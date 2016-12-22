@@ -33,8 +33,7 @@ public class RecipeRegistry {
 	private Class<?> GT_Class;
 
 	@SuppressWarnings("unchecked")
-	public void main()
-	{
+	public void main() {
 		registerDictionary();
 		registerRecipes();
 		registerMagicianTable();
@@ -45,13 +44,11 @@ public class RecipeRegistry {
 		CraftingManager.getInstance().getRecipeList().add(new RecipeArmorDyesHandler());
 	}
 	
-	public void registerDictionary()
-	{
+	public void registerDictionary() {
 		OreDictionaryRegistry.register();
 	}
 	
-	public void registerRecipes()
-	{
+	public void registerRecipes() {
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(ItemsCore.drops,4,4), new Object[]{
 			"shardFire","shardWater","shardEarth","shardAir"
 		}));
@@ -1592,8 +1589,7 @@ public class RecipeRegistry {
 		}));
 	}
 	
-	public void registerRadiatingChamber()
-	{
+	public void registerRadiatingChamber() {
 		//TODO RadiatingChamberRecipes
 		RadiatingChamberRecipes.addRecipeIS(new ItemStack[]{new ItemStack(Blocks.stone),new ItemStack(Items.iron_ingot)}, getItemByNameEC3("fortifiedStone",0), 10, new float[]{Float.MAX_VALUE,Float.MIN_VALUE},4);
 		RadiatingChamberRecipes.addRecipeIS(new ItemStack[]{new ItemStack(Blocks.glass),new ItemStack(Items.iron_ingot)}, getItemByNameEC3("fortifiedGlass",0), 10, new float[]{Float.MAX_VALUE,Float.MIN_VALUE},4);
@@ -1611,8 +1607,7 @@ public class RecipeRegistry {
 		RadiatingChamberRecipes.addRecipeIS(new ItemStack[]{new ItemStack(Items.diamond),new ItemStack(Items.emerald)}, getItemByNameEC3("genericItem",44), 100, new float[]{Float.MAX_VALUE,Float.MIN_VALUE},50,1);
 	}
 	
-	public void registerMagicianTable()
-	{
+	public void registerMagicianTable() {
 		//TODO MagicianTableRecipes
 		MagicianTableRecipes.addRecipeIS(new ItemStack[]{getItemByNameEC3("genericItem",7),getItemByNameEC3("genericItem",79),getItemByNameEC3("genericItem",8),getItemByNameEC3("genericItem",8),getItemByNameEC3("genericItem",79)},getItemByNameEC3("genericItem",0), 10000);
 		MagicianTableRecipes.addRecipeIS(new ItemStack[]{getItemByNameEC3("genericItem",7),getItemByNameEC3("genericItem",8),getItemByNameEC3("genericItem",79),getItemByNameEC3("genericItem",79),getItemByNameEC3("genericItem",8)},getItemByNameEC3("genericItem",0), 10000);
@@ -1650,8 +1645,7 @@ public class RecipeRegistry {
 		MagicianTableRecipes.addRecipeIS(new ItemStack[]{new ItemStack(BlocksCore.voidStone),null,null,null,null},getItemByNameEC3("genericItem",35), 1000);
 	}
 	
-	public void registerMithrilineFurnace()
-	{
+	public void registerMithrilineFurnace() {
 		//TODO MithrilineFurnaceRecipes
 		MithrilineFurnaceRecipes.addRecipe("dustMithriline", getItemByNameEC3("genericItem",50), 60,1);
 		MithrilineFurnaceRecipes.addRecipe("gemResonant", getItemByNameEC3("genericItem",48), 120,1);
@@ -1756,8 +1750,7 @@ public class RecipeRegistry {
 	}
 	
 	@SuppressWarnings("unused")
-	public static void registerWindRecipes()
-	{
+	public static void registerWindRecipes() {
 		new WindImbueRecipe(new ItemStack(ItemsCore.soulStone,1,0),new ItemStack(ItemsCore.soulStone,1,0),10000*4);
 		new WindImbueRecipe(new ItemStack(Items.diamond,1,0),new ItemStack(ItemsCore.genericItem,1,55),10000);
 		new WindImbueRecipe(new ItemStack(Items.potionitem,1,0),new ItemStack(ItemsCore.air_potion,1,0),250);
@@ -1765,8 +1758,7 @@ public class RecipeRegistry {
 	}
 	
 	@SuppressWarnings("unused")
-	public static void registerDemonTrades()
-	{
+	public static void registerDemonTrades() {
 		//TODO demon trades
 		new DemonTrade(EntityVillager.class);
 		new DemonTrade(EntityEnderman.class);
@@ -1821,20 +1813,21 @@ public class RecipeRegistry {
 		new DemonTrade(new ItemStack(ItemsCore.gatling,1,0));
 	}
 	
-	public static ItemStack getItemByNameEC3(String itemName, int metadata)
-	{
+	public static ItemStack getItemByNameEC3(String itemName, int metadata) {
 		Class<BlocksCore> blocks = BlocksCore.class;
 		try {
 			Field block = blocks.getDeclaredField(itemName);
 			ItemStack is = new ItemStack((Block) block.get(null),1,metadata);
 			return is;
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			try {
 				Class<ItemsCore> items = ItemsCore.class;
 				Field item = items.getDeclaredField(itemName);
 				ItemStack is = new ItemStack((Item) item.get(null),1,metadata);
 				return is;
-			} catch (Exception e1) {
+			}
+			catch (Exception e1) {
 				e.printStackTrace();
 				e1.printStackTrace();
 				return null;
@@ -1842,8 +1835,7 @@ public class RecipeRegistry {
 		}
 	}
 	
-	public void registerEFuelCrafts()
-	{
+	public void registerEFuelCrafts() {
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ItemsCore.elementalFuel,1,0), new Object[]{
 		" E ","ECE"," E ", 'E', new ItemStack(ItemsCore.essence,1,0),'C',Items.coal
 		}));
@@ -1906,8 +1898,7 @@ public class RecipeRegistry {
 		}));
 	}
 	
-	public void registerCharmsCraft()
-	{
+	public void registerCharmsCraft() {
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ItemsCore.charm,1,0), new Object[]{
 		"SGS","FRF","@G@",
 		'F',ItemsCore.fFocus,'W',ItemsCore.wFocus,'E',ItemsCore.eFocus,'A',ItemsCore.aFocus,
@@ -1990,8 +1981,7 @@ public class RecipeRegistry {
 		}));
 	}
 	
-	public static ItemStack gen(int meta)
-	{
+	public static ItemStack gen(int meta) {
 		return new ItemStack(ItemsCore.genericItem,1,meta);
 	}
 }

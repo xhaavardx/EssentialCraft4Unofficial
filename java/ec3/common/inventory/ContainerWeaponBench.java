@@ -9,135 +9,185 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 
-public class ContainerWeaponBench extends Container{
-
-    public ContainerWeaponBench(InventoryPlayer par1InventoryPlayer, TileEntity par2)
-    {
-    	TileWeaponMaker maker = TileWeaponMaker.class.cast(par2);
+public class ContainerWeaponBench extends Container {
+	
+	private IInventory inv;
+	private int sizeInventory;
+    public ContainerWeaponBench(InventoryPlayer par1InventoryPlayer, TileEntity par2) {
+    	TileWeaponMaker maker = (TileWeaponMaker)par2;
+    	inv = (IInventory)par2;
     	
-        this.addSlotToContainer(new Slot((IInventory) par2, 0, 152, 37));
+        addSlotToContainer(new SlotGeneric(inv, 0, 152, 37));
         
-        if(maker.index == 0)
-        {
+        if(maker.index == 0) {
         	//Elemental Core
-        	this.addSlotToContainer(new Slot((IInventory) par2, 1, 40, 37));
+        	addSlotToContainer(new SlotGeneric(inv, 1, 40, 37));
         	//Soul Sphere
-        	this.addSlotToContainer(new Slot((IInventory) par2, 2, 60, 57));
+        	addSlotToContainer(new SlotGeneric(inv, 2, 60, 57));
         	//Lens
-        	this.addSlotToContainer(new Slot((IInventory) par2, 3, 20, 17));
+        	addSlotToContainer(new SlotGeneric(inv, 3, 20, 17));
         	//Scope
-        	this.addSlotToContainer(new Slot((IInventory) par2, 4, 60, 17));
+        	addSlotToContainer(new SlotGeneric(inv, 4, 60, 17));
         	//Base
-        	this.addSlotToContainer(new Slot((IInventory) par2, 5, 40, 17));
-        	this.addSlotToContainer(new Slot((IInventory) par2, 6, 60, 37));
-        	this.addSlotToContainer(new Slot((IInventory) par2, 7, 80, 37));
+        	addSlotToContainer(new SlotGeneric(inv, 5, 40, 17));
+        	addSlotToContainer(new SlotGeneric(inv, 6, 60, 37));
+        	addSlotToContainer(new SlotGeneric(inv, 7, 80, 37));
         	//Mechanism
-        	this.addSlotToContainer(new Slot((IInventory) par2, 8, 80, 17));
+        	addSlotToContainer(new SlotGeneric(inv, 8, 80, 17));
         	//Handle
-        	this.addSlotToContainer(new Slot((IInventory) par2, 9, 80, 57));
+        	addSlotToContainer(new SlotGeneric(inv, 9, 80, 57));
+        	sizeInventory = 10;
         }
         
-        if(maker.index == 1)
-        {
+        if(maker.index == 1) {
         	//Elemental Core
-        	this.addSlotToContainer(new Slot((IInventory) par2, 1, 40, 37));
+        	addSlotToContainer(new SlotGeneric(inv, 1, 40, 37));
         	//Soul Sphere
-        	this.addSlotToContainer(new Slot((IInventory) par2, 2, 60, 37));
+        	addSlotToContainer(new SlotGeneric(inv, 2, 60, 37));
         	//Lens
-        	this.addSlotToContainer(new Slot((IInventory) par2, 3, 20, 37));
+        	addSlotToContainer(new SlotGeneric(inv, 3, 20, 37));
         	//Scope
-        	this.addSlotToContainer(new Slot((IInventory) par2, 4, 40, 17));
+        	addSlotToContainer(new SlotGeneric(inv, 4, 40, 17));
         	//Base
-        	this.addSlotToContainer(new Slot((IInventory) par2, 5, 20, 17));
-        	this.addSlotToContainer(new Slot((IInventory) par2, 6, 60, 17));
-        	this.addSlotToContainer(new Slot((IInventory) par2, 7, 80, 37));
-        	this.addSlotToContainer(new Slot((IInventory) par2, 8, 60, 57));
+        	addSlotToContainer(new SlotGeneric(inv, 5, 20, 17));
+        	addSlotToContainer(new SlotGeneric(inv, 6, 60, 17));
+        	addSlotToContainer(new SlotGeneric(inv, 7, 80, 37));
+        	addSlotToContainer(new SlotGeneric(inv, 8, 60, 57));
         	//Mechanism
-        	this.addSlotToContainer(new Slot((IInventory) par2, 9, 80, 17));
+        	addSlotToContainer(new SlotGeneric(inv, 9, 80, 17));
         	//Handle
-        	this.addSlotToContainer(new Slot((IInventory) par2, 10, 20, 57));
-        	this.addSlotToContainer(new Slot((IInventory) par2, 11, 40, 57));
-        	this.addSlotToContainer(new Slot((IInventory) par2, 12, 80, 57));
+        	addSlotToContainer(new SlotGeneric(inv, 10, 20, 57));
+        	addSlotToContainer(new SlotGeneric(inv, 11, 40, 57));
+        	addSlotToContainer(new SlotGeneric(inv, 12, 80, 57));
+        	sizeInventory = 13;
         }
         
-        if(maker.index == 2)
-        {
+        if(maker.index == 2) {
         	//Elemental Core
-        	this.addSlotToContainer(new Slot((IInventory) par2, 1, 60, 37));
+        	addSlotToContainer(new SlotGeneric(inv, 1, 60, 37));
         	//Soul Sphere
-        	this.addSlotToContainer(new Slot((IInventory) par2, 2, 40, 57));
+        	addSlotToContainer(new SlotGeneric(inv, 2, 40, 57));
         	//Lens
-        	this.addSlotToContainer(new Slot((IInventory) par2, 3, 20, 37));
+        	addSlotToContainer(new SlotGeneric(inv, 3, 20, 37));
         	//Scope
-        	this.addSlotToContainer(new Slot((IInventory) par2, 4, 60, 17));
-        	this.addSlotToContainer(new Slot((IInventory) par2, 5, 40, 17));
-        	this.addSlotToContainer(new Slot((IInventory) par2, 6, 80, 17));
+        	addSlotToContainer(new SlotGeneric(inv, 4, 60, 17));
+        	addSlotToContainer(new SlotGeneric(inv, 5, 40, 17));
+        	addSlotToContainer(new SlotGeneric(inv, 6, 80, 17));
         	//Base
-        	this.addSlotToContainer(new Slot((IInventory) par2, 7, 40, 37));
-        	this.addSlotToContainer(new Slot((IInventory) par2, 8, 80, 37));
-        	this.addSlotToContainer(new Slot((IInventory) par2, 9, 100, 37));
+        	addSlotToContainer(new SlotGeneric(inv, 7, 40, 37));
+        	addSlotToContainer(new SlotGeneric(inv, 8, 80, 37));
+        	addSlotToContainer(new SlotGeneric(inv, 9, 100, 37));
         	//Mechanism
-        	this.addSlotToContainer(new Slot((IInventory) par2, 10, 100, 17));
-        	this.addSlotToContainer(new Slot((IInventory) par2, 11, 60, 57));
+        	addSlotToContainer(new SlotGeneric(inv, 10, 100, 17));
+        	addSlotToContainer(new SlotGeneric(inv, 11, 60, 57));
         	//Handle
-        	this.addSlotToContainer(new Slot((IInventory) par2, 12, 80, 57));
-        	this.addSlotToContainer(new Slot((IInventory) par2, 13, 100, 57));
+        	addSlotToContainer(new SlotGeneric(inv, 12, 80, 57));
+        	addSlotToContainer(new SlotGeneric(inv, 13, 100, 57));
+        	sizeInventory = 14;
         }
         
-        if(maker.index == 3)
-        {
+        if(maker.index == 3) {
         	//Elemental Core
-        	this.addSlotToContainer(new Slot((IInventory) par2, 1, 80, 37));
+        	addSlotToContainer(new SlotGeneric(inv, 1, 80, 37));
         	//Soul Sphere
-        	this.addSlotToContainer(new Slot((IInventory) par2, 2, 40, 57));
+        	addSlotToContainer(new SlotGeneric(inv, 2, 40, 57));
         	//Lens
-        	this.addSlotToContainer(new Slot((IInventory) par2, 3, 20, 37));
-        	this.addSlotToContainer(new Slot((IInventory) par2, 4, 20, 17));
-        	this.addSlotToContainer(new Slot((IInventory) par2, 5, 20, 57));
+        	addSlotToContainer(new SlotGeneric(inv, 3, 20, 37));
+        	addSlotToContainer(new SlotGeneric(inv, 4, 20, 17));
+        	addSlotToContainer(new SlotGeneric(inv, 5, 20, 57));
         	//Scope
         	//No scope for the Gatling
         	//Base
-        	this.addSlotToContainer(new Slot((IInventory) par2, 6, 40, 17));
-        	this.addSlotToContainer(new Slot((IInventory) par2, 7, 60, 17));
-        	this.addSlotToContainer(new Slot((IInventory) par2, 8, 80, 17));
-        	this.addSlotToContainer(new Slot((IInventory) par2, 9, 100, 17));
-        	this.addSlotToContainer(new Slot((IInventory) par2, 10, 120, 17));
-        	this.addSlotToContainer(new Slot((IInventory) par2, 11, 40, 37));
-        	this.addSlotToContainer(new Slot((IInventory) par2, 12, 120, 37));
+        	addSlotToContainer(new SlotGeneric(inv, 6, 40, 17));
+        	addSlotToContainer(new SlotGeneric(inv, 7, 60, 17));
+        	addSlotToContainer(new SlotGeneric(inv, 8, 80, 17));
+        	addSlotToContainer(new SlotGeneric(inv, 9, 100, 17));
+        	addSlotToContainer(new SlotGeneric(inv, 10, 120, 17));
+        	addSlotToContainer(new SlotGeneric(inv, 11, 40, 37));
+        	addSlotToContainer(new SlotGeneric(inv, 12, 120, 37));
         	//Mechanism
-        	this.addSlotToContainer(new Slot((IInventory) par2, 13, 60, 37));
-        	this.addSlotToContainer(new Slot((IInventory) par2, 14, 100, 37));
+        	addSlotToContainer(new SlotGeneric(inv, 13, 60, 37));
+        	addSlotToContainer(new SlotGeneric(inv, 14, 100, 37));
         	//Handle
-        	this.addSlotToContainer(new Slot((IInventory) par2, 15, 60, 57));
-        	this.addSlotToContainer(new Slot((IInventory) par2, 16, 80, 57));
-        	this.addSlotToContainer(new Slot((IInventory) par2, 17, 100, 57));
-        	this.addSlotToContainer(new Slot((IInventory) par2, 18, 120, 57));
+        	addSlotToContainer(new SlotGeneric(inv, 15, 60, 57));
+        	addSlotToContainer(new SlotGeneric(inv, 16, 80, 57));
+        	addSlotToContainer(new SlotGeneric(inv, 17, 100, 57));
+        	addSlotToContainer(new SlotGeneric(inv, 18, 120, 57));
+        	sizeInventory = 19;
         }
         
         int i;
 
-        for (i = 0; i < 3; ++i)
-        {
-            for (int j = 0; j < 9; ++j)
-            {
-                this.addSlotToContainer(new Slot(par1InventoryPlayer, j + i * 9 + 9, 8 + j * 18,84+ i * 18));
+        for(i = 0; i < 3; ++i) {
+            for(int j = 0; j < 9; ++j) {
+                addSlotToContainer(new Slot(par1InventoryPlayer, j + i*9 + 9, 8 + j*18, 84 + i*18));
             }
         }
 
-        for (i = 0; i < 9; ++i)
-        {
-            this.addSlotToContainer(new Slot(par1InventoryPlayer, i, 8 + i * 18, 142));
+        for(i = 0; i < 9; ++i) {
+            addSlotToContainer(new Slot(par1InventoryPlayer, i, 8 + i*18, 142));
         }
     }
 
 	@Override
 	public boolean canInteractWith(EntityPlayer p_75145_1_) {
-		return true;
+		return inv.isUseableByPlayer(p_75145_1_);
 	}
-
+	
 	@Override
-    public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int par2)
-    {
-        return null;
-    }
+	public ItemStack transferStackInSlot(EntityPlayer p_82846_1_, int p_82846_2_) {
+		ItemStack itemstack = null;
+		Slot slot = (Slot)inventorySlots.get(p_82846_2_);
+		
+		if(slot != null && slot.getHasStack()) {
+			ItemStack itemstack1 = slot.getStack();
+			itemstack = itemstack1.copy();
+			
+			if(p_82846_2_ < sizeInventory) {
+				if(!mergeItemStack(itemstack1, sizeInventory, 36+sizeInventory, true)) {
+					if(itemstack1.stackSize == 0)
+						slot.putStack((ItemStack)null);
+					slot.onSlotChange(itemstack1, itemstack);
+					return null;
+				}
+			}
+			else if(p_82846_2_ >= sizeInventory) {
+				for(int i = 0; i < sizeInventory; ++i) {
+					if(mergeItemStack(itemstack1, i, i+1, false)) {
+						if(itemstack1.stackSize == 0)
+							slot.putStack((ItemStack)null);
+						return null;
+					}
+				}
+			}
+			
+			if(p_82846_2_ >= sizeInventory && p_82846_2_ < 27+sizeInventory) {
+				if(!mergeItemStack(itemstack1, 27+sizeInventory, 36+sizeInventory, false)) {
+					if(itemstack1.stackSize == 0)
+						slot.putStack((ItemStack)null);
+					return null;
+				}
+			}
+			else if(p_82846_2_ >= 27+sizeInventory && p_82846_2_ < 36+sizeInventory && !mergeItemStack(itemstack1, sizeInventory, 27+sizeInventory, false)) {
+				if(itemstack1.stackSize == 0)
+					slot.putStack((ItemStack)null);
+				return null;
+			}
+			
+			if(itemstack.stackSize == 0)
+				slot.putStack((ItemStack)null);
+			
+			if(itemstack1.stackSize == 0)
+				slot.putStack((ItemStack)null);
+			else
+				slot.onSlotChanged();
+			
+			if(itemstack1.stackSize == itemstack.stackSize)
+				return null;
+			
+			slot.onPickupFromSlot(p_82846_1_, itemstack1);
+		}
+		
+		return itemstack;
+	}
 }

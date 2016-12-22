@@ -8,6 +8,7 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.tileentity.TileEntity;
 
+@Deprecated
 public class GuiAMINEjector extends GuiCommon{
 
 	public GuiAMINEjector(Container c, TileEntity tile) {

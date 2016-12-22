@@ -24,7 +24,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
 
-public class EntityDemon extends EntityLiving implements IInventory{
+public class EntityDemon extends EntityLiving implements IInventory {
 	
 	public ItemStack inventory;
 	public ItemStack desiredItem;

@@ -13,35 +13,33 @@ import ec3.common.item.ItemsCore;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
-public class TileWeaponMaker extends TileMRUGeneric{
+public class TileWeaponMaker extends TileMRUGeneric {
 	
 	public int index;
 	public ItemStack previewStack;
 	
-	public TileWeaponMaker()
-	{
+	public TileWeaponMaker() {
 		super();
-		this.setSlotsNum(19);
+		slot0IsBoundGem = false;
+		setSlotsNum(19);
 	}
 	
 	@Override
-	public void updateEntity()
-	{
-		this.index = this.worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
-		++this.innerRotation;
+	public void updateEntity() {
+		index = worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
+		++innerRotation;
 		//Sending the sync packets to the CLIENT. 
-		if(syncTick == 0)
-		{
-			if(!this.worldObj.isRemote)
-				MiscUtils.sendPacketToAllAround(worldObj, getDescriptionPacket(), xCoord, yCoord, zCoord, this.worldObj.provider.dimensionId, 16);
+		if(syncTick == 0) {
+			if(!worldObj.isRemote)
+				MiscUtils.sendPacketToAllAround(worldObj, getDescriptionPacket(), xCoord, yCoord, zCoord, worldObj.provider.dimensionId, 16);
 			syncTick = 20;
-		}else
-			--this.syncTick;
+		}
+		else
+			--syncTick;
 	}
 	
 	@Override
-    public void readFromNBT(NBTTagCompound i)
-    {
+	public void readFromNBT(NBTTagCompound i) {
 		if(i.hasKey("preview"))
 			previewStack = ItemStack.loadItemStackFromNBT(i.getCompoundTag("preview"));
 		else
@@ -49,343 +47,244 @@ public class TileWeaponMaker extends TileMRUGeneric{
 		
 		index = i.getInteger("index");
 		super.readFromNBT(i);
-    }
+	}
 	
 	@Override
-    public void writeToNBT(NBTTagCompound i)
-    {
-		if(previewStack != null)
-		{
+	public void writeToNBT(NBTTagCompound i) {
+		if(previewStack != null) {
 			NBTTagCompound tag = new NBTTagCompound();
 			previewStack.writeToNBT(tag);
 			i.setTag("preview", tag);
-		}else
+		}
+		else
 			i.removeTag("preview");
 		
 		i.setInteger("index", index);
-    	super.writeToNBT(i);
-    }
+		super.writeToNBT(i);
+	}
 	
-	public String getBase()
-	{
+	public String getBase() {
 		String baseName = "";
-		if(this.index == 0)
-		{
-			for(int i = 5; i < 8; ++i)
-			{
-				if(this.getStackInSlot(i) != null)
-				{
-					for(int j = 0; j < GunRegistry.gunMaterials.size(); ++j)
-					{
+		if(index == 0) {
+			for(int i = 5; i < 8; ++i) {
+				if(getStackInSlot(i) != null) {
+					for(int j = 0; j < GunRegistry.gunMaterials.size(); ++j) {
 						GunMaterial material = GunRegistry.gunMaterials.get(j);
-						if(this.getStackInSlot(i).isItemEqual(material.recipe))
-						{
+						if(getStackInSlot(i).isItemEqual(material.recipe)) {
 							if(baseName.isEmpty())
-							{
 								baseName = material.id;
-							}else
-							{
-								if(!baseName.equalsIgnoreCase(material.id))
-									return "";
-							}
+							else if(!baseName.equalsIgnoreCase(material.id))
+								return "";
 						}
 					}
-				}else
+				}
+				else
 					return "";
 			}
 		}
-		if(this.index == 1)
-		{
-			for(int i = 5; i < 9; ++i)
-			{
-				if(this.getStackInSlot(i) != null)
-				{
-					for(int j = 0; j < GunRegistry.gunMaterials.size(); ++j)
-					{
+		if(index == 1) {
+			for(int i = 5; i < 9; ++i) {
+				if(getStackInSlot(i) != null) {
+					for(int j = 0; j < GunRegistry.gunMaterials.size(); ++j) {
 						GunMaterial material = GunRegistry.gunMaterials.get(j);
-						if(this.getStackInSlot(i).isItemEqual(material.recipe))
-						{
+						if(getStackInSlot(i).isItemEqual(material.recipe)) {
 							if(baseName.isEmpty())
-							{
 								baseName = material.id;
-							}else
-							{
-								if(!baseName.equalsIgnoreCase(material.id))
-									return "";
-							}
+							else if(!baseName.equalsIgnoreCase(material.id))
+								return "";
 						}
 					}
-				}else
+				}
+				else
 					return "";
 			}
 		}
-		if(this.index == 2)
-		{
-			for(int i = 7; i < 10; ++i)
-			{
-				if(this.getStackInSlot(i) != null)
-				{
-					for(int j = 0; j < GunRegistry.gunMaterials.size(); ++j)
-					{
+		if(index == 2) {
+			for(int i = 7; i < 10; ++i) {
+				if(getStackInSlot(i) != null) {
+					for(int j = 0; j < GunRegistry.gunMaterials.size(); ++j) {
 						GunMaterial material = GunRegistry.gunMaterials.get(j);
-						if(this.getStackInSlot(i).isItemEqual(material.recipe))
-						{
+						if(getStackInSlot(i).isItemEqual(material.recipe)) {
 							if(baseName.isEmpty())
-							{
 								baseName = material.id;
-							}else
-							{
-								if(!baseName.equalsIgnoreCase(material.id))
-									return "";
-							}
+							else if(!baseName.equalsIgnoreCase(material.id))
+								return "";
 						}
 					}
-				}else
+				}
+				else
 					return "";
 			}
 		}
-		if(this.index == 3)
-		{
-			for(int i = 6; i < 13; ++i)
-			{
-				if(this.getStackInSlot(i) != null)
-				{
-					for(int j = 0; j < GunRegistry.gunMaterials.size(); ++j)
-					{
+		if(index == 3) {
+			for(int i = 6; i < 13; ++i) {
+				if(getStackInSlot(i) != null) {
+					for(int j = 0; j < GunRegistry.gunMaterials.size(); ++j) {
 						GunMaterial material = GunRegistry.gunMaterials.get(j);
-						if(this.getStackInSlot(i).isItemEqual(material.recipe))
-						{
+						if(getStackInSlot(i).isItemEqual(material.recipe)) {
 							if(baseName.isEmpty())
-							{
 								baseName = material.id;
-							}else
-							{
-								if(!baseName.equalsIgnoreCase(material.id))
-									return "";
-							}
+							else if(!baseName.equalsIgnoreCase(material.id))
+								return "";
 						}
 					}
-				}else
+				}
+				else
 					return "";
 			}
 		}
 		return baseName;
 	}
 	
-	public String getHandle()
-	{
+	public String getHandle() {
 		String handleName = "";
-		if(this.index == 0)
-		{
-			if(this.getStackInSlot(9) != null)
-			{
-				for(int i = 0; i < GunRegistry.gunMaterials.size(); ++i)
-				{
+		if(index == 0) {
+			if(getStackInSlot(9) != null) {
+				for(int i = 0; i < GunRegistry.gunMaterials.size(); ++i) {
 					GunMaterial material = GunRegistry.gunMaterials.get(i);
-					if(this.getStackInSlot(9).isItemEqual(material.recipe))
+					if(getStackInSlot(9).isItemEqual(material.recipe))
 						return material.id;
 				}
 			}
 		}
-		if(this.index == 1)
-		{
-			for(int i = 10; i < 13; ++i)
-			{
-				if(this.getStackInSlot(i) != null)
-				{
-					for(int j = 0; j < GunRegistry.gunMaterials.size(); ++j)
-					{
+		if(index == 1) {
+			for(int i = 10; i < 13; ++i) {
+				if(getStackInSlot(i) != null) {
+					for(int j = 0; j < GunRegistry.gunMaterials.size(); ++j) {
 						GunMaterial material = GunRegistry.gunMaterials.get(j);
-						if(this.getStackInSlot(i).isItemEqual(material.recipe))
-						{
+						if(getStackInSlot(i).isItemEqual(material.recipe)) {
 							if(handleName.isEmpty())
-							{
 								handleName = material.id;
-							}else
-							{
-								if(!handleName.equalsIgnoreCase(material.id))
-									return "";
-							}
+							else if(!handleName.equalsIgnoreCase(material.id))
+								return "";
 						}
 					}
-				}else
+				}
+				else
 					return "";
 			}
 		}
-		if(this.index == 2)
-		{
-			for(int i = 12; i < 14; ++i)
-			{
-				if(this.getStackInSlot(i) != null)
-				{
-					for(int j = 0; j < GunRegistry.gunMaterials.size(); ++j)
-					{
+		if(index == 2) {
+			for(int i = 12; i < 14; ++i) {
+				if(getStackInSlot(i) != null) {
+					for(int j = 0; j < GunRegistry.gunMaterials.size(); ++j) {
 						GunMaterial material = GunRegistry.gunMaterials.get(j);
-						if(this.getStackInSlot(i).isItemEqual(material.recipe))
-						{
+						if(getStackInSlot(i).isItemEqual(material.recipe)) {
 							if(handleName.isEmpty())
-							{
 								handleName = material.id;
-							}else
-							{
-								if(!handleName.equalsIgnoreCase(material.id))
-									return "";
-							}
+							else if(!handleName.equalsIgnoreCase(material.id))
+								return "";
 						}
 					}
-				}else
+				}
+				else
 					return "";
 			}
 		}
-		if(this.index == 3)
-		{
-			for(int i = 15; i < 19; ++i)
-			{
-				if(this.getStackInSlot(i) != null)
-				{
-					for(int j = 0; j < GunRegistry.gunMaterials.size(); ++j)
-					{
+		if(index == 3) {
+			for(int i = 15; i < 19; ++i) {
+				if(getStackInSlot(i) != null) {
+					for(int j = 0; j < GunRegistry.gunMaterials.size(); ++j) {
 						GunMaterial material = GunRegistry.gunMaterials.get(j);
-						if(this.getStackInSlot(i).isItemEqual(material.recipe))
-						{
+						if(getStackInSlot(i).isItemEqual(material.recipe)) {
 							if(handleName.isEmpty())
-							{
 								handleName = material.id;
-							}else
-							{
-								if(!handleName.equalsIgnoreCase(material.id))
-									return "";
-							}
+							else if(!handleName.equalsIgnoreCase(material.id))
+								return "";
 						}
 					}
-				}else
+				}
+				else
 					return "";
 			}
 		}
 		return handleName;
 	}
 	
-	public String getDevice()
-	{
+	public String getDevice() {
 		String deviceName = "";
-		if(this.index == 0)
-		{
-			if(this.getStackInSlot(8) != null)
-			{
-				for(int i = 0; i < GunRegistry.gunMaterials.size(); ++i)
-				{
+		if(index == 0) {
+			if(getStackInSlot(8) != null) {
+				for(int i = 0; i < GunRegistry.gunMaterials.size(); ++i) {
 					GunMaterial material = GunRegistry.gunMaterials.get(i);
-					if(this.getStackInSlot(8).isItemEqual(material.recipe))
+					if(getStackInSlot(8).isItemEqual(material.recipe))
 						return material.id;
 				}
 			}
 		}
-		if(this.index == 1)
-		{
-			if(this.getStackInSlot(9) != null)
-			{
-				for(int i = 0; i < GunRegistry.gunMaterials.size(); ++i)
-				{
+		if(index == 1) {
+			if(getStackInSlot(9) != null) {
+				for(int i = 0; i < GunRegistry.gunMaterials.size(); ++i) {
 					GunMaterial material = GunRegistry.gunMaterials.get(i);
-					if(this.getStackInSlot(9).isItemEqual(material.recipe))
+					if(getStackInSlot(9).isItemEqual(material.recipe))
 						return material.id;
 				}
 			}
 		}
-		if(this.index == 2)
-		{
-			for(int i = 10; i < 12; ++i)
-			{
-				if(this.getStackInSlot(i) != null)
-				{
-					for(int j = 0; j < GunRegistry.gunMaterials.size(); ++j)
-					{
+		if(index == 2) {
+			for(int i = 10; i < 12; ++i) {
+				if(getStackInSlot(i) != null) {
+					for(int j = 0; j < GunRegistry.gunMaterials.size(); ++j) {
 						GunMaterial material = GunRegistry.gunMaterials.get(j);
-						if(this.getStackInSlot(i).isItemEqual(material.recipe))
-						{
+						if(getStackInSlot(i).isItemEqual(material.recipe)) {
 							if(deviceName.isEmpty())
-							{
 								deviceName = material.id;
-							}else
-							{
-								if(!deviceName.equalsIgnoreCase(material.id))
-									return "";
-							}
+							else if(!deviceName.equalsIgnoreCase(material.id))
+								return "";
 						}
 					}
-				}else
+				}
+				else
 					return "";
 			}
 		}
-		if(this.index == 3)
-		{
-			for(int i = 13; i < 15; ++i)
-			{
-				if(this.getStackInSlot(i) != null)
-				{
-					for(int j = 0; j < GunRegistry.gunMaterials.size(); ++j)
-					{
+		if(index == 3) {
+			for(int i = 13; i < 15; ++i) {
+				if(getStackInSlot(i) != null) {
+					for(int j = 0; j < GunRegistry.gunMaterials.size(); ++j) {
 						GunMaterial material = GunRegistry.gunMaterials.get(j);
-						if(this.getStackInSlot(i).isItemEqual(material.recipe))
-						{
+						if(getStackInSlot(i).isItemEqual(material.recipe)) {
 							if(deviceName.isEmpty())
-							{
 								deviceName = material.id;
-							}else
-							{
-								if(!deviceName.equalsIgnoreCase(material.id))
-									return "";
-							}
+							else if(!deviceName.equalsIgnoreCase(material.id))
+								return "";
 						}
 					}
-				}else
+				}
+				else
 					return "";
 			}
 		}
 		return deviceName;
 	}
 	
-	public String getLense()
-	{
+	public String getLense() {
 		String lenseName = "";
-		if(this.index == 0 || this.index == 1 || this.index == 2)
-		{
-			if(this.getStackInSlot(3) != null)
-			{
-				for(int i = 0; i < GunRegistry.lenseMaterials.size(); ++i)
-				{
+		if(index == 0 || index == 1 || index == 2) {
+			if(getStackInSlot(3) != null) {
+				for(int i = 0; i < GunRegistry.lenseMaterials.size(); ++i) {
 					LenseMaterial material = GunRegistry.lenseMaterials.get(i);
-					if(this.getStackInSlot(3).isItemEqual(material.recipe))
+					if(getStackInSlot(3).isItemEqual(material.recipe))
 						return material.id;
 				}
 			}
 		}
-		if(this.index == 3)
-		{
-			if(this.getStackInSlot(3) != null)
-			{
-				if(this.getStackInSlot(3).getItem() instanceof ItemGenericEC3 && this.getStackInSlot(3).getItemDamage() == 32)
-				{
-					for(int i = 4; i < 6; ++i)
-					{
-						if(this.getStackInSlot(i) != null)
-						{
-							for(int j = 0; j < GunRegistry.lenseMaterials.size(); ++j)
-							{
+		if(index == 3) {
+			if(getStackInSlot(3) != null) {
+				if(getStackInSlot(3).getItem() instanceof ItemGenericEC3 && getStackInSlot(3).getItemDamage() == 32) {
+					for(int i = 4; i < 6; ++i) {
+						if(getStackInSlot(i) != null) {
+							for(int j = 0; j < GunRegistry.lenseMaterials.size(); ++j) {
 								LenseMaterial material = GunRegistry.lenseMaterials.get(j);
-								if(this.getStackInSlot(i).isItemEqual(material.recipe))
-								{
+								if(getStackInSlot(i).isItemEqual(material.recipe)) {
 									if(lenseName.isEmpty())
-									{
 										lenseName = material.id;
-									}else
-									{
-										if(!lenseName.equalsIgnoreCase(material.id))
+									else if(!lenseName.equalsIgnoreCase(material.id))
 											return "";
-									}
 								}
 							}
-						}else
+						}
+						else
 							return "";
 					}
 				}
@@ -394,51 +293,36 @@ public class TileWeaponMaker extends TileMRUGeneric{
 		return lenseName;
 	}
 	
-	public String getScope()
-	{
+	public String getScope() {
 		String scopeName = "";
-		if(this.index == 0 || this.index == 1)
-		{
-			if(this.getStackInSlot(4) != null)
-			{
-				for(int i = 0; i < GunRegistry.scopeMaterials.size(); ++i)
-				{
+		if(index == 0 || index == 1) {
+			if(getStackInSlot(4) != null) {
+				for(int i = 0; i < GunRegistry.scopeMaterials.size(); ++i) {
 					ScopeMaterial material = GunRegistry.scopeMaterials.get(i);
-					if(this.getStackInSlot(4).isItemEqual(material.recipe))
+					if(getStackInSlot(4).isItemEqual(material.recipe))
 						return material.id;
 				}
 			}
 		}
 		
-		if(this.index == 2)
-		{
-			if(this.getStackInSlot(4) != null)
-			{
-				for(int i = 0; i < GunRegistry.scopeMaterials.size(); ++i)
-				{
+		if(index == 2) {
+			if(getStackInSlot(4) != null) {
+				for(int i = 0; i < GunRegistry.scopeMaterials.size(); ++i) {
 					ScopeMaterial material = GunRegistry.scopeMaterials.get(i);
-					if(this.getStackInSlot(4).isItemEqual(material.recipe))
-					{
-						for(int j = 5; j < 7; ++j)
-						{
-							if(this.getStackInSlot(j) != null)
-							{
-								for(int k = 0; k < GunRegistry.scopeMaterialsSniper.size(); ++k)
-								{
+					if(getStackInSlot(4).isItemEqual(material.recipe)) {
+						for(int j = 5; j < 7; ++j) {
+							if(getStackInSlot(j) != null) {
+								for(int k = 0; k < GunRegistry.scopeMaterialsSniper.size(); ++k) {
 									ScopeMaterial material1 = GunRegistry.scopeMaterialsSniper.get(k);
-									if(this.getStackInSlot(j).isItemEqual(material1.recipe))
-									{
+									if(getStackInSlot(j).isItemEqual(material1.recipe)) {
 										if(scopeName.isEmpty())
-										{
 											scopeName = material1.id;
-										}else
-										{
-											if(!scopeName.equalsIgnoreCase(material1.id))
-												return "";
-										}
+										else if(!scopeName.equalsIgnoreCase(material1.id))
+											return "";
 									}
 								}
-							}else
+							}
+							else
 								return "";
 						}
 					}
@@ -449,8 +333,7 @@ public class TileWeaponMaker extends TileMRUGeneric{
 		return scopeName;
 	}
 	
-	public boolean isOreDict(ItemStack stk, String target)
-	{
+	public boolean isOreDict(ItemStack stk, String target) {
 		UnformedItemStack s = new UnformedItemStack(target);
 		boolean ret = s.itemStackMatches(stk);
 		s.possibleStacks.clear();
@@ -458,37 +341,29 @@ public class TileWeaponMaker extends TileMRUGeneric{
 		return ret;
 	}
 	
-	public boolean areIngridientsCorrect()
-	{
+	public boolean areIngridientsCorrect() {
 		//If output is empty
-		if(this.getStackInSlot(0) == null)
-		{
-			if(this.getStackInSlot(1) != null && isOreDict(this.getStackInSlot(1),"elementalCore"))
-			{
-				if(this.getStackInSlot(2) != null && this.getStackInSlot(2).getItem() instanceof ItemMRUStorageNBTTag && this.getStackInSlot(2).getItemDamage() >= 1)
-				{
-					String base = this.getBase();
-					String handle = this.getHandle();
-					String scope = this.getScope();
-					String device = this.getDevice();
-					String lense = this.getLense();
-					if(index == 0)
-					{
+		if(getStackInSlot(0) == null) {
+			if(getStackInSlot(1) != null && isOreDict(getStackInSlot(1),"elementalCore")) {
+				if(getStackInSlot(2) != null && getStackInSlot(2).getItem() instanceof ItemMRUStorageNBTTag && getStackInSlot(2).getItemDamage() >= 1) {
+					String base = getBase();
+					String handle = getHandle();
+					String scope = getScope();
+					String device = getDevice();
+					String lense = getLense();
+					if(index == 0) {
 						if(!base.isEmpty() && !handle.isEmpty() && !device.isEmpty())
 							return true;
 					}
-					if(index == 1)
-					{
+					if(index == 1) {
 						if(!base.isEmpty() && !handle.isEmpty() && !device.isEmpty())
 							return true;
 					}
-					if(index == 2)
-					{
+					if(index == 2) {
 						if(!base.isEmpty() && !handle.isEmpty() && !device.isEmpty() && !scope.isEmpty())
 							return true;
 					}
-					if(index == 3)
-					{
+					if(index == 3) {
 						if(!base.isEmpty() && !handle.isEmpty() && !device.isEmpty() && !lense.isEmpty())
 							return true;
 					}
@@ -498,29 +373,25 @@ public class TileWeaponMaker extends TileMRUGeneric{
 		return false;
 	}
 	
-	public void previewWeapon()
-	{
-		this.previewStack = null;
-		if(this.getStackInSlot(0) == null)
-		{
-			if(this.getStackInSlot(1) != null && isOreDict(this.getStackInSlot(1),"elementalCore"))
-			{
-				if(this.getStackInSlot(2) != null && this.getStackInSlot(2).getItem() instanceof ItemMRUStorageNBTTag && this.getStackInSlot(2).getItemDamage() >= 1)
-				{
-					if(this.index == 0)
-						this.previewStack = new ItemStack(ItemsCore.pistol);
-					if(this.index == 1)
-						this.previewStack = new ItemStack(ItemsCore.rifle);
-					if(this.index == 2)
-						this.previewStack = new ItemStack(ItemsCore.sniper);
-					if(this.index == 3)
-						this.previewStack = new ItemStack(ItemsCore.gatling);
+	public void previewWeapon() {
+		previewStack = null;
+		if(getStackInSlot(0) == null) {
+			if(getStackInSlot(1) != null && isOreDict(getStackInSlot(1), "elementalCore")) {
+				if(getStackInSlot(2) != null && getStackInSlot(2).getItem() instanceof ItemMRUStorageNBTTag && getStackInSlot(2).getItemDamage() >= 1) {
+					if(index == 0)
+						previewStack = new ItemStack(ItemsCore.pistol);
+					if(index == 1)
+						previewStack = new ItemStack(ItemsCore.rifle);
+					if(index == 2)
+						previewStack = new ItemStack(ItemsCore.sniper);
+					if(index == 3)
+						previewStack = new ItemStack(ItemsCore.gatling);
 					
-					String lense = this.getLense();
-					String base = this.getBase();
-					String handle = this.getHandle();
-					String scope = this.getScope();
-					String device = this.getDevice();
+					String lense = getLense();
+					String base = getBase();
+					String handle = getHandle();
+					String scope = getScope();
+					String device = getDevice();
 					NBTTagCompound tag = MiscUtils.getStackTag(previewStack);
 					tag.setString("lense", lense);
 					tag.setString("base", base);
@@ -532,42 +403,71 @@ public class TileWeaponMaker extends TileMRUGeneric{
 		}
 	}
 	
-	public void makeWeapon()
-	{
-		if(this.areIngridientsCorrect())
-		{
-			ItemStack result = this.previewStack.copy();
+	public void makeWeapon() {
+		if(areIngridientsCorrect()) {
+			ItemStack result = previewStack.copy();
 			ItemGun.calculateGunStats(result);
-			this.setInventorySlotContents(0, result);
-			for(int i = 1; i < this.getSizeInventory(); ++i)
-				this.decrStackSize(i, 1);
+			setInventorySlotContents(0, result);
+			for(int i = 1; i < getSizeInventory(); ++i)
+				decrStackSize(i, 1);
 		}
 	}
 	
 	@Override
-	public ItemStack decrStackSize(int par1, int par2) 
-	{
+	public ItemStack decrStackSize(int par1, int par2)  {
 		ItemStack is = super.decrStackSize(par1, par2);
-		this.markDirty();
+		markDirty();
 		return is;
 	}
 	
-    @Override
-    public void setInventorySlotContents(int par1, ItemStack par2ItemStack)
-    {
-    	super.setInventorySlotContents(par1, par2ItemStack);
-    	this.markDirty();
-    }
-    
-    public void markDirty()
-    {
-    	super.markDirty();
-    	this.previewWeapon();
-    	this.syncTick = 0;
-    }
-
+	@Override
+	public void setInventorySlotContents(int par1, ItemStack par2ItemStack) {
+		super.setInventorySlotContents(par1, par2ItemStack);
+		markDirty();
+	}
+	
+	@Override
+	public void markDirty() {
+		super.markDirty();
+		previewWeapon();
+		syncTick = 0;
+	}
+	
 	@Override
 	public int[] getOutputSlots() {
-		return new int[]{0};
+		return new int[] {0};
+	}
+	
+	@Override
+	public int[] getInputSlots() {
+		switch(index) {
+		case 0:
+			return new int[] {1, 2, 3, 4, 5, 6, 7, 8, 9};
+		case 1:
+			return new int[] {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
+		case 2:
+			return new int[] {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13};
+		case 3:
+			return new int[] {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18};
+		}
+		return new int[0];
+	}
+	
+	@Override
+	public boolean isItemValidForSlot(int p_94041_1_, ItemStack p_94041_2_) {
+		if(p_94041_1_ == 0)
+			return false;
+		
+		switch(index) {
+		case 0:
+			return p_94041_1_ <= 9;
+		case 1:
+			return p_94041_1_ <= 12;
+		case 2:
+			return p_94041_1_ <= 13;
+		case 3:
+			return p_94041_1_ <= 18;
+		}
+		return false;
 	}
 }

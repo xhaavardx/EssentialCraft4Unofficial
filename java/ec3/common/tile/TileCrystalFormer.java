@@ -13,7 +13,7 @@ import ec3.api.ApiCore;
 import ec3.common.block.BlocksCore;
 import ec3.utils.common.ECUtils;
 
-public class TileCrystalFormer extends TileMRUGeneric{
+public class TileCrystalFormer extends TileMRUGeneric {
 	
 	public int progressLevel;
 	public static float cfgMaxMRU = ApiCore.DEVICE_MAX_MRU_GENERIC;
@@ -22,157 +22,139 @@ public class TileCrystalFormer extends TileMRUGeneric{
 	public static boolean generatesCorruption = true;
 	public static int genCorruption = 2;
 	
-	public TileCrystalFormer()
-	{
-		 super();
-		this.maxMRU = (int)cfgMaxMRU;
-		this.setSlotsNum(8);
+	public TileCrystalFormer() {
+		super();
+		maxMRU = (int)cfgMaxMRU;
+		setSlotsNum(8);
 	}
 	
 	@Override
-	public void updateEntity()
-	{
+	public void updateEntity() {
 		super.updateEntity();
 		ECUtils.manage(this, 0);
 		
-		if(!this.worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord))
-			this.doWork();
-    	this.spawnParticles();
+		if(!worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord))
+			doWork();
+    	spawnParticles();
 	}
 	
-    public void doWork()
-    {
-    	if(canWork())
-    	{
-    		if(this.getMRU() > mruUsage)
-    		{
-    			if(!this.worldObj.isRemote)
-    			{
-    				if(this.setMRU(this.getMRU()-mruUsage))
-    				++this.progressLevel;
-    				if(generatesCorruption)
-    					ECUtils.increaseCorruptionAt(worldObj, xCoord, yCoord, zCoord, this.worldObj.rand.nextInt(genCorruption));
-        			if(this.progressLevel >= requiredTime)
-        			{
-        				this.progressLevel = 0;
-        				this.createItem();
-        			}	
-    			}
+	public void doWork()  {
+		if(canWork()) {
+			if(getMRU() > mruUsage) {
+				if(!worldObj.isRemote) {
+					if(setMRU(getMRU() - mruUsage))
+						++progressLevel;
+					if(generatesCorruption)
+						ECUtils.increaseCorruptionAt(worldObj, xCoord, yCoord, zCoord, worldObj.rand.nextInt(genCorruption));
+					if(progressLevel >= requiredTime) {
+						progressLevel = 0;
+						createItem();
+					}	
+				}
+			}
+		}
+	}
 	
-    		}
-    	}
-    }
-    
-    public void createItem()
-    {
-    	ItemStack b = new ItemStack(Items.bucket,1,0);
-    	this.setInventorySlotContents(2, b);
-    	this.setInventorySlotContents(3, b);
-    	this.setInventorySlotContents(4, b);
-    	this.decrStackSize(5, 1);
-    	this.decrStackSize(6, 1);
-    	this.decrStackSize(7, 1);
-    	ItemStack crystal = new ItemStack(BlocksCore.elementalCrystal,1,0);
-    	MiscUtils.getStackTag(crystal).setFloat("size", 1);
-    	MiscUtils.getStackTag(crystal).setFloat("fire", 0);
-    	MiscUtils.getStackTag(crystal).setFloat("water", 0);
-    	MiscUtils.getStackTag(crystal).setFloat("earth", 0);
-    	MiscUtils.getStackTag(crystal).setFloat("air", 0);
-    	this.setInventorySlotContents(1, crystal);
-    }
-    
-    public boolean canWork()
-    {
-    	ItemStack[] s = new ItemStack[7];
-    	for(int i = 1; i < 8; ++i)
-    	{
-    		s[i-1] = this.getStackInSlot(i);
-    	}
-    	if(s[0] == null)
-    	{
-    		if(s[1] != null && s[2] != null && s[3] != null && s[4] != null && s[5] != null && s[6] != null)
-    		{
-    			if(
-    					s[1].getItem() == Items.water_bucket 
-    					&& s[2].getItem() == Items.water_bucket 
-    					&& s[3].getItem() == Items.water_bucket 
-    					&& isGlassBlock(s[4])
-    					&& isGlassBlock(s[5])
-    					&& s[6].getItem() == Items.diamond)
-    			{
-    				return true;
-    			}
-    		}
-    	}
-    	return false;
-    }
-    
-    public boolean isGlassBlock(ItemStack is)
-    {
-    	if(is == null)
-    		return false;
-    	
-    	if(is.getItem() == Item.getItemFromBlock(Blocks.glass) || is.getItem() == Item.getItemFromBlock(Blocks.stained_glass))
-    		return true;
-    	
-    	if(OreDictionary.getOreIDs(is) != null && OreDictionary.getOreIDs(is).length > 0)
-    	{
-    		for(int i = 0; i < OreDictionary.getOreIDs(is).length; ++i)
-    		{
-    			String name = OreDictionary.getOreName(OreDictionary.getOreIDs(is)[i]);
-    			if(name.equals("blockGlass"))
-    				return true;
-    		}
-    	}
-    	
-    	return false;
-    }
-    
-    public void spawnParticles()
-    {
-    	if(this.canWork() && this.getMRU() > 0)
-    	{
-    		for(int o = 0; o < 10; ++o)
-    		{
-    			this.worldObj.spawnParticle("reddust", xCoord+0.1D+this.worldObj.rand.nextDouble()/1.1D, yCoord+((float)o/10), zCoord+0.1D+this.worldObj.rand.nextDouble()/1.1D, -1.0D, 1.0D, 1.0D);
-    		}
-    	}
-    }
-    
-    public static void setupConfig(Configuration cfg)
-    {
-    	try
-    	{
-	    	cfg.load();
-	    	String[] cfgArrayString = cfg.getStringList("CrystalFormerSettings", "tileentities", new String[]{
-	    			"Max MRU:"+ApiCore.DEVICE_MAX_MRU_GENERIC,
-	    			"MRU Usage:100",
-	    			"Ticks required to create a crystal:1000",
-	    			"Can this device actually generate corruption:true",
-	    			"The amount of corruption generated each tick(do not set to 0!):2"
-	    			},"");
-	    	String dataString="";
+	public void createItem()  {
+		ItemStack b = new ItemStack(Items.bucket, 1, 0);
+		setInventorySlotContents(2, b);
+		setInventorySlotContents(3, b);
+		setInventorySlotContents(4, b);
+		decrStackSize(5, 1);
+		decrStackSize(6, 1);
+		decrStackSize(7, 1);
+		ItemStack crystal = new ItemStack(BlocksCore.elementalCrystal,1,0);
+		MiscUtils.getStackTag(crystal).setFloat("size", 1);
+		MiscUtils.getStackTag(crystal).setFloat("fire", 0);
+		MiscUtils.getStackTag(crystal).setFloat("water", 0);
+		MiscUtils.getStackTag(crystal).setFloat("earth", 0);
+		MiscUtils.getStackTag(crystal).setFloat("air", 0);
+		setInventorySlotContents(1, crystal);
+	}
+	
+	public boolean canWork() {
+		ItemStack[] s = new ItemStack[7];
+		for(int i = 1; i < 8; ++i) {
+			s[i-1] = getStackInSlot(i);
+		}
+		if(s[0] == null) {
+			if(s[1] != null && s[2] != null && s[3] != null && s[4] != null && s[5] != null && s[6] != null) {
+				if(s[1].getItem() == Items.water_bucket && s[2].getItem() == Items.water_bucket && s[3].getItem() == Items.water_bucket && isGlassBlock(s[4]) && isGlassBlock(s[5]) && s[6].getItem() == Items.diamond) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	public boolean isGlassBlock(ItemStack is) {
+		if(is == null)
+			return false;
+		
+		if(is.getItem() == Item.getItemFromBlock(Blocks.glass) || is.getItem() == Item.getItemFromBlock(Blocks.stained_glass))
+			return true;
+		
+		if(OreDictionary.getOreIDs(is) != null && OreDictionary.getOreIDs(is).length > 0) {
+			for(int i = 0; i < OreDictionary.getOreIDs(is).length; ++i) {
+				String name = OreDictionary.getOreName(OreDictionary.getOreIDs(is)[i]);
+				if(name.equals("blockGlass"))
+					return true;
+			}
+		}
+		
+		return false;
+	}
+	
+	public void spawnParticles() {
+		if(canWork() && getMRU() > 0) {
+			for(int o = 0; o < 10; ++o) {
+				worldObj.spawnParticle("reddust", xCoord+0.1D + worldObj.rand.nextDouble()/1.1D, yCoord + ((float)o/10), zCoord+0.1D + worldObj.rand.nextDouble()/1.1D, -1.0D, 1.0D, 1.0D);
+			}
+		}
+	}
+	
+	public static void setupConfig(Configuration cfg) {
+		try {
+			cfg.load();
+			String[] cfgArrayString = cfg.getStringList("CrystalFormerSettings", "tileentities", new String[] {
+					"Max MRU:" + ApiCore.DEVICE_MAX_MRU_GENERIC,
+					"MRU Usage:100",
+					"Ticks required to create a crystal:1000",
+					"Can this device actually generate corruption:true",
+					"The amount of corruption generated each tick(do not set to 0!):2"
+			}, "");
+			String dataString = "";
+			
+			for(int i = 0; i < cfgArrayString.length; ++i)
+				dataString += "||" + cfgArrayString[i];
 	    	
-	    	for(int i = 0; i < cfgArrayString.length; ++i)
-	    		dataString+="||"+cfgArrayString[i];
-	    	
-	    	DummyData[] data = DataStorage.parseData(dataString);
-	    	
-	    	mruUsage = Integer.parseInt(data[1].fieldValue);
-	    	requiredTime = Integer.parseInt(data[2].fieldValue);
-	    	cfgMaxMRU = Float.parseFloat(data[0].fieldValue);
-	    	generatesCorruption = Boolean.parseBoolean(data[3].fieldValue);
-	    	genCorruption = Integer.parseInt(data[4].fieldValue);
-	    	
-	    	cfg.save();
-    	}catch(Exception e)
-    	{
-    		return;
-    	}
-    }
-
+			DummyData[] data = DataStorage.parseData(dataString);
+			
+			mruUsage = Integer.parseInt(data[1].fieldValue);
+			requiredTime = Integer.parseInt(data[2].fieldValue);
+			cfgMaxMRU = Float.parseFloat(data[0].fieldValue);
+			generatesCorruption = Boolean.parseBoolean(data[3].fieldValue);
+			genCorruption = Integer.parseInt(data[4].fieldValue);
+			
+			cfg.save();
+		}
+		catch(Exception e) {
+			return;
+		}
+	}
+	
 	@Override
 	public int[] getOutputSlots() {
-		return new int[]{1};
+		return new int[] {1, 2, 3, 4};
+	}
+	
+	@Override
+	public int[] getInputSlots() {
+		return new int[] {2, 3, 4, 5, 6, 7};
+	}
+	
+	@Override
+	public boolean isItemValidForSlot(int p_94041_1_, ItemStack p_94041_2_) {
+		return p_94041_1_ == 0 ? isBoundGem(p_94041_2_) : p_94041_1_ >= 2 && p_94041_1_ <= 4 ? p_94041_2_.getItem() == Items.water_bucket : p_94041_1_ >= 5 && p_94041_1_ <= 6 ? isGlassBlock(p_94041_2_) : p_94041_1_ == 7 ? p_94041_2_.getItem() == Items.diamond : false;
 	}
 }

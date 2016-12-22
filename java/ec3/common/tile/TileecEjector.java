@@ -7,7 +7,7 @@ import ec3.api.EnumStructureType;
 import ec3.api.IStructurePiece;
 import ec3.api.ITEStoresMRU;
 
-public class TileecEjector extends TileEntity implements ITEStoresMRU, IStructurePiece{
+public class TileecEjector extends TileEntity implements ITEStoresMRU, IStructurePiece {
 	public TileecController controller;
 	public UUID uuid = UUID.randomUUID();
 	
@@ -25,30 +25,17 @@ public class TileecEjector extends TileEntity implements ITEStoresMRU, IStructur
 
 	@Override
 	public boolean setMRU(int i) {
-		if(controller != null)
-		{
-			if(i < this.getMRU())
-				return controller.setMRU(i);
-		}
-		return false;
+		return controller != null && i < getMRU() ? controller.setMRU(i) : false;
 	}
 
 	@Override
 	public float getBalance() {
-		if(controller != null)
-		{
-			return controller.getBalance();
-		}
-		return 1;
+		return controller != null ? controller.getBalance() : 1;
 	}
 
 	@Override
 	public boolean setBalance(float f) {
-		if(controller != null)
-		{
-			return controller.setBalance(f);
-		}
-		return false;
+		return controller != null ? controller.setBalance(f) : false;
 	}
 
 	@Override
@@ -67,22 +54,13 @@ public class TileecEjector extends TileEntity implements ITEStoresMRU, IStructur
 	}
 
 	@Override
-	public void setStructureController(TileEntity tile,
-			EnumStructureType structure) {
-		if(tile instanceof TileecController && structure == this.getStructure())
-		{
+	public void setStructureController(TileEntity tile, EnumStructureType structure) {
+		if(tile instanceof TileecController && structure == getStructure())
 			controller = (TileecController) tile;
-		}
-		
 	}
 
 	@Override
 	public boolean setMaxMRU(float f) {
-		if(controller != null)
-		{
-			return controller.setMaxMRU(f);
-		}
-		return false;
+		return controller != null ? controller.setMaxMRU(f) : false;
 	}
-
 }

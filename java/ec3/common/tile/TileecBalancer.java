@@ -6,7 +6,7 @@ import net.minecraft.tileentity.TileEntity;
 import ec3.api.EnumStructureType;
 import ec3.api.IStructurePiece;
 
-public class TileecBalancer extends TileEntity implements IStructurePiece{
+public class TileecBalancer extends TileEntity implements IStructurePiece {
 	public TileecController controller;
 	public UUID uuid = UUID.randomUUID();
 	
@@ -21,26 +21,15 @@ public class TileecBalancer extends TileEntity implements IStructurePiece{
 	}
 
 	@Override
-	public void setStructureController(TileEntity tile,
-			EnumStructureType structure) {
-		if(tile instanceof TileecController && structure == this.getStructure())
-		{
-			controller = (TileecController) tile;
-		}
-		
+	public void setStructureController(TileEntity tile, EnumStructureType structure) {
+		if(tile instanceof TileecController && structure == getStructure())
+			controller = (TileecController)tile;
 	}
-
 	
 	@Override
-	public void updateEntity() 
-	{
+	public void updateEntity() {
 		super.updateEntity();
-		if(this.controller != null)
-		{
-			if(this.controller.getMRUCU() != null)
-			{
-				this.controller.getMRUCU().setFlag(true);
-			}
-		}
+		if(controller != null && controller.getMRUCU() != null)
+			controller.getMRUCU().setFlag(true);
 	}
 }

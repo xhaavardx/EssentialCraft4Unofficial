@@ -1906,7 +1906,6 @@ public class ResearchRegistry {
 				.apendPage(next("mithrilineFurnace").setText(StatCollector.translateToLocal("ec3.page.mithrilineFurnace_1.txt")))
 				.apendPage(next("mithrilineFurnace").setRecipe(ECUtils.findRecipeByIS(new ItemStack(BlocksCore.mithrilineFurnace,1,0), 2)))
 				.apendPage(next("mithrilineFurnace").setText(StatCollector.translateToLocal("ec3.txt.layer_-1")).setRecipe(new StructureRecipe(new ItemStack(BlocksCore.mithrilineFurnace),
-						new StructureBlock(BlocksCore.invertedBlock, 0, 0, 0, 0),
 						new StructureBlock(BlocksCore.invertedBlock, 0, 1, 0, 0),
 						new StructureBlock(BlocksCore.invertedBlock, 0, -1, 0, 0),
 						new StructureBlock(BlocksCore.invertedBlock, 0, 0, 0, 1),

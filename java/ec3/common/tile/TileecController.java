@@ -23,7 +23,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.common.config.Configuration;
 
-public class TileecController extends TileEntity implements ITEHasMRU{
+public class TileecController extends TileEntity implements ITEHasMRU {
 	
 	//============================Variables================================//
 	public int syncTick;
@@ -47,32 +47,29 @@ public class TileecController extends TileEntity implements ITEHasMRU{
 	//===========================Functions=================================//
 	
 	@Override
-	public void updateEntity() 
-	{
+	public void updateEntity() {
 		//Retrying structure checks. Basically, every 10 seconds the structure will re-initialize//
-		if(structureCheckTick == 0)
-		{
-			isCorrect = this.checkStructure();
+		if(structureCheckTick == 0) {
+			isCorrect = checkStructure();
 			structureCheckTick = 200;
-		}else
-			--this.structureCheckTick;
+		}
+		else
+			--structureCheckTick;
 		
 		//Sending the sync packets to the CLIENT. 
-		if(syncTick == 0)
-		{
-			if(!this.worldObj.isRemote)
-				MiscUtils.sendPacketToAllAround(worldObj, getDescriptionPacket(), xCoord, yCoord, zCoord, this.worldObj.provider.dimensionId, 16);
+		if(syncTick == 0) {
+			if(!worldObj.isRemote)
+				MiscUtils.sendPacketToAllAround(worldObj, getDescriptionPacket(), xCoord, yCoord, zCoord, worldObj.provider.dimensionId, 16);
 			syncTick = 30;
-		}else
-			--this.syncTick;
+		}
+		else
+			--syncTick;
 	}
 	
 	@SuppressWarnings("unchecked")
-	public IMRUPressence getMRUCU()
-	{
-		if(isCorrect)
-		{
-			List<IMRUPressence> pList = this.worldObj.getEntitiesWithinAABB(IMRUPressence.class, AxisAlignedBB.getBoundingBox(lowerCoord.x, lowerCoord.y, lowerCoord.z, upperCoord.x, upperCoord.y, upperCoord.z));
+	public IMRUPressence getMRUCU() {
+		if(isCorrect) {
+			List<IMRUPressence> pList = worldObj.getEntitiesWithinAABB(IMRUPressence.class, AxisAlignedBB.getBoundingBox(lowerCoord.x, lowerCoord.y, lowerCoord.z, upperCoord.x, upperCoord.y, upperCoord.z));
 			if(pList != null && !pList.isEmpty())
 				return pList.get(0);
 		}
@@ -80,32 +77,28 @@ public class TileecController extends TileEntity implements ITEHasMRU{
 	}
 	
 	@Override
-    public Packet getDescriptionPacket()
-    {
+    public Packet getDescriptionPacket() {
         NBTTagCompound nbttagcompound = new NBTTagCompound();
-        this.writeToNBT(nbttagcompound);
-        return new S35PacketUpdateTileEntity(this.xCoord, this.yCoord, this.zCoord, -10, nbttagcompound);
+        writeToNBT(nbttagcompound);
+        return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, -10, nbttagcompound);
     }
 	
 	@Override
-    public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt)
-    {
+    public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
 		if(net.getNetHandler() instanceof INetHandlerPlayClient)
 			if(pkt.func_148853_f() == -10)
-				this.readFromNBT(pkt.func_148857_g());
+				readFromNBT(pkt.func_148857_g());
     }
 
 	
 	@Override
-    public void readFromNBT(NBTTagCompound i)
-    {
+    public void readFromNBT(NBTTagCompound i) {
 		super.readFromNBT(i);
 		ECUtils.loadMRUState(this, i);
     }
 	
 	@Override
-    public void writeToNBT(NBTTagCompound i)
-    {
+    public void writeToNBT(NBTTagCompound i) {
     	super.writeToNBT(i);
     	ECUtils.saveMRUState(this, i);
     }
@@ -114,10 +107,9 @@ public class TileecController extends TileEntity implements ITEHasMRU{
 	 * Checking the shape of the structure;
 	 * @return - false, if the structure is incorrect, true otherwise
 	 */
-	public boolean checkStructure()
-	{
+	public boolean checkStructure() {
 		resistance = 0F;
-		maxMRU = (int) cfgMaxMRU;
+		maxMRU = (int)cfgMaxMRU;
 		blocksInStructure.clear(); //Clearing the list of blocks to reinitialise it
 		//Base variables setup//
 		int minX = 0;
@@ -129,305 +121,210 @@ public class TileecController extends TileEntity implements ITEHasMRU{
 		int checkInt0 = 0;
 		List<?> allowedBlocks = ECUtils.allowedBlocks.get(EnumStructureType.MRUCUContaigementChamber); //Getting the list of allowed blocks in the structure
 		//Trying to find the whole shape of a structure//
-		while(allowedBlocks.contains(this.worldObj.getBlock(xCoord+checkInt0, yCoord, zCoord)))
-		{
+		while(allowedBlocks.contains(worldObj.getBlock(xCoord+checkInt0, yCoord, zCoord))) {
 			++checkInt0;
 		}
 		--checkInt0;
 		if(checkInt0 > 0)
-		{
 			maxX = checkInt0;
-		}
 		checkInt0 = 0;
-		while(allowedBlocks.contains(this.worldObj.getBlock(xCoord+checkInt0, yCoord, zCoord)))
-		{
+		while(allowedBlocks.contains(worldObj.getBlock(xCoord+checkInt0, yCoord, zCoord))) {
 			--checkInt0;
 		}
 		++checkInt0;
 		if(checkInt0 < 0)
-		{
 			minX = checkInt0;
-		}
-		if(maxX == 0)
-		{
+		if(maxX == 0) {
 			checkInt0 = 0;
-			while(allowedBlocks.contains(this.worldObj.getBlock(xCoord, yCoord, zCoord+checkInt0)))
-			{
+			while(allowedBlocks.contains(worldObj.getBlock(xCoord, yCoord, zCoord+checkInt0))) {
 				++checkInt0;
 			}
 			--checkInt0;
 			if(checkInt0 > 0)
-			{
 				maxZ = checkInt0;
-			}
 		}
-		if(minX == 0)
-		{
+		if(minX == 0) {
 			checkInt0 = 0;
-			while(allowedBlocks.contains(this.worldObj.getBlock(xCoord, yCoord, zCoord+checkInt0)))
-			{
+			while(allowedBlocks.contains(worldObj.getBlock(xCoord, yCoord, zCoord+checkInt0))) {
 				--checkInt0;
 			}
 			++checkInt0;
 			if(checkInt0 < 0)
-			{
 				minZ = checkInt0;
-			}
 		}
-		if(maxX == 0 && maxZ != 0)
-		{
+		if(maxX == 0 && maxZ != 0) {
 			checkInt0 = 0;
-			while(allowedBlocks.contains(this.worldObj.getBlock(xCoord+checkInt0, yCoord, zCoord+maxZ)))
-			{
+			while(allowedBlocks.contains(worldObj.getBlock(xCoord+checkInt0, yCoord, zCoord+maxZ))) {
 				++checkInt0;
 			}
 			--checkInt0;
 			if(checkInt0 > 0)
-			{
 				maxX = checkInt0;
-			}
 		}
-		if(minX == 0 && maxZ != 0)
-		{
+		if(minX == 0 && maxZ != 0) {
 			checkInt0 = 0;
-			while(allowedBlocks.contains(this.worldObj.getBlock(xCoord+checkInt0, yCoord, zCoord+maxZ)))
-			{
+			while(allowedBlocks.contains(worldObj.getBlock(xCoord+checkInt0, yCoord, zCoord+maxZ))) {
 				--checkInt0;
 			}
 			++checkInt0;
 			if(checkInt0 < 0)
-			{
 				minX = checkInt0;
-			}
 		}
-		if(maxX == 0 && minZ != 0)
-		{
+		if(maxX == 0 && minZ != 0) {
 			checkInt0 = 0;
-			while(allowedBlocks.contains(this.worldObj.getBlock(xCoord+checkInt0, yCoord, zCoord+minZ)))
-			{
+			while(allowedBlocks.contains(worldObj.getBlock(xCoord+checkInt0, yCoord, zCoord+minZ))) {
 				++checkInt0;
 			}
 			--checkInt0;
 			if(checkInt0 > 0)
-			{
 				maxX = checkInt0;
-			}
 		}
-		if(minX == 0 && minZ != 0)
-		{
+		if(minX == 0 && minZ != 0) {
 			checkInt0 = 0;
-			while(allowedBlocks.contains(this.worldObj.getBlock(xCoord+checkInt0, yCoord, zCoord+minZ)))
-			{
+			while(allowedBlocks.contains(worldObj.getBlock(xCoord+checkInt0, yCoord, zCoord+minZ))) {
 				--checkInt0;
 			}
 			++checkInt0;
 			if(checkInt0 < 0)
-			{
 				minX = checkInt0;
-			}
 		}
-		if(maxZ == 0 && maxX != 0)
-		{
+		if(maxZ == 0 && maxX != 0) {
 			checkInt0 = 0;
-			while(allowedBlocks.contains(this.worldObj.getBlock(xCoord+maxX, yCoord, zCoord+checkInt0)))
-			{
+			while(allowedBlocks.contains(worldObj.getBlock(xCoord+maxX, yCoord, zCoord+checkInt0))) {
 				++checkInt0;
 			}
 			--checkInt0;
 			if(checkInt0 > 0)
-			{
 				maxZ = checkInt0;
-			}
 		}
-		if(minZ == 0 && maxX != 0)
-		{
+		if(minZ == 0 && maxX != 0) {
 			checkInt0 = 0;
-			while(allowedBlocks.contains(this.worldObj.getBlock(xCoord+maxX, yCoord, zCoord+checkInt0)))
-			{
+			while(allowedBlocks.contains(worldObj.getBlock(xCoord+maxX, yCoord, zCoord+checkInt0))) {
 				--checkInt0;
 			}
 			++checkInt0;
 			if(checkInt0 < 0)
-			{
 				minZ = checkInt0;
-			}
 		}
-		if(maxZ == 0 && minX != 0)
-		{
+		if(maxZ == 0 && minX != 0) {
 			checkInt0 = 0;
-			while(allowedBlocks.contains(this.worldObj.getBlock(xCoord+minX, yCoord, zCoord+checkInt0)))
-			{
+			while(allowedBlocks.contains(worldObj.getBlock(xCoord+minX, yCoord, zCoord+checkInt0))) {
 				++checkInt0;
 			}
 			--checkInt0;
 			if(checkInt0 > 0)
-			{
 				maxZ = checkInt0;
-			}
 		}
-		if(minZ == 0 && minX != 0)
-		{
+		if(minZ == 0 && minX != 0) {
 			checkInt0 = 0;
-			while(allowedBlocks.contains(this.worldObj.getBlock(xCoord+minX, yCoord, zCoord+checkInt0)))
-			{
+			while(allowedBlocks.contains(worldObj.getBlock(xCoord+minX, yCoord, zCoord+checkInt0))) {
 				--checkInt0;
 			}
 			++checkInt0;
 			if(checkInt0 < 0)
-			{
 				minZ = checkInt0;
-			}
 		}
-		if(maxY == 0 && maxX != 0 && maxZ != 0)
-		{
+		if(maxY == 0 && maxX != 0 && maxZ != 0) {
 			checkInt0 = 0;
-			while(allowedBlocks.contains(this.worldObj.getBlock(xCoord+maxX, yCoord+checkInt0, zCoord+maxZ)))
-			{
+			while(allowedBlocks.contains(worldObj.getBlock(xCoord+maxX, yCoord+checkInt0, zCoord+maxZ))) {
 				++checkInt0;
 			}
 			--checkInt0;
 			if(checkInt0 > 0)
-			{
 				maxY = checkInt0;
-			}
 		}
-		if(maxY == 0 && minX != 0 && maxZ != 0)
-		{
+		if(maxY == 0 && minX != 0 && maxZ != 0) {
 			checkInt0 = 0;
-			while(allowedBlocks.contains(this.worldObj.getBlock(xCoord+minX, yCoord+checkInt0, zCoord+maxZ)))
-			{
+			while(allowedBlocks.contains(worldObj.getBlock(xCoord+minX, yCoord+checkInt0, zCoord+maxZ))) {
 				++checkInt0;
 			}
 			--checkInt0;
 			if(checkInt0 > 0)
-			{
 				maxY = checkInt0;
-			}
 		}
-		if(maxY == 0 && maxX != 0 && minZ != 0)
-		{
+		if(maxY == 0 && maxX != 0 && minZ != 0) {
 			checkInt0 = 0;
-			while(allowedBlocks.contains(this.worldObj.getBlock(xCoord+maxX, yCoord+checkInt0, zCoord+minZ)))
-			{
+			while(allowedBlocks.contains(worldObj.getBlock(xCoord+maxX, yCoord+checkInt0, zCoord+minZ))) {
 				++checkInt0;
 			}
 			--checkInt0;
 			if(checkInt0 > 0)
-			{
 				maxY = checkInt0;
-			}
 		}
-		if(maxY == 0 && minX != 0 && minZ != 0)
-		{
+		if(maxY == 0 && minX != 0 && minZ != 0) {
 			checkInt0 = 0;
-			while(allowedBlocks.contains(this.worldObj.getBlock(xCoord+minX, yCoord+checkInt0, zCoord+minZ)))
-			{
+			while(allowedBlocks.contains(worldObj.getBlock(xCoord+minX, yCoord+checkInt0, zCoord+minZ))) {
 				++checkInt0;
 			}
 			--checkInt0;
 			if(checkInt0 > 0)
-			{
 				maxY = checkInt0;
-			}
 		}
-		if(minY == 0 && maxX != 0 && minZ != 0)
-		{
+		if(minY == 0 && maxX != 0 && minZ != 0) {
 			checkInt0 = 0;
-			while(allowedBlocks.contains(this.worldObj.getBlock(xCoord+maxX, yCoord+checkInt0, zCoord+minZ)))
-			{
+			while(allowedBlocks.contains(worldObj.getBlock(xCoord+maxX, yCoord+checkInt0, zCoord+minZ))) {
+				--checkInt0;
+			}
+			++checkInt0;
+				minY = checkInt0;
+		}
+		if(minY == 0 && minX != 0 && minZ != 0) {
+			checkInt0 = 0;
+			while(allowedBlocks.contains(worldObj.getBlock(xCoord+minX, yCoord+checkInt0, zCoord+minZ))) {
 				--checkInt0;
 			}
 			++checkInt0;
 			if(checkInt0 < 0)
-			{
 				minY = checkInt0;
-			}
 		}
-		if(minY == 0 && minX != 0 && minZ != 0)
-		{
+		if(minY == 0 && minX != 0 && maxZ != 0) {
 			checkInt0 = 0;
-			while(allowedBlocks.contains(this.worldObj.getBlock(xCoord+minX, yCoord+checkInt0, zCoord+minZ)))
-			{
+			while(allowedBlocks.contains(worldObj.getBlock(xCoord+maxX, yCoord+checkInt0, zCoord+minZ))) {
 				--checkInt0;
 			}
 			++checkInt0;
 			if(checkInt0 < 0)
-			{
 				minY = checkInt0;
-			}
 		}
-		if(minY == 0 && minX != 0 && maxZ != 0)
-		{
+		if(minY == 0 && maxX != 0 && maxZ != 0) {
 			checkInt0 = 0;
-			while(allowedBlocks.contains(this.worldObj.getBlock(xCoord+maxX, yCoord+checkInt0, zCoord+minZ)))
-			{
+			while(allowedBlocks.contains(worldObj.getBlock(xCoord+minX, yCoord+checkInt0, zCoord+minZ))) {
 				--checkInt0;
 			}
 			++checkInt0;
 			if(checkInt0 < 0)
-			{
 				minY = checkInt0;
-			}
-		}
-		if(minY == 0 && maxX != 0 && maxZ != 0)
-		{
-			checkInt0 = 0;
-			while(allowedBlocks.contains(this.worldObj.getBlock(xCoord+minX, yCoord+checkInt0, zCoord+minZ)))
-			{
-				--checkInt0;
-			}
-			++checkInt0;
-			if(checkInt0 < 0)
-			{
-				minY = checkInt0;
-			}
 		}
 		//Checking for the cuboid shape//
 		if((minX == 0 && maxX == 0) || (minY == 0 && maxY == 0) || (minZ == 0 && maxZ == 0))
-		{
 			return false;
-		}else
-		{
-			this.lowerCoord = new Coord3D(this.xCoord+minX, this.yCoord+minY, this.zCoord+minZ);
-			this.upperCoord = new Coord3D(this.xCoord+maxX, this.yCoord+maxY, this.zCoord+maxZ);
-			for(int x = minX; x <= maxX; ++x)
-			{
-				for(int y = minY; y <= maxY; ++y)
-				{
-					for(int z = minZ; z <= maxZ; ++z)
-					{
-						if(z == minZ || z == maxZ || x == minX || x == maxX || y == minY || y == maxY)
-						{
-							if(allowedBlocks.contains(this.worldObj.getBlock(xCoord+x, yCoord+y, zCoord+z)))
-							{
-								this.blocksInStructure.add(new BlockPosition(worldObj, xCoord+x, yCoord+y, zCoord+z));
-								int meta = this.worldObj.getBlockMetadata(xCoord+x, yCoord+y, zCoord+z);
-								if(ECUtils.ignoreMeta.containsKey(this.worldObj.getBlock(xCoord+x, yCoord+y, zCoord+z).getUnlocalizedName()) && ECUtils.ignoreMeta.get(this.worldObj.getBlock(xCoord+x, yCoord+y, zCoord+z).getUnlocalizedName()))
-								{
+		else {
+			lowerCoord = new Coord3D(xCoord+minX, yCoord+minY, zCoord+minZ);
+			upperCoord = new Coord3D(xCoord+maxX, yCoord+maxY, zCoord+maxZ);
+			for(int x = minX; x <= maxX; ++x) {
+				for(int y = minY; y <= maxY; ++y) {
+					for(int z = minZ; z <= maxZ; ++z) {
+						if(z == minZ || z == maxZ || x == minX || x == maxX || y == minY || y == maxY) {
+							if(allowedBlocks.contains(worldObj.getBlock(xCoord+x, yCoord+y, zCoord+z))) {
+								blocksInStructure.add(new BlockPosition(worldObj, xCoord+x, yCoord+y, zCoord+z));
+								int meta = worldObj.getBlockMetadata(xCoord+x, yCoord+y, zCoord+z);
+								if(ECUtils.ignoreMeta.containsKey(worldObj.getBlock(xCoord+x, yCoord+y, zCoord+z).getUnlocalizedName()) && ECUtils.ignoreMeta.get(worldObj.getBlock(xCoord+x, yCoord+y, zCoord+z).getUnlocalizedName()))
 									meta = -1;
-								}
-								DummyData dt = new DummyData(this.worldObj.getBlock(xCoord+x, yCoord+y, zCoord+z).getUnlocalizedName(),meta);
+								DummyData dt = new DummyData(worldObj.getBlock(xCoord+x, yCoord+y, zCoord+z).getUnlocalizedName(),meta);
 								if(ECUtils.mruResistance.containsKey(dt.toString()))
-								{
 									resistance += ECUtils.mruResistance.get(dt.toString());
-								}else
-								{
+								else
 									resistance += 1F;
-								}
 								dt = null;
-								if(this.worldObj.getTileEntity(xCoord+x, yCoord+y, zCoord+z) != null && this.worldObj.getTileEntity(xCoord+x, yCoord+y, zCoord+z) instanceof IStructurePiece)
-								{
-									IStructurePiece piece = (IStructurePiece) this.worldObj.getTileEntity(xCoord+x, yCoord+y, zCoord+z);
+								if(worldObj.getTileEntity(xCoord+x, yCoord+y, zCoord+z) != null && worldObj.getTileEntity(xCoord+x, yCoord+y, zCoord+z) instanceof IStructurePiece) {
+									IStructurePiece piece = (IStructurePiece) worldObj.getTileEntity(xCoord+x, yCoord+y, zCoord+z);
 									piece.setStructureController(this, EnumStructureType.MRUCUContaigementChamber);
-									if(this.worldObj.getTileEntity(xCoord+x, yCoord+y, zCoord+z) instanceof TileecHoldingChamber)
-									{
+									if(worldObj.getTileEntity(xCoord+x, yCoord+y, zCoord+z) instanceof TileecHoldingChamber)
 										maxMRU += cfgMRUPerStorage;
-									}
 								}
-							}else
-							{
-								return false;
 							}
+							else
+								return false;
 						}
 					}
 				}
@@ -438,9 +335,9 @@ public class TileecController extends TileEntity implements ITEHasMRU{
 
 	@Override
 	public int getMRU() {
-		IMRUPressence pressence =  getMRUCU();
+		IMRUPressence pressence = getMRUCU();
 		if(pressence != null)
-			return this.mru;
+			return mru;
 		return 0;
 	}
 
@@ -451,61 +348,56 @@ public class TileecController extends TileEntity implements ITEHasMRU{
 
 	@Override
 	public boolean setMRU(int i) {
-			this.mru = i;
+		mru = i;
 		return true;
 	}
 
 	@Override
 	public float getBalance() {
-		IMRUPressence pressence =  getMRUCU();
+		IMRUPressence pressence = getMRUCU();
 		if(pressence != null)
 			return pressence.getBalance();
-		return this.balance;
+		return balance;
 	}
 
 	@Override
 	public boolean setBalance(float f) {
-		this.balance = f;
+		balance = f;
 		return true;
 	}
 
 	@Override
 	public UUID getUUID() {
-		// TODO Auto-generated method stub
 		return uuid;
 	}
 
 	@Override
 	public boolean setMaxMRU(float f) {
-		maxMRU = (int) f;
+		maxMRU = (int)f;
 		return true;
 	}
 	
-	
-    public static void setupConfig(Configuration cfg)
-    {
-    	try
-    	{
-	    	cfg.load();
-	    	String[] cfgArrayString = cfg.getStringList("EnrichmentChamberSettings", "tileentities", new String[]{
-	    			"Default Max MRU:60000",
-	    			"MRU Increasement per Storage:100000"
-	    			},"");
-	    	String dataString="";
-	    	
-	    	for(int i = 0; i < cfgArrayString.length; ++i)
-	    		dataString+="||"+cfgArrayString[i];
-	    	
-	    	DummyData[] data = DataStorage.parseData(dataString);
-	    	
-	    	cfgMaxMRU = Float.parseFloat(data[0].fieldValue);
-	    	cfgMRUPerStorage = Float.parseFloat(data[1].fieldValue);
-	    	
-	    	cfg.save();
-    	}catch(Exception e)
-    	{
-    		return;
-    	}
-    }
-
+	public static void setupConfig(Configuration cfg) {
+		try {
+			cfg.load();
+			String[] cfgArrayString = cfg.getStringList("EnrichmentChamberSettings", "tileentities", new String[] {
+					"Default Max MRU:60000",
+					"MRU Increasement per Storage:100000"
+			},"");
+			String dataString = "";
+			
+			for(int i = 0; i < cfgArrayString.length; ++i)
+				dataString += "||" + cfgArrayString[i];
+			
+			DummyData[] data = DataStorage.parseData(dataString);
+			
+			cfgMaxMRU = Float.parseFloat(data[0].fieldValue);
+			cfgMRUPerStorage = Float.parseFloat(data[1].fieldValue);
+			
+			cfg.save();
+		}
+		catch(Exception e) {
+			return;
+		}
+	}
 }

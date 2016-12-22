@@ -7,19 +7,17 @@ import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 
-public class TileCrafter extends TileMRUGeneric{
+public class TileCrafter extends TileMRUGeneric {
 
-	public TileCrafter()
-	{
+	public TileCrafter() {
 		super();
-		this.setMaxMRU(0);
-		this.setSlotsNum(11);
-		this.slot0IsBoundGem = false;
+		setMaxMRU(0);
+		setSlotsNum(11);
+		slot0IsBoundGem = false;
 	}
 	
 	@Override
-	public int[] getAccessibleSlotsFromSide(int side) 
-	{
+	public int[] getAccessibleSlotsFromSide(int side) {
 		return super.getAccessibleSlotsFromSide(side);
 	}
 	
@@ -30,79 +28,67 @@ public class TileCrafter extends TileMRUGeneric{
 	
 	@Override
 	public int[] getOutputSlots() {
-		// TODO Auto-generated method stub
-		return new int[]{9};
+		return new int[] {9};
 	}
 	
 	@Override
-	public void updateEntity()
-    {
-		if(this.worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord) || this.worldObj.getBlockPowerInput(xCoord, yCoord, yCoord) > 0)
-		{
-			if(!this.hasFrame())
-			{
-				this.makeRecipe();
-			}else
-			{
-				if(this.hasSufficientForCraftWithFrame())
-					this.makeRecipe();
+	public void updateEntity() {
+		if(worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord) || worldObj.getBlockPowerInput(xCoord, yCoord, yCoord) > 0) {
+			if(!hasFrame()) {
+				makeRecipe();
+			}
+			else {
+				if(hasSufficientForCraftWithFrame())
+					makeRecipe();
 			}
 		}
 	}
 	
 	@Override
-	public boolean isItemValidForSlot(int slot, ItemStack stack) 
-	{
+	public boolean isItemValidForSlot(int slot, ItemStack stack) {
 		if(stack == null)
 			return false;
 		
-		return slot == 10 ? isFrame(stack) : slot == 9 ? false : isItemFineForSlot(stack,slot);
+		return slot == 10 ? isFrame(stack) : slot == 9 ? false : isItemFineForSlot(stack, slot);
 	}
 	
-	public boolean isFrame(ItemStack is)
-	{
+	public boolean isFrame(ItemStack is) {
 		return is != null && is.getItem() instanceof ItemCraftingFrame && new InventoryCraftingFrame(is).inventory[9] != null;
 	}
 	
 	
-	public boolean isItemFineForSlot(ItemStack compared, int slotNum)
-	{
-		if(hasFrame())
-		{
-			return areStacksTheSame(getRecipeFromFrame()[slotNum],compared,hasOreDict());
-		}else
-		{
+	public boolean isItemFineForSlot(ItemStack compared, int slotNum) {
+		if(hasFrame()) {
+			return areStacksTheSame(getRecipeFromFrame()[slotNum], compared, hasOreDict());
+		}
+		else {
 			return true;
 		}
 	}
 	
-	public boolean hasOreDict()
-	{
-		return this.getStackInSlot(10) != null && this.getStackInSlot(10).getItem() instanceof ItemCraftingFrame && this.getStackInSlot(10).stackTagCompound != null && !this.getStackInSlot(10).stackTagCompound.getBoolean("ignoreOreDict");
+	public boolean hasOreDict() {
+		return getStackInSlot(10) != null && getStackInSlot(10).getItem() instanceof ItemCraftingFrame && getStackInSlot(10).stackTagCompound != null && !getStackInSlot(10).stackTagCompound.getBoolean("ignoreOreDict");
 	}
 	
-	public boolean hasFrame()
-	{
-		return this.getStackInSlot(10) != null && this.getStackInSlot(10).getItem() instanceof ItemCraftingFrame && new InventoryCraftingFrame(this.getStackInSlot(10)).inventory[9] != null;
+	public boolean hasFrame() {
+		return getStackInSlot(10) != null && getStackInSlot(10).getItem() instanceof ItemCraftingFrame && new InventoryCraftingFrame(getStackInSlot(10)).inventory[9] != null;
 	}
 	
-	public boolean areStacksTheSame(ItemStack stk1, ItemStack stk2, boolean oreDict)
-	{
+	public boolean areStacksTheSame(ItemStack stk1, ItemStack stk2, boolean oreDict) {
 		if(stk1 == null && stk2 == null)
 			return true;
 		
 		if(stk1 == null || stk2 == null)
 			return false;
 		
-		if(!oreDict)
-		{
+		if(!oreDict) {
 			if(!stk1.isItemEqual(stk2))
 				return false;
 			
 			if(!ItemStack.areItemStacksEqual(stk1, stk2))
 				return false;
-		}else
-		{
+		}
+		else {
 			if(!ECUtils.oreDictionaryCompare(stk1, stk2))
 				return false;
 		}
@@ -110,12 +96,10 @@ public class TileCrafter extends TileMRUGeneric{
 		return true;
 	}
 	
-	public boolean hasSufficientForCraftWithFrame()
-	{
-		ItemStack[] frame = this.getRecipeFromFrame();
-		for(int i = 0; i < 9; ++i)
-		{
-			ItemStack stk = this.getStackInSlot(i);
+	public boolean hasSufficientForCraftWithFrame() {
+		ItemStack[] frame = getRecipeFromFrame();
+		for(int i = 0; i < 9; ++i) {
+			ItemStack stk = getStackInSlot(i);
 			if(!areStacksTheSame(frame[i],stk,hasOreDict()))
 				return false;
 		}
@@ -123,13 +107,10 @@ public class TileCrafter extends TileMRUGeneric{
 		return true;
 	}
 	
-	public ItemStack[] getRecipeFromFrame()
-	{
-		if(this.getStackInSlot(10) != null && this.getStackInSlot(10).getItem() instanceof ItemCraftingFrame)
-		{
-			InventoryCraftingFrame cInv = new InventoryCraftingFrame(this.getStackInSlot(10));
-			if(cInv.inventory[9] != null)
-			{
+	public ItemStack[] getRecipeFromFrame() {
+		if(getStackInSlot(10) != null && getStackInSlot(10).getItem() instanceof ItemCraftingFrame) {
+			InventoryCraftingFrame cInv = new InventoryCraftingFrame(getStackInSlot(10));
+			if(cInv.inventory[9] != null) {
 				ItemStack[] arrayStk = new ItemStack[9];
 				
 				arrayStk[0] = cInv.inventory[0];
@@ -148,138 +129,109 @@ public class TileCrafter extends TileMRUGeneric{
 		return null;
 	}
 	
-	public static class InventoryCraftingNoContainer extends InventoryCrafting
-	{
+	public static class InventoryCraftingNoContainer extends InventoryCrafting {
 		
-	    private ItemStack[] stackList;
-	    private int inventoryWidth;
-	    
-	    public InventoryCraftingNoContainer(int p_i1807_2_, int p_i1807_3_)
-	    {
-	    	super(null,p_i1807_2_,p_i1807_3_);
-	        int k = p_i1807_2_ * p_i1807_3_;
-	        this.stackList = new ItemStack[k];
-	        this.inventoryWidth = p_i1807_2_;
-	    }
-	    
-	    public int getSizeInventory()
-	    {
-	        return this.stackList.length;
-	    }
-	    
-	    public ItemStack getStackInSlot(int p_70301_1_)
-	    {
-	        return p_70301_1_ >= this.getSizeInventory() ? null : this.stackList[p_70301_1_];
-	    }
-
-	    public ItemStack getStackInRowAndColumn(int p_70463_1_, int p_70463_2_)
-	    {
-	        if (p_70463_1_ >= 0 && p_70463_1_ < this.inventoryWidth)
-	        {
-	            int k = p_70463_1_ + p_70463_2_ * this.inventoryWidth;
-	            return this.getStackInSlot(k);
-	        }
-	        else
-	        {
-	            return null;
-	        }
-	    }
-	    
-	    public ItemStack getStackInSlotOnClosing(int p_70304_1_)
-	    {
-	        if (this.stackList[p_70304_1_] != null)
-	        {
-	            ItemStack itemstack = this.stackList[p_70304_1_];
-	            this.stackList[p_70304_1_] = null;
-	            return itemstack;
-	        }
-	        else
-	        {
-	            return null;
-	        }
-	    }
-	    
-	    public ItemStack decrStackSize(int p_70298_1_, int p_70298_2_)
-	    {
-	        if (this.stackList[p_70298_1_] != null)
-	        {
-	            ItemStack itemstack;
-
-	            if (this.stackList[p_70298_1_].stackSize <= p_70298_2_)
-	            {
-	                itemstack = this.stackList[p_70298_1_];
-	                this.stackList[p_70298_1_] = null;
-	                return itemstack;
-	            }
-	            else
-	            {
-	                itemstack = this.stackList[p_70298_1_].splitStack(p_70298_2_);
-
-	                if (this.stackList[p_70298_1_].stackSize == 0)
-	                {
-	                    this.stackList[p_70298_1_] = null;
-	                }
-
-	                return itemstack;
-	            }
-	        }
-	        else
-	        {
-	            return null;
-	        }
-	    }
-
-	    public void setInventorySlotContents(int p_70299_1_, ItemStack p_70299_2_)
-	    {
-	        this.stackList[p_70299_1_] = p_70299_2_;
-	    }
+		private ItemStack[] stackList;
+		private int inventoryWidth;
+		
+		public InventoryCraftingNoContainer(int p_i1807_2_, int p_i1807_3_) {
+			super(null,p_i1807_2_,p_i1807_3_);
+			int k = p_i1807_2_ * p_i1807_3_;
+			stackList = new ItemStack[k];
+			inventoryWidth = p_i1807_2_;
+		}
+		
+		public int getSizeInventory() {
+			return stackList.length;
+		}
+		
+		public ItemStack getStackInSlot(int p_70301_1_) {
+			return p_70301_1_ >= getSizeInventory() ? null : stackList[p_70301_1_];
+		}
+		
+		public ItemStack getStackInRowAndColumn(int p_70463_1_, int p_70463_2_) {
+			if(p_70463_1_ >= 0 && p_70463_1_ < inventoryWidth) {
+				int k = p_70463_1_ + p_70463_2_ * inventoryWidth;
+				return getStackInSlot(k);
+			}
+			else {
+				return null;
+			}
+		}
+		
+		public ItemStack getStackInSlotOnClosing(int p_70304_1_) {
+			if(stackList[p_70304_1_] != null) {
+				ItemStack itemstack = stackList[p_70304_1_];
+				stackList[p_70304_1_] = null;
+				return itemstack;
+			}
+			else {
+				return null;
+			}
+		}
+		
+		public ItemStack decrStackSize(int p_70298_1_, int p_70298_2_) {
+			if(stackList[p_70298_1_] != null) {
+				ItemStack itemstack;
+				
+				if(stackList[p_70298_1_].stackSize <= p_70298_2_) {
+					itemstack = stackList[p_70298_1_];
+					stackList[p_70298_1_] = null;
+					return itemstack;
+				}
+				else {
+					itemstack = stackList[p_70298_1_].splitStack(p_70298_2_);
+					
+					if(stackList[p_70298_1_].stackSize == 0) {
+						stackList[p_70298_1_] = null;
+					}
+					
+					return itemstack;
+				}
+			}
+			else {
+				return null;
+			}
+		}
+		
+		public void setInventorySlotContents(int p_70299_1_, ItemStack p_70299_2_) {
+			stackList[p_70299_1_] = p_70299_2_;
+		}
 		
 	}
 	
-	public void makeRecipe()
-	{
+	public void makeRecipe() {
 		InventoryCraftingNoContainer craftingInv = new InventoryCraftingNoContainer(3, 3);
 		
-		for(int i = 0; i < 9; ++i)
-		{
-			craftingInv.setInventorySlotContents(i, this.getStackInSlot(i));
+		for(int i = 0; i < 9; ++i) {
+			craftingInv.setInventorySlotContents(i, getStackInSlot(i));
 		}
 		
-		ItemStack result = CraftingManager.getInstance().findMatchingRecipe(craftingInv, this.worldObj);
+		ItemStack result = CraftingManager.getInstance().findMatchingRecipe(craftingInv, worldObj);
 		
 		
-		if(result != null)
-		{
-			if(this.getStackInSlot(9) == null)
-			{
-				this.setInventorySlotContents(9, result.copy());
+		if(result != null) {
+			if(getStackInSlot(9) == null) {
+				setInventorySlotContents(9, result.copy());
 				decreaseStacks();
-			}else
-			{
-				if(this.getStackInSlot(9).isItemEqual(result) && ItemStack.areItemStackTagsEqual(result, this.getStackInSlot(9)))
-				{
-					if(this.getStackInSlot(9).stackSize + result.stackSize <= this.getInventoryStackLimit() && this.getStackInSlot(9).stackSize + result.stackSize <= result.getMaxStackSize())
-					{
-						this.getStackInSlot(9).stackSize += result.stackSize;
-						decreaseStacks();
-					}
+			}
+			else if(getStackInSlot(9).isItemEqual(result) && ItemStack.areItemStackTagsEqual(result, getStackInSlot(9))) {
+				if(getStackInSlot(9).stackSize + result.stackSize <= getInventoryStackLimit() && getStackInSlot(9).stackSize + result.stackSize <= result.getMaxStackSize()) {
+					getStackInSlot(9).stackSize += result.stackSize;
+					decreaseStacks();
 				}
 			}
 		}
 	}
 	
-	public void decreaseStacks()
-	{
-		for(int i = 0; i < 9; ++i)
-		{
-			ItemStack is = this.getStackInSlot(i);
-			if(is != null)
-			{
+	public void decreaseStacks() {
+		for(int i = 0; i < 9; ++i) {
+			ItemStack is = getStackInSlot(i);
+			if(is != null) {
 				ItemStack container = is.getItem().getContainerItem(is);
-				this.decrStackSize(i, 1);
-				if((this.getStackInSlot(i) == null || this.getStackInSlot(i).stackSize <= 0) && container != null)
-				{
-					this.setInventorySlotContents(i, container.copy());
+				decrStackSize(i, 1);
+				if((getStackInSlot(i) == null || getStackInSlot(i).stackSize <= 0) && container != null) {
+					setInventorySlotContents(i, container.copy());
 				}
 			}
 		}

@@ -1,5 +1,5 @@
-# EssentialCraft3
-EssentialCraft 3 is a huge magic themed industrial mod, which adds a lot of content to the game. A new energy system, recipes, tools, armor, devices, bosses - even a new dimension exists!
+# EssentialCraft4Unofficial
+EssentialCraft 4 Unofficial is a modified version of EssentialCraft 3, which is a huge magic themed industrial mod, which adds a lot of content to the game. A new energy system, recipes, tools, armor, devices, bosses - even a new dimension exists!
 
 Feel free to report bugs. However, please, attach a crash report when reporting bugs!
 

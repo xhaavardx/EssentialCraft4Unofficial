@@ -85,8 +85,7 @@ public class TileRegistry {
 	
 	public static final List<Class<? extends TileEntity>> cfgDependant = new ArrayList<Class<? extends TileEntity>>();
 	
-	public static void register()
-	{
+	public static void register() {
 		addTileToMapping(TileecController.class);
 		addTileToMapping(TileecAcceptor.class);
 		addTileToMapping(TileecBalancer.class);
@@ -126,11 +125,11 @@ public class TileRegistry {
 		addTileToMapping(TileMRUCoil.class);
 		addTileToMapping(TileCorruptionCleaner.class);
 		addTileToMapping(TileMRUReactor.class);
-		addTileToMapping(TileMINEjector.class);
-		addTileToMapping(TileAMINEjector.class);
-		addTileToMapping(TileMINInjector.class);
-		addTileToMapping(TileAMINInjector.class);
-		addTileToMapping(TileMIM.class);
+		//addTileToMapping(TileMINEjector.class);
+		//addTileToMapping(TileAMINEjector.class);
+		//addTileToMapping(TileMINInjector.class);
+		//addTileToMapping(TileAMINInjector.class);
+		//addTileToMapping(TileMIM.class);
 		addTileToMapping(TileDarknessObelisk.class);
 		addTileToMapping(TileUltraHeatGenerator.class);
 		addTileToMapping(TileUltraFlowerBurner.class);
@@ -162,21 +161,16 @@ public class TileRegistry {
 		addTileToMapping(TileAnimalSeparator.class);
 	}
 	
-	public static void addTileToMapping(Class<? extends TileEntity> tile)
-	{
+	public static void addTileToMapping(Class<? extends TileEntity> tile) {
 		GameRegistry.registerTileEntity(tile, "ec3:"+tile.getCanonicalName());
-		try
-		{
-			if(tile.getMethod("setupConfig", Configuration.class) != null)
-			{
+		try {
+			if(tile.getMethod("setupConfig", Configuration.class) != null) {
 				cfgDependant.add(tile);
 				tile.getMethod("setupConfig", Configuration.class).invoke(null, Config.config);
 			}
-		}catch(Exception e)
-		{
+		}
+		catch(Exception e) {
 			return;
 		}
-		
 	}
-
 }

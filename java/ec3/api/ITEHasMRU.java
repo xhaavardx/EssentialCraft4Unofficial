@@ -49,5 +49,4 @@ public interface ITEHasMRU {
 	public abstract boolean setMaxMRU(float f);
 	
 	public abstract UUID getUUID();
-
 }

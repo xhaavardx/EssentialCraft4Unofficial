@@ -16,7 +16,7 @@ public enum EnumOreColoring {
 	SILVER("oreSilver",0xf0fdfe),
 	COBALT("oreCobalt",0x002568),
 	ARDITE("oreArdite",0xc9a537),
-	NICKEL("oreFerrous",0xe5e4bd),
+	NICKEL("oreNickel",0xe5e4bd),
 	ALUMINUM("oreAluminum",0xc5c5c5),
 	URANIUM("oreUranium",0x41b200),
 	IRIDIUM("oreIridium",0xebffff),

@@ -7,23 +7,21 @@ import net.minecraft.tileentity.TileEntity;
 import ec3.api.EnumStructureType;
 import ec3.api.IStructurePiece;
 
-public class TileecRedstoneController extends TileEntity implements IStructurePiece{
+public class TileecRedstoneController extends TileEntity implements IStructurePiece {
 	public TileecController controller;
 	public UUID uuid = UUID.randomUUID();
 	public int setting;
 	public int tickTimer;
 	
-    public void readFromNBT(NBTTagCompound p_145839_1_)
-    {
-    	super.readFromNBT(p_145839_1_);
-    	setting = p_145839_1_.getInteger("setting");
-    }
-    
-    public void writeToNBT(NBTTagCompound p_145841_1_)
-    {
-    	super.writeToNBT(p_145841_1_);
-    	p_145841_1_.setInteger("setting", setting);
-    }
+	public void readFromNBT(NBTTagCompound p_145839_1_) {
+		super.readFromNBT(p_145839_1_);
+		setting = p_145839_1_.getInteger("setting");
+	}
+	
+	public void writeToNBT(NBTTagCompound p_145841_1_) {
+		super.writeToNBT(p_145841_1_);
+		p_145841_1_.setInteger("setting", setting);
+	}
 	
 	@Override
 	public EnumStructureType getStructure() {
@@ -34,34 +32,26 @@ public class TileecRedstoneController extends TileEntity implements IStructurePi
 	public TileEntity structureController() {
 		return controller;
 	}
-
+	
 	@Override
-	public void setStructureController(TileEntity tile,
-			EnumStructureType structure) {
-		if(tile instanceof TileecController && structure == this.getStructure())
-		{
-			controller = (TileecController) tile;
-		}
-		
+	public void setStructureController(TileEntity tile, EnumStructureType structure) {
+		if(tile instanceof TileecController && structure == getStructure())
+			controller = (TileecController)tile;
 	}
 	
 	@Override
-	public void updateEntity()
-	{
+	public void updateEntity() {
 		++tickTimer;
-		if(tickTimer >= 20)
-		{
+		if(tickTimer >= 20) {
 			tickTimer = 0;
-			this.worldObj.notifyBlockChange(xCoord, yCoord, zCoord, this.worldObj.getBlock(xCoord, yCoord, zCoord));
+			worldObj.notifyBlockChange(xCoord, yCoord, zCoord, worldObj.getBlock(xCoord, yCoord, zCoord));
 		}
 	}
 	
-	public boolean outputRedstone()
-	{
-		if(this.controller != null && this.controller.getMRUCU() != null && ((float)this.controller.getMRU()/(float)this.controller.getMaxMRU())*10 >= this.setting)
+	public boolean outputRedstone() {
+		if(controller != null && controller.getMRUCU() != null && ((float)controller.getMRU()/(float)controller.getMaxMRU())*10 >= setting)
 			return true;
 		
 		return false;
 	}
-
 }

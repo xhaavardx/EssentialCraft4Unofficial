@@ -3,13 +3,12 @@ package ec3.common.tile;
 import ec3.api.ApiCore;
 import ec3.utils.common.ECUtils;
 
-public class TileTeleportationRune extends TileMRUGeneric
-{
+@Deprecated
+public class TileTeleportationRune extends TileMRUGeneric {
 
-	public TileTeleportationRune()
-	{
-		this.setSlotsNum(2);
-		this.setMaxMRU(ApiCore.DEVICE_MAX_MRU_GENERIC);
+	public TileTeleportationRune() {
+		setSlotsNum(2);
+		setMaxMRU(ApiCore.DEVICE_MAX_MRU_GENERIC);
 	}
 	
 	@Override
@@ -18,15 +17,10 @@ public class TileTeleportationRune extends TileMRUGeneric
 	}
 	
 	@Override
-	public void updateEntity()
-	{
+	public void updateEntity() {
 		super.updateEntity();
 		ECUtils.manage(this, 0);
 	}
 	
-	public void teleport()
-	{
-		
-	}
-
+	public void teleport() {}
 }

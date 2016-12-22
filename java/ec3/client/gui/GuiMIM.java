@@ -13,6 +13,7 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.tileentity.TileEntity;
 
+@Deprecated
 public class GuiMIM extends GuiCommon{
 
 	public GuiMIM(Container c, TileEntity tile) {

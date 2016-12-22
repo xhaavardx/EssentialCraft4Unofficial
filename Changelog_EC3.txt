@@ -1,5 +1,20 @@
 To know about the changes from 4.5.1710.125 to 4.6.1710.32 look at .git commits, they are pretty informative too. I just do not have enough time to write all the changes here. From 4.6 the changelog will be continued normaly.
 
+4.6.1710.67Unofficial
+        +Changed: The Magmatic Smelter can now accepted pumped in liquid
+        +Changed: Some TileEntities will now have better slot handling
+        
+        -Fixed: Shift-clicking items out of the Magical Activator crashes
+        -Fixed: Metadata related crashes
+        
+        =Partial code cleanup
+
+4.6.1710.66Unofficial
+        +Changed: Void armor now provides step assist.
+        +Changed: PlayerClone now renders player skin.
+        
+        -Fixed: Putting items into machines via automation now properly works.
+
 4.6.1710.63
         +Added: Elemental Drops ore now drops some XP
         +Added: Some EC3 blocks are now registered in the OreDictionary. Good for things like digital miner

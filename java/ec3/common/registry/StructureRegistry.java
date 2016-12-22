@@ -22,10 +22,8 @@ import net.minecraftforge.common.ChestGenHooks;
 
 public class StructureRegistry {
 	
-	public static void register()
-	{
-		for(int i = 0; i < BaublesModifier.names.length; ++i)
-		{
+	public static void register() {
+		for(int i = 0; i < BaublesModifier.names.length; ++i) {
 			ChestGenHooks.addItem(ChestGenHooks.DUNGEON_CHEST, new WeightedRandomChestContent(new ItemStack(ItemsCore.baublesCore,1,i),1,1,3));
 		}
 		MapGenStructureIO.registerStructure(MapGenTown.Start.class, "ec3.Town");

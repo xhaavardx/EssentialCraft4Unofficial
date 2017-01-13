@@ -60,8 +60,7 @@ public class EssentialCraftCore {
 	@SidedProxy(clientSide = "ec3.network.proxy.ClientProxy", serverSide = "ec3.network.proxy.CommonProxy", modId = EssentialCraftCore.modid)
 	public static CommonProxy proxy;
 	public static Config cfg = new Config();
-	//TODO Do not forget to change the version number every git commit.
-	public static final String version = "4.6.1710.67";
+	public static final String version = "4.6.1710.69";
 	public static final String modid = "essentialcraft";
 	public static ModMetadata metadata;
 	public static SimpleNetworkWrapper network;
@@ -174,7 +173,7 @@ public class EssentialCraftCore {
 		metadata.name="Essential Craft 4";
 		metadata.credits="Author: Modbder, TheLMiffy1111";
 		metadata.authorList = Arrays.asList(new String[]{"Modbder", "TheLMiffy1111"});
-		metadata.description = "Essential Craft 3 is a huge magic-themed mod, that adds lots of end-game content.";
+		metadata.description = "Essential Craft 4 is a modified version of Essential Craft 3, which is a huge magic-themed mod, that adds lots of end-game content.";
 		metadata.url = "http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/2286105-1-7-10-forge-open-source-dummythinking-mods";
 		metadata.updateUrl = "http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/2286105-1-7-10-forge-open-source-dummythinking-mods";
 		metadata.logoFile = "assets/essentialcraft/textures/special/logo.png";

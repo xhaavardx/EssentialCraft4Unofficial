@@ -1,5 +1,10 @@
 To know about the changes from 4.5.1710.125 to 4.6.1710.32 look at .git commits, they are pretty informative too. I just do not have enough time to write all the changes here. From 4.6 the changelog will be continued normaly.
 
+4.6.1710.69Unofficial
+        +Added: zh_CN.lang (Incomplete)
+        
+        -Fixed: Items that aren¡¦t supposed to appear appearing
+
 4.6.1710.67Unofficial
         +Changed: The Magmatic Smelter can now accepted pumped in liquid
         +Changed: Some TileEntities will now have better slot handling

@@ -15,7 +15,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.config.Configuration;
 
 public class TileElementalCrystal extends TileEntity{
-	public int syncTick;
+	public int syncTick = 10;
 	public float size,fire,water,earth,air;
 	
 	public static float mutatuinChance = 0.001F;

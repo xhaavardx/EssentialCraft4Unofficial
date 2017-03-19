@@ -47,7 +47,7 @@ import ec3.utils.common.CommandSetMRU;
 		modid = EssentialCraftCore.modid,
 		name = "EssentialCraftIVUnofficial",
 		version = EssentialCraftCore.version,
-		dependencies = "required-after:DummyCore@[1.12,);",
+		dependencies = "required-after:DummyCore@[1.12,);required-after:Baubles",
 		guiFactory = "ec3.client.regular.ModConfigGuiHandler"
 	)
 public class EssentialCraftCore {
@@ -60,7 +60,7 @@ public class EssentialCraftCore {
 	@SidedProxy(clientSide = "ec3.network.proxy.ClientProxy", serverSide = "ec3.network.proxy.CommonProxy", modId = EssentialCraftCore.modid)
 	public static CommonProxy proxy;
 	public static Config cfg = new Config();
-	public static final String version = "4.6.1710.69";
+	public static final String version = "4.6.1710.70";
 	public static final String modid = "essentialcraft";
 	public static ModMetadata metadata;
 	public static SimpleNetworkWrapper network;

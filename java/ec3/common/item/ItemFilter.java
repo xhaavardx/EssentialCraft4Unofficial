@@ -62,7 +62,7 @@ public class ItemFilter extends Item{
     
     public IIcon getIconFromDamage(int par1)
     {
-    	return itemIcons[par1];
+    	return itemIcons[par1%4];
     }
 	
 	@Override

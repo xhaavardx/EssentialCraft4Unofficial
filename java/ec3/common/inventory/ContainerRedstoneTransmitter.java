@@ -12,7 +12,7 @@ public class ContainerRedstoneTransmitter extends Container {
 	
 	private IInventory inv;
 	public ContainerRedstoneTransmitter(InventoryPlayer par1InventoryPlayer, TileEntity par2) {
-		inv = (IInventory)inv;
+		inv = (IInventory)par2;
 		addSlotToContainer(new SlotBoundEssence(inv, 0, 29, 32));
 		int i;
 		

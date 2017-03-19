@@ -10,9 +10,9 @@ import net.minecraft.util.ResourceLocation;
 
 public class ModelDemon extends ModelBiped{
 	
-	 public ModelRenderer bipedWings;
-	 public ModelRenderer bipedWingsBack;
-	 private static final ResourceLocation wingsTexture = new ResourceLocation("essentialcraft","textures/special/models/demon_wings.png");
+	public ModelRenderer bipedWings;
+	public ModelRenderer bipedWingsBack;
+	private static final ResourceLocation wingsTexture = new ResourceLocation("essentialcraft","textures/special/models/demon_wings.png");
     public ModelDemon(float scale, float bodyPos, int textureWidth, int textureHeight)
     {
         this.bipedWings = new ModelRenderer(this, 0, 0);

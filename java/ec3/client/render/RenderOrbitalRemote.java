@@ -37,7 +37,6 @@ public class RenderOrbitalRemote implements IItemRenderer{
 					GL11.glRotatef(90, 1, 1, 0);
 					ItemRenderer.renderItemIn2D(Tessellator.instance, icon.getMinU(), icon.getMinV(), icon.getMaxU(), icon.getMaxV(), icon.getIconWidth(), icon.getIconHeight(), 0.0625F);
 					GL11.glPopMatrix();
-					
 				}
 			}
 		}

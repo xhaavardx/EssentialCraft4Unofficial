@@ -43,7 +43,7 @@ public class TileMonsterHarvester extends TileMRUGeneric {
 			++destrTick;
 			if(destrTick >= mobDestructionTimer) {
 				destrTick = 0;
-				List<EntityLivingBase> lst = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, AxisAlignedBB.getBoundingBox(xCoord-16, yCoord-16, zCoord-16, xCoord+16, yCoord+16, zCoord+16));
+				List<EntityLivingBase> lst = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, AxisAlignedBB.getBoundingBox(xCoord-16, yCoord-16, zCoord-16, xCoord+17, yCoord+17, zCoord+17));
 				if(!lst.isEmpty() && !worldObj.isRemote) {
 					for(int i = 0; i < lst.size(); ++i) {
 						EntityLivingBase e = lst.get(i);

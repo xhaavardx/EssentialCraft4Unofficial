@@ -31,7 +31,7 @@ public class ItemMRUMatrixProjection extends Item {
 	
     public String getUnlocalizedName(ItemStack p_77667_1_)
     {
-        return super.getUnlocalizedName(p_77667_1_)+"_"+names[p_77667_1_.getItemDamage()];
+        return super.getUnlocalizedName(p_77667_1_)+"_"+names[Math.min(p_77667_1_.getItemDamage(),names.length-1)];
     }
     
 	@Override

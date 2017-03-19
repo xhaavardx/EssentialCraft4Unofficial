@@ -4,7 +4,7 @@ import DummyCore.Utils.MiscUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 
-public class ServerToClientSyncAction extends ScheduledServerAction{
+public class ServerToClientSyncAction extends ScheduledServerAction {
 
 	EntityPlayer p;
 	TileEntity t;
@@ -12,6 +12,8 @@ public class ServerToClientSyncAction extends ScheduledServerAction{
 	public ServerToClientSyncAction(EntityPlayer requester, TileEntity tile) 
 	{
 		super(20);
+		p = requester;
+		t = tile;
 	}
 
 	@Override
@@ -22,6 +24,4 @@ public class ServerToClientSyncAction extends ScheduledServerAction{
 				if(t.getWorldObj().getTileEntity(t.xCoord, t.yCoord, t.zCoord) == t)
 					MiscUtils.sendPacketToPlayer(t.getWorldObj(), t.getDescriptionPacket(), p);
 	}
-	
-	
 }

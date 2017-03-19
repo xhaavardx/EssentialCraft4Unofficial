@@ -171,7 +171,7 @@ public class ItemMagicalDigger extends ItemPickaxe implements IItemRequiresMRU {
 			if(!e.capabilities.allowEdit)
 				type = GameType.ADVENTURE;
 			
-			BreakEvent be = ForgeHooks.onBlockBreakEvent(e.worldObj, type, (EntityPlayerMP) e, z, y, z);
+			BreakEvent be = ForgeHooks.onBlockBreakEvent(e.worldObj, type, (EntityPlayerMP) e, x, y, z);
 			if(!be.isCanceled())
 			{
 	    		b.harvestBlock(e.worldObj, e, x, y, z, e.worldObj.getBlockMetadata(x, y, z));

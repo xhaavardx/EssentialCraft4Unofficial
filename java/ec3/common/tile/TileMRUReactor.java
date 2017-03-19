@@ -154,7 +154,7 @@ public class TileMRUReactor extends TileMRUGeneric {
 			--ticksBeforeStructureCheck;
 		super.updateEntity();
 		if(isStructureCorrect()) {
-			List<EntityLivingBase> lst = getWorldObj().getEntitiesWithinAABB(EntityLivingBase.class, AxisAlignedBB.getBoundingBox(xCoord-3, yCoord-3, zCoord-3, xCoord+3, yCoord+3, zCoord+3));
+			List<EntityLivingBase> lst = getWorldObj().getEntitiesWithinAABB(EntityLivingBase.class, AxisAlignedBB.getBoundingBox(xCoord-3, yCoord-3, zCoord-3, xCoord+4, yCoord+4, zCoord+4));
 			if(!lst.isEmpty() && damage) {
 				for(int i = 0; i < lst.size(); ++i) {
 					EntityLivingBase e = lst.get(i);

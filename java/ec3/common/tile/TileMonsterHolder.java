@@ -35,7 +35,7 @@ public class TileMonsterHolder extends TileMRUGeneric {
 		super.updateEntity();
 		ECUtils.manage(this, 0);
 		if(!worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord)) {
-			List<EntityLivingBase> lst = getWorldObj().getEntitiesWithinAABB(EntityLivingBase.class, AxisAlignedBB.getBoundingBox(xCoord-32, yCoord-32, zCoord-32, xCoord+32, yCoord+32, zCoord+32));
+			List<EntityLivingBase> lst = getWorldObj().getEntitiesWithinAABB(EntityLivingBase.class, AxisAlignedBB.getBoundingBox(xCoord-32, yCoord-32, zCoord-32, xCoord+33, yCoord+33, zCoord+33));
 			if(!lst.isEmpty()) {
 				for(int i = 0; i < lst.size(); ++i)
 				{

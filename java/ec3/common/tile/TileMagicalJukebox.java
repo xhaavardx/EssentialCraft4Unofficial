@@ -86,12 +86,12 @@ public class TileMagicalJukebox extends TileMRUGeneric {
 			
 			ChatComponentText achievementText = new ChatComponentText("["+achievementNames[achievementID]+"]");
 			achievementText.setChatStyle(achievementStyle);
-			List<EntityPlayer> playerLst = worldObj.getEntitiesWithinAABB(EntityPlayer.class, AxisAlignedBB.getBoundingBox(xCoord-6, yCoord-6, zCoord-6, xCoord+6, yCoord+6, zCoord+6));
+			List<EntityPlayer> playerLst = worldObj.getEntitiesWithinAABB(EntityPlayer.class, AxisAlignedBB.getBoundingBox(xCoord-6, yCoord-6, zCoord-6, xCoord+7, yCoord+7, zCoord+7));
 			if(!playerLst.isEmpty() && worldObj.getWorldTime() % 60 == 0 && !worldObj.isRemote) {
 				EntityPlayer player = playerLst.get(worldObj.rand.nextInt(playerLst.size()));
 				player.addChatMessage(new ChatComponentText(player.getDisplayName()+" has just earned the achievement ").appendSibling(achievementText));
 			}
-			List<EntitySheep> sheepLst = worldObj.getEntitiesWithinAABB(EntitySheep.class, AxisAlignedBB.getBoundingBox(xCoord-16, yCoord-16, zCoord-16, xCoord+16, yCoord+16, zCoord+16));
+			List<EntitySheep> sheepLst = worldObj.getEntitiesWithinAABB(EntitySheep.class, AxisAlignedBB.getBoundingBox(xCoord-16, yCoord-16, zCoord-16, xCoord+17, yCoord+17, zCoord+17));
 			if(!sheepLst.isEmpty() && worldObj.getWorldTime() % 20 == 0 && !worldObj.isRemote) {
 				for(int t = 0; t < sheepLst.size(); ++t) {
 					EntitySheep sheep = sheepLst.get(t);
@@ -99,7 +99,7 @@ public class TileMagicalJukebox extends TileMRUGeneric {
 					sheep.setCustomNameTag(monsterNames[worldObj.rand.nextInt(monsterNames.length)]);
 				}
 			}
-			List<EntityLiving> baseLst = worldObj.getEntitiesWithinAABB(EntityLiving.class, AxisAlignedBB.getBoundingBox(xCoord-16, yCoord-16, zCoord-16, xCoord+16, yCoord+16, zCoord+16));
+			List<EntityLiving> baseLst = worldObj.getEntitiesWithinAABB(EntityLiving.class, AxisAlignedBB.getBoundingBox(xCoord-16, yCoord-16, zCoord-16, xCoord+17, yCoord+17, zCoord+17));
 			if(!baseLst.isEmpty() && worldObj.getWorldTime() % 10 == 0 && !worldObj.isRemote) {
 				for(int t = 0; t < baseLst.size(); ++t) {
 					EntityLiving sheep = baseLst.get(t);

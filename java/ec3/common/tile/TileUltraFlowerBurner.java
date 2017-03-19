@@ -47,7 +47,7 @@ public class TileUltraFlowerBurner extends TileMRUGeneric {
 		if(!worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord)) {
 			if(!worldObj.isRemote) {
 				if(worldObj.getWorldTime()%80 == 0) {
-					List<EntityItem> sapplings = worldObj.getEntitiesWithinAABB(EntityItem.class, AxisAlignedBB.getBoundingBox(xCoord-16, yCoord-0.5D, zCoord-16, xCoord+16, yCoord+1.5D, zCoord+16));
+					List<EntityItem> sapplings = worldObj.getEntitiesWithinAABB(EntityItem.class, AxisAlignedBB.getBoundingBox(xCoord-16, yCoord-0.5D, zCoord-16, xCoord+17, yCoord+1.5D, zCoord+17));
 					if(!sapplings.isEmpty()) {
 						for(int i = 0; i < sapplings.size(); ++i) {
 							EntityItem sappling = sapplings.get(i);
@@ -107,7 +107,7 @@ public class TileUltraFlowerBurner extends TileMRUGeneric {
 								burnTime = 600;
 								mruProduced = 60;
 							}
-							if(name.toLowerCase().contains("leaves") || b.isLeaves(worldObj, xCoord+offsetX, yCoord, zCoord+offsetZ)) {
+							if(name.toLowerCase().contains("leaves") || b.isLeaves(worldObj, xCoord+offsetX, yCoord+y, zCoord+offsetZ)) {
 								burnedFlower = new Coord3D(xCoord+offsetX, yCoord+y, zCoord+offsetZ);
 								burnTime = 300;
 								mruProduced = 70;

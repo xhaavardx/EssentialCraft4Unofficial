@@ -645,8 +645,7 @@ public class RenderBlocksECIII implements ISimpleBlockRenderingHandler{
 	}
 
 	@Override
-	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z,
-			Block block, int modelId, RenderBlocks renderer) {
+	public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer) {
 		int metadata = world.getBlockMetadata(x, y, z);
 		if(block instanceof BlockRedstoneTransmitter)
 		{

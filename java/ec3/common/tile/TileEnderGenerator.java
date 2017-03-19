@@ -36,7 +36,7 @@ public class TileEnderGenerator extends TileMRUGeneric {
 		if(balance == -1)
 			balance = worldObj.rand.nextFloat()*2;
 		if(!worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord)) {
-			AxisAlignedBB endermenTPRadius = AxisAlignedBB.getBoundingBox(xCoord-endermenCatchRadius, yCoord-endermenCatchRadius, zCoord-endermenCatchRadius, xCoord+endermenCatchRadius, yCoord+endermenCatchRadius, zCoord+endermenCatchRadius);
+			AxisAlignedBB endermenTPRadius = AxisAlignedBB.getBoundingBox(xCoord-endermenCatchRadius, yCoord-endermenCatchRadius, zCoord-endermenCatchRadius, xCoord+endermenCatchRadius+1, yCoord+endermenCatchRadius+1, zCoord+endermenCatchRadius+1);
 			List<EntityEnderman> l = worldObj.getEntitiesWithinAABB(EntityEnderman.class, endermenTPRadius);
 			if(Loader.isModLoaded("HardcoreEnderExpansion")) {
 				try {

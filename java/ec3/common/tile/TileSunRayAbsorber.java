@@ -30,7 +30,7 @@ public class TileSunRayAbsorber extends TileMRUGeneric {
 		super.updateEntity();
 		if(!worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord)) {
 			balance = cfgBalance;
-			List<EntitySolarBeam> l = worldObj.getEntitiesWithinAABB(EntitySolarBeam.class, AxisAlignedBB.getBoundingBox(xCoord-1, yCoord-1, zCoord-1, xCoord+1, yCoord+1, zCoord+1));
+			List<EntitySolarBeam> l = worldObj.getEntitiesWithinAABB(EntitySolarBeam.class, AxisAlignedBB.getBoundingBox(xCoord-1, yCoord-1, zCoord-1, xCoord+2, yCoord+2, zCoord+2));
 			if(!l.isEmpty()) {
 				if(!worldObj.isRemote) {
 					setMRU((int)(getMRU() + mruGenerated));

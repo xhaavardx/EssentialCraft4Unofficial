@@ -101,8 +101,6 @@ public class BlockFancy extends Block implements IColdBlock{
 
 	@Override
 	public float getColdModifier(World w, int x, int y, int z,int meta)  {
-		// TODO Auto-generated method stub
 		return this == BlocksCore.fancyBlocks.get(3) ? 0.5F : 0;
 	}
-
 }

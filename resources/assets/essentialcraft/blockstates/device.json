@@ -1,0 +1,34 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "minecraft:cube_all"
+    },
+    "variants": {
+        "type": {
+            "replanter": {
+                "textures": { "all": "essentialcraft:blocks/replanter" }
+            },
+            "item_shuffler": {
+                "textures": { "all": "essentialcraft:blocks/itemShuffler" }
+            },
+            "crafter": {
+                "textures": { "all": "essentialcraft:blocks/crafter" }
+            },
+            "breeder": {
+                "textures": { "all": "essentialcraft:blocks/breeder" }
+            },
+            "creative_mru_storage": {
+                "textures": { "all": "essentialcraft:blocks/creativeMRUStorage" }
+            },
+            "shearing_station": {
+                "textures": { "all": "essentialcraft:blocks/shearingStation" }
+            },
+            "child_separator": {
+                "textures": { "all": "essentialcraft:blocks/childSeparator" }
+            },
+            "adult_separator": {
+                "textures": { "all": "essentialcraft:blocks/adultSeparator" }
+            }
+        }
+    }
+}

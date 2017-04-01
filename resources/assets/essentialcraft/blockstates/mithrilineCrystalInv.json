@@ -1,0 +1,36 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "builtin/generated",
+        "transform": "forge:default-item"
+    },
+    "variants": {
+        "type": {
+            "mithriline": {
+                "textures": {
+                    "layer0": "essentialcraft:blocks/icons/mithrilineCrystal"
+                }
+            },
+            "pale": {
+                "textures": {
+                    "layer0": "essentialcraft:blocks/icons/paleCrystal"
+                }
+            },
+            "void": {
+                "textures": {
+                    "layer0": "essentialcraft:blocks/icons/voidCrystal"
+                }
+            },
+            "demonic": {
+                "textures": {
+                    "layer0": "essentialcraft:blocks/icons/demonicCrystal"
+                }
+            },
+            "shade": {
+                "textures": {
+                    "layer0": "essentialcraft:blocks/icons/shadeCrystal"
+                }
+            }
+        }
+    }
+}

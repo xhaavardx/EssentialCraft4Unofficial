@@ -5,7 +5,7 @@ import ec3.api.EnumCorruptionEffect;
 import ec3.utils.common.CorruptionEffectEC3NBTBased;
 
 public class CERegistry {
-	
+
 	public static void register()
 	{
 		effect(BODY,6000);
@@ -34,17 +34,16 @@ public class CERegistry {
 		effect(MATRIX,8000);
 		effect(MATRIX,4000);
 	}
-	
+
 	public static CorruptionEffectEC3NBTBased effect(EnumCorruptionEffect effect, int cost)
 	{
 		return new CorruptionEffectEC3NBTBased().setMeta(gMeta()).setType(effect).setCost(cost).done();
 	}
-	
+
 	public static int meta = -1;
-	
+
 	public static int gMeta()
 	{
 		return ++meta;
 	}
-
 }

@@ -17,11 +17,6 @@ public class TileCrafter extends TileMRUGeneric {
 	}
 	
 	@Override
-	public int[] getAccessibleSlotsFromSide(int side) {
-		return super.getAccessibleSlotsFromSide(side);
-	}
-	
-	@Override
 	public int getInventoryStackLimit() {
 		return 64;
 	}
@@ -32,8 +27,8 @@ public class TileCrafter extends TileMRUGeneric {
 	}
 	
 	@Override
-	public void updateEntity() {
-		if(worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord) || worldObj.getBlockPowerInput(xCoord, yCoord, yCoord) > 0) {
+	public void update() {
+		if(worldObj.isBlockIndirectlyGettingPowered(pos) > 0 || worldObj.getStrongPower(pos) > 0) {
 			if(!hasFrame()) {
 				makeRecipe();
 			}
@@ -67,7 +62,7 @@ public class TileCrafter extends TileMRUGeneric {
 	}
 	
 	public boolean hasOreDict() {
-		return getStackInSlot(10) != null && getStackInSlot(10).getItem() instanceof ItemCraftingFrame && getStackInSlot(10).stackTagCompound != null && !getStackInSlot(10).stackTagCompound.getBoolean("ignoreOreDict");
+		return getStackInSlot(10) != null && getStackInSlot(10).getItem() instanceof ItemCraftingFrame && getStackInSlot(10).getTagCompound() != null && !getStackInSlot(10).getTagCompound().getBoolean("ignoreOreDict");
 	}
 	
 	public boolean hasFrame() {
@@ -159,7 +154,7 @@ public class TileCrafter extends TileMRUGeneric {
 			}
 		}
 		
-		public ItemStack getStackInSlotOnClosing(int p_70304_1_) {
+		public ItemStack removeStackFromSlot(int p_70304_1_) {
 			if(stackList[p_70304_1_] != null) {
 				ItemStack itemstack = stackList[p_70304_1_];
 				stackList[p_70304_1_] = null;

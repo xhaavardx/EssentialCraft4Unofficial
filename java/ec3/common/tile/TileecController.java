@@ -14,16 +14,20 @@ import ec3.api.IMRUPressence;
 import ec3.api.IStructurePiece;
 import ec3.api.ITEHasMRU;
 import ec3.utils.common.ECUtils;
+import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.INetHandlerPlayClient;
-import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.ITickable;
 import net.minecraftforge.common.config.Configuration;
 
-public class TileecController extends TileEntity implements ITEHasMRU {
+public class TileecController extends TileEntity implements ITEHasMRU, ITickable {
 	
 	//============================Variables================================//
 	public int syncTick;
@@ -47,7 +51,7 @@ public class TileecController extends TileEntity implements ITEHasMRU {
 	//===========================Functions=================================//
 	
 	@Override
-	public void updateEntity() {
+	public void update() {
 		//Retrying structure checks. Basically, every 10 seconds the structure will re-initialize//
 		if(structureCheckTick == 0) {
 			isCorrect = checkStructure();
@@ -59,7 +63,7 @@ public class TileecController extends TileEntity implements ITEHasMRU {
 		//Sending the sync packets to the CLIENT. 
 		if(syncTick == 0) {
 			if(!worldObj.isRemote)
-				MiscUtils.sendPacketToAllAround(worldObj, getDescriptionPacket(), xCoord, yCoord, zCoord, worldObj.provider.dimensionId, 16);
+				MiscUtils.sendPacketToAllAround(worldObj, getUpdatePacket(), pos.getX(), pos.getY(), pos.getZ(), worldObj.provider.getDimension(), 16);
 			syncTick = 30;
 		}
 		else
@@ -69,7 +73,13 @@ public class TileecController extends TileEntity implements ITEHasMRU {
 	@SuppressWarnings("unchecked")
 	public IMRUPressence getMRUCU() {
 		if(isCorrect) {
-			List<IMRUPressence> pList = worldObj.getEntitiesWithinAABB(IMRUPressence.class, AxisAlignedBB.getBoundingBox(lowerCoord.x, lowerCoord.y, lowerCoord.z, upperCoord.x, upperCoord.y, upperCoord.z));
+			List<Entity> eList = worldObj.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(lowerCoord.x, lowerCoord.y, lowerCoord.z, upperCoord.x, upperCoord.y, upperCoord.z));
+			List<IMRUPressence> pList = new ArrayList<IMRUPressence>();
+			for(Entity e : eList) {
+				if(e instanceof IMRUPressence) {
+					pList.add((IMRUPressence)e);
+				}
+			}
 			if(pList != null && !pList.isEmpty())
 				return pList.get(0);
 		}
@@ -77,17 +87,16 @@ public class TileecController extends TileEntity implements ITEHasMRU {
 	}
 	
 	@Override
-    public Packet getDescriptionPacket() {
+    public SPacketUpdateTileEntity getUpdatePacket() {
         NBTTagCompound nbttagcompound = new NBTTagCompound();
         writeToNBT(nbttagcompound);
-        return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, -10, nbttagcompound);
+        return new SPacketUpdateTileEntity(pos, -10, nbttagcompound);
     }
 	
 	@Override
-    public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
-		if(net.getNetHandler() instanceof INetHandlerPlayClient)
-			if(pkt.func_148853_f() == -10)
-				readFromNBT(pkt.func_148857_g());
+    public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
+		if(pkt.getTileEntityType() == -10)
+			readFromNBT(pkt.getNbtCompound());
     }
 
 	
@@ -98,9 +107,10 @@ public class TileecController extends TileEntity implements ITEHasMRU {
     }
 	
 	@Override
-    public void writeToNBT(NBTTagCompound i) {
+    public NBTTagCompound writeToNBT(NBTTagCompound i) {
     	super.writeToNBT(i);
     	ECUtils.saveMRUState(this, i);
+    	return i;
     }
 	
 	/**
@@ -110,7 +120,7 @@ public class TileecController extends TileEntity implements ITEHasMRU {
 	public boolean checkStructure() {
 		resistance = 0F;
 		maxMRU = (int)cfgMaxMRU;
-		blocksInStructure.clear(); //Clearing the list of blocks to reinitialise it
+		blocksInStructure.clear(); //Clearing the list of blocks to reinitialize it
 		//Base variables setup//
 		int minX = 0;
 		int minY = 0;
@@ -119,16 +129,16 @@ public class TileecController extends TileEntity implements ITEHasMRU {
 		int maxY = 0;
 		int maxZ = 0;
 		int checkInt0 = 0;
-		List<?> allowedBlocks = ECUtils.allowedBlocks.get(EnumStructureType.MRUCUContaigementChamber); //Getting the list of allowed blocks in the structure
+		List<Block> allowedBlocks = ECUtils.allowedBlocks.get(EnumStructureType.MRUCUEnrichmentChamber); //Getting the list of allowed blocks in the structure
 		//Trying to find the whole shape of a structure//
-		while(allowedBlocks.contains(worldObj.getBlock(xCoord+checkInt0, yCoord, zCoord))) {
+		while(allowedBlocks.contains(worldObj.getBlockState(pos.add(checkInt0, 0, 0)).getBlock())) {
 			++checkInt0;
 		}
 		--checkInt0;
 		if(checkInt0 > 0)
 			maxX = checkInt0;
 		checkInt0 = 0;
-		while(allowedBlocks.contains(worldObj.getBlock(xCoord+checkInt0, yCoord, zCoord))) {
+		while(allowedBlocks.contains(worldObj.getBlockState(pos.add(checkInt0, 0, 0)).getBlock())) {
 			--checkInt0;
 		}
 		++checkInt0;
@@ -136,7 +146,7 @@ public class TileecController extends TileEntity implements ITEHasMRU {
 			minX = checkInt0;
 		if(maxX == 0) {
 			checkInt0 = 0;
-			while(allowedBlocks.contains(worldObj.getBlock(xCoord, yCoord, zCoord+checkInt0))) {
+			while(allowedBlocks.contains(worldObj.getBlockState(pos.add(0, 0, checkInt0)).getBlock())) {
 				++checkInt0;
 			}
 			--checkInt0;
@@ -145,7 +155,7 @@ public class TileecController extends TileEntity implements ITEHasMRU {
 		}
 		if(minX == 0) {
 			checkInt0 = 0;
-			while(allowedBlocks.contains(worldObj.getBlock(xCoord, yCoord, zCoord+checkInt0))) {
+			while(allowedBlocks.contains(worldObj.getBlockState(pos.add(0, 0, checkInt0)).getBlock())) {
 				--checkInt0;
 			}
 			++checkInt0;
@@ -154,7 +164,7 @@ public class TileecController extends TileEntity implements ITEHasMRU {
 		}
 		if(maxX == 0 && maxZ != 0) {
 			checkInt0 = 0;
-			while(allowedBlocks.contains(worldObj.getBlock(xCoord+checkInt0, yCoord, zCoord+maxZ))) {
+			while(allowedBlocks.contains(worldObj.getBlockState(pos.add(checkInt0, 0, maxZ)).getBlock())) {
 				++checkInt0;
 			}
 			--checkInt0;
@@ -163,7 +173,7 @@ public class TileecController extends TileEntity implements ITEHasMRU {
 		}
 		if(minX == 0 && maxZ != 0) {
 			checkInt0 = 0;
-			while(allowedBlocks.contains(worldObj.getBlock(xCoord+checkInt0, yCoord, zCoord+maxZ))) {
+			while(allowedBlocks.contains(worldObj.getBlockState(pos.add(checkInt0, 0, maxZ)).getBlock())) {
 				--checkInt0;
 			}
 			++checkInt0;
@@ -172,7 +182,7 @@ public class TileecController extends TileEntity implements ITEHasMRU {
 		}
 		if(maxX == 0 && minZ != 0) {
 			checkInt0 = 0;
-			while(allowedBlocks.contains(worldObj.getBlock(xCoord+checkInt0, yCoord, zCoord+minZ))) {
+			while(allowedBlocks.contains(worldObj.getBlockState(pos.add(checkInt0, 0, minZ)).getBlock())) {
 				++checkInt0;
 			}
 			--checkInt0;
@@ -181,7 +191,7 @@ public class TileecController extends TileEntity implements ITEHasMRU {
 		}
 		if(minX == 0 && minZ != 0) {
 			checkInt0 = 0;
-			while(allowedBlocks.contains(worldObj.getBlock(xCoord+checkInt0, yCoord, zCoord+minZ))) {
+			while(allowedBlocks.contains(worldObj.getBlockState(pos.add(checkInt0, 0, minZ)).getBlock())) {
 				--checkInt0;
 			}
 			++checkInt0;
@@ -190,7 +200,7 @@ public class TileecController extends TileEntity implements ITEHasMRU {
 		}
 		if(maxZ == 0 && maxX != 0) {
 			checkInt0 = 0;
-			while(allowedBlocks.contains(worldObj.getBlock(xCoord+maxX, yCoord, zCoord+checkInt0))) {
+			while(allowedBlocks.contains(worldObj.getBlockState(pos.add(maxX, 0, checkInt0)).getBlock())) {
 				++checkInt0;
 			}
 			--checkInt0;
@@ -199,7 +209,7 @@ public class TileecController extends TileEntity implements ITEHasMRU {
 		}
 		if(minZ == 0 && maxX != 0) {
 			checkInt0 = 0;
-			while(allowedBlocks.contains(worldObj.getBlock(xCoord+maxX, yCoord, zCoord+checkInt0))) {
+			while(allowedBlocks.contains(worldObj.getBlockState(pos.add(maxX, 0, checkInt0)).getBlock())) {
 				--checkInt0;
 			}
 			++checkInt0;
@@ -208,7 +218,7 @@ public class TileecController extends TileEntity implements ITEHasMRU {
 		}
 		if(maxZ == 0 && minX != 0) {
 			checkInt0 = 0;
-			while(allowedBlocks.contains(worldObj.getBlock(xCoord+minX, yCoord, zCoord+checkInt0))) {
+			while(allowedBlocks.contains(worldObj.getBlockState(pos.add(minX, 0, checkInt0)).getBlock())) {
 				++checkInt0;
 			}
 			--checkInt0;
@@ -217,7 +227,7 @@ public class TileecController extends TileEntity implements ITEHasMRU {
 		}
 		if(minZ == 0 && minX != 0) {
 			checkInt0 = 0;
-			while(allowedBlocks.contains(worldObj.getBlock(xCoord+minX, yCoord, zCoord+checkInt0))) {
+			while(allowedBlocks.contains(worldObj.getBlockState(pos.add(minX, 0, checkInt0)).getBlock())) {
 				--checkInt0;
 			}
 			++checkInt0;
@@ -226,7 +236,7 @@ public class TileecController extends TileEntity implements ITEHasMRU {
 		}
 		if(maxY == 0 && maxX != 0 && maxZ != 0) {
 			checkInt0 = 0;
-			while(allowedBlocks.contains(worldObj.getBlock(xCoord+maxX, yCoord+checkInt0, zCoord+maxZ))) {
+			while(allowedBlocks.contains(worldObj.getBlockState(pos.add(maxX, checkInt0, maxZ)).getBlock())) {
 				++checkInt0;
 			}
 			--checkInt0;
@@ -235,7 +245,7 @@ public class TileecController extends TileEntity implements ITEHasMRU {
 		}
 		if(maxY == 0 && minX != 0 && maxZ != 0) {
 			checkInt0 = 0;
-			while(allowedBlocks.contains(worldObj.getBlock(xCoord+minX, yCoord+checkInt0, zCoord+maxZ))) {
+			while(allowedBlocks.contains(worldObj.getBlockState(pos.add(minX, checkInt0, maxZ)).getBlock())) {
 				++checkInt0;
 			}
 			--checkInt0;
@@ -244,7 +254,7 @@ public class TileecController extends TileEntity implements ITEHasMRU {
 		}
 		if(maxY == 0 && maxX != 0 && minZ != 0) {
 			checkInt0 = 0;
-			while(allowedBlocks.contains(worldObj.getBlock(xCoord+maxX, yCoord+checkInt0, zCoord+minZ))) {
+			while(allowedBlocks.contains(worldObj.getBlockState(pos.add(maxX, checkInt0, minZ)).getBlock())) {
 				++checkInt0;
 			}
 			--checkInt0;
@@ -253,7 +263,7 @@ public class TileecController extends TileEntity implements ITEHasMRU {
 		}
 		if(maxY == 0 && minX != 0 && minZ != 0) {
 			checkInt0 = 0;
-			while(allowedBlocks.contains(worldObj.getBlock(xCoord+minX, yCoord+checkInt0, zCoord+minZ))) {
+			while(allowedBlocks.contains(worldObj.getBlockState(pos.add(minX, checkInt0, minZ)).getBlock())) {
 				++checkInt0;
 			}
 			--checkInt0;
@@ -262,7 +272,7 @@ public class TileecController extends TileEntity implements ITEHasMRU {
 		}
 		if(minY == 0 && maxX != 0 && minZ != 0) {
 			checkInt0 = 0;
-			while(allowedBlocks.contains(worldObj.getBlock(xCoord+maxX, yCoord+checkInt0, zCoord+minZ))) {
+			while(allowedBlocks.contains(worldObj.getBlockState(pos.add(maxX, checkInt0, minZ)).getBlock())) {
 				--checkInt0;
 			}
 			++checkInt0;
@@ -270,7 +280,7 @@ public class TileecController extends TileEntity implements ITEHasMRU {
 		}
 		if(minY == 0 && minX != 0 && minZ != 0) {
 			checkInt0 = 0;
-			while(allowedBlocks.contains(worldObj.getBlock(xCoord+minX, yCoord+checkInt0, zCoord+minZ))) {
+			while(allowedBlocks.contains(worldObj.getBlockState(pos.add(minX, checkInt0, minZ)).getBlock())) {
 				--checkInt0;
 			}
 			++checkInt0;
@@ -279,7 +289,7 @@ public class TileecController extends TileEntity implements ITEHasMRU {
 		}
 		if(minY == 0 && minX != 0 && maxZ != 0) {
 			checkInt0 = 0;
-			while(allowedBlocks.contains(worldObj.getBlock(xCoord+maxX, yCoord+checkInt0, zCoord+minZ))) {
+			while(allowedBlocks.contains(worldObj.getBlockState(pos.add(maxX, checkInt0, minZ)).getBlock())) {
 				--checkInt0;
 			}
 			++checkInt0;
@@ -288,7 +298,7 @@ public class TileecController extends TileEntity implements ITEHasMRU {
 		}
 		if(minY == 0 && maxX != 0 && maxZ != 0) {
 			checkInt0 = 0;
-			while(allowedBlocks.contains(worldObj.getBlock(xCoord+minX, yCoord+checkInt0, zCoord+minZ))) {
+			while(allowedBlocks.contains(worldObj.getBlockState(pos.add(minX, checkInt0, minZ)).getBlock())) {
 				--checkInt0;
 			}
 			++checkInt0;
@@ -299,27 +309,28 @@ public class TileecController extends TileEntity implements ITEHasMRU {
 		if((minX == 0 && maxX == 0) || (minY == 0 && maxY == 0) || (minZ == 0 && maxZ == 0))
 			return false;
 		else {
-			lowerCoord = new Coord3D(xCoord+minX, yCoord+minY, zCoord+minZ);
-			upperCoord = new Coord3D(xCoord+maxX, yCoord+maxY, zCoord+maxZ);
+			lowerCoord = new Coord3D(pos.getX()+minX, pos.getY()+minY, pos.getZ()+minZ);
+			upperCoord = new Coord3D(pos.getX()+maxX, pos.getY()+maxY, pos.getZ()+maxZ);
 			for(int x = minX; x <= maxX; ++x) {
 				for(int y = minY; y <= maxY; ++y) {
 					for(int z = minZ; z <= maxZ; ++z) {
 						if(z == minZ || z == maxZ || x == minX || x == maxX || y == minY || y == maxY) {
-							if(allowedBlocks.contains(worldObj.getBlock(xCoord+x, yCoord+y, zCoord+z))) {
-								blocksInStructure.add(new BlockPosition(worldObj, xCoord+x, yCoord+y, zCoord+z));
-								int meta = worldObj.getBlockMetadata(xCoord+x, yCoord+y, zCoord+z);
-								if(ECUtils.ignoreMeta.containsKey(worldObj.getBlock(xCoord+x, yCoord+y, zCoord+z).getUnlocalizedName()) && ECUtils.ignoreMeta.get(worldObj.getBlock(xCoord+x, yCoord+y, zCoord+z).getUnlocalizedName()))
+							BlockPos cp = new BlockPos(pos.add(x, y, z));
+							if(allowedBlocks.contains(worldObj.getBlockState(cp).getBlock())) {
+								blocksInStructure.add(new BlockPosition(worldObj, pos.getX()+x, pos.getY()+y, pos.getZ()+z));
+								int meta = worldObj.getBlockState(cp).getBlock().getMetaFromState(worldObj.getBlockState(cp));
+								if(ECUtils.ignoreMeta.containsKey(worldObj.getBlockState(cp).getBlock().getUnlocalizedName()) && ECUtils.ignoreMeta.get(worldObj.getBlockState(cp).getBlock().getUnlocalizedName()))
 									meta = -1;
-								DummyData dt = new DummyData(worldObj.getBlock(xCoord+x, yCoord+y, zCoord+z).getUnlocalizedName(),meta);
+								DummyData dt = new DummyData(worldObj.getBlockState(cp).getBlock().getUnlocalizedName(),meta);
 								if(ECUtils.mruResistance.containsKey(dt.toString()))
 									resistance += ECUtils.mruResistance.get(dt.toString());
 								else
 									resistance += 1F;
 								dt = null;
-								if(worldObj.getTileEntity(xCoord+x, yCoord+y, zCoord+z) != null && worldObj.getTileEntity(xCoord+x, yCoord+y, zCoord+z) instanceof IStructurePiece) {
-									IStructurePiece piece = (IStructurePiece) worldObj.getTileEntity(xCoord+x, yCoord+y, zCoord+z);
-									piece.setStructureController(this, EnumStructureType.MRUCUContaigementChamber);
-									if(worldObj.getTileEntity(xCoord+x, yCoord+y, zCoord+z) instanceof TileecHoldingChamber)
+								if(worldObj.getTileEntity(cp) != null && worldObj.getTileEntity(cp) instanceof IStructurePiece) {
+									IStructurePiece piece = (IStructurePiece) worldObj.getTileEntity(cp);
+									piece.setStructureController(this, EnumStructureType.MRUCUEnrichmentChamber);
+									if(worldObj.getTileEntity(cp) instanceof TileecHoldingChamber)
 										maxMRU += cfgMRUPerStorage;
 								}
 							}

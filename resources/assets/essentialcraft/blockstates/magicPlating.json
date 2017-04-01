@@ -1,0 +1,448 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "essentialcraft:cube_colored",
+        "textures": {
+            "down": "essentialcraft:blocks/magicPlatingBlock",
+            "up": "essentialcraft:blocks/magicPlatingBlock",
+            "north": "essentialcraft:blocks/magicPlatingBlock",
+            "south": "essentialcraft:blocks/magicPlatingBlock",
+            "west": "essentialcraft:blocks/magicPlatingBlock",
+            "east": "essentialcraft:blocks/magicPlatingBlock",
+            "particle": "essentialcraft:blocks/magicPlatingBlock"
+        }
+    },
+    "variants": {
+        "down=false,east=false,north=false,south=false,up=false,west=false": [{}],
+        "down=true,east=false,north=false,south=false,up=false,west=false": [{
+            "textures": {
+                "north": "essentialcraft:blocks/ct/magicPlating/t",
+                "south": "essentialcraft:blocks/ct/magicPlating/t",
+                "west": "essentialcraft:blocks/ct/magicPlating/t",
+                "east": "essentialcraft:blocks/ct/magicPlating/t"
+            }
+        }],
+        "down=false,east=true,north=false,south=false,up=false,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/magicPlating/l",
+                "up": "essentialcraft:blocks/ct/magicPlating/l",
+                "north": "essentialcraft:blocks/ct/magicPlating/r",
+                "south": "essentialcraft:blocks/ct/magicPlating/l"
+            }
+        }],
+        "down=true,east=true,north=false,south=false,up=false,west=false": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/magicPlating/l",
+                "north": "essentialcraft:blocks/ct/magicPlating/tr",
+                "south": "essentialcraft:blocks/ct/magicPlating/tl",
+                "west": "essentialcraft:blocks/ct/magicPlating/t"
+            }
+        }],
+        "down=false,east=false,north=true,south=false,up=false,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/magicPlating/t",
+                "up": "essentialcraft:blocks/ct/magicPlating/b",
+                "west": "essentialcraft:blocks/ct/magicPlating/r",
+                "east": "essentialcraft:blocks/ct/magicPlating/l"
+            }
+        }],
+        "down=true,east=false,north=true,south=false,up=false,west=false": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/magicPlating/b",
+                "south": "essentialcraft:blocks/ct/magicPlating/t",
+                "west": "essentialcraft:blocks/ct/magicPlating/tr",
+                "east": "essentialcraft:blocks/ct/magicPlating/tl"
+            }
+        }],
+        "down=false,east=true,north=true,south=false,up=false,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/magicPlating/tl",
+                "up": "essentialcraft:blocks/ct/magicPlating/bl",
+                "south": "essentialcraft:blocks/ct/magicPlating/l",
+                "west": "essentialcraft:blocks/ct/magicPlating/r"
+            }
+        }],
+        "down=true,east=true,north=true,south=false,up=false,west=false": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/magicPlating/bl",
+                "south": "essentialcraft:blocks/ct/magicPlating/tl",
+                "west": "essentialcraft:blocks/ct/magicPlating/tr"
+            }
+        }],
+        "down=false,east=false,north=false,south=true,up=false,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/magicPlating/b",
+                "up": "essentialcraft:blocks/ct/magicPlating/t",
+                "west": "essentialcraft:blocks/ct/magicPlating/l",
+                "east": "essentialcraft:blocks/ct/magicPlating/r"
+            }
+        }],
+        "down=true,east=false,north=false,south=true,up=false,west=false": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/magicPlating/t",
+                "north": "essentialcraft:blocks/ct/magicPlating/t",
+                "west": "essentialcraft:blocks/ct/magicPlating/tl",
+                "east": "essentialcraft:blocks/ct/magicPlating/tr"
+            }
+        }],
+        "down=false,east=true,north=false,south=true,up=false,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/magicPlating/bl",
+                "up": "essentialcraft:blocks/ct/magicPlating/tl",
+                "north": "essentialcraft:blocks/ct/magicPlating/r",
+                "west": "essentialcraft:blocks/ct/magicPlating/l"
+            }
+        }],
+        "down=true,east=true,north=false,south=true,up=false,west=false": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/magicPlating/tl",
+                "north": "essentialcraft:blocks/ct/magicPlating/tr",
+                "west": "essentialcraft:blocks/ct/magicPlating/tl"
+            }
+        }],
+        "down=false,east=false,north=true,south=true,up=false,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/magicPlating/tb",
+                "up": "essentialcraft:blocks/ct/magicPlating/tb",
+                "west": "essentialcraft:blocks/ct/magicPlating/lr",
+                "east": "essentialcraft:blocks/ct/magicPlating/lr"
+            }
+        }],
+        "down=true,east=false,north=true,south=true,up=false,west=false": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/magicPlating/tb",
+                "west": "essentialcraft:blocks/ct/magicPlating/lrt",
+                "east": "essentialcraft:blocks/ct/magicPlating/lrt"
+            }
+        }],
+        "down=false,east=true,north=true,south=true,up=false,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/magicPlating/tbl",
+                "up": "essentialcraft:blocks/ct/magicPlating/tbl",
+                "west": "essentialcraft:blocks/ct/magicPlating/lr"
+            }
+        }],
+        "down=true,east=true,north=true,south=true,up=false,west=false": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/magicPlating/tbl",
+                "west": "essentialcraft:blocks/ct/magicPlating/lrt"
+            }
+        }],
+        "down=false,east=false,north=false,south=false,up=true,west=false": [{
+            "textures": {
+                "north": "essentialcraft:blocks/ct/magicPlating/b",
+                "south": "essentialcraft:blocks/ct/magicPlating/b",
+                "west": "essentialcraft:blocks/ct/magicPlating/b",
+                "east": "essentialcraft:blocks/ct/magicPlating/b"
+            }
+        }],
+        "down=true,east=false,north=false,south=false,up=true,west=false": [{
+            "textures": {
+                "north": "essentialcraft:blocks/ct/magicPlating/tb",
+                "south": "essentialcraft:blocks/ct/magicPlating/tb",
+                "west": "essentialcraft:blocks/ct/magicPlating/tb",
+                "east": "essentialcraft:blocks/ct/magicPlating/tb"
+            }
+        }],
+        "down=false,east=true,north=false,south=false,up=true,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/magicPlating/l",
+                "north": "essentialcraft:blocks/ct/magicPlating/br",
+                "south": "essentialcraft:blocks/ct/magicPlating/bl",
+                "west": "essentialcraft:blocks/ct/magicPlating/b"
+            }
+        }],
+        "down=true,east=true,north=false,south=false,up=true,west=false": [{
+            "textures": {
+                "north": "essentialcraft:blocks/ct/magicPlating/tbr",
+                "south": "essentialcraft:blocks/ct/magicPlating/tbl",
+                "west": "essentialcraft:blocks/ct/magicPlating/tb"
+            }
+        }],
+        "down=false,east=false,north=true,south=false,up=true,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/magicPlating/t",
+                "south": "essentialcraft:blocks/ct/magicPlating/b",
+                "west": "essentialcraft:blocks/ct/magicPlating/br",
+                "east": "essentialcraft:blocks/ct/magicPlating/bl"
+            }
+        }],
+        "down=true,east=false,north=true,south=false,up=true,west=false": [{
+            "textures": {
+                "south": "essentialcraft:blocks/ct/magicPlating/tb",
+                "west": "essentialcraft:blocks/ct/magicPlating/tbr",
+                "east": "essentialcraft:blocks/ct/magicPlating/tbl"
+            }
+        }],
+        "down=false,east=true,north=true,south=false,up=true,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/magicPlating/tl",
+                "south": "essentialcraft:blocks/ct/magicPlating/bl",
+                "west": "essentialcraft:blocks/ct/magicPlating/br"
+            }
+        }],
+        "down=true,east=true,north=true,south=false,up=true,west=false": [{
+           "textures": {
+                "south": "essentialcraft:blocks/ct/magicPlating/tbl",
+                "west": "essentialcraft:blocks/ct/magicPlating/tbr"
+            } 
+        }],
+        "down=false,east=false,north=false,south=true,up=true,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/magicPlating/b",
+                "north": "essentialcraft:blocks/ct/magicPlating/b",
+                "west": "essentialcraft:blocks/ct/magicPlating/bl",
+                "east": "essentialcraft:blocks/ct/magicPlating/br"
+            }
+        }],
+        "down=true,east=false,north=false,south=true,up=true,west=false": [{
+            "textures": {
+                "north": "essentialcraft:blocks/ct/magicPlating/tb",
+                "west": "essentialcraft:blocks/ct/magicPlating/tbl",
+                "east": "essentialcraft:blocks/ct/magicPlating/tbr"
+            }
+        }],
+        "down=false,east=true,north=false,south=true,up=true,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/magicPlating/bl",
+                "north": "essentialcraft:blocks/ct/magicPlating/br",
+                "west": "essentialcraft:blocks/ct/magicPlating/bl"
+            }
+        }],
+        "down=true,east=true,north=false,south=true,up=true,west=false": [{
+            "textures": {
+                "north": "essentialcraft:blocks/ct/magicPlating/tbr",
+                "west": "essentialcraft:blocks/ct/magicPlating/tbl"
+            }
+        }],
+        "down=false,east=false,north=true,south=true,up=true,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/magicPlating/tb",
+                "west": "essentialcraft:blocks/ct/magicPlating/lrb",
+                "east": "essentialcraft:blocks/ct/magicPlating/lrb"
+            }
+        }],
+        "down=true,east=false,north=true,south=true,up=true,west=false": [{
+            "textures": {
+                "west": "essentialcraft:blocks/ct/magicPlating/tblr",
+                "east": "essentialcraft:blocks/ct/magicPlating/tblr"
+            }
+        }],
+        "down=false,east=true,north=true,south=true,up=true,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/magicPlating/tbl",
+                "west": "essentialcraft:blocks/ct/magicPlating/lrb"
+            }
+        }],
+        "down=true,east=true,north=true,south=true,up=true,west=false": [{
+            "textures": {
+                "west": "essentialcraft:blocks/ct/magicPlating/tblr"
+            }
+        }],
+        "down=false,east=false,north=false,south=false,up=false,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/magicPlating/r",
+                "up": "essentialcraft:blocks/ct/magicPlating/r",
+                "north": "essentialcraft:blocks/ct/magicPlating/l",
+                "south": "essentialcraft:blocks/ct/magicPlating/r"
+            }
+        }],
+        "down=true,east=false,north=false,south=false,up=false,west=true": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/magicPlating/r",
+                "north": "essentialcraft:blocks/ct/magicPlating/tl",
+                "south": "essentialcraft:blocks/ct/magicPlating/tr",
+                "east": "essentialcraft:blocks/ct/magicPlating/t"
+            }
+        }],
+        "down=false,east=true,north=false,south=false,up=false,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/magicPlating/lr",
+                "up": "essentialcraft:blocks/ct/magicPlating/lr",
+                "north": "essentialcraft:blocks/ct/magicPlating/lr",
+                "south": "essentialcraft:blocks/ct/magicPlating/lr"
+            }
+        }],
+        "down=true,east=true,north=false,south=false,up=false,west=true": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/magicPlating/lr",
+                "north": "essentialcraft:blocks/ct/magicPlating/lrt",
+                "south": "essentialcraft:blocks/ct/magicPlating/lrt"
+            }
+        }],
+        "down=false,east=false,north=true,south=false,up=false,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/magicPlating/tr",
+                "up": "essentialcraft:blocks/ct/magicPlating/br",
+                "south": "essentialcraft:blocks/ct/magicPlating/r",
+                "east": "essentialcraft:blocks/ct/magicPlating/l"
+            }
+        }],
+        "down=true,east=false,north=true,south=false,up=false,west=true": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/magicPlating/br",
+                "south": "essentialcraft:blocks/ct/magicPlating/tr",
+                "east": "essentialcraft:blocks/ct/magicPlating/tl"
+            }
+        }],
+        "down=false,east=true,north=true,south=false,up=false,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/magicPlating/lrt",
+                "up": "essentialcraft:blocks/ct/magicPlating/lrb",
+                "south": "essentialcraft:blocks/ct/magicPlating/lr"
+            }
+        }],
+        "down=true,east=true,north=true,south=false,up=false,west=true": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/magicPlating/lrb",
+                "south": "essentialcraft:blocks/ct/magicPlating/lrt"
+            }
+        }],
+        "down=false,east=false,north=false,south=true,up=false,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/magicPlating/br",
+                "up": "essentialcraft:blocks/ct/magicPlating/tr",
+                "north": "essentialcraft:blocks/ct/magicPlating/l",
+                "east": "essentialcraft:blocks/ct/magicPlating/r"
+            }
+        }],
+        "down=true,east=false,north=false,south=true,up=false,west=true": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/magicPlating/tr",
+                "north": "essentialcraft:blocks/ct/magicPlating/tl",
+                "east": "essentialcraft:blocks/ct/magicPlating/tr"
+            }
+        }],
+        "down=false,east=true,north=false,south=true,up=false,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/magicPlating/lrb",
+                "up": "essentialcraft:blocks/ct/magicPlating/lrt",
+                "north": "essentialcraft:blocks/ct/magicPlating/lr"
+            }
+        }],
+        "down=true,east=true,north=false,south=true,up=false,west=true": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/magicPlating/lrt",
+                "north": "essentialcraft:blocks/ct/magicPlating/lrt"
+            }
+        }],
+        "down=false,east=false,north=true,south=true,up=false,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/magicPlating/tbr",
+                "up": "essentialcraft:blocks/ct/magicPlating/tbr",
+                "east": "essentialcraft:blocks/ct/magicPlating/lr"
+            }
+        }],
+        "down=true,east=false,north=true,south=true,up=false,west=true": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/magicPlating/tbr",
+                "east": "essentialcraft:blocks/ct/magicPlating/lrt"
+            }
+        }],
+        "down=false,east=true,north=true,south=true,up=false,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/magicPlating/tblr",
+                "up": "essentialcraft:blocks/ct/magicPlating/tblr"
+            }
+        }],
+        "down=true,east=true,north=true,south=true,up=false,west=true": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/magicPlating/tblr"
+            }
+        }],
+        "down=false,east=false,north=false,south=false,up=true,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/magicPlating/r",
+                "north": "essentialcraft:blocks/ct/magicPlating/bl",
+                "south": "essentialcraft:blocks/ct/magicPlating/br",
+                "east": "essentialcraft:blocks/ct/magicPlating/b"
+            }
+        }],
+        "down=true,east=false,north=false,south=false,up=true,west=true": [{
+            "textures": {
+                "north": "essentialcraft:blocks/ct/magicPlating/tbl",
+                "south": "essentialcraft:blocks/ct/magicPlating/tbr",
+                "east": "essentialcraft:blocks/ct/magicPlating/tb"
+            }
+        }],
+        "down=false,east=true,north=false,south=false,up=true,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/magicPlating/lr",
+                "north": "essentialcraft:blocks/ct/magicPlating/lrb",
+                "south": "essentialcraft:blocks/ct/magicPlating/lrb"
+            }
+        }],
+        "down=true,east=true,north=false,south=false,up=true,west=true": [{
+            "textures": {
+                "north": "essentialcraft:blocks/ct/magicPlating/tblr",
+                "south": "essentialcraft:blocks/ct/magicPlating/tblr"
+            }
+        }],
+        "down=false,east=false,north=true,south=false,up=true,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/magicPlating/tr",
+                "south": "essentialcraft:blocks/ct/magicPlating/br",
+                "east": "essentialcraft:blocks/ct/magicPlating/bl"
+            }
+        }],
+        "down=true,east=false,north=true,south=false,up=true,west=true": [{
+            "textures": {
+                "south": "essentialcraft:blocks/ct/magicPlating/tbr",
+                "east": "essentialcraft:blocks/ct/magicPlating/tbl"
+            }
+        }],
+        "down=false,east=true,north=true,south=false,up=true,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/magicPlating/lrt",
+                "south": "essentialcraft:blocks/ct/magicPlating/lrb"
+            }
+        }],
+        "down=true,east=true,north=true,south=false,up=true,west=true": [{
+            "textures": {
+                "south": "essentialcraft:blocks/ct/magicPlating/tblr"
+            }
+        }],
+        "down=false,east=false,north=false,south=true,up=true,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/magicPlating/br",
+                "north": "essentialcraft:blocks/ct/magicPlating/bl",
+                "east": "essentialcraft:blocks/ct/magicPlating/br"
+            }
+        }],
+        "down=true,east=false,north=false,south=true,up=true,west=true": [{
+            "textures": {
+                "north": "essentialcraft:blocks/ct/magicPlating/tbl",
+                "east": "essentialcraft:blocks/ct/magicPlating/tbr"
+            }
+        }],
+        "down=false,east=true,north=false,south=true,up=true,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/magicPlating/lrb",
+                "north": "essentialcraft:blocks/ct/magicPlating/lrb"
+            }
+        }],
+        "down=true,east=true,north=false,south=true,up=true,west=true": [{
+            "textures": {
+                "north": "essentialcraft:blocks/ct/magicPlating/tblr"
+            }
+        }],
+        "down=false,east=false,north=true,south=true,up=true,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/magicPlating/tbr",
+                "east": "essentialcraft:blocks/ct/magicPlating/lrb"
+            }
+        }],
+        "down=true,east=false,north=true,south=true,up=true,west=true": [{
+            "textures": {
+                "east": "essentialcraft:blocks/ct/magicPlating/tblr"
+            }
+        }],
+        "down=false,east=true,north=true,south=true,up=true,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/magicPlating/tblr"
+            }
+        }],
+        "down=true,east=true,north=true,south=true,up=true,west=true": [{}],
+        "inventory": [{}]
+    }
+}

@@ -1,56 +1,69 @@
 package ec3.common.block;
 
+import DummyCore.Client.IModelRegisterer;
 import ec3.common.tile.TileWindRune;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.EnumBlockRenderType;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.client.model.ModelLoader;
 
-public class BlockWindRune extends BlockContainer{
-	
+public class BlockWindRune extends BlockContainer implements IModelRegisterer {
+
+	public static final AxisAlignedBB BLOCK_AABB = new AxisAlignedBB(0, 0, 0, 1, 0.0625F, 1);
+
 	public BlockWindRune() {
-		super(Material.rock);
-		this.setBlockBounds(0, 0, 0, 1, 0.0625F, 1);
+		super(Material.ROCK);
 	}
-	
-    public boolean isOpaqueCube()
-    {
-        return false;
-    }
-    
+
+	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+		return BLOCK_AABB;
+	}
+
+	public boolean isOpaqueCube(IBlockState s)
+	{
+		return false;
+	}
+
+	public boolean isFullCube(IBlockState s)
+	{
+		return false;
+	}
+
 	@Override
-    public int getRenderBlockPass()
-    {
-        return 0;
-    }
-    
-    public boolean renderAsNormalBlock()
-    {
-        return false;
-    }
-    
-    public int getRenderType()
-    {
-        return -1;
-    }
+	public BlockRenderLayer getBlockLayer()
+	{
+		return BlockRenderLayer.SOLID;
+	}
+
+	public EnumBlockRenderType getRenderType(IBlockState s) {
+		return EnumBlockRenderType.MODEL;
+	}
 
 	@Override
 	public TileEntity createNewTileEntity(World var1, int var2) {
-		// TODO Auto-generated method stub
 		return new TileWindRune();
 	}
-	
+
 	@Override
-	public boolean onBlockActivated(World par1World, int par2, int par3, int par4, EntityPlayer par5EntityPlayer, int par6, float par7, float par8, float par9)
-	{
-		return TileWindRune.class.cast(par1World.getTileEntity(par2, par3, par4)).action(par5EntityPlayer);
+	public boolean onBlockActivated(World par1World, BlockPos par2, IBlockState par3, EntityPlayer par4EntityPlayer, EnumHand par5, ItemStack par6, EnumFacing par7, float par8, float par9, float par10) {
+		return ((TileWindRune)par1World.getTileEntity(par2)).action(par4EntityPlayer);
 	}
-	
+
 	@Override
-    public void breakBlock(World par1World, int par2, int par3, int par4, Block par5, int par6)
-    {
-		super.breakBlock(par1World, par2, par3, par4, par5, par6);
-    }
+	public void registerModels() {
+		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation("essentialcraft:windRune", "inventory"));
+	}
 }

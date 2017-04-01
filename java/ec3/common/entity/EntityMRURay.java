@@ -3,26 +3,34 @@ package ec3.common.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import ec3.common.item.ItemsCore;
 import ec3.utils.common.ECUtils;
 import ec3.utils.common.ShadeUtils;
 import DummyCore.Utils.DataStorage;
 import DummyCore.Utils.DummyData;
 import DummyCore.Utils.MathUtils;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-public class EntityMRURay extends Entity
-{
-
+public class EntityMRURay extends Entity {
+	
+	public static final DataParameter<String> DATA = EntityDataManager.<String>createKey(EntityMRURay.class, DataSerializers.STRING);
 	public float balance;
 	public float damage;
 	public EntityLivingBase shootingEntity;
@@ -43,12 +51,12 @@ public class EntityMRURay extends Entity
     	
     	if(!this.worldObj.isRemote)
     	{
-    		this.getDataWatcher().updateObject(12, "||x:"+pX+"||y:"+pY+"||z:"+pZ+"||b:"+(double)balance);
+    		this.getDataManager().set(DATA, "||x:"+pX+"||y:"+pY+"||z:"+pZ+"||b:"+(double)balance);
     	}
     	
     	if(this.worldObj.isRemote)
     	{
-    		String dataStr = this.getDataWatcher().getWatchableObjectString(12);
+    		String dataStr = this.getDataManager().get(DATA);
     		if(dataStr != null && !dataStr.isEmpty())
     		{
     			DummyData[] posData = DataStorage.parseData(dataStr);
@@ -106,16 +114,16 @@ public class EntityMRURay extends Entity
 		if(attacked instanceof EntityPlayer)
 		{
 			EntityPlayer player = EntityPlayer.class.cast(attacked);
-			if(!player.worldObj.isRemote && MinecraftServer.getServer().isPVPEnabled())
+			if(!player.worldObj.isRemote && this.worldObj.getMinecraftServer().isPVPEnabled())
 			{
 				if(attacker instanceof EntityPlayer)
 				{
 					EntityPlayer attackerPlayer = (EntityPlayer) attacker;
 					if(attackerPlayer.getTeam() == null || player == null || !(player.getTeam().isSameTeam(attackerPlayer.getTeam())))
-						if(!this.worldObj.getGameRules().getGameRuleBooleanValue("ec3:weaponMatrixDamage"))
+						if(!this.worldObj.getGameRules().getBoolean("ec3:weaponMatrixDamage"))
 							ECUtils.getData(player).modifyOverhaulDamage(ECUtils.getData(player).getOverhaulDamage() + MathHelper.floor_double(this.damage*100));
 				}else
-					if(!this.worldObj.getGameRules().getGameRuleBooleanValue("ec3:weaponMatrixDamage"))
+					if(!this.worldObj.getGameRules().getBoolean("ec3:weaponMatrixDamage"))
 						ECUtils.getData(player).modifyOverhaulDamage(ECUtils.getData(player).getOverhaulDamage() + MathHelper.floor_double(this.damage*100));
 			}
 			if(this.balance == 4)
@@ -137,7 +145,7 @@ public class EntityMRURay extends Entity
 	@SuppressWarnings("unchecked")
 	public void shoot(float f, float f1)
 	{
-		Vec3 vec = this.shootingEntity.getLookVec();
+		Vec3d vec = this.shootingEntity.getLookVec();
 		for(int i = 0; i < 128; ++i)
 		{
 			float vX = (float) ((vec.xCoord*(float)i/2F)+this.posX);
@@ -147,7 +155,7 @@ public class EntityMRURay extends Entity
 			int bVY = MathHelper.floor_float(vY);
 			int bVZ = MathHelper.floor_float(vZ);
 			double d = 0.5D;
-			AxisAlignedBB aabb = AxisAlignedBB.getBoundingBox(vX-d, vY-d, vZ-d, vX+d, vY+d, vZ+d);
+			AxisAlignedBB aabb = new AxisAlignedBB(vX-d, vY-d, vZ-d, vX+d, vY+d, vZ+d);
 			List<EntityLivingBase> entities = this.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, aabb);
 			for(int j = 0; j < entities.size(); ++j)
 			{
@@ -158,8 +166,8 @@ public class EntityMRURay extends Entity
 					this.hitEntities.add(base);
 				}
 			}
-			Block b = this.worldObj.getBlock(bVX, bVY, bVZ);
-			if(b.isNormalCube(worldObj, bVX, bVY, bVZ) || i == 127)
+			IBlockState b = this.worldObj.getBlockState(new BlockPos(bVX, bVY, bVZ));
+			if(b.isNormalCube() || i == 127)
 			{
 				this.setPositionAndRotation(vX, vY, vZ, 0, 0);
 				break;
@@ -172,7 +180,7 @@ public class EntityMRURay extends Entity
 	@Override
 	protected void entityInit()
 	{
-		this.getDataWatcher().addObject(12, "");
+		this.getDataManager().register(DATA, "");
 	}
 
 	@Override
@@ -192,5 +200,9 @@ public class EntityMRURay extends Entity
 		tag.setDouble("pZ", pZ);
 		tag.setFloat("balance", balance);
 	}
-
+	
+	@Override
+	public ItemStack getPickedResult(RayTraceResult target) {
+		return new ItemStack(ItemsCore.entityEgg,1,EntitiesCore.registeredEntities.indexOf(this.getClass()));
+	}
 }

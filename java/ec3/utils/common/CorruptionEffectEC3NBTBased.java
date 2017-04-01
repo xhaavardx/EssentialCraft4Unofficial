@@ -7,14 +7,17 @@ import DummyCore.Utils.UnformedItemStack;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.text.translation.I18n;
 import ec3.api.CorruptionEffectLibrary;
 import ec3.api.EnumCorruptionEffect;
 import ec3.api.ICorruptionEffect;
@@ -130,7 +133,7 @@ public class CorruptionEffectEC3NBTBased implements ICorruptionEffect{
 	}
 
 	@Override
-	public void writeToNBTTagCompound(NBTTagCompound tag, int tagID) 
+	public NBTTagCompound writeToNBTTagCompound(NBTTagCompound tag, int tagID) 
 	{
 		if(tagID == -1)
 		{
@@ -145,6 +148,7 @@ public class CorruptionEffectEC3NBTBased implements ICorruptionEffect{
 			ttag.setInteger("meta", meta);
 			tag.setTag("effectTag_"+tagID, ttag);
 		}
+		return tag;
 	}
 
 	@Override
@@ -165,7 +169,7 @@ public class CorruptionEffectEC3NBTBased implements ICorruptionEffect{
 					if(player.worldObj.rand.nextFloat() <= 0.001F)
 					{
 						message(player,"ec3.effect.desc_"+meta);
-						player.addPotionEffect(new PotionEffect(Potion.digSlowdown.id,400,1,true));
+						player.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS,400,1,true,true));
 					}
 					break;
 				}
@@ -174,7 +178,7 @@ public class CorruptionEffectEC3NBTBased implements ICorruptionEffect{
 					if(player.worldObj.rand.nextFloat() <= 0.001F)
 					{
 						message(player,"ec3.effect.desc_"+meta);
-						player.addPotionEffect(new PotionEffect(Potion.weakness.id,400,1,true));
+						player.addPotionEffect(new PotionEffect(MobEffects.WEAKNESS,400,1,true,true));
 					}
 					break;
 				}
@@ -192,7 +196,7 @@ public class CorruptionEffectEC3NBTBased implements ICorruptionEffect{
 					if(player.worldObj.rand.nextFloat() <= 0.001F)
 					{
 						message(player,"ec3.effect.desc_"+meta);
-						player.addPotionEffect(new PotionEffect(Potion.moveSlowdown.id,400,1,true));
+						player.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS,400,1,true,true));
 					}
 					break;
 				}
@@ -208,14 +212,13 @@ public class CorruptionEffectEC3NBTBased implements ICorruptionEffect{
 					if(player.worldObj.rand.nextFloat() <= 0.001F && !player.isPotionActive(PotionRegistry.paradox))
 					{
 						message(player,"ec3.effect.desc_"+meta);
-						player.addPotionEffect(new PotionEffect(PotionRegistry.paradox.id,2000,1,true));
+						player.addPotionEffect(new PotionEffect(PotionRegistry.paradox,2000,1,true,true));
 					}break;
 				}
 				case 6:
 				{
 					if(player.worldObj.rand.nextFloat() <= 0.0008F)
 					{
-						//TODO
 						message(player,"ec3.effect.desc_"+meta);
 					}break;
 				}
@@ -223,7 +226,6 @@ public class CorruptionEffectEC3NBTBased implements ICorruptionEffect{
 				{
 					if(player.worldObj.rand.nextFloat() <= 0.001F)
 					{
-						//TODO
 						message(player,"ec3.effect.desc_"+meta);
 					}break;
 				}
@@ -272,7 +274,7 @@ public class CorruptionEffectEC3NBTBased implements ICorruptionEffect{
 						message(player,"ec3.effect.desc_"+meta);
 						if(player.inventory.getCurrentItem()!=null)
 						{
-							player.inventory.getCurrentItem().useItemRightClick(player.worldObj, player);
+							player.inventory.getCurrentItem().useItemRightClick(player.worldObj, player, EnumHand.MAIN_HAND);
 						}
 					}break;
 				}
@@ -314,7 +316,7 @@ public class CorruptionEffectEC3NBTBased implements ICorruptionEffect{
 					if(player.worldObj.rand.nextFloat() <= 0.0007F)
 					{
 						message(player,"ec3.effect.desc_"+meta);
-						EntityLightningBolt bolt = new EntityLightningBolt(player.worldObj,player.posX,player.posY,player.posZ);
+						EntityLightningBolt bolt = new EntityLightningBolt(player.worldObj,player.posX,player.posY,player.posZ, false);
 						player.worldObj.spawnEntityInWorld(bolt);
 						player.worldObj.addWeatherEffect(bolt);
 						player.onStruckByLightning(bolt);
@@ -329,7 +331,7 @@ public class CorruptionEffectEC3NBTBased implements ICorruptionEffect{
 				}
 				case 17:
 				{
-					if(player.worldObj.rand.nextFloat() <= 0.01F && !player.worldObj.isRaining() && !player.worldObj.isDaytime() && player.worldObj.isDaytime() && player.worldObj.canBlockSeeTheSky(MathHelper.floor_double(player.posX), MathHelper.floor_double(player.posY+player.eyeHeight), MathHelper.floor_double(player.posZ)))
+					if(player.worldObj.rand.nextFloat() <= 0.01F && !player.worldObj.isRaining() && !player.worldObj.isDaytime() && player.worldObj.isDaytime() && player.worldObj.canBlockSeeSky(new BlockPos(MathHelper.floor_double(player.posX), MathHelper.floor_double(player.posY+player.eyeHeight), MathHelper.floor_double(player.posZ))))
 					{
 						int moonPhase = (int) (player.worldObj.getWorldTime() / 24000L % 8L + 8L) % 8;
 						int damage = 0;
@@ -348,7 +350,7 @@ public class CorruptionEffectEC3NBTBased implements ICorruptionEffect{
 				}
 				case 18:
 				{
-					if(player.worldObj.rand.nextFloat() <= 0.001F && player.isPotionActive(PotionRegistry.mruCorruptionPotion.id))
+					if(player.worldObj.rand.nextFloat() <= 0.001F && player.isPotionActive(PotionRegistry.mruCorruptionPotion))
 					{
 						player.attackEntityFrom(DamageSource.magic, 4);
 					}break;
@@ -371,7 +373,7 @@ public class CorruptionEffectEC3NBTBased implements ICorruptionEffect{
 				}
 				case 21:
 				{
-					if(player.worldObj.rand.nextFloat() <= 0.1F && player.worldObj.isRaining() && player.worldObj.isDaytime() && player.worldObj.canBlockSeeTheSky(MathHelper.floor_double(player.posX), MathHelper.floor_double(player.posY+player.eyeHeight), MathHelper.floor_double(player.posZ)))
+					if(player.worldObj.rand.nextFloat() <= 0.1F && player.worldObj.isRaining() && player.worldObj.isDaytime() && player.worldObj.canBlockSeeSky(new BlockPos(MathHelper.floor_double(player.posX), MathHelper.floor_double(player.posY+player.eyeHeight), MathHelper.floor_double(player.posZ))))
 					{
 						//message(player,"ec3.effect.desc_"+meta);
 						player.attackEntityFrom(DamageSource.wither, 1);
@@ -379,7 +381,7 @@ public class CorruptionEffectEC3NBTBased implements ICorruptionEffect{
 				}
 				case 22:
 				{
-					if(player.worldObj.rand.nextFloat() <= 0.003F && player.worldObj.isDaytime() && !player.worldObj.isRaining() && player.worldObj.canBlockSeeTheSky(MathHelper.floor_double(player.posX), MathHelper.floor_double(player.posY+player.eyeHeight), MathHelper.floor_double(player.posZ)))
+					if(player.worldObj.rand.nextFloat() <= 0.003F && player.worldObj.isDaytime() && !player.worldObj.isRaining() && player.worldObj.canBlockSeeSky(new BlockPos(MathHelper.floor_double(player.posX), MathHelper.floor_double(player.posY+player.eyeHeight), MathHelper.floor_double(player.posZ))))
 					{
 						message(player,"ec3.effect.desc_"+meta);
 						player.attackEntityFrom(DamageSource.wither, 1);
@@ -387,7 +389,7 @@ public class CorruptionEffectEC3NBTBased implements ICorruptionEffect{
 				}
 				case 23:
 				{
-					if(player.worldObj.rand.nextFloat() <= 0.03F && player.isInsideOfMaterial(Material.water))
+					if(player.worldObj.rand.nextFloat() <= 0.03F && player.isInsideOfMaterial(Material.WATER))
 					{
 						message(player,"ec3.effect.desc_"+meta);
 						player.attackEntityFrom(DamageSource.wither, 3);
@@ -407,7 +409,7 @@ public class CorruptionEffectEC3NBTBased implements ICorruptionEffect{
 	
 	public static void message(EntityPlayer p, String message)
 	{
-		//p.addChatComponentMessage(new ChatComponentText(StatCollector.translateToLocal(message)).setChatStyle(new ChatStyle().setColor(EnumChatFormatting.DARK_RED)));
+		//p.addChatComponentMessage(new ChatComponentText(I18n.translateToLocal(message)).setChatStyle(new ChatStyle().setColor(EnumChatFormatting.DARK_RED)));
 	}
 
 	@Override
@@ -449,12 +451,12 @@ public class CorruptionEffectEC3NBTBased implements ICorruptionEffect{
 
 	@Override
 	public String getLocalizedName() {
-		return StatCollector.translateToLocal("ec3.effect.name_"+this.meta);
+		return I18n.translateToLocal("ec3.effect.name_"+this.meta);
 	}
 
 	@Override
 	public String getLocalizedDesc() {
-		return StatCollector.translateToLocal("ec3.effect.desc_"+this.meta);
+		return I18n.translateToLocal("ec3.effect.desc_"+this.meta);
 	}
 
 }

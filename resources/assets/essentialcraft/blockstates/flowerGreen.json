@@ -1,0 +1,14 @@
+{
+    "forge_marker": 1,
+    "variants": {
+        "normal": [{
+            "model": "minecraft:cross",
+            "textures": { "cross": "essentialcraft:blocks/firstWorld/flower_green" }
+        }],
+        "inventory": [{
+            "model": "builtin/generated",
+            "transform": "forge:default-item",
+            "textures": { "layer0": "essentialcraft:blocks/firstWorld/flower_green" }
+        }]
+    }
+}

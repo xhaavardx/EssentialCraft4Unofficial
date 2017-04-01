@@ -1,6 +1,7 @@
 package ec3.common.inventory;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.ClickType;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
@@ -46,14 +47,14 @@ public class ContainerFilter extends Container {
 	}
 	
 	@Override
-	public ItemStack slotClick(int slotID, int buttonPressed, int flag, EntityPlayer player) {
+	public ItemStack slotClick(int slotID, int buttonPressed, ClickType flag, EntityPlayer player) {
 		Slot tmpSlot;
 		if(slotID >= 0 && slotID < inventorySlots.size())
 			tmpSlot = (Slot)inventorySlots.get(slotID);
 		else
 			tmpSlot = null;
 		
-		if(tmpSlot != null && tmpSlot.isSlotInInventory(player.inventory, player.inventory.currentItem))
+		if(tmpSlot != null && tmpSlot.isHere(player.inventory, player.inventory.currentItem))
 			return tmpSlot.getStack();
 		return super.slotClick(slotID, buttonPressed, flag, player);
 	}

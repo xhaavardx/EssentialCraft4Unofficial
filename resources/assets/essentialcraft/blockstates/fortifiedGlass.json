@@ -1,0 +1,448 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "essentialcraft:cube_colored",
+        "textures": {
+            "down": "essentialcraft:blocks/transparentGlass",
+            "up": "essentialcraft:blocks/transparentGlass",
+            "north": "essentialcraft:blocks/transparentGlass",
+            "south": "essentialcraft:blocks/transparentGlass",
+            "west": "essentialcraft:blocks/transparentGlass",
+            "east": "essentialcraft:blocks/transparentGlass",
+            "particle": "essentialcraft:blocks/transparentGlass"
+        }
+    },
+    "variants": {
+        "down=false,east=false,north=false,south=false,up=false,west=false": [{}],
+        "down=true,east=false,north=false,south=false,up=false,west=false": [{
+            "textures": {
+                "north": "essentialcraft:blocks/ct/fortifiedGlass/t",
+                "south": "essentialcraft:blocks/ct/fortifiedGlass/t",
+                "west": "essentialcraft:blocks/ct/fortifiedGlass/t",
+                "east": "essentialcraft:blocks/ct/fortifiedGlass/t"
+            }
+        }],
+        "down=false,east=true,north=false,south=false,up=false,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/fortifiedGlass/l",
+                "up": "essentialcraft:blocks/ct/fortifiedGlass/l",
+                "north": "essentialcraft:blocks/ct/fortifiedGlass/r",
+                "south": "essentialcraft:blocks/ct/fortifiedGlass/l"
+            }
+        }],
+        "down=true,east=true,north=false,south=false,up=false,west=false": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/fortifiedGlass/l",
+                "north": "essentialcraft:blocks/ct/fortifiedGlass/tr",
+                "south": "essentialcraft:blocks/ct/fortifiedGlass/tl",
+                "west": "essentialcraft:blocks/ct/fortifiedGlass/t"
+            }
+        }],
+        "down=false,east=false,north=true,south=false,up=false,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/fortifiedGlass/t",
+                "up": "essentialcraft:blocks/ct/fortifiedGlass/b",
+                "west": "essentialcraft:blocks/ct/fortifiedGlass/r",
+                "east": "essentialcraft:blocks/ct/fortifiedGlass/l"
+            }
+        }],
+        "down=true,east=false,north=true,south=false,up=false,west=false": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/fortifiedGlass/b",
+                "south": "essentialcraft:blocks/ct/fortifiedGlass/t",
+                "west": "essentialcraft:blocks/ct/fortifiedGlass/tr",
+                "east": "essentialcraft:blocks/ct/fortifiedGlass/tl"
+            }
+        }],
+        "down=false,east=true,north=true,south=false,up=false,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/fortifiedGlass/tl",
+                "up": "essentialcraft:blocks/ct/fortifiedGlass/bl",
+                "south": "essentialcraft:blocks/ct/fortifiedGlass/l",
+                "west": "essentialcraft:blocks/ct/fortifiedGlass/r"
+            }
+        }],
+        "down=true,east=true,north=true,south=false,up=false,west=false": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/fortifiedGlass/bl",
+                "south": "essentialcraft:blocks/ct/fortifiedGlass/tl",
+                "west": "essentialcraft:blocks/ct/fortifiedGlass/tr"
+            }
+        }],
+        "down=false,east=false,north=false,south=true,up=false,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/fortifiedGlass/b",
+                "up": "essentialcraft:blocks/ct/fortifiedGlass/t",
+                "west": "essentialcraft:blocks/ct/fortifiedGlass/l",
+                "east": "essentialcraft:blocks/ct/fortifiedGlass/r"
+            }
+        }],
+        "down=true,east=false,north=false,south=true,up=false,west=false": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/fortifiedGlass/t",
+                "north": "essentialcraft:blocks/ct/fortifiedGlass/t",
+                "west": "essentialcraft:blocks/ct/fortifiedGlass/tl",
+                "east": "essentialcraft:blocks/ct/fortifiedGlass/tr"
+            }
+        }],
+        "down=false,east=true,north=false,south=true,up=false,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/fortifiedGlass/bl",
+                "up": "essentialcraft:blocks/ct/fortifiedGlass/tl",
+                "north": "essentialcraft:blocks/ct/fortifiedGlass/r",
+                "west": "essentialcraft:blocks/ct/fortifiedGlass/l"
+            }
+        }],
+        "down=true,east=true,north=false,south=true,up=false,west=false": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/fortifiedGlass/tl",
+                "north": "essentialcraft:blocks/ct/fortifiedGlass/tr",
+                "west": "essentialcraft:blocks/ct/fortifiedGlass/tl"
+            }
+        }],
+        "down=false,east=false,north=true,south=true,up=false,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/fortifiedGlass/tb",
+                "up": "essentialcraft:blocks/ct/fortifiedGlass/tb",
+                "west": "essentialcraft:blocks/ct/fortifiedGlass/lr",
+                "east": "essentialcraft:blocks/ct/fortifiedGlass/lr"
+            }
+        }],
+        "down=true,east=false,north=true,south=true,up=false,west=false": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/fortifiedGlass/tb",
+                "west": "essentialcraft:blocks/ct/fortifiedGlass/lrt",
+                "east": "essentialcraft:blocks/ct/fortifiedGlass/lrt"
+            }
+        }],
+        "down=false,east=true,north=true,south=true,up=false,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/fortifiedGlass/tbl",
+                "up": "essentialcraft:blocks/ct/fortifiedGlass/tbl",
+                "west": "essentialcraft:blocks/ct/fortifiedGlass/lr"
+            }
+        }],
+        "down=true,east=true,north=true,south=true,up=false,west=false": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/fortifiedGlass/tbl",
+                "west": "essentialcraft:blocks/ct/fortifiedGlass/lrt"
+            }
+        }],
+        "down=false,east=false,north=false,south=false,up=true,west=false": [{
+            "textures": {
+                "north": "essentialcraft:blocks/ct/fortifiedGlass/b",
+                "south": "essentialcraft:blocks/ct/fortifiedGlass/b",
+                "west": "essentialcraft:blocks/ct/fortifiedGlass/b",
+                "east": "essentialcraft:blocks/ct/fortifiedGlass/b"
+            }
+        }],
+        "down=true,east=false,north=false,south=false,up=true,west=false": [{
+            "textures": {
+                "north": "essentialcraft:blocks/ct/fortifiedGlass/tb",
+                "south": "essentialcraft:blocks/ct/fortifiedGlass/tb",
+                "west": "essentialcraft:blocks/ct/fortifiedGlass/tb",
+                "east": "essentialcraft:blocks/ct/fortifiedGlass/tb"
+            }
+        }],
+        "down=false,east=true,north=false,south=false,up=true,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/fortifiedGlass/l",
+                "north": "essentialcraft:blocks/ct/fortifiedGlass/br",
+                "south": "essentialcraft:blocks/ct/fortifiedGlass/bl",
+                "west": "essentialcraft:blocks/ct/fortifiedGlass/b"
+            }
+        }],
+        "down=true,east=true,north=false,south=false,up=true,west=false": [{
+            "textures": {
+                "north": "essentialcraft:blocks/ct/fortifiedGlass/tbr",
+                "south": "essentialcraft:blocks/ct/fortifiedGlass/tbl",
+                "west": "essentialcraft:blocks/ct/fortifiedGlass/tb"
+            }
+        }],
+        "down=false,east=false,north=true,south=false,up=true,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/fortifiedGlass/t",
+                "south": "essentialcraft:blocks/ct/fortifiedGlass/b",
+                "west": "essentialcraft:blocks/ct/fortifiedGlass/br",
+                "east": "essentialcraft:blocks/ct/fortifiedGlass/bl"
+            }
+        }],
+        "down=true,east=false,north=true,south=false,up=true,west=false": [{
+            "textures": {
+                "south": "essentialcraft:blocks/ct/fortifiedGlass/tb",
+                "west": "essentialcraft:blocks/ct/fortifiedGlass/tbr",
+                "east": "essentialcraft:blocks/ct/fortifiedGlass/tbl"
+            }
+        }],
+        "down=false,east=true,north=true,south=false,up=true,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/fortifiedGlass/tl",
+                "south": "essentialcraft:blocks/ct/fortifiedGlass/bl",
+                "west": "essentialcraft:blocks/ct/fortifiedGlass/br"
+            }
+        }],
+        "down=true,east=true,north=true,south=false,up=true,west=false": [{
+           "textures": {
+                "south": "essentialcraft:blocks/ct/fortifiedGlass/tbl",
+                "west": "essentialcraft:blocks/ct/fortifiedGlass/tbr"
+            } 
+        }],
+        "down=false,east=false,north=false,south=true,up=true,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/fortifiedGlass/b",
+                "north": "essentialcraft:blocks/ct/fortifiedGlass/b",
+                "west": "essentialcraft:blocks/ct/fortifiedGlass/bl",
+                "east": "essentialcraft:blocks/ct/fortifiedGlass/br"
+            }
+        }],
+        "down=true,east=false,north=false,south=true,up=true,west=false": [{
+            "textures": {
+                "north": "essentialcraft:blocks/ct/fortifiedGlass/tb",
+                "west": "essentialcraft:blocks/ct/fortifiedGlass/tbl",
+                "east": "essentialcraft:blocks/ct/fortifiedGlass/tbr"
+            }
+        }],
+        "down=false,east=true,north=false,south=true,up=true,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/fortifiedGlass/bl",
+                "north": "essentialcraft:blocks/ct/fortifiedGlass/br",
+                "west": "essentialcraft:blocks/ct/fortifiedGlass/bl"
+            }
+        }],
+        "down=true,east=true,north=false,south=true,up=true,west=false": [{
+            "textures": {
+                "north": "essentialcraft:blocks/ct/fortifiedGlass/tbr",
+                "west": "essentialcraft:blocks/ct/fortifiedGlass/tbl"
+            }
+        }],
+        "down=false,east=false,north=true,south=true,up=true,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/fortifiedGlass/tb",
+                "west": "essentialcraft:blocks/ct/fortifiedGlass/lrb",
+                "east": "essentialcraft:blocks/ct/fortifiedGlass/lrb"
+            }
+        }],
+        "down=true,east=false,north=true,south=true,up=true,west=false": [{
+            "textures": {
+                "west": "essentialcraft:blocks/ct/fortifiedGlass/tblr",
+                "east": "essentialcraft:blocks/ct/fortifiedGlass/tblr"
+            }
+        }],
+        "down=false,east=true,north=true,south=true,up=true,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/fortifiedGlass/tbl",
+                "west": "essentialcraft:blocks/ct/fortifiedGlass/lrb"
+            }
+        }],
+        "down=true,east=true,north=true,south=true,up=true,west=false": [{
+            "textures": {
+                "west": "essentialcraft:blocks/ct/fortifiedGlass/tblr"
+            }
+        }],
+        "down=false,east=false,north=false,south=false,up=false,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/fortifiedGlass/r",
+                "up": "essentialcraft:blocks/ct/fortifiedGlass/r",
+                "north": "essentialcraft:blocks/ct/fortifiedGlass/l",
+                "south": "essentialcraft:blocks/ct/fortifiedGlass/r"
+            }
+        }],
+        "down=true,east=false,north=false,south=false,up=false,west=true": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/fortifiedGlass/r",
+                "north": "essentialcraft:blocks/ct/fortifiedGlass/tl",
+                "south": "essentialcraft:blocks/ct/fortifiedGlass/tr",
+                "east": "essentialcraft:blocks/ct/fortifiedGlass/t"
+            }
+        }],
+        "down=false,east=true,north=false,south=false,up=false,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/fortifiedGlass/lr",
+                "up": "essentialcraft:blocks/ct/fortifiedGlass/lr",
+                "north": "essentialcraft:blocks/ct/fortifiedGlass/lr",
+                "south": "essentialcraft:blocks/ct/fortifiedGlass/lr"
+            }
+        }],
+        "down=true,east=true,north=false,south=false,up=false,west=true": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/fortifiedGlass/lr",
+                "north": "essentialcraft:blocks/ct/fortifiedGlass/lrt",
+                "south": "essentialcraft:blocks/ct/fortifiedGlass/lrt"
+            }
+        }],
+        "down=false,east=false,north=true,south=false,up=false,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/fortifiedGlass/tr",
+                "up": "essentialcraft:blocks/ct/fortifiedGlass/br",
+                "south": "essentialcraft:blocks/ct/fortifiedGlass/r",
+                "east": "essentialcraft:blocks/ct/fortifiedGlass/l"
+            }
+        }],
+        "down=true,east=false,north=true,south=false,up=false,west=true": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/fortifiedGlass/br",
+                "south": "essentialcraft:blocks/ct/fortifiedGlass/tr",
+                "east": "essentialcraft:blocks/ct/fortifiedGlass/tl"
+            }
+        }],
+        "down=false,east=true,north=true,south=false,up=false,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/fortifiedGlass/lrt",
+                "up": "essentialcraft:blocks/ct/fortifiedGlass/lrb",
+                "south": "essentialcraft:blocks/ct/fortifiedGlass/lr"
+            }
+        }],
+        "down=true,east=true,north=true,south=false,up=false,west=true": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/fortifiedGlass/lrb",
+                "south": "essentialcraft:blocks/ct/fortifiedGlass/lrt"
+            }
+        }],
+        "down=false,east=false,north=false,south=true,up=false,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/fortifiedGlass/br",
+                "up": "essentialcraft:blocks/ct/fortifiedGlass/tr",
+                "north": "essentialcraft:blocks/ct/fortifiedGlass/l",
+                "east": "essentialcraft:blocks/ct/fortifiedGlass/r"
+            }
+        }],
+        "down=true,east=false,north=false,south=true,up=false,west=true": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/fortifiedGlass/tr",
+                "north": "essentialcraft:blocks/ct/fortifiedGlass/tl",
+                "east": "essentialcraft:blocks/ct/fortifiedGlass/tr"
+            }
+        }],
+        "down=false,east=true,north=false,south=true,up=false,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/fortifiedGlass/lrb",
+                "up": "essentialcraft:blocks/ct/fortifiedGlass/lrt",
+                "north": "essentialcraft:blocks/ct/fortifiedGlass/lr"
+            }
+        }],
+        "down=true,east=true,north=false,south=true,up=false,west=true": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/fortifiedGlass/lrt",
+                "north": "essentialcraft:blocks/ct/fortifiedGlass/lrt"
+            }
+        }],
+        "down=false,east=false,north=true,south=true,up=false,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/fortifiedGlass/tbr",
+                "up": "essentialcraft:blocks/ct/fortifiedGlass/tbr",
+                "east": "essentialcraft:blocks/ct/fortifiedGlass/lr"
+            }
+        }],
+        "down=true,east=false,north=true,south=true,up=false,west=true": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/fortifiedGlass/tbr",
+                "east": "essentialcraft:blocks/ct/fortifiedGlass/lrt"
+            }
+        }],
+        "down=false,east=true,north=true,south=true,up=false,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/fortifiedGlass/tblr",
+                "up": "essentialcraft:blocks/ct/fortifiedGlass/tblr"
+            }
+        }],
+        "down=true,east=true,north=true,south=true,up=false,west=true": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/fortifiedGlass/tblr"
+            }
+        }],
+        "down=false,east=false,north=false,south=false,up=true,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/fortifiedGlass/r",
+                "north": "essentialcraft:blocks/ct/fortifiedGlass/bl",
+                "south": "essentialcraft:blocks/ct/fortifiedGlass/br",
+                "east": "essentialcraft:blocks/ct/fortifiedGlass/b"
+            }
+        }],
+        "down=true,east=false,north=false,south=false,up=true,west=true": [{
+            "textures": {
+                "north": "essentialcraft:blocks/ct/fortifiedGlass/tbl",
+                "south": "essentialcraft:blocks/ct/fortifiedGlass/tbr",
+                "east": "essentialcraft:blocks/ct/fortifiedGlass/tb"
+            }
+        }],
+        "down=false,east=true,north=false,south=false,up=true,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/fortifiedGlass/lr",
+                "north": "essentialcraft:blocks/ct/fortifiedGlass/lrb",
+                "south": "essentialcraft:blocks/ct/fortifiedGlass/lrb"
+            }
+        }],
+        "down=true,east=true,north=false,south=false,up=true,west=true": [{
+            "textures": {
+                "north": "essentialcraft:blocks/ct/fortifiedGlass/tblr",
+                "south": "essentialcraft:blocks/ct/fortifiedGlass/tblr"
+            }
+        }],
+        "down=false,east=false,north=true,south=false,up=true,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/fortifiedGlass/tr",
+                "south": "essentialcraft:blocks/ct/fortifiedGlass/br",
+                "east": "essentialcraft:blocks/ct/fortifiedGlass/bl"
+            }
+        }],
+        "down=true,east=false,north=true,south=false,up=true,west=true": [{
+            "textures": {
+                "south": "essentialcraft:blocks/ct/fortifiedGlass/tbr",
+                "east": "essentialcraft:blocks/ct/fortifiedGlass/tbl"
+            }
+        }],
+        "down=false,east=true,north=true,south=false,up=true,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/fortifiedGlass/lrt",
+                "south": "essentialcraft:blocks/ct/fortifiedGlass/lrb"
+            }
+        }],
+        "down=true,east=true,north=true,south=false,up=true,west=true": [{
+            "textures": {
+                "south": "essentialcraft:blocks/ct/fortifiedGlass/tblr"
+            }
+        }],
+        "down=false,east=false,north=false,south=true,up=true,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/fortifiedGlass/br",
+                "north": "essentialcraft:blocks/ct/fortifiedGlass/bl",
+                "east": "essentialcraft:blocks/ct/fortifiedGlass/br"
+            }
+        }],
+        "down=true,east=false,north=false,south=true,up=true,west=true": [{
+            "textures": {
+                "north": "essentialcraft:blocks/ct/fortifiedGlass/tbl",
+                "east": "essentialcraft:blocks/ct/fortifiedGlass/tbr"
+            }
+        }],
+        "down=false,east=true,north=false,south=true,up=true,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/fortifiedGlass/lrb",
+                "north": "essentialcraft:blocks/ct/fortifiedGlass/lrb"
+            }
+        }],
+        "down=true,east=true,north=false,south=true,up=true,west=true": [{
+            "textures": {
+                "north": "essentialcraft:blocks/ct/fortifiedGlass/tblr"
+            }
+        }],
+        "down=false,east=false,north=true,south=true,up=true,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/fortifiedGlass/tbr",
+                "east": "essentialcraft:blocks/ct/fortifiedGlass/lrb"
+            }
+        }],
+        "down=true,east=false,north=true,south=true,up=true,west=true": [{
+            "textures": {
+                "east": "essentialcraft:blocks/ct/fortifiedGlass/tblr"
+            }
+        }],
+        "down=false,east=true,north=true,south=true,up=true,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/fortifiedGlass/tblr"
+            }
+        }],
+        "down=true,east=true,north=true,south=true,up=true,west=true": [{}],
+        "inventory": [{}]
+    }
+}

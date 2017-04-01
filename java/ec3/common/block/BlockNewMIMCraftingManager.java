@@ -1,80 +1,66 @@
 package ec3.common.block;
 
+import DummyCore.Client.IModelRegisterer;
 import DummyCore.Utils.MiscUtils;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import ec3.common.mod.EssentialCraftCore;
 import ec3.common.tile.TileNewMIMCraftingManager;
 import ec3.utils.cfg.Config;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.util.EnumBlockRenderType;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.client.model.ModelLoader;
 
-public class BlockNewMIMCraftingManager extends BlockContainer{
-	
+public class BlockNewMIMCraftingManager extends BlockContainer implements IModelRegisterer {
+
 	public BlockNewMIMCraftingManager() 
 	{
-		super(Material.rock);
+		super(Material.ROCK);
 	}
-	
-	public IIcon tbIcon;
-	public IIcon siIcon;
-	
+
 	@Override
 	public TileEntity createNewTileEntity(World w, int meta) {
 		return new TileNewMIMCraftingManager();
 	}
-	
-    @SideOnly(Side.CLIENT)
-    public IIcon getIcon(IBlockAccess w, int x, int y, int z, int side)
-    {
-    	return side <= 1 ? tbIcon : siIcon;
-    }
-	
-    public IIcon getIcon(int side, int meta)
-    {
-        return side <= 1 ? tbIcon : siIcon;
-    }
-    
-	@Override
-    @SideOnly(Side.CLIENT)
-    public void registerBlockIcons(IIconRegister reg)
-    {
-		tbIcon = blockIcon = reg.registerIcon("essentialcraft:mimInventoryHandler_TB");
-		siIcon = reg.registerIcon("essentialcraft:mimCraftingManager");
-    }
-	
-	@Override
-    public void breakBlock(World par1World, int par2, int par3, int par4, Block par5, int par6)
-    {
-		MiscUtils.dropItemsOnBlockBreak(par1World, par2, par3, par4, par5, par6);
-		super.breakBlock(par1World, par2, par3, par4, par5, par6);
-    }
-	
-	@Override
-	public boolean onBlockActivated(World par1World, int par2, int par3, int par4, EntityPlayer par5EntityPlayer, int par6, float par7, float par8, float par9)
+
+	public EnumBlockRenderType getRenderType(IBlockState s)
 	{
-	    if (par1World.isRemote)
-	    {
-	        return true;
-	    }else
-	    {
-	    	if(!par5EntityPlayer.isSneaking())
-	      	{
-	       		par5EntityPlayer.openGui(EssentialCraftCore.core, Config.guiID[0], par1World, par2, par3, par4);
-	           	return true;
-	       	}
-	       	else
-	       	{
-	       		return false;
-	       	}
-	    }
+		return EnumBlockRenderType.MODEL;
+	}
+	
+	@Override
+	public void breakBlock(World par1World, BlockPos par2Pos, IBlockState par3State) {
+		MiscUtils.dropItemsOnBlockBreak(par1World, par2Pos.getX(), par2Pos.getY(), par2Pos.getZ(), par3State.getBlock(), 0);
+		super.breakBlock(par1World, par2Pos, par3State);
 	}
 
+	@Override
+	public boolean onBlockActivated(World par1World, BlockPos par2, IBlockState par3, EntityPlayer par4EntityPlayer, EnumHand par5, ItemStack par6, EnumFacing par7, float par8, float par9, float par10) {
+		if(par1World.isRemote) {
+			return true;
+		}
+		else {
+			if(!par4EntityPlayer.isSneaking()) {
+				par4EntityPlayer.openGui(EssentialCraftCore.core, Config.guiID[0], par1World, par2.getX(), par2.getY(), par2.getZ());
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+	}
+
+	@Override
+	public void registerModels() {
+		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation("essentialcraft:mimCrafter", "inventory"));
+	}
 }

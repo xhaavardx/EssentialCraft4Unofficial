@@ -1,0 +1,22 @@
+{
+    "__comment": "Model generated using MrCrayfish's Model Creator (http://mrcrayfish.com/modelcreator/)",
+    "parent": "minecraft:block/block",
+    "textures": {
+        "particle": "#base"
+    },
+    "elements": [
+        {
+            "name": "cube_0",
+            "from": [ 5.6, 5.6, 0.0 ], 
+            "to": [ 10.4, 10.4, 3.2 ], 
+            "faces": {
+                "north": { "texture": "#base", "uv": [ 5.6, 5.6, 10.4, 10.4 ], "cullface": "north" },
+                "east": { "texture": "#base", "uv": [ 12.8, 5.6, 16.0, 10.4 ] },
+                "south": { "texture": "#base", "uv": [ 5.6, 5.6, 10.4, 10.4 ] },
+                "west": { "texture": "#base", "uv": [ 0.0, 6.0, 3.2, 10.8 ] },
+                "up": { "texture": "#base", "uv": [ 5.6, 0.0, 10.4, 3.2 ] },
+                "down": { "texture": "#base", "uv": [ 5.6, 12.8, 10.4, 16.0 ] }
+            }
+        }
+    ]
+}

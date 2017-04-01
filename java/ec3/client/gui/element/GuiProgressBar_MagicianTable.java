@@ -1,5 +1,6 @@
 package ec3.client.gui.element;
 
+import DummyCore.Utils.DrawUtils;
 import DummyCore.Utils.MathUtils;
 import DummyCore.Utils.MiscUtils;
 import ec3.common.tile.TileMagicianTable;
@@ -22,8 +23,8 @@ public class GuiProgressBar_MagicianTable extends GuiTextField{
 	}
 
 	@Override
-	public void draw(int posX, int posY) {
-		MiscUtils.bindTexture("essentialcraft", "textures/gui/gui_magicianTable.png");
+	public void draw(int posX, int posY, int mouseX, int mouseY) {
+		DrawUtils.bindTexture("essentialcraft", "textures/gui/gui_magicianTable.png");
 		int current = (int) tile.progressLevel;
 		int max = (int) tile.progressRequired;
 		int progress = MathUtils.pixelatedTextureSize(current, max, 18);

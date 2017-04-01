@@ -1,9 +1,7 @@
 package ec3.common.tile;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.common.config.Configuration;
 import DummyCore.Utils.DataStorage;
 import DummyCore.Utils.DummyData;
@@ -28,10 +26,10 @@ public class TileRadiatingChamber extends TileMRUGeneric {
 	}
 	
 	@Override
-	public void updateEntity() {
-		super.updateEntity();
+	public void update() {
+		super.update();
 		ECUtils.manage(this, 0);
-		if(!worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord)) {
+		if(worldObj.isBlockIndirectlyGettingPowered(pos) == 0) {
 			ItemStack[] craftMatrix = new ItemStack[2];
 			craftMatrix[0] = getStackInSlot(1);
 			craftMatrix[1] = getStackInSlot(2);
@@ -59,7 +57,7 @@ public class TileRadiatingChamber extends TileMRUGeneric {
 				if(getMRU() >= mruReq && progressLevel < currentRecipe.mruRequired) {
 					progressLevel += 1;
 					if(generatesCorruption)
-						ECUtils.increaseCorruptionAt(worldObj, xCoord, yCoord, zCoord, worldObj.rand.nextInt(genCorruption));
+						ECUtils.increaseCorruptionAt(worldObj, pos.getX(), pos.getY(), pos.getZ(), worldObj.rand.nextInt(genCorruption));
 					setMRU(getMRU() - mruReq);
 					if(progressLevel >= currentRecipe.mruRequired) {
 						progressLevel = 0;
@@ -71,7 +69,6 @@ public class TileRadiatingChamber extends TileMRUGeneric {
 		}
 	}
 	
-	@SideOnly(Side.CLIENT)
 	@Override
 	public AxisAlignedBB getRenderBoundingBox() {
 		AxisAlignedBB bb = INFINITE_EXTENT_AABB;
@@ -96,7 +93,6 @@ public class TileRadiatingChamber extends TileMRUGeneric {
 		if(canFunction(currentRecipe)) {
 			ItemStack stk = currentRecipe.result.copy();
 			
-			stk.stackSize = currentRecipe.recipeSize;
 			if(getStackInSlot(3) == null)
 				setInventorySlotContents(3, stk.copy());
 			else if (getStackInSlot(3).getItem() == stk.getItem())

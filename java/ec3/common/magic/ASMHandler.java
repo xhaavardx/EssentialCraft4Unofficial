@@ -249,7 +249,7 @@ public class ASMHandler implements IClassTransformer
 	    	}
 	    }
 	    
-	    System.out.println(" *Patch status: overwrighting original class");
+	    System.out.println(" *Patch status: overwriting original class");
 	    classNode.accept(writer);
 	    System.out.println(" *Patch status: success?");
 	    System.out.println(" *Patch status: adding patched/new methods");

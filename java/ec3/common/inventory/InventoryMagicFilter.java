@@ -8,6 +8,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.text.ITextComponent;
 
 public class InventoryMagicFilter implements IInventory {
 	
@@ -51,7 +52,7 @@ public class InventoryMagicFilter implements IInventory {
 	}
 	
 	@Override
-	public ItemStack getStackInSlotOnClosing(int slot) {
+	public ItemStack removeStackFromSlot(int slot) {
 		ItemStack returnStack = getStackInSlot(slot);
 		setInventorySlotContents(slot, null);
 		return returnStack;
@@ -63,12 +64,12 @@ public class InventoryMagicFilter implements IInventory {
 	}
 	
 	@Override
-	public String getInventoryName() {
+	public String getName() {
 		return "ec3.inventory.filter";
 	}
 	
 	@Override
-	public boolean hasCustomInventoryName() {
+	public boolean hasCustomName() {
 		return false;
 	}
 	
@@ -92,10 +93,10 @@ public class InventoryMagicFilter implements IInventory {
 	}
 	
 	@Override
-	public void openInventory() {}
+	public void openInventory(EntityPlayer e) {}
 	
 	@Override
-	public void closeInventory() {}
+	public void closeInventory(EntityPlayer e) {}
 	
 	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack stack) {
@@ -127,7 +128,7 @@ public class InventoryMagicFilter implements IInventory {
 		}
 	}
 	
-	public void writeToNBT(NBTTagCompound tag) {
+	public NBTTagCompound writeToNBT(NBTTagCompound tag) {
 		NBTTagList items = new NBTTagList();
 		
 		for(int i = 0; i < inventory.length; i++) {
@@ -144,5 +145,30 @@ public class InventoryMagicFilter implements IInventory {
 		//Can this ever happen? I guess it only happens on server, so should be impossible, but just in case - here is a NPE check.
 		if(randomUUID == null)randomUUID = UUID.randomUUID();
 		tag.setString("uniqueID", randomUUID.toString());
+		return tag;
+	}
+
+	@Override
+	public ITextComponent getDisplayName() {
+		return null;
+	}
+
+	@Override
+	public int getField(int id) {
+		return 0;
+	}
+
+	@Override
+	public void setField(int id, int value) {}
+
+	@Override
+	public int getFieldCount() {
+		return 0;
+	}
+
+	@Override
+	public void clear() {
+	    for(int i = 0; i < getSizeInventory(); i++)
+	        setInventorySlotContents(i, null);
 	}
 }

@@ -5,46 +5,46 @@ import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.MathHelper;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 
 import ec3.api.DemonTrade;
 
-public class ItemSoulScriber extends ItemSword_Mod{
+public class ItemSoulScriber extends ItemSword_Mod {
 
 	public ItemSoulScriber() {
 		super(ToolMaterial.WOOD);
+		setTextureName("essentialcraft:tools/soulScriber");
 	}
-	
+
 	@Override
-    @SuppressWarnings({ "rawtypes", "unchecked" })
-	public Multimap getAttributeModifiers(ItemStack stack)
-    {
-    	Multimap mp = HashMultimap.create();
-    	mp.put(SharedMonsterAttributes.attackDamage.getAttributeUnlocalizedName(), new AttributeModifier(field_111210_e, "Weapon modifier", 1, 0));
-    	return mp;
-    }
+	public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot s,ItemStack stack)
+	{
+		Multimap<String, AttributeModifier> mp = HashMultimap.<String, AttributeModifier>create();
+		if(s == EntityEquipmentSlot.MAINHAND)
+			mp.put(SharedMonsterAttributes.ATTACK_DAMAGE.getAttributeUnlocalizedName(), new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", 1, 0));
+		return mp;
+	}
 
-    public boolean hitEntity(ItemStack weapon, EntityLivingBase attacked, EntityLivingBase attacker)
-    {
+	public boolean hitEntity(ItemStack weapon, EntityLivingBase attacked, EntityLivingBase attacker)
+	{
+		if(MathHelper.floor_double(attacked.getHealth()) <= 2)
+		{
+			boolean createSoul = DemonTrade.allMobs.contains(attacked.getClass());
+			if(createSoul && attacker instanceof EntityPlayer)
+			{
+				ItemStack soul = new ItemStack(ItemsCore.soul,1,DemonTrade.allMobs.indexOf(attacked.getClass()));
+				EntityItem ei = new EntityItem(attacked.worldObj,attacked.posX,attacked.posY,attacked.posZ,soul);
+				if(!attacked.worldObj.isRemote)
+					attacked.worldObj.spawnEntityInWorld(ei);
 
-    	if(MathHelper.floor_double(attacked.getHealth()) <= 2)
-    	{
-    		boolean createSoul = DemonTrade.allMobs.contains(attacked.getClass());
-    		if(createSoul && attacker instanceof EntityPlayer)
-    		{
-    			ItemStack soul = new ItemStack(ItemsCore.soul,1,DemonTrade.allMobs.indexOf(attacked.getClass()));
-    			EntityItem ei = new EntityItem(attacked.worldObj,attacked.posX,attacked.posY,attacked.posZ,soul);
-    			if(!attacked.worldObj.isRemote)
-    				attacked.worldObj.spawnEntityInWorld(ei);
-    			
-    			attacked.setDead();
-    		}
-    	}
-    	return false;
-    }
-
+				attacked.setDead();
+			}
+		}
+		return false;
+	}
 }

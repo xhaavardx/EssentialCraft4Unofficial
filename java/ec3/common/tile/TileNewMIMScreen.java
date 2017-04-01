@@ -25,8 +25,8 @@ public class TileNewMIMScreen extends TileMRUGeneric {
 		return new int[] {1};
 	}
 	
-	public void updateEntity() {
-		super.updateEntity();
+	public void update() {
+		super.update();
 		ECUtils.manage(this, 0);
 		if(tickTime == 0) {
 			tickTime = 20;

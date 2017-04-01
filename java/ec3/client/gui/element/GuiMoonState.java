@@ -1,5 +1,6 @@
 package ec3.client.gui.element;
 
+import DummyCore.Utils.DrawUtils;
 import DummyCore.Utils.MiscUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
@@ -18,9 +19,9 @@ public class GuiMoonState extends GuiTextField{
 	}
 
 	@Override
-	public void draw(int posX, int posY) {
+	public void draw(int posX, int posY, int mouseX, int mouseY) {
 		this.drawTexturedModalRect(posX, posY, 0, 0, 18, 18);
-		MiscUtils.bindTexture("essentialcraft", "textures/gui/gui_moon_phases.png");
+		DrawUtils.bindTexture("essentialcraft", "textures/gui/gui_moon_phases.png");
 		int moonPhase = Minecraft.getMinecraft().theWorld.getMoonPhase();
 		this.drawTexturedModalRect(posX+1, posY+1, 16*moonPhase, 0, 16, 16);
 		drawText(posX,posY);

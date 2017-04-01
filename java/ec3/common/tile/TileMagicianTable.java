@@ -33,7 +33,7 @@ public class TileMagicianTable extends TileMRUGeneric {
 	}
 	
 	@Override
-	public void updateEntity() {
+	public void update() {
 		if(upgrade == -1)
 			speedFactor = 1F;
 		else
@@ -42,9 +42,9 @@ public class TileMagicianTable extends TileMRUGeneric {
 			mruConsume = speedFactor * 2 * mruUsage;
 		else
 			mruConsume = 1 * mruUsage;
-		super.updateEntity();
+		super.update();
 		ECUtils.manage(this, 0);
-		if(!worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord)) {
+		if(worldObj.isBlockIndirectlyGettingPowered(pos) == 0) {
 			ItemStack[] craftMatrix = new ItemStack[5];
 			craftMatrix[0] = getStackInSlot(1);
 			craftMatrix[1] = getStackInSlot(2);
@@ -82,7 +82,7 @@ public class TileMagicianTable extends TileMRUGeneric {
 				if(getMRU() >= mruReq && progressLevel < progressRequired) {
 					progressLevel += speedFactor;
 					if(generatesCorruption)
-						ECUtils.increaseCorruptionAt(worldObj, xCoord, yCoord, zCoord, worldObj.rand.nextInt(genCorruption));
+						ECUtils.increaseCorruptionAt(worldObj, pos.getX(), pos.getY(), pos.getZ(), worldObj.rand.nextInt(genCorruption));
 					setMRU((int)(getMRU() - mruReq));
 					if(progressLevel >= progressRequired) {
 						progressRequired = 0;
@@ -106,13 +106,14 @@ public class TileMagicianTable extends TileMRUGeneric {
 	}
 	
 	@Override
-	public void writeToNBT(NBTTagCompound i) {
+	public NBTTagCompound writeToNBT(NBTTagCompound i) {
 		super.writeToNBT(i);
 		i.setFloat("progressLevel", progressLevel);
 		i.setFloat("progressRequired", progressRequired);
 		i.setFloat("speedFactor", speedFactor);
 		i.setFloat("mruConsume", mruConsume);
 		i.setInteger("upgrade", upgrade);
+		return i;
 	}
 	
 	public boolean canFunction(MagicianTableRecipe rec){

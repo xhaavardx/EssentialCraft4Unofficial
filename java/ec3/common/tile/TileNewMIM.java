@@ -3,13 +3,13 @@ package ec3.common.tile;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
-import cpw.mods.fml.common.registry.GameRegistry;
 import ec3.common.item.ItemBoundGem;
 import ec3.common.tile.TileNewMIMCraftingManager.CraftingPattern;
 import ec3.utils.common.ECUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
 
 public class TileNewMIM extends TileMRUGeneric {
 
@@ -30,8 +30,8 @@ public class TileNewMIM extends TileMRUGeneric {
 		return new int[0];
 	}
 	
-	public void updateEntity() {
-		super.updateEntity();
+	public void update() {
+		super.update();
 		ECUtils.manage(this, 0);
 		rebuildAllItems();
 		if(tickTime == 0) {
@@ -44,10 +44,10 @@ public class TileNewMIM extends TileMRUGeneric {
 			if(tickTime == 9) {
 				for(int i = 35; i < 53; ++i) {
 					ItemStack gem = getStackInSlot(i);
-					if(gem != null && gem.getItem() instanceof ItemBoundGem && gem.getTagCompound() != null && gem.getTagCompound().hasKey("pos") && gem.getTagCompound().getInteger("dim") == worldObj.provider.dimensionId) {
+					if(gem != null && gem.getItem() instanceof ItemBoundGem && gem.getTagCompound() != null && gem.getTagCompound().hasKey("pos") && gem.getTagCompound().getInteger("dim") == worldObj.provider.getDimension()) {
 						int[] c = ItemBoundGem.getCoords(gem);
-						if(worldObj.blockExists(c[0], c[1], c[2])) {
-							TileEntity t = worldObj.getTileEntity(c[0], c[1], c[2]);
+						if(worldObj.isBlockLoaded(new BlockPos(c[0], c[1], c[2]))) {
+							TileEntity t = worldObj.getTileEntity(new BlockPos(c[0], c[1], c[2]));
 							if(t != null && t instanceof TileNewMIMExportNode)
 								TileNewMIMExportNode.class.cast(t).exportAllPossibleItems(this);
 						}
@@ -57,10 +57,10 @@ public class TileNewMIM extends TileMRUGeneric {
 			if(tickTime == 10) {
 				for(int i = 17; i < 35; ++i) {
 					ItemStack gem = getStackInSlot(i);
-					if(gem != null && gem.getItem() instanceof ItemBoundGem && gem.getTagCompound() != null && gem.getTagCompound().hasKey("pos") && gem.getTagCompound().getInteger("dim") == worldObj.provider.dimensionId) {
+					if(gem != null && gem.getItem() instanceof ItemBoundGem && gem.getTagCompound() != null && gem.getTagCompound().hasKey("pos") && gem.getTagCompound().getInteger("dim") == worldObj.provider.getDimension()) {
 						int[] c = ItemBoundGem.getCoords(gem);
-						if(worldObj.blockExists(c[0], c[1], c[2])) {
-							TileEntity t = worldObj.getTileEntity(c[0], c[1], c[2]);
+						if(worldObj.isBlockLoaded(new BlockPos(c[0], c[1], c[2]))) {
+							TileEntity t = worldObj.getTileEntity(new BlockPos(c[0], c[1], c[2]));
 							if(t != null && t instanceof TileNewMIMImportNode)
 								TileNewMIMImportNode.class.cast(t).importAllPossibleItems(this);
 						}
@@ -75,10 +75,10 @@ public class TileNewMIM extends TileMRUGeneric {
 		screens.clear();
 		for(int i = 7; i < 11; ++i) {
 			ItemStack gem = getStackInSlot(i);
-			if(gem != null && gem.getItem() instanceof ItemBoundGem && gem.getTagCompound() != null && gem.getTagCompound().hasKey("pos") && gem.getTagCompound().getInteger("dim") == worldObj.provider.dimensionId) {
+			if(gem != null && gem.getItem() instanceof ItemBoundGem && gem.getTagCompound() != null && gem.getTagCompound().hasKey("pos") && gem.getTagCompound().getInteger("dim") == worldObj.provider.getDimension()) {
 				int[] c = ItemBoundGem.getCoords(gem);
-				if(worldObj.blockExists(c[0], c[1], c[2])) {
-					TileEntity t = worldObj.getTileEntity(c[0], c[1], c[2]);
+				if(worldObj.isBlockLoaded(new BlockPos(c[0], c[1], c[2]))) {
+					TileEntity t = worldObj.getTileEntity(new BlockPos(c[0], c[1], c[2]));
 					if(t != null && t instanceof TileNewMIMScreen) {
 						TileNewMIMScreen.class.cast(t).parent = this;
 						screens.add(TileNewMIMScreen.class.cast(t));
@@ -92,10 +92,10 @@ public class TileNewMIM extends TileMRUGeneric {
 		managers.clear();
 		for(int i = 11; i < 17; ++i) {
 			ItemStack gem = getStackInSlot(i);
-			if(gem != null && gem.getItem() instanceof ItemBoundGem && gem.getTagCompound() != null && gem.getTagCompound().hasKey("pos") && gem.getTagCompound().getInteger("dim") == worldObj.provider.dimensionId) {
+			if(gem != null && gem.getItem() instanceof ItemBoundGem && gem.getTagCompound() != null && gem.getTagCompound().hasKey("pos") && gem.getTagCompound().getInteger("dim") == worldObj.provider.getDimension()) {
 				int[] c = ItemBoundGem.getCoords(gem);
-				if(worldObj.blockExists(c[0], c[1], c[2])) {
-					TileEntity t = worldObj.getTileEntity(c[0], c[1], c[2]);
+				if(worldObj.isBlockLoaded(new BlockPos(c[0], c[1], c[2]))) {
+					TileEntity t = worldObj.getTileEntity(new BlockPos(c[0], c[1], c[2]));
 					if(t != null && t instanceof TileNewMIMCraftingManager) {
 						TileNewMIMCraftingManager.class.cast(t).parent = this;
 						managers.add(TileNewMIMCraftingManager.class.cast(t));
@@ -116,10 +116,10 @@ public class TileNewMIM extends TileMRUGeneric {
 		
 		for(int i = 1; i < 7; ++i) {
 			ItemStack gem = getStackInSlot(i);
-			if(gem != null && gem.getItem() instanceof ItemBoundGem && gem.getTagCompound() != null && gem.getTagCompound().hasKey("pos") && gem.getTagCompound().getInteger("dim") == worldObj.provider.dimensionId) {
+			if(gem != null && gem.getItem() instanceof ItemBoundGem && gem.getTagCompound() != null && gem.getTagCompound().hasKey("pos") && gem.getTagCompound().getInteger("dim") == worldObj.provider.getDimension()) {
 				int[] c = ItemBoundGem.getCoords(gem);
-				if(worldObj.blockExists(c[0], c[1], c[2])) {
-					TileEntity t = worldObj.getTileEntity(c[0], c[1], c[2]);
+				if(worldObj.isBlockLoaded(new BlockPos(c[0], c[1], c[2]))) {
+					TileEntity t = worldObj.getTileEntity(new BlockPos(c[0], c[1], c[2]));
 					if(t != null && t instanceof TileNewMIMInventoryStorage) {
 						if(TileNewMIMInventoryStorage.class.cast(t).insertItemStack(is))
 							return true;
@@ -154,10 +154,10 @@ public class TileNewMIM extends TileMRUGeneric {
 		
 		for(int i = 11; i < 17; ++i) {
 			ItemStack gem = getStackInSlot(i);
-			if(gem != null && gem.getItem() instanceof ItemBoundGem && gem.getTagCompound() != null && gem.getTagCompound().hasKey("pos") && gem.getTagCompound().getInteger("dim") == worldObj.provider.dimensionId) {
+			if(gem != null && gem.getItem() instanceof ItemBoundGem && gem.getTagCompound() != null && gem.getTagCompound().hasKey("pos") && gem.getTagCompound().getInteger("dim") == worldObj.provider.getDimension()) {
 				int[] c = ItemBoundGem.getCoords(gem);
-				if(worldObj.blockExists(c[0], c[1], c[2])) {
-					TileEntity t = worldObj.getTileEntity(c[0], c[1], c[2]);
+				if(worldObj.isBlockLoaded(new BlockPos(c[0], c[1], c[2]))) {
+					TileEntity t = worldObj.getTileEntity(new BlockPos(c[0], c[1], c[2]));
 					if(t != null && t instanceof TileNewMIMCraftingManager) {
 						TileNewMIMCraftingManager cm = TileNewMIMCraftingManager.class.cast(t);
 						int crafted = cm.craft(is, times);
@@ -182,10 +182,10 @@ public class TileNewMIM extends TileMRUGeneric {
 		
 		for(int i = 1; i < 7; ++i) {
 			ItemStack gem = getStackInSlot(i);
-			if(gem != null && gem.getItem() instanceof ItemBoundGem && gem.getTagCompound() != null && gem.getTagCompound().hasKey("pos") && gem.getTagCompound().getInteger("dim") == worldObj.provider.dimensionId) {
+			if(gem != null && gem.getItem() instanceof ItemBoundGem && gem.getTagCompound() != null && gem.getTagCompound().hasKey("pos") && gem.getTagCompound().getInteger("dim") == worldObj.provider.getDimension()) {
 				int[] c = ItemBoundGem.getCoords(gem);
-				if(worldObj.blockExists(c[0], c[1], c[2])) {
-					TileEntity t = worldObj.getTileEntity(c[0], c[1], c[2]);
+				if(worldObj.isBlockLoaded(new BlockPos(c[0], c[1], c[2]))) {
+					TileEntity t = worldObj.getTileEntity(new BlockPos(c[0], c[1], c[2]));
 					if(t != null && t instanceof TileNewMIMInventoryStorage) {
 						int newLeft = TileNewMIMInventoryStorage.class.cast(t).retrieveStack(is,oreDict,doRetrieve);
 						if(newLeft == 0) {
@@ -235,10 +235,10 @@ public class TileNewMIM extends TileMRUGeneric {
 	public void openAllStorages(EntityPlayer p) {
 		for(int i = 1; i < 7; ++i) {
 			ItemStack gem = getStackInSlot(i);
-			if(gem != null && gem.getItem() instanceof ItemBoundGem && gem.getTagCompound() != null && gem.getTagCompound().hasKey("pos") && gem.getTagCompound().getInteger("dim") == worldObj.provider.dimensionId) {
+			if(gem != null && gem.getItem() instanceof ItemBoundGem && gem.getTagCompound() != null && gem.getTagCompound().hasKey("pos") && gem.getTagCompound().getInteger("dim") == worldObj.provider.getDimension()) {
 				int[] c = ItemBoundGem.getCoords(gem);
-				if(worldObj.blockExists(c[0], c[1], c[2])) {
-					TileEntity t = worldObj.getTileEntity(c[0], c[1], c[2]);
+				if(worldObj.isBlockLoaded(new BlockPos(c[0], c[1], c[2]))) {
+					TileEntity t = worldObj.getTileEntity(new BlockPos(c[0], c[1], c[2]));
 					if(t != null && t instanceof TileNewMIMInventoryStorage) {
 						TileNewMIMInventoryStorage.class.cast(t).openInventory(p);
 					}
@@ -250,10 +250,10 @@ public class TileNewMIM extends TileMRUGeneric {
 	public void closeAllStorages(EntityPlayer p) {
 		for(int i = 1; i < 7; ++i) {
 			ItemStack gem = getStackInSlot(i);
-			if(gem != null && gem.getItem() instanceof ItemBoundGem && gem.getTagCompound() != null && gem.getTagCompound().hasKey("pos") && gem.getTagCompound().getInteger("dim") == worldObj.provider.dimensionId) {
+			if(gem != null && gem.getItem() instanceof ItemBoundGem && gem.getTagCompound() != null && gem.getTagCompound().hasKey("pos") && gem.getTagCompound().getInteger("dim") == worldObj.provider.getDimension()) {
 				int[] c = ItemBoundGem.getCoords(gem);
-				if(worldObj.blockExists(c[0], c[1], c[2])) {
-					TileEntity t = worldObj.getTileEntity(c[0], c[1], c[2]);
+				if(worldObj.isBlockLoaded(new BlockPos(c[0], c[1], c[2]))) {
+					TileEntity t = worldObj.getTileEntity(new BlockPos(c[0], c[1], c[2]));
 					if(t != null && t instanceof TileNewMIMInventoryStorage)
 						TileNewMIMInventoryStorage.class.cast(t).closeInventory(p);
 				}
@@ -269,16 +269,16 @@ public class TileNewMIM extends TileMRUGeneric {
 		
 		for(int i = 1; i < 7; ++i) {
 			ItemStack gem = getStackInSlot(i);
-			if(gem != null && gem.getItem() instanceof ItemBoundGem && gem.getTagCompound() != null && gem.getTagCompound().hasKey("pos") && gem.getTagCompound().getInteger("dim") == worldObj.provider.dimensionId) {
+			if(gem != null && gem.getItem() instanceof ItemBoundGem && gem.getTagCompound() != null && gem.getTagCompound().hasKey("pos") && gem.getTagCompound().getInteger("dim") == worldObj.provider.getDimension()) {
 				int[] c = ItemBoundGem.getCoords(gem);
-				if(worldObj.blockExists(c[0], c[1], c[2])) {
-					TileEntity t = worldObj.getTileEntity(c[0], c[1], c[2]);
+				if(worldObj.isBlockLoaded(new BlockPos(c[0], c[1], c[2]))) {
+					TileEntity t = worldObj.getTileEntity(new BlockPos(c[0], c[1], c[2]));
 					if(t != null && t instanceof TileNewMIMInventoryStorage) {
 						ArrayList<ItemStack> items = TileNewMIMInventoryStorage.class.cast(t).getAllItems();
 						for(int j = 0; j < items.size(); ++j) {
 							ItemStack itm = items.get(j);
 							if(itm != null) {
-								String id = GameRegistry.findUniqueIdentifierFor(itm.getItem()).toString() + "@" + itm.getItemDamage();
+								String id = itm.getItem().getRegistryName().toString() + "@" + itm.getItemDamage();
 								if(itm.getTagCompound() == null || itm.getTagCompound().hasNoTags()) {
 									if(allItems.containsKey(id))
 										allItems.put(id, allItems.get(id)+itm.stackSize);
@@ -316,10 +316,10 @@ public class TileNewMIM extends TileMRUGeneric {
 		crafts.clear();
 		for(int i = 11; i < 17; ++i) {
 			ItemStack gem = getStackInSlot(i);
-			if(gem != null && gem.getItem() instanceof ItemBoundGem && gem.getTagCompound() != null && gem.getTagCompound().hasKey("pos") && gem.getTagCompound().getInteger("dim") == worldObj.provider.dimensionId) {
+			if(gem != null && gem.getItem() instanceof ItemBoundGem && gem.getTagCompound() != null && gem.getTagCompound().hasKey("pos") && gem.getTagCompound().getInteger("dim") == worldObj.provider.getDimension()) {
 				int[] c = ItemBoundGem.getCoords(gem);
-				if(worldObj.blockExists(c[0], c[1], c[2])) {
-					TileEntity t = worldObj.getTileEntity(c[0], c[1], c[2]);
+				if(worldObj.isBlockLoaded(new BlockPos(c[0], c[1], c[2]))) {
+					TileEntity t = worldObj.getTileEntity(new BlockPos(c[0], c[1], c[2]));
 					if(t != null && t instanceof TileNewMIMCraftingManager)
 						crafts.addAll(TileNewMIMCraftingManager.class.cast(t).getAllRecipes());
 				}

@@ -4,7 +4,7 @@ import java.util.List;
 
 import DummyCore.Utils.DataStorage;
 import DummyCore.Utils.DummyData;
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.common.config.Configuration;
 import ec3.api.ApiCore;
 import ec3.common.entity.EntitySolarBeam;
@@ -26,11 +26,11 @@ public class TileSunRayAbsorber extends TileMRUGeneric {
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public void updateEntity() {
-		super.updateEntity();
-		if(!worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord)) {
+	public void update() {
+		super.update();
+		if(worldObj.isBlockIndirectlyGettingPowered(pos) == 0) {
 			balance = cfgBalance;
-			List<EntitySolarBeam> l = worldObj.getEntitiesWithinAABB(EntitySolarBeam.class, AxisAlignedBB.getBoundingBox(xCoord-1, yCoord-1, zCoord-1, xCoord+2, yCoord+2, zCoord+2));
+			List<EntitySolarBeam> l = worldObj.getEntitiesWithinAABB(EntitySolarBeam.class, new AxisAlignedBB(pos.getX()-1, pos.getY()-1, pos.getZ()-1, pos.getX()+2, pos.getY()+2, pos.getZ()+2));
 			if(!l.isEmpty()) {
 				if(!worldObj.isRemote) {
 					setMRU((int)(getMRU() + mruGenerated));

@@ -1,0 +1,23 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "textures": {
+            "top": "essentialcraft:blocks/mimInventoryHandler_TB",
+            "side": "essentialcraft:blocks/mimInventoryHandler_TB",
+            "front": "essentialcraft:blocks/mimScreen"
+        },
+        "model": "minecraft:orientable",
+        "uvlock": true
+    },
+    "variants": {
+        "facing": {
+            "north": {},
+            "south": { "y": 180 },
+            "west": { "y": -90 },
+            "east": { "y": 90 },
+            "down": { "x": 90 },
+            "up": { "x": -90 }
+        },
+        "inventory": [{}]
+    }
+}

@@ -3,6 +3,8 @@ package ec3.common.tile;
 import DummyCore.Utils.MiscUtils;
 import DummyCore.Utils.Notifier;
 import DummyCore.Utils.TileStatTracker;
+import ec3.common.mod.EssentialCraftCore;
+import ec3.utils.common.ECUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -10,14 +12,21 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.INetHandlerPlayClient;
-import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ITickable;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.wrapper.InvWrapper;
 
-public class TileMagicalDisplay extends TileEntity implements IInventory {
-	public int syncTick;
+public class TileMagicalDisplay extends TileEntity implements IInventory, ITickable {
+	public int syncTick = 10;
 	public int type;
 	public ItemStack[] items = new ItemStack[1];
 	private TileStatTracker tracker;
+	private boolean requestSync = true;
 	
 	public TileMagicalDisplay() {
 		super();
@@ -32,37 +41,43 @@ public class TileMagicalDisplay extends TileEntity implements IInventory {
 	}
 	
 	@Override
-	public void writeToNBT(NBTTagCompound i) {
+	public NBTTagCompound writeToNBT(NBTTagCompound i) {
 		super.writeToNBT(i);
 		MiscUtils.saveInventory(this, i);
 		i.setInteger("type", type);
+		return i;
 	}
 	
 	@Override
-	public void updateEntity() {
+	public void update() {
 		//Sending the sync packets to the CLIENT. 
 		if(syncTick == 0) {
 			if(tracker == null)
-				Notifier.notifyCustomMod("EssentialCraft", "[WARNING][SEVERE]TileEntity " + this + " at pos " + xCoord + "," + yCoord + "," + zCoord + " tries to sync itself, but has no TileTracker attached to it! SEND THIS MESSAGE TO THE DEVELOPER OF THE MOD!");
+				Notifier.notifyCustomMod("EssentialCraft", "[WARNING][SEVERE]TileEntity " + this + " at pos " + pos.getX() + "," + pos.getY() + "," + pos.getZ() + " tries to sync itself, but has no TileTracker attached to it! SEND THIS MESSAGE TO THE DEVELOPER OF THE MOD!");
 			else if(!worldObj.isRemote && tracker.tileNeedsSyncing())
-				MiscUtils.sendPacketToAllAround(worldObj, getDescriptionPacket(), xCoord, yCoord, zCoord, worldObj.provider.dimensionId, 32);
+				MiscUtils.sendPacketToAllAround(worldObj, getUpdatePacket(), pos.getX(), pos.getY(), pos.getZ(), worldObj.provider.getDimension(), 32);
 			syncTick = 60;
 		}
 		else
 			--syncTick;
+		
+		if(requestSync && worldObj.isRemote) {
+			requestSync = false;
+			ECUtils.requestScheduledTileSync(this, EssentialCraftCore.proxy.getClientPlayer());
+		}
 	}
 
 	@Override
-    public Packet getDescriptionPacket() {
+    public SPacketUpdateTileEntity getUpdatePacket() {
         NBTTagCompound nbttagcompound = new NBTTagCompound();
         writeToNBT(nbttagcompound);
-        return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, -10, nbttagcompound);
+        return new SPacketUpdateTileEntity(pos, -10, nbttagcompound);
     }
 	
 	@Override
-    public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
-		if(net.getNetHandler() instanceof INetHandlerPlayClient && pkt.func_148853_f() == -10)
-			readFromNBT(pkt.func_148857_g());
+    public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
+		if(pkt.getTileEntityType() == -10)
+			readFromNBT(pkt.getNbtCompound());
     }
 	
 	@Override
@@ -101,7 +116,7 @@ public class TileMagicalDisplay extends TileEntity implements IInventory {
 	}
 	
 	@Override
-	public ItemStack getStackInSlotOnClosing(int par1) {
+	public ItemStack removeStackFromSlot(int par1) {
 		if(items[par1] != null) {
 			ItemStack itemstack = items[par1];
 			items[par1] = null;
@@ -123,12 +138,12 @@ public class TileMagicalDisplay extends TileEntity implements IInventory {
 	}
 	
 	@Override
-	public String getInventoryName() {
+	public String getName() {
 		return "ec3.container.display";
 	}
 	
 	@Override
-	public boolean hasCustomInventoryName() {
+	public boolean hasCustomName() {
 		return false;
 	}
 	
@@ -139,17 +154,48 @@ public class TileMagicalDisplay extends TileEntity implements IInventory {
 	
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer player) {
-		return worldObj.getTileEntity(xCoord, yCoord, zCoord) == this && player.dimension == worldObj.provider.dimensionId;
+		return worldObj.getTileEntity(pos) == this && player.dimension == worldObj.provider.getDimension();
 	}
 	
 	@Override
-	public void openInventory() {}
+	public void openInventory(EntityPlayer p) {}
 	
 	@Override
-	public void closeInventory() {}
+	public void closeInventory(EntityPlayer p) {}
 
 	@Override
 	public boolean isItemValidForSlot(int p_94041_1_, ItemStack p_94041_2_) {
 		return true;
+	}
+	
+	@Override
+	public void clear() {
+	    for(int i = 0; i < getSizeInventory(); i++)
+	        setInventorySlotContents(i, null);
+	}
+
+	@Override
+	public int getField(int id) {
+		return 0;
+	}
+
+	@Override
+	public void setField(int id, int value) {}
+
+	@Override
+	public int getFieldCount() {
+		return 0;
+	}
+	
+	public IItemHandler itemHandler = new InvWrapper(this);
+
+	@Override
+	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
+	}
+
+	@Override
+	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ? (T)itemHandler : super.getCapability(capability, facing);
 	}
 }

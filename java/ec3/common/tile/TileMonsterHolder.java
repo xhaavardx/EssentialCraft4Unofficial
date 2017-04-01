@@ -2,12 +2,10 @@ package ec3.common.tile;
 
 import java.util.List;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.common.config.Configuration;
 import DummyCore.Utils.Coord3D;
 import DummyCore.Utils.DataStorage;
@@ -31,22 +29,22 @@ public class TileMonsterHolder extends TileMRUGeneric {
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public void updateEntity() {
-		super.updateEntity();
+	public void update() {
+		super.update();
 		ECUtils.manage(this, 0);
-		if(!worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord)) {
-			List<EntityLivingBase> lst = getWorldObj().getEntitiesWithinAABB(EntityLivingBase.class, AxisAlignedBB.getBoundingBox(xCoord-32, yCoord-32, zCoord-32, xCoord+33, yCoord+33, zCoord+33));
+		if(worldObj.isBlockIndirectlyGettingPowered(pos) == 0) {
+			List<EntityLivingBase> lst = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(pos.getX()-32, pos.getY()-32, pos.getZ()-32, pos.getX()+33, pos.getY()+33, pos.getZ()+33));
 			if(!lst.isEmpty()) {
 				for(int i = 0; i < lst.size(); ++i)
 				{
 					EntityLivingBase e = lst.get(i);
 					if(!(e instanceof EntityPlayer)) {
 						if(getMRU() > mruUsage) {
-							Coord3D tilePos = new Coord3D(xCoord+0.5D,yCoord+0.5D,zCoord+0.5D);
+							Coord3D tilePos = new Coord3D(pos.getX()+0.5D,pos.getY()+0.5D,pos.getZ()+0.5D);
 							Coord3D mobPosition = new Coord3D(e.posX,e.posY,e.posZ);
 							DummyDistance dist = new DummyDistance(tilePos,mobPosition);
 							if(dist.getDistance() < rad && dist.getDistance() >= rad - 3) {
-								Vec3 posVector = Vec3.createVectorHelper(tilePos.x-mobPosition.x,tilePos.y-mobPosition.y ,tilePos.z-mobPosition.z);
+								Vec3d posVector = new Vec3d(tilePos.x-mobPosition.x,tilePos.y-mobPosition.y ,tilePos.z-mobPosition.z);
 								e.setPositionAndRotation(tilePos.x-posVector.xCoord/1.1D, tilePos.y-posVector.yCoord/1.1D, tilePos.z-posVector.zCoord/1.1D, e.rotationYaw, e.rotationPitch);
 							}
 							if(!worldObj.isRemote)
@@ -58,7 +56,6 @@ public class TileMonsterHolder extends TileMRUGeneric {
 		}
 	}
 	
-	@SideOnly(Side.CLIENT)
 	@Override
 	public AxisAlignedBB getRenderBoundingBox() {
 		AxisAlignedBB bb = INFINITE_EXTENT_AABB;

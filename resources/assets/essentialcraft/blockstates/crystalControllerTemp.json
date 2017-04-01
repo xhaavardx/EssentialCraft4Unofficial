@@ -1,0 +1,10 @@
+{
+    "forge_marker": 1,
+    "defaults": {},
+    "variants": {
+        "normal": [{
+            "model": "minecraft:block",
+            "textures": { "particle": "essentialcraft:models/crystalController" }
+        }]
+    }
+}

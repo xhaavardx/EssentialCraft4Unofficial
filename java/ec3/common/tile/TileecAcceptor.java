@@ -10,8 +10,14 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.INetHandlerPlayClient;
-import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ITickable;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.wrapper.InvWrapper;
 import ec3.api.EnumStructureType;
 import ec3.api.IStructurePiece;
 import ec3.api.ITERequiresMRU;
@@ -19,7 +25,7 @@ import ec3.common.item.ItemBoundGem;
 import ec3.common.item.ItemsCore;
 import ec3.utils.common.ECUtils;
 
-public class TileecAcceptor extends TileEntity implements ITERequiresMRU, IStructurePiece, IInventory {
+public class TileecAcceptor extends TileEntity implements ITERequiresMRU, IStructurePiece, IInventory, ITickable {
 	public TileecController controller;
 	public UUID uuid = UUID.randomUUID();
 	public int syncTick;
@@ -32,9 +38,10 @@ public class TileecAcceptor extends TileEntity implements ITERequiresMRU, IStruc
 	}
 	
 	@Override
-	public void writeToNBT(NBTTagCompound i) {
+	public NBTTagCompound writeToNBT(NBTTagCompound i) {
 		super.writeToNBT(i);
 		MiscUtils.saveInventory(this, i);
+		return i;
 	}
 	
 	@Override
@@ -69,7 +76,7 @@ public class TileecAcceptor extends TileEntity implements ITERequiresMRU, IStruc
 	
 	@Override
 	public EnumStructureType getStructure() {
-		return EnumStructureType.MRUCUContaigementChamber;
+		return EnumStructureType.MRUCUEnrichmentChamber;
 	}
 	
 	@Override
@@ -84,13 +91,13 @@ public class TileecAcceptor extends TileEntity implements ITERequiresMRU, IStruc
 	}
 	
 	@Override
-	public void updateEntity() {
+	public void update() {
 		if(structureController() != null)
 			ECUtils.mruIn(this, 0);
 		ECUtils.spawnMRUParticles(this,0);
 		if(syncTick == 0) {
 			if(!worldObj.isRemote)
-				MiscUtils.sendPacketToAllAround(worldObj, getDescriptionPacket(), xCoord, yCoord, zCoord, worldObj.provider.dimensionId, 16);
+				MiscUtils.sendPacketToAllAround(worldObj, getUpdatePacket(), pos.getX(), pos.getY(), pos.getZ(), worldObj.provider.getDimension(), 16);
 			syncTick = 10;
 		}
 		else
@@ -98,17 +105,16 @@ public class TileecAcceptor extends TileEntity implements ITERequiresMRU, IStruc
 	}
 	
 	@Override
-    public Packet getDescriptionPacket() {
+    public SPacketUpdateTileEntity getUpdatePacket() {
         NBTTagCompound nbttagcompound = new NBTTagCompound();
         writeToNBT(nbttagcompound);
-        return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, -10, nbttagcompound);
+        return new SPacketUpdateTileEntity(pos, -10, nbttagcompound);
     }
 	
 	@Override
-	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
-		if(net.getNetHandler() instanceof INetHandlerPlayClient)
-			if(pkt.func_148853_f() == -10)
-				readFromNBT(pkt.func_148857_g());
+	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
+		if(pkt.getTileEntityType() == -10)
+			readFromNBT(pkt.getNbtCompound());
 	}
 	
 	@Override
@@ -145,7 +151,7 @@ public class TileecAcceptor extends TileEntity implements ITERequiresMRU, IStruc
 	}
 	
 	@Override
-	public ItemStack getStackInSlotOnClosing(int par1) {
+	public ItemStack removeStackFromSlot(int par1) {
 		if(items[par1] != null) {
 			ItemStack itemstack = items[par1];
 			items[par1] = null;
@@ -165,12 +171,12 @@ public class TileecAcceptor extends TileEntity implements ITERequiresMRU, IStruc
 	}
 	
 	@Override
-	public String getInventoryName() {
+	public String getName() {
 		return "ec3.container.mruAcceptor";
 	}
 	
 	@Override
-	public boolean hasCustomInventoryName() {
+	public boolean hasCustomName() {
 		return false;
 	}
 	
@@ -181,14 +187,14 @@ public class TileecAcceptor extends TileEntity implements ITERequiresMRU, IStruc
 	
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer player) {
-		return worldObj.getTileEntity(xCoord, yCoord, zCoord) == this && player.dimension == worldObj.provider.dimensionId;
+		return worldObj.getTileEntity(pos) == this && player.dimension == worldObj.provider.getDimension();
 	}
 	
 	@Override
-	public void openInventory() {}
+	public void openInventory(EntityPlayer p) {}
 	
 	@Override
-	public void closeInventory() {}
+	public void closeInventory(EntityPlayer p) {}
 	
 	@Override
 	public boolean isItemValidForSlot(int p_94041_1_, ItemStack p_94041_2_) {
@@ -198,5 +204,36 @@ public class TileecAcceptor extends TileEntity implements ITERequiresMRU, IStruc
 	@Override
 	public boolean setMaxMRU(float f) {
 		return controller != null ? controller.setMaxMRU(f) : false;
+	}
+
+	@Override
+	public int getField(int id) {
+		return 0;
+	}
+
+	@Override
+	public void setField(int id, int value) {}
+
+	@Override
+	public int getFieldCount() {
+		return 0;
+	}
+
+	@Override
+	public void clear() {
+	    for(int i = 0; i < getSizeInventory(); i++)
+	        setInventorySlotContents(i, null);
+	}
+	
+	public IItemHandler itemHandler = new InvWrapper(this);
+
+	@Override
+	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
+	}
+
+	@Override
+	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ? (T)itemHandler : super.getCapability(capability, facing);
 	}
 }

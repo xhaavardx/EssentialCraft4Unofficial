@@ -1,0 +1,28 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "minecraft:cube_all"
+    },
+    "variants": {
+        "type": {
+            "fire": {
+                "textures": { "all": "essentialcraft:blocks/compressed/drops_flame" }
+            },
+            "water": {
+                "textures": { "all": "essentialcraft:blocks/compressed/drops_water" }
+            },
+            "earth": {
+                "textures": { "all": "essentialcraft:blocks/compressed/drops_earth" }
+            },
+            "air": {
+                "textures": { "all": "essentialcraft:blocks/compressed/drops_air" }
+            },
+            "elemental": {
+                "textures": { "all": "essentialcraft:blocks/compressed/drops_elemental" }
+            },
+            "mithriline": {
+                "textures": { "all": "essentialcraft:blocks/compressed/mithriline" }
+            }
+        }
+    }
+}

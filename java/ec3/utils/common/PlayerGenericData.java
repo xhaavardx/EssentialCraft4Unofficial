@@ -3,20 +3,21 @@ package ec3.utils.common;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import ec3.api.ICorruptionEffect;
 import ec3.api.IPlayerData;
 
-public class PlayerGenericData implements IPlayerData{
-	
-	int damage,radiation,wind,ubmru,matrixid;
-	boolean windbound;
-	final List<ICorruptionEffect> effects = new ArrayList<ICorruptionEffect>();
+public class PlayerGenericData implements IPlayerData {
+
+	private int damage,radiation,wind,ubmru,matrixid;
+	private boolean windbound;
+	private final List<ICorruptionEffect> effects = new ArrayList<ICorruptionEffect>();
 	EntityPlayer thePlayer;
-	
-	public PlayerGenericData(EntityPlayer p)
-	{
+
+	public PlayerGenericData(EntityPlayer p) {
 		thePlayer = p;
 	}
 
@@ -94,19 +95,19 @@ public class PlayerGenericData implements IPlayerData{
 		matrixid = tag.getInteger("matrixid");
 		windbound = tag.getBoolean("windbound");
 		effects.clear();
-		
+
 		for(int i = 0; i < tag.getInteger("effectsSize"); ++i)
 		{
 			CorruptionEffectEC3NBTBased effect = new CorruptionEffectEC3NBTBased();
 			effect.readFromNBTTagCompound(tag, i);
 			effects.add(effect);
 		}
-		
+
 	}
 
 	@Override
-	public void writeToNBTTagCompound(NBTTagCompound tag) {
-		
+	public NBTTagCompound writeToNBTTagCompound(NBTTagCompound tag) {
+
 		tag.setInteger("damage", damage);
 		tag.setInteger("radiation", radiation);
 		tag.setInteger("wind", wind);
@@ -116,11 +117,11 @@ public class PlayerGenericData implements IPlayerData{
 		tag.setInteger("effectsSize", effects.size());
 		for(int i = 0; i < effects.size(); ++i)
 			effects.get(i).writeToNBTTagCompound(tag,i);
+		return tag;
 	}
 
 	@Override
 	public EntityPlayer carrier() {
 		return thePlayer;
 	}
-
 }

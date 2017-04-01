@@ -5,7 +5,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
-import net.minecraft.inventory.SlotFurnace;
+import net.minecraft.inventory.SlotFurnaceOutput;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 
@@ -20,7 +20,7 @@ public class ContainerMagicianTable extends Container {
 		addSlotToContainer(new SlotGeneric(inv, 3, 62, 5));
 		addSlotToContainer(new SlotGeneric(inv, 4, 26, 41));
 		addSlotToContainer(new SlotGeneric(inv, 5, 62, 41));
-		addSlotToContainer(new SlotFurnace(par1InventoryPlayer.player, inv, 6, 89, 5));
+		addSlotToContainer(new SlotFurnaceOutput(par1InventoryPlayer.player, inv, 6, 89, 5));
 		int i;
 		
 		for(i = 0; i < 3; ++i) {

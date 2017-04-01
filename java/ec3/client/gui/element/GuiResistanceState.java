@@ -18,24 +18,21 @@ public class GuiResistanceState extends GuiTextField{
 
 	@Override
 	public ResourceLocation getElementTexture() {
-		// TODO Auto-generated method stub
 		return super.getElementTexture();
 	}
 
 	@Override
-	public void draw(int posX, int posY) {
-		super.draw(posX, posY);
+	public void draw(int posX, int posY, int mouseX, int mouseY) {
+		super.draw(posX, posY, mouseX, mouseY);
 	}
 
 	@Override
 	public int getX() {
-		// TODO Auto-generated method stub
 		return super.getX();
 	}
 
 	@Override
 	public int getY() {
-		// TODO Auto-generated method stub
 		return super.getY();
 	}
 
@@ -45,7 +42,7 @@ public class GuiResistanceState extends GuiTextField{
 		{
 			TileecController controllerTile = (TileecController) ((TileecStateChecker)tile).structureController();
 			if(controllerTile != null)
-				Minecraft.getMinecraft().fontRenderer.drawString(controllerTile.resistance+" MROV", posX+2, posY+5, 0xffffff, true);
+				Minecraft.getMinecraft().fontRendererObj.drawString(controllerTile.resistance+" MROV", posX+2, posY+5, 0xffffff, true);
 		}
 	}
 

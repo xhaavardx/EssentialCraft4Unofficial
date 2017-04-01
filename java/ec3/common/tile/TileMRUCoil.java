@@ -3,16 +3,16 @@ package ec3.common.tile;
 import java.util.ArrayList;
 import java.util.List;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.SoundCategory;
 import net.minecraftforge.common.config.Configuration;
 import DummyCore.Utils.Coord3D;
 import DummyCore.Utils.DataStorage;
@@ -26,6 +26,7 @@ import ec3.api.IMRUPressence;
 import ec3.common.block.BlocksCore;
 import ec3.common.item.ItemPlayerList;
 import ec3.common.item.ItemsCore;
+import ec3.common.registry.SoundRegistry;
 import ec3.utils.common.ECUtils;
 
 public class TileMRUCoil extends TileMRUGeneric {
@@ -64,39 +65,41 @@ public class TileMRUCoil extends TileMRUGeneric {
 		height = 0;
 		rad = 0;
 		isStructureCorrect = false;
-		int dy = yCoord-1;
-		while(worldObj.getBlock(xCoord, dy, zCoord) == BlocksCore.mruCoilHardener) {
+		int dy = pos.getY()-1;
+		BlockPos.MutableBlockPos dp = new BlockPos.MutableBlockPos(pos.down());
+		while(worldObj.getBlockState(dp).getBlock() == BlocksCore.mruCoilHardener) {
 			--dy;
+			dp.setY(dy);
 			++height;
 		}
 		List<Block> allowed = ECUtils.allowedBlocks.get(EnumStructureType.MRUCoil);
-		Block b_0 = worldObj.getBlock(xCoord, dy, zCoord);
-		Block b_1 = worldObj.getBlock(xCoord+1, dy, zCoord);
-		Block b_2 = worldObj.getBlock(xCoord-1, dy, zCoord);
-		Block b_3 = worldObj.getBlock(xCoord+1, dy, zCoord+1);
-		Block b_4 = worldObj.getBlock(xCoord-1, dy, zCoord+1);
-		Block b_5 = worldObj.getBlock(xCoord+1, dy, zCoord-1);
-		Block b_6 = worldObj.getBlock(xCoord-1, dy, zCoord-1);
-		Block b_7 = worldObj.getBlock(xCoord, dy, zCoord+1);
-		Block b_8 = worldObj.getBlock(xCoord, dy, zCoord-1);
+		Block b_0 = worldObj.getBlockState(dp.add(0, 0, 0)).getBlock();
+		Block b_1 = worldObj.getBlockState(dp.add(1, 0, 0)).getBlock();
+		Block b_2 = worldObj.getBlockState(dp.add(-1, 0, 0)).getBlock();
+		Block b_3 = worldObj.getBlockState(dp.add(1, 0, 1)).getBlock();
+		Block b_4 = worldObj.getBlockState(dp.add(-1, 0, 1)).getBlock();
+		Block b_5 = worldObj.getBlockState(dp.add(1, 0, -1)).getBlock();
+		Block b_6 = worldObj.getBlockState(dp.add(-1, 0, -1)).getBlock();
+		Block b_7 = worldObj.getBlockState(dp.add(0, 0, 1)).getBlock();
+		Block b_8 = worldObj.getBlockState(dp.add(0, 0, -1)).getBlock();
 		
-		Block b_0_0 = worldObj.getBlock(xCoord, dy, zCoord-2);
-		Block b_0_1 = worldObj.getBlock(xCoord, dy, zCoord+2);
-		Block b_0_2 = worldObj.getBlock(xCoord+2, dy, zCoord);
-		Block b_0_3 = worldObj.getBlock(xCoord-2, dy, zCoord);
+		Block b_0_0 = worldObj.getBlockState(dp.add(0, 0, -2)).getBlock();
+		Block b_0_1 = worldObj.getBlockState(dp.add(0, 0, 2)).getBlock();
+		Block b_0_2 = worldObj.getBlockState(dp.add(2, 0, 0)).getBlock();
+		Block b_0_3 = worldObj.getBlockState(dp.add(-2, 0, 0)).getBlock();
 		
-		Block b_1_0 = worldObj.getBlock(xCoord, dy, zCoord-3);
-		Block b_1_1 = worldObj.getBlock(xCoord+1, dy, zCoord-3);
-		Block b_1_2 = worldObj.getBlock(xCoord-1, dy, zCoord-3);
-		Block b_1_3 = worldObj.getBlock(xCoord, dy, zCoord+3);
-		Block b_1_4 = worldObj.getBlock(xCoord+1, dy, zCoord+3);
-		Block b_1_5 = worldObj.getBlock(xCoord-1, dy, zCoord+3);
-		Block b_1_6 = worldObj.getBlock(xCoord+3, dy, zCoord);
-		Block b_1_7 = worldObj.getBlock(xCoord+3, dy, zCoord-1);
-		Block b_1_8 = worldObj.getBlock(xCoord+3, dy, zCoord+1);
-		Block b_1_9 = worldObj.getBlock(xCoord-3, dy, zCoord);
-		Block b_1_10 = worldObj.getBlock(xCoord-3, dy, zCoord-1);
-		Block b_1_11 = worldObj.getBlock(xCoord-3, dy, zCoord+1);
+		Block b_1_0 = worldObj.getBlockState(dp.add(0, 0, -3)).getBlock();
+		Block b_1_1 = worldObj.getBlockState(dp.add(1, 0, -3)).getBlock();
+		Block b_1_2 = worldObj.getBlockState(dp.add(-1, 0, -3)).getBlock();
+		Block b_1_3 = worldObj.getBlockState(dp.add(0, 0, 3)).getBlock();
+		Block b_1_4 = worldObj.getBlockState(dp.add(1, 0, 3)).getBlock();
+		Block b_1_5 = worldObj.getBlockState(dp.add(-1, 0, 3)).getBlock();
+		Block b_1_6 = worldObj.getBlockState(dp.add(3, 0, 0)).getBlock();
+		Block b_1_7 = worldObj.getBlockState(dp.add(3, 0, -1)).getBlock();
+		Block b_1_8 = worldObj.getBlockState(dp.add(3, 0, 1)).getBlock();
+		Block b_1_9 = worldObj.getBlockState(dp.add(-3, 0, 0)).getBlock();
+		Block b_1_10 = worldObj.getBlockState(dp.add(-3, 0, -1)).getBlock();
+		Block b_1_11 = worldObj.getBlockState(dp.add(-3, 0, 1)).getBlock();
 		List<Block> cBl = new ArrayList<Block>();
 		cBl.add(b_0);
 		cBl.add(b_1);
@@ -132,8 +135,8 @@ public class TileMRUCoil extends TileMRUGeneric {
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public void updateEntity() {
-		if(!worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord)) {
+	public void update() {
+		if(worldObj.isBlockIndirectlyGettingPowered(pos) == 0) {
 			if(worldObj.isRemote) {
 				if(isStructureCorrect()) {
 					if(localLightning == null) {
@@ -156,11 +159,10 @@ public class TileMRUCoil extends TileMRUGeneric {
 				}
 			}
 			if(isStructureCorrect) {
-				List<EntityLivingBase> entities = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, AxisAlignedBB.getBoundingBox(xCoord, yCoord, zCoord, xCoord+1, yCoord+1, zCoord+1).expand(rad*radiusModifier, rad*radiusModifier, rad*radiusModifier));
+				List<EntityLivingBase> entities = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(pos).expand(rad*radiusModifier, rad*radiusModifier, rad*radiusModifier));
 				if(entities != null && !entities.isEmpty() && monsterLightning == null) {
 					Ford:
 						for(EntityLivingBase b : entities) {
-							
 							if(b instanceof EntityPlayer) {
 								if(!((EntityPlayer)b).capabilities.isCreativeMode && hurtPlayers) {
 									ItemStack is = getStackInSlot(1);
@@ -172,7 +174,7 @@ public class TileMRUCoil extends TileMRUGeneric {
 										DummyData[] dt = DataStorage.parseData(str);
 										for(int i = 0; i < dt.length; ++i) {
 											String username = dt[i].fieldValue;
-											String playerName = b.getCommandSenderName();
+											String playerName = MiscUtils.getUUIDFromPlayer((EntityPlayer)b).toString();
 											if(username.equals(playerName))
 												continue Ford;
 										}
@@ -201,24 +203,23 @@ public class TileMRUCoil extends TileMRUGeneric {
 			else
 				--ticksBeforeStructureCheck;
 		}
-		super.updateEntity();
+		super.update();
 		ECUtils.manage(this, 0);
 	}
 	
 	public void attack(EntityLivingBase b) {
 		if(getMRU() > mruUsage && !b.isDead && b.hurtTime <= 0 && b.hurtResistantTime <= 0) {
 			if(generatesCorruption)
-				ECUtils.increaseCorruptionAt(worldObj, xCoord, yCoord, zCoord, worldObj.rand.nextInt(genCorruption));
+				ECUtils.increaseCorruptionAt(worldObj, pos.getX(), pos.getY(), pos.getZ(), worldObj.rand.nextInt(genCorruption));
 			b.attackEntityFrom(DamageSource.magic, damage);
 			if(worldObj.isRemote && monsterLightning == null)
-				worldObj.playSound(xCoord+0.5F,yCoord+0.5F,zCoord+0.5F, "essentialcraft:sound.lightning_hit", 2F, 2F, false);
-			monsterLightning = new Lightning(worldObj.rand, new Coord3D(0.5F,0.8F,0.5F), new Coord3D(b.posX-xCoord+0.5D, b.posY-yCoord+0.8D, b.posZ-zCoord+0.5D), 0.1F, 1F, 0.0F, 0.7F);
+				worldObj.playSound(pos.getX()+0.5F,pos.getY()+0.5F,pos.getZ()+0.5F, SoundRegistry.machineLightningHit, SoundCategory.BLOCKS, 2F, 2F, false);
+			monsterLightning = new Lightning(worldObj.rand, new Coord3D(0.5F,0.8F,0.5F), new Coord3D(b.posX-pos.getX()+0.5D, b.posY-pos.getY()+0.8D, b.posZ-pos.getZ()+0.5D), 0.1F, 1F, 0.0F, 0.7F);
 			if(!worldObj.isRemote)
 				setMRU(getMRU() - mruUsage);
 		}
 	}
 	
-	@SideOnly(Side.CLIENT)	
 	@Override
 	public AxisAlignedBB getRenderBoundingBox() {
 		AxisAlignedBB bb = INFINITE_EXTENT_AABB;

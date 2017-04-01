@@ -6,7 +6,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.world.World;
 
-public class MithrilineFurnaceRecipe implements IRecipe{
+public class MithrilineFurnaceRecipe implements IRecipe {
 	
 	public final UnformedItemStack smelted;
 	public final ItemStack result;
@@ -41,4 +41,8 @@ public class MithrilineFurnaceRecipe implements IRecipe{
 		return result;
 	}
 
+	@Override
+	public ItemStack[] getRemainingItems(InventoryCrafting inv) {
+		return new ItemStack[1];
+	}
 }

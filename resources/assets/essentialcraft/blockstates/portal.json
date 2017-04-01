@@ -1,0 +1,16 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "essentialcraft:portal"
+    },
+    "variants": {
+        "axis": {
+            "x": {},
+            "y": {},
+            "z": {
+                "y": 90
+            }
+        },
+        "inventory": [{}]
+    }
+}

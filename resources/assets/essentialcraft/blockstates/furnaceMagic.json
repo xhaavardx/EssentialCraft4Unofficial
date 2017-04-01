@@ -1,0 +1,45 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "minecraft:orientable",
+        "uvlock": true
+    },
+    "variants": {
+        "facing": {
+            "north": {},
+            "south": { "y": 180 },
+            "west": { "y": -90 },
+            "east": { "y": 90 }
+        },
+        "type": {
+            "fortified": {
+                "textures": {
+                    "top": "essentialcraft:blocks/fortifiedStone",
+                    "side": "essentialcraft:blocks/fortifiedStone",
+                    "front": "essentialcraft:blocks/furnace_fortified"
+                }
+            },
+            "magic": {
+                "textures": {
+                    "top": "essentialcraft:blocks/magicPlatingBlock",
+                    "side": "essentialcraft:blocks/magicPlatingBlock",
+                    "front": "essentialcraft:blocks/furnace_magic"
+                }
+            },
+            "pale": {
+                "textures": {
+                    "top": "essentialcraft:blocks/palePlatingBlock",
+                    "side": "essentialcraft:blocks/palePlatingBlock",
+                    "front": "essentialcraft:blocks/furnace_pale"
+                }
+            },
+            "void": {
+                "textures": {
+                    "top": "essentialcraft:blocks/voidStone",
+                    "side": "essentialcraft:blocks/voidStone",
+                    "front": "essentialcraft:blocks/furnace_void"
+                }
+            }
+        }
+    }
+}

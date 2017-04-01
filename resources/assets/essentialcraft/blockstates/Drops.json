@@ -1,0 +1,22 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "essentialcraft:drops"
+    },
+    "variants": {
+        "type": {
+            "fire": {
+                "textures": { "base": "minecraft:blocks/lava_still" }
+            },
+            "water": {
+                "textures": { "base": "minecraft:blocks/water_still" }
+            },
+            "earth": {
+                "textures": { "base": "minecraft:blocks/dirt_podzol_top" }
+            },
+            "air": {
+                "textures": { "base": "minecraft:blocks/quartz_block_top" }
+            }
+        }
+    }
+}

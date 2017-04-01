@@ -2,11 +2,11 @@ package ec3.common.tile;
 
 import java.util.List;
 
-import cpw.mods.fml.common.Loader;
+import net.minecraftforge.fml.common.Loader;
 import DummyCore.Utils.DataStorage;
 import DummyCore.Utils.DummyData;
 import net.minecraft.entity.monster.EntityEnderman;
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraftforge.common.config.Configuration;
 import ec3.api.ApiCore;
@@ -31,20 +31,20 @@ public class TileEnderGenerator extends TileMRUGeneric {
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public void updateEntity() {
-		super.updateEntity();
+	public void update() {
+		super.update();
 		if(balance == -1)
 			balance = worldObj.rand.nextFloat()*2;
-		if(!worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord)) {
-			AxisAlignedBB endermenTPRadius = AxisAlignedBB.getBoundingBox(xCoord-endermenCatchRadius, yCoord-endermenCatchRadius, zCoord-endermenCatchRadius, xCoord+endermenCatchRadius+1, yCoord+endermenCatchRadius+1, zCoord+endermenCatchRadius+1);
+		if(worldObj.isBlockIndirectlyGettingPowered(pos) == 0) {
+			AxisAlignedBB endermenTPRadius = new AxisAlignedBB(pos.getX()-endermenCatchRadius, pos.getY()-endermenCatchRadius, pos.getZ()-endermenCatchRadius, pos.getX()+endermenCatchRadius+1, pos.getY()+endermenCatchRadius+1, pos.getZ()+endermenCatchRadius+1);
 			List<EntityEnderman> l = worldObj.getEntitiesWithinAABB(EntityEnderman.class, endermenTPRadius);
 			if(Loader.isModLoaded("HardcoreEnderExpansion")) {
 				try {
-					l.addAll(worldObj.getEntitiesWithinAABB(Class.forName("chylex.hee.entity.mob.EntityMobAngryEnderman"), endermenTPRadius));
-					l.addAll(worldObj.getEntitiesWithinAABB(Class.forName("chylex.hee.entity.mob.EntityMobBabyEnderman"), endermenTPRadius));
-					l.addAll(worldObj.getEntitiesWithinAABB(Class.forName("chylex.hee.entity.mob.EntityMobEndermage"), endermenTPRadius));
-					l.addAll(worldObj.getEntitiesWithinAABB(Class.forName("chylex.hee.entity.mob.EntityMobEnderman"), endermenTPRadius));
-					l.addAll(worldObj.getEntitiesWithinAABB(Class.forName("chylex.hee.entity.mob.EntityMobParalyzedEnderman"), endermenTPRadius));
+					l.addAll(worldObj.getEntitiesWithinAABB((Class<? extends EntityEnderman>)Class.forName("chylex.hee.entity.mob.EntityMobAngryEnderman"), endermenTPRadius));
+					l.addAll(worldObj.getEntitiesWithinAABB((Class<? extends EntityEnderman>)Class.forName("chylex.hee.entity.mob.EntityMobBabyEnderman"), endermenTPRadius));
+					l.addAll(worldObj.getEntitiesWithinAABB((Class<? extends EntityEnderman>)Class.forName("chylex.hee.entity.mob.EntityMobEndermage"), endermenTPRadius));
+					l.addAll(worldObj.getEntitiesWithinAABB((Class<? extends EntityEnderman>)Class.forName("chylex.hee.entity.mob.EntityMobEnderman"), endermenTPRadius));
+					l.addAll(worldObj.getEntitiesWithinAABB((Class<? extends EntityEnderman>)Class.forName("chylex.hee.entity.mob.EntityMobParalyzedEnderman"), endermenTPRadius));
 				}
 				catch(ClassNotFoundException e) {
 					e.printStackTrace();
@@ -52,18 +52,18 @@ public class TileEnderGenerator extends TileMRUGeneric {
 			}
 			if(!l.isEmpty()) {
 				for(int i = 0; i < l.size(); ++i) {
-					l.get(i).setPositionAndRotation(xCoord+0.5D, yCoord+1D, zCoord+0.5D, 0, 0);
+					l.get(i).setPositionAndRotation(pos.getX()+0.5D, pos.getY()+1D, pos.getZ()+0.5D, 0, 0);
 				}
 			}
-			AxisAlignedBB endermanAttackRad = AxisAlignedBB.getBoundingBox(xCoord-2, yCoord-2, zCoord-2, xCoord+2, yCoord+2, zCoord+2);
+			AxisAlignedBB endermanAttackRad = new AxisAlignedBB(pos.getX()-2, pos.getY()-2, pos.getZ()-2, pos.getX()+2, pos.getY()+2, pos.getZ()+2);
 			List<EntityEnderman> l1 = worldObj.getEntitiesWithinAABB(EntityEnderman.class, endermanAttackRad);
 			if(Loader.isModLoaded("HardcoreEnderExpansion")) {
 				try {
-					l1.addAll(worldObj.getEntitiesWithinAABB(Class.forName("chylex.hee.entity.mob.EntityMobAngryEnderman"), endermanAttackRad));
-					l1.addAll(worldObj.getEntitiesWithinAABB(Class.forName("chylex.hee.entity.mob.EntityMobBabyEnderman"), endermanAttackRad));
-					l1.addAll(worldObj.getEntitiesWithinAABB(Class.forName("chylex.hee.entity.mob.EntityMobEndermage"), endermanAttackRad));
-					l1.addAll(worldObj.getEntitiesWithinAABB(Class.forName("chylex.hee.entity.mob.EntityMobEnderman"), endermanAttackRad));
-					l1.addAll(worldObj.getEntitiesWithinAABB(Class.forName("chylex.hee.entity.mob.EntityMobParalyzedEnderman"), endermanAttackRad));
+					l1.addAll(worldObj.getEntitiesWithinAABB((Class<? extends EntityEnderman>)Class.forName("chylex.hee.entity.mob.EntityMobAngryEnderman"), endermanAttackRad));
+					l1.addAll(worldObj.getEntitiesWithinAABB((Class<? extends EntityEnderman>)Class.forName("chylex.hee.entity.mob.EntityMobBabyEnderman"), endermanAttackRad));
+					l1.addAll(worldObj.getEntitiesWithinAABB((Class<? extends EntityEnderman>)Class.forName("chylex.hee.entity.mob.EntityMobEndermage"), endermanAttackRad));
+					l1.addAll(worldObj.getEntitiesWithinAABB((Class<? extends EntityEnderman>)Class.forName("chylex.hee.entity.mob.EntityMobEnderman"), endermanAttackRad));
+					l1.addAll(worldObj.getEntitiesWithinAABB((Class<? extends EntityEnderman>)Class.forName("chylex.hee.entity.mob.EntityMobParalyzedEnderman"), endermanAttackRad));
 				}
 				catch(ClassNotFoundException e) {
 					e.printStackTrace();

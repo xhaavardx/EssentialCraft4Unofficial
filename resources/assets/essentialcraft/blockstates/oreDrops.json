@@ -1,0 +1,36 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "essentialcraft:overlayed"
+    },
+    "variants": {
+        "dimension": {
+            "overworld": {
+                "textures": { "out": "essentialcraft:blocks/elemental_base" }
+            },
+            "nether": {
+                "textures": { "out": "essentialcraft:blocks/elemental_nether" }
+            },
+            "end": {
+                "textures": { "out": "essentialcraft:blocks/elemental_end" }
+            }
+        },
+        "type": {
+            "fire": {
+                "textures": { "in": "essentialcraft:blocks/elemental_fire" }
+            },
+            "water": {
+                "textures": { "in": "essentialcraft:blocks/elemental_water" }
+            },
+            "earth": {
+                "textures": { "in": "essentialcraft:blocks/elemental_earth" }
+            },
+            "air": {
+                "textures": { "in": "essentialcraft:blocks/elemental_air" }
+            },
+            "elemental": {
+                "textures": { "in": "essentialcraft:blocks/elemental_elemental" }
+            }
+        }
+    }
+}

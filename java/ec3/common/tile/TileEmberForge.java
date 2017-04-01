@@ -13,9 +13,13 @@ import DummyCore.Utils.DummyData;
 import DummyCore.Utils.MathUtils;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.config.Configuration;
 
 public class TileEmberForge extends TileMRUGeneric {
@@ -36,58 +40,59 @@ public class TileEmberForge extends TileMRUGeneric {
 	}
 	
 	@Override
-	public void writeToNBT(NBTTagCompound par1NBTTagCompound) {
+	public NBTTagCompound writeToNBT(NBTTagCompound par1NBTTagCompound) {
 		super.writeToNBT(par1NBTTagCompound);
 		par1NBTTagCompound.setInteger("progress", progressLevel);
+		return par1NBTTagCompound;
 	}
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public void updateEntity() {
+	public void update() {
 		maxMRU = 50000;
-		super.updateEntity();
+		super.update();
 		spawnParticles();
 		if(isStructureCorrect()) {
 			boolean flag = false;
 			for(int i = 0; i < 2; ++i) {
-				worldObj.spawnParticle("flame", xCoord+worldObj.rand.nextDouble(),yCoord+1.1,zCoord+worldObj.rand.nextDouble(),0,0,0);
+				worldObj.spawnParticle(EnumParticleTypes.FLAME, pos.getX()+worldObj.rand.nextDouble(),pos.getY()+1.1,pos.getZ()+worldObj.rand.nextDouble(),0,0,0);
 			}
-			List<EntityItem> l_0 = worldObj.getEntitiesWithinAABB(EntityItem.class, AxisAlignedBB.getBoundingBox(xCoord+2, yCoord, zCoord, xCoord+3, yCoord+2, zCoord+1));
+			List<EntityItem> l_0 = worldObj.getEntitiesWithinAABB(EntityItem.class, new AxisAlignedBB(pos.getX()+2, pos.getY(), pos.getZ(), pos.getX()+3, pos.getY()+2, pos.getZ()+1));
 			EntityItem ember_0 = null;
 			if(!l_0.isEmpty() && l_0.get(0).getEntityItem().getItem() instanceof ItemEmber)
 				ember_0 = l_0.get(0); 
-			List<EntityItem> l_1 = worldObj.getEntitiesWithinAABB(EntityItem.class, AxisAlignedBB.getBoundingBox(xCoord-2, yCoord, zCoord, xCoord-1, yCoord+2, zCoord+1));
+			List<EntityItem> l_1 = worldObj.getEntitiesWithinAABB(EntityItem.class, new AxisAlignedBB(pos.getX()-2, pos.getY(), pos.getZ(), pos.getX()-1, pos.getY()+2, pos.getZ()+1));
 			EntityItem ember_1 = null;
 			if(!l_1.isEmpty() && l_1.get(0).getEntityItem().getItem() instanceof ItemEmber)
 				ember_1 = l_1.get(0); 
-			List<EntityItem> l_2 = worldObj.getEntitiesWithinAABB(EntityItem.class, AxisAlignedBB.getBoundingBox(xCoord, yCoord, zCoord+2, xCoord+1, yCoord+2, zCoord+3));
+			List<EntityItem> l_2 = worldObj.getEntitiesWithinAABB(EntityItem.class, new AxisAlignedBB(pos.getX(), pos.getY(), pos.getZ()+2, pos.getX()+1, pos.getY()+2, pos.getZ()+3));
 			EntityItem ember_2 = null;
 			if(!l_2.isEmpty() && l_2.get(0).getEntityItem().getItem() instanceof ItemEmber)
 				ember_2 = l_2.get(0); 
-			List<EntityItem> l_3 = worldObj.getEntitiesWithinAABB(EntityItem.class, AxisAlignedBB.getBoundingBox(xCoord, yCoord, zCoord-2, xCoord+1, yCoord+2, zCoord-1));
+			List<EntityItem> l_3 = worldObj.getEntitiesWithinAABB(EntityItem.class, new AxisAlignedBB(pos.getX(), pos.getY(), pos.getZ()-2, pos.getX()+1, pos.getY()+2, pos.getZ()-1));
 			EntityItem ember_3 = null;
 			if(!l_3.isEmpty() && l_3.get(0).getEntityItem().getItem() instanceof ItemEmber)
 				ember_3 = l_3.get(0); 
-			List<EntityItem> l_4 = worldObj.getEntitiesWithinAABB(EntityItem.class, AxisAlignedBB.getBoundingBox(xCoord+2, yCoord+2, zCoord+2, xCoord+3, yCoord+4, zCoord+3));
+			List<EntityItem> l_4 = worldObj.getEntitiesWithinAABB(EntityItem.class, new AxisAlignedBB(pos.getX()+2, pos.getY()+2, pos.getZ()+2, pos.getX()+3, pos.getY()+4, pos.getZ()+3));
 			EntityItem focus_0 = null;
 			if(!l_4.isEmpty() && l_4.get(0).getEntityItem().getItem() instanceof ItemElementalFocus)
 				focus_0 = l_4.get(0); 
-			List<EntityItem> l_41 = worldObj.getEntitiesWithinAABB(EntityItem.class, AxisAlignedBB.getBoundingBox(xCoord-2, yCoord+2, zCoord+2, xCoord-1, yCoord+4, zCoord+3));
+			List<EntityItem> l_41 = worldObj.getEntitiesWithinAABB(EntityItem.class, new AxisAlignedBB(pos.getX()-2, pos.getY()+2, pos.getZ()+2, pos.getX()-1, pos.getY()+4, pos.getZ()+3));
 			EntityItem focus_1 = null;
 			if(!l_41.isEmpty() && l_41.get(0).getEntityItem().getItem() instanceof ItemElementalFocus)
 				focus_1 = l_41.get(0);
-			List<EntityItem> l_411 = worldObj.getEntitiesWithinAABB(EntityItem.class, AxisAlignedBB.getBoundingBox(xCoord+2, yCoord+2, zCoord-2, xCoord+3, yCoord+4, zCoord-1));
+			List<EntityItem> l_411 = worldObj.getEntitiesWithinAABB(EntityItem.class, new AxisAlignedBB(pos.getX()+2, pos.getY()+2, pos.getZ()-2, pos.getX()+3, pos.getY()+4, pos.getZ()-1));
 			EntityItem focus_2 = null;
 			if(!l_411.isEmpty() && l_411.get(0).getEntityItem().getItem() instanceof ItemElementalFocus)
 				focus_2 = l_411.get(0); 
-			List<EntityItem> l_4111 = worldObj.getEntitiesWithinAABB(EntityItem.class, AxisAlignedBB.getBoundingBox(xCoord-2, yCoord+2, zCoord-2, xCoord-1, yCoord+4, zCoord-1));
+			List<EntityItem> l_4111 = worldObj.getEntitiesWithinAABB(EntityItem.class, new AxisAlignedBB(pos.getX()-2, pos.getY()+2, pos.getZ()-2, pos.getX()-1, pos.getY()+4, pos.getZ()-1));
 			EntityItem focus_3 = null;
 			if(!l_4111.isEmpty() && l_4111.get(0).getEntityItem().getItem() instanceof ItemElementalFocus)
 				focus_3 = l_4111.get(0); 
 			--soundArray;
 			if(ember_0 != null && ember_1 != null && ember_2 != null && ember_3 != null && focus_0 != null && focus_1 != null && focus_2 != null && focus_3 != null && (!worldObj.isDaytime() || !nightRequired)) {
 				if(soundArray <= 0) {
-					worldObj.playSoundEffect(xCoord, yCoord, zCoord, "portal.trigger", 1F, 0.2F);
+					worldObj.playSound(null, pos, SoundEvents.BLOCK_PORTAL_TRIGGER, SoundCategory.BLOCKS, 1F, 0.2F);
 					soundArray = 50;
 				}
 				++progressLevel;
@@ -113,12 +118,12 @@ public class TileEmberForge extends TileMRUGeneric {
 					ItemStack eSword = new ItemStack(ItemsCore.elementalSword, 1, 0);
 					eSword.setTagCompound(swordTag);
 					ItemElementalSword.setPrimaryAttribute(eSword);
-					EntityItem elementalSword = new EntityItem(worldObj, xCoord+0.5, yCoord+2.1, zCoord+0.5, eSword);
+					EntityItem elementalSword = new EntityItem(worldObj, pos.getX()+0.5, pos.getY()+2.1, pos.getZ()+0.5, eSword);
 					if(!worldObj.isRemote)
 						worldObj.spawnEntityInWorld(elementalSword);
 				}
 				for(int i = 0; i < progressLevel/50; ++i)
-					worldObj.spawnParticle("lava", xCoord+worldObj.rand.nextDouble(), yCoord+1, zCoord+worldObj.rand.nextDouble(), 0, 0, 0);
+					worldObj.spawnParticle(EnumParticleTypes.LAVA, pos.getX()+worldObj.rand.nextDouble(), pos.getY()+1, pos.getZ()+worldObj.rand.nextDouble(), 0, 0, 0);
 				flag = true;
 			}
 			else {
@@ -126,93 +131,85 @@ public class TileEmberForge extends TileMRUGeneric {
 				flag = false;
 			}
 			if(focus_0 != null) {
-				focus_0.setPosition(xCoord+2.5, yCoord+2.5, zCoord+2.5);
+				focus_0.setPosition(pos.getX()+2.5, pos.getY()+2.5, pos.getZ()+2.5);
 				focus_0.motionX = 0;
 				focus_0.motionY = 0;
 				focus_0.motionZ = 0;
-				focus_0.age = 111;
-				worldObj.spawnParticle("portal", xCoord+0.5, yCoord+0.9, zCoord+0.5, 2, 1, 2);
+				worldObj.spawnParticle(EnumParticleTypes.PORTAL, pos.getX()+0.5, pos.getY()+0.9, pos.getZ()+0.5, 2, 1, 2);
 				for(int i = 0; i < 10; ++i)
-					worldObj.spawnParticle("reddust", xCoord+2.5, yCoord+2.7, zCoord+2.5, 0, 0, 1);
+					worldObj.spawnParticle(EnumParticleTypes.REDSTONE, pos.getX()+2.5, pos.getY()+2.7, pos.getZ()+2.5, 0, 0, 1);
 			}
 			if(focus_1 != null) {
-				focus_1.setPosition(xCoord-1.5, yCoord+2.5, zCoord+2.5);
+				focus_1.setPosition(pos.getX()-1.5, pos.getY()+2.5, pos.getZ()+2.5);
 				focus_1.motionX = 0;
 				focus_1.motionY = 0;
 				focus_1.motionZ = 0;
-				focus_1.age = 111;
-				worldObj.spawnParticle("portal", xCoord+0.5, yCoord+0.9, zCoord+0.5, -2, 1, 2);
+				worldObj.spawnParticle(EnumParticleTypes.PORTAL, pos.getX()+0.5, pos.getY()+0.9, pos.getZ()+0.5, -2, 1, 2);
 				for(int i = 0; i < 10; ++i)
-					worldObj.spawnParticle("reddust", xCoord-1.5, yCoord+2.7, zCoord+2.5, 0, 0, 1);
+					worldObj.spawnParticle(EnumParticleTypes.REDSTONE, pos.getX()-1.5, pos.getY()+2.7, pos.getZ()+2.5, 0, 0, 1);
 			}
 			if(focus_2 != null) {
-				focus_2.setPosition(xCoord+2.5, yCoord+2.5, zCoord-1.5);
+				focus_2.setPosition(pos.getX()+2.5, pos.getY()+2.5, pos.getZ()-1.5);
 				focus_2.motionX = 0;
 				focus_2.motionY = 0;
 				focus_2.motionZ = 0;
-				focus_2.age = 111;
-				worldObj.spawnParticle("portal", xCoord+0.5, yCoord+0.9, zCoord+0.5, 2, 1, -2);
+				worldObj.spawnParticle(EnumParticleTypes.PORTAL, pos.getX()+0.5, pos.getY()+0.9, pos.getZ()+0.5, 2, 1, -2);
 				for(int i = 0; i < 10; ++i)
-					worldObj.spawnParticle("reddust", xCoord+2.5, yCoord+2.7, zCoord-1.5, 0, 0, 1);
+					worldObj.spawnParticle(EnumParticleTypes.REDSTONE, pos.getX()+2.5, pos.getY()+2.7, pos.getZ()-1.5, 0, 0, 1);
 			}
 			if(focus_3 != null) {
-				focus_3.setPosition(xCoord-1.5, yCoord+2.5, zCoord-1.5);
+				focus_3.setPosition(pos.getX()-1.5, pos.getY()+2.5, pos.getZ()-1.5);
 				focus_3.motionX = 0;
 				focus_3.motionY = 0;
 				focus_3.motionZ = 0;
-				focus_3.age = 111;
-				worldObj.spawnParticle("portal", xCoord+0.5, yCoord+0.9, zCoord+0.5, -2, 1, -2);
+				worldObj.spawnParticle(EnumParticleTypes.PORTAL, pos.getX()+0.5, pos.getY()+0.9, pos.getZ()+0.5, -2, 1, -2);
 				for(int i = 0; i < 10; ++i)
-					worldObj.spawnParticle("reddust", xCoord-1.5, yCoord+2.7, zCoord-1.5, 0, 0, 1);
+					worldObj.spawnParticle(EnumParticleTypes.REDSTONE, pos.getX()-1.5, pos.getY()+2.7, pos.getZ()-1.5, 0, 0, 1);
 			}
 			if(ember_0 != null) {
-				ember_0.setPosition(xCoord+2.5, yCoord+1.5, zCoord+0.5);
+				ember_0.setPosition(pos.getX()+2.5, pos.getY()+1.5, pos.getZ()+0.5);
 				ember_0.motionX = 0;
 				ember_0.motionY = 0;
 				ember_0.motionZ = 0;
-				ember_0.age = 111;
 				for(int i = 0; i < 10; ++i)
-					worldObj.spawnParticle("reddust", xCoord+0.5+(float)i/5, yCoord+0.9+(float)i/12.5, zCoord+0.5, 1, 0, 0);
-				worldObj.spawnParticle("flame", xCoord+2.5, yCoord+2, zCoord+0.5, 0, 0, 0);
+					worldObj.spawnParticle(EnumParticleTypes.REDSTONE, pos.getX()+0.5+(float)i/5, pos.getY()+0.9+(float)i/12.5, pos.getZ()+0.5, 1, 0, 0);
+				worldObj.spawnParticle(EnumParticleTypes.FLAME, pos.getX()+2.5, pos.getY()+2, pos.getZ()+0.5, 0, 0, 0);
 				if(!flag)
-					worldObj.playSoundAtEntity(ember_0, "fire.fire", 0.2F, 2.0F);
+					worldObj.playSound(null, ember_0.getPosition(), SoundEvents.BLOCK_FIRE_AMBIENT, SoundCategory.BLOCKS, 0.2F, 2.0F);
     		}
 			if(ember_1!= null) {
-				ember_1.setPosition(xCoord-1.5, yCoord+1.5, zCoord+0.5);
+				ember_1.setPosition(pos.getX()-1.5, pos.getY()+1.5, pos.getZ()+0.5);
 				ember_1.motionX = 0;
 				ember_1.motionY = 0;
 				ember_1.motionZ = 0;
-				ember_1.age = 111+188;
 				for(int i = 0; i < 10; ++i)
-					worldObj.spawnParticle("reddust", xCoord+0.5-(float)i/5, yCoord+0.9+(float)i/12.5, zCoord+0.5, 1, 0, 0);
-				worldObj.spawnParticle("flame", xCoord-1.5, yCoord+2, zCoord+0.5, 0, 0, 0);
+					worldObj.spawnParticle(EnumParticleTypes.REDSTONE, pos.getX()+0.5-(float)i/5, pos.getY()+0.9+(float)i/12.5, pos.getZ()+0.5, 1, 0, 0);
+				worldObj.spawnParticle(EnumParticleTypes.FLAME, pos.getX()-1.5, pos.getY()+2, pos.getZ()+0.5, 0, 0, 0);
 				if(!flag)
-					worldObj.playSoundAtEntity(ember_1, "fire.fire", 0.2F, 2.0F);
+					worldObj.playSound(null, ember_1.getPosition(), SoundEvents.BLOCK_FIRE_AMBIENT, SoundCategory.BLOCKS, 0.2F, 2.0F);
 			}
 			if(ember_2 != null) {
-				ember_2.setPosition(xCoord+0.5, yCoord+1.5, zCoord+2.5);
+				ember_2.setPosition(pos.getX()+0.5, pos.getY()+1.5, pos.getZ()+2.5);
 				ember_2.motionX = 0;
 				ember_2.motionY = 0;
 				ember_2.motionZ = 0;
-				ember_2.age = 111+188;
 				for(int i = 0; i < 10; ++i)
-					worldObj.spawnParticle("reddust", xCoord+0.5, yCoord+0.9+(float)i/12.5, zCoord+0.5+(float)i/5, 1, 0, 0);
-				worldObj.spawnParticle("flame", xCoord+0.5, yCoord+2, zCoord+2.5, 0, 0, 0);
+					worldObj.spawnParticle(EnumParticleTypes.REDSTONE, pos.getX()+0.5, pos.getY()+0.9+(float)i/12.5, pos.getZ()+0.5+(float)i/5, 1, 0, 0);
+				worldObj.spawnParticle(EnumParticleTypes.FLAME, pos.getX()+0.5, pos.getY()+2, pos.getZ()+2.5, 0, 0, 0);
 				if(!flag)
-					worldObj.playSoundAtEntity(ember_2, "fire.fire", 0.2F, 2.0F);
+					worldObj.playSound(null, ember_2.getPosition(), SoundEvents.BLOCK_FIRE_AMBIENT, SoundCategory.BLOCKS, 0.2F, 2.0F);
 			}
 			if(ember_3 != null) {
-				ember_3.setPosition(xCoord+0.5, yCoord+1.5, zCoord-1.5);
+				ember_3.setPosition(pos.getX()+0.5, pos.getY()+1.5, pos.getZ()-1.5);
 				ember_3.motionX = 0;
 				ember_3.motionY = 0;
-				ember_3.motionZ = 0;    			
-				ember_3.age = 124;
+				ember_3.motionZ = 0;
 				for(int i = 0; i < 10; ++i)
-					worldObj.spawnParticle("reddust", xCoord+0.5, yCoord+0.9+(float)i/12.5, zCoord+0.5-(float)i/5, 1, 0, 0);
-				worldObj.spawnParticle("flame", xCoord+0.5, yCoord+2, zCoord-1.5, 0, 0, 0);
+					worldObj.spawnParticle(EnumParticleTypes.REDSTONE, pos.getX()+0.5, pos.getY()+0.9+(float)i/12.5, pos.getZ()+0.5-(float)i/5, 1, 0, 0);
+				worldObj.spawnParticle(EnumParticleTypes.FLAME, pos.getX()+0.5, pos.getY()+2, pos.getZ()-1.5, 0, 0, 0);
 				if(!flag)
-					worldObj.playSoundAtEntity(ember_3, "fire.fire", 0.2F, 2.0F);
-			}
+					worldObj.playSound(null, ember_3.getPosition(), SoundEvents.BLOCK_FIRE_AMBIENT, SoundCategory.BLOCKS, 0.2F, 2.0F);
+				}
 		}
 	}
 	
@@ -220,31 +217,31 @@ public class TileEmberForge extends TileMRUGeneric {
 		boolean flag = true;
 		for(int x = -2; x <= 2; ++x) {
 			for(int z = -2; z <= 2; ++z) {
-				flag = worldObj.getBlock(xCoord+x, yCoord-1, zCoord+z) == BlocksCore.voidStone;
+				flag = worldObj.getBlockState(new BlockPos(pos.getX()+x, pos.getY()-1, pos.getZ()+z)).getBlock() == BlocksCore.voidStone;
 				if(!flag)
 					return false;
 			}
 		}
 		flag =
-				worldObj.getBlock(xCoord+2, yCoord, zCoord+2) == BlocksCore.voidStone &&
-				worldObj.getBlock(xCoord-2, yCoord, zCoord+2) == BlocksCore.voidStone &&  
-				worldObj.getBlock(xCoord+2, yCoord, zCoord-2) == BlocksCore.voidStone &&
-				worldObj.getBlock(xCoord-2, yCoord, zCoord-2) == BlocksCore.voidStone &&
-				worldObj.getBlock(xCoord+2, yCoord, zCoord) != Blocks.air &&
-				worldObj.getBlock(xCoord, yCoord, zCoord+2) != Blocks.air &&
-				worldObj.getBlock(xCoord-2, yCoord, zCoord) != Blocks.air &&
-				worldObj.getBlock(xCoord, yCoord, zCoord-2) != Blocks.air &&   			
-				worldObj.getBlock(xCoord+2, yCoord+1, zCoord+2) != Blocks.air &&
-				worldObj.getBlock(xCoord-2, yCoord+1, zCoord+2) != Blocks.air &&
-				worldObj.getBlock(xCoord-2, yCoord+1, zCoord-2) != Blocks.air &&
-				worldObj.getBlock(xCoord+2, yCoord+1, zCoord-2) != Blocks.air;
+				worldObj.getBlockState(pos.add(2, 0, 2)).getBlock() == BlocksCore.voidStone &&
+				worldObj.getBlockState(pos.add(-2, 0, 2)).getBlock() == BlocksCore.voidStone &&  
+				worldObj.getBlockState(pos.add(2, 0, -2)).getBlock() == BlocksCore.voidStone &&
+				worldObj.getBlockState(pos.add(-2, 0, -2)).getBlock() == BlocksCore.voidStone &&
+				worldObj.getBlockState(pos.add(2, 0, 0)).getBlock() != Blocks.AIR &&
+				worldObj.getBlockState(pos.add(0, 0, 2)).getBlock() != Blocks.AIR &&
+				worldObj.getBlockState(pos.add(-2, 0, 0)).getBlock() != Blocks.AIR &&
+				worldObj.getBlockState(pos.add(0, 0, -2)).getBlock() != Blocks.AIR &&   			
+				worldObj.getBlockState(pos.add(2, 1, 2)).getBlock() != Blocks.AIR &&
+				worldObj.getBlockState(pos.add(-2, 1, 2)).getBlock() != Blocks.AIR &&
+				worldObj.getBlockState(pos.add(-2, 1, -2)).getBlock() != Blocks.AIR &&
+				worldObj.getBlockState(pos.add(2, 1, -2)).getBlock() != Blocks.AIR;
 		return flag;
 	}
 	
 	public void spawnParticles() {
 		if(isStructureCorrect()) {
 			/*for(int i = 0; i < 100; ++i)*/ {
-				EssentialCraftCore.proxy.spawnParticle("cSpellFX", xCoord+0.5F + MathUtils.randomFloat(worldObj.rand)*3, yCoord, zCoord+0.5F + MathUtils.randomFloat(worldObj.rand)*3, 0,2, 0);
+				EssentialCraftCore.proxy.spawnParticle("cSpellFX", pos.getX()+0.5F + MathUtils.randomFloat(worldObj.rand)*3, pos.getY(), pos.getZ()+0.5F + MathUtils.randomFloat(worldObj.rand)*3, 0,2, 0);
 			}
 		}
 	}

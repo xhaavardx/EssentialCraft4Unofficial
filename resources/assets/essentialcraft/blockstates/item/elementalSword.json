@@ -1,0 +1,43 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "builtin/generated",
+        "transform": "forge:default-tool"
+    },
+    "variants": {
+        "bottom": {
+            "normal": {
+                "textures": { "layer0": "essentialcraft:items/tools/elementalSword" }
+            },
+            "fire": {
+                "textures": { "layer0": "essentialcraft:items/modular/pa_Fire" }
+            },
+            "water": {
+                "textures": { "layer0": "essentialcraft:items/modular/pa_Water" }
+            },
+            "earth": {
+                "textures": { "layer0": "essentialcraft:items/modular/pa_Earth" }
+            },
+            "air": {
+                "textures": { "layer0": "essentialcraft:items/modular/pa_Air" }
+            }
+        },
+        "top": {
+            "normal": {
+                "textures": { "layer1": "essentialcraft:items/tools/elementalSword" }
+            },
+            "fire": {
+                "textures": { "layer1": "essentialcraft:items/modular/sa_Fire" }
+            },
+            "water": {
+                "textures": { "layer1": "essentialcraft:items/modular/sa_Water" }
+            },
+            "earth": {
+                "textures": { "layer1": "essentialcraft:items/modular/sa_Earth" }
+            },
+            "air": {
+                "textures": { "layer1": "essentialcraft:items/modular/sa_Air" }
+            }
+        }
+    }
+}

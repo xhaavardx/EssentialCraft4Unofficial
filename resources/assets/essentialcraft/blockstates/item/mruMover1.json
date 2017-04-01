@@ -1,0 +1,17 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "builtin/generated",
+        "transform": "forge:default-tool"
+    },
+    "variants": {
+        "active": {
+            "true": {
+                "textures": { "layer0": "essentialcraft:items/tools/mru_mover_t1_active" }
+            },
+            "false": {
+                "textures": { "layer0": "essentialcraft:items/tools/mru_mover_t1" }
+            }
+        }
+    }
+}

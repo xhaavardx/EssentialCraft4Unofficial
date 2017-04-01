@@ -2,10 +2,11 @@ package ec3.common.world;
 
 import java.util.Random;
 
+import DummyCore.Utils.WeightedRandomChestContent;
 import ec3.common.block.BlocksCore;
 import ec3.common.item.ItemsCore;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.WeightedRandomChestContent;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 
@@ -45,9 +46,10 @@ public class WorldGenDestroyedHouse extends WorldGenerator{
 	{
 		while(y > 5)
 		{
-			if(!w.isAirBlock(x, y, z) && w.getBlock(x, y, z) != Blocks.water)
+			BlockPos p = new BlockPos(x,y,z);
+			if(!w.isAirBlock(p) && w.getBlockState(p).getBlock() != Blocks.WATER)
 			{
-				if(w.getBlock(x, y, z) != BlocksCore.concrete && w.getBlock(x, y, z) != BlocksCore.fortifiedStone)
+				if(w.getBlockState(p).getBlock() != BlocksCore.concrete && w.getBlockState(p).getBlock() != BlocksCore.fortifiedStone)
 				{
 					break;
 				}else
@@ -63,17 +65,17 @@ public class WorldGenDestroyedHouse extends WorldGenerator{
 	}
 
 	@Override
-	public boolean generate(World w, Random r,int x, int y, int z)
+	public boolean generate(World w, Random r,BlockPos p)
 	{
-		int genY = getGroundToGenerate(w,x,y,z);
+		int genY = getGroundToGenerate(w,p.getX(),p.getY(),p.getZ());
 		if(genY != -1)
 		{
-			y = genY;
+			int y = genY;
 			if(rad == 0)
 				rad = r.nextInt(6)+3;
 			for(int i = 0; i < floorsAmount+1; ++i)
 			{
-				generateFloor(w,r,x,y+5*i,z,i,rad);
+				generateFloor(w,r,p.getX(),y+5*i,p.getZ(),i,rad);
 			}
 			return true;
 		}
@@ -90,34 +92,35 @@ public class WorldGenDestroyedHouse extends WorldGenerator{
 				{
 					if(((dx == -size || dx == size) && (dz == -size || dz == size)) || (dx == 0 && dz == 0))
 					{
-						w.setBlock(x+dx, y-1, z+dz, BlocksCore.levitator,0,3);
+						w.setBlockState(new BlockPos(x+dx, y-1, z+dz), BlocksCore.levitator.getDefaultState(),3);
 					}
 				}
 				for(int dy = 0; dy < 5; ++dy)
 				{
-					if(w.getBlock(x+dx, y+dy, z+dz) != Blocks.water)
-						w.setBlock(x+dx, y+dy, z+dz, Blocks.air,0,3);
+					BlockPos p = new BlockPos(x+dx, y+dy, z+dz);
+					if(w.getBlockState(p) != Blocks.WATER)
+						w.setBlockState(p, Blocks.AIR.getDefaultState(),3);
 					int tryInt = dy+1;
 					if(w.rand.nextInt(tryInt) == 0)
-						w.setBlock(x+dx, y+dy, z+dz, BlocksCore.concrete);
+						w.setBlockState(p, BlocksCore.concrete.getDefaultState(),3);
 					if(dy == 0 || dy == 4)
 					{
-						w.setBlock(x+dx, y+dy, z+dz, BlocksCore.fortifiedStone,0,3);
+						w.setBlockState(p, BlocksCore.fortifiedStone.getDefaultState(),3);
 					}
 					if(dx == -size || dx == size)
 					{
-						w.setBlock(x+dx, y+dy, z+dz, BlocksCore.fortifiedStone,0,3);
+						w.setBlockState(p, BlocksCore.fortifiedStone.getDefaultState(),3);
 						if(dy > 0 && dy < 4 && dz > -size+1 && dz < size-1)
 						{
-							w.setBlock(x+dx, y+dy, z+dz, BlocksCore.fortifiedGlass,0,3);
+							w.setBlockState(p, BlocksCore.fortifiedGlass.getDefaultState(),3);
 						}
 					}
 					if(dz == -size || dz == size)
 					{
-						w.setBlock(x+dx, y+dy, z+dz, BlocksCore.fortifiedStone,0,3);
+						w.setBlockState(p, BlocksCore.fortifiedStone.getDefaultState(),3);
 						if(dy > 0 && dy < 4 && dx > -size+1 && dx < size-1)
 						{
-							w.setBlock(x+dx, y+dy, z+dz, BlocksCore.fortifiedGlass,0,3);
+							w.setBlockState(p, BlocksCore.fortifiedGlass.getDefaultState(),3);
 						}
 					}
 					if(floorsAmount == 0)floorsAmount = 1;

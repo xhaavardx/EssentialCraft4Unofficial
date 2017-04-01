@@ -1,0 +1,35 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "builtin/generated",
+        "transform": "forge:default-item"
+    },
+    "variants": {
+        "type": {
+            "acidic": {
+                "textures": { "layer0": "essentialcraft:items/misc/ember_acidic" }
+            },
+            "chaos": {
+                "textures": { "layer0": "essentialcraft:items/misc/ember_chaos" }
+            },
+            "common": {
+                "textures": { "layer0": "essentialcraft:items/misc/ember_common" }
+            },
+            "corrupted": {
+                "textures": { "layer0": "essentialcraft:items/misc/ember_corrupted" }
+            },
+            "crystal": {
+                "textures": { "layer0": "essentialcraft:items/misc/ember_crystal" }
+            },
+            "divine": {
+                "textures": { "layer0": "essentialcraft:items/misc/ember_divine" }
+            },
+            "magical": {
+                "textures": { "layer0": "essentialcraft:items/misc/ember_magical" }
+            },
+            "flame": {
+                "textures": { "layer0": "essentialcraft:items/misc/ember_flame" }
+            }
+        }
+    }
+}

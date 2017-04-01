@@ -2,6 +2,7 @@ package ec3.common.tile;
 
 import java.util.List;
 
+import ec3.common.block.BlockCorruption_Light;
 import ec3.common.block.BlocksCore;
 import ec3.common.registry.BiomeRegistry;
 import ec3.common.registry.PotionRegistry;
@@ -16,58 +17,57 @@ import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.INetHandlerPlayClient;
-import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ITickable;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.common.util.ForgeDirection;
 
-public class TileCorruption extends TileEntity {
+public class TileCorruption extends TileEntity implements ITickable {
 	
 	public static boolean canChangeBiome = true, canDestroyBlocks = true;
 	
 	@Override
-	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
-		if(net.getNetHandler() instanceof INetHandlerPlayClient)
-			if(pkt.func_148853_f() == -11) {
-				NBTTagCompound packetTag = pkt.func_148857_g();
-				int biomeID = packetTag.getInteger("biomeID");
-				MiscUtils.changeBiome(worldObj, BiomeGenBase.getBiomeGenArray()[biomeID], xCoord, zCoord);
-			}
+	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
+		if(pkt.getTileEntityType() == -11) {
+			NBTTagCompound packetTag = pkt.getNbtCompound();
+			int biomeID = packetTag.getInteger("biomeID");
+			MiscUtils.changeBiome(worldObj, Biome.getBiome(biomeID), pos.getX(), pos.getZ());
+		}
 	}
 	
 	public void changeBiomeAtPos(int biomeID) {
 		if(canChangeBiome) {
-			MiscUtils.changeBiome(worldObj, BiomeGenBase.getBiomeGenArray()[biomeID], xCoord, zCoord);
+			MiscUtils.changeBiome(worldObj, Biome.getBiome(biomeID), pos.getX(), pos.getZ());
 			NBTTagCompound nbttagcompound = new NBTTagCompound();
 			nbttagcompound.setInteger("biomeID", biomeID);
-			S35PacketUpdateTileEntity pkt = new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, -11, nbttagcompound);
-			MiscUtils.sendPacketToAllAround(worldObj, pkt, xCoord, yCoord, zCoord, worldObj.provider.dimensionId, 32);
+			SPacketUpdateTileEntity pkt = new SPacketUpdateTileEntity(pos, -11, nbttagcompound);
+			MiscUtils.sendPacketToAllAround(worldObj, pkt, pos.getX(), pos.getY(), pos.getZ(), worldObj.provider.getDimension(), 32);
 		}
 	}
 	
 	public void addPotionEffectAtEntity(EntityLivingBase e, PotionEffect p) {
-		if(!e.isPotionActive(p.getPotionID())) {
+		if(!e.isPotionActive(p.getPotion())) {
 			e.addPotionEffect(p);
 		}
 	}
 	
 	@SuppressWarnings("unchecked")
-	public void updateEntity() {
+	public void update() {
 		try {
-			super.updateEntity();
 			Potion potionToAdd = PotionRegistry.mruCorruptionPotion;
-			Block blk = worldObj.getBlock(xCoord, yCoord, zCoord);
+			Block blk = worldObj.getBlockState(pos).getBlock();
 			if(blk == BlocksCore.lightCorruption[0]) {
 				potionToAdd = PotionRegistry.chaosInfluence;
 			}
 			if(blk == BlocksCore.lightCorruption[1]) {
 				potionToAdd = PotionRegistry.frozenMind;
 			}
-			List<EntityPlayer> players = worldObj.getEntitiesWithinAABB(EntityPlayer.class, AxisAlignedBB.getBoundingBox(xCoord, yCoord, zCoord, xCoord+1, yCoord+1, zCoord+1));
+			List<EntityPlayer> players = worldObj.getEntitiesWithinAABB(EntityPlayer.class, new AxisAlignedBB(pos));
 			for(int i = 0; i < players.size(); ++i) {
 				if(!worldObj.isRemote) {
 					float increasement = 5;
@@ -78,29 +78,29 @@ public class TileCorruption extends TileEntity {
 			if(worldObj.rand.nextFloat() <= 0.0001F) {
 				int biomeId = 0;
 				if(blk == BlocksCore.lightCorruption[0]) {
-					biomeId = BiomeRegistry.chaosCorruption.biomeID;
+					biomeId = Biome.getIdForBiome(BiomeRegistry.chaosCorruption);
 				}
 				if(blk == BlocksCore.lightCorruption[1]) {
-					biomeId = BiomeRegistry.frozenCorruption.biomeID;
+					biomeId = Biome.getIdForBiome(BiomeRegistry.frozenCorruption);
 				}
 				if(blk == BlocksCore.lightCorruption[2]) {
-					biomeId = BiomeRegistry.shadowCorruption.biomeID;
+					biomeId = Biome.getIdForBiome(BiomeRegistry.shadowCorruption);
 				}
 				if(blk == BlocksCore.lightCorruption[3]) {
-					biomeId = BiomeRegistry.magicCorruption.biomeID;
+					biomeId = Biome.getIdForBiome(BiomeRegistry.magicCorruption);
 				}
 				if(!worldObj.isRemote)
 					changeBiomeAtPos(biomeId);
 			}
-			int metadata = worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
+			int metadata = worldObj.getBlockState(pos).getValue(BlockCorruption_Light.LEVEL);
 			if(metadata >= 7 && canDestroyBlocks) {
 				for(int i = 0; i < 6; ++i) {
-					ForgeDirection dir = ForgeDirection.VALID_DIRECTIONS[i];
-					if(worldObj.getTileEntity(xCoord+dir.offsetX, yCoord+dir.offsetY, zCoord+dir.offsetZ) == null && worldObj.getBlock(xCoord+dir.offsetX, yCoord+dir.offsetY, zCoord+dir.offsetZ).isBlockSolid(worldObj, xCoord+dir.offsetX, yCoord+dir.offsetY, zCoord+dir.offsetZ, dir.getOpposite().ordinal())) {
-						worldObj.setBlock(xCoord+dir.offsetX, yCoord+dir.offsetY, zCoord+dir.offsetZ, blk, 0, 3);
+					EnumFacing dir = EnumFacing.getFront(i);
+					if(worldObj.getTileEntity(pos.offset(dir)) == null && worldObj.getBlockState(pos.offset(dir)).getBlock().isBlockSolid(worldObj, pos.offset(dir), dir.getOpposite())) {
+						worldObj.setBlockState(pos.offset(dir), blk.getStateFromMeta(0), 3);
 					}
 				}
-				worldObj.setBlock(xCoord, yCoord, zCoord, Blocks.air, 0, 3);
+				worldObj.setBlockToAir(pos);
 			}
 		}
 		catch (Exception e) {
@@ -112,7 +112,7 @@ public class TileCorruption extends TileEntity {
 	public static void setupConfig(Configuration cfg) {
 		try {
 			cfg.load();
-			String[] cfgArrayString = cfg.getStringList("CorruptionSettings", "tileentities", new String[]{
+			String[] cfgArrayString = cfg.getStringList("CorruptionSettings", "tileentities", new String[] {
 					"Change Biome:true",
 					"Destroy Blocks if grown:true"
 			}, "Settings of the given Device.");

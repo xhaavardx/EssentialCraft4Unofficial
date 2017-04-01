@@ -1,0 +1,448 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "essentialcraft:cube_colored",
+        "textures": {
+            "down": "essentialcraft:blocks/invertedPlatingBlock",
+            "up": "essentialcraft:blocks/invertedPlatingBlock",
+            "north": "essentialcraft:blocks/invertedPlatingBlock",
+            "south": "essentialcraft:blocks/invertedPlatingBlock",
+            "west": "essentialcraft:blocks/invertedPlatingBlock",
+            "east": "essentialcraft:blocks/invertedPlatingBlock",
+            "particle": "essentialcraft:blocks/invertedPlatingBlock"
+        }
+    },
+    "variants": {
+        "down=false,east=false,north=false,south=false,up=false,west=false": [{}],
+        "down=true,east=false,north=false,south=false,up=false,west=false": [{
+            "textures": {
+                "north": "essentialcraft:blocks/ct/invertedPlating/t",
+                "south": "essentialcraft:blocks/ct/invertedPlating/t",
+                "west": "essentialcraft:blocks/ct/invertedPlating/t",
+                "east": "essentialcraft:blocks/ct/invertedPlating/t"
+            }
+        }],
+        "down=false,east=true,north=false,south=false,up=false,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/invertedPlating/l",
+                "up": "essentialcraft:blocks/ct/invertedPlating/l",
+                "north": "essentialcraft:blocks/ct/invertedPlating/r",
+                "south": "essentialcraft:blocks/ct/invertedPlating/l"
+            }
+        }],
+        "down=true,east=true,north=false,south=false,up=false,west=false": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/invertedPlating/l",
+                "north": "essentialcraft:blocks/ct/invertedPlating/tr",
+                "south": "essentialcraft:blocks/ct/invertedPlating/tl",
+                "west": "essentialcraft:blocks/ct/invertedPlating/t"
+            }
+        }],
+        "down=false,east=false,north=true,south=false,up=false,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/invertedPlating/t",
+                "up": "essentialcraft:blocks/ct/invertedPlating/b",
+                "west": "essentialcraft:blocks/ct/invertedPlating/r",
+                "east": "essentialcraft:blocks/ct/invertedPlating/l"
+            }
+        }],
+        "down=true,east=false,north=true,south=false,up=false,west=false": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/invertedPlating/b",
+                "south": "essentialcraft:blocks/ct/invertedPlating/t",
+                "west": "essentialcraft:blocks/ct/invertedPlating/tr",
+                "east": "essentialcraft:blocks/ct/invertedPlating/tl"
+            }
+        }],
+        "down=false,east=true,north=true,south=false,up=false,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/invertedPlating/tl",
+                "up": "essentialcraft:blocks/ct/invertedPlating/bl",
+                "south": "essentialcraft:blocks/ct/invertedPlating/l",
+                "west": "essentialcraft:blocks/ct/invertedPlating/r"
+            }
+        }],
+        "down=true,east=true,north=true,south=false,up=false,west=false": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/invertedPlating/bl",
+                "south": "essentialcraft:blocks/ct/invertedPlating/tl",
+                "west": "essentialcraft:blocks/ct/invertedPlating/tr"
+            }
+        }],
+        "down=false,east=false,north=false,south=true,up=false,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/invertedPlating/b",
+                "up": "essentialcraft:blocks/ct/invertedPlating/t",
+                "west": "essentialcraft:blocks/ct/invertedPlating/l",
+                "east": "essentialcraft:blocks/ct/invertedPlating/r"
+            }
+        }],
+        "down=true,east=false,north=false,south=true,up=false,west=false": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/invertedPlating/t",
+                "north": "essentialcraft:blocks/ct/invertedPlating/t",
+                "west": "essentialcraft:blocks/ct/invertedPlating/tl",
+                "east": "essentialcraft:blocks/ct/invertedPlating/tr"
+            }
+        }],
+        "down=false,east=true,north=false,south=true,up=false,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/invertedPlating/bl",
+                "up": "essentialcraft:blocks/ct/invertedPlating/tl",
+                "north": "essentialcraft:blocks/ct/invertedPlating/r",
+                "west": "essentialcraft:blocks/ct/invertedPlating/l"
+            }
+        }],
+        "down=true,east=true,north=false,south=true,up=false,west=false": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/invertedPlating/tl",
+                "north": "essentialcraft:blocks/ct/invertedPlating/tr",
+                "west": "essentialcraft:blocks/ct/invertedPlating/tl"
+            }
+        }],
+        "down=false,east=false,north=true,south=true,up=false,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/invertedPlating/tb",
+                "up": "essentialcraft:blocks/ct/invertedPlating/tb",
+                "west": "essentialcraft:blocks/ct/invertedPlating/lr",
+                "east": "essentialcraft:blocks/ct/invertedPlating/lr"
+            }
+        }],
+        "down=true,east=false,north=true,south=true,up=false,west=false": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/invertedPlating/tb",
+                "west": "essentialcraft:blocks/ct/invertedPlating/lrt",
+                "east": "essentialcraft:blocks/ct/invertedPlating/lrt"
+            }
+        }],
+        "down=false,east=true,north=true,south=true,up=false,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/invertedPlating/tbl",
+                "up": "essentialcraft:blocks/ct/invertedPlating/tbl",
+                "west": "essentialcraft:blocks/ct/invertedPlating/lr"
+            }
+        }],
+        "down=true,east=true,north=true,south=true,up=false,west=false": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/invertedPlating/tbl",
+                "west": "essentialcraft:blocks/ct/invertedPlating/lrt"
+            }
+        }],
+        "down=false,east=false,north=false,south=false,up=true,west=false": [{
+            "textures": {
+                "north": "essentialcraft:blocks/ct/invertedPlating/b",
+                "south": "essentialcraft:blocks/ct/invertedPlating/b",
+                "west": "essentialcraft:blocks/ct/invertedPlating/b",
+                "east": "essentialcraft:blocks/ct/invertedPlating/b"
+            }
+        }],
+        "down=true,east=false,north=false,south=false,up=true,west=false": [{
+            "textures": {
+                "north": "essentialcraft:blocks/ct/invertedPlating/tb",
+                "south": "essentialcraft:blocks/ct/invertedPlating/tb",
+                "west": "essentialcraft:blocks/ct/invertedPlating/tb",
+                "east": "essentialcraft:blocks/ct/invertedPlating/tb"
+            }
+        }],
+        "down=false,east=true,north=false,south=false,up=true,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/invertedPlating/l",
+                "north": "essentialcraft:blocks/ct/invertedPlating/br",
+                "south": "essentialcraft:blocks/ct/invertedPlating/bl",
+                "west": "essentialcraft:blocks/ct/invertedPlating/b"
+            }
+        }],
+        "down=true,east=true,north=false,south=false,up=true,west=false": [{
+            "textures": {
+                "north": "essentialcraft:blocks/ct/invertedPlating/tbr",
+                "south": "essentialcraft:blocks/ct/invertedPlating/tbl",
+                "west": "essentialcraft:blocks/ct/invertedPlating/tb"
+            }
+        }],
+        "down=false,east=false,north=true,south=false,up=true,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/invertedPlating/t",
+                "south": "essentialcraft:blocks/ct/invertedPlating/b",
+                "west": "essentialcraft:blocks/ct/invertedPlating/br",
+                "east": "essentialcraft:blocks/ct/invertedPlating/bl"
+            }
+        }],
+        "down=true,east=false,north=true,south=false,up=true,west=false": [{
+            "textures": {
+                "south": "essentialcraft:blocks/ct/invertedPlating/tb",
+                "west": "essentialcraft:blocks/ct/invertedPlating/tbr",
+                "east": "essentialcraft:blocks/ct/invertedPlating/tbl"
+            }
+        }],
+        "down=false,east=true,north=true,south=false,up=true,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/invertedPlating/tl",
+                "south": "essentialcraft:blocks/ct/invertedPlating/bl",
+                "west": "essentialcraft:blocks/ct/invertedPlating/br"
+            }
+        }],
+        "down=true,east=true,north=true,south=false,up=true,west=false": [{
+           "textures": {
+                "south": "essentialcraft:blocks/ct/invertedPlating/tbl",
+                "west": "essentialcraft:blocks/ct/invertedPlating/tbr"
+            } 
+        }],
+        "down=false,east=false,north=false,south=true,up=true,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/invertedPlating/b",
+                "north": "essentialcraft:blocks/ct/invertedPlating/b",
+                "west": "essentialcraft:blocks/ct/invertedPlating/bl",
+                "east": "essentialcraft:blocks/ct/invertedPlating/br"
+            }
+        }],
+        "down=true,east=false,north=false,south=true,up=true,west=false": [{
+            "textures": {
+                "north": "essentialcraft:blocks/ct/invertedPlating/tb",
+                "west": "essentialcraft:blocks/ct/invertedPlating/tbl",
+                "east": "essentialcraft:blocks/ct/invertedPlating/tbr"
+            }
+        }],
+        "down=false,east=true,north=false,south=true,up=true,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/invertedPlating/bl",
+                "north": "essentialcraft:blocks/ct/invertedPlating/br",
+                "west": "essentialcraft:blocks/ct/invertedPlating/bl"
+            }
+        }],
+        "down=true,east=true,north=false,south=true,up=true,west=false": [{
+            "textures": {
+                "north": "essentialcraft:blocks/ct/invertedPlating/tbr",
+                "west": "essentialcraft:blocks/ct/invertedPlating/tbl"
+            }
+        }],
+        "down=false,east=false,north=true,south=true,up=true,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/invertedPlating/tb",
+                "west": "essentialcraft:blocks/ct/invertedPlating/lrb",
+                "east": "essentialcraft:blocks/ct/invertedPlating/lrb"
+            }
+        }],
+        "down=true,east=false,north=true,south=true,up=true,west=false": [{
+            "textures": {
+                "west": "essentialcraft:blocks/ct/invertedPlating/tblr",
+                "east": "essentialcraft:blocks/ct/invertedPlating/tblr"
+            }
+        }],
+        "down=false,east=true,north=true,south=true,up=true,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/invertedPlating/tbl",
+                "west": "essentialcraft:blocks/ct/invertedPlating/lrb"
+            }
+        }],
+        "down=true,east=true,north=true,south=true,up=true,west=false": [{
+            "textures": {
+                "west": "essentialcraft:blocks/ct/invertedPlating/tblr"
+            }
+        }],
+        "down=false,east=false,north=false,south=false,up=false,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/invertedPlating/r",
+                "up": "essentialcraft:blocks/ct/invertedPlating/r",
+                "north": "essentialcraft:blocks/ct/invertedPlating/l",
+                "south": "essentialcraft:blocks/ct/invertedPlating/r"
+            }
+        }],
+        "down=true,east=false,north=false,south=false,up=false,west=true": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/invertedPlating/r",
+                "north": "essentialcraft:blocks/ct/invertedPlating/tl",
+                "south": "essentialcraft:blocks/ct/invertedPlating/tr",
+                "east": "essentialcraft:blocks/ct/invertedPlating/t"
+            }
+        }],
+        "down=false,east=true,north=false,south=false,up=false,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/invertedPlating/lr",
+                "up": "essentialcraft:blocks/ct/invertedPlating/lr",
+                "north": "essentialcraft:blocks/ct/invertedPlating/lr",
+                "south": "essentialcraft:blocks/ct/invertedPlating/lr"
+            }
+        }],
+        "down=true,east=true,north=false,south=false,up=false,west=true": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/invertedPlating/lr",
+                "north": "essentialcraft:blocks/ct/invertedPlating/lrt",
+                "south": "essentialcraft:blocks/ct/invertedPlating/lrt"
+            }
+        }],
+        "down=false,east=false,north=true,south=false,up=false,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/invertedPlating/tr",
+                "up": "essentialcraft:blocks/ct/invertedPlating/br",
+                "south": "essentialcraft:blocks/ct/invertedPlating/r",
+                "east": "essentialcraft:blocks/ct/invertedPlating/l"
+            }
+        }],
+        "down=true,east=false,north=true,south=false,up=false,west=true": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/invertedPlating/br",
+                "south": "essentialcraft:blocks/ct/invertedPlating/tr",
+                "east": "essentialcraft:blocks/ct/invertedPlating/tl"
+            }
+        }],
+        "down=false,east=true,north=true,south=false,up=false,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/invertedPlating/lrt",
+                "up": "essentialcraft:blocks/ct/invertedPlating/lrb",
+                "south": "essentialcraft:blocks/ct/invertedPlating/lr"
+            }
+        }],
+        "down=true,east=true,north=true,south=false,up=false,west=true": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/invertedPlating/lrb",
+                "south": "essentialcraft:blocks/ct/invertedPlating/lrt"
+            }
+        }],
+        "down=false,east=false,north=false,south=true,up=false,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/invertedPlating/br",
+                "up": "essentialcraft:blocks/ct/invertedPlating/tr",
+                "north": "essentialcraft:blocks/ct/invertedPlating/l",
+                "east": "essentialcraft:blocks/ct/invertedPlating/r"
+            }
+        }],
+        "down=true,east=false,north=false,south=true,up=false,west=true": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/invertedPlating/tr",
+                "north": "essentialcraft:blocks/ct/invertedPlating/tl",
+                "east": "essentialcraft:blocks/ct/invertedPlating/tr"
+            }
+        }],
+        "down=false,east=true,north=false,south=true,up=false,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/invertedPlating/lrb",
+                "up": "essentialcraft:blocks/ct/invertedPlating/lrt",
+                "north": "essentialcraft:blocks/ct/invertedPlating/lr"
+            }
+        }],
+        "down=true,east=true,north=false,south=true,up=false,west=true": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/invertedPlating/lrt",
+                "north": "essentialcraft:blocks/ct/invertedPlating/lrt"
+            }
+        }],
+        "down=false,east=false,north=true,south=true,up=false,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/invertedPlating/tbr",
+                "up": "essentialcraft:blocks/ct/invertedPlating/tbr",
+                "east": "essentialcraft:blocks/ct/invertedPlating/lr"
+            }
+        }],
+        "down=true,east=false,north=true,south=true,up=false,west=true": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/invertedPlating/tbr",
+                "east": "essentialcraft:blocks/ct/invertedPlating/lrt"
+            }
+        }],
+        "down=false,east=true,north=true,south=true,up=false,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/invertedPlating/tblr",
+                "up": "essentialcraft:blocks/ct/invertedPlating/tblr"
+            }
+        }],
+        "down=true,east=true,north=true,south=true,up=false,west=true": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/invertedPlating/tblr"
+            }
+        }],
+        "down=false,east=false,north=false,south=false,up=true,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/invertedPlating/r",
+                "north": "essentialcraft:blocks/ct/invertedPlating/bl",
+                "south": "essentialcraft:blocks/ct/invertedPlating/br",
+                "east": "essentialcraft:blocks/ct/invertedPlating/b"
+            }
+        }],
+        "down=true,east=false,north=false,south=false,up=true,west=true": [{
+            "textures": {
+                "north": "essentialcraft:blocks/ct/invertedPlating/tbl",
+                "south": "essentialcraft:blocks/ct/invertedPlating/tbr",
+                "east": "essentialcraft:blocks/ct/invertedPlating/tb"
+            }
+        }],
+        "down=false,east=true,north=false,south=false,up=true,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/invertedPlating/lr",
+                "north": "essentialcraft:blocks/ct/invertedPlating/lrb",
+                "south": "essentialcraft:blocks/ct/invertedPlating/lrb"
+            }
+        }],
+        "down=true,east=true,north=false,south=false,up=true,west=true": [{
+            "textures": {
+                "north": "essentialcraft:blocks/ct/invertedPlating/tblr",
+                "south": "essentialcraft:blocks/ct/invertedPlating/tblr"
+            }
+        }],
+        "down=false,east=false,north=true,south=false,up=true,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/invertedPlating/tr",
+                "south": "essentialcraft:blocks/ct/invertedPlating/br",
+                "east": "essentialcraft:blocks/ct/invertedPlating/bl"
+            }
+        }],
+        "down=true,east=false,north=true,south=false,up=true,west=true": [{
+            "textures": {
+                "south": "essentialcraft:blocks/ct/invertedPlating/tbr",
+                "east": "essentialcraft:blocks/ct/invertedPlating/tbl"
+            }
+        }],
+        "down=false,east=true,north=true,south=false,up=true,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/invertedPlating/lrt",
+                "south": "essentialcraft:blocks/ct/invertedPlating/lrb"
+            }
+        }],
+        "down=true,east=true,north=true,south=false,up=true,west=true": [{
+            "textures": {
+                "south": "essentialcraft:blocks/ct/invertedPlating/tblr"
+            }
+        }],
+        "down=false,east=false,north=false,south=true,up=true,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/invertedPlating/br",
+                "north": "essentialcraft:blocks/ct/invertedPlating/bl",
+                "east": "essentialcraft:blocks/ct/invertedPlating/br"
+            }
+        }],
+        "down=true,east=false,north=false,south=true,up=true,west=true": [{
+            "textures": {
+                "north": "essentialcraft:blocks/ct/invertedPlating/tbl",
+                "east": "essentialcraft:blocks/ct/invertedPlating/tbr"
+            }
+        }],
+        "down=false,east=true,north=false,south=true,up=true,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/invertedPlating/lrb",
+                "north": "essentialcraft:blocks/ct/invertedPlating/lrb"
+            }
+        }],
+        "down=true,east=true,north=false,south=true,up=true,west=true": [{
+            "textures": {
+                "north": "essentialcraft:blocks/ct/invertedPlating/tblr"
+            }
+        }],
+        "down=false,east=false,north=true,south=true,up=true,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/invertedPlating/tbr",
+                "east": "essentialcraft:blocks/ct/invertedPlating/lrb"
+            }
+        }],
+        "down=true,east=false,north=true,south=true,up=true,west=true": [{
+            "textures": {
+                "east": "essentialcraft:blocks/ct/invertedPlating/tblr"
+            }
+        }],
+        "down=false,east=true,north=true,south=true,up=true,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/invertedPlating/tblr"
+            }
+        }],
+        "down=true,east=true,north=true,south=true,up=true,west=true": [{}],
+        "inventory": [{}]
+    }
+}

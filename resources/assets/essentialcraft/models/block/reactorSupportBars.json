@@ -1,0 +1,50 @@
+{
+    "__comment": "Model generated using MrCrayfish's Model Creator (http://mrcrayfish.com/modelcreator/)",
+    "parent": "minecraft:block/block",
+    "ambientocclusion": false,
+    "textures": {
+        "0": "essentialcraft:blocks/fortifiedStone",
+        "particle": "essentialcraft:blocks/fortifiedStone"
+    },
+    "elements": [
+        {
+            "name": "cube_0",
+            "from": [ 7.2, 9.6, -6.4 ], 
+            "to": [ 8.8, 11.2, 9.6 ], 
+            "faces": {
+                "north": { "texture": "#0", "uv": [ 7.2, 7.2, 8.8, 8.8 ] },
+                "east": { "texture": "#0", "uv": [ 0.0, 7.2, 16.0, 8.8 ] },
+                "south": { "texture": "#0", "uv": [ 7.2, 7.2, 8.8, 8.8 ] },
+                "west": { "texture": "#0", "uv": [ 0.0, 7.2, 16.0, 8.8 ] },
+                "up": { "texture": "#0", "uv": [ 7.2, 0.0, 8.8, 16.0 ] },
+                "down": { "texture": "#0", "uv": [ 7.2, 0.0, 8.8, 16.0 ] }
+            }
+        },
+        {
+            "name": "cube_1",
+            "from": [ 7.2, 15.2, -6.4 ], 
+            "to": [ 8.8, 16.8, 9.6 ], 
+            "faces": {
+                "north": { "texture": "#0", "uv": [ 7.2, 7.2, 8.8, 8.8 ] },
+                "east": { "texture": "#0", "uv": [ 0.0, 7.2, 16.0, 8.8 ] },
+                "south": { "texture": "#0", "uv": [ 7.2, 7.2, 8.8, 8.8 ] },
+                "west": { "texture": "#0", "uv": [ 0.0, 7.2, 16.0, 8.8 ] },
+                "up": { "texture": "#0", "uv": [ 7.2, 0.0, 8.8, 16.0 ] },
+                "down": { "texture": "#0", "uv": [ 7.2, 0.0, 8.8, 16.0 ] }
+            }
+        },
+        {
+            "name": "cube_2",
+            "from": [ 7.2, 20.8, -6.4 ], 
+            "to": [ 8.8, 22.4, 9.6 ], 
+            "faces": {
+                "north": { "texture": "#0", "uv": [ 7.2, 7.2, 8.8, 8.8 ] },
+                "east": { "texture": "#0", "uv": [ 0.0, 7.2, 16.0, 8.8 ] },
+                "south": { "texture": "#0", "uv": [ 7.2, 7.2, 8.8, 8.8 ] },
+                "west": { "texture": "#0", "uv": [ 0.0, 7.2, 16.0, 8.8 ] },
+                "up": { "texture": "#0", "uv": [ 7.2, 0.0, 8.8, 16.0 ] },
+                "down": { "texture": "#0", "uv": [ 7.2, 0.0, 8.8, 16.0 ] }
+            }
+        }
+    ]
+}

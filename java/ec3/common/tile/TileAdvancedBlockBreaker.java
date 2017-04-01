@@ -1,13 +1,15 @@
 package ec3.common.tile;
 
+import ec3.common.block.BlockAdvBlockBreaker;
 import ec3.common.inventory.InventoryMagicFilter;
 import ec3.common.item.ItemFilter;
 import ec3.utils.common.ECUtils;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
 
 public class TileAdvancedBlockBreaker extends TileMRUGeneric {
 
@@ -16,11 +18,11 @@ public class TileAdvancedBlockBreaker extends TileMRUGeneric {
 		setSlotsNum(1);
 	}
 	
-	public ForgeDirection getRotation() {
-		int metadata = worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
+	public EnumFacing getRotation() {
+		int metadata = worldObj.getBlockState(pos).getValue(BlockAdvBlockBreaker.FACING).getIndex();
 		if(metadata > 5)
-			metadata -= 6;
-		return ForgeDirection.getOrientation(metadata);
+			metadata %= 6;
+		return EnumFacing.getFront(metadata);
 	}
 	
 	@Override
@@ -30,25 +32,27 @@ public class TileAdvancedBlockBreaker extends TileMRUGeneric {
 	
 	public void breakBlocks() {
 		for(int i = 1; i < 13; ++i) {
-			Block b = worldObj.getBlock(xCoord + getRotation().offsetX*i, yCoord + getRotation().offsetY*i, zCoord + getRotation().offsetZ*i);
-			if(b != null && !b.isAir(worldObj, xCoord + getRotation().offsetX*i, yCoord + getRotation().offsetY*i, zCoord + getRotation().offsetZ*i)) {
-				ItemStack fromBlock = new ItemStack(b,1,worldObj.getBlockMetadata(xCoord + getRotation().offsetX*i, yCoord + getRotation().offsetY*i, zCoord + getRotation().offsetZ*i));
+			BlockPos p = new BlockPos(pos.getX() + getRotation().getFrontOffsetX()*i, pos.getY() + getRotation().getFrontOffsetY()*i, pos.getZ() + getRotation().getFrontOffsetZ()*i);
+			Block b = worldObj.getBlockState(p).getBlock();
+			if(b != null && !b.isAir(worldObj.getBlockState(p), worldObj, p)) {
+				ItemStack fromBlock = new ItemStack(b,1,worldObj.getBlockState(p).getValue(BlockAdvBlockBreaker.FACING).getIndex());
 				World w = worldObj;
-				int dX = xCoord + getRotation().offsetX*i;
-				int dY = yCoord + getRotation().offsetY*i;
-				int dZ = zCoord + getRotation().offsetZ*i;
+				int dX = pos.getX() + getRotation().getFrontOffsetX()*i;
+				int dY = pos.getY() + getRotation().getFrontOffsetY()*i;
+				int dZ = pos.getZ() + getRotation().getFrontOffsetZ()*i;
+				BlockPos dP = new BlockPos(dX, dY, dZ);
 				if(getStackInSlot(0) == null || !(getStackInSlot(0).getItem() instanceof ItemFilter)) {
-					b.breakBlock(w, dX, dY, dZ, b, w.getBlockMetadata(dX, dY, dZ));
-					b.onBlockDestroyedByPlayer(w, dX, dY, dZ, w.getBlockMetadata(dX, dY, dZ));
-					b.dropBlockAsItem(w, dX, dY, dZ, w.getBlockMetadata(dX, dY, dZ), 0);
-					w.setBlock(dX, dY, dZ, Blocks.air, 0, 2);
+					b.breakBlock(w, dP, w.getBlockState(dP));
+					b.onBlockDestroyedByPlayer(w, dP, w.getBlockState(dP));
+					b.dropBlockAsItem(w, dP, w.getBlockState(dP), 0);
+					w.setBlockState(dP, Blocks.AIR.getDefaultState(), 2);
 				}
 				else {
 					if(ECUtils.canFilterAcceptItem(new InventoryMagicFilter(getStackInSlot(0)), fromBlock, getStackInSlot(0))) {
-						b.breakBlock(w, dX, dY, dZ, b, w.getBlockMetadata(dX, dY, dZ));
-						b.onBlockDestroyedByPlayer(w, dX, dY, dZ, w.getBlockMetadata(dX, dY, dZ));
-						b.dropBlockAsItem(w, dX, dY, dZ, w.getBlockMetadata(dX, dY, dZ), 0);
-						w.setBlock(dX, dY, dZ, Blocks.air, 0, 2);
+						b.breakBlock(w, dP, w.getBlockState(dP));
+						b.onBlockDestroyedByPlayer(w, dP, w.getBlockState(dP));
+						b.dropBlockAsItem(w, dP, w.getBlockState(dP), 0);
+						w.setBlockState(dP, Blocks.AIR.getDefaultState(), 2);
 					}
 				}
 			}

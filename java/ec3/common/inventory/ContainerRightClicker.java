@@ -1,7 +1,5 @@
 package ec3.common.inventory;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Items;
@@ -10,7 +8,6 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
 
 public class ContainerRightClicker extends Container {
 	
@@ -21,16 +18,16 @@ public class ContainerRightClicker extends Container {
 		addSlotToContainer(new SlotBoundEssence(inv, 0, 26, 41));
 		
 		if(par2.getBlockMetadata() == 0 || par2.getBlockMetadata() == 1) {
-			addSlotToContainer(new SlotGeneric(inv, 1, 80, 24, Items.stick.getIconFromDamage(0)));
+			addSlotToContainer(new SlotGeneric(inv, 1, 80, 24, "minecraft:items/stick"));
 			sizeInventory = 3;
 		}
 		else {
 			for(int i = 0; i < 9; ++i) {
-				addSlotToContainer(new SlotGeneric(inv, 1 + i, 62 + (i%3*18), 6 + (i/3*18), Items.stick.getIconFromDamage(0)));
+				addSlotToContainer(new SlotGeneric(inv, 1 + i, 62 + (i%3*18), 6 + (i/3*18), "minecraft:items/stick"));
 			}
 			sizeInventory = 11;
 		}
-		addSlotToContainer(new SlotGeneric(inv, 10, 156, 4, Items.dye.getIconFromDamage(8)));
+		addSlotToContainer(new SlotGeneric(inv, 10, 156, 4, "minecraft:items/dye_powder_gray"));
 		int i;
 		
 		for(i = 0; i < 3; ++i) {

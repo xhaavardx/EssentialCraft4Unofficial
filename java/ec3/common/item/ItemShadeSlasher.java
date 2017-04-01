@@ -1,52 +1,28 @@
 package ec3.common.item;
 
-import net.minecraft.client.renderer.texture.IIconRegister;
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
+
+import DummyCore.Client.ModelUtils;
+import DummyCore.Utils.MiscUtils;
+import ec3.api.IShadeCreature;
+import ec3.utils.common.ECUtils;
+import ec3.utils.common.ShadeUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.MobEffects;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.IIcon;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-import DummyCore.Utils.MiscUtils;
 
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Multimap;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import ec3.api.IShadeCreature;
-import ec3.utils.common.ECUtils;
-import ec3.utils.common.ShadeUtils;
-
-public class ItemShadeSlasher extends ItemSword_Mod{
-
-	public IIcon[] swordIcons = new IIcon[2];
-	
-    @SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegister r)
-    {
-    	this.itemIcon = r.registerIcon(this.iconString+"_gen");
-    	swordIcons[0] = r.registerIcon(this.iconString+"_gen");
-    	swordIcons[1] = r.registerIcon(this.iconString+"_player");
-    }
-    
-    @SideOnly(Side.CLIENT)
-    public IIcon getIconIndex(ItemStack stack)
-    {
-    	return getIcon(stack,0);
-    }
-    
-    public IIcon getIcon(ItemStack stack, int pass)
-    {
-    	return MiscUtils.getStackTag(stack).getBoolean("active") ? swordIcons[0] : swordIcons[1];
-    }
+public class ItemShadeSlasher extends ItemSword_Mod {
 	
 	public ItemShadeSlasher() {
 		super(ItemsCore.shade);
@@ -73,7 +49,7 @@ public class ItemShadeSlasher extends ItemSword_Mod{
 	public void onUpdate(ItemStack sword, World w, Entity e, int slotNum, boolean held) 
 	{
 		if(e instanceof EntityLivingBase && !w.isRemote && held)
-			EntityLivingBase.class.cast(e).addPotionEffect(new PotionEffect(Potion.digSlowdown.id,3,3,true));
+			EntityLivingBase.class.cast(e).addPotionEffect(new PotionEffect(MobEffects.MINING_FATIGUE,3,3,true,true));
 		if(e instanceof IShadeCreature)
 			toggleActivity(sword,true);
 		
@@ -88,12 +64,11 @@ public class ItemShadeSlasher extends ItemSword_Mod{
 	}
 	
 	@Override
-    @SuppressWarnings({ "rawtypes", "unchecked" })
-	public Multimap getAttributeModifiers(ItemStack stack)
+	public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot s, ItemStack stack)
     {
-    	Multimap mp = HashMultimap.create();
-    	if(MiscUtils.getStackTag(stack).getBoolean("active"))
-    		mp.put(SharedMonsterAttributes.attackDamage.getAttributeUnlocalizedName(), new AttributeModifier(field_111210_e, "Weapon modifier", 32, 0));
+    	Multimap<String, AttributeModifier> mp = HashMultimap.<String, AttributeModifier>create();
+    	if(MiscUtils.getStackTag(stack).getBoolean("active") && s == EntityEquipmentSlot.MAINHAND)
+    		mp.put(SharedMonsterAttributes.ATTACK_DAMAGE.getAttributeUnlocalizedName(), new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", 32, 0));
     	return mp;
     }
 	
@@ -126,11 +101,15 @@ public class ItemShadeSlasher extends ItemSword_Mod{
     			if(attacker.worldObj.rand.nextFloat() <= 0.01F)
     			{
     				//instagib
-    				attacker.addPotionEffect(new PotionEffect(Potion.damageBoost.id,20,20,true));
+    				attacker.addPotionEffect(new PotionEffect(MobEffects.STRENGTH,20,20,true,true));
     			}
     		}
     	}
     	return false;
     }
 
+	@Override
+	public void registerModels() {
+		ModelUtils.setItemModelNBTActive(this, "essentialcraft:item/shadeSlasher");
+	}
 }

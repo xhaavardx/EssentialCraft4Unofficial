@@ -16,7 +16,7 @@ public class ContainerMagicalChest extends Container {
 	
 	public ContainerMagicalChest(InventoryPlayer inventoryPlayer, TileMagicalChest chest) {
 		tile = chest;
-		chest.openInventory();
+		chest.openInventory(inventoryPlayer.player);
 		
 		if(tile.getBlockMetadata() == 0) {
 			chestInventoryRows = 6;
@@ -56,7 +56,7 @@ public class ContainerMagicalChest extends Container {
 	@Override
 	public void onContainerClosed(EntityPlayer entityPlayer) {
 		super.onContainerClosed(entityPlayer);
-		tile.closeInventory();
+		tile.closeInventory(entityPlayer);
 	}
 	
 	@Override

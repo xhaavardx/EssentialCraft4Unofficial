@@ -1,0 +1,11 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "minecraft:cube_all",
+        "textures": { "all": "minecraft:blocks/cauldron_top" }
+    },
+    "variants": {
+        "normal": [{}],
+        "inventory": [{}]
+    }
+}

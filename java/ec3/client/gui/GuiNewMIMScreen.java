@@ -10,6 +10,7 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
 import DummyCore.Client.GuiElement;
+import DummyCore.Utils.DrawUtils;
 import DummyCore.Utils.MathUtils;
 import DummyCore.Utils.MiscUtils;
 import ec3.client.gui.element.GuiMRUStorage;
@@ -23,12 +24,13 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.ResourceLocation;
 
 public class GuiNewMIMScreen extends GuiContainer{
@@ -85,32 +87,38 @@ public class GuiNewMIMScreen extends GuiContainer{
     
     protected void keyTyped(char c, int keyID)
     {
-        if (this.search.textboxKeyTyped(c, keyID) || (isValidInt(c,keyID) && stackSize.textboxKeyTyped(c, keyID)))
-        {
-        	setupMaxInt();
-        }
-        else
-        {
-        	if(keyID == 28 && selectedStack != null)
-        	{
-        		this.actionPerformed(GuiButton.class.cast(buttonList.get(26)));
-        	}
-            super.keyTyped(c, keyID);
-        }
+    	try {
+    		if (this.search.textboxKeyTyped(c, keyID) || (isValidInt(c,keyID) && stackSize.textboxKeyTyped(c, keyID)))
+    		{
+    			setupMaxInt();
+    		}
+    		else
+    		{
+    			if(keyID == 28 && selectedStack != null)
+    			{
+    				this.actionPerformed(GuiButton.class.cast(buttonList.get(26)));
+    			}
+    			super.keyTyped(c, keyID);
+    		}
+    	}
+        catch(Exception e) {}
     }
     
     protected void mouseClicked(int p_73864_1_, int p_73864_2_, int p_73864_3_)
     {
-        super.mouseClicked(p_73864_1_, p_73864_2_, p_73864_3_);
-        this.search.mouseClicked(p_73864_1_, p_73864_2_, p_73864_3_);
-        this.stackSize.mouseClicked(p_73864_1_, p_73864_2_, p_73864_3_);
+    	try {
+    		super.mouseClicked(p_73864_1_, p_73864_2_, p_73864_3_);
+    		this.search.mouseClicked(p_73864_1_, p_73864_2_, p_73864_3_);
+    		this.stackSize.mouseClicked(p_73864_1_, p_73864_2_, p_73864_3_);
+    	}
+    	catch(Exception e) {}
     }
     
     public void drawScreen(int p_73863_1_, int p_73863_2_, float p_73863_3_)
     {
         super.drawScreen(p_73863_1_, p_73863_2_, p_73863_3_);
-        GL11.glDisable(GL11.GL_LIGHTING);
-        GL11.glDisable(GL11.GL_BLEND);
+        GlStateManager.disableLighting();
+        GlStateManager.disableBlend();
         this.search.drawTextBox();
         this.stackSize.drawTextBox();
     }
@@ -127,14 +135,14 @@ public class GuiNewMIMScreen extends GuiContainer{
 	    {
 	        if (this.visible)
 	        {
-	            FontRenderer fontrenderer = p_146112_1_.fontRenderer;
-	            p_146112_1_.getTextureManager().bindTexture(buttonTextures);
-	            GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-	            this.field_146123_n = p_146112_2_ >= this.xPosition && p_146112_3_ >= this.yPosition && p_146112_2_ < this.xPosition + this.width && p_146112_3_ < this.yPosition + this.height;
-	            int k = this.getHoverState(this.field_146123_n);
-	            GL11.glEnable(GL11.GL_BLEND);
+	            FontRenderer fontrenderer = p_146112_1_.fontRendererObj;
+	            p_146112_1_.getTextureManager().bindTexture(BUTTON_TEXTURES);
+	            GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+	            this.hovered = p_146112_2_ >= this.xPosition && p_146112_3_ >= this.yPosition && p_146112_2_ < this.xPosition + this.width && p_146112_3_ < this.yPosition + this.height;
+	            int k = this.getHoverState(this.hovered);
+	            GlStateManager.enableBlend();
 	            OpenGlHelper.glBlendFunc(770, 771, 1, 0);
-	            GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+	            GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 	            this.drawTexturedModalRect(this.xPosition, this.yPosition, 0, 46 + k * 20, this.width / 2, this.height);
 	            this.drawTexturedModalRect(this.xPosition + this.width / 2, this.yPosition, 200 - this.width / 2, 46 + k * 20, this.width / 2, this.height);
 	            this.mouseDragged(p_146112_1_, p_146112_2_, p_146112_3_);
@@ -148,23 +156,23 @@ public class GuiNewMIMScreen extends GuiContainer{
 	            {
 	                l = 10526880;
 	            }
-	            else if (this.field_146123_n)
+	            else if (this.hovered)
 	            {
 	                l = 16777120;
 	            }
 	            
-	            boolean unicode = Minecraft.getMinecraft().gameSettings.forceUnicodeFont || Minecraft.getMinecraft().fontRenderer.getUnicodeFlag();
+	            boolean unicode = Minecraft.getMinecraft().gameSettings.forceUnicodeFont || Minecraft.getMinecraft().fontRendererObj.getUnicodeFlag();
 
 	            if(!unicode)
-	            	GL11.glScalef(0.5F, 0.5F, 0.5F);
+	            	GlStateManager.scale(0.5F, 0.5F, 0.5F);
 	            else
-	            	GL11.glScalef(0.95F, 0.95F, 0.95F);
+	            	GlStateManager.scale(0.95F, 0.95F, 0.95F);
 	            
 	            	this.drawCenteredString(fontrenderer, this.displayString, !unicode ? (this.xPosition + this.width / 2)*2 : MathHelper.floor_float((this.xPosition + this.width / 2)/0.95F), !unicode ? (this.yPosition + (this.height - 8) / 2)*2+4 : MathHelper.floor_float((this.yPosition + (this.height - 8) / 2)/0.95F), l);
 	            if(!unicode)
-	            	GL11.glScalef(2, 2, 2);
+	            	GlStateManager.scale(2, 2, 2);
 	            else
-	            	GL11.glScalef(1F/0.95F, 1F/0.95F, 1F/0.95F);
+	            	GlStateManager.scale(1F/0.95F, 1F/0.95F, 1F/0.95F);
 	        }
 	    }
     	
@@ -178,8 +186,8 @@ public class GuiNewMIMScreen extends GuiContainer{
         Keyboard.enableRepeatEvents(true);
 		int k = (this.width - this.xSize)/2;
 		int l = (this.height - this.ySize)/2;
-        search = new GuiTextField(fontRendererObj, k+4, l+4, 248, 20);
-        stackSize = new GuiTextField(fontRendererObj, k+95, l+156, 64, 12);
+        search = new GuiTextField(2934, fontRendererObj, k+4, l+4, 248, 20);
+        stackSize = new GuiTextField(2935, fontRendererObj, k+95, l+156, 64, 12);
         setupMaxInt();
         for(int i = 0; i < btnActions.length; ++i)
         {
@@ -211,66 +219,69 @@ public class GuiNewMIMScreen extends GuiContainer{
     @Override
 	protected void actionPerformed(GuiButton b) 
 	{
-		super.actionPerformed(b);
-		if(b.id < 26)
-		{
-			int i = btnActions[b.id];
-			setupMaxInt();
-			int currentInt = Integer.parseInt(this.stackSize.getText());
-			if(i != Integer.MAX_VALUE && i != -Integer.MAX_VALUE)
-			{
-				currentInt += i;
-				if(currentInt <= 0)
-					currentInt = 1;
-				this.stackSize.setText(String.valueOf(currentInt));
-				setupMaxInt();
-			}else
-			{
-				currentInt = i;
-				if(currentInt < 0)
-				{
-					this.stackSize.setText("1");
-					setupMaxInt();
-					return;
-				}
-				if(selectedStack != null)
-				{
-					if(currentInt > selectedStack.stackSize)
-					{
-						this.stackSize.setText(String.valueOf(selectedStack.stackSize));
-						setupMaxInt();
-						return;
-					}
-				}
-				setupMaxInt();
-			}
-		}else
-		{
-			if(b.id == 26)
-			{
-				if(screen != null && screen.parent != null && selectedStack != null)
-				{
-					setupMaxInt();
-					
-					NBTTagCompound carriedToServer = new NBTTagCompound();
-					NBTTagCompound itemTag = new NBTTagCompound();
-					selectedStack.writeToNBT(itemTag);
-					carriedToServer.setInteger("x", screen.xCoord);
-					carriedToServer.setInteger("y", screen.yCoord);
-					carriedToServer.setInteger("z", screen.zCoord);
-					carriedToServer.setInteger("px", screen.parent.xCoord);
-					carriedToServer.setInteger("py", screen.parent.yCoord);
-					carriedToServer.setInteger("pz", screen.parent.zCoord);
-					carriedToServer.setString("requester", Minecraft.getMinecraft().thePlayer.getCommandSenderName());
-					carriedToServer.setInteger("size", Integer.parseInt(stackSize.getText()));
-					carriedToServer.setBoolean("craft", recipeSelected > -1);
-					carriedToServer.setTag("requestedItem", itemTag);
-					PacketNBT sent = new PacketNBT(carriedToServer).setID(5);
-					EssentialCraftCore.network.sendToServer(sent);
-					packetArrived = false;
-				}
-			}
-		}
+    	try {
+    		super.actionPerformed(b);
+    		if(b.id < 26)
+    		{
+    			int i = btnActions[b.id];
+    			setupMaxInt();
+    			int currentInt = Integer.parseInt(this.stackSize.getText());
+    			if(i != Integer.MAX_VALUE && i != -Integer.MAX_VALUE)
+    			{
+    				currentInt += i;
+    				if(currentInt <= 0)
+    					currentInt = 1;
+    				this.stackSize.setText(String.valueOf(currentInt));
+    				setupMaxInt();
+    			}else
+    			{
+    				currentInt = i;
+    				if(currentInt < 0)
+    				{
+    					this.stackSize.setText("1");
+    					setupMaxInt();
+    					return;
+    				}
+    				if(selectedStack != null)
+    				{
+    					if(currentInt > selectedStack.stackSize)
+    					{
+    						this.stackSize.setText(String.valueOf(selectedStack.stackSize));
+    						setupMaxInt();
+    						return;
+    					}
+    				}
+    				setupMaxInt();
+    			}
+    		}else
+    		{
+    			if(b.id == 26)
+    			{
+    				if(screen != null && screen.parent != null && selectedStack != null)
+    				{
+    					setupMaxInt();
+    					
+    					NBTTagCompound carriedToServer = new NBTTagCompound();
+    					NBTTagCompound itemTag = new NBTTagCompound();
+    					selectedStack.writeToNBT(itemTag);
+    					carriedToServer.setInteger("x", screen.getPos().getX());
+    					carriedToServer.setInteger("y", screen.getPos().getY());
+    					carriedToServer.setInteger("z", screen.getPos().getZ());
+    					carriedToServer.setInteger("px", screen.parent.getPos().getX());
+    					carriedToServer.setInteger("py", screen.parent.getPos().getY());
+    					carriedToServer.setInteger("pz", screen.parent.getPos().getZ());
+    					carriedToServer.setString("requester", MiscUtils.getUUIDFromPlayer(Minecraft.getMinecraft().thePlayer).toString());
+    					carriedToServer.setInteger("size", Integer.parseInt(stackSize.getText()));
+    					carriedToServer.setBoolean("craft", recipeSelected > -1);
+    					carriedToServer.setTag("requestedItem", itemTag);
+    					PacketNBT sent = new PacketNBT(carriedToServer).setID(5);
+    					EssentialCraftCore.network.sendToServer(sent);
+    					packetArrived = false;
+    				}
+    			}	
+    		}
+    	}
+		catch(Exception e) {}
 	}
 	
     @Override
@@ -292,11 +303,11 @@ public class GuiNewMIMScreen extends GuiContainer{
 		{
 			GuiElement element = elementList.get(i);
 			Minecraft.getMinecraft().renderEngine.bindTexture(element.getElementTexture());
-			element.draw(k+element.getX(),l+element.getY());
-			GL11.glColor3f(1, 1, 1);
+			element.draw(k+element.getX(),l+element.getY(),mX,mY);
+			GlStateManager.color(1, 1, 1);
 		}
 		
-		MiscUtils.bindTexture("essentialcraft", "textures/gui/mimScreenSlider.png");
+		DrawUtils.bindTexture("essentialcraft", "textures/gui/mimScreenSlider.png");
 		this.drawTexturedModalRect(k+228, l+25, 0, 0, 12, 126);
 		if(Mouse.isButtonDown(0))
 		{
@@ -421,7 +432,7 @@ public class GuiNewMIMScreen extends GuiContainer{
 					}
 				}
 				
-				GuiResearchBook.itemRender.renderItemAndEffectIntoGUI(fontRendererObj,Minecraft.getMinecraft().renderEngine, drawnItems.get(i), x, y);
+				GuiResearchBook.itemRender.renderItemAndEffectIntoGUI(drawnItems.get(i), x, y);
 				int alterSize = drawnItems.get(i).stackSize;
 				boolean greaterThan1K = alterSize >= 1000;
 				boolean greaterThan1M = alterSize >= 1000000;
@@ -434,34 +445,34 @@ public class GuiNewMIMScreen extends GuiContainer{
 					s = "Craft";
 				if(i >= regSize)
 				{
-					boolean unicode = Minecraft.getMinecraft().gameSettings.forceUnicodeFont || Minecraft.getMinecraft().fontRenderer.getUnicodeFlag();
+					boolean unicode = Minecraft.getMinecraft().gameSettings.forceUnicodeFont || Minecraft.getMinecraft().fontRendererObj.getUnicodeFlag();
 					if(!unicode)
 					{
-						GL11.glScaled(0.5F, 0.5F, 1);
-						GL11.glTranslated(0, 0, 100);
-						GL11.glTranslated(1D, 1D, 0);
+						GlStateManager.scale(0.5F, 0.5F, 1);
+						GlStateManager.translate(0, 0, 100);
+						GlStateManager.translate(1D, 1D, 0);
 						fontRendererObj.drawString(s, x*2, (y+8)*2+6, 0x000000);
-						GL11.glTranslated(-1D, -1D, 0);
+						GlStateManager.translate(-1D, -1D, 0);
 						fontRendererObj.drawString(s, x*2, (y+8)*2+6, 0xffffff);
-						GL11.glTranslated(0, 0, -100);
-						GL11.glScaled(2F, 2F, 1);
+						GlStateManager.translate(0, 0, -100);
+						GlStateManager.scale(2F, 2F, 1);
 					}else
 					{
-						GL11.glTranslated(0, 0, 100);
-						GL11.glTranslated(0.5D, 0.5D, 0);
+						GlStateManager.translate(0, 0, 100);
+						GlStateManager.translate(0.5D, 0.5D, 0);
 						fontRendererObj.drawString(s, x, y+8, 0x000000);
-						GL11.glTranslated(-0.5D, -0.5D, 0);
+						GlStateManager.translate(-0.5D, -0.5D, 0);
 						fontRendererObj.drawString(s, x, y+8, 0xffffff);
-						GL11.glTranslated(0, 0, -100);
+						GlStateManager.translate(0, 0, -100);
 					}
 				}else
 				{
-					GL11.glTranslated(0, 0, 100);
-					GL11.glTranslated(0.5D, 0.5D, 0);
+					GlStateManager.translate(0, 0, 100);
+					GlStateManager.translate(0.5D, 0.5D, 0);
 					fontRendererObj.drawString(s, x, y+8, 0x000000);
-					GL11.glTranslated(-0.5D, -0.5D, 0);
+					GlStateManager.translate(-0.5D, -0.5D, 0);
 					fontRendererObj.drawString(s, x, y+8, 0xffffff);
-					GL11.glTranslated(0, 0, -100);
+					GlStateManager.translate(0, 0, -100);
 				}
 				
 				if(mX >= x && mX <= x + 16)
@@ -471,7 +482,7 @@ public class GuiNewMIMScreen extends GuiContainer{
 						this.renderToolTip(drawnItems.get(i), mX, mY);
 						if(i >= regSize)
 						{
-							GL11.glTranslated(0, 0, 200);
+							GlStateManager.translate(0, 0, 200);
 							int j2 = mX+12;
 							int k2 = mY+drawnItems.get(i).getTooltip(player, false).size()*10-8;
 							int i1 = 50;
@@ -481,7 +492,7 @@ public class GuiNewMIMScreen extends GuiContainer{
 				            this.drawGradientRect(j2 - 3, k2 - 3, j2 + sX + 3, k2 + i1 + 3, 0xff223366, 0xff000611);
 				            this.drawGradientRect(j2 - 4, k2 - 3, j2 - 3, k2 + i1 + 3, 0xff000000, 0xff000000);
 				            this.drawGradientRect(j2 + sX + 3, k2 - 3, j2 + sX + 4, k2 + i1 + 3, 0xff000000, 0xff000000);
-				            GL11.glTranslated(0, 0, -200);
+				            GlStateManager.translate(0, 0, -200);
 				            
 				            if(drawnItems.get(i) != null && this.craftsByItemStack.containsKey(drawnItems.get(i)))
 				            {
@@ -489,7 +500,7 @@ public class GuiNewMIMScreen extends GuiContainer{
 				            	{
 			            			int pX = mX+j/3*17+10 - 10;
 			            			int pY = mY+j%3*17+4 - 17;
-			            			GL11.glTranslated(0, 0, 300);
+			            			GlStateManager.translate(0, 0, 300);
 			            			this.drawGradientRect(pX+12, pY+16, pX+12+16, pY+16+16, 0x88ffaaff, 0x88886688);
 			            			this.drawGradientRect(pX+12, pY+16, pX+12+1, pY+16+16, 0xff660066, 0xff330033);
 			            			this.drawGradientRect(pX+12, pY+16+15, pX+12+16, pY+16+16, 0xff330033, 0xff110011);
@@ -499,12 +510,12 @@ public class GuiNewMIMScreen extends GuiContainer{
 				            		if(this.craftsByItemStack.get(drawnItems.get(i)).input[j] != null)
 				            		{
 				            			
-				            			GL11.glTranslated(0, 0, 300);
-				            			GuiResearchBook.itemRender.renderItemAndEffectIntoGUI(fontRendererObj,Minecraft.getMinecraft().renderEngine, this.craftsByItemStack.get(drawnItems.get(i)).input[j], mX+j/3*17+12, mY+j%3*17+3);
-				            			GL11.glTranslated(0, 0, -300);
+				            			GlStateManager.translate(0, 0, 300);
+				            			GuiResearchBook.itemRender.renderItemAndEffectIntoGUI(this.craftsByItemStack.get(drawnItems.get(i)).input[j], mX+j/3*17+12, mY+j%3*17+3);
+				            			GlStateManager.translate(0, 0, -300);
 				            			
 				            		}
-				            		GL11.glTranslated(0, 0, -300);
+				            		GlStateManager.translate(0, 0, -300);
 				            	}
 				            }
 				            
@@ -613,7 +624,7 @@ public class GuiNewMIMScreen extends GuiContainer{
     {
         if (!p_146283_1_.isEmpty())
         {
-            GL11.glTranslated(0, 0, 100);
+            GlStateManager.translate(0, 0, 100);
             int k = 0;
             Iterator iterator = p_146283_1_.iterator();
 
@@ -658,9 +669,9 @@ public class GuiNewMIMScreen extends GuiContainer{
             for (int i2 = 0; i2 < p_146283_1_.size(); ++i2)
             {
                 String s1 = (String)p_146283_1_.get(i2);
-                GL11.glTranslated(0, 0, 300);
+                GlStateManager.translate(0, 0, 300);
                 font.drawString(s1, j2, k2, 0xffffff);
-                GL11.glTranslated(0, 0, -300);
+                GlStateManager.translate(0, 0, -300);
 				
 				
                 if (i2 == 0)
@@ -673,7 +684,7 @@ public class GuiNewMIMScreen extends GuiContainer{
 
             this.zLevel = 0.0F;
             //itemRender.zLevel = 0.0F;
-            GL11.glTranslated(0, 0, -100);
+            GlStateManager.translate(0, 0, -100);
         }
     }
 	

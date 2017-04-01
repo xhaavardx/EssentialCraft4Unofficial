@@ -26,7 +26,7 @@ public class GuiEnchantmentState extends GuiTextField{
 	}
 
 	@Override
-	public void draw(int posX, int posY) {
+	public void draw(int posX, int posY, int mouseX, int mouseY) {
 		this.drawTexturedModalRect(posX, posY, 0, 0, 17, 18);
 		this.drawTexturedModalRect(posX+17, posY, 1, 0, 16, 18);
 		this.drawTexturedModalRect(posX+17+16, posY, 1, 0, 16, 18);
@@ -53,7 +53,7 @@ public class GuiEnchantmentState extends GuiTextField{
 
 	@Override
 	public void drawText(int posX, int posY) {
-		FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
+		FontRenderer fontRenderer = Minecraft.getMinecraft().fontRendererObj;
 		IInventory inventory = (IInventory) tile;
 		if(inventory.getStackInSlot(1) == null)
 	    {

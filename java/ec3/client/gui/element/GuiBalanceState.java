@@ -6,9 +6,9 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 
 public class GuiBalanceState extends GuiTextField{
-	
+
 	public TileEntity tile;
-	
+
 	public GuiBalanceState(int i, int j, TileEntity t)
 	{
 		super(i,j);
@@ -17,24 +17,21 @@ public class GuiBalanceState extends GuiTextField{
 
 	@Override
 	public ResourceLocation getElementTexture() {
-		// TODO Auto-generated method stub
 		return super.getElementTexture();
 	}
 
 	@Override
-	public void draw(int posX, int posY) {
-		super.draw(posX, posY);
+	public void draw(int posX, int posY, int mouseX, int mouseY) {
+		super.draw(posX, posY, mouseX, mouseY);
 	}
 
 	@Override
 	public int getX() {
-		// TODO Auto-generated method stub
 		return super.getX();
 	}
 
 	@Override
 	public int getY() {
-		// TODO Auto-generated method stub
 		return super.getY();
 	}
 
@@ -44,7 +41,7 @@ public class GuiBalanceState extends GuiTextField{
 		String str = Float.toString( ((ITEHasMRU)tile).getBalance());
 		if(str.length() > 6)
 			str = str.substring(0, 6);
-		
+
 		for(int i = str.length()-1; i > 0; --i)
 		{
 			if(i > 2)
@@ -68,8 +65,8 @@ public class GuiBalanceState extends GuiTextField{
 			balanceType = "Chaos";
 			color = 0xff0000;
 		}
-		
-		Minecraft.getMinecraft().fontRenderer.drawString(balanceType+": "+str, posX+2, posY+5, color, true);
+
+		Minecraft.getMinecraft().fontRendererObj.drawString(balanceType+": "+str, posX+2, posY+5, color, true);
 	}
 
 }

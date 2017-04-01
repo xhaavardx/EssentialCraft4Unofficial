@@ -2,6 +2,7 @@ package ec3.common.tile;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraftforge.common.config.Configuration;
 import DummyCore.Utils.DataStorage;
 import DummyCore.Utils.DummyData;
@@ -24,11 +25,11 @@ public class TileCrystalExtractor extends TileMRUGeneric {
 	}
 	
 	@Override
-	public void updateEntity() {
-		super.updateEntity();
+	public void update() {
+		super.update();
 		ECUtils.manage(this, 0);
 		
-		if(!worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord))
+		if(worldObj.isBlockIndirectlyGettingPowered(pos) == 0)
 			doWork();
 		spawnParticles();
 		
@@ -60,7 +61,7 @@ public class TileCrystalExtractor extends TileMRUGeneric {
 		int[] essenceChance = new int[] {37500, 50000, 75000, 150000};
 		int[] getChance = new int[16];
 		for(int i = 0; i < 16; ++i) {
-			getChance[i] = (int)((s*baseChance[ItemEssence.convertDamageToIntBefore4(i)])/essenceChance[i/4]);
+			getChance[i] = (int)((s*baseChance[i%4])/essenceChance[i/4]);
 		}
 		if(!worldObj.isRemote) {
 			for(int i = 1; i < 13; ++i) {
@@ -102,7 +103,7 @@ public class TileCrystalExtractor extends TileMRUGeneric {
 			TileElementalCrystal t = getCrystal();
 			if(t != null)
 				for(int o = 0; o < 10; ++o) {
-					worldObj.spawnParticle("portal", xCoord + worldObj.rand.nextDouble(), t.yCoord + worldObj.rand.nextDouble(), zCoord + worldObj.rand.nextDouble(), (t.xCoord-xCoord), 0.0D, (t.zCoord-zCoord));
+					worldObj.spawnParticle(EnumParticleTypes.PORTAL, pos.getX() + worldObj.rand.nextDouble(), t.getPos().getY() + worldObj.rand.nextDouble(), pos.getZ() + worldObj.rand.nextDouble(), (t.getPos().getX()-pos.getX()), 0.0D, (t.getPos().getZ()-pos.getZ()));
 				}
 		}
 	}
@@ -110,37 +111,37 @@ public class TileCrystalExtractor extends TileMRUGeneric {
 	public TileElementalCrystal getCrystal() {
 		TileElementalCrystal t = null;
 		if(hasCrystalOnFront()) {
-			t = (TileElementalCrystal)worldObj.getTileEntity(xCoord+1, yCoord, zCoord);
+			t = (TileElementalCrystal)worldObj.getTileEntity(pos.east());
 		}
 		if(hasCrystalOnBack()) {
-			t = (TileElementalCrystal)worldObj.getTileEntity(xCoord-1, yCoord, zCoord);
+			t = (TileElementalCrystal)worldObj.getTileEntity(pos.west());
 		}
 		if(hasCrystalOnLeft()) {
-			t = (TileElementalCrystal)worldObj.getTileEntity(xCoord, yCoord, zCoord+1);
+			t = (TileElementalCrystal)worldObj.getTileEntity(pos.south());
 		}
 		if(hasCrystalOnRight()) {
-			t = (TileElementalCrystal)worldObj.getTileEntity(xCoord, yCoord, zCoord-1);
+			t = (TileElementalCrystal)worldObj.getTileEntity(pos.north());
 		}
 		return t;
 	}
 	
 	public boolean hasCrystalOnFront() {
-		TileEntity t = worldObj.getTileEntity(xCoord+1, yCoord, zCoord);
+		TileEntity t = worldObj.getTileEntity(pos.east());
 		return t != null && t instanceof TileElementalCrystal;
 	}
 	
 	public boolean hasCrystalOnBack() {
-		TileEntity t = worldObj.getTileEntity(xCoord-1, yCoord, zCoord);
+		TileEntity t = worldObj.getTileEntity(pos.west());
 		return t != null && t instanceof TileElementalCrystal;
 	}
 	
 	public boolean hasCrystalOnLeft() {
-		TileEntity t = worldObj.getTileEntity(xCoord, yCoord, zCoord+1);
+		TileEntity t = worldObj.getTileEntity(pos.south());
 		return t != null && t instanceof TileElementalCrystal;
 	}
 	
 	public boolean hasCrystalOnRight() {
-		TileEntity t = worldObj.getTileEntity(xCoord, yCoord, zCoord-1);
+		TileEntity t = worldObj.getTileEntity(pos.north());
 		return t != null && t instanceof TileElementalCrystal;
 	}
 	

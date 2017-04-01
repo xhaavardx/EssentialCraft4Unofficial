@@ -3,6 +3,7 @@ package ec3.common.world;
 import java.util.Random;
 
 import DummyCore.Utils.MathUtils;
+import DummyCore.Utils.WeightedRandomChestContent;
 import ec3.common.block.BlocksCore;
 import ec3.common.item.ItemBaublesWearable;
 import ec3.common.item.ItemsCore;
@@ -14,11 +15,11 @@ import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityChest;
-import net.minecraft.util.Vec3;
-import net.minecraft.util.WeightedRandomChestContent;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
-import net.minecraftforge.common.util.ForgeDirection;
 
 public class WorldGenOldCatacombs extends WorldGenerator{
 
@@ -63,20 +64,24 @@ public class WorldGenOldCatacombs extends WorldGenerator{
 	
 	public boolean isFirstTry = true;
 	
-	public ForgeDirection cameFrom;
+	public EnumFacing cameFrom;
 	@Override
-	public boolean generate(World w, Random r,int x, int y, int z)
+	public boolean generate(World w, Random r, BlockPos p)
 	{
+		int x = p.getX();
+		int y = p.getY();
+		int z = p.getZ();
+		
 		int lengthGenned = r.nextInt(corridorMaxLength-corridorMinLength)+corridorMinLength;		
-		ForgeDirection[] genTry = new ForgeDirection[4];
-		if(this.cameFrom != ForgeDirection.SOUTH)
-			genTry[0] = ForgeDirection.NORTH;
-		if(this.cameFrom != ForgeDirection.NORTH)
-			genTry[1] = ForgeDirection.SOUTH;
-		if(this.cameFrom != ForgeDirection.EAST)
-			genTry[2] = ForgeDirection.WEST;
-		if(this.cameFrom != ForgeDirection.WEST)
-			genTry[3] = ForgeDirection.EAST;
+		EnumFacing[] genTry = new EnumFacing[4];
+		if(this.cameFrom != EnumFacing.SOUTH)
+			genTry[0] = EnumFacing.NORTH;
+		if(this.cameFrom != EnumFacing.NORTH)
+			genTry[1] = EnumFacing.SOUTH;
+		if(this.cameFrom != EnumFacing.EAST)
+			genTry[2] = EnumFacing.WEST;
+		if(this.cameFrom != EnumFacing.WEST)
+			genTry[3] = EnumFacing.EAST;
 		if(isFirstTry && maxSizeTries > 0)
 		{
 			for(int i = 0; i < 4; ++i)
@@ -87,7 +92,7 @@ public class WorldGenOldCatacombs extends WorldGenerator{
 						WorldGenOldCatacombs catacombs = new WorldGenOldCatacombs();
 						catacombs.maxSizeTries = this.maxSizeTries/4;
 						catacombs.cameFrom = genTry[i];
-						catacombs.generate(w, r, x+ForgeDirection.values()[i+2].offsetX*10, y, z+ForgeDirection.values()[i+2].offsetZ*10);
+						catacombs.generate(w, r, new BlockPos(x+EnumFacing.getFront(i+2).getFrontOffsetX()*10, y, z+EnumFacing.getFront(i+2).getFrontOffsetZ()*10));
 					}
 			}
 		}
@@ -95,11 +100,11 @@ public class WorldGenOldCatacombs extends WorldGenerator{
 		{
 			if(w.rand.nextFloat() < 0.03F)
 				generateWayUp(w,x,y,z);
-			if(w.getBlock(x, y, z) != Blocks.chest)
+			if(w.getBlockState(p).getBlock() != Blocks.CHEST)
 			{
-				w.setBlock(x, y, z, Blocks.chest,0,3);
-				w.setBlock(x, y-1, z, BlocksCore.voidStone);
-				TileEntityChest chest = (TileEntityChest) w.getTileEntity(x, y, z);
+				w.setBlockState(p, Blocks.CHEST.getDefaultState(), 3);
+				w.setBlockState(p.add(0, -1, 0), BlocksCore.voidStone.getDefaultState());
+				TileEntityChest chest = (TileEntityChest)w.getTileEntity(p);
 	            if (chest != null)
 	            {
 	                WeightedRandomChestContent.generateChestContents(w.rand, generatedItems, chest, w.rand.nextInt(12)+6);
@@ -118,7 +123,7 @@ public class WorldGenOldCatacombs extends WorldGenerator{
 		return false;
 	}
 	
-	public boolean generateCorridor(World w, int x, int y, int z, int length, ForgeDirection direction, boolean green)
+	public boolean generateCorridor(World w, int x, int y, int z, int length, EnumFacing direction, boolean green)
 	{
 		int generatedLength = 0;
 		Block generateFrom = this.getBlockToGenFrom();
@@ -127,115 +132,114 @@ public class WorldGenOldCatacombs extends WorldGenerator{
 		{
 			if(w.rand.nextFloat() < this.destroyedRoomChance)
 				generateBrokenPath(w,x,y,z);
-			w.getBlock(x, y, z);
-			if(direction.offsetX >= 0 && direction.offsetZ >= 0)
+			if(direction.getFrontOffsetX() >= 0 && direction.getFrontOffsetZ() >= 0)
 			{
-				for(int dx = x-direction.offsetZ*2; dx <= x+direction.offsetZ*2; ++dx)
+				for(int dx = x-direction.getFrontOffsetZ()*2; dx <= x+direction.getFrontOffsetZ()*2; ++dx)
 				{
 					for(int dy = -2; dy <= 2; ++dy)
 					{
-						for(int dz = z-direction.offsetX*2; dz <= z+direction.offsetX*2; ++dz)
+						for(int dz = z-direction.getFrontOffsetX()*2; dz <= z+direction.getFrontOffsetX()*2; ++dz)
 						{
-							Block b = w.getBlock(dx, y+dy, dz);
-							if(b != Blocks.chest && b != Blocks.air && !(b instanceof BlockBush) && !(b instanceof BlockVine) && !(b instanceof BlockLeaves) && (b != BlocksCore.concrete) && (b != BlocksCore.root))
+							Block b = w.getBlockState(new BlockPos(dx, y+dy, dz)).getBlock();
+							if(b != Blocks.CHEST && b != Blocks.AIR && !(b instanceof BlockBush) && !(b instanceof BlockVine) && !(b instanceof BlockLeaves) && (b != BlocksCore.concrete) && (b != BlocksCore.root))
 							{
-								w.setBlock(dx, y+dy, dz, generateFrom, 0, 3);
+								w.setBlockState(new BlockPos(dx, y+dy, dz), generateFrom.getStateFromMeta(0), 3);
 							}
 						}
 					}
 				}
-				for(int dx = x-direction.offsetZ; dx <= x+direction.offsetZ; ++dx)
+				for(int dx = x-direction.getFrontOffsetZ(); dx <= x+direction.getFrontOffsetZ(); ++dx)
 				{
 					for(int dy = -1; dy <= 1; ++dy)
 					{
-						for(int dz = z-direction.offsetX; dz <= z+direction.offsetX; ++dz)
+						for(int dz = z-direction.getFrontOffsetX(); dz <= z+direction.getFrontOffsetX(); ++dz)
 						{
-							Block b = w.getBlock(dx, y+dy, dz);
-							if(b != Blocks.chest && b != Blocks.air && !(b instanceof BlockBush) && !(b instanceof BlockVine) && !(b instanceof BlockLeaves) && (b != BlocksCore.concrete) && (b != BlocksCore.root))
-								w.setBlock(dx, y+dy, dz, Blocks.air, 0, 3);
+							Block b = w.getBlockState(new BlockPos(dx, y+dy, dz)).getBlock();
+							if(b != Blocks.CHEST && b != Blocks.AIR && !(b instanceof BlockBush) && !(b instanceof BlockVine) && !(b instanceof BlockLeaves) && (b != BlocksCore.concrete) && (b != BlocksCore.root))
+								w.setBlockState(new BlockPos(dx, y+dy, dz), Blocks.AIR.getDefaultState(), 3);
 						}
 					}
 				}
 			}
-			if(direction.offsetX < 0 && direction.offsetZ >= 0)
+			if(direction.getFrontOffsetX() < 0 && direction.getFrontOffsetZ() >= 0)
 			{
-				for(int dx = x-direction.offsetZ*2; dx <= x+direction.offsetZ*2; ++dx)
+				for(int dx = x-direction.getFrontOffsetZ()*2; dx <= x+direction.getFrontOffsetZ()*2; ++dx)
 				{
 					for(int dy = -2; dy <= 2; ++dy)
 					{
-						for(int dz = z+direction.offsetX*2; dz <= z-direction.offsetX*2; ++dz)
+						for(int dz = z+direction.getFrontOffsetX()*2; dz <= z-direction.getFrontOffsetX()*2; ++dz)
 						{
-							Block b = w.getBlock(dx, y+dy, dz);
-							if(b != Blocks.chest && b != Blocks.air && !(b instanceof BlockBush) && !(b instanceof BlockVine) && !(b instanceof BlockLeaves) && (b != BlocksCore.concrete) && (b != BlocksCore.root))
-								w.setBlock(dx, y+dy, dz, generateFrom, 0, 3);
+							Block b = w.getBlockState(new BlockPos(dx, y+dy, dz)).getBlock();
+							if(b != Blocks.CHEST && b != Blocks.AIR && !(b instanceof BlockBush) && !(b instanceof BlockVine) && !(b instanceof BlockLeaves) && (b != BlocksCore.concrete) && (b != BlocksCore.root))
+								w.setBlockState(new BlockPos(dx, y+dy, dz), generateFrom.getStateFromMeta(0), 3);
 						}
 					}
 				}
-				for(int dx = x-direction.offsetZ; dx <= x+direction.offsetZ; ++dx)
+				for(int dx = x-direction.getFrontOffsetZ(); dx <= x+direction.getFrontOffsetZ(); ++dx)
 				{
 					for(int dy = -1; dy <= 1; ++dy)
 					{
-						for(int dz = z+direction.offsetX; dz <= z-direction.offsetX; ++dz)
+						for(int dz = z+direction.getFrontOffsetX(); dz <= z-direction.getFrontOffsetX(); ++dz)
 						{
-							Block b = w.getBlock(dx, y+dy, dz);
-							if(b != Blocks.chest && b != Blocks.air && !(b instanceof BlockBush) && !(b instanceof BlockVine) && !(b instanceof BlockLeaves) && (b != BlocksCore.concrete) && (b != BlocksCore.root))
-								w.setBlock(dx, y+dy, dz, Blocks.air, 0, 3);
+							Block b = w.getBlockState(new BlockPos(dx, y+dy, dz)).getBlock();
+							if(b != Blocks.CHEST && b != Blocks.AIR && !(b instanceof BlockBush) && !(b instanceof BlockVine) && !(b instanceof BlockLeaves) && (b != BlocksCore.concrete) && (b != BlocksCore.root))
+								w.setBlockState(new BlockPos(dx, y+dy, dz), Blocks.AIR.getDefaultState(), 3);
 						}
 					}
 				}
 			}
-			if(direction.offsetX >= 0 && direction.offsetZ < 0)
+			if(direction.getFrontOffsetX() >= 0 && direction.getFrontOffsetZ() < 0)
 			{
-				for(int dx = x+direction.offsetZ*2; dx <= x-direction.offsetZ*2; ++dx)
+				for(int dx = x+direction.getFrontOffsetZ()*2; dx <= x-direction.getFrontOffsetZ()*2; ++dx)
 				{
 					for(int dy = -2; dy <= 2; ++dy)
 					{
-						for(int dz = z-direction.offsetX*2; dz <= z+direction.offsetX*2; ++dz)
+						for(int dz = z-direction.getFrontOffsetX()*2; dz <= z+direction.getFrontOffsetX()*2; ++dz)
 						{
-							Block b = w.getBlock(dx, y+dy, dz);
-							if(b != Blocks.chest && b != Blocks.air && !(b instanceof BlockBush) && !(b instanceof BlockVine) && !(b instanceof BlockLeaves) && (b != BlocksCore.concrete) && (b != BlocksCore.root))
-								if(!w.isAirBlock(dx, y+dy, dz))
-									w.setBlock(dx, y+dy, dz, generateFrom, 0, 3);
+							Block b = w.getBlockState(new BlockPos(dx, y+dy, dz)).getBlock();
+							if(b != Blocks.CHEST && b != Blocks.AIR && !(b instanceof BlockBush) && !(b instanceof BlockVine) && !(b instanceof BlockLeaves) && (b != BlocksCore.concrete) && (b != BlocksCore.root))
+								if(!w.isAirBlock(new BlockPos(dx, y+dy, dz)))
+									w.setBlockState(new BlockPos(dx, y+dy, dz), generateFrom.getStateFromMeta(0), 3);
 						}
 					}
 				}
-				for(int dx = x+direction.offsetZ; dx <= x-direction.offsetZ; ++dx)
+				for(int dx = x+direction.getFrontOffsetZ(); dx <= x-direction.getFrontOffsetZ(); ++dx)
 				{
 					for(int dy = -1; dy <= 1; ++dy)
 					{
-						for(int dz = z-direction.offsetX; dz <= z+direction.offsetX; ++dz)
+						for(int dz = z-direction.getFrontOffsetX(); dz <= z+direction.getFrontOffsetX(); ++dz)
 						{
-							Block b = w.getBlock(dx, y+dy, dz);
-							if(b != Blocks.chest && b != Blocks.air && !(b instanceof BlockBush) && !(b instanceof BlockVine) && !(b instanceof BlockLeaves) && (b != BlocksCore.concrete) && (b != BlocksCore.root))
-								w.setBlock(dx, y+dy, dz, Blocks.air, 0, 3);
+							Block b = w.getBlockState(new BlockPos(dx, y+dy, dz)).getBlock();
+							if(b != Blocks.CHEST && b != Blocks.AIR && !(b instanceof BlockBush) && !(b instanceof BlockVine) && !(b instanceof BlockLeaves) && (b != BlocksCore.concrete) && (b != BlocksCore.root))
+								w.setBlockState(new BlockPos(dx, y+dy, dz), Blocks.AIR.getDefaultState(), 3);
 						}
 					}
 				}
 			}
-			if(direction.offsetX < 0 && direction.offsetZ < 0)
+			if(direction.getFrontOffsetX() < 0 && direction.getFrontOffsetZ() < 0)
 			{
-				for(int dx = x+direction.offsetZ*2; dx <= x-direction.offsetZ*2; ++dx)
+				for(int dx = x+direction.getFrontOffsetZ()*2; dx <= x-direction.getFrontOffsetZ()*2; ++dx)
 				{
 					for(int dy = -2; dy <= 2; ++dy)
 					{
-						for(int dz = z+direction.offsetX*2; dz <= z-direction.offsetX*2; ++dz)
+						for(int dz = z+direction.getFrontOffsetX()*2; dz <= z-direction.getFrontOffsetX()*2; ++dz)
 						{
-							Block b = w.getBlock(dx, y+dy, dz);
-							if(b != Blocks.chest && b != Blocks.air && !(b instanceof BlockBush) && !(b instanceof BlockVine) && !(b instanceof BlockLeaves) && (b != BlocksCore.concrete) && (b != BlocksCore.root))
-								if(!w.isAirBlock(dx, y+dy, dz))
-									w.setBlock(dx, y+dy, dz, generateFrom, 0, 3);
+							Block b = w.getBlockState(new BlockPos(dx, y+dy, dz)).getBlock();
+							if(b != Blocks.CHEST && b != Blocks.AIR && !(b instanceof BlockBush) && !(b instanceof BlockVine) && !(b instanceof BlockLeaves) && (b != BlocksCore.concrete) && (b != BlocksCore.root))
+								if(!w.isAirBlock(new BlockPos(dx, y+dy, dz)))
+									w.setBlockState(new BlockPos(dx, y+dy, dz), generateFrom.getStateFromMeta(0), 3);
 						}
 					}
 				}
-				for(int dx = x+direction.offsetZ; dx <= x-direction.offsetZ; ++dx)
+				for(int dx = x+direction.getFrontOffsetZ(); dx <= x-direction.getFrontOffsetZ(); ++dx)
 				{
 					for(int dy = -1; dy <= 1; ++dy)
 					{
-						for(int dz = z+direction.offsetX; dz <= z-direction.offsetX; ++dz)
+						for(int dz = z+direction.getFrontOffsetX(); dz <= z-direction.getFrontOffsetX(); ++dz)
 						{
-							Block b = w.getBlock(dx, y+dy, dz);
-							if(b != Blocks.chest && b != Blocks.air && !(b instanceof BlockBush) && !(b instanceof BlockVine) && !(b instanceof BlockLeaves) && (b != BlocksCore.concrete) && (b != BlocksCore.root))
-								w.setBlock(dx, y+dy, dz, Blocks.air, 0, 3);
+							Block b = w.getBlockState(new BlockPos(dx, y+dy, dz)).getBlock();
+							if(b != Blocks.CHEST && b != Blocks.AIR && !(b instanceof BlockBush) && !(b instanceof BlockVine) && !(b instanceof BlockLeaves) && (b != BlocksCore.concrete) && (b != BlocksCore.root))
+								w.setBlockState(new BlockPos(dx, y+dy, dz), Blocks.AIR.getDefaultState(), 3);
 						}
 					}
 				}
@@ -246,8 +250,8 @@ public class WorldGenOldCatacombs extends WorldGenerator{
 				gen = false;
 				return true;
 			}
-			x += direction.offsetX;
-			z += direction.offsetZ;
+			x += direction.getFrontOffsetX();
+			z += direction.getFrontOffsetZ();
 			if(w.rand.nextFloat() < this.greenRoomChance)
 				generateGrownPath(w,x,y,z);
 		}
@@ -267,9 +271,10 @@ public class WorldGenOldCatacombs extends WorldGenerator{
 			{
 				for(int k = -2; k <= 2; ++k)
 				{
+					BlockPos p = new BlockPos(x+i,y+j,z+k);
 					int tryInt = j+3;
 					if(w.rand.nextInt(tryInt) == 0)
-						w.setBlock(x+i, y+j, z+k, BlocksCore.concrete);
+						w.setBlockState(p, BlocksCore.concrete.getDefaultState());
 				}
 			}
 		}
@@ -277,10 +282,10 @@ public class WorldGenOldCatacombs extends WorldGenerator{
 	
 	public void generateGrownPath(World w, int x, int y, int z)
 	{
-		Vec3 rootVec = Vec3.createVectorHelper(MathUtils.randomDouble(w.rand)*3, -6, MathUtils.randomDouble(w.rand)*3);
+		Vec3d rootVec = new Vec3d(MathUtils.randomDouble(w.rand)*3, -6, MathUtils.randomDouble(w.rand)*3);
 		for(int vi = 0; vi <= 6; ++vi)
 		{
-			w.setBlock((int) (x+rootVec.xCoord/vi), (int) (y-2-rootVec.yCoord/vi), (int) (z+rootVec.zCoord/vi), BlocksCore.root);
+			w.setBlockState(new BlockPos((int)(x+rootVec.xCoord/vi), (int)(y-2-rootVec.yCoord/vi), (int)(z+rootVec.zCoord/vi)), BlocksCore.root.getDefaultState());
 		}
 		for(int i = -3; i <= 3; ++i)
 		{
@@ -290,9 +295,10 @@ public class WorldGenOldCatacombs extends WorldGenerator{
 				{
 					if(w.rand.nextInt(3) == 0)
 					{
-						Block b = w.getBlock(x+i, y+j, z+k);
-						if(b != Blocks.chest && b != Blocks.air && !(b instanceof BlockBush) && !(b instanceof BlockVine) && !(b instanceof BlockLeaves) && (b != BlocksCore.concrete) && (b != BlocksCore.root))
-							w.setBlock(x+i, y+j, z+k, Blocks.leaves);
+						BlockPos p = new BlockPos(x+i, y+j, z+k);
+						Block b = w.getBlockState(p).getBlock();
+						if(b != Blocks.CHEST && b != Blocks.AIR && !(b instanceof BlockBush) && !(b instanceof BlockVine) && !(b instanceof BlockLeaves) && (b != BlocksCore.concrete) && (b != BlocksCore.root))
+							w.setBlockState(p, Blocks.LEAVES.getStateFromMeta(0));
 					}
 				}
 			}
@@ -308,7 +314,7 @@ public class WorldGenOldCatacombs extends WorldGenerator{
 			boolean isAir = true;
 			for(int i = 0; i < 10; ++i)
 			{
-				if(!w.isAirBlock(x, maxY+i, z))
+				if(!w.isAirBlock(new BlockPos(x, maxY+i, z)))
 					isAir = false;
 			}
 			if(isAir)
@@ -321,7 +327,7 @@ public class WorldGenOldCatacombs extends WorldGenerator{
 			{
 				for(int dz = -2; dz <= 2; ++dz)
 				{
-					w.setBlock(x+dx, dy, z+dz, getBlockToGenFrom(), 0, 3);
+					w.setBlockState(new BlockPos(x+dx, dy, z+dz), getBlockToGenFrom().getStateFromMeta(0), 3);
 				}
 			}
 		}
@@ -332,14 +338,14 @@ public class WorldGenOldCatacombs extends WorldGenerator{
 			{
 				for(int dz = -1; dz <= 1; ++dz)
 				{
-					w.setBlock(x+dx, dy, z+dz, Blocks.air, 0, 3);
+					w.setBlockState(new BlockPos(x+dx, dy, z+dz), Blocks.AIR.getDefaultState(), 3);
 				}
 			}
 		}
 		
 		for(int dy = y-3; dy < maxY; ++dy)
 		{
-			w.setBlock(x-1, dy, z, Blocks.ladder, 5, 3);
+			w.setBlockState(new BlockPos(x-1, dy, z), Blocks.LADDER.getStateFromMeta(5), 3);
 		}
 		return true;
 	}

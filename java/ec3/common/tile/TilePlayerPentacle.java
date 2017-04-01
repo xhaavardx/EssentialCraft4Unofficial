@@ -1,11 +1,15 @@
 package ec3.common.tile;
 
+import ec3.common.block.BlockMithrilineCrystal;
 import ec3.common.block.BlocksCore;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.ITickable;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class TilePlayerPentacle extends TileEntity {
+public class TilePlayerPentacle extends TileEntity implements ITickable {
 	public int tier = -1;
 	public int sCheckTick = 0;
 	
@@ -29,9 +33,9 @@ public class TilePlayerPentacle extends TileEntity {
 		double energy = 0;
 		double consumeModifier = 0.36D;
 		for(int i = 0; i < tierCheck; ++i) {
-			TileEntity tile = worldObj.getTileEntity(xCoord+coords[i][0], yCoord+coords[i][1], zCoord+coords[i][2]);
+			TileEntity tile = worldObj.getTileEntity(pos.add(coords[i][0], coords[i][1], coords[i][2]));
 			if(tile instanceof TileMithrilineCrystal) {
-				TileMithrilineCrystal tmc = TileMithrilineCrystal.class.cast(tile);
+				TileMithrilineCrystal tmc = (TileMithrilineCrystal)tile;
 				if(tmc.energy > TileMithrilineCrystal.maxEnergy)
 					tmc.energy = TileMithrilineCrystal.maxEnergy;
 				if(tier < 3)
@@ -64,7 +68,7 @@ public class TilePlayerPentacle extends TileEntity {
 		double aconsumed = 0;
 		double consumeModifier = 0.36D;
 		for(int i = 0; i < tierCheck; ++i) {
-			TileEntity tile = worldObj.getTileEntity(xCoord+coords[i][0], yCoord+coords[i][1], zCoord+coords[i][2]);
+			TileEntity tile = worldObj.getTileEntity(pos.add(coords[i][0], coords[i][1], coords[i][2]));
 			if(tile instanceof TileMithrilineCrystal) {
 				TileMithrilineCrystal tmc = TileMithrilineCrystal.class.cast(tile);
 				if(tmc.energy>TileMithrilineCrystal.maxEnergy)
@@ -82,7 +86,7 @@ public class TilePlayerPentacle extends TileEntity {
 		
 		aconsumed = 0;
 		for(int i = 0; i < tierCheck; ++i) {
-			TileEntity tile = worldObj.getTileEntity(xCoord+coords[i][0], yCoord+coords[i][1], zCoord+coords[i][2]);
+			TileEntity tile = worldObj.getTileEntity(pos.add(coords[i][0], coords[i][1], coords[i][2]));
 			if(tile instanceof TileMithrilineCrystal) {
 				TileMithrilineCrystal tmc = TileMithrilineCrystal.class.cast(tile);
 				
@@ -103,7 +107,7 @@ public class TilePlayerPentacle extends TileEntity {
 	}
 	
 	@Override
-	public void updateEntity() {
+	public void update() {
 		if(sCheckTick == 0) {
 			checkStructureAndTier();
 			sCheckTick = 200;
@@ -122,120 +126,118 @@ public class TilePlayerPentacle extends TileEntity {
 		};
 		if(tier >= 0) {
 			for(int i = 0; i < 8; ++i) {
-				worldObj.spawnParticle("reddust", xCoord+coords[i][0]+0.5D, yCoord+coords[i][1]+movement/30, zCoord+coords[i][2]+0.5D, -1, 1, 0);
-				worldObj.spawnParticle("reddust", xCoord+coords[i][0]+0.5D, yCoord+coords[i][1]+2+movement/30, zCoord+coords[i][2]+0.5D, -1, 1, 0);
+				worldObj.spawnParticle(EnumParticleTypes.REDSTONE, pos.getX()+coords[i][0]+0.5D, pos.getY()+coords[i][1]+movement/30, pos.getZ()+coords[i][2]+0.5D, -1, 1, 0);
+				worldObj.spawnParticle(EnumParticleTypes.REDSTONE, pos.getX()+coords[i][0]+0.5D, pos.getY()+coords[i][1]+2+movement/30, pos.getZ()+coords[i][2]+0.5D, -1, 1, 0);
 			}
 		}
 		if(tier >= 1) {
 			for(int i = 8; i < 12; ++i) {
-				worldObj.spawnParticle("reddust", xCoord+coords[i][0]+0.5D, yCoord+coords[i][1]+movement/30, zCoord+coords[i][2]+0.5D, -1, 0, 1);
-				worldObj.spawnParticle("reddust", xCoord+coords[i][0]+0.5D, yCoord+coords[i][1]+2+movement/30, zCoord+coords[i][2]+0.5D, -1, 0, 1);
+				worldObj.spawnParticle(EnumParticleTypes.REDSTONE, pos.getX()+coords[i][0]+0.5D, pos.getY()+coords[i][1]+movement/30, pos.getZ()+coords[i][2]+0.5D, -1, 0, 1);
+				worldObj.spawnParticle(EnumParticleTypes.REDSTONE, pos.getX()+coords[i][0]+0.5D, pos.getY()+coords[i][1]+2+movement/30, pos.getZ()+coords[i][2]+0.5D, -1, 0, 1);
 			}
 		}
 		if(tier >= 2) {
 			for(int i = 12; i < 16; ++i) {
-				worldObj.spawnParticle("reddust", xCoord+coords[i][0]+0.5D, yCoord+coords[i][1]+movement/30, zCoord+coords[i][2]+0.5D, 0.1D, 0, 0.1D);
-				worldObj.spawnParticle("reddust", xCoord+coords[i][0]+0.5D, yCoord+coords[i][1]+2+movement/30, zCoord+coords[i][2]+0.5D, 0.1D, 0, 0.1D);
+				worldObj.spawnParticle(EnumParticleTypes.REDSTONE, pos.getX()+coords[i][0]+0.5D, pos.getY()+coords[i][1]+movement/30, pos.getZ()+coords[i][2]+0.5D, 0.1D, 0, 0.1D);
+				worldObj.spawnParticle(EnumParticleTypes.REDSTONE, pos.getX()+coords[i][0]+0.5D, pos.getY()+coords[i][1]+2+movement/30, pos.getZ()+coords[i][2]+0.5D, 0.1D, 0, 0.1D);
 			}
 		}
 		if(tier >= 3) {
 			for(int i = 16; i < 20; ++i) {
-				worldObj.spawnParticle("reddust", xCoord+coords[i][0]+0.5D, yCoord+coords[i][1]+movement/30, zCoord+coords[i][2]+0.5D, 1D, 0, 0D);
-				worldObj.spawnParticle("reddust", xCoord+coords[i][0]+0.5D, yCoord+coords[i][1]+2+movement/30, zCoord+coords[i][2]+0.5D, 1D, 0, 0D);
+				worldObj.spawnParticle(EnumParticleTypes.REDSTONE, pos.getX()+coords[i][0]+0.5D, pos.getY()+coords[i][1]+movement/30, pos.getZ()+coords[i][2]+0.5D, 1D, 0, 0D);
+				worldObj.spawnParticle(EnumParticleTypes.REDSTONE, pos.getX()+coords[i][0]+0.5D, pos.getY()+coords[i][1]+2+movement/30, pos.getZ()+coords[i][2]+0.5D, 1D, 0, 0D);
 			}
 		}
 	}
 	
 	public void checkStructureAndTier() {
 		World w = worldObj;
-		int x = xCoord;
-		int y = yCoord - 1;
-		int z = zCoord;
+		BlockPos cp = pos.down();
 		tier = -1;
 		if(
-				w.getBlock(x, y, z) == BlocksCore.invertedBlock &&
-				w.getBlock(x+1, y, z) == BlocksCore.invertedBlock &&
-				w.getBlock(x-1, y, z) == BlocksCore.invertedBlock &&
-				w.getBlock(x, y, z+1) == BlocksCore.invertedBlock &&
-				w.getBlock(x, y, z-1) == BlocksCore.invertedBlock &&
-				w.getBlock(x+2, y, z-1) == BlocksCore.invertedBlock &&
-				w.getBlock(x+2, y, z+1) == BlocksCore.invertedBlock &&
-				w.getBlock(x-2, y, z-1) == BlocksCore.invertedBlock &&
-				w.getBlock(x-2, y, z+1) == BlocksCore.invertedBlock &&
-				w.getBlock(x-1, y, z+2) == BlocksCore.invertedBlock &&
-				w.getBlock(x+1, y, z+2) == BlocksCore.invertedBlock &&
-				w.getBlock(x-1, y, z-2) == BlocksCore.invertedBlock &&
-				w.getBlock(x+1, y, z-2) == BlocksCore.invertedBlock &&
-				w.getBlock(x-1, y+1, z+2) == BlocksCore.mithrilineCrystal &&
-				w.getBlock(x+1, y+1, z+2) == BlocksCore.mithrilineCrystal &&
-				w.getBlock(x-1, y+1, z-2) == BlocksCore.mithrilineCrystal &&
-				w.getBlock(x+1, y+1, z-2) == BlocksCore.mithrilineCrystal &&
-				w.getBlock(x+2, y+1, z-1) == BlocksCore.mithrilineCrystal &&
-				w.getBlock(x+2, y+1, z+1) == BlocksCore.mithrilineCrystal &&
-				w.getBlock(x-2, y+1, z-1) == BlocksCore.mithrilineCrystal &&
-				w.getBlock(x-2, y+1, z+1) == BlocksCore.mithrilineCrystal &&
-				w.getBlockMetadata(x-1, y+1, z+2) == 0 &&
-				w.getBlockMetadata(x+1, y+1, z+2) == 0 &&
-				w.getBlockMetadata(x-1, y+1, z-2) == 0 &&
-				w.getBlockMetadata(x+1, y+1, z-2) == 0 &&
-				w.getBlockMetadata(x+2, y+1, z-1) == 0 &&
-				w.getBlockMetadata(x+2, y+1, z+1) == 0 &&
-				w.getBlockMetadata(x-2, y+1, z-1) == 0 &&
-				w.getBlockMetadata(x-2, y+1, z+1) == 0
-				) {
+				w.getBlockState(cp.add(0, 0, 0)).getBlock() == BlocksCore.invertedBlock &&
+				w.getBlockState(cp.add(1, 0, 0)).getBlock() == BlocksCore.invertedBlock &&
+				w.getBlockState(cp.add(-1, 0, 0)).getBlock() == BlocksCore.invertedBlock &&
+				w.getBlockState(cp.add(0, 0, 1)).getBlock() == BlocksCore.invertedBlock &&
+				w.getBlockState(cp.add(0, 0, -1)).getBlock() == BlocksCore.invertedBlock &&
+				w.getBlockState(cp.add(2, 0, -1)).getBlock() == BlocksCore.invertedBlock &&
+				w.getBlockState(cp.add(2, 0, 1)).getBlock() == BlocksCore.invertedBlock &&
+				w.getBlockState(cp.add(-2, 0, -1)).getBlock() == BlocksCore.invertedBlock &&
+				w.getBlockState(cp.add(-2, 0, 1)).getBlock() == BlocksCore.invertedBlock &&
+				w.getBlockState(cp.add(-1, 0, 2)).getBlock() == BlocksCore.invertedBlock &&
+				w.getBlockState(cp.add(1, 0, 2)).getBlock() == BlocksCore.invertedBlock &&
+				w.getBlockState(cp.add(-1, 0, -2)).getBlock() == BlocksCore.invertedBlock &&
+				w.getBlockState(cp.add(1, 0, -2)).getBlock() == BlocksCore.invertedBlock &&
+				w.getBlockState(cp.add(-1, 1, 2)).getBlock() == BlocksCore.mithrilineCrystal &&
+				w.getBlockState(cp.add(1, 1, 2)).getBlock() == BlocksCore.mithrilineCrystal &&
+				w.getBlockState(cp.add(-1, 1, -2)).getBlock() == BlocksCore.mithrilineCrystal &&
+				w.getBlockState(cp.add(1, 1, -2)).getBlock() == BlocksCore.mithrilineCrystal &&
+				w.getBlockState(cp.add(2, 1, -1)).getBlock() == BlocksCore.mithrilineCrystal &&
+				w.getBlockState(cp.add(2, 1, 1)).getBlock() == BlocksCore.mithrilineCrystal &&
+				w.getBlockState(cp.add(-2, 1, -1)).getBlock() == BlocksCore.mithrilineCrystal &&
+				w.getBlockState(cp.add(-2, 1, 1)).getBlock() == BlocksCore.mithrilineCrystal &&
+				w.getBlockState(cp.add(-1, 1, 2)).getValue(BlockMithrilineCrystal.TYPE).getIndex() == 0 &&
+				w.getBlockState(cp.add(1, 1, 2)).getValue(BlockMithrilineCrystal.TYPE).getIndex() == 0 &&
+				w.getBlockState(cp.add(-1, 1, -2)).getValue(BlockMithrilineCrystal.TYPE).getIndex() == 0 &&
+				w.getBlockState(cp.add(1, 1, -2)).getValue(BlockMithrilineCrystal.TYPE).getIndex() == 0 &&
+				w.getBlockState(cp.add(2, 1, -1)).getValue(BlockMithrilineCrystal.TYPE).getIndex() == 0 &&
+				w.getBlockState(cp.add(2, 1, 1)).getValue(BlockMithrilineCrystal.TYPE).getIndex() == 0 &&
+				w.getBlockState(cp.add(-2, 1, -2)).getValue(BlockMithrilineCrystal.TYPE).getIndex() == 0 &&
+				w.getBlockState(cp.add(-2, 1, 1)).getValue(BlockMithrilineCrystal.TYPE).getIndex() == 0
+				)
 			tier = 0;
-			if(
-					w.getBlock(x+1, y+1, z+1) == BlocksCore.blockPale &&
-					w.getBlock(x-1, y+1, z+1) == BlocksCore.blockPale &&
-					w.getBlock(x+1, y+1, z-1) == BlocksCore.blockPale &&
-					w.getBlock(x-1, y+1, z-1) == BlocksCore.blockPale &&
-					w.getBlock(x+1, y+2, z+1) == BlocksCore.mithrilineCrystal &&
-					w.getBlock(x-1, y+2, z+1) == BlocksCore.mithrilineCrystal &&
-					w.getBlock(x+1, y+2, z-1) == BlocksCore.mithrilineCrystal &&
-					w.getBlock(x-1, y+2, z-1) == BlocksCore.mithrilineCrystal &&
-					w.getBlockMetadata(x+1, y+2, z+1) == 3 &&
-					w.getBlockMetadata(x-1, y+2, z+1) == 3 &&
-					w.getBlockMetadata(x+1, y+2, z-1) == 3 &&
-					w.getBlockMetadata(x-1, y+2, z-1) == 3
-					) {
-				tier = 1;
-				if(
-						w.getBlock(x+2, y+1, z+2) == BlocksCore.voidStone &&
-						w.getBlock(x-2, y+1, z+2) == BlocksCore.voidStone &&
-						w.getBlock(x+2, y+1, z-2) == BlocksCore.voidStone &&
-						w.getBlock(x-2, y+1, z-2) == BlocksCore.voidStone &&
-						w.getBlock(x+2, y+2, z+2) == BlocksCore.voidStone &&
-						w.getBlock(x-2, y+2, z+2) == BlocksCore.voidStone &&
-						w.getBlock(x+2, y+2, z-2) == BlocksCore.voidStone &&
-						w.getBlock(x-2, y+2, z-2) == BlocksCore.voidStone &&
-						w.getBlock(x+2, y+3, z+2) == BlocksCore.mithrilineCrystal &&
-						w.getBlock(x-2, y+3, z+2) == BlocksCore.mithrilineCrystal &&
-						w.getBlock(x+2, y+3, z-2) == BlocksCore.mithrilineCrystal &&
-						w.getBlock(x-2, y+3, z-2) == BlocksCore.mithrilineCrystal &&
-						w.getBlockMetadata(x+2, y+3, z+2) == 6 &&
-						w.getBlockMetadata(x-2, y+3, z+2) == 6 &&
-						w.getBlockMetadata(x+2, y+3, z-2) == 6 &&
-						w.getBlockMetadata(x-2, y+3, z-2) == 6
-						) {
-					tier = 2;
-					if(
-							w.getBlock(x+2, y, z) == BlocksCore.demonicPlating &&
-							w.getBlock(x-2, y, z) == BlocksCore.demonicPlating &&
-							w.getBlock(x, y, z+2) == BlocksCore.demonicPlating &&
-							w.getBlock(x, y, z-2) == BlocksCore.demonicPlating &&
-							w.getBlock(x+2, y+4, z) == BlocksCore.mithrilineCrystal &&
-							w.getBlock(x-2, y+4, z) == BlocksCore.mithrilineCrystal	&&
-							w.getBlock(x, y+4, z+2) == BlocksCore.mithrilineCrystal &&
-							w.getBlock(x, y+4, z-2) == BlocksCore.mithrilineCrystal &&
-							w.getBlockMetadata(x+2, y+4, z) == 9 &&
-							w.getBlockMetadata(x-2, y+4, z) == 9 &&
-							w.getBlockMetadata(x, y+4, z+2) == 9 &&
-							w.getBlockMetadata(x, y+4, z-2) == 9
-							) {
-						tier = 3;
-					}
-				}
-			}
-		}
+		else return;
+		if(
+				w.getBlockState(cp.add(1, 1, 1)).getBlock() == BlocksCore.blockPale &&
+				w.getBlockState(cp.add(-1, 1, 1)).getBlock() == BlocksCore.blockPale &&
+				w.getBlockState(cp.add(1, 1, -1)).getBlock() == BlocksCore.blockPale &&
+				w.getBlockState(cp.add(-1, 1, -1)).getBlock() == BlocksCore.blockPale &&
+				w.getBlockState(cp.add(1, 2, 1)).getBlock() == BlocksCore.mithrilineCrystal &&
+				w.getBlockState(cp.add(-1, 2, 1)).getBlock() == BlocksCore.mithrilineCrystal &&
+				w.getBlockState(cp.add(1, 2, -1)).getBlock() == BlocksCore.mithrilineCrystal &&
+				w.getBlockState(cp.add(-1, 2, -1)).getBlock() == BlocksCore.mithrilineCrystal &&
+				w.getBlockState(cp.add(1, 2, 1)).getValue(BlockMithrilineCrystal.TYPE).getIndex() == 1 &&
+				w.getBlockState(cp.add(-1, 2, 1)).getValue(BlockMithrilineCrystal.TYPE).getIndex() == 1 &&
+				w.getBlockState(cp.add(1, 2, -1)).getValue(BlockMithrilineCrystal.TYPE).getIndex() == 1 &&
+				w.getBlockState(cp.add(-1, 2, -1)).getValue(BlockMithrilineCrystal.TYPE).getIndex() == 1
+				)
+			tier = 1;
+		else return;
+		if(
+				w.getBlockState(cp.add(2, 1, 2)).getBlock() == BlocksCore.voidStone &&
+				w.getBlockState(cp.add(-2, 1, 2)).getBlock() == BlocksCore.voidStone &&
+				w.getBlockState(cp.add(2, 1, -2)).getBlock() == BlocksCore.voidStone &&
+				w.getBlockState(cp.add(-2, 1, -2)).getBlock() == BlocksCore.voidStone &&
+				w.getBlockState(cp.add(2, 2, 2)).getBlock() == BlocksCore.voidStone &&
+				w.getBlockState(cp.add(-2, 2, 2)).getBlock() == BlocksCore.voidStone &&
+				w.getBlockState(cp.add(2, 2, -2)).getBlock() == BlocksCore.voidStone &&
+				w.getBlockState(cp.add(-2, 2, -2)).getBlock() == BlocksCore.voidStone &&
+				w.getBlockState(cp.add(2, 3, 2)).getBlock() == BlocksCore.mithrilineCrystal &&
+				w.getBlockState(cp.add(-2, 3, 2)).getBlock() == BlocksCore.mithrilineCrystal &&
+				w.getBlockState(cp.add(2, 3, -2)).getBlock() == BlocksCore.mithrilineCrystal &&
+				w.getBlockState(cp.add(-2, 3, -2)).getBlock() == BlocksCore.mithrilineCrystal &&
+				w.getBlockState(cp.add(2, 3, 2)).getValue(BlockMithrilineCrystal.TYPE).getIndex() == 2 &&
+				w.getBlockState(cp.add(-2, 3, 2)).getValue(BlockMithrilineCrystal.TYPE).getIndex() == 2 &&
+				w.getBlockState(cp.add(2, 3, -2)).getValue(BlockMithrilineCrystal.TYPE).getIndex() == 2 &&
+				w.getBlockState(cp.add(-2, 3, -2)).getValue(BlockMithrilineCrystal.TYPE).getIndex() == 2
+				)
+			tier = 2;
+		else return;
+		if(
+				w.getBlockState(cp.add(2, 0, 0)) == BlocksCore.demonicPlating &&
+				w.getBlockState(cp.add(-2, 0, 0)) == BlocksCore.demonicPlating &&
+				w.getBlockState(cp.add(0, 0, 2)) == BlocksCore.demonicPlating &&
+				w.getBlockState(cp.add(0, 0, -2)) == BlocksCore.demonicPlating &&
+				w.getBlockState(cp.add(2, 4, 0)) == BlocksCore.mithrilineCrystal &&
+				w.getBlockState(cp.add(-2, 4, 0)) == BlocksCore.mithrilineCrystal	&&
+				w.getBlockState(cp.add(0, 4, 2)) == BlocksCore.mithrilineCrystal &&
+				w.getBlockState(cp.add(0, 4, -2)) == BlocksCore.mithrilineCrystal &&
+				w.getBlockState(cp.add(2, 4, 0)).getValue(BlockMithrilineCrystal.TYPE).getIndex() == 3 &&
+				w.getBlockState(cp.add(-2, 4, 0)).getValue(BlockMithrilineCrystal.TYPE).getIndex() == 3 &&
+				w.getBlockState(cp.add(0, 4, 2)).getValue(BlockMithrilineCrystal.TYPE).getIndex() == 3 &&
+				w.getBlockState(cp.add(0, 4, -2)).getValue(BlockMithrilineCrystal.TYPE).getIndex() == 3
+				)
+			tier = 3;
+		else return;
 	}
 }

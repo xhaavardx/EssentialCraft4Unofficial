@@ -1,12 +1,15 @@
 package ec3.common.item;
 
+import DummyCore.Client.IModelRegisterer;
+import baubles.api.BaubleType;
+import baubles.api.IBauble;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import baubles.api.BaubleType;
-import baubles.api.IBauble;
+import net.minecraftforge.client.model.ModelLoader;
 
-public class ItemComputerBoard extends Item implements IBauble{
+public class ItemComputerBoard extends Item implements IBauble, IModelRegisterer {
 
 	@Override
 	public BaubleType getBaubleType(ItemStack itemstack) 
@@ -15,33 +18,26 @@ public class ItemComputerBoard extends Item implements IBauble{
 	}
 
 	@Override
-	public void onWornTick(ItemStack itemstack, EntityLivingBase player) 
-	{
-		
-	}
+	public void onWornTick(ItemStack itemstack, EntityLivingBase player) {}
 
 	@Override
-	public void onEquipped(ItemStack itemstack, EntityLivingBase player) 
-	{
-		
-	}
+	public void onEquipped(ItemStack itemstack, EntityLivingBase player) {}
 
 	@Override
-	public void onUnequipped(ItemStack itemstack, EntityLivingBase player)
-	{
-		
-	}
+	public void onUnequipped(ItemStack itemstack, EntityLivingBase player) {}
 
 	@Override
-	public boolean canEquip(ItemStack itemstack, EntityLivingBase player) 
-	{
+	public boolean canEquip(ItemStack itemstack, EntityLivingBase player) {
 		return true;
 	}
 
 	@Override
-	public boolean canUnequip(ItemStack itemstack, EntityLivingBase player) 
-	{
+	public boolean canUnequip(ItemStack itemstack, EntityLivingBase player) {
 		return true;
 	}
 
+	@Override
+	public void registerModels() {
+		ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation("essentialcraft:item/computer_board", "inventory"));
+	}
 }

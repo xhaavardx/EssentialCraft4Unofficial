@@ -2,6 +2,7 @@ package ec3.common.tile;
 
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.config.Configuration;
 import DummyCore.Utils.Coord3D;
 import DummyCore.Utils.DataStorage;
@@ -29,26 +30,27 @@ public class TileCorruptionCleaner extends TileMRUGeneric {
 	}
 	
 	@Override
-	public void updateEntity() {
-		super.updateEntity();
+	public void update() {
+		super.update();
 		ECUtils.manage(this, 0);
 		
-		if(!worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord)) {
+		if(worldObj.isBlockIndirectlyGettingPowered(pos) == 0) {
 			if(cleared == null) {
 				if(!worldObj.isRemote) {
 					int offsetX = (int)(MathUtils.randomDouble(worldObj.rand)*maxRadius);
 					int offsetY = (int)(MathUtils.randomDouble(worldObj.rand)*maxRadius);
 					int offsetZ = (int)(MathUtils.randomDouble(worldObj.rand)*maxRadius);
-					Block b = worldObj.getBlock(xCoord+offsetX, yCoord+offsetY, zCoord+offsetZ);
+					Block b = worldObj.getBlockState(pos.add(offsetX, offsetY, offsetZ)).getBlock();
 					if(b instanceof BlockCorruption_Light) {
-						cleared = new Coord3D(xCoord+offsetX, yCoord+offsetY, zCoord+offsetZ);
+						cleared = new Coord3D(pos.getX()+offsetX, pos.getY()+offsetY, pos.getZ()+offsetZ);
 						clearTime = ticksRequired;
 					}
 				}
 			}
 			else {
 				if(!worldObj.isRemote) {
-					Block b = worldObj.getBlock((int)cleared.x, (int)cleared.y, (int)cleared.z);
+					BlockPos clearing = new BlockPos((int)cleared.x, (int)cleared.y, (int)cleared.z);
+					Block b = worldObj.getBlockState(clearing).getBlock();
 					if(!(b instanceof BlockCorruption_Light)) {
 						cleared = null;
 						clearTime = 0;
@@ -58,11 +60,11 @@ public class TileCorruptionCleaner extends TileMRUGeneric {
 						--clearTime;
 						setMRU(getMRU()-mruUsage);
 						if(clearTime <= 0) {
-							int metadata = worldObj.getBlockMetadata((int)cleared.x, (int)cleared.y, (int)cleared.z);
+							int metadata = worldObj.getBlockState(clearing).getValue(BlockCorruption_Light.LEVEL);
 							if(metadata == 0 || removeBlock)
-								worldObj.setBlockToAir((int)cleared.x, (int)cleared.y, (int)cleared.z);
+								worldObj.setBlockToAir(clearing);
 							else
-								worldObj.setBlockMetadataWithNotify((int)cleared.x, (int)cleared.y, (int)cleared.z, metadata-1, 3);
+								worldObj.setBlockState(clearing, b.getStateFromMeta(metadata-1), 3);
 							cleared = null;
 						}
 					}
@@ -88,7 +90,7 @@ public class TileCorruptionCleaner extends TileMRUGeneric {
 	}
 	
 	@Override
-	public void writeToNBT(NBTTagCompound i) {
+	public NBTTagCompound writeToNBT(NBTTagCompound i) {
 		if(cleared != null) {
 			i.setString("coord", cleared.toString());
 		}
@@ -96,7 +98,7 @@ public class TileCorruptionCleaner extends TileMRUGeneric {
 			i.setString("coord", "null");
 		}
 		i.setInteger("clear", clearTime);
-		super.writeToNBT(i);
+		return super.writeToNBT(i);
 	}
 	
 	public static void setupConfig(Configuration cfg) {

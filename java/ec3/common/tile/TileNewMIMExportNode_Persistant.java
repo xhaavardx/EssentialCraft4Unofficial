@@ -17,7 +17,7 @@ public class TileNewMIMExportNode_Persistant extends TileNewMIMExportNode {
 	
 	@Override
 	public void exportAllPossibleItems(TileNewMIM parent) {
-		if(worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord))
+		if(worldObj.isBlockIndirectlyGettingPowered(pos) > 0)
 			return;
 		
 		ISidedInventory inv = getConnectedInventory();
@@ -30,7 +30,7 @@ public class TileNewMIMExportNode_Persistant extends TileNewMIMExportNode {
 			
 			for(int i = 0; i < itemsToExport.size(); ++i) {
 				for(int j = 0; j < slots.length; ++j) {
-					if(inv.canInsertItem(slots[j], itemsToExport.get(i), getRotation().getOpposite().ordinal())) {
+					if(inv.canInsertItem(slots[j], itemsToExport.get(i), getRotation().getOpposite())) {
 						if(inv.getStackInSlot(slots[j]) == null || (inv.getStackInSlot(slots[j]).isItemEqual(itemsToExport.get(i)) && ItemStack.areItemStackTagsEqual(inv.getStackInSlot(slots[j]), itemsToExport.get(i)))) {
 							if(getStackInSlot(0) == null || !(getStackInSlot(0).getItem() instanceof ItemFilter)) {
 								if(inv.getStackInSlot(slots[j]) == null) {

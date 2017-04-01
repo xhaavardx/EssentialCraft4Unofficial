@@ -13,6 +13,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
 
 public class ContainerNewMIM extends Container {
 	
@@ -36,12 +37,12 @@ public class ContainerNewMIM extends Container {
 			
 			TileEntity tile = (TileEntity)inventory;
 			
-			if(stk.getTagCompound().getInteger("dim") != tile.getWorldObj().provider.dimensionId)
+			if(stk.getTagCompound().getInteger("dim") != tile.getWorld().provider.getDimension())
 				return false;
 			
 			int[] coords = ItemBoundGem.getCoords(stk);
 			
-			TileEntity t = tile.getWorldObj().getTileEntity(coords[0], coords[1], coords[2]);
+			TileEntity t = tile.getWorld().getTileEntity(new BlockPos(coords[0], coords[1], coords[2]));
 			
 			if(t == null)
 				return false;

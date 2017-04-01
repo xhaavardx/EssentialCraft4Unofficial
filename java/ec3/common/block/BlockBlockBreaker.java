@@ -1,83 +1,103 @@
 package ec3.common.block;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import DummyCore.Client.IModelRegisterer;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.init.Blocks;
-import net.minecraft.util.IIcon;
+import net.minecraft.block.properties.PropertyDirection;
+import net.minecraft.block.state.BlockStateContainer;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.Item;
+import net.minecraft.util.EnumBlockRenderType;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Mirror;
+import net.minecraft.util.Rotation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.client.model.ModelLoader;
 
-public class BlockBlockBreaker extends Block{
-	
-	public IIcon[] blockIcons = new IIcon[2];
-	
+public class BlockBlockBreaker extends Block implements IModelRegisterer {
+
+	public static final PropertyDirection FACING = PropertyDirection.create("facing");
+
 	public BlockBlockBreaker() {
-		super(Material.rock);
+		super(Material.ROCK);
+		setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.DOWN));
 	}
 	
-    @SideOnly(Side.CLIENT)
-    public IIcon getIcon(IBlockAccess w, int x, int y, int z, int side)
-    {
-    	int meta = w.getBlockMetadata(x, y, z);
-    	return side == meta ? blockIcons[1] : blockIcons[0];
-    }
+	public EnumBlockRenderType getRenderType(IBlockState s)
+	{
+		return EnumBlockRenderType.MODEL;
+	}
 	
-    public IIcon getIcon(int side, int meta)
-    {
-        return side == 3 ? blockIcons[1] : blockIcons[0];
-    }
-    
+	public boolean canProvidePower(IBlockState s)
+	{
+		return true;
+	}
+
+	public void onNeighborChange(IBlockAccess w, BlockPos p, BlockPos n) 
+	{
+		if(w instanceof World && ((World)w).isBlockIndirectlyGettingPowered(p) > 0)
+		{
+			EnumFacing d = w.getBlockState(p).getValue(FACING);
+			Block broken = w.getBlockState(p.add(d.getFrontOffsetX(), d.getFrontOffsetY(), d.getFrontOffsetZ())).getBlock();
+			if(!broken.isAir(w.getBlockState(p.add(d.getFrontOffsetX(), d.getFrontOffsetY(), d.getFrontOffsetZ())), w, p.add(d.getFrontOffsetX(), d.getFrontOffsetY(), d.getFrontOffsetZ())))
+			{
+				float hardness = broken.getBlockHardness(w.getBlockState(p.add(d.getFrontOffsetX(), d.getFrontOffsetY(), d.getFrontOffsetZ())), (World)w, p.add(d.getFrontOffsetX(), d.getFrontOffsetY(), d.getFrontOffsetZ()));
+				if(hardness >= 0 && hardness <= 10)
+				{
+					for(int i = 1; i < 13; ++i)
+					{
+						BlockPos dP = p.add(d.getFrontOffsetX()*i, d.getFrontOffsetY()*i, d.getFrontOffsetZ()*i);
+						Block b = w.getBlockState(dP).getBlock();
+						if(b.getBlockHardness(w.getBlockState(dP), (World)w, dP) == hardness)
+						{
+							b.breakBlock((World)w, dP, w.getBlockState(dP));
+							b.onBlockDestroyedByPlayer((World)w, dP, w.getBlockState(dP));
+							b.dropBlockAsItem((World)w, dP, w.getBlockState(dP), 0);
+							((World)w).setBlockToAir(dP);
+						}else
+							break;
+					}
+				}
+			}
+		}
+	}
+
 	@Override
-    @SideOnly(Side.CLIENT)
-    public void registerBlockIcons(IIconRegister p_149651_1_)
-    {
-    	this.blockIcons[0] = p_149651_1_.registerIcon("essentialcraft:fortifiedStone");
-    	this.blockIcons[1] = p_149651_1_.registerIcon("essentialcraft:blockBreaker");
-    }
-	
-    public boolean canProvidePower()
-    {
-        return true;
-    }
-    
-    public void onNeighborBlockChange(World w, int x, int y, int z, Block n) 
-    {
-    	if(w.isBlockIndirectlyGettingPowered(x, y, z))
-    	{
-    		ForgeDirection d = ForgeDirection.values()[w.getBlockMetadata(x, y, z)];
-    		Block broken = w.getBlock(x+d.offsetX, y+d.offsetY, z+d.offsetZ);
-    		if(!broken.isAir(w, x+d.offsetX, y+d.offsetY, z+d.offsetZ))
-    		{
-    			float hardness = broken.getBlockHardness(w, x+d.offsetX, y+d.offsetY, z+d.offsetZ);
-    			if(hardness >= 0 && hardness <= 10)
-    			{
-    				for(int i = 1; i < 13; ++i)
-    				{
-    					int dX = x+d.offsetX*i;
-    					int dY = y+d.offsetY*i;
-    					int dZ = z+d.offsetZ*i;
-    					Block b = w.getBlock(dX, dY, dZ);
-    					if(b.getBlockHardness(w, dX, dY, dZ) == hardness)
-    					{
-    	    				b.breakBlock(w, dX, dY, dZ, b, w.getBlockMetadata(dX, dY, dZ));
-    	    				b.onBlockDestroyedByPlayer(w, dX, dY, dZ, w.getBlockMetadata(dX, dY, dZ));
-    	    				b.dropBlockAsItem(w, dX, dY, dZ, w.getBlockMetadata(dX, dY, dZ), 0);
-    	    				w.setBlock(dX, dY, dZ, Blocks.air, 0, 2);
-    					}else
-    						break;
-    				}
-    			}
-    		}
-    	}
-    }
-    
-    @Override
-    public int onBlockPlaced(World w, int x, int y, int z, int side, float hitX, float hitY, float hitZ, int meta)
-    {
-        return ForgeDirection.values()[side].ordinal();
-    }
+	public IBlockState onBlockPlaced(World w, BlockPos p, EnumFacing side, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
+		return getDefaultState().withProperty(FACING, side);
+	}
+
+	@Override
+	public IBlockState getStateFromMeta(int meta) {
+		return getDefaultState().withProperty(FACING, EnumFacing.getFront(meta%6));
+	}
+
+	@Override
+	public int getMetaFromState(IBlockState state) {
+		return state.getValue(FACING).getIndex();
+	}
+
+	@Override
+	public IBlockState withRotation(IBlockState state, Rotation rot) {
+		return state.withProperty(FACING, rot.rotate(state.getValue(FACING)));
+	}
+
+	@Override
+	public IBlockState withMirror(IBlockState state, Mirror mirrorIn) {
+		return state.withRotation(mirrorIn.toRotation(state.getValue(FACING)));
+	}
+
+	@Override
+	protected BlockStateContainer createBlockState() {
+		return new BlockStateContainer(this, FACING);
+	}
+
+	@Override
+	public void registerModels() {
+		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation("essentialcraft:blockBreaker", "inventory"));
+	}
 }

@@ -12,7 +12,7 @@ public class TileecHoldingChamber extends TileEntity implements IStructurePiece 
 	
 	@Override
 	public EnumStructureType getStructure() {
-		return EnumStructureType.MRUCUContaigementChamber;
+		return EnumStructureType.MRUCUEnrichmentChamber;
 	}
 	
 	@Override

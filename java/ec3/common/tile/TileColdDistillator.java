@@ -8,9 +8,10 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.MobEffects;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraftforge.common.config.Configuration;
 import ec3.api.ApiCore;
@@ -33,11 +34,11 @@ public class TileColdDistillator extends TileMRUGeneric {
 	}
 	
 	@Override
-	public void updateEntity() {
-		super.updateEntity();
+	public void update() {
+		super.update();
 		balance = balanceProduced;
 		if(!worldObj.isRemote) {
-			if(!worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord)) {
+			if(worldObj.isBlockIndirectlyGettingPowered(pos) == 0) {
 				int mruGenerated = CgetMru();
 				setMRU((int) (getMRU()+mruGenerated));
 				if(getMRU() > getMaxMRU())
@@ -51,21 +52,21 @@ public class TileColdDistillator extends TileMRUGeneric {
 	
 	@SuppressWarnings("unchecked")
 	public void CdamageAround() {
-		List<EntityLivingBase> l = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, AxisAlignedBB.getBoundingBox(xCoord, yCoord, zCoord, xCoord+1, yCoord+1, zCoord+1).expand(3D, 3D, 3D));
+		List<EntityLivingBase> l = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(pos).expand(3D, 3D, 3D));
 		if(!l.isEmpty()) {
 			EntityLivingBase e = l.get(worldObj.rand.nextInt(l.size()));
 			if(e instanceof EntityPlayer && !((EntityPlayer)e).capabilities.isCreativeMode) {
-				e.addPotionEffect(new PotionEffect(Potion.digSlowdown.id, 3000, 2));
-				e.addPotionEffect(new PotionEffect(Potion.weakness.id, 3000, 2));
-				e.addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, 3000, 2));
+				e.addPotionEffect(new PotionEffect(MobEffects.MINING_FATIGUE, 3000, 2));
+				e.addPotionEffect(new PotionEffect(MobEffects.WEAKNESS, 3000, 2));
+				e.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 3000, 2));
 				if(e.worldObj.rand.nextFloat() < 0.2F && !e.worldObj.isRemote) {
 					e.attackEntityFrom(DamageSource.starve, 1);
 				}
 			}
 			else if(!(e instanceof EntityPlayer)) {
-				e.addPotionEffect(new PotionEffect(Potion.digSlowdown.id, 3000, 2));
-				e.addPotionEffect(new PotionEffect(Potion.weakness.id, 3000, 2));
-				e.addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, 3000, 2));
+				e.addPotionEffect(new PotionEffect(MobEffects.MINING_FATIGUE, 3000, 2));
+				e.addPotionEffect(new PotionEffect(MobEffects.WEAKNESS, 3000, 2));
+				e.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 3000, 2));
 				if(e.worldObj.rand.nextFloat() < 0.2F && !e.worldObj.isRemote) {
 					e.attackEntityFrom(DamageSource.starve, 1);
 				}
@@ -78,21 +79,21 @@ public class TileColdDistillator extends TileMRUGeneric {
 		for(int x = -3; x <= 3; ++x) {
 			for(int z = -3; z <= 3; ++z) {
 				for(int y = -3; y <= 3; ++y) {
-					if(worldObj.getBlock(xCoord+x, yCoord+y, zCoord+z) == Blocks.ice) {
+					if(worldObj.getBlockState(pos.add(x, y, z)) == Blocks.ICE) {
 						i += 0.15F;
 					}
-					if(worldObj.getBlock(xCoord+x, yCoord+y, zCoord+z) == Blocks.snow) {
+					if(worldObj.getBlockState(pos.add(x, y, z)) == Blocks.SNOW) {
 						i += 0.2F;
 					}
-					if(worldObj.getBlock(xCoord+x, yCoord+y, zCoord+z) == Blocks.snow_layer) {
+					if(worldObj.getBlockState(pos.add(x, y, z)) == Blocks.SNOW_LAYER) {
 						i += 0.05F;
 					}
-					if(worldObj.getBlock(xCoord+x, yCoord+y, zCoord+z) == Blocks.packed_ice) {
+					if(worldObj.getBlockState(pos.add(x, y, z)) == Blocks.PACKED_ICE) {
 						i += 0.3F;
 					}
-					Block b = worldObj.getBlock(xCoord+x, yCoord+y, zCoord+z);
+					Block b = worldObj.getBlockState(pos.add(x, y, z)).getBlock();
 					if(b != null && b instanceof IColdBlock) {
-						i += ((IColdBlock)b).getColdModifier(worldObj, xCoord+x, yCoord+y, zCoord+z, worldObj.getBlockMetadata(xCoord+x, yCoord+y, zCoord+z));
+						i += ((IColdBlock)b).getColdModifier(worldObj, pos.getX()+x, pos.getY()+y, pos.getZ()+z, b.getMetaFromState(worldObj.getBlockState(pos.add(x, y, z))));
 					}
 				}
 			}

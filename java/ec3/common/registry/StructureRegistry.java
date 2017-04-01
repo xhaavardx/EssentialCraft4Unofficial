@@ -16,16 +16,11 @@ import ec3.common.world.structure.StructureTownPieces;
 import ec3.utils.common.ECUtils;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
-import net.minecraftforge.common.ChestGenHooks;
 
 public class StructureRegistry {
 	
 	public static void register() {
-		for(int i = 0; i < BaublesModifier.names.length-1; ++i) {
-			ChestGenHooks.addItem(ChestGenHooks.DUNGEON_CHEST, new WeightedRandomChestContent(new ItemStack(ItemsCore.baublesCore,1,i),1,1,3));
-		}
 		MapGenStructureIO.registerStructure(MapGenTown.Start.class, "ec3.Town");
 		MapGenStructureIO.registerStructure(StructureModernShaftStart.class, "ec3.ModernShafts");
 		StructureTownPieces.registerVillagePieces();
@@ -46,13 +41,13 @@ public class StructureRegistry {
 		structureBlocks_mrucucc.add(BlocksCore.platingPale);
 		structureBlocks_mrucucc.add(BlocksCore.invertedBlock);
 		structureBlocks_mrucucc.add(BlocksCore.demonicPlating);
-		structureBlocks_mrucucc.add(BlocksCore.fancyBlocks.get(0));
-		structureBlocks_mrucucc.add(BlocksCore.fancyBlocks.get(2));
-		structureBlocks_mrucucc.add(BlocksCore.fancyBlocks.get(4));
-		structureBlocks_mrucucc.add(BlocksCore.fancyBlocks.get(5));
-		structureBlocks_mrucucc.add(BlocksCore.fancyBlocks.get(6));
-		structureBlocks_mrucucc.add(BlocksCore.fancyBlocks.get(7));
-		allowedBlocks.put(EnumStructureType.MRUCUContaigementChamber, structureBlocks_mrucucc);
+		//structureBlocks_mrucucc.add(BlocksCore.fancyBlocks.get(0));
+		//structureBlocks_mrucucc.add(BlocksCore.fancyBlocks.get(2));
+		//structureBlocks_mrucucc.add(BlocksCore.fancyBlocks.get(4));
+		//structureBlocks_mrucucc.add(BlocksCore.fancyBlocks.get(5));
+		//structureBlocks_mrucucc.add(BlocksCore.fancyBlocks.get(6));
+		//structureBlocks_mrucucc.add(BlocksCore.fancyBlocks.get(7));
+		allowedBlocks.put(EnumStructureType.MRUCUEnrichmentChamber, structureBlocks_mrucucc);
 		
 		List<Block> structureBlocks_mrucoil = new ArrayList<Block>();
 		structureBlocks_mrucoil.add(BlocksCore.platingPale);
@@ -60,20 +55,20 @@ public class StructureRegistry {
 		structureBlocks_mrucoil.add(BlocksCore.voidStone);
 		structureBlocks_mrucoil.add(BlocksCore.invertedBlock);
 		structureBlocks_mrucoil.add(BlocksCore.demonicPlating);
-		structureBlocks_mrucoil.add(BlocksCore.fancyBlocks.get(4));
-		structureBlocks_mrucoil.add(BlocksCore.fancyBlocks.get(5));
-		structureBlocks_mrucoil.add(BlocksCore.fancyBlocks.get(6));
-		structureBlocks_mrucoil.add(BlocksCore.fancyBlocks.get(7));
+		//structureBlocks_mrucoil.add(BlocksCore.fancyBlocks.get(4));
+		//structureBlocks_mrucoil.add(BlocksCore.fancyBlocks.get(5));
+		//structureBlocks_mrucoil.add(BlocksCore.fancyBlocks.get(6));
+		//structureBlocks_mrucoil.add(BlocksCore.fancyBlocks.get(7));
 		
 		allowedBlocks.put(EnumStructureType.MRUCoil, structureBlocks_mrucoil);
 		
 		ECUtils.registerBlockResistance(BlocksCore.fortifiedGlass, 0, 3F);
-		ECUtils.registerBlockResistance(BlocksCore.fancyBlocks.get(0), -1, 8F);
-		ECUtils.registerBlockResistance(BlocksCore.fancyBlocks.get(2), -1, 3F);
-		ECUtils.registerBlockResistance(BlocksCore.fancyBlocks.get(4), -1, 5F);
-		ECUtils.registerBlockResistance(BlocksCore.fancyBlocks.get(5), -1, 10F);
-		ECUtils.registerBlockResistance(BlocksCore.fancyBlocks.get(6), -1, 18F);
-		ECUtils.registerBlockResistance(BlocksCore.fancyBlocks.get(7), -1, 36F);
+		//ECUtils.registerBlockResistance(BlocksCore.fancyBlocks.get(0), -1, 8F);
+		//ECUtils.registerBlockResistance(BlocksCore.fancyBlocks.get(2), -1, 3F);
+		//ECUtils.registerBlockResistance(BlocksCore.fancyBlocks.get(4), -1, 5F);
+		//ECUtils.registerBlockResistance(BlocksCore.fancyBlocks.get(5), -1, 10F);
+		//ECUtils.registerBlockResistance(BlocksCore.fancyBlocks.get(6), -1, 18F);
+		//ECUtils.registerBlockResistance(BlocksCore.fancyBlocks.get(7), -1, 36F);
 		
 		ECUtils.registerBlockResistance(BlocksCore.magicPlating, 0, 5F);
 		ECUtils.registerBlockResistance(BlocksCore.platingPale, 0, 10F);

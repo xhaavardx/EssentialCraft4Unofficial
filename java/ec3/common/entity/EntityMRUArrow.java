@@ -1,23 +1,25 @@
 package ec3.common.entity;
 
 import DummyCore.Utils.MathUtils;
+import ec3.common.item.ItemsCore;
 import ec3.common.mod.EssentialCraftCore;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.projectile.EntityArrow;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 
-public class EntityMRUArrow extends EntityArrow{
+public class EntityMRUArrow extends EntityArrow {
 	
     public EntityMRUArrow(World p_i1753_1_)
     {
         super(p_i1753_1_);
     }
 
-
 	public EntityMRUArrow(World p_i1756_1_, EntityLivingBase p_i1756_2_,float p_i1756_3_) 
 	{
-		super(p_i1756_1_, p_i1756_2_, p_i1756_3_);
-		this.canBePickedUp = 0;
+		super(p_i1756_1_, p_i1756_2_);
+		this.pickupStatus = PickupStatus.DISALLOWED;
 	}
 	
     public void onUpdate()
@@ -30,8 +32,17 @@ public class EntityMRUArrow extends EntityArrow{
         this.motionZ *= 0.8F;
         for(int i = 0; i < 2; ++i)
         {
-        	EssentialCraftCore.proxy.spawnParticle("cSpellFX", (float)posX+MathUtils.randomFloat(rand)/10, (float)posY+MathUtils.randomFloat(rand)/10, (float)posZ+MathUtils.randomFloat(rand)/10, motionX*10, motionY*10, motionZ*10);
+        	EssentialCraftCore.proxy.spawnParticle("cSpellFX",(float)posX+MathUtils.randomFloat(rand)/10, (float)posY+MathUtils.randomFloat(rand)/10, (float)posZ+MathUtils.randomFloat(rand)/10, motionX*10, motionY*10, motionZ*10);
         }
     }
 
+	@Override
+	protected ItemStack getArrowStack() {
+		return null;
+	}
+	
+	@Override
+	public ItemStack getPickedResult(RayTraceResult target) {
+		return new ItemStack(ItemsCore.entityEgg,1,EntitiesCore.registeredEntities.indexOf(this.getClass()));
+	}
 }

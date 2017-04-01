@@ -15,7 +15,7 @@ public class TileNewMIMImportNode_Persistant extends TileNewMIMImportNode {
 	
 	@Override
 	public void importAllPossibleItems(TileNewMIM parent) {
-		if(worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord))
+		if(worldObj.isBlockIndirectlyGettingPowered(pos) > 0)
 			return;
 		
 		ISidedInventory inv = getConnectedInventory();

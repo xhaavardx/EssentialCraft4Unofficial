@@ -1,0 +1,17 @@
+{
+    "forge_marker": 1,
+    "variants": {
+        "layer": {
+            "top": {
+                "model": "minecraft:block",
+                "textures": { "particle": "minecraft:blocks/anvil_base" }
+            },
+            "bottom": {
+                "model": "essentialcraft:rayTower"
+            }
+        },
+        "inventory": [{
+            "model": "essentialcraft:rayTower"
+        }]
+    }
+}

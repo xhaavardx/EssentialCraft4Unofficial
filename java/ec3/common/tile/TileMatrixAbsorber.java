@@ -1,14 +1,19 @@
 package ec3.common.tile;
 
+import java.util.UUID;
+
 import DummyCore.Utils.DataStorage;
 import DummyCore.Utils.DummyData;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.SoundCategory;
 import net.minecraftforge.common.config.Configuration;
 import ec3.api.ApiCore;
 import ec3.common.item.ItemSoulStone;
+import ec3.common.registry.SoundRegistry;
 import ec3.utils.common.ECUtils;
 
 public class TileMatrixAbsorber extends TileMRUGeneric {
@@ -33,18 +38,18 @@ public class TileMatrixAbsorber extends TileMRUGeneric {
 	}
 	
 	@Override
-	public void updateEntity() {
+	public void update() {
 		balance = cfgBalance;
-		super.updateEntity();
+		super.update();
 		boolean t = false;
-		if(!worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord)) {
+		if(worldObj.isBlockIndirectlyGettingPowered(pos) == 0) {
 			if(!worldObj.isRemote) {
 				ItemStack stk = getStackInSlot(0);
 				if(stk != null && stk.getItem() instanceof ItemSoulStone) {
 					if(stk.getTagCompound() != null) {
 						String username = stk.getTagCompound().getString("playerName");
-						if(MinecraftServer.getServer() != null && MinecraftServer.getServer().getConfigurationManager() != null) {
-							EntityPlayer p = MinecraftServer.getServer().getConfigurationManager().func_152612_a(username);
+						if(worldObj.getMinecraftServer() != null && worldObj.getMinecraftServer().getPlayerList() != null) {
+							EntityPlayer p = worldObj.getMinecraftServer().getPlayerList().getPlayerByUUID(UUID.fromString(username));
 							if(p != null) {
 								if(getMRU() + mruGenerated <= getMaxMRU()) {
 									int current = ECUtils.getData(p).getPlayerUBMRU();
@@ -56,7 +61,7 @@ public class TileMatrixAbsorber extends TileMRUGeneric {
 										}
 										setMRU((int)(getMRU() + mruGenerated));
 										for(int o = 0; o < 10; ++o) {
-											worldObj.spawnParticle("reddust", xCoord+0.25D+worldObj.rand.nextDouble()/2.2D, yCoord+0.25D+((float)o/20), zCoord+0.25D+worldObj.rand.nextDouble()/2.2D, 1.0D, 0.0D, 1.0D);
+											worldObj.spawnParticle(EnumParticleTypes.REDSTONE, pos.getX()+0.25D+worldObj.rand.nextDouble()/2.2D, pos.getY()+0.25D+((float)o/20), pos.getZ()+0.25D+worldObj.rand.nextDouble()/2.2D, 1.0D, 0.0D, 1.0D);
 										}
 										t = true;
 									}
@@ -69,7 +74,7 @@ public class TileMatrixAbsorber extends TileMRUGeneric {
 			--sndTime;
 			if(t && sndTime <= 0) {
 				sndTime = 400;
-				worldObj.playSound(xCoord+0.5D, yCoord+0.5D, zCoord+0.5D, "essentialcraft:sound.deepnoise", 0.01F, 2F, false);
+				worldObj.playSound(pos.getX()+0.5D, pos.getY()+0.5D, pos.getZ()+0.5D, SoundRegistry.machineDeepNoise, SoundCategory.BLOCKS, 0.01F, 2F, false);
 			}
 			if(!t)
 				sndTime = 0;
@@ -82,8 +87,8 @@ public class TileMatrixAbsorber extends TileMRUGeneric {
 	}
 	
 	@Override
-	public void writeToNBT(NBTTagCompound i) {
-		super.writeToNBT(i);
+	public NBTTagCompound writeToNBT(NBTTagCompound i) {
+		return super.writeToNBT(i);
 	}
 	
 	public static void setupConfig(Configuration cfg) {
@@ -119,10 +124,5 @@ public class TileMatrixAbsorber extends TileMRUGeneric {
 	@Override
 	public int[] getOutputSlots() {
 		return new int[] {0};
-	}
-	
-	@Override
-	public int[] getInputSlots() {
-		return new int[] {1};
 	}
 }

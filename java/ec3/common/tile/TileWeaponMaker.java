@@ -12,6 +12,7 @@ import ec3.common.item.ItemMRUStorageNBTTag;
 import ec3.common.item.ItemsCore;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
 
 public class TileWeaponMaker extends TileMRUGeneric {
 	
@@ -25,17 +26,9 @@ public class TileWeaponMaker extends TileMRUGeneric {
 	}
 	
 	@Override
-	public void updateEntity() {
-		index = worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
-		++innerRotation;
-		//Sending the sync packets to the CLIENT. 
-		if(syncTick == 0) {
-			if(!worldObj.isRemote)
-				MiscUtils.sendPacketToAllAround(worldObj, getDescriptionPacket(), xCoord, yCoord, zCoord, worldObj.provider.dimensionId, 16);
-			syncTick = 20;
-		}
-		else
-			--syncTick;
+	public void update() {
+		index = this.getBlockMetadata();
+		super.update();
 	}
 	
 	@Override
@@ -50,7 +43,7 @@ public class TileWeaponMaker extends TileMRUGeneric {
 	}
 	
 	@Override
-	public void writeToNBT(NBTTagCompound i) {
+	public NBTTagCompound writeToNBT(NBTTagCompound i) {
 		if(previewStack != null) {
 			NBTTagCompound tag = new NBTTagCompound();
 			previewStack.writeToNBT(tag);
@@ -60,7 +53,7 @@ public class TileWeaponMaker extends TileMRUGeneric {
 			i.removeTag("preview");
 		
 		i.setInteger("index", index);
-		super.writeToNBT(i);
+		return super.writeToNBT(i);
 	}
 	
 	public String getBase() {
@@ -439,16 +432,16 @@ public class TileWeaponMaker extends TileMRUGeneric {
 	}
 	
 	@Override
-	public int[] getInputSlots() {
+	public int[] getSlotsForFace(EnumFacing facing) {
 		switch(index) {
 		case 0:
-			return new int[] {1, 2, 3, 4, 5, 6, 7, 8, 9};
+			return new int[] {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
 		case 1:
-			return new int[] {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
+			return new int[] {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
 		case 2:
-			return new int[] {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13};
+			return new int[] {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13};
 		case 3:
-			return new int[] {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18};
+			return new int[] {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18};
 		}
 		return new int[0];
 	}

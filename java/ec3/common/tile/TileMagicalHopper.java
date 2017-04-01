@@ -9,9 +9,9 @@ import ec3.common.item.ItemFilter;
 import ec3.utils.common.ECUtils;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.common.util.ForgeDirection;
 
 public class TileMagicalHopper extends TileMRUGeneric {
 	public static int itemHopRadius = 3;
@@ -19,11 +19,10 @@ public class TileMagicalHopper extends TileMRUGeneric {
 	
 	public int delay = 0;
 	
-	public ForgeDirection getRotation() {
-		int metadata = worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
-		if(metadata > 5)
-			metadata -= 6;
-		return ForgeDirection.getOrientation(metadata);
+	public EnumFacing getRotation() {
+		int metadata = this.getBlockMetadata();
+		metadata %= 6;
+		return EnumFacing.getFront(metadata);
 	}
 	
 	public TileMagicalHopper() {
@@ -38,25 +37,25 @@ public class TileMagicalHopper extends TileMRUGeneric {
 	}
 	
 	@Override
-	public void writeToNBT(NBTTagCompound par1NBTTagCompound) {
-		super.writeToNBT(par1NBTTagCompound);
+	public NBTTagCompound writeToNBT(NBTTagCompound par1NBTTagCompound) {
+		return super.writeToNBT(par1NBTTagCompound);
 	}
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public void updateEntity() {
-		super.updateEntity();
-		if(delay <= 0 && !worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord)) {
-			ForgeDirection r = getRotation();
-			AxisAlignedBB teleportBB = AxisAlignedBB.getBoundingBox(xCoord+r.offsetX, yCoord+r.offsetY, zCoord+r.offsetZ, xCoord+1+r.offsetX, yCoord+1+r.offsetY, zCoord+1+r.offsetZ);
+	public void update() {
+		super.update();
+		if(delay <= 0 && worldObj.isBlockIndirectlyGettingPowered(pos) == 0) {
+			EnumFacing r = getRotation();
+			AxisAlignedBB teleportBB = new AxisAlignedBB(pos.offset(r));
 			delay = itemDelay;
-			List<EntityItem> items = worldObj.getEntitiesWithinAABB(EntityItem.class, AxisAlignedBB.getBoundingBox(xCoord, yCoord, zCoord, xCoord+1, yCoord+1, zCoord+1).expand(itemHopRadius, itemHopRadius, itemHopRadius));
+			List<EntityItem> items = worldObj.getEntitiesWithinAABB(EntityItem.class, new AxisAlignedBB(pos).expand(itemHopRadius, itemHopRadius, itemHopRadius));
 			List<EntityItem> doNotTouch = worldObj.getEntitiesWithinAABB(EntityItem.class, teleportBB);
 			
 			for(int i = 0; i < items.size(); ++i) {
 				EntityItem item = items.get(i);
 				if(canTeleport(item) && !doNotTouch.contains(item))
-					item.setPositionAndRotation(xCoord+0.5D+r.offsetX, yCoord+0.5D+r.offsetY, zCoord+0.5D+r.offsetZ, 0, 0);
+					item.setPositionAndRotation(pos.getX()+0.5D+r.getFrontOffsetX(), pos.getY()+0.5D+r.getFrontOffsetY(), pos.getZ()+0.5D+r.getFrontOffsetZ(), 0, 0);
 			}
 		}
 		else {

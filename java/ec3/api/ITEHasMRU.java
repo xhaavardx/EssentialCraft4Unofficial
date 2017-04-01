@@ -30,7 +30,7 @@ public interface ITEHasMRU {
 	
 	/**
 	 * this is used to get the balance in the device.
-	 * @return the amount of balanve there is
+	 * @return the amount of balance there is
 	 */
 	public abstract float getBalance();
 	

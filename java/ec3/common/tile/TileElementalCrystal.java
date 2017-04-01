@@ -5,21 +5,35 @@ import java.util.Random;
 import DummyCore.Utils.DataStorage;
 import DummyCore.Utils.DummyData;
 import DummyCore.Utils.MiscUtils;
+import DummyCore.Utils.Notifier;
+import DummyCore.Utils.TileStatTracker;
+import ec3.common.mod.EssentialCraftCore;
+import ec3.utils.common.ECUtils;
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.INetHandlerPlayClient;
-import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.ITickable;
 import net.minecraftforge.common.config.Configuration;
 
-public class TileElementalCrystal extends TileEntity{
+public class TileElementalCrystal extends TileEntity implements ITickable {
 	public int syncTick = 10;
 	public float size,fire,water,earth,air;
+	private TileStatTracker tracker;
+	public boolean requestSync = true;
 	
 	public static float mutatuinChance = 0.001F;
 	public static float growthModifier = 1.0F;
+	
+	public TileElementalCrystal() {
+		super();
+		tracker = new TileStatTracker(this);
+	}
 	
 	@Override
     public void readFromNBT(NBTTagCompound i) {
@@ -32,13 +46,14 @@ public class TileElementalCrystal extends TileEntity{
     }
 	
 	@Override
-    public void writeToNBT(NBTTagCompound i)  {
+    public NBTTagCompound writeToNBT(NBTTagCompound i)  {
     	super.writeToNBT(i);
     	i.setFloat("size", size);
     	i.setFloat("fire", fire);
     	i.setFloat("water", water);
     	i.setFloat("earth", earth);
     	i.setFloat("air", air);
+    	return i;
     }
     
 	public float getElementByNum(int num) {
@@ -88,85 +103,94 @@ public class TileElementalCrystal extends TileEntity{
 		return -1;
 	}
 	
-	public void updateEntity() {
-		int metadata = worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
+	public void update() {
+		int metadata = this.getBlockMetadata();
 		
 		if(metadata == 1) {
-			Block b = worldObj.getBlock(xCoord, yCoord-1, zCoord);
-			if(!b.isBlockSolid(worldObj, xCoord, yCoord-1, zCoord, 0)) {
-				worldObj.getBlock(xCoord, yCoord, zCoord).dropBlockAsItem(getWorldObj(), xCoord, yCoord, zCoord, metadata, 0);
-				worldObj.setBlockToAir(xCoord, yCoord, zCoord);
+			Block b = worldObj.getBlockState(pos.down()).getBlock();
+			if(!b.isBlockSolid(worldObj, pos.down(), EnumFacing.UP)) {
+				worldObj.getBlockState(pos).getBlock().dropBlockAsItem(worldObj, pos, worldObj.getBlockState(pos), 0);
+				worldObj.setBlockToAir(pos);
 			}
 		}
 		
 		if(metadata == 0) {
-			Block b = worldObj.getBlock(xCoord, yCoord+1, zCoord);
-			if(!b.isBlockSolid(worldObj, xCoord, yCoord+1, zCoord, 1)) {
-				worldObj.getBlock(xCoord, yCoord, zCoord).dropBlockAsItem(getWorldObj(), xCoord, yCoord, zCoord, metadata, 0);
-				worldObj.setBlockToAir(xCoord, yCoord, zCoord);
-			}
-		}
-		
-		if(metadata == 2) {
-			Block b = worldObj.getBlock(xCoord, yCoord, zCoord+1);
-			if(!b.isBlockSolid(worldObj, xCoord, yCoord, zCoord+1, 3)) {
-				worldObj.getBlock(xCoord, yCoord, zCoord).dropBlockAsItem(getWorldObj(), xCoord, yCoord, zCoord, metadata, 0);
-				worldObj.setBlockToAir(xCoord, yCoord, zCoord);
+			Block b = worldObj.getBlockState(pos.up()).getBlock();
+			if(!b.isBlockSolid(worldObj, pos.up(), EnumFacing.DOWN)) {
+				worldObj.getBlockState(pos).getBlock().dropBlockAsItem(worldObj, pos, worldObj.getBlockState(pos), 0);
+				worldObj.setBlockToAir(pos);
 			}
 		}
 		
 		if(metadata == 3) {
-			Block b = worldObj.getBlock(xCoord, yCoord, zCoord-1);
-			if(!b.isBlockSolid(worldObj, xCoord, yCoord, zCoord-1, 2)) {
-				worldObj.getBlock(xCoord, yCoord, zCoord).dropBlockAsItem(getWorldObj(), xCoord, yCoord, zCoord, metadata, 0);
-				worldObj.setBlockToAir(xCoord, yCoord, zCoord);
+			Block b = worldObj.getBlockState(pos.north()).getBlock();
+			if(!b.isBlockSolid(worldObj, pos.north(), EnumFacing.SOUTH)) {
+				worldObj.getBlockState(pos).getBlock().dropBlockAsItem(worldObj, pos, worldObj.getBlockState(pos), 0);
+				worldObj.setBlockToAir(pos);
 			}
 		}
 		
-		if(metadata == 4) {
-			Block b = worldObj.getBlock(xCoord+1, yCoord, zCoord);
-			if(!b.isBlockSolid(worldObj, xCoord+1, yCoord, zCoord, 5)) {
-				worldObj.getBlock(xCoord, yCoord, zCoord).dropBlockAsItem(getWorldObj(), xCoord, yCoord, zCoord, metadata, 0);
-				worldObj.setBlockToAir(xCoord, yCoord, zCoord);
+		if(metadata == 2) {
+			Block b = worldObj.getBlockState(pos.south()).getBlock();
+			if(!b.isBlockSolid(worldObj, pos.south(), EnumFacing.NORTH)) {
+				worldObj.getBlockState(pos).getBlock().dropBlockAsItem(worldObj, pos, worldObj.getBlockState(pos), 0);
+				worldObj.setBlockToAir(pos);
 			}
 		}
 		
 		if(metadata == 5) {
-			Block b = worldObj.getBlock(xCoord-1, yCoord, zCoord);
-			if(!b.isBlockSolid(worldObj, xCoord-1, yCoord, zCoord, 4)) {
-				worldObj.getBlock(xCoord, yCoord, zCoord).dropBlockAsItem(getWorldObj(), xCoord, yCoord, zCoord, metadata, 0);
-				worldObj.setBlockToAir(xCoord, yCoord, zCoord);
+			Block b = worldObj.getBlockState(pos.west()).getBlock();
+			if(!b.isBlockSolid(worldObj, pos.west(), EnumFacing.EAST)) {
+				worldObj.getBlockState(pos).getBlock().dropBlockAsItem(worldObj, pos, worldObj.getBlockState(pos), 0);
+				worldObj.setBlockToAir(pos);
+			}
+		}
+		
+		if(metadata == 4) {
+			Block b = worldObj.getBlockState(pos.east()).getBlock();
+			if(!b.isBlockSolid(worldObj, pos.east(), EnumFacing.WEST)) {
+				worldObj.getBlockState(pos).getBlock().dropBlockAsItem(worldObj, pos, worldObj.getBlockState(pos), 0);
+				worldObj.setBlockToAir(pos);
 			}
 		}
 		
 		if(size < 100) {
-			worldObj.spawnParticle("enchantmenttable", xCoord+worldObj.rand.nextFloat(),yCoord+1,zCoord+worldObj.rand.nextFloat(), 0, 0, 0);
+			worldObj.spawnParticle(EnumParticleTypes.ENCHANTMENT_TABLE, pos.getX()+worldObj.rand.nextFloat(),pos.getY()+1,pos.getZ()+worldObj.rand.nextFloat(), 0, 0, 0);
 			if(!worldObj.isRemote) {
 	    		size += 0.002F*growthModifier;
 	    			randomlyMutate();
 			}
 		}
+		
 		//Sending the sync packets to the CLIENT. 
 		if(syncTick == 0) {
-			if(!worldObj.isRemote)
-				MiscUtils.sendPacketToAllAround(worldObj, getDescriptionPacket(), xCoord, yCoord, zCoord, worldObj.provider.dimensionId, 128);
-			syncTick = 10;
+			if(tracker == null)
+				Notifier.notifyCustomMod("EssentialCraft", "[WARNING][SEVERE]TileEntity " + this + " at pos " + pos.getX() + "," + pos.getY() + ","  + pos.getZ() + " tries to sync itself, but has no TileTracker attached to it! SEND THIS MESSAGE TO THE DEVELOPER OF THE MOD!");
+			else if(!worldObj.isRemote && tracker.tileNeedsSyncing()) {
+				MiscUtils.sendPacketToAllAround(worldObj, getUpdatePacket(), pos.getX(), pos.getY(), pos.getZ(), worldObj.provider.getDimension(), 32);
+			}
+			syncTick = 60;
 		}
 		else
 			--syncTick;
+		
+		if(requestSync && worldObj.isRemote) {
+			requestSync = false;
+			ECUtils.requestScheduledTileSync(this, EssentialCraftCore.proxy.getClientPlayer());
+		}
 	}
 	
 	@Override
-	public Packet getDescriptionPacket() {
+	public SPacketUpdateTileEntity getUpdatePacket() {
 		NBTTagCompound nbttagcompound = new NBTTagCompound();
 		writeToNBT(nbttagcompound);
-		return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, -10, nbttagcompound);
+		return new SPacketUpdateTileEntity(pos, -10, nbttagcompound);
 	}
 	
 	@Override
-	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
-		if(net.getNetHandler() instanceof INetHandlerPlayClient && pkt.func_148853_f() == -10)
-			readFromNBT(pkt.func_148857_g());
+	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
+		if(pkt.getTileEntityType() == -10)
+			readFromNBT(pkt.getNbtCompound());
 	}
 	
 	public static void setupConfig(Configuration cfg) {

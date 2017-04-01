@@ -4,116 +4,146 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import DummyCore.Client.IModelRegisterer;
+import ec3.api.EnumDropType;
 import ec3.common.item.ItemsCore;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.state.BlockStateContainer;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.client.model.ModelLoader;
 
-public class BlockDropsOre extends Block{
+public class BlockDropsOre extends Block implements IModelRegisterer {
 
-	public IIcon[] icons = new IIcon[4];
-	private Random rand = new Random();
-    @Override
-    public int getExpDrop(IBlockAccess p_149690_1_, int p_149690_5_, int p_149690_7_)
-    {
-    	return MathHelper.getRandomIntegerInRange(rand, 0, 2);
-    }
-	
+	private Random rand = new Random(System.currentTimeMillis());
+	public static final PropertyEnum<EnumDropType> TYPE = PropertyEnum.<EnumDropType>create("type", EnumDropType.class, EnumDropType.NORMAL);
+	public static final PropertyEnum<OreDimensionType> DIMENSION = PropertyEnum.<OreDimensionType>create("dimension", OreDimensionType.class);
+
 	@Override
-    @SideOnly(Side.CLIENT)
-    public void registerBlockIcons(IIconRegister reg)
-    {
-		icons[0] = reg.registerIcon("essentialcraft:elemental_base");
-		icons[1] = reg.registerIcon("essentialcraft:elemental_nether");
-		icons[2] = reg.registerIcon("essentialcraft:elemental_end");
-		icons[3] = reg.registerIcon("essentialcraft:elemental");
-    }
-	
-    public IIcon getIcon(int par1, int par2)
-    {
-        return par2 < 5 ? icons[0] : par2 >= 5 && par2 < 10 ? icons[1] : icons[2];
-    }
-	
-	public BlockDropsOre() {
-		super(Material.rock);
-	}
-	
-	public boolean isSideSolid(IBlockAccess world, int x, int y, int z, ForgeDirection side)
+	public int getExpDrop(IBlockState state, IBlockAccess world, BlockPos pos, int fortune)
 	{
+		return MathHelper.getRandomIntegerInRange(rand, 0, 2);
+	}
+
+	@Override
+	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
+		return new ItemStack(this,1,state.getValue(DIMENSION).getIndex()*5+state.getValue(TYPE).getIndexOre());
+	}
+
+	@Override
+	public boolean canSilkHarvest(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
 		return true;
 	}
-	
-    public boolean isOpaqueCube()
-    {
-        return true;
-    }
-    
-    public boolean renderAsNormalBlock()
-    {
-        return false;
-    }
-    
-    public int getRenderType()
-    {
-        return 2634;
-    }
-    
-    @SuppressWarnings({ "unchecked", "rawtypes" })
-	@SideOnly(Side.CLIENT)
-    public void getSubBlocks(Item p_149666_1_, CreativeTabs p_149666_2_, List p_149666_3_)
-    {
-    	for(int i = 0; i < 15; ++i)
-    		p_149666_3_.add(new ItemStack(p_149666_1_, 1, i));
-    }
-    
-    @Override
-    public int damageDropped(int p_149692_1_)
-    {
-    	p_149692_1_ %= 5;
-        return p_149692_1_ == 0 ? 4 : p_149692_1_-1;
-    }
-    
-    @Override
-    public Item getItemDropped(int p_149650_1_, Random p_149650_2_, int p_149650_3_)
-    {
-        return ItemsCore.drops;
-    }
-    
-    @Override
-    public int quantityDropped(Random p_149745_1_)
-    {
-        return 1+p_149745_1_.nextInt(2);
-    }
 
-    public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune)
-    {
-        ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
+	public BlockDropsOre() {
+		super(Material.ROCK);
+		setDefaultState(blockState.getBaseState().withProperty(TYPE, EnumDropType.ELEMENTAL).withProperty(DIMENSION, OreDimensionType.OVERWORLD));
+	}
 
-        int count = quantityDropped(metadata, fortune, world.rand);
-        for(int i = 0; i < count; i++)
-        {
-            Item item = getItemDropped(metadata, world.rand, fortune);
-            if (item != null)
-            {
-                ret.add(new ItemStack(item, 1, damageDropped(metadata)));
-            }
-        }
-        return ret;
-    }
-    
-    @Override
-    public void dropBlockAsItemWithChance(World p_149690_1_, int p_149690_2_, int p_149690_3_, int p_149690_4_, int p_149690_5_, float p_149690_6_, int p_149690_7_)
-    {
-    	super.dropBlockAsItemWithChance(p_149690_1_, p_149690_2_, p_149690_3_, p_149690_4_, p_149690_5_, p_149690_6_, p_149690_7_);
-    }
+	@Override
+	public BlockRenderLayer getBlockLayer() {
+		return BlockRenderLayer.CUTOUT_MIPPED;
+	}
+
+	public void getSubBlocks(Item p_149666_1_, CreativeTabs p_149666_2_, List<ItemStack> p_149666_3_)
+	{
+		for(int i = 0; i < 15; ++i)
+			p_149666_3_.add(new ItemStack(p_149666_1_, 1, i));
+	}
+
+	@Override
+	public int damageDropped(IBlockState state)
+	{
+		int value = state.getValue(TYPE).getIndexOre();
+		return value == 0 ? 4 : value-1;
+	}
+
+	@Override
+	public Item getItemDropped(IBlockState state, Random rand, int fortune)
+	{
+		return ItemsCore.drops;
+	}
+
+	public ArrayList<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune)
+	{
+		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
+
+		int count = rand.nextInt(2*(fortune+1))+1;
+		for(int i = 0; i < count; i++)
+		{
+			Item item = getItemDropped(state, rand, fortune);
+			if(item != null)
+			{
+				ret.add(new ItemStack(item, 1, damageDropped(state)));
+			}
+		}
+		return ret;
+	}
+
+	@Override
+	public IBlockState getStateFromMeta(int meta) {
+		return getDefaultState().withProperty(DIMENSION, OreDimensionType.fromIndex(meta%15/5)).withProperty(TYPE, EnumDropType.fromIndexOre(meta%5));
+	}
+
+	@Override
+	public int getMetaFromState(IBlockState state) {
+		return state.getValue(DIMENSION).getIndex()*5+state.getValue(TYPE).getIndexOre();
+	}
+
+	@Override
+	protected BlockStateContainer createBlockState() {
+		return new BlockStateContainer(this, TYPE, DIMENSION);
+	}
+
+	@Override
+	public void registerModels() {
+		for(int i = 0; i < OreDimensionType.values().length; i++) {
+			for(int j = 0; j < EnumDropType.values().length; j++) {
+				ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), i*EnumDropType.values().length+j, new ModelResourceLocation("essentialcraft:oreDrops", "dimension=" + OreDimensionType.fromIndex(i).getName() + "," + "type=" + EnumDropType.fromIndexOre(j).getName()));
+			}
+		}
+	}
+
+	public static enum OreDimensionType implements IStringSerializable {
+		OVERWORLD(0, "overworld"),
+		NETHER(1, "nether"),
+		END(2, "end");
+
+		private int index;
+		private String name;
+
+		private OreDimensionType(int i, String s) {
+			index = i;
+			name = s;
+		}
+
+		public String getName() {
+			return name;
+		}
+
+		public String toString() {
+			return name;
+		}
+
+		public int getIndex() {
+			return index;
+		}
+
+		public static OreDimensionType fromIndex(int i) {
+			return values()[i%3];
+		}
+	}
 }

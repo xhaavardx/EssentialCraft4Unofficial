@@ -2,6 +2,7 @@ package ec3.common.tile;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraftforge.common.config.Configuration;
 import DummyCore.Utils.DataStorage;
 import DummyCore.Utils.DummyData;
@@ -23,23 +24,23 @@ public class TileCrystalController extends TileMRUGeneric {
 	}
 	
 	@Override
-	public void updateEntity() {
-		super.updateEntity();
+	public void update() {
+		super.update();
 		ECUtils.manage(this, 0);
 		
-		if(!worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord))
+		if(worldObj.isBlockIndirectlyGettingPowered(pos) == 0)
 			if(!worldObj.isRemote && worldObj.rand.nextInt(chanceToUseMRU) == 0 && getMRU() >= mruUsage) {
 				setMRU(getMRU() - mruUsage);
 			}
 		spawnParticles();
-		if(!worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord))
+		if(worldObj.isBlockIndirectlyGettingPowered(pos) == 0)
 			mutateToElement();
 	}
 	
 	public void spawnParticles() {
 		if(getMRU() > 0 && getCrystal() != null) {
 			for(int o = 0; o < 2; ++o) {
-				worldObj.spawnParticle("reddust", xCoord+0.3D + worldObj.rand.nextDouble()/2, yCoord+0.3F + ((float)o/2), zCoord+0.3D + worldObj.rand.nextDouble()/2D, -1.0D, 1.0D, 0.0D);
+				worldObj.spawnParticle(EnumParticleTypes.REDSTONE, pos.getX()+0.3D + worldObj.rand.nextDouble()/2, pos.getY()+0.3F + ((float)o/2), pos.getZ()+0.3D + worldObj.rand.nextDouble()/2D, -1.0D, 1.0D, 0.0D);
 			}
 		}
 	}
@@ -51,7 +52,7 @@ public class TileCrystalController extends TileMRUGeneric {
 			int rarity = (int)((float)e.getItemDamage() / 4);
 			float chance = (float) (mutateModifier * (rarity + 1));
 			if(worldObj.rand.nextFloat() <= chance) {
-				int type = ItemEssence.convertDamageToIntBefore4(e.getItemDamage());
+				int type = e.getItemDamage()%4;
 				c.mutate(type, worldObj.rand.nextInt((rarity + 1) * 2));
 				decrStackSize(1, 1);
 				setMRU(getMRU() - mruUsage*10);
@@ -62,33 +63,33 @@ public class TileCrystalController extends TileMRUGeneric {
 	public TileElementalCrystal getCrystal() {
 		TileElementalCrystal t = null;
 		if(hasCrystalOnFront())
-			t = (TileElementalCrystal)worldObj.getTileEntity(xCoord+1, yCoord, zCoord);
+			t = (TileElementalCrystal)worldObj.getTileEntity(pos.east());
 		if(hasCrystalOnBack())
-			t = (TileElementalCrystal)worldObj.getTileEntity(xCoord-1, yCoord, zCoord);
+			t = (TileElementalCrystal)worldObj.getTileEntity(pos.west());
 		if(hasCrystalOnLeft())
-			t = (TileElementalCrystal)worldObj.getTileEntity(xCoord, yCoord, zCoord+1);
+			t = (TileElementalCrystal)worldObj.getTileEntity(pos.south());
 		if(hasCrystalOnRight())
-			t = (TileElementalCrystal)worldObj.getTileEntity(xCoord, yCoord, zCoord-1);
+			t = (TileElementalCrystal)worldObj.getTileEntity(pos.north());
 		return t;
 	}
 	
 	public boolean hasCrystalOnFront() {
-		TileEntity t = worldObj.getTileEntity(xCoord + 1, yCoord, zCoord);
+		TileEntity t = worldObj.getTileEntity(pos.east());
 		return t != null && t instanceof TileElementalCrystal;
 	}
 	
 	public boolean hasCrystalOnBack() {
-		TileEntity t = worldObj.getTileEntity(xCoord - 1, yCoord, zCoord);
+		TileEntity t = worldObj.getTileEntity(pos.west());
 		return t != null && t instanceof TileElementalCrystal;
 	}
 	
 	public boolean hasCrystalOnLeft() {
-		TileEntity t = worldObj.getTileEntity(xCoord, yCoord, zCoord + 1);
+		TileEntity t = worldObj.getTileEntity(pos.south());
 		return t != null && t instanceof TileElementalCrystal;
 	}
 	
 	public boolean hasCrystalOnRight() {
-		TileEntity t = worldObj.getTileEntity(xCoord, yCoord, zCoord - 1);
+		TileEntity t = worldObj.getTileEntity(pos.north());
 		return t != null && t instanceof TileElementalCrystal;
 	}
 	

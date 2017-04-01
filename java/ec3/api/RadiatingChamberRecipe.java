@@ -12,7 +12,6 @@ public class RadiatingChamberRecipe implements IRecipe{
 	public int mruRequired;
 	public float upperBalanceLine,lowerBalanceLine;
 	public float costModifier;
-	public int recipeSize = 1;
 	
 	public RadiatingChamberRecipe(ItemStack[] ingred, ItemStack res, int mruReq, float[] balancePoints)
 	{
@@ -32,7 +31,6 @@ public class RadiatingChamberRecipe implements IRecipe{
 		upperBalanceLine = balancePoints[0];
 		lowerBalanceLine = balancePoints[1];
 		costModifier = 1.0F;
-		recipeSize = size;
 		result.stackSize = size;
 	}
 	
@@ -54,7 +52,6 @@ public class RadiatingChamberRecipe implements IRecipe{
 		upperBalanceLine = balancePoints[0];
 		lowerBalanceLine = balancePoints[1];
 		costModifier = modifier;
-		recipeSize = size;
 		result.stackSize = size;
 	}
 	
@@ -87,19 +84,16 @@ public class RadiatingChamberRecipe implements IRecipe{
 
 	@Override
 	public ItemStack getCraftingResult(InventoryCrafting p_77572_1_) {
-		// TODO Auto-generated method stub
 		return result;
 	}
 
 	@Override
 	public int getRecipeSize() {
-		// TODO Auto-generated method stub
 		return 2;
 	}
 
 	@Override
 	public ItemStack getRecipeOutput() {
-		// TODO Auto-generated method stub
 		return result;
 	}
 	
@@ -117,4 +111,8 @@ public class RadiatingChamberRecipe implements IRecipe{
 		return retStr;
 	}
 
+	@Override
+	public ItemStack[] getRemainingItems(InventoryCrafting inv) {
+		return new ItemStack[2];
+	}
 }

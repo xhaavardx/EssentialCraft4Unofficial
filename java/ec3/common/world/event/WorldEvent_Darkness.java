@@ -1,10 +1,10 @@
 package ec3.common.world.event;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import ec3.api.IWorldEvent;
-import ec3.common.world.WorldProviderFirstWorld;
+import ec3.common.world.dim.WorldProviderFirstWorld;
 import ec3.utils.cfg.Config;
 import ec3.utils.common.ECUtils;
 
@@ -12,13 +12,13 @@ public class WorldEvent_Darkness implements IWorldEvent{
 
 	@Override
 	public void onEventBeginning(World w) {
-		ECUtils.sendChatMessageToAllPlayersInDim(Config.dimensionID, EnumChatFormatting.RED+"Why is it so dark?!");
+		ECUtils.sendChatMessageToAllPlayersInDim(Config.dimensionID, TextFormatting.RED+"Why is it so dark?!");
 		((WorldProviderFirstWorld)w.provider).generateLightBrightnessTable();
 	}
 
 	@Override
 	public void worldTick(World w, int leftoverTime) {
-		if(w.provider.dimensionId == Config.dimensionID)
+		if(w.provider.getDimension() == Config.dimensionID)
 			((WorldProviderFirstWorld)w.provider).generateLightBrightnessTable();
 	}
 
@@ -29,8 +29,8 @@ public class WorldEvent_Darkness implements IWorldEvent{
 
 	@Override
 	public void onEventEnd(World w) {
-		ECUtils.sendChatMessageToAllPlayersInDim(Config.dimensionID, EnumChatFormatting.GREEN+"The lights are back!");
-		if(w.provider.dimensionId == Config.dimensionID)
+		ECUtils.sendChatMessageToAllPlayersInDim(Config.dimensionID, TextFormatting.GREEN+"The lights are back!");
+		if(w.provider.getDimension() == Config.dimensionID)
 			((WorldProviderFirstWorld)w.provider).generateLightBrightnessTable();
 	}
 
@@ -41,7 +41,7 @@ public class WorldEvent_Darkness implements IWorldEvent{
 
 	@Override
 	public boolean possibleToApply(World w) {
-		return w.provider.dimensionId == Config.dimensionID;
+		return w.provider.getDimension()  == Config.dimensionID;
 	}
 
 	@Override
@@ -53,5 +53,4 @@ public class WorldEvent_Darkness implements IWorldEvent{
 	public String getEventID() {
 		return "ec3.event.darkness";
 	}
-
 }

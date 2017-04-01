@@ -1,0 +1,16 @@
+{
+    "forge_marker": 1,
+    "variants": {
+        "normal": [{
+            "model": "minecraft:block",
+            "textures": {
+                "particle": "essentialcraft:blocks/playerPentacle"
+            }
+        }],
+        "inventory": [{
+            "model": "builtin/generated",
+            "transform": "forge:default-item",
+            "textures": { "layer0": "essentialcraft:blocks/playerPentacle" }
+        }]
+    }
+}

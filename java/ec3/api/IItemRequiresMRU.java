@@ -40,7 +40,7 @@ public interface IItemRequiresMRU {
 	//This is the way to store MRU using damage values. I decided to not use this, because it is not the best way to do so, and it will not allow you to store more than 32000 mru in it. Although this way was used in EC I, and it was perfectly working there.
 	/*
 	@Deprecated
-	public class ItemStoresMRUInDamage extends Item implements IItemRequiresMRU {
+	public static class ItemStoresMRUInDamage extends Item implements IItemRequiresMRU {
 		public ItemStoresMRUInDamage(int par1) {
 			super(par1);
 		}
@@ -82,7 +82,7 @@ public interface IItemRequiresMRU {
 	
 	//This is the way to store MRU in item's NBTTagCompound. Notice, that I'm not showing how to create/edit tags, it all is within the ECUtils class. I use lots of methods from there. Just ignore it, you can use your ways to do this
 	/*
-	public class ItemStoresMRUInNBTTag extends Item implements IItemRequiresMRU {
+	public static class ItemStoresMRUInNBTTag extends Item implements IItemRequiresMRU {
 		int maxMRU;
 		public ItemStoresMRUInNBTTag(int par1, int maxMRU) {
 			super(par1);

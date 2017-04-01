@@ -15,10 +15,17 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.INetHandlerPlayClient;
-import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.ITickable;
+import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.wrapper.SidedInvWrapper;
 import ec3.api.MithrilineFurnaceRecipe;
 import ec3.api.MithrilineFurnaceRecipes;
 import ec3.common.block.BlockMithrilineCrystal;
@@ -26,14 +33,14 @@ import ec3.common.block.BlocksCore;
 import ec3.common.mod.EssentialCraftCore;
 import ec3.utils.common.ECUtils;
 
-public class TileMithrilineFurnace extends TileEntity implements ISidedInventory {
+public class TileMithrilineFurnace extends TileEntity implements ISidedInventory, ITickable {
 	
 	public static float maxEnergy = 10000F;
 	public float energy;
 	public float progress;
 	public float reqProgress;
 	private TileStatTracker tracker;
-	public int syncTick;
+	public int syncTick = 10;
 	public ItemStack[] items = new ItemStack[2];
 	public boolean requestSync = true;
 
@@ -51,28 +58,29 @@ public class TileMithrilineFurnace extends TileEntity implements ISidedInventory
     }
 	
 	@Override
-    public void writeToNBT(NBTTagCompound i) {
+    public NBTTagCompound writeToNBT(NBTTagCompound i) {
     	super.writeToNBT(i);
     	MiscUtils.saveInventory(this, i);
     	i.setFloat("energy", energy);
     	i.setFloat("progress", progress);
+    	return i;
     }
 	
 	@Override
-	public void updateEntity() {
+	public void update() {
 		boolean correct = isStructureCorrect();
-		super.updateEntity();
 		if(syncTick == 0) {
 			if(tracker == null)
-				Notifier.notifyCustomMod("EssentialCraft", "[WARNING][SEVERE]TileEntity " + this + " at pos " + xCoord + "," + yCoord + "," + zCoord + " tries to sync itself, but has no TileTracker attached to it! SEND THIS MESSAGE TO THE DEVELOPER OF THE MOD!");
-			else if(!worldObj.isRemote && tracker.tileNeedsSyncing())
-				MiscUtils.sendPacketToAllAround(worldObj, getDescriptionPacket(), xCoord, yCoord, zCoord, worldObj.provider.dimensionId, 32);
+				Notifier.notifyCustomMod("EssentialCraft", "[WARNING][SEVERE]TileEntity " + this + " at pos " + pos.getX() + "," + pos.getY() + "," + pos.getZ() + " tries to sync itself, but has no TileTracker attached to it! SEND THIS MESSAGE TO THE DEVELOPER OF THE MOD!");
+			else if(!worldObj.isRemote && tracker.tileNeedsSyncing()) {
+				MiscUtils.sendPacketToAllAround(worldObj, getUpdatePacket(), pos.getX(), pos.getY(), pos.getZ(), worldObj.provider.getDimension(), 32);
+			}
 			syncTick = 60;
 		}
 		else
 			--syncTick;
 		
-		if(requestSync  && worldObj.isRemote) {
+		if(requestSync && worldObj.isRemote) {
 			requestSync = false;
 			ECUtils.requestScheduledTileSync(this, EssentialCraftCore.proxy.getClientPlayer());
 		}
@@ -91,9 +99,9 @@ public class TileMithrilineFurnace extends TileEntity implements ISidedInventory
 					int dX = MathHelper.floor_float(c.x);
 					int dY = MathHelper.floor_float(c.y);
 					int dZ = MathHelper.floor_float(c.z);
-					Block b = worldObj.getBlock(xCoord+dX, yCoord+dY, zCoord+dZ);
+					Block b = worldObj.getBlockState(pos.add(dX, dY, dZ)).getBlock();
 					if(b instanceof BlockMithrilineCrystal) {
-						TileEntity c_tile = worldObj.getTileEntity(xCoord+dX, yCoord+dY, zCoord+dZ);
+						TileEntity c_tile = worldObj.getTileEntity(pos.add(dX, dY, dZ));
 						if(c_tile != null && c_tile instanceof TileMithrilineCrystal) {
 							TileMithrilineCrystal crystal = (TileMithrilineCrystal) c_tile;
 							float c_energy = crystal.energy;
@@ -104,18 +112,16 @@ public class TileMithrilineFurnace extends TileEntity implements ISidedInventory
 							if(energy + c_energy <= maxEnergy) {
 								energy += c_energy;
 								crystal.energy = 0;
-								worldObj.spawnParticle("reddust", xCoord+dX+0.5F, yCoord+dY+movement/30, zCoord+dZ+0.5F, -1, 1, 0);
-								worldObj.spawnParticle("reddust", xCoord+dX+0.5F, yCoord+dY+2+movement/30, zCoord+dZ+0.5F, -1, 1, 0);
 							}
 							else {
 								float energyReq = maxEnergy - energy;
 								if(c_energy >= energyReq) {
 									energy = maxEnergy;
 									crystal.energy -= energyReq;
-									worldObj.spawnParticle("reddust", xCoord+dX+0.5F, yCoord+dY+movement/30, zCoord+dZ+0.5F, -1, 1, 0);
-									worldObj.spawnParticle("reddust", xCoord+dX+0.5F, yCoord+dY+2+movement/30, zCoord+dZ+0.5F, -1, 1, 0);
 								}
 							}
+							worldObj.spawnParticle(EnumParticleTypes.REDSTONE, pos.getX()+dX+0.5F, pos.getY()+dY+movement/30, pos.getZ()+dZ+0.5F, -1, 1, 0);
+							worldObj.spawnParticle(EnumParticleTypes.REDSTONE, pos.getX()+dX+0.5F, pos.getY()+dY+2+movement/30, pos.getZ()+dZ+0.5F, -1, 1, 0);
 						}
 					}
 				}
@@ -155,57 +161,53 @@ public class TileMithrilineFurnace extends TileEntity implements ISidedInventory
 			}
 			
 			for(int i = 0; i < 10; ++i)
-				EssentialCraftCore.proxy.FlameFX(xCoord+0.5F + MathUtils.randomFloat(worldObj.rand)*0.4F, yCoord+0.2F + MathUtils.randomFloat(worldObj.rand)*0.6F, zCoord+0.5F + MathUtils.randomFloat(worldObj.rand)*0.4F, 0, 0.01F, 0, 0D, 1D, 0F, 1F);
+				EssentialCraftCore.proxy.FlameFX(pos.getX()+0.5F + MathUtils.randomFloat(worldObj.rand)*0.4F, pos.getY()+0.2F + MathUtils.randomFloat(worldObj.rand)*0.6F, pos.getZ()+0.5F + MathUtils.randomFloat(worldObj.rand)*0.4F, 0, 0.01F, 0, 0D, 1D, 0F, 1F);
 		}
 	}
 	
 	public boolean isStructureCorrect() {
-		int x = xCoord;
-		int y = yCoord;
-		int z = zCoord;
 		boolean hasPlatformBelow = 
-				worldObj.getBlock(x-1, y-1, z) == BlocksCore.invertedBlock &&
-				worldObj.getBlock(x+1, y-1, z) == BlocksCore.invertedBlock &&
-				worldObj.getBlock(x, y-1, z-1) == BlocksCore.invertedBlock &&
-				worldObj.getBlock(x, y-1, z+1) == BlocksCore.invertedBlock &&
-				worldObj.getBlock(x+1, y-1, z+1) == BlocksCore.invertedBlock && 
-				worldObj.getBlock(x+1, y-1, z-1) == BlocksCore.invertedBlock &&
-				worldObj.getBlock(x-1, y-1, z+1) == BlocksCore.invertedBlock &&
-				worldObj.getBlock(x-1, y-1, z-1) == BlocksCore.invertedBlock &&
-				worldObj.getBlock(x-2, y-1, z) == BlocksCore.invertedBlock &&
-				worldObj.getBlock(x+2, y-1, z) == BlocksCore.invertedBlock &&
-				worldObj.getBlock(x, y-1, z-2) == BlocksCore.invertedBlock &&
-				worldObj.getBlock(x, y-1, z+2) == BlocksCore.invertedBlock;
+				worldObj.getBlockState(pos.add(-1, -1, 0)).getBlock() == BlocksCore.invertedBlock &&
+				worldObj.getBlockState(pos.add(1, -1, 0)).getBlock() == BlocksCore.invertedBlock &&
+				worldObj.getBlockState(pos.add(0, -1, -1)).getBlock() == BlocksCore.invertedBlock &&
+				worldObj.getBlockState(pos.add(0, -1, 1)).getBlock() == BlocksCore.invertedBlock &&
+				worldObj.getBlockState(pos.add(1, -1, 1)).getBlock() == BlocksCore.invertedBlock && 
+				worldObj.getBlockState(pos.add(1, -1, -1)).getBlock() == BlocksCore.invertedBlock &&
+				worldObj.getBlockState(pos.add(-1, -1, 1)).getBlock() == BlocksCore.invertedBlock &&
+				worldObj.getBlockState(pos.add(-1, -1, -1)).getBlock() == BlocksCore.invertedBlock &&
+				worldObj.getBlockState(pos.add(-2, -1, 0)).getBlock() == BlocksCore.invertedBlock &&
+				worldObj.getBlockState(pos.add(2, -1, 0)).getBlock() == BlocksCore.invertedBlock &&
+				worldObj.getBlockState(pos.add(0, -1, -2)).getBlock() == BlocksCore.invertedBlock &&
+				worldObj.getBlockState(pos.add(0, -1, 2)).getBlock() == BlocksCore.invertedBlock;
 		
 		boolean hasGenericOutline = 
-				worldObj.getBlock(x-2, y, z) == BlocksCore.invertedBlock &&
-				worldObj.getBlock(x+2, y, z) == BlocksCore.invertedBlock &&
-				worldObj.getBlock(x, y, z-2) == BlocksCore.invertedBlock &&
-				worldObj.getBlock(x, y, z+2) == BlocksCore.invertedBlock &&
-				worldObj.getBlock(x-2, y, z+2) == BlocksCore.invertedBlock &&
-				worldObj.getBlock(x+2, y, z-2) == BlocksCore.invertedBlock &&
-				worldObj.getBlock(x-2, y, z-2) == BlocksCore.invertedBlock &&
-				worldObj.getBlock(x+2, y, z+2) == BlocksCore.invertedBlock &&
-				worldObj.getBlock(x-2, y+1, z+2) == BlocksCore.invertedBlock &&
-				worldObj.getBlock(x+2, y+1, z-2) == BlocksCore.invertedBlock &&
-				worldObj.getBlock(x-2, y+1, z-2) == BlocksCore.invertedBlock &&
-				worldObj.getBlock(x+2, y+1, z+2) == BlocksCore.invertedBlock; 
+				worldObj.getBlockState(pos.add(-2, 0, 0)).getBlock() == BlocksCore.invertedBlock &&
+				worldObj.getBlockState(pos.add(2, 0, 0)).getBlock() == BlocksCore.invertedBlock &&
+				worldObj.getBlockState(pos.add(0, 0, -2)).getBlock() == BlocksCore.invertedBlock &&
+				worldObj.getBlockState(pos.add(0, 0, 2)).getBlock() == BlocksCore.invertedBlock &&
+				worldObj.getBlockState(pos.add(-2, 0, 2)).getBlock() == BlocksCore.invertedBlock &&
+				worldObj.getBlockState(pos.add(2, 0, -2)).getBlock() == BlocksCore.invertedBlock &&
+				worldObj.getBlockState(pos.add(-2, 0, -2)).getBlock() == BlocksCore.invertedBlock &&
+				worldObj.getBlockState(pos.add(2, 0, 2)).getBlock() == BlocksCore.invertedBlock &&
+				worldObj.getBlockState(pos.add(-2, 1, 2)).getBlock() == BlocksCore.invertedBlock &&
+				worldObj.getBlockState(pos.add(2, 1, -2)).getBlock() == BlocksCore.invertedBlock &&
+				worldObj.getBlockState(pos.add(-2, 1, -2)).getBlock() == BlocksCore.invertedBlock &&
+				worldObj.getBlockState(pos.add(2, 1, 2)).getBlock() == BlocksCore.invertedBlock; 
 		
 		return hasPlatformBelow && hasGenericOutline;
 	}
 	
 	@Override
-    public Packet getDescriptionPacket() {
+    public SPacketUpdateTileEntity getUpdatePacket() {
 		NBTTagCompound nbttagcompound = new NBTTagCompound();
 		writeToNBT(nbttagcompound);
-		return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, -10, nbttagcompound);
+		return new SPacketUpdateTileEntity(pos, -10, nbttagcompound);
 	}
 	
 	@Override
-	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
-		if(net.getNetHandler() instanceof INetHandlerPlayClient)
-			if(pkt.func_148853_f() == -10)
-				readFromNBT(pkt.func_148857_g());
+	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
+		if(pkt.getTileEntityType() == -10)
+			readFromNBT(pkt.getNbtCompound());
 	}
 	
 	public static void setupConfig(Configuration cfg) {
@@ -265,7 +267,7 @@ public class TileMithrilineFurnace extends TileEntity implements ISidedInventory
 	}
 	
 	@Override
-	public ItemStack getStackInSlotOnClosing(int par1) {
+	public ItemStack removeStackFromSlot(int par1) {
 		if(items[par1] != null) {
 			ItemStack itemstack = items[par1];
 			items[par1] = null;
@@ -285,12 +287,12 @@ public class TileMithrilineFurnace extends TileEntity implements ISidedInventory
 	}
 	
 	@Override
-	public String getInventoryName() {
+	public String getName() {
 		return "ec3.container.mithrilineFurnace";
 	}
 	
 	@Override
-	public boolean hasCustomInventoryName() {
+	public boolean hasCustomName() {
 		return false;
 	}
 	
@@ -301,14 +303,14 @@ public class TileMithrilineFurnace extends TileEntity implements ISidedInventory
 	
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer player) {
-		return worldObj.getTileEntity(xCoord, yCoord, zCoord) == this && player.dimension == worldObj.provider.dimensionId;
+		return worldObj.getTileEntity(pos) == this && player.dimension == worldObj.provider.getDimension();
 	}
 	
 	@Override
-	public void openInventory() {}
+	public void openInventory(EntityPlayer p) {}
 	
 	@Override
-	public void closeInventory() {}
+	public void closeInventory(EntityPlayer p) {}
 	
 	@Override
 	public boolean isItemValidForSlot(int p_94041_1_, ItemStack p_94041_2_) {
@@ -316,17 +318,48 @@ public class TileMithrilineFurnace extends TileEntity implements ISidedInventory
 	}
 	
 	@Override
-	public int[] getAccessibleSlotsFromSide(int p_94128_1_) {
-		return p_94128_1_ == 0 ? new int[] {1} : new int[] {0};
+	public int[] getSlotsForFace(EnumFacing p_94128_1_) {
+		return new int[] {0, 1};
 	}
 	
 	@Override
-	public boolean canInsertItem(int p_102007_1_, ItemStack p_102007_2_, int p_102007_3_) {
+	public boolean canInsertItem(int p_102007_1_, ItemStack p_102007_2_, EnumFacing p_102007_3_) {
 		return isItemValidForSlot(p_102007_1_, p_102007_2_);
 	}
 	
 	@Override
-	public boolean canExtractItem(int p_102008_1_, ItemStack p_102008_2_, int p_102008_3_) {
+	public boolean canExtractItem(int p_102008_1_, ItemStack p_102008_2_, EnumFacing p_102008_3_) {
 		return p_102008_1_ == 1;
+	}
+	
+	@Override
+	public void clear() {
+	    for(int i = 0; i < getSizeInventory(); i++)
+	        setInventorySlotContents(i, null);
+	}
+
+	@Override
+	public int getField(int id) {
+		return 0;
+	}
+
+	@Override
+	public void setField(int id, int value) {}
+
+	@Override
+	public int getFieldCount() {
+		return 0;
+	}
+
+	public IItemHandler itemHandler = new SidedInvWrapper(this, EnumFacing.DOWN);
+
+	@Override
+	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
+	}
+
+	@Override
+	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ? (T)itemHandler : super.getCapability(capability, facing);
 	}
 }

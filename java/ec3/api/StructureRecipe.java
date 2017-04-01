@@ -32,16 +32,16 @@ public class StructureRecipe implements IRecipe{
 
 	@Override
 	public int getRecipeSize() {
-		// TODO Auto-generated method stub
 		return structure.size();
 	}
 
 	@Override
 	public ItemStack getRecipeOutput() {
-		// TODO Auto-generated method stub
 		return referal;
 	}
-	
-	
 
+	@Override
+	public ItemStack[] getRemainingItems(InventoryCrafting inv) {
+		return new ItemStack[structure.size()];
+	}
 }

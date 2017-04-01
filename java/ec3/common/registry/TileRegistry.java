@@ -3,9 +3,6 @@ package ec3.common.registry;
 import java.util.ArrayList;
 import java.util.List;
 
-import cpw.mods.fml.common.registry.GameRegistry;
-import ec3.common.tile.TileAMINEjector;
-import ec3.common.tile.TileAMINInjector;
 import ec3.common.tile.TileAdvancedBlockBreaker;
 import ec3.common.tile.TileAnimalSeparator;
 import ec3.common.tile.TileChargingChamber;
@@ -25,13 +22,11 @@ import ec3.common.tile.TileEnderGenerator;
 import ec3.common.tile.TileFlowerBurner;
 import ec3.common.tile.TileFurnaceMagic;
 import ec3.common.tile.TileHeatGenerator;
-import ec3.common.tile.TileMIM;
-import ec3.common.tile.TileMINEjector;
-import ec3.common.tile.TileMINInjector;
+import ec3.common.tile.TileMRUChunkLoader;
 import ec3.common.tile.TileMRUCoil;
 import ec3.common.tile.TileMRUCoil_Hardener;
+import ec3.common.tile.TileMRUDimensionalTransciever;
 import ec3.common.tile.TileMRUReactor;
-import ec3.common.tile.TileMagicalAssembler;
 import ec3.common.tile.TileMagicalChest;
 import ec3.common.tile.TileMagicalDisplay;
 import ec3.common.tile.TileMagicalEnchanter;
@@ -45,6 +40,7 @@ import ec3.common.tile.TileMagicalTeleporter;
 import ec3.common.tile.TileMagicianTable;
 import ec3.common.tile.TileMagmaticSmelter;
 import ec3.common.tile.TileMatrixAbsorber;
+import ec3.common.tile.TileMimic;
 import ec3.common.tile.TileMithrilineCrystal;
 import ec3.common.tile.TileMithrilineFurnace;
 import ec3.common.tile.TileMonsterHarvester;
@@ -80,11 +76,12 @@ import ec3.common.tile.TileecStateChecker;
 import ec3.utils.cfg.Config;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class TileRegistry {
-	
+
 	public static final List<Class<? extends TileEntity>> cfgDependant = new ArrayList<Class<? extends TileEntity>>();
-	
+
 	public static void register() {
 		addTileToMapping(TileecController.class);
 		addTileToMapping(TileecAcceptor.class);
@@ -125,15 +122,9 @@ public class TileRegistry {
 		addTileToMapping(TileMRUCoil.class);
 		addTileToMapping(TileCorruptionCleaner.class);
 		addTileToMapping(TileMRUReactor.class);
-		//addTileToMapping(TileMINEjector.class);
-		//addTileToMapping(TileAMINEjector.class);
-		//addTileToMapping(TileMINInjector.class);
-		//addTileToMapping(TileAMINInjector.class);
-		//addTileToMapping(TileMIM.class);
 		addTileToMapping(TileDarknessObelisk.class);
 		addTileToMapping(TileUltraHeatGenerator.class);
 		addTileToMapping(TileUltraFlowerBurner.class);
-		addTileToMapping(TileMagicalAssembler.class);
 		addTileToMapping(TileMagicalMirror.class);
 		addTileToMapping(TileMagicalDisplay.class);
 		addTileToMapping(TileMithrilineCrystal.class);
@@ -159,8 +150,11 @@ public class TileRegistry {
 		addTileToMapping(TileCrafter.class);
 		addTileToMapping(TileCreativeMRUSource.class);
 		addTileToMapping(TileAnimalSeparator.class);
+		addTileToMapping(TileMimic.class);
+		addTileToMapping(TileMRUChunkLoader.class);
+		addTileToMapping(TileMRUDimensionalTransciever.class);
 	}
-	
+
 	public static void addTileToMapping(Class<? extends TileEntity> tile) {
 		GameRegistry.registerTileEntity(tile, "ec3:"+tile.getCanonicalName());
 		try {

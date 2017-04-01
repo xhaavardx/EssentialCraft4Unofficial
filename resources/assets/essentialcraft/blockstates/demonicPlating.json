@@ -1,0 +1,448 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "essentialcraft:cube_colored",
+        "textures": {
+            "down": "essentialcraft:blocks/demonicPlatingBlock",
+            "up": "essentialcraft:blocks/demonicPlatingBlock",
+            "north": "essentialcraft:blocks/demonicPlatingBlock",
+            "south": "essentialcraft:blocks/demonicPlatingBlock",
+            "west": "essentialcraft:blocks/demonicPlatingBlock",
+            "east": "essentialcraft:blocks/demonicPlatingBlock",
+            "particle": "essentialcraft:blocks/demonicPlatingBlock"
+        }
+    },
+    "variants": {
+        "down=false,east=false,north=false,south=false,up=false,west=false": [{}],
+        "down=true,east=false,north=false,south=false,up=false,west=false": [{
+            "textures": {
+                "north": "essentialcraft:blocks/ct/demonicPlating/t",
+                "south": "essentialcraft:blocks/ct/demonicPlating/t",
+                "west": "essentialcraft:blocks/ct/demonicPlating/t",
+                "east": "essentialcraft:blocks/ct/demonicPlating/t"
+            }
+        }],
+        "down=false,east=true,north=false,south=false,up=false,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/demonicPlating/l",
+                "up": "essentialcraft:blocks/ct/demonicPlating/l",
+                "north": "essentialcraft:blocks/ct/demonicPlating/r",
+                "south": "essentialcraft:blocks/ct/demonicPlating/l"
+            }
+        }],
+        "down=true,east=true,north=false,south=false,up=false,west=false": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/demonicPlating/l",
+                "north": "essentialcraft:blocks/ct/demonicPlating/tr",
+                "south": "essentialcraft:blocks/ct/demonicPlating/tl",
+                "west": "essentialcraft:blocks/ct/demonicPlating/t"
+            }
+        }],
+        "down=false,east=false,north=true,south=false,up=false,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/demonicPlating/t",
+                "up": "essentialcraft:blocks/ct/demonicPlating/b",
+                "west": "essentialcraft:blocks/ct/demonicPlating/r",
+                "east": "essentialcraft:blocks/ct/demonicPlating/l"
+            }
+        }],
+        "down=true,east=false,north=true,south=false,up=false,west=false": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/demonicPlating/b",
+                "south": "essentialcraft:blocks/ct/demonicPlating/t",
+                "west": "essentialcraft:blocks/ct/demonicPlating/tr",
+                "east": "essentialcraft:blocks/ct/demonicPlating/tl"
+            }
+        }],
+        "down=false,east=true,north=true,south=false,up=false,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/demonicPlating/tl",
+                "up": "essentialcraft:blocks/ct/demonicPlating/bl",
+                "south": "essentialcraft:blocks/ct/demonicPlating/l",
+                "west": "essentialcraft:blocks/ct/demonicPlating/r"
+            }
+        }],
+        "down=true,east=true,north=true,south=false,up=false,west=false": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/demonicPlating/bl",
+                "south": "essentialcraft:blocks/ct/demonicPlating/tl",
+                "west": "essentialcraft:blocks/ct/demonicPlating/tr"
+            }
+        }],
+        "down=false,east=false,north=false,south=true,up=false,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/demonicPlating/b",
+                "up": "essentialcraft:blocks/ct/demonicPlating/t",
+                "west": "essentialcraft:blocks/ct/demonicPlating/l",
+                "east": "essentialcraft:blocks/ct/demonicPlating/r"
+            }
+        }],
+        "down=true,east=false,north=false,south=true,up=false,west=false": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/demonicPlating/t",
+                "north": "essentialcraft:blocks/ct/demonicPlating/t",
+                "west": "essentialcraft:blocks/ct/demonicPlating/tl",
+                "east": "essentialcraft:blocks/ct/demonicPlating/tr"
+            }
+        }],
+        "down=false,east=true,north=false,south=true,up=false,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/demonicPlating/bl",
+                "up": "essentialcraft:blocks/ct/demonicPlating/tl",
+                "north": "essentialcraft:blocks/ct/demonicPlating/r",
+                "west": "essentialcraft:blocks/ct/demonicPlating/l"
+            }
+        }],
+        "down=true,east=true,north=false,south=true,up=false,west=false": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/demonicPlating/tl",
+                "north": "essentialcraft:blocks/ct/demonicPlating/tr",
+                "west": "essentialcraft:blocks/ct/demonicPlating/tl"
+            }
+        }],
+        "down=false,east=false,north=true,south=true,up=false,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/demonicPlating/tb",
+                "up": "essentialcraft:blocks/ct/demonicPlating/tb",
+                "west": "essentialcraft:blocks/ct/demonicPlating/lr",
+                "east": "essentialcraft:blocks/ct/demonicPlating/lr"
+            }
+        }],
+        "down=true,east=false,north=true,south=true,up=false,west=false": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/demonicPlating/tb",
+                "west": "essentialcraft:blocks/ct/demonicPlating/lrt",
+                "east": "essentialcraft:blocks/ct/demonicPlating/lrt"
+            }
+        }],
+        "down=false,east=true,north=true,south=true,up=false,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/demonicPlating/tbl",
+                "up": "essentialcraft:blocks/ct/demonicPlating/tbl",
+                "west": "essentialcraft:blocks/ct/demonicPlating/lr"
+            }
+        }],
+        "down=true,east=true,north=true,south=true,up=false,west=false": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/demonicPlating/tbl",
+                "west": "essentialcraft:blocks/ct/demonicPlating/lrt"
+            }
+        }],
+        "down=false,east=false,north=false,south=false,up=true,west=false": [{
+            "textures": {
+                "north": "essentialcraft:blocks/ct/demonicPlating/b",
+                "south": "essentialcraft:blocks/ct/demonicPlating/b",
+                "west": "essentialcraft:blocks/ct/demonicPlating/b",
+                "east": "essentialcraft:blocks/ct/demonicPlating/b"
+            }
+        }],
+        "down=true,east=false,north=false,south=false,up=true,west=false": [{
+            "textures": {
+                "north": "essentialcraft:blocks/ct/demonicPlating/tb",
+                "south": "essentialcraft:blocks/ct/demonicPlating/tb",
+                "west": "essentialcraft:blocks/ct/demonicPlating/tb",
+                "east": "essentialcraft:blocks/ct/demonicPlating/tb"
+            }
+        }],
+        "down=false,east=true,north=false,south=false,up=true,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/demonicPlating/l",
+                "north": "essentialcraft:blocks/ct/demonicPlating/br",
+                "south": "essentialcraft:blocks/ct/demonicPlating/bl",
+                "west": "essentialcraft:blocks/ct/demonicPlating/b"
+            }
+        }],
+        "down=true,east=true,north=false,south=false,up=true,west=false": [{
+            "textures": {
+                "north": "essentialcraft:blocks/ct/demonicPlating/tbr",
+                "south": "essentialcraft:blocks/ct/demonicPlating/tbl",
+                "west": "essentialcraft:blocks/ct/demonicPlating/tb"
+            }
+        }],
+        "down=false,east=false,north=true,south=false,up=true,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/demonicPlating/t",
+                "south": "essentialcraft:blocks/ct/demonicPlating/b",
+                "west": "essentialcraft:blocks/ct/demonicPlating/br",
+                "east": "essentialcraft:blocks/ct/demonicPlating/bl"
+            }
+        }],
+        "down=true,east=false,north=true,south=false,up=true,west=false": [{
+            "textures": {
+                "south": "essentialcraft:blocks/ct/demonicPlating/tb",
+                "west": "essentialcraft:blocks/ct/demonicPlating/tbr",
+                "east": "essentialcraft:blocks/ct/demonicPlating/tbl"
+            }
+        }],
+        "down=false,east=true,north=true,south=false,up=true,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/demonicPlating/tl",
+                "south": "essentialcraft:blocks/ct/demonicPlating/bl",
+                "west": "essentialcraft:blocks/ct/demonicPlating/br"
+            }
+        }],
+        "down=true,east=true,north=true,south=false,up=true,west=false": [{
+           "textures": {
+                "south": "essentialcraft:blocks/ct/demonicPlating/tbl",
+                "west": "essentialcraft:blocks/ct/demonicPlating/tbr"
+            } 
+        }],
+        "down=false,east=false,north=false,south=true,up=true,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/demonicPlating/b",
+                "north": "essentialcraft:blocks/ct/demonicPlating/b",
+                "west": "essentialcraft:blocks/ct/demonicPlating/bl",
+                "east": "essentialcraft:blocks/ct/demonicPlating/br"
+            }
+        }],
+        "down=true,east=false,north=false,south=true,up=true,west=false": [{
+            "textures": {
+                "north": "essentialcraft:blocks/ct/demonicPlating/tb",
+                "west": "essentialcraft:blocks/ct/demonicPlating/tbl",
+                "east": "essentialcraft:blocks/ct/demonicPlating/tbr"
+            }
+        }],
+        "down=false,east=true,north=false,south=true,up=true,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/demonicPlating/bl",
+                "north": "essentialcraft:blocks/ct/demonicPlating/br",
+                "west": "essentialcraft:blocks/ct/demonicPlating/bl"
+            }
+        }],
+        "down=true,east=true,north=false,south=true,up=true,west=false": [{
+            "textures": {
+                "north": "essentialcraft:blocks/ct/demonicPlating/tbr",
+                "west": "essentialcraft:blocks/ct/demonicPlating/tbl"
+            }
+        }],
+        "down=false,east=false,north=true,south=true,up=true,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/demonicPlating/tb",
+                "west": "essentialcraft:blocks/ct/demonicPlating/lrb",
+                "east": "essentialcraft:blocks/ct/demonicPlating/lrb"
+            }
+        }],
+        "down=true,east=false,north=true,south=true,up=true,west=false": [{
+            "textures": {
+                "west": "essentialcraft:blocks/ct/demonicPlating/tblr",
+                "east": "essentialcraft:blocks/ct/demonicPlating/tblr"
+            }
+        }],
+        "down=false,east=true,north=true,south=true,up=true,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/demonicPlating/tbl",
+                "west": "essentialcraft:blocks/ct/demonicPlating/lrb"
+            }
+        }],
+        "down=true,east=true,north=true,south=true,up=true,west=false": [{
+            "textures": {
+                "west": "essentialcraft:blocks/ct/demonicPlating/tblr"
+            }
+        }],
+        "down=false,east=false,north=false,south=false,up=false,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/demonicPlating/r",
+                "up": "essentialcraft:blocks/ct/demonicPlating/r",
+                "north": "essentialcraft:blocks/ct/demonicPlating/l",
+                "south": "essentialcraft:blocks/ct/demonicPlating/r"
+            }
+        }],
+        "down=true,east=false,north=false,south=false,up=false,west=true": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/demonicPlating/r",
+                "north": "essentialcraft:blocks/ct/demonicPlating/tl",
+                "south": "essentialcraft:blocks/ct/demonicPlating/tr",
+                "east": "essentialcraft:blocks/ct/demonicPlating/t"
+            }
+        }],
+        "down=false,east=true,north=false,south=false,up=false,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/demonicPlating/lr",
+                "up": "essentialcraft:blocks/ct/demonicPlating/lr",
+                "north": "essentialcraft:blocks/ct/demonicPlating/lr",
+                "south": "essentialcraft:blocks/ct/demonicPlating/lr"
+            }
+        }],
+        "down=true,east=true,north=false,south=false,up=false,west=true": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/demonicPlating/lr",
+                "north": "essentialcraft:blocks/ct/demonicPlating/lrt",
+                "south": "essentialcraft:blocks/ct/demonicPlating/lrt"
+            }
+        }],
+        "down=false,east=false,north=true,south=false,up=false,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/demonicPlating/tr",
+                "up": "essentialcraft:blocks/ct/demonicPlating/br",
+                "south": "essentialcraft:blocks/ct/demonicPlating/r",
+                "east": "essentialcraft:blocks/ct/demonicPlating/l"
+            }
+        }],
+        "down=true,east=false,north=true,south=false,up=false,west=true": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/demonicPlating/br",
+                "south": "essentialcraft:blocks/ct/demonicPlating/tr",
+                "east": "essentialcraft:blocks/ct/demonicPlating/tl"
+            }
+        }],
+        "down=false,east=true,north=true,south=false,up=false,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/demonicPlating/lrt",
+                "up": "essentialcraft:blocks/ct/demonicPlating/lrb",
+                "south": "essentialcraft:blocks/ct/demonicPlating/lr"
+            }
+        }],
+        "down=true,east=true,north=true,south=false,up=false,west=true": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/demonicPlating/lrb",
+                "south": "essentialcraft:blocks/ct/demonicPlating/lrt"
+            }
+        }],
+        "down=false,east=false,north=false,south=true,up=false,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/demonicPlating/br",
+                "up": "essentialcraft:blocks/ct/demonicPlating/tr",
+                "north": "essentialcraft:blocks/ct/demonicPlating/l",
+                "east": "essentialcraft:blocks/ct/demonicPlating/r"
+            }
+        }],
+        "down=true,east=false,north=false,south=true,up=false,west=true": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/demonicPlating/tr",
+                "north": "essentialcraft:blocks/ct/demonicPlating/tl",
+                "east": "essentialcraft:blocks/ct/demonicPlating/tr"
+            }
+        }],
+        "down=false,east=true,north=false,south=true,up=false,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/demonicPlating/lrb",
+                "up": "essentialcraft:blocks/ct/demonicPlating/lrt",
+                "north": "essentialcraft:blocks/ct/demonicPlating/lr"
+            }
+        }],
+        "down=true,east=true,north=false,south=true,up=false,west=true": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/demonicPlating/lrt",
+                "north": "essentialcraft:blocks/ct/demonicPlating/lrt"
+            }
+        }],
+        "down=false,east=false,north=true,south=true,up=false,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/demonicPlating/tbr",
+                "up": "essentialcraft:blocks/ct/demonicPlating/tbr",
+                "east": "essentialcraft:blocks/ct/demonicPlating/lr"
+            }
+        }],
+        "down=true,east=false,north=true,south=true,up=false,west=true": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/demonicPlating/tbr",
+                "east": "essentialcraft:blocks/ct/demonicPlating/lrt"
+            }
+        }],
+        "down=false,east=true,north=true,south=true,up=false,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/demonicPlating/tblr",
+                "up": "essentialcraft:blocks/ct/demonicPlating/tblr"
+            }
+        }],
+        "down=true,east=true,north=true,south=true,up=false,west=true": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/demonicPlating/tblr"
+            }
+        }],
+        "down=false,east=false,north=false,south=false,up=true,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/demonicPlating/r",
+                "north": "essentialcraft:blocks/ct/demonicPlating/bl",
+                "south": "essentialcraft:blocks/ct/demonicPlating/br",
+                "east": "essentialcraft:blocks/ct/demonicPlating/b"
+            }
+        }],
+        "down=true,east=false,north=false,south=false,up=true,west=true": [{
+            "textures": {
+                "north": "essentialcraft:blocks/ct/demonicPlating/tbl",
+                "south": "essentialcraft:blocks/ct/demonicPlating/tbr",
+                "east": "essentialcraft:blocks/ct/demonicPlating/tb"
+            }
+        }],
+        "down=false,east=true,north=false,south=false,up=true,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/demonicPlating/lr",
+                "north": "essentialcraft:blocks/ct/demonicPlating/lrb",
+                "south": "essentialcraft:blocks/ct/demonicPlating/lrb"
+            }
+        }],
+        "down=true,east=true,north=false,south=false,up=true,west=true": [{
+            "textures": {
+                "north": "essentialcraft:blocks/ct/demonicPlating/tblr",
+                "south": "essentialcraft:blocks/ct/demonicPlating/tblr"
+            }
+        }],
+        "down=false,east=false,north=true,south=false,up=true,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/demonicPlating/tr",
+                "south": "essentialcraft:blocks/ct/demonicPlating/br",
+                "east": "essentialcraft:blocks/ct/demonicPlating/bl"
+            }
+        }],
+        "down=true,east=false,north=true,south=false,up=true,west=true": [{
+            "textures": {
+                "south": "essentialcraft:blocks/ct/demonicPlating/tbr",
+                "east": "essentialcraft:blocks/ct/demonicPlating/tbl"
+            }
+        }],
+        "down=false,east=true,north=true,south=false,up=true,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/demonicPlating/lrt",
+                "south": "essentialcraft:blocks/ct/demonicPlating/lrb"
+            }
+        }],
+        "down=true,east=true,north=true,south=false,up=true,west=true": [{
+            "textures": {
+                "south": "essentialcraft:blocks/ct/demonicPlating/tblr"
+            }
+        }],
+        "down=false,east=false,north=false,south=true,up=true,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/demonicPlating/br",
+                "north": "essentialcraft:blocks/ct/demonicPlating/bl",
+                "east": "essentialcraft:blocks/ct/demonicPlating/br"
+            }
+        }],
+        "down=true,east=false,north=false,south=true,up=true,west=true": [{
+            "textures": {
+                "north": "essentialcraft:blocks/ct/demonicPlating/tbl",
+                "east": "essentialcraft:blocks/ct/demonicPlating/tbr"
+            }
+        }],
+        "down=false,east=true,north=false,south=true,up=true,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/demonicPlating/lrb",
+                "north": "essentialcraft:blocks/ct/demonicPlating/lrb"
+            }
+        }],
+        "down=true,east=true,north=false,south=true,up=true,west=true": [{
+            "textures": {
+                "north": "essentialcraft:blocks/ct/demonicPlating/tblr"
+            }
+        }],
+        "down=false,east=false,north=true,south=true,up=true,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/demonicPlating/tbr",
+                "east": "essentialcraft:blocks/ct/demonicPlating/lrb"
+            }
+        }],
+        "down=true,east=false,north=true,south=true,up=true,west=true": [{
+            "textures": {
+                "east": "essentialcraft:blocks/ct/demonicPlating/tblr"
+            }
+        }],
+        "down=false,east=true,north=true,south=true,up=true,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/demonicPlating/tblr"
+            }
+        }],
+        "down=true,east=true,north=true,south=true,up=true,west=true": [{}],
+        "inventory": [{}]
+    }
+}

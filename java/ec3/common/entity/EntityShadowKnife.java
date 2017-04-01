@@ -3,17 +3,22 @@ package ec3.common.entity;
 import ec3.common.item.ItemsCore;
 import ec3.utils.common.ShadeUtils;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityThrowable;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 
-public class EntityShadowKnife extends EntityThrowable{
+public class EntityShadowKnife extends EntityThrowable {
 
 	public EntityShadowKnife(World w, EntityLivingBase t)
 	{
@@ -25,9 +30,8 @@ public class EntityShadowKnife extends EntityThrowable{
     	super(w);
     }
 
-
 	@Override
-	protected void onImpact(MovingObjectPosition mop) 
+	protected void onImpact(RayTraceResult mop) 
 	{
 		if(mop.entityHit != null)
 		{
@@ -65,13 +69,13 @@ public class EntityShadowKnife extends EntityThrowable{
         int j = MathHelper.floor_double(e.posY);
         int k = MathHelper.floor_double(e.posZ);
 
-        if (this.worldObj.blockExists(i, j, k))
+        if (this.worldObj.isBlockLoaded(new BlockPos(i, j, k)))
         {
             boolean flag1 = false;
 
             while (!flag1 && j > 0)
             {
-                Block block = e.worldObj.getBlock(i, j - 1, k);
+                IBlockState block = e.worldObj.getBlockState(new BlockPos(i, j-1, k));
 
                 if (block.getMaterial().blocksMovement())
                 {
@@ -88,7 +92,7 @@ public class EntityShadowKnife extends EntityThrowable{
             {
                 e.setPosition(e.posX, e.posY, e.posZ);
 
-                if (e.worldObj.getCollidingBoundingBoxes(e, e.boundingBox).isEmpty() && !e.worldObj.isAnyLiquid(e.boundingBox))
+                if (e.worldObj.getCollisionBoxes(e, e.getEntityBoundingBox()).isEmpty() && !e.worldObj.containsAnyLiquid(e.getEntityBoundingBox()))
                 {
                     flag = true;
                 }
@@ -113,14 +117,17 @@ public class EntityShadowKnife extends EntityThrowable{
                 double d7 = d3 + (e.posX - d3) * d6 + (this.rand.nextDouble() - 0.5D) * (double)e.width * 2.0D;
                 double d8 = d4 + (e.posY - d4) * d6 + this.rand.nextDouble() * (double)e.height;
                 double d9 = d5 + (e.posZ - d5) * d6 + (this.rand.nextDouble() - 0.5D) * (double)e.width * 2.0D;
-                e.worldObj.spawnParticle("portal", d7, d8, d9, (double)f, (double)f1, (double)f2);
+                e.worldObj.spawnParticle(EnumParticleTypes.PORTAL, d7, d8, d9, (double)f, (double)f1, (double)f2);
             }
 
-            e.worldObj.playSoundEffect(d3, d4, d5, "mob.endermen.portal", 1.0F, 1.0F);
-            e.playSound("mob.endermen.portal", 1.0F, 1.0F);
+            e.worldObj.playSound(null, d3, d4, d5, SoundEvents.ENTITY_ENDERMEN_TELEPORT, SoundCategory.PLAYERS, 1.0F, 1.0F);
+            e.playSound(SoundEvents.ENTITY_ENDERMEN_TELEPORT, 1.0F, 1.0F);
             return true;
         }
     }
-
-
+	
+	@Override
+	public ItemStack getPickedResult(RayTraceResult target) {
+		return new ItemStack(ItemsCore.entityEgg,1,EntitiesCore.registeredEntities.indexOf(this.getClass()));
+	}
 }

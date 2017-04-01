@@ -9,10 +9,11 @@ import java.util.Map.Entry;
 
 import ec3.common.registry.BiomeRegistry;
 import ec3.utils.cfg.Config;
+import net.minecraft.init.Biomes;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.structure.MapGenStructure;
 import net.minecraft.world.gen.structure.StructureComponent;
 import net.minecraft.world.gen.structure.StructureStart;
@@ -21,7 +22,7 @@ public class MapGenTown extends MapGenStructure
 {
     /** A list of all the biomes villages can spawn in. */
     @SuppressWarnings("rawtypes")
-	public static List villageSpawnBiomes = Arrays.asList(new BiomeGenBase[] {BiomeGenBase.plains, BiomeRegistry.chaosCorruption, BiomeRegistry.frozenCorruption});
+	public static List villageSpawnBiomes = Arrays.asList(new Biome[] {Biomes.PLAINS, BiomeRegistry.chaosCorruption, BiomeRegistry.frozenCorruption});
     /** World terrain type, 0 for normal, 1 for flat map */
     private int terrainType;
     private int field_82665_g;
@@ -54,7 +55,7 @@ public class MapGenTown extends MapGenStructure
         }
     }
 
-    public String func_143025_a()
+    public String getStructureName()
     {
         return "Town";
     }
@@ -83,7 +84,7 @@ public class MapGenTown extends MapGenStructure
         j1 += random.nextInt(this.field_82665_g - this.field_82666_h);
         if (k == i1 && l == j1)
         {
-            boolean flag = this.worldObj.provider.dimensionId == Config.dimensionID;
+            boolean flag = this.worldObj.provider.getDimension() == Config.dimensionID;
             if (flag)
             {
                 return true;
@@ -110,7 +111,7 @@ public class MapGenTown extends MapGenStructure
             {
                 super(p_i2092_3_, p_i2092_4_);
                 List list = StructureTownPieces.getStructureVillageWeightedPieceList(p_i2092_2_, p_i2092_5_);
-                StructureTownPieces.Start start = new StructureTownPieces.Start(p_i2092_1_.getWorldChunkManager(), 0, p_i2092_2_, (p_i2092_3_ << 4) + 2, (p_i2092_4_ << 4) + 2, list, p_i2092_5_);
+                StructureTownPieces.Start start = new StructureTownPieces.Start(p_i2092_1_.getBiomeProvider(), 0, p_i2092_2_, (p_i2092_3_ << 4) + 2, (p_i2092_4_ << 4) + 2, list, p_i2092_5_);
                 this.components.add(start);
                 start.buildComponent(start, this.components, p_i2092_2_);
                 List list1 = start.field_74930_j;
@@ -160,15 +161,15 @@ public class MapGenTown extends MapGenStructure
                 return this.hasMoreThanTwoComponents;
             }
 
-            public void func_143022_a(NBTTagCompound p_143022_1_)
+            public void writeToNBT(NBTTagCompound p_143022_1_)
             {
-                super.func_143022_a(p_143022_1_);
+                super.writeToNBT(p_143022_1_);
                 p_143022_1_.setBoolean("Valid", this.hasMoreThanTwoComponents);
             }
 
-            public void func_143017_b(NBTTagCompound p_143017_1_)
+            public void readFromNBT(NBTTagCompound p_143017_1_)
             {
-                super.func_143017_b(p_143017_1_);
+                super.readFromNBT(p_143017_1_);
                 this.hasMoreThanTwoComponents = p_143017_1_.getBoolean("Valid");
             }
         }

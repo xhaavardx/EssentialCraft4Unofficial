@@ -6,28 +6,28 @@ import DummyCore.Utils.DummyData;
 import ec3.api.ApiCore;
 
 public class TileMoonWell extends TileMRUGeneric {
-	
+
 	public static float cfgMaxMRU = ApiCore.GENERATOR_MAX_MRU_GENERIC;
 	public static float cfgBalance = 1F;
 	public static float mruGenerated = 60;
-	
+
 	public TileMoonWell() {
 		super();
 		maxMRU = (int)cfgMaxMRU;
 		slot0IsBoundGem = false;
 	}
-	
+
 	public boolean canGenerateMRU() {
 		int moonPhase = worldObj.provider.getMoonPhase(worldObj.getWorldTime());
 		boolean night = !worldObj.isDaytime();
-		return moonPhase != 4 && night && worldObj.canBlockSeeTheSky(xCoord, yCoord+1, zCoord);
+		return moonPhase != 4 && night && worldObj.canBlockSeeSky(pos.up());
 	}
-	
+
 	@Override
-	public void updateEntity() {
-		super.updateEntity();
+	public void update() {
+		super.update();
 		balance = cfgBalance;
-		if(!worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord)) {
+		if(worldObj.isBlockIndirectlyGettingPowered(pos) == 0) {
 			int moonPhase = worldObj.provider.getMoonPhase(worldObj.getWorldTime());
 			float moonFactor = 1.0F;
 			switch(moonPhase) {
@@ -67,10 +67,10 @@ public class TileMoonWell extends TileMRUGeneric {
 			float mruGenerated = TileMoonWell.mruGenerated;
 			mruGenerated *= moonFactor;
 			float heightFactor = 1.0F;
-			if(yCoord > 80)
+			if(pos.getY() > 80)
 				heightFactor = 0F;
 			else {
-				heightFactor = 1.0F - (float)((float)yCoord/80F);
+				heightFactor = 1.0F - (float)pos.getY()/80F;
 				mruGenerated *= heightFactor;
 			}
 			if(mruGenerated > 0 && canGenerateMRU() && !worldObj.isRemote) {
@@ -80,7 +80,7 @@ public class TileMoonWell extends TileMRUGeneric {
 			}	
 		}
 	}
-	
+
 	public static void setupConfig(Configuration cfg) {
 		try {
 			cfg.load();
@@ -90,23 +90,23 @@ public class TileMoonWell extends TileMRUGeneric {
 					"Max MRU generated per tick:60"
 			}, "");
 			String dataString = "";
-			
+
 			for(int i = 0; i < cfgArrayString.length; ++i)
 				dataString += "||" + cfgArrayString[i];
-			
+
 			DummyData[] data = DataStorage.parseData(dataString);
-			
+
 			cfgMaxMRU = Float.parseFloat(data[0].fieldValue);
 			cfgBalance = Float.parseFloat(data[1].fieldValue);
 			mruGenerated = Float.parseFloat(data[2].fieldValue);
-			
+
 			cfg.save();
 		}
 		catch(Exception e) {
 			return;
 		}
 	}
-	
+
 	@Override
 	public int[] getOutputSlots() {
 		return new int[0];

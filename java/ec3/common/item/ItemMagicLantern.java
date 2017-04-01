@@ -1,17 +1,23 @@
 package ec3.common.item;
 
+import DummyCore.Client.IModelRegisterer;
 import ec3.common.block.BlocksCore;
 import ec3.utils.common.ECUtils;
 import net.minecraft.block.Block;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.client.model.ModelLoader;
 
-public class ItemMagicLantern extends ItemStoresMRUInNBT {
+public class ItemMagicLantern extends ItemStoresMRUInNBT implements IModelRegisterer {
 
 	public ItemMagicLantern() {
 		super();	
@@ -19,7 +25,7 @@ public class ItemMagicLantern extends ItemStoresMRUInNBT {
 		this.maxStackSize = 1;
 		this.bFull3D = true;
 	}
-	
+
 	@Override
 	public void onUpdate(ItemStack itemStack, World world, Entity entity, int indexInInventory, boolean isCurrentItem)
 	{
@@ -28,47 +34,50 @@ public class ItemMagicLantern extends ItemStoresMRUInNBT {
 			int fX = MathHelper.floor_double(entity.posX);
 			int fY = MathHelper.floor_double(entity.posY);
 			int fZ = MathHelper.floor_double(entity.posZ);
-			Block b = world.getBlock(fX, fY, fZ);
-			if(b == Blocks.air)
+			Block b = world.getBlockState(new BlockPos(fX, fY, fZ)).getBlock();
+			if(b == Blocks.AIR)
 			{
 				if(isCurrentItem)
 				{
-					world.setBlock(fX, fY, fZ, BlocksCore.torch, 1, 3);
-					world.scheduleBlockUpdate(fX, fY,fZ, BlocksCore.torch, 20);
+					world.setBlockState(new BlockPos(fX, fY, fZ), BlocksCore.torch.getStateFromMeta(1), 3);
+					world.scheduleUpdate(new BlockPos(fX, fY, fZ), BlocksCore.torch, 20);
 				}
 			}
 		}
 		super.onUpdate(itemStack, world, entity, indexInInventory, isCurrentItem);
 	}
-	
-    
-    public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, int px, int y, int pz, int side, float hitX, float hitY, float hitZ)
-    {
-    	ForgeDirection dir = ForgeDirection.getOrientation(side);
-    	Block b = world.getBlock(px+dir.offsetX, y+dir.offsetY, pz+dir.offsetZ);
-    	if(b == Blocks.air)
-    	{
-	        if(player.inventory.hasItem(ItemsCore.magicalSlag) && (ECUtils.tryToDecreaseMRUInStorage(player, -100) || this.setMRU(stack, -100)))
-	        {
-	        	int slotID = -1;
-	        	for(int i = 0; i < player.inventory.getSizeInventory(); ++i)
-	        	{
-	        		ItemStack stk = player.inventory.getStackInSlot(i);
-	        		if(stk != null && stk.getItem() == ItemsCore.magicalSlag)
-	        		{
-	        			slotID = i;
-	        			break;
-	        		}
-	        	}
-	        	if(slotID != -1)
-	        	{
-	        		player.inventory.decrStackSize(slotID, 1);
-	        		world.setBlock(px+dir.offsetX, y+dir.offsetY, pz+dir.offsetZ, BlocksCore.torch, 0, 3);
-	        		player.swingItem();
-	        	}
-	        }
-    	}
-        return false;
-    }
-    
+
+
+	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing dir, float hitX, float hitY, float hitZ)
+	{
+		Block b = world.getBlockState(pos.offset(dir)).getBlock();
+		if(b == Blocks.AIR)
+		{
+			if(player.inventory.hasItemStack(new ItemStack(ItemsCore.magicalSlag)) && (ECUtils.tryToDecreaseMRUInStorage(player, -100) || this.setMRU(stack, -100)))
+			{
+				int slotID = -1;
+				for(int i = 0; i < player.inventory.getSizeInventory(); ++i)
+				{
+					ItemStack stk = player.inventory.getStackInSlot(i);
+					if(stk != null && stk.getItem() == ItemsCore.magicalSlag)
+					{
+						slotID = i;
+						break;
+					}
+				}
+				if(slotID != -1)
+				{
+					player.inventory.decrStackSize(slotID, 1);
+					world.setBlockState(pos.offset(dir), BlocksCore.torch.getStateFromMeta(0), 3);
+					player.swingArm(hand);
+				}
+			}
+		}
+		return EnumActionResult.PASS;
+	}
+
+	@Override
+	public void registerModels() {
+		ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation("essentialcraft:item/magicalLantern", "inventory"));
+	}
 }

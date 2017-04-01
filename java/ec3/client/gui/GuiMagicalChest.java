@@ -1,5 +1,6 @@
 package ec3.client.gui;
 
+import DummyCore.Utils.DrawUtils;
 import DummyCore.Utils.MiscUtils;
 import ec3.common.inventory.ContainerMagicalChest;
 import ec3.common.tile.TileMagicalChest;
@@ -31,10 +32,10 @@ public class GuiMagicalChest extends GuiContainer{
 	protected void drawGuiContainerBackgroundLayer(float partialTicks,int mX, int mY) {
 		int k = (this.width - this.xSize)/2;
 		int l = (this.height - this.ySize)/2;
-        if (this.tile.getBlockMetadata() == 0)
-        	MiscUtils.bindTexture("essentialcraft", "textures/gui/magical_chest.png");
+        if(this.tile.getBlockMetadata() == 0)
+        	DrawUtils.bindTexture("essentialcraft", "textures/gui/magical_chest.png");
         else
-        	MiscUtils.bindTexture("essentialcraft", "textures/gui/void_chest.png");
+        	DrawUtils.bindTexture("essentialcraft", "textures/gui/void_chest.png");
         
         this.drawTexturedModalRect(k, l, 0, 0, xSize, ySize);
 	}

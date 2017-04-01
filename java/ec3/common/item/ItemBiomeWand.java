@@ -1,16 +1,22 @@
 package ec3.common.item;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import ec3.utils.common.ECUtils;
+import DummyCore.Client.IModelRegisterer;
 import DummyCore.Utils.MiscUtils;
+import ec3.utils.common.ECUtils;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.biome.Biome;
+import net.minecraftforge.client.model.ModelLoader;
 
-public class ItemBiomeWand extends ItemStoresMRUInNBT {
+public class ItemBiomeWand extends ItemStoresMRUInNBT implements IModelRegisterer, IItemColor {
 
 	public ItemBiomeWand() {
 		super();	
@@ -18,13 +24,13 @@ public class ItemBiomeWand extends ItemStoresMRUInNBT {
 		this.maxStackSize = 1;
 		this.bFull3D = true;
 	}
-	
+
 	public static boolean isBiomeSaved(ItemStack stack)
 	{
 		NBTTagCompound tag = MiscUtils.getStackTag(stack);
 		return tag.hasKey("biome");
 	}
-	
+
 	public static int getBiomeID(ItemStack stack)
 	{
 		NBTTagCompound tag = MiscUtils.getStackTag(stack);
@@ -32,7 +38,7 @@ public class ItemBiomeWand extends ItemStoresMRUInNBT {
 			return tag.getInteger("biome");
 		return -1;
 	}
-	
+
 	public static void setBiomeID(ItemStack stack, int bID, boolean remove)
 	{
 		NBTTagCompound tag = MiscUtils.getStackTag(stack);
@@ -46,43 +52,47 @@ public class ItemBiomeWand extends ItemStoresMRUInNBT {
 		}
 		stack.setTagCompound(tag);
 	}
-    
-    public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, int px, int y, int pz, int side, float hitX, float hitY, float hitZ)
-    {
-    	if(!player.isSneaking())
-    	{
-	    	if(isBiomeSaved(stack))
-	    	{
-		    	if(ECUtils.tryToDecreaseMRUInStorage(player, -100) || this.setMRU(stack, -100))
-		    	{
-		    		for(int x = px-1; x <= px+1; ++x)
-		    		{
-			    		for(int z = pz-1; z <= pz+1; ++z)
-			    		{
-			    			MiscUtils.changeBiome(world, BiomeGenBase.getBiome(getBiomeID(stack)), x, z);
-					    	player.swingItem();
-			    		}
-		    		}
-		    	}
-	    	}else
-	    	{
-				int cbiome = world.getBiomeGenForCoords(px, pz).biomeID;
+
+	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ)
+	{
+		if(!player.isSneaking())
+		{
+			if(isBiomeSaved(stack))
+			{
+				if(ECUtils.tryToDecreaseMRUInStorage(player, -100) || this.setMRU(stack, -100))
+				{
+					for(int x = pos.getX()-1; x <= pos.getX()+1; ++x)
+					{
+						for(int z = pos.getZ()-1; z <= pos.getZ()+1; ++z)
+						{
+							MiscUtils.changeBiome(world, Biome.getBiome(getBiomeID(stack)), x, z);
+							player.swingArm(hand);
+						}
+					}
+				}
+			}else
+			{
+				int cbiome = Biome.getIdForBiome(world.getBiomeGenForCoords(pos));
 				setBiomeID(stack,cbiome,false);
-				player.swingItem();
-	    	}
-    	}else
-    	{
-    		setBiomeID(stack,0,true);
-    		player.swingItem();
-    	}
-        return false;
-    }
-    
-    @SideOnly(Side.CLIENT)
-    public int getColorFromItemStack(ItemStack par1ItemStack, int par2)
-    {
-    	if(isBiomeSaved(par1ItemStack))
-    		return BiomeGenBase.getBiome(getBiomeID(par1ItemStack)).color;
-        return 0x00ffff;
-    }
+				player.swingArm(hand);
+			}
+		}else
+		{
+			setBiomeID(stack,0,true);
+			player.swingArm(hand);
+		}
+		return EnumActionResult.PASS;
+	}
+
+	public int getColorFromItemstack(ItemStack par1ItemStack, int par2)
+	{
+		if(isBiomeSaved(par1ItemStack))
+			return Biome.getBiome(getBiomeID(par1ItemStack)).getFoliageColorAtPos(BlockPos.ORIGIN);
+		return 0x00ffff;
+	}
+
+	@Override
+	public void registerModels() {
+		ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation("essentialcraft:item/biomeWand", "inventory"));
+	}
 }

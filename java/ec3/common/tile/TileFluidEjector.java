@@ -1,14 +1,13 @@
 package ec3.common.tile;
 
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 
 public class TileFluidEjector extends TileMRUGeneric {
 
-	public ForgeDirection getRotation() {
-		int metadata = worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
-		if(metadata > 5)
-			metadata -= 6;
-		return ForgeDirection.getOrientation(metadata);
+	public EnumFacing getRotation() {
+		int metadata = this.getBlockMetadata();
+		metadata %= 6;
+		return EnumFacing.getFront(metadata);
 	}
 	
 	public TileFluidEjector() {

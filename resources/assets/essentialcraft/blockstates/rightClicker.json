@@ -1,0 +1,41 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "textures": {
+            "top": "essentialcraft:blocks/fortifiedStone",
+            "side": "essentialcraft:blocks/fortifiedStone"
+        },
+        "model": "minecraft:orientable",
+        "uvlock": true
+    },
+    "variants": {
+        "facing": {
+            "north": {},
+            "south": { "y": 180 },
+            "west": { "y": -90 },
+            "east": { "y": 90 },
+            "down": { "x": 90 },
+            "up": { "x": -90 }
+        },
+        "type": {
+            "normal": {
+                "textures": { "front": "essentialcraft:blocks/rightClicker" }
+            },
+            "normal_sneaky": {
+                "textures": { "front": "essentialcraft:blocks/rightClicker_sneaky" }
+            },
+            "extended": {
+                "textures": { "front": "essentialcraft:blocks/rightClickerExtended" }
+            },
+            "extended_sneaky": {
+                "textures": { "front": "essentialcraft:blocks/rightClickerExtended_sneaky" }
+            },
+            "advanced": {
+                "textures": { "front": "essentialcraft:blocks/rightClickerExtendedAdvanced" }
+            },
+            "advanced_sneaky": {
+                "textures": { "front": "essentialcraft:blocks/rightClickerExtendedAdvanced_sneaky" }
+            }
+        }
+    }
+}

@@ -1,7 +1,7 @@
 package ec3.common.world.event;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import ec3.api.IWorldEvent;
 import ec3.utils.cfg.Config;
@@ -11,7 +11,7 @@ public class WorldEvent_Fumes implements IWorldEvent{
 
 	@Override
 	public void onEventBeginning(World w) {
-		ECUtils.sendChatMessageToAllPlayersInDim(Config.dimensionID, EnumChatFormatting.RED+"What is that smell?!");
+		ECUtils.sendChatMessageToAllPlayersInDim(Config.dimensionID, TextFormatting.RED+"What is that smell?!");
 	}
 
 	@Override
@@ -26,7 +26,7 @@ public class WorldEvent_Fumes implements IWorldEvent{
 
 	@Override
 	public void onEventEnd(World w) {
-		ECUtils.sendChatMessageToAllPlayersInDim(Config.dimensionID, EnumChatFormatting.GREEN+"The poison is gone!");
+		ECUtils.sendChatMessageToAllPlayersInDim(Config.dimensionID, TextFormatting.GREEN+"The poison is gone!");
 	}
 
 	@Override

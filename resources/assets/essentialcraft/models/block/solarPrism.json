@@ -1,0 +1,128 @@
+{
+    "__comment": "Model generated using MrCrayfish's Model Creator (http://mrcrayfish.com/modelcreator/)",
+    "parent": "minecraft:block/block",
+    "ambientocclusion": false,
+    "textures": {
+        "0": "essentialcraft:models/solarPrism",
+        "particle": "essentialcraft:blocks/magicPlatingBlock"
+    },
+    "elements": [
+        {
+            "name": "cube_0",
+            "from": [ 0.0, 7.0, -16.0 ], 
+            "to": [ 16.0, 9.0, -14.0 ], 
+            "faces": {
+                "north": { "texture": "#0", "uv": [ 0.0, 0.25, 2.0, 0.5 ] },
+                "east": { "texture": "#0", "uv": [ 0.0, 0.25, 0.25, 0.5 ] },
+                "south": { "texture": "#0", "uv": [ 0.0, 0.25, 2.0, 0.5 ] },
+                "west": { "texture": "#0", "uv": [ 0.0, 0.25, 0.25, 0.5 ] },
+                "up": { "texture": "#0", "uv": [ 0.25, 0.0, 2.25, 0.25 ] },
+                "down": { "texture": "#0", "uv": [ 0.25, 0.0, 2.25, 0.25 ] }
+            }
+        },
+        {
+            "name": "cube_1",
+            "from": [ 0.0, 7.0, 30.0 ], 
+            "to": [ 16.0, 9.0, 32.0 ], 
+            "faces": {
+                "north": { "texture": "#0", "uv": [ 0.0, 0.25, 2.0, 0.5 ] },
+                "east": { "texture": "#0", "uv": [ 0.0, 0.25, 0.25, 0.5 ] },
+                "south": { "texture": "#0", "uv": [ 0.0, 0.25, 2.0, 0.5 ] },
+                "west": { "texture": "#0", "uv": [ 0.0, 0.25, 0.25, 0.5 ] },
+                "up": { "texture": "#0", "uv": [ 0.25, 0.0, 2.25, 0.25 ] },
+                "down": { "texture": "#0", "uv": [ 0.25, 0.0, 2.25, 0.25 ] }
+            }
+        },
+        {
+            "name": "cube_2",
+            "from": [ -16.0, 7.0, 0.0 ], 
+            "to": [ -14.0, 9.0, 16.0 ], 
+            "faces": {
+                "north": { "texture": "#0", "uv": [ 0.0, 0.25, 0.25, 0.5 ] },
+                "east": { "texture": "#0", "uv": [ 0.0, 0.25, 2.0, 0.5 ] },
+                "south": { "texture": "#0", "uv": [ 0.0, 0.25, 0.25, 0.5 ] },
+                "west": { "texture": "#0", "uv": [ 0.0, 0.25, 2.0, 0.5 ] },
+                "up": { "texture": "#0", "uv": [ 8.75, 0.0, 9.0, 2.0 ] },
+                "down": { "texture": "#0", "uv": [ 8.75, 0.0, 9.0, 2.0 ] }
+            }
+        },
+        {
+            "name": "cube_3",
+            "from": [ 30.0, 7.0, 0.0 ], 
+            "to": [ 32.0, 9.0, 16.0 ], 
+            "faces": {
+                "north": { "texture": "#0", "uv": [ 0.0, 0.25, 0.25, 0.5 ] },
+                "east": { "texture": "#0", "uv": [ 0.0, 0.25, 2.0, 0.5 ] },
+                "south": { "texture": "#0", "uv": [ 0.0, 0.25, 0.25, 0.5 ] },
+                "west": { "texture": "#0", "uv": [ 0.0, 0.25, 2.0, 0.5 ] },
+                "up": { "texture": "#0", "uv": [ 8.75, 0.0, 9.0, 2.0 ] },
+                "down": { "texture": "#0", "uv": [ 8.75, 0.0, 9.0, 2.0 ] }
+            }
+        },
+        {
+            "name": "cube_4",
+            "from": [ -3.0, 7.01, -15.0 ], 
+            "to": [ 19.0, 8.99, -13.0 ], 
+            "rotation": { "origin": [ 8.0, 8.0, 8.0 ], "axis": "y", "angle": 45.0 },
+            "faces": {
+                "north": { "texture": "#0", "uv": [ 0.0, 0.25, 0.25, 0.5 ] },
+                "east": { "texture": "#0", "uv": [ 0.0, 0.25, 2.75, 0.5 ] },
+                "south": { "texture": "#0", "uv": [ 0.0, 0.25, 0.25, 0.5 ] },
+                "west": { "texture": "#0", "uv": [ 0.0, 0.0, 2.75, 2.0 ] },
+                "up": { "texture": "#0", "uv": [ 0.25, 0.0, 3.0, 0.25 ] },
+                "down": { "texture": "#0", "uv": [ 0.25, 0.0, 3.0, 0.25 ] }
+            }
+        },
+        {
+            "name": "cube_5",
+            "from": [ -3.0, 7.01, -15.0 ], 
+            "to": [ 19.0, 8.99, -13.0 ], 
+            "rotation": { "origin": [ 8.0, 8.0, 8.0 ], "axis": "y", "angle": -45.0 },
+            "faces": {
+                "north": { "texture": "#0", "uv": [ 0.0, 0.25, 0.25, 0.5 ] },
+                "east": { "texture": "#0", "uv": [ 0.0, 0.25, 2.75, 0.5 ] },
+                "south": { "texture": "#0", "uv": [ 0.0, 0.25, 0.25, 0.5 ] },
+                "west": { "texture": "#0", "uv": [ 0.0, 0.0, 2.75, 2.0 ] },
+                "up": { "texture": "#0", "uv": [ 0.25, 0.0, 3.0, 0.25 ] },
+                "down": { "texture": "#0", "uv": [ 0.25, 0.0, 3.0, 0.25 ] }
+            }
+        },
+        {
+            "name": "cube_6",
+            "from": [ -3.0, 7.01, 29.0 ], 
+            "to": [ 19.0, 8.99, 31.0 ], 
+            "rotation": { "origin": [ 8.0, 8.0, 8.0 ], "axis": "y", "angle": 45.0 },
+            "faces": {
+                "north": { "texture": "#0", "uv": [ 0.0, 0.25, 0.25, 0.5 ] },
+                "east": { "texture": "#0", "uv": [ 0.0, 0.25, 2.75, 0.5 ] },
+                "south": { "texture": "#0", "uv": [ 0.0, 0.25, 0.25, 0.5 ] },
+                "west": { "texture": "#0", "uv": [ 0.0, 0.0, 2.75, 2.0 ] },
+                "up": { "texture": "#0", "uv": [ 0.25, 0.0, 3.0, 0.25 ] },
+                "down": { "texture": "#0", "uv": [ 0.25, 0.0, 3.0, 0.25 ] }
+            }
+        },
+        {
+            "name": "cube_7",
+            "from": [ -3.0, 7.01, 29.0 ], 
+            "to": [ 19.0, 8.99, 31.0 ], 
+            "rotation": { "origin": [ 8.0, 8.0, 8.0 ], "axis": "y", "angle": -45.0 },
+            "faces": {
+                "north": { "texture": "#0", "uv": [ 0.0, 0.25, 0.25, 0.5 ] },
+                "east": { "texture": "#0", "uv": [ 0.0, 0.25, 2.75, 0.5 ] },
+                "south": { "texture": "#0", "uv": [ 0.0, 0.25, 0.25, 0.5 ] },
+                "west": { "texture": "#0", "uv": [ 0.0, 0.0, 2.75, 2.0 ] },
+                "up": { "texture": "#0", "uv": [ 0.25, 0.0, 3.0, 0.25 ] },
+                "down": { "texture": "#0", "uv": [ 0.25, 0.0, 3.0, 0.25 ] }
+            }
+        },
+        {
+            "name": "cube_8",
+            "from": [ -14.0, 7.5, -14.0 ], 
+            "to": [ 30.0, 8.5, 30.0 ], 
+            "faces": {
+                "up": { "texture": "#0", "uv": [ 0.0, 3.125, 5.5, 8.625 ] },
+                "down": { "texture": "#0", "uv": [ 5.5, 3.125, 11.0, 8.625 ] }
+            }
+        }
+    ]
+}

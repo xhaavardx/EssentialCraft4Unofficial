@@ -1,0 +1,66 @@
+{
+    "__comment": "Model generated using MrCrayfish's Model Creator (http://mrcrayfish.com/modelcreator/)",
+    "parent": "minecraft:block/block",
+    "ambientocclusion": false,
+    "textures": {
+        "0": "essentialcraft:blocks/transparentGlass",
+        "1": "essentialcraft:blocks/fortifiedStone",
+        "2": "essentialcraft:blocks/magicPlatingBlock",
+        "3": "minecraft:blocks/beacon",
+        "particle": "essentialcraft:blocks/fortifiedStone"
+    },
+    "elements": [
+        {
+            "name": "cube_0",
+            "from": [ 0.0, 0.0, 0.0 ], 
+            "to": [ 16.0, 16.0, 16.0 ], 
+            "faces": {
+                "north": { "texture": "#0", "uv": [ 0.0, 0.0, 16.0, 16.0 ] },
+                "east": { "texture": "#0", "uv": [ 0.0, 0.0, 16.0, 16.0 ] },
+                "south": { "texture": "#0", "uv": [ 0.0, 0.0, 16.0, 16.0 ] },
+                "west": { "texture": "#0", "uv": [ 0.0, 0.0, 16.0, 16.0 ] },
+                "up": { "texture": "#0", "uv": [ 0.0, 0.0, 16.0, 16.0 ] },
+                "down": { "texture": "#0", "uv": [ 0.0, 0.0, 16.0, 16.0 ] }
+            }
+        },
+        {
+            "name": "cube_1",
+            "from": [ 0.0, 0.0, 0.0 ], 
+            "to": [ 16.0, 3.2, 16.0 ], 
+            "faces": {
+                "north": { "texture": "#1", "uv": [ 0.0, 12.8, 16.0, 16.0 ], "cullface": "north" },
+                "east": { "texture": "#1", "uv": [ 0.0, 12.8, 16.0, 16.0 ], "cullface": "east" },
+                "south": { "texture": "#1", "uv": [ 0.0, 12.8, 16.0, 16.0 ], "cullface": "south" },
+                "west": { "texture": "#1", "uv": [ 0.0, 12.8, 16.0, 16.0 ], "cullface": "west" },
+                "up": { "texture": "#1", "uv": [ 0.0, 0.0, 16.0, 16.0 ] },
+                "down": { "texture": "#1", "uv": [ 0.0, 0.0, 16.0, 16.0 ], "cullface": "down" }
+            }
+        },
+        {
+            "name": "cube_2",
+            "from": [ 6.4, 3.2, 6.4 ], 
+            "to": [ 9.6, 9.6, 9.6 ], 
+            "faces": {
+                "north": { "texture": "#2", "uv": [ 6.4, 3.2, 9.6, 9.6 ] },
+                "east": { "texture": "#2", "uv": [ 6.4, 3.2, 9.6, 9.6 ] },
+                "south": { "texture": "#2", "uv": [ 6.4, 3.2, 9.6, 9.6 ] },
+                "west": { "texture": "#2", "uv": [ 6.4, 3.2, 9.6, 9.6 ] },
+                "up": { "texture": "#-1", "uv": [ 0.0, 0.0, 3.2, 3.2 ] },
+                "down": { "texture": "#-1", "uv": [ 0.0, 0.0, 3.2, 3.2 ] }
+            }
+        },
+        {
+            "name": "cube_3",
+            "from": [ 4.8, 6.4, 4.8 ], 
+            "to": [ 11.2, 12.8, 11.2 ], 
+            "faces": {
+                "north": { "texture": "#3", "uv": [ 0.0, 0.0, 16.0, 16.0 ] },
+                "east": { "texture": "#3", "uv": [ 0.0, 0.0, 16.0, 16.0 ] },
+                "south": { "texture": "#3", "uv": [ 0.0, 0.0, 16.0, 16.0 ] },
+                "west": { "texture": "#3", "uv": [ 0.0, 0.0, 16.0, 16.0 ] },
+                "up": { "texture": "#3", "uv": [ 0.0, 0.0, 16.0, 16.0 ] },
+                "down": { "texture": "#3", "uv": [ 0.0, 0.0, 16.0, 16.0 ] }
+            }
+        }
+    ]
+}

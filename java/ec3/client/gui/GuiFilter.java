@@ -7,11 +7,13 @@ import java.util.List;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
+import DummyCore.Utils.DrawUtils;
 import DummyCore.Utils.MiscUtils;
 import ec3.common.inventory.InventoryMagicFilter;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
@@ -53,28 +55,28 @@ public class GuiFilter extends GuiContainer{
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float p_146976_1_,
 			int p_146976_2_, int p_146976_3_) {
-		MiscUtils.bindTexture("minecraft", "textures/gui/container/dispenser.png");
+		DrawUtils.bindTexture("minecraft", "textures/gui/container/dispenser.png");
 		this.drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
 	}
 	
     public void drawScreen(int mX, int mY, float partialTicks)
     {
-    	if(!this.filter.filterStack.isItemEqual(mc.thePlayer.getCurrentEquippedItem()))
-    		this.filter.filterStack = mc.thePlayer.getCurrentEquippedItem();
-    	if(!ItemStack.areItemStackTagsEqual(this.filter.filterStack, mc.thePlayer.getCurrentEquippedItem()))
-    		this.filter.filterStack = mc.thePlayer.getCurrentEquippedItem();
+    	if(!this.filter.filterStack.isItemEqual(mc.thePlayer.getHeldItemMainhand()))
+    		this.filter.filterStack = mc.thePlayer.getHeldItemMainhand();
+    	if(!ItemStack.areItemStackTagsEqual(this.filter.filterStack, mc.thePlayer.getHeldItemMainhand()))
+    		this.filter.filterStack = mc.thePlayer.getHeldItemMainhand();
     	super.drawScreen(mX, mY, partialTicks);
 	     for (int ik = 0; ik < this.buttonList.size(); ++ik)
 	     {
 	    	 RenderHelper.disableStandardItemLighting();
-	    	 GL11.glColor3f(1, 1, 1);
+	    	 GlStateManager.color(1, 1, 1);
 	    	 GuiButton btn  = (GuiButton) this.buttonList.get(ik);
 	    	 boolean hover = mX >= btn.xPosition && mY >= btn.yPosition && mX < btn.xPosition + btn.width && mY < btn.yPosition + btn.height;
 	    	 int id = btn.id;
 
 	    	 if(id == 0)
 	    	 {
-	    		 MiscUtils.bindTexture("essentialcraft", "textures/gui/guiFilterButtons.png");
+	    		 DrawUtils.bindTexture("essentialcraft", "textures/gui/guiFilterButtons.png");
 	    		 if(MiscUtils.getStackTag(this.filter.filterStack).getBoolean("ignoreMeta"))
 	    		 {
 	    			 this.drawTexturedModalRect(btn.xPosition, btn.yPosition, 20, 0, 20, 20);
@@ -85,7 +87,7 @@ public class GuiFilter extends GuiContainer{
 	    	 }
 	    	 if(id == 1)
 	    	 {
-	    		 MiscUtils.bindTexture("essentialcraft", "textures/gui/guiFilterButtons.png");
+	    		 DrawUtils.bindTexture("essentialcraft", "textures/gui/guiFilterButtons.png");
 	    		 if(MiscUtils.getStackTag(this.filter.filterStack).getBoolean("ignoreNBT"))
 	    		 {
 	    			 this.drawTexturedModalRect(btn.xPosition, btn.yPosition, 20, 20, 20, 20);
@@ -96,7 +98,7 @@ public class GuiFilter extends GuiContainer{
 	    	 }
 	    	 if(id == 2)
 	    	 {
-	    		 MiscUtils.bindTexture("essentialcraft", "textures/gui/guiFilterButtons.png");
+	    		 DrawUtils.bindTexture("essentialcraft", "textures/gui/guiFilterButtons.png");
 	    		 if(MiscUtils.getStackTag(this.filter.filterStack).getBoolean("ignoreOreDict"))
 	    		 {
 	    			 this.drawTexturedModalRect(btn.xPosition, btn.yPosition, 20, 40, 20, 20);
@@ -153,13 +155,13 @@ public class GuiFilter extends GuiContainer{
     @SuppressWarnings({ "rawtypes", "unchecked" })
 	protected void drawHoveringText(List p_146283_1_, int p_146283_2_, int p_146283_3_, FontRenderer font)
     {
-    	GL11.glDisable(GL11.GL_LIGHTING);
+    	GlStateManager.disableLighting();
         if (!p_146283_1_.isEmpty())
         {
-            GL11.glDisable(GL12.GL_RESCALE_NORMAL);
+            GlStateManager.disableRescaleNormal();
             RenderHelper.disableStandardItemLighting();
-            GL11.glDisable(GL11.GL_LIGHTING);
-            GL11.glDisable(GL11.GL_DEPTH_TEST);
+            GlStateManager.disableLighting();
+            GlStateManager.disableDepth();
             int k = 0;
             Iterator<String> iterator = p_146283_1_.iterator();
 
@@ -223,13 +225,13 @@ public class GuiFilter extends GuiContainer{
 
             this.zLevel = 0.0F;
             itemRender.zLevel = 0.0F;
-            GL11.glEnable(GL11.GL_LIGHTING);
-            GL11.glEnable(GL11.GL_DEPTH_TEST);
+            GlStateManager.enableLighting();
+            GlStateManager.enableDepth();
             RenderHelper.enableStandardItemLighting();
-            GL11.glEnable(GL12.GL_RESCALE_NORMAL);
+            GlStateManager.enableRescaleNormal();
         }
-        GL11.glEnable(GL11.GL_LIGHTING);
-        GL11.glColor3f(1, 1, 1);
+        GlStateManager.enableLighting();
+        GlStateManager.color(1, 1, 1);
     }
 
 }

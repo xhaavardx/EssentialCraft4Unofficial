@@ -4,10 +4,12 @@ import DummyCore.Utils.DataStorage;
 import DummyCore.Utils.DummyData;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ITickable;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.config.Configuration;
 import ec3.common.entity.EntitySolarBeam;
 
-public class TileSolarPrism extends TileEntity {
+public class TileSolarPrism extends TileEntity implements ITickable {
 	
 	public static float solarBeamChance = 0.025F;
 	public static boolean requiresUnabstructedSky = true;
@@ -15,30 +17,31 @@ public class TileSolarPrism extends TileEntity {
 	public static boolean ignoreRain = false;
 	
 	@Override
-	public void updateEntity() {
-		super.updateEntity();
+	public void update() {
 		if(!worldObj.isRemote) {
-			if(worldObj.rand.nextFloat() <= solarBeamChance && (worldObj.canBlockSeeTheSky(xCoord, yCoord, zCoord) || !requiresUnabstructedSky) && ((worldObj.getWorldTime() % 24000 >= 5000 && worldObj.getWorldTime() % 24000 <= 7000) || !requiresMidday) && (!worldObj.isRaining() || ignoreRain)) {
-				int y = yCoord-1;
-				while(y > 0 && worldObj.isAirBlock(xCoord, y, zCoord)) {
+			if(worldObj.rand.nextFloat() <= solarBeamChance && (worldObj.canBlockSeeSky(pos) || !requiresUnabstructedSky) && ((worldObj.getWorldTime() % 24000 >= 5000 && worldObj.getWorldTime() % 24000 <= 7000) || !requiresMidday) && (!worldObj.isRaining() || ignoreRain)) {
+				int y = pos.getY()-1;
+				BlockPos.MutableBlockPos p = new BlockPos.MutableBlockPos(pos.down());
+				while(y > 0 && worldObj.isAirBlock(p)) {
 					--y;
-					if(!worldObj.isAirBlock(xCoord, y, zCoord)) {
-						EntitySolarBeam beam = new EntitySolarBeam(worldObj,xCoord,y,zCoord);
+					p.setY(y);
+					if(!worldObj.isAirBlock(p)) {
+						EntitySolarBeam beam = new EntitySolarBeam(worldObj,pos.getX(),y,pos.getZ());
 						worldObj.spawnEntityInWorld(beam);
 					}
 				}
 			}
-			if(worldObj.isAirBlock(xCoord+2, yCoord, zCoord) || worldObj.isAirBlock(xCoord-2, yCoord, zCoord) || worldObj.isAirBlock(xCoord, yCoord, zCoord-2) || worldObj.isAirBlock(xCoord, yCoord, zCoord+2)) {
-				worldObj.getBlock(xCoord, yCoord, zCoord).dropBlockAsItem(worldObj, xCoord, yCoord, zCoord, getBlockMetadata(), 0);
-				worldObj.setBlock(xCoord, yCoord, zCoord, Blocks.air, 0, 3);
+			if(worldObj.isAirBlock(pos.east(2)) || worldObj.isAirBlock(pos.west(2)) || worldObj.isAirBlock(pos.north(2)) || worldObj.isAirBlock(pos.south(2))) {
+				worldObj.getBlockState(pos).getBlock().dropBlockAsItem(worldObj, pos, worldObj.getBlockState(pos), 0);
+				worldObj.setBlockToAir(pos);
 			}
-			if(!worldObj.isAirBlock(xCoord+1, yCoord, zCoord) || !worldObj.isAirBlock(xCoord-1, yCoord, zCoord) || !worldObj.isAirBlock(xCoord, yCoord, zCoord-1) || !worldObj.isAirBlock(xCoord, yCoord, zCoord+1)) {
-				worldObj.getBlock(xCoord, yCoord, zCoord).dropBlockAsItem(worldObj, xCoord, yCoord, zCoord, getBlockMetadata(), 0);
-				worldObj.setBlock(xCoord, yCoord, zCoord, Blocks.air, 0, 3);
+			if(!worldObj.isAirBlock(pos.east()) || !worldObj.isAirBlock(pos.west()) || !worldObj.isAirBlock(pos.north()) || !worldObj.isAirBlock(pos.south())) {
+				worldObj.getBlockState(pos).getBlock().dropBlockAsItem(worldObj, pos, worldObj.getBlockState(pos), 0);
+				worldObj.setBlockToAir(pos);
 			}
-			if(!worldObj.isAirBlock(xCoord+1, yCoord, zCoord+1) || !worldObj.isAirBlock(xCoord+1, yCoord, zCoord-1) || !worldObj.isAirBlock(xCoord-1, yCoord, zCoord-1) || !worldObj.isAirBlock(xCoord-1, yCoord, zCoord+1)) {
-				worldObj.getBlock(xCoord, yCoord, zCoord).dropBlockAsItem(worldObj, xCoord, yCoord, zCoord, getBlockMetadata(), 0);
-				worldObj.setBlock(xCoord, yCoord, zCoord, Blocks.air, 0, 3);
+			if(!worldObj.isAirBlock(pos.add(1, 0, 1)) || !worldObj.isAirBlock(pos.add(1, 0, -1)) || !worldObj.isAirBlock(pos.add(-1, 0, -1)) || !worldObj.isAirBlock(pos.add(-1, 0, 1))) {
+				worldObj.getBlockState(pos).getBlock().dropBlockAsItem(worldObj, pos, worldObj.getBlockState(pos), 0);
+				worldObj.setBlockToAir(pos);
 			}
 		}
 	}

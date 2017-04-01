@@ -2,38 +2,47 @@ package ec3.common.registry;
 
 import org.apache.logging.log4j.LogManager;
 
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import ec3.common.world.BiomeGenCorruption_Chaos;
-import ec3.common.world.BiomeGenCorruption_Frozen;
-import ec3.common.world.BiomeGenCorruption_Magic;
-import ec3.common.world.BiomeGenCorruption_Shadow;
-import ec3.common.world.BiomeGenFirstWorld_Desert;
-import ec3.common.world.BiomeGenFirstWorld_Dreadlands;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+import ec3.common.world.biome.BiomeGenCorruption_Chaos;
+import ec3.common.world.biome.BiomeGenCorruption_Frozen;
+import ec3.common.world.biome.BiomeGenCorruption_Magic;
+import ec3.common.world.biome.BiomeGenCorruption_Shadow;
+import ec3.common.world.biome.BiomeGenFirstWorld_Desert;
+import ec3.common.world.biome.BiomeGenFirstWorld_Dreadlands;
 import ec3.utils.cfg.Config;
-import net.minecraft.world.biome.BiomeGenBase;
-import net.minecraft.world.biome.BiomeGenBase.Height;
+import net.minecraft.init.Biomes;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.Biome.BiomeProperties;
 import net.minecraftforge.common.BiomeManager;
 import net.minecraftforge.event.terraingen.WorldTypeEvent;
 
 public class BiomeRegistry {
-	public static BiomeRegistry core;
 	
-	public BiomeRegistry()
-	{
+	public BiomeRegistry() {
 		//MinecraftForge.TERRAIN_GEN_BUS.register(this);
 	}
 	
 	@SubscribeEvent
-	public void manageBiomeGen(WorldTypeEvent.InitBiomeGens event)
-	{
+	public void manageBiomeGen(WorldTypeEvent.InitBiomeGens event) {
 	}
 	
-	public void register()
-	{
-		chaosCorruption = new BiomeGenCorruption_Chaos(Config.biomeID[0]);
-		frozenCorruption = new BiomeGenCorruption_Frozen(Config.biomeID[1]);
-		shadowCorruption = new BiomeGenCorruption_Shadow(Config.biomeID[2]);
-		magicCorruption = new BiomeGenCorruption_Magic(Config.biomeID[3]);
+	public static void register() {
+		chaosCorruption = new BiomeGenCorruption_Chaos(new BiomeProperties("Corrupted Land")).setRegistryName("essentialcraft:chaosCorruption");
+		frozenCorruption = new BiomeGenCorruption_Frozen(new BiomeProperties("Corrupted Land")).setRegistryName("essentialcraft:frozenCorruption");
+		shadowCorruption = new BiomeGenCorruption_Shadow(new BiomeProperties("Corrupted Land")).setRegistryName("essentialcraft:shadowCorruption");
+		magicCorruption = new BiomeGenCorruption_Magic(new BiomeProperties("Corrupted Land")).setRegistryName("essentialcraft:magicCorruption");
+		dreadlands = new BiomeGenFirstWorld_Dreadlands(new BiomeProperties("dreadlands").setRainDisabled().setTemperature(2F).setRainfall(0F).setBaseHeight(0.125F).setHeightVariation(0.126F))
+				.setGrassColor(0x889688).setWaterColor(0x889688).setLeavesColor(0x889688).setRegistryName("essentialcraft:dreadlands");
+		desert = new BiomeGenFirstWorld_Desert(new BiomeProperties("desert").setRainDisabled().setTemperature(2F).setRainfall(0F).setBaseHeight(0.125F).setHeightVariation(0.05F))
+				.setGrassColor(16421912).setLeavesColor(16421912).setWaterColor(16421912).setRegistryName("essentialcraft:desert");
+		
+		GameRegistry.register(chaosCorruption);
+		GameRegistry.register(frozenCorruption);
+		GameRegistry.register(shadowCorruption);
+		GameRegistry.register(magicCorruption);
+		GameRegistry.register(dreadlands);
+		GameRegistry.register(desert);
 		
 		BiomeManager.removeSpawnBiome(chaosCorruption);
 		BiomeManager.removeSpawnBiome(frozenCorruption);
@@ -43,22 +52,20 @@ public class BiomeRegistry {
 		registerFirstWorldBiomes();
 	}
 	
-	public void registerFirstWorldBiomes()
-	{
-		firstWorldBiomeArray[0] = BiomeGenBase.ocean;
+	public static void registerFirstWorldBiomes() {
+		firstWorldBiomeArray[0] = Biomes.OCEAN;
 		firstWorldBiomeArray[1] = magicCorruption;
-		firstWorldBiomeArray[2] = BiomeGenBase.beach;
-		firstWorldBiomeArray[3] = BiomeGenBase.river;
-		firstWorldBiomeArray[4] = new BiomeGenFirstWorld_Dreadlands(Config.biomeID[5]).setGrassColor(0x889688).setWaterColor(0x889688).setLeavesColor(0x889688).setBiomeName("dreadlands").setDisableRain().setTemperatureRainfall(2.0F, 0.0F).setHeight(new Height(0.125F, 0.126F));
-		firstWorldBiomeArray[5] = BiomeGenBase.forest;
-		firstWorldBiomeArray[6] = BiomeGenBase.extremeHills;
+		firstWorldBiomeArray[2] = Biomes.BEACH;
+		firstWorldBiomeArray[3] = Biomes.RIVER;
+		firstWorldBiomeArray[4] = dreadlands;
+		firstWorldBiomeArray[5] = Biomes.FOREST;
+		firstWorldBiomeArray[6] = Biomes.EXTREME_HILLS;
 		firstWorldBiomeArray[7] = chaosCorruption;
-		firstWorldBiomeArray[8] = new BiomeGenFirstWorld_Desert(Config.biomeID[4]).setBiomeName("desert").setColor(16421912).setDisableRain().setTemperatureRainfall(2.0F, 0.0F).setHeight(new Height(0.125F, 0.05F));
+		firstWorldBiomeArray[8] = desert;
 		firstWorldBiomeArray[9] = frozenCorruption;
-		
 	}
 	
-    public static BiomeGenBase getBiome(int p_150568_0_)
+    public static Biome getBiome(int p_150568_0_)
     {
         if (p_150568_0_ >= 0 && p_150568_0_ <= firstWorldBiomeArray.length)
         {
@@ -71,10 +78,12 @@ public class BiomeRegistry {
         }
     }
 	
-	public static BiomeGenCorruption_Chaos chaosCorruption;
-	public static BiomeGenCorruption_Frozen frozenCorruption;
-	public static BiomeGenCorruption_Shadow shadowCorruption;
-	public static BiomeGenCorruption_Magic magicCorruption;
+	public static Biome chaosCorruption;
+	public static Biome frozenCorruption;
+	public static Biome shadowCorruption;
+	public static Biome magicCorruption;
+	public static Biome dreadlands;
+	public static Biome desert;
 	
-	public static BiomeGenBase[] firstWorldBiomeArray = new BiomeGenBase[10];
+	public static Biome[] firstWorldBiomeArray = new Biome[10];
 }

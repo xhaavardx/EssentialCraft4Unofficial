@@ -1,0 +1,448 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "essentialcraft:cube_colored",
+        "textures": {
+            "down": "essentialcraft:blocks/fortifiedStone",
+            "up": "essentialcraft:blocks/fortifiedStone",
+            "north": "essentialcraft:blocks/fortifiedStone",
+            "south": "essentialcraft:blocks/fortifiedStone",
+            "west": "essentialcraft:blocks/fortifiedStone",
+            "east": "essentialcraft:blocks/fortifiedStone",
+            "particle": "essentialcraft:blocks/fortifiedStone"
+        }
+    },
+    "variants": {
+        "down=false,east=false,north=false,south=false,up=false,west=false": [{}],
+        "down=true,east=false,north=false,south=false,up=false,west=false": [{
+            "textures": {
+                "north": "essentialcraft:blocks/ct/fortifiedStone/t",
+                "south": "essentialcraft:blocks/ct/fortifiedStone/t",
+                "west": "essentialcraft:blocks/ct/fortifiedStone/t",
+                "east": "essentialcraft:blocks/ct/fortifiedStone/t"
+            }
+        }],
+        "down=false,east=true,north=false,south=false,up=false,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/fortifiedStone/l",
+                "up": "essentialcraft:blocks/ct/fortifiedStone/l",
+                "north": "essentialcraft:blocks/ct/fortifiedStone/r",
+                "south": "essentialcraft:blocks/ct/fortifiedStone/l"
+            }
+        }],
+        "down=true,east=true,north=false,south=false,up=false,west=false": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/fortifiedStone/l",
+                "north": "essentialcraft:blocks/ct/fortifiedStone/tr",
+                "south": "essentialcraft:blocks/ct/fortifiedStone/tl",
+                "west": "essentialcraft:blocks/ct/fortifiedStone/t"
+            }
+        }],
+        "down=false,east=false,north=true,south=false,up=false,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/fortifiedStone/t",
+                "up": "essentialcraft:blocks/ct/fortifiedStone/b",
+                "west": "essentialcraft:blocks/ct/fortifiedStone/r",
+                "east": "essentialcraft:blocks/ct/fortifiedStone/l"
+            }
+        }],
+        "down=true,east=false,north=true,south=false,up=false,west=false": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/fortifiedStone/b",
+                "south": "essentialcraft:blocks/ct/fortifiedStone/t",
+                "west": "essentialcraft:blocks/ct/fortifiedStone/tr",
+                "east": "essentialcraft:blocks/ct/fortifiedStone/tl"
+            }
+        }],
+        "down=false,east=true,north=true,south=false,up=false,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/fortifiedStone/tl",
+                "up": "essentialcraft:blocks/ct/fortifiedStone/bl",
+                "south": "essentialcraft:blocks/ct/fortifiedStone/l",
+                "west": "essentialcraft:blocks/ct/fortifiedStone/r"
+            }
+        }],
+        "down=true,east=true,north=true,south=false,up=false,west=false": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/fortifiedStone/bl",
+                "south": "essentialcraft:blocks/ct/fortifiedStone/tl",
+                "west": "essentialcraft:blocks/ct/fortifiedStone/tr"
+            }
+        }],
+        "down=false,east=false,north=false,south=true,up=false,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/fortifiedStone/b",
+                "up": "essentialcraft:blocks/ct/fortifiedStone/t",
+                "west": "essentialcraft:blocks/ct/fortifiedStone/l",
+                "east": "essentialcraft:blocks/ct/fortifiedStone/r"
+            }
+        }],
+        "down=true,east=false,north=false,south=true,up=false,west=false": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/fortifiedStone/t",
+                "north": "essentialcraft:blocks/ct/fortifiedStone/t",
+                "west": "essentialcraft:blocks/ct/fortifiedStone/tl",
+                "east": "essentialcraft:blocks/ct/fortifiedStone/tr"
+            }
+        }],
+        "down=false,east=true,north=false,south=true,up=false,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/fortifiedStone/bl",
+                "up": "essentialcraft:blocks/ct/fortifiedStone/tl",
+                "north": "essentialcraft:blocks/ct/fortifiedStone/r",
+                "west": "essentialcraft:blocks/ct/fortifiedStone/l"
+            }
+        }],
+        "down=true,east=true,north=false,south=true,up=false,west=false": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/fortifiedStone/tl",
+                "north": "essentialcraft:blocks/ct/fortifiedStone/tr",
+                "west": "essentialcraft:blocks/ct/fortifiedStone/tl"
+            }
+        }],
+        "down=false,east=false,north=true,south=true,up=false,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/fortifiedStone/tb",
+                "up": "essentialcraft:blocks/ct/fortifiedStone/tb",
+                "west": "essentialcraft:blocks/ct/fortifiedStone/lr",
+                "east": "essentialcraft:blocks/ct/fortifiedStone/lr"
+            }
+        }],
+        "down=true,east=false,north=true,south=true,up=false,west=false": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/fortifiedStone/tb",
+                "west": "essentialcraft:blocks/ct/fortifiedStone/lrt",
+                "east": "essentialcraft:blocks/ct/fortifiedStone/lrt"
+            }
+        }],
+        "down=false,east=true,north=true,south=true,up=false,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/fortifiedStone/tbl",
+                "up": "essentialcraft:blocks/ct/fortifiedStone/tbl",
+                "west": "essentialcraft:blocks/ct/fortifiedStone/lr"
+            }
+        }],
+        "down=true,east=true,north=true,south=true,up=false,west=false": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/fortifiedStone/tbl",
+                "west": "essentialcraft:blocks/ct/fortifiedStone/lrt"
+            }
+        }],
+        "down=false,east=false,north=false,south=false,up=true,west=false": [{
+            "textures": {
+                "north": "essentialcraft:blocks/ct/fortifiedStone/b",
+                "south": "essentialcraft:blocks/ct/fortifiedStone/b",
+                "west": "essentialcraft:blocks/ct/fortifiedStone/b",
+                "east": "essentialcraft:blocks/ct/fortifiedStone/b"
+            }
+        }],
+        "down=true,east=false,north=false,south=false,up=true,west=false": [{
+            "textures": {
+                "north": "essentialcraft:blocks/ct/fortifiedStone/tb",
+                "south": "essentialcraft:blocks/ct/fortifiedStone/tb",
+                "west": "essentialcraft:blocks/ct/fortifiedStone/tb",
+                "east": "essentialcraft:blocks/ct/fortifiedStone/tb"
+            }
+        }],
+        "down=false,east=true,north=false,south=false,up=true,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/fortifiedStone/l",
+                "north": "essentialcraft:blocks/ct/fortifiedStone/br",
+                "south": "essentialcraft:blocks/ct/fortifiedStone/bl",
+                "west": "essentialcraft:blocks/ct/fortifiedStone/b"
+            }
+        }],
+        "down=true,east=true,north=false,south=false,up=true,west=false": [{
+            "textures": {
+                "north": "essentialcraft:blocks/ct/fortifiedStone/tbr",
+                "south": "essentialcraft:blocks/ct/fortifiedStone/tbl",
+                "west": "essentialcraft:blocks/ct/fortifiedStone/tb"
+            }
+        }],
+        "down=false,east=false,north=true,south=false,up=true,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/fortifiedStone/t",
+                "south": "essentialcraft:blocks/ct/fortifiedStone/b",
+                "west": "essentialcraft:blocks/ct/fortifiedStone/br",
+                "east": "essentialcraft:blocks/ct/fortifiedStone/bl"
+            }
+        }],
+        "down=true,east=false,north=true,south=false,up=true,west=false": [{
+            "textures": {
+                "south": "essentialcraft:blocks/ct/fortifiedStone/tb",
+                "west": "essentialcraft:blocks/ct/fortifiedStone/tbr",
+                "east": "essentialcraft:blocks/ct/fortifiedStone/tbl"
+            }
+        }],
+        "down=false,east=true,north=true,south=false,up=true,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/fortifiedStone/tl",
+                "south": "essentialcraft:blocks/ct/fortifiedStone/bl",
+                "west": "essentialcraft:blocks/ct/fortifiedStone/br"
+            }
+        }],
+        "down=true,east=true,north=true,south=false,up=true,west=false": [{
+           "textures": {
+                "south": "essentialcraft:blocks/ct/fortifiedStone/tbl",
+                "west": "essentialcraft:blocks/ct/fortifiedStone/tbr"
+            } 
+        }],
+        "down=false,east=false,north=false,south=true,up=true,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/fortifiedStone/b",
+                "north": "essentialcraft:blocks/ct/fortifiedStone/b",
+                "west": "essentialcraft:blocks/ct/fortifiedStone/bl",
+                "east": "essentialcraft:blocks/ct/fortifiedStone/br"
+            }
+        }],
+        "down=true,east=false,north=false,south=true,up=true,west=false": [{
+            "textures": {
+                "north": "essentialcraft:blocks/ct/fortifiedStone/tb",
+                "west": "essentialcraft:blocks/ct/fortifiedStone/tbl",
+                "east": "essentialcraft:blocks/ct/fortifiedStone/tbr"
+            }
+        }],
+        "down=false,east=true,north=false,south=true,up=true,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/fortifiedStone/bl",
+                "north": "essentialcraft:blocks/ct/fortifiedStone/br",
+                "west": "essentialcraft:blocks/ct/fortifiedStone/bl"
+            }
+        }],
+        "down=true,east=true,north=false,south=true,up=true,west=false": [{
+            "textures": {
+                "north": "essentialcraft:blocks/ct/fortifiedStone/tbr",
+                "west": "essentialcraft:blocks/ct/fortifiedStone/tbl"
+            }
+        }],
+        "down=false,east=false,north=true,south=true,up=true,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/fortifiedStone/tb",
+                "west": "essentialcraft:blocks/ct/fortifiedStone/lrb",
+                "east": "essentialcraft:blocks/ct/fortifiedStone/lrb"
+            }
+        }],
+        "down=true,east=false,north=true,south=true,up=true,west=false": [{
+            "textures": {
+                "west": "essentialcraft:blocks/ct/fortifiedStone/tblr",
+                "east": "essentialcraft:blocks/ct/fortifiedStone/tblr"
+            }
+        }],
+        "down=false,east=true,north=true,south=true,up=true,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/fortifiedStone/tbl",
+                "west": "essentialcraft:blocks/ct/fortifiedStone/lrb"
+            }
+        }],
+        "down=true,east=true,north=true,south=true,up=true,west=false": [{
+            "textures": {
+                "west": "essentialcraft:blocks/ct/fortifiedStone/tblr"
+            }
+        }],
+        "down=false,east=false,north=false,south=false,up=false,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/fortifiedStone/r",
+                "up": "essentialcraft:blocks/ct/fortifiedStone/r",
+                "north": "essentialcraft:blocks/ct/fortifiedStone/l",
+                "south": "essentialcraft:blocks/ct/fortifiedStone/r"
+            }
+        }],
+        "down=true,east=false,north=false,south=false,up=false,west=true": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/fortifiedStone/r",
+                "north": "essentialcraft:blocks/ct/fortifiedStone/tl",
+                "south": "essentialcraft:blocks/ct/fortifiedStone/tr",
+                "east": "essentialcraft:blocks/ct/fortifiedStone/t"
+            }
+        }],
+        "down=false,east=true,north=false,south=false,up=false,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/fortifiedStone/lr",
+                "up": "essentialcraft:blocks/ct/fortifiedStone/lr",
+                "north": "essentialcraft:blocks/ct/fortifiedStone/lr",
+                "south": "essentialcraft:blocks/ct/fortifiedStone/lr"
+            }
+        }],
+        "down=true,east=true,north=false,south=false,up=false,west=true": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/fortifiedStone/lr",
+                "north": "essentialcraft:blocks/ct/fortifiedStone/lrt",
+                "south": "essentialcraft:blocks/ct/fortifiedStone/lrt"
+            }
+        }],
+        "down=false,east=false,north=true,south=false,up=false,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/fortifiedStone/tr",
+                "up": "essentialcraft:blocks/ct/fortifiedStone/br",
+                "south": "essentialcraft:blocks/ct/fortifiedStone/r",
+                "east": "essentialcraft:blocks/ct/fortifiedStone/l"
+            }
+        }],
+        "down=true,east=false,north=true,south=false,up=false,west=true": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/fortifiedStone/br",
+                "south": "essentialcraft:blocks/ct/fortifiedStone/tr",
+                "east": "essentialcraft:blocks/ct/fortifiedStone/tl"
+            }
+        }],
+        "down=false,east=true,north=true,south=false,up=false,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/fortifiedStone/lrt",
+                "up": "essentialcraft:blocks/ct/fortifiedStone/lrb",
+                "south": "essentialcraft:blocks/ct/fortifiedStone/lr"
+            }
+        }],
+        "down=true,east=true,north=true,south=false,up=false,west=true": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/fortifiedStone/lrb",
+                "south": "essentialcraft:blocks/ct/fortifiedStone/lrt"
+            }
+        }],
+        "down=false,east=false,north=false,south=true,up=false,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/fortifiedStone/br",
+                "up": "essentialcraft:blocks/ct/fortifiedStone/tr",
+                "north": "essentialcraft:blocks/ct/fortifiedStone/l",
+                "east": "essentialcraft:blocks/ct/fortifiedStone/r"
+            }
+        }],
+        "down=true,east=false,north=false,south=true,up=false,west=true": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/fortifiedStone/tr",
+                "north": "essentialcraft:blocks/ct/fortifiedStone/tl",
+                "east": "essentialcraft:blocks/ct/fortifiedStone/tr"
+            }
+        }],
+        "down=false,east=true,north=false,south=true,up=false,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/fortifiedStone/lrb",
+                "up": "essentialcraft:blocks/ct/fortifiedStone/lrt",
+                "north": "essentialcraft:blocks/ct/fortifiedStone/lr"
+            }
+        }],
+        "down=true,east=true,north=false,south=true,up=false,west=true": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/fortifiedStone/lrt",
+                "north": "essentialcraft:blocks/ct/fortifiedStone/lrt"
+            }
+        }],
+        "down=false,east=false,north=true,south=true,up=false,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/fortifiedStone/tbr",
+                "up": "essentialcraft:blocks/ct/fortifiedStone/tbr",
+                "east": "essentialcraft:blocks/ct/fortifiedStone/lr"
+            }
+        }],
+        "down=true,east=false,north=true,south=true,up=false,west=true": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/fortifiedStone/tbr",
+                "east": "essentialcraft:blocks/ct/fortifiedStone/lrt"
+            }
+        }],
+        "down=false,east=true,north=true,south=true,up=false,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/fortifiedStone/tblr",
+                "up": "essentialcraft:blocks/ct/fortifiedStone/tblr"
+            }
+        }],
+        "down=true,east=true,north=true,south=true,up=false,west=true": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/fortifiedStone/tblr"
+            }
+        }],
+        "down=false,east=false,north=false,south=false,up=true,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/fortifiedStone/r",
+                "north": "essentialcraft:blocks/ct/fortifiedStone/bl",
+                "south": "essentialcraft:blocks/ct/fortifiedStone/br",
+                "east": "essentialcraft:blocks/ct/fortifiedStone/b"
+            }
+        }],
+        "down=true,east=false,north=false,south=false,up=true,west=true": [{
+            "textures": {
+                "north": "essentialcraft:blocks/ct/fortifiedStone/tbl",
+                "south": "essentialcraft:blocks/ct/fortifiedStone/tbr",
+                "east": "essentialcraft:blocks/ct/fortifiedStone/tb"
+            }
+        }],
+        "down=false,east=true,north=false,south=false,up=true,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/fortifiedStone/lr",
+                "north": "essentialcraft:blocks/ct/fortifiedStone/lrb",
+                "south": "essentialcraft:blocks/ct/fortifiedStone/lrb"
+            }
+        }],
+        "down=true,east=true,north=false,south=false,up=true,west=true": [{
+            "textures": {
+                "north": "essentialcraft:blocks/ct/fortifiedStone/tblr",
+                "south": "essentialcraft:blocks/ct/fortifiedStone/tblr"
+            }
+        }],
+        "down=false,east=false,north=true,south=false,up=true,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/fortifiedStone/tr",
+                "south": "essentialcraft:blocks/ct/fortifiedStone/br",
+                "east": "essentialcraft:blocks/ct/fortifiedStone/bl"
+            }
+        }],
+        "down=true,east=false,north=true,south=false,up=true,west=true": [{
+            "textures": {
+                "south": "essentialcraft:blocks/ct/fortifiedStone/tbr",
+                "east": "essentialcraft:blocks/ct/fortifiedStone/tbl"
+            }
+        }],
+        "down=false,east=true,north=true,south=false,up=true,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/fortifiedStone/lrt",
+                "south": "essentialcraft:blocks/ct/fortifiedStone/lrb"
+            }
+        }],
+        "down=true,east=true,north=true,south=false,up=true,west=true": [{
+            "textures": {
+                "south": "essentialcraft:blocks/ct/fortifiedStone/tblr"
+            }
+        }],
+        "down=false,east=false,north=false,south=true,up=true,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/fortifiedStone/br",
+                "north": "essentialcraft:blocks/ct/fortifiedStone/bl",
+                "east": "essentialcraft:blocks/ct/fortifiedStone/br"
+            }
+        }],
+        "down=true,east=false,north=false,south=true,up=true,west=true": [{
+            "textures": {
+                "north": "essentialcraft:blocks/ct/fortifiedStone/tbl",
+                "east": "essentialcraft:blocks/ct/fortifiedStone/tbr"
+            }
+        }],
+        "down=false,east=true,north=false,south=true,up=true,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/fortifiedStone/lrb",
+                "north": "essentialcraft:blocks/ct/fortifiedStone/lrb"
+            }
+        }],
+        "down=true,east=true,north=false,south=true,up=true,west=true": [{
+            "textures": {
+                "north": "essentialcraft:blocks/ct/fortifiedStone/tblr"
+            }
+        }],
+        "down=false,east=false,north=true,south=true,up=true,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/fortifiedStone/tbr",
+                "east": "essentialcraft:blocks/ct/fortifiedStone/lrb"
+            }
+        }],
+        "down=true,east=false,north=true,south=true,up=true,west=true": [{
+            "textures": {
+                "east": "essentialcraft:blocks/ct/fortifiedStone/tblr"
+            }
+        }],
+        "down=false,east=true,north=true,south=true,up=true,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/fortifiedStone/tblr"
+            }
+        }],
+        "down=true,east=true,north=true,south=true,up=true,west=true": [{}],
+        "inventory": [{}]
+    }
+}

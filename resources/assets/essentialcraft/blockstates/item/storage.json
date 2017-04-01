@@ -1,0 +1,26 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "builtin/generated",
+        "transform": "forge:default-item"
+    },
+    "variants": {
+        "type": {
+            "soulshard": {
+                "textures": { "layer0": "essentialcraft:items/storages/soulShard" }
+            },
+            "soulsphere": {
+                "textures": { "layer0": "essentialcraft:items/storages/soulSphere" }
+            },
+            "darksoulmatter": {
+                "textures": { "layer0": "essentialcraft:items/storages/darkSoulMatter" }
+            },
+            "redsoulmatter": {
+                "textures": { "layer0": "essentialcraft:items/storages/redSoulMatter" }
+            },
+            "matterofeternity": {
+                "textures": { "layer0": "essentialcraft:items/storages/eternityMatter" }
+            }
+        }
+    }
+}

@@ -1,5 +1,7 @@
 package ec3.common.entity;
 
+import com.google.common.base.Predicate;
+
 import ec3.common.item.ItemsCore;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
@@ -8,8 +10,8 @@ import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.IRangedAttackMob;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.EntityAIArrowAttack;
-import net.minecraft.entity.ai.EntityAIAttackOnCollide;
+import net.minecraft.entity.ai.EntityAIAttackMelee;
+import net.minecraft.entity.ai.EntityAIAttackRanged;
 import net.minecraft.entity.ai.EntityAIFleeSun;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
 import net.minecraft.entity.ai.EntityAILookIdle;
@@ -20,16 +22,25 @@ import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
-public class EntityWindMage extends EntityMob implements IRangedAttackMob
-{
-    private EntityAIArrowAttack aiArrowAttack = new EntityAIArrowAttack(this, 1.0D, 20, 60, 15.0F);
-    private EntityAIAttackOnCollide aiAttackOnCollide = new EntityAIAttackOnCollide(this, EntityPlayer.class, 1.2D, false);
+public class EntityWindMage extends EntityMob implements IRangedAttackMob {
+	
+	public static final DataParameter<Byte> TYPE = EntityDataManager.<Byte>createKey(EntityWindMage.class, DataSerializers.BYTE);
+    private EntityAIAttackRanged aiArrowAttack = new EntityAIAttackRanged(this, 1.0D, 20, 60, 15.0F);
+    private EntityAIAttackMelee aiAttackOnCollide = new EntityAIAttackMelee(this, 1.2D, false);
     public EntityWindMage(World p_i1741_1_)
     {
         super(p_i1741_1_);
@@ -40,7 +51,7 @@ public class EntityWindMage extends EntityMob implements IRangedAttackMob
         this.tasks.addTask(6, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
         this.tasks.addTask(6, new EntityAILookIdle(this));
         this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, false));
-        this.targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, EntityPlayer.class, 0, true));
+        this.targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, EntityPlayer.class, 0, true, false, (Predicate)null));
 
         if (p_i1741_1_ != null && !p_i1741_1_.isRemote)
         {
@@ -51,13 +62,13 @@ public class EntityWindMage extends EntityMob implements IRangedAttackMob
     protected void applyEntityAttributes()
     {
         super.applyEntityAttributes();
-        this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.25D);
+        this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.25D);
     }
 
     protected void entityInit()
     {
         super.entityInit();
-        this.dataWatcher.addObject(13, new Byte((byte)0));
+        this.getDataManager().register(TYPE, new Byte((byte)0));
     }
 
     /**
@@ -69,17 +80,17 @@ public class EntityWindMage extends EntityMob implements IRangedAttackMob
     }
 
 
-    protected String getHurtSound()
+    protected SoundEvent getHurtSound()
     {
-        return "mob.villager.hit";
+        return SoundEvents.ENTITY_VILLAGER_HURT;
     }
 
     /**
      * Returns the sound this mob makes on death.
      */
-    protected String getDeathSound()
+    protected SoundEvent getDeathSound()
     {
-        return "mob.villager.death";
+        return SoundEvents.ENTITY_VILLAGER_DEATH;
     }
 
     public boolean attackEntityAsMob(Entity p_70652_1_)
@@ -118,9 +129,9 @@ public class EntityWindMage extends EntityMob implements IRangedAttackMob
     {
         super.updateRidden();
 
-        if (this.ridingEntity instanceof EntityCreature)
+        if (this.getRidingEntity() instanceof EntityCreature)
         {
-            EntityCreature entitycreature = (EntityCreature)this.ridingEntity;
+            EntityCreature entitycreature = (EntityCreature)this.getRidingEntity();
             this.renderYawOffset = entitycreature.renderYawOffset;
         }
     }
@@ -144,11 +155,11 @@ public class EntityWindMage extends EntityMob implements IRangedAttackMob
      */
     protected void dropFewItems(boolean p_70628_1_, int p_70628_2_)
     {
-    	if(this.getSkeletonType() == 0)
+    	if(this.getType() == 0)
     		this.dropItem(getDropItem(), 1);
-    	if(this.getSkeletonType() == 1)
+    	if(this.getType() == 1)
     		this.dropItem(ItemsCore.imprisonedWind, 1);
-    	if(this.getSkeletonType() == 2)
+    	if(this.getType() == 2)
     	{
     		this.dropItem(ItemsCore.windKeeper, 1);
     		if(this.worldObj.rand.nextFloat() < 0.1F)
@@ -198,24 +209,23 @@ public class EntityWindMage extends EntityMob implements IRangedAttackMob
     public void attackEntityWithRangedAttack(EntityLivingBase p_82196_1_, float p_82196_2_)
     {
         EntityMRUArrow entityarrow = new EntityMRUArrow(this.worldObj, this, 1.6F);
-        entityarrow.setDamage((this.getSkeletonType()+1)*3);
+        double d0 = p_82196_1_.posX - this.posX;
+        double d1 = p_82196_1_.getEntityBoundingBox().minY + (double)(p_82196_1_.height / 3.0F) - entityarrow.posY;
+        double d2 = p_82196_1_.posZ - this.posZ;
+        double d3 = (double)MathHelper.sqrt_double(d0 * d0 + d2 * d2);
+        entityarrow.setThrowableHeading(d0, d1 + d3 * 0.2D, d2, 1.6F, (float)(14 - this.worldObj.getDifficulty().getDifficultyId() * 4));
+        entityarrow.setDamage((this.getType()+1)*3);
         this.worldObj.spawnEntityInWorld(entityarrow);
     }
 
-    /**
-     * Return this skeleton's type.
-     */
-    public int getSkeletonType()
+    public int getType()
     {
-        return this.dataWatcher.getWatchableObjectByte(13);
+        return this.getDataManager().get(TYPE);
     }
 
-    /**
-     * Set this skeleton's type.
-     */
-    public void setSkeletonType(int p_82201_1_)
+    public void setType(int p_82201_1_)
     {
-        this.dataWatcher.updateObject(13, Byte.valueOf((byte)p_82201_1_));
+        this.getDataManager().set(TYPE, Byte.valueOf((byte)p_82201_1_));
     }
 
     /**
@@ -225,10 +235,10 @@ public class EntityWindMage extends EntityMob implements IRangedAttackMob
     {
         super.readEntityFromNBT(p_70037_1_);
 
-        if (p_70037_1_.hasKey("SkeletonType", 99))
+        if (p_70037_1_.hasKey("Type", 99))
         {
-            byte b0 = p_70037_1_.getByte("SkeletonType");
-            this.setSkeletonType(b0);
+            byte b0 = p_70037_1_.getByte("Type");
+            this.setType(b0);
         }
 
         this.setCombatTask();
@@ -240,21 +250,13 @@ public class EntityWindMage extends EntityMob implements IRangedAttackMob
     public void writeEntityToNBT(NBTTagCompound p_70014_1_)
     {
         super.writeEntityToNBT(p_70014_1_);
-        p_70014_1_.setByte("SkeletonType", (byte)this.getSkeletonType());
-    }
-
-    /**
-     * Sets the held item, or an armor slot. Slot 0 is held item. Slot 1-4 is armor. Params: Item, slot
-     */
-    public void setCurrentItemOrArmor(int p_70062_1_, ItemStack p_70062_2_)
-    {
-        super.setCurrentItemOrArmor(p_70062_1_, p_70062_2_);
+        p_70014_1_.setByte("Type", (byte)this.getType());
     }
     
-    public IEntityLivingData onSpawnWithEgg(IEntityLivingData p_110161_1_)
+    public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, IEntityLivingData p_110161_1_)
     {
-        p_110161_1_ = super.onSpawnWithEgg(p_110161_1_);
-        this.setSkeletonType(this.worldObj.rand.nextInt(3));
+        p_110161_1_ = super.onInitialSpawn(difficulty, p_110161_1_);
+        this.setType(this.worldObj.rand.nextInt(3));
         return p_110161_1_;
     }
 
@@ -265,4 +267,9 @@ public class EntityWindMage extends EntityMob implements IRangedAttackMob
     {
         return super.getYOffset() - 0.5D;
     }
+	
+	@Override
+	public ItemStack getPickedResult(RayTraceResult target) {
+		return new ItemStack(ItemsCore.entityEgg,1,EntitiesCore.registeredEntities.indexOf(this.getClass()));
+	}
 }

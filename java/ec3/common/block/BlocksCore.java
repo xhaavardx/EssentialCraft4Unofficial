@@ -3,211 +3,228 @@ package ec3.common.block;
 import java.util.ArrayList;
 import java.util.List;
 
-import cpw.mods.fml.common.registry.GameRegistry;
+import DummyCore.Blocks.BlocksRegistry;
 import ec3.common.item.ItemBlockElementalCrystal;
 import ec3.common.item.ItemBlockFancy;
 import ec3.common.item.ItemBlockGeneric;
+import ec3.common.item.ItemBlockMeta;
 import ec3.common.item.ItemBlockMithrilineCrystal;
 import ec3.common.item.ItemBlockRDNS;
 import ec3.common.item.ItemsCore;
 import ec3.common.mod.EssentialCraftCore;
-import DummyCore.Blocks.BlocksRegistry;
+import ec3.common.registry.RecipeRegistry;
 import net.minecraft.block.Block;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.init.Items;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.oredict.OreDictionary;
-import net.minecraftforge.oredict.ShapedOreRecipe;
-import net.minecraftforge.oredict.ShapelessOreRecipe;
 
 public class BlocksCore {
 
-	public static BlocksCore instance;
-
-	public void loadBlocks() {
-		drops = new BlockDrops(Material.cloth).setBlockName("essentialcraft.drops").setBlockTextureName("minecraft:bedrock");
-		BlocksRegistry.registerBlock(drops, "Drops", EssentialCraftCore.class, ItemBlockGeneric.class);
-		magicPlating = new BlockConnectedTextures(Material.rock).setTexturePath("magicPlating").setHardness(3.0F).setResistance(15.0F).setBlockName("essentialcraft.magicPlatingBlock").setBlockTextureName("essentialcraft:magicPlatingBlock");
-		BlocksRegistry.registerBlock(magicPlating, "magicPlating", EssentialCraftCore.class, ItemBlockGeneric.class);
-		fortifiedGlass = new BlockConnectedTextures(Material.glass).setTexturePath("fortifiedGlass").setHardness(3.0F).setResistance(15.0F).setLightOpacity(0).setBlockName("essentialcraft.fortifiedGlass").setBlockTextureName("essentialcraft:transparentGlass");
-		BlocksRegistry.registerBlock(fortifiedGlass, "fortifiedGlass", EssentialCraftCore.class, ItemBlockGeneric.class);
-		ecController = new BlockecController(Material.rock).setHardness(3.0F).setResistance(15.0F).setLightOpacity(0).setBlockName("essentialcraft.ecController").setBlockTextureName("essentialcraft:mrucuecController");
-		BlocksRegistry.registerBlock(ecController, "ecController", EssentialCraftCore.class, ItemBlockGeneric.class);
-		ecAcceptor = new BlockecAcceptor(Material.rock).setHardness(3.0F).setResistance(15.0F).setLightOpacity(0).setBlockName("essentialcraft.ecAcceptor").setBlockTextureName("essentialcraft:mrucuecMRUAcceptor");
-		BlocksRegistry.registerBlock(ecAcceptor, "ecAcceptor", EssentialCraftCore.class, ItemBlockGeneric.class);
-		ecBalancer = new BlockecBalancer(Material.rock).setHardness(3.0F).setResistance(15.0F).setLightOpacity(0).setBlockName("essentialcraft.ecBalancer").setBlockTextureName("essentialcraft:mrucuecMRUBalancer");
-		BlocksRegistry.registerBlock(ecBalancer, "ecBalancer", EssentialCraftCore.class, ItemBlockGeneric.class);
-		ecEjector = new BlockecEjector(Material.rock).setHardness(3.0F).setResistance(15.0F).setLightOpacity(0).setBlockName("essentialcraft.ecEjector").setBlockTextureName("essentialcraft:mrucuecMRUEjector");
-		BlocksRegistry.registerBlock(ecEjector, "ecEjector", EssentialCraftCore.class, ItemBlockGeneric.class);
-		ecHoldingChamber = new BlockecHoldingChamber(Material.rock).setHardness(3.0F).setResistance(15.0F).setLightOpacity(0).setBlockName("essentialcraft.ecHoldingChamber").setBlockTextureName("essentialcraft:mrucuecMRUHoldingChamber");
-		BlocksRegistry.registerBlock(ecHoldingChamber, "ecHoldingChamber", EssentialCraftCore.class, ItemBlockGeneric.class);
-		ecStateChecker = new BlockecStateChecker(Material.rock).setHardness(3.0F).setResistance(15.0F).setLightOpacity(0).setBlockName("essentialcraft.ecStateChecker").setBlockTextureName("essentialcraft:mrucuecMRUStateChecker");
-		BlocksRegistry.registerBlock(ecStateChecker, "ecStateChecker", EssentialCraftCore.class, ItemBlockGeneric.class);
-		ecRedstoneController = new BlockecRedstoneController(Material.rock).setHardness(3.0F).setResistance(15.0F).setLightOpacity(0).setBlockName("essentialcraft.ecRedstoneController").setBlockTextureName("essentialcraft:mrucuecRedstoneController");
-		BlocksRegistry.registerBlock(ecRedstoneController, "ecRedstoneController", EssentialCraftCore.class, ItemBlockGeneric.class);
-		rayTower = new BlockRayTower().setHardness(1.0F).setResistance(1.0F).setLightOpacity(0).setBlockName("essentialcraft.rayTower").setBlockTextureName("essentialcraft:magicPlatingBlock");
-		BlocksRegistry.registerBlock(rayTower, "rayTower", EssentialCraftCore.class, ItemBlockGeneric.class);
-		solarPrism = new BlockSolarPrism(Material.rock).setHardness(1.0F).setResistance(1.0F).setLightOpacity(0).setBlockName("essentialcraft.solarPrism").setBlockTextureName("essentialcraft:magicPlatingBlock");
-		BlocksRegistry.registerBlock(solarPrism, "solarPrism", EssentialCraftCore.class, ItemBlockGeneric.class);
-		sunRayAbsorber = new BlockSunRayAbsorber(Material.rock).setHardness(1.0F).setResistance(1.0F).setLightOpacity(0).setBlockName("essentialcraft.sunRayAbsorber").setBlockTextureName("essentialcraft:magicPlatingBlock");
-		BlocksRegistry.registerBlock(sunRayAbsorber, "sunRayAbsorber", EssentialCraftCore.class, ItemBlockGeneric.class);
-		coldStone = new BlockColdStone().setHardness(1.0F).setResistance(1.0F).setLightOpacity(0).setBlockName("essentialcraft.coldStone").setBlockTextureName("essentialcraft:coldStone");
-		BlocksRegistry.registerBlock(coldStone, "coldStone", EssentialCraftCore.class, ItemBlockGeneric.class);
-		String[] corruptionNames = new String[]{"chaos", "frozen", "shade", "magic"};
-		coldDistillator = new BlockColdDistillator(Material.rock).setHardness(1.0F).setResistance(1.0F).setLightOpacity(0).setBlockName("essentialcraft.coldDistillator").setBlockTextureName("essentialcraft:magicPlatingBlock");
-		BlocksRegistry.registerBlock(coldDistillator, "coldDistillator", EssentialCraftCore.class, ItemBlockGeneric.class);
-		naturalFurnace = new BlockFlowerBurner(Material.rock).setHardness(1.0F).setResistance(1.0F).setLightOpacity(0).setBlockName("essentialcraft.naturalFurnace").setBlockTextureName("essentialcraft:magicPlatingBlock");
-		BlocksRegistry.registerBlock(naturalFurnace, "naturalFurnace", EssentialCraftCore.class, ItemBlockGeneric.class);
-		heatGenerator = new BlockHeatGenerator(Material.rock).setHardness(1.0F).setResistance(1.0F).setLightOpacity(0).setBlockName("essentialcraft.heatGenerator").setBlockTextureName("essentialcraft:magicPlatingBlock");
-		BlocksRegistry.registerBlock(heatGenerator, "heatGenerator", EssentialCraftCore.class, ItemBlockGeneric.class);
-		enderGenerator = new BlockEnderGenerator(Material.rock).setHardness(1.0F).setResistance(1.0F).setLightOpacity(0).setBlockName("essentialcraft.enderGenerator").setBlockTextureName("essentialcraft:magicPlatingBlock");
-		BlocksRegistry.registerBlock(enderGenerator, "enderGenerator", EssentialCraftCore.class, ItemBlockGeneric.class);
+	public static void loadBlocks() {
+		drops = new BlockDrops(Material.CLOTH).setUnlocalizedName("essentialcraft.drops");
+		registerBlockSimple(new ItemBlockMeta(drops), "Drops");
+		magicPlating = new BlockConnectedTextures(Material.ROCK).setBlockTextureName("essentialcraft:magicPlatingBlock").setTexturePath("magicPlating").setHardness(3.0F).setResistance(15.0F).setUnlocalizedName("essentialcraft.magicPlatingBlock");
+		registerBlockSimple(magicPlating, "magicPlating");
+		fortifiedGlass = new BlockConnectedTextures(Material.GLASS).setBlockTextureName("essentialcraft:transparentGlass").setTexturePath("fortifiedGlass").setHardness(3.0F).setResistance(15.0F).setLightOpacity(0).setUnlocalizedName("essentialcraft.fortifiedGlass");
+		registerBlockSimple(fortifiedGlass, "fortifiedGlass");
+		ecController = new BlockecController(Material.ROCK).setHardness(3.0F).setResistance(15.0F).setLightOpacity(0).setUnlocalizedName("essentialcraft.ecController");
+		registerBlockSimple(ecController, "ecController");
+		ecAcceptor = new BlockecAcceptor(Material.ROCK).setHardness(3.0F).setResistance(15.0F).setLightOpacity(0).setUnlocalizedName("essentialcraft.ecAcceptor");
+		registerBlockSimple(ecAcceptor, "ecAcceptor");
+		ecBalancer = new BlockecBalancer(Material.ROCK).setHardness(3.0F).setResistance(15.0F).setLightOpacity(0).setUnlocalizedName("essentialcraft.ecBalancer");
+		registerBlockSimple(ecBalancer, "ecBalancer");
+		ecEjector = new BlockecEjector(Material.ROCK).setHardness(3.0F).setResistance(15.0F).setLightOpacity(0).setUnlocalizedName("essentialcraft.ecEjector");
+		registerBlockSimple(ecEjector, "ecEjector");
+		ecHoldingChamber = new BlockecHoldingChamber(Material.ROCK).setHardness(3.0F).setResistance(15.0F).setLightOpacity(0).setUnlocalizedName("essentialcraft.ecHoldingChamber");
+		registerBlockSimple(ecHoldingChamber, "ecHoldingChamber");
+		ecStateChecker = new BlockecStateChecker(Material.ROCK).setHardness(3.0F).setResistance(15.0F).setLightOpacity(0).setUnlocalizedName("essentialcraft.ecStateChecker");
+		registerBlockSimple(ecStateChecker, "ecStateChecker");
+		ecRedstoneController = new BlockecRedstoneController(Material.ROCK).setHardness(3.0F).setResistance(15.0F).setLightOpacity(0).setUnlocalizedName("essentialcraft.ecRedstoneController");
+		registerBlockSimple(ecRedstoneController, "ecRedstoneController");
+		rayTower = new BlockRayTower().setHardness(1.0F).setResistance(1.0F).setLightOpacity(0).setUnlocalizedName("essentialcraft.rayTower");
+		registerBlockSimple(rayTower, "rayTower");
+		solarPrism = new BlockSolarPrism(Material.ROCK).setHardness(1.0F).setResistance(1.0F).setLightOpacity(0).setUnlocalizedName("essentialcraft.solarPrism");
+		registerBlockSimple(solarPrism, "solarPrism");
+		sunRayAbsorber = new BlockSunRayAbsorber(Material.ROCK).setHardness(1.0F).setResistance(1.0F).setLightOpacity(0).setUnlocalizedName("essentialcraft.sunRayAbsorber");
+		registerBlockSimple(sunRayAbsorber, "sunRayAbsorber");
+		coldStone = new BlockColdStone().setHardness(1.0F).setResistance(1.0F).setLightOpacity(0).setUnlocalizedName("essentialcraft.coldStone");
+		registerBlockSimple(coldStone, "coldStone");
+		String[] corruptionNames = new String[]{"chaos", "frozen", "magic", "shade"};
+		coldDistillator = new BlockColdDistillator(Material.ROCK).setHardness(1.0F).setResistance(1.0F).setLightOpacity(0).setUnlocalizedName("essentialcraft.coldDistillator");
+		registerBlockSimple(coldDistillator, "coldDistillator");
+		naturalFurnace = new BlockFlowerBurner(Material.ROCK).setHardness(1.0F).setResistance(1.0F).setLightOpacity(0).setUnlocalizedName("essentialcraft.naturalFurnace");
+		registerBlockSimple(naturalFurnace, "naturalFurnace");
+		heatGenerator = new BlockHeatGenerator(Material.ROCK).setHardness(1.0F).setResistance(1.0F).setLightOpacity(0).setUnlocalizedName("essentialcraft.heatGenerator");
+		registerBlockSimple(heatGenerator, "heatGenerator");
+		enderGenerator = new BlockEnderGenerator(Material.ROCK).setHardness(1.0F).setResistance(1.0F).setLightOpacity(0).setUnlocalizedName("essentialcraft.enderGenerator");
+		registerBlockSimple(enderGenerator, "enderGenerator");
 		for(int i = 0; i < 4; ++i) {
-			lightCorruption[i] = new BlockCorruption_Light(Material.circuits).setHardness(1.0F).setResistance(1.0F).setLightOpacity(0).setBlockName("essentialcraft.corruption."+corruptionNames[i]).setBlockTextureName("essentialcraft:"+corruptionNames[i]);
-			BlocksRegistry.registerBlock(lightCorruption[i], corruptionNames[i], EssentialCraftCore.class, ItemBlockGeneric.class);
+			lightCorruption[i] = new BlockCorruption_Light(Material.CIRCUITS).setBlockTextureName("essentialcraft:"+corruptionNames[i]).setHardness(1.0F).setResistance(1.0F).setLightOpacity(0).setUnlocalizedName("essentialcraft.corruption."+corruptionNames[i]);
+			registerBlockSimple(lightCorruption[i], corruptionNames[i]);
 		}
-		moonWell = new BlockMoonWell(Material.rock).setHardness(1.0F).setResistance(1.0F).setLightOpacity(0).setBlockName("essentialcraft.moonWell").setBlockTextureName("essentialcraft:magicPlatingBlock");
-		BlocksRegistry.registerBlock(moonWell, "moonWell", EssentialCraftCore.class, ItemBlockGeneric.class);
-		magicianTable = registerBlockSimple(BlockMagicianTable.class, Material.rock, magicianTable, "magicianTable", "magicPlatingBlock", 1, 1, 0);
-		fortifiedStone = new BlockConnectedTextures(Material.rock).setTexturePath("fortifiedStone").setHardness(3.0F).setResistance(15.0F).setBlockName("essentialcraft.fortifiedStone").setBlockTextureName("essentialcraft:fortifiedStone");
-		BlocksRegistry.registerBlock(fortifiedStone, "fortifiedStone", EssentialCraftCore.class, ItemBlockGeneric.class);
-		magicalQuarry = registerBlockSimple(BlockMagicalQuarry.class, Material.rock, magicalQuarry, "magicalQuarry", "magicPlatingBlock", 1, 1, 0);
-		monsterClinger = registerBlockSimple(BlockMonsterHolder.class, Material.rock, monsterClinger, "monsterClinger", "magicPlatingBlock", 1, 1, 0);
-		potionSpreader = registerBlockSimple(BlockPotionSpreader.class, Material.rock, potionSpreader, "potionSpreader", "magicPlatingBlock", 1, 1, 0);
-		magicalEnchanter = registerBlockSimple(BlockMagicalEnchanter.class, Material.rock, magicalEnchanter, "magicalEnchanter", "magicPlatingBlock", 1, 1, 0);
-		monsterHarvester = registerBlockSimple(BlockMonsterHarvester.class, Material.rock, monsterHarvester, "monsterHarvester", "magicPlatingBlock", 1, 1, 0);
-		magicalRepairer = registerBlockSimple(BlockMagicalRepairer.class, Material.rock, magicalRepairer, "magicalRepairer", "magicPlatingBlock", 1, 1, 0);
-		matrixAbsorber = registerBlockSimple(BlockMatrixAbsorber.class, Material.rock, matrixAbsorber, "matrixAbsorber", "magicPlatingBlock", 1, 1, 0);
-		radiatingChamber = registerBlockSimple(BlockRadiatingChamber.class, Material.rock, radiatingChamber, "radiatingChamber", "magicPlatingBlock", 1, 1, 0);
-		magmaticSmeltery = registerBlockSimple(BlockMagmaticSmeltery.class, Material.rock, magmaticSmeltery, "magmaticSmeltery", "magicPlatingBlock", 1, 1, 0);
-		magicalJukebox = registerBlockSimple(BlockMagicalJukebox.class, Material.rock, magicalJukebox, "magicalJukebox", "magicPlatingBlock", 1, 1, 0);
-		elementalCrystal = new BlockElementalCrystal(Material.rock).setHardness(3.0F).setResistance(15.0F).setBlockName("essentialcraft.elementalCrystal").setBlockTextureName("essentialcraft:fortifiedStone");
-		BlocksRegistry.registerBlock(elementalCrystal, "elementalCrystal", EssentialCraftCore.class, ItemBlockElementalCrystal.class);
-		crystalFormer = registerBlockSimple(BlockCrystalFormer.class, Material.rock, crystalFormer, "crystalFormer", "magicPlatingBlock", 1, 1, 0);
-		crystalController = registerBlockSimple(BlockCrystalController.class, Material.rock, crystalController, "crystalController", "magicPlatingBlock", 1, 1, 0);
-		crystalExtractor = registerBlockSimple(BlockCrystalExtractor.class, Material.rock, crystalExtractor, "crystalExtractor", "magicPlatingBlock", 1, 1, 0);
-		chargingChamber = registerBlockSimple(BlockChargingChamber.class, Material.rock ,chargingChamber, "chargingChamber", "magicPlatingBlock", 1, 1, 0);
-		voidStone = new BlockConnectedTextures(Material.rock).setTexturePath("voidStone").setHardness(8.0F).setResistance(150.0F).setBlockName("essentialcraft.voidStone").setBlockTextureName("essentialcraft:voidStone");
-		BlocksRegistry.registerBlock(voidStone, "voidStone", EssentialCraftCore.class, ItemBlockGeneric.class);
-		voidGlass = new BlockConnectedTextures(Material.glass).setTexturePath("voidGlass").setHardness(8.0F).setResistance(150.0F).setBlockName("essentialcraft.voidGlass").setBlockTextureName("essentialcraft:voidGlass");
-		BlocksRegistry.registerBlock(voidGlass, "voidGlass", EssentialCraftCore.class, ItemBlockGeneric.class);
-		
-		concrete = registerBlockSimple(Block.class, Material.rock, concrete, "concrete", "firstWorld/burnedConcrete", 1, 1, 0);
-		cacti = registerBlockSimple(BlockDreadCacti.class, Material.cactus, cacti, "cacti", "firstWorld/cactus", 1, 1, 0);
-		dreadDirt = registerBlockSimple(Block.class, Material.ground, dreadDirt, "dreadDirt", "firstWorld/dreadDirt", 1, 1, 0);
-		dreadDirt.setStepSound(Block.soundTypeGravel);
-		flowerGreen = registerBlockSimple(BlockModFlower.class, Material.grass, flowerGreen, "flowerGreen", "firstWorld/flower_green", 1, 1, 0);
-		fruit = registerBlockSimple(BlockMagicalFruit.class, Material.grass, fruit, "fruit", "firstWorld/magicalFruit", 1, 1, 0);
-		root = registerBlockSimple(Block.class, Material.wood,root, "root", "firstWorld/root", 1, 1, 0);
-		tallGrass = registerBlockSimple(BlockModTallGrass.class, Material.grass, tallGrass, "tallGrass", "firstWorld/tallGrass", 1, 1, 0);
-		
-		magicalTeleporter = registerBlockSimple(BlockMagicalTeleporter.class, Material.rock, magicalTeleporter, "magicalTeleporter", "magicPlatingBlock", 1, 1, 0);
-		magicalFurnace = registerBlockSimple(BlockMagicalFurnace.class, Material.rock, magicalFurnace, "magicalFurnace", "magicPlatingBlock", 1, 1, 0);
-		emberForge = registerBlockSimple(BlockEmberForge.class, Material.rock, emberForge, "emberForge", "magicPlatingBlock", 1, 1, 0);
-		levitator = registerBlockSimple(BlockMRULevitator.class, Material.rock, levitator, "levitator", "fortifiedStone",1,100,0);
-		spreader = registerBlockSimple(BlockMRUSpreader.class, Material.rock, spreader, "spreader", "fortifiedStone",1 ,100 ,0);
-		
-		fence[0] = new BlockModFence(Material.rock, "essentialcraft:voidStone").setHardness(1.0F).setResistance(150.0F).setBlockName("essentialcraft.voidFence").setBlockTextureName("essentialcraft:voidStone");
-		BlocksRegistry.registerBlock(fence[0], "voidFence", EssentialCraftCore.class, ItemBlockGeneric.class);
-		fence[1] = new BlockModFence(Material.rock, "essentialcraft:magicPlatingBlock").setHardness(1.0F).setResistance(150.0F).setBlockName("essentialcraft.magicFence").setBlockTextureName("essentialcraft:magicPlatingBlock");
-		BlocksRegistry.registerBlock(fence[1], "magicFence", EssentialCraftCore.class, ItemBlockGeneric.class);
-		fence[2] = new BlockModFence(Material.rock, "essentialcraft:fortifiedStone").setHardness(1.0F).setResistance(150.0F).setBlockName("essentialcraft.fFence").setBlockTextureName("essentialcraft:fortifiedStone");
-		BlocksRegistry.registerBlock(fence[2], "fFence", EssentialCraftCore.class, ItemBlockGeneric.class);
-		
-		torch = registerBlockSimple(BlockMagicLight.class, Material.circuits,torch, "torch", "firstWorld/root", 0, 0, 1);
+		moonWell = new BlockMoonWell(Material.ROCK).setHardness(1.0F).setResistance(1.0F).setLightOpacity(0).setUnlocalizedName("essentialcraft.moonWell");
+		registerBlockSimple(moonWell, "moonWell");
+		magicianTable = registerBlockSimple(BlockMagicianTable.class, Material.ROCK, magicianTable, "magicianTable", "magicPlatingBlock", 1, 1, 0);
+		fortifiedStone = new BlockConnectedTextures(Material.ROCK).setBlockTextureName("essentialcraft:fortifiedStone").setTexturePath("fortifiedStone").setHardness(3.0F).setResistance(15.0F).setUnlocalizedName("essentialcraft.fortifiedStone");
+		registerBlockSimple(fortifiedStone, "fortifiedStone");
+		magicalQuarry = registerBlockSimple(BlockMagicalQuarry.class, Material.ROCK, magicalQuarry, "magicalQuarry", "magicPlatingBlock", 1, 1, 0);
+		monsterClinger = registerBlockSimple(BlockMonsterHolder.class, Material.ROCK, monsterClinger, "monsterClinger", "magicPlatingBlock", 1, 1, 0);
+		potionSpreader = registerBlockSimple(BlockPotionSpreader.class, Material.ROCK, potionSpreader, "potionSpreader", "magicPlatingBlock", 1, 1, 0);
+		magicalEnchanter = registerBlockSimple(BlockMagicalEnchanter.class, Material.ROCK, magicalEnchanter, "magicalEnchanter", "magicPlatingBlock", 1, 1, 0);
+		monsterHarvester = registerBlockSimple(BlockMonsterHarvester.class, Material.ROCK, monsterHarvester, "monsterHarvester", "magicPlatingBlock", 1, 1, 0);
+		magicalRepairer = registerBlockSimple(BlockMagicalRepairer.class, Material.ROCK, magicalRepairer, "magicalRepairer", "magicPlatingBlock", 1, 1, 0);
+		matrixAbsorber = registerBlockSimple(BlockMatrixAbsorber.class, Material.ROCK, matrixAbsorber, "matrixAbsorber", "magicPlatingBlock", 1, 1, 0);
+		radiatingChamber = registerBlockSimple(BlockRadiatingChamber.class, Material.ROCK, radiatingChamber, "radiatingChamber", "magicPlatingBlock", 1, 1, 0);
+		magmaticSmeltery = registerBlockSimple(BlockMagmaticSmeltery.class, Material.ROCK, magmaticSmeltery, "magmaticSmeltery", "magicPlatingBlock", 1, 1, 0);
+		magicalJukebox = registerBlockSimple(BlockMagicalJukebox.class, Material.ROCK, magicalJukebox, "magicalJukebox", "magicPlatingBlock", 1, 1, 0);
+		elementalCrystal = new BlockElementalCrystal(Material.ROCK).setHardness(3.0F).setResistance(15.0F).setUnlocalizedName("essentialcraft.elementalCrystal");
+		registerBlockSimple(elementalCrystal, "elementalCrystal", ItemBlockElementalCrystal.class);
+		crystalFormer = registerBlockSimple(BlockCrystalFormer.class, Material.ROCK, crystalFormer, "crystalFormer", "magicPlatingBlock", 1, 1, 0);
+		crystalController = registerBlockSimple(BlockCrystalController.class, Material.ROCK, crystalController, "crystalController", "magicPlatingBlock", 1, 1, 0);
+		crystalExtractor = registerBlockSimple(BlockCrystalExtractor.class, Material.ROCK, crystalExtractor, "crystalExtractor", "magicPlatingBlock", 1, 1, 0);
+		chargingChamber = registerBlockSimple(BlockChargingChamber.class, Material.ROCK ,chargingChamber, "chargingChamber", "magicPlatingBlock", 1, 1, 0);
+		voidStone = new BlockConnectedTextures(Material.ROCK).setBlockTextureName("essentialcraft:voidStone").setTexturePath("voidStone").setHardness(8.0F).setResistance(150.0F).setUnlocalizedName("essentialcraft.voidStone");
+		registerBlockSimple(voidStone, "voidStone");
+		voidGlass = new BlockConnectedTextures(Material.GLASS).setBlockTextureName("essentialcraft:voidGlass").setTexturePath("voidGlass").setHardness(8.0F).setResistance(150.0F).setUnlocalizedName("essentialcraft.voidGlass");
+		registerBlockSimple(voidGlass, "voidGlass");
+
+		concrete = registerBlockSimple(BlockMod.class, Material.ROCK, concrete, "concrete", "firstWorld/burnedConcrete", 1, 1, 0);
+		cacti = registerBlockSimple(BlockDreadCacti.class, Material.CACTUS, cacti, "cacti", "firstWorld/cactus", 1, 1, 0);
+		dreadDirt = registerBlockSimple(BlockMod.class, Material.GROUND, dreadDirt, "dreadDirt", "firstWorld/dreadDirt", 1, 1, 0);
+		((BlockMod)dreadDirt).setSoundType(SoundType.GROUND);
+		flowerGreen = registerBlockSimple(BlockModFlower.class, Material.GRASS, flowerGreen, "flowerGreen", "firstWorld/flower_green", 1, 1, 0);
+		fruit = registerBlockSimple(BlockMagicalFruit.class, Material.GRASS, fruit, "fruit", "firstWorld/magicalFruit", 1, 1, 0);
+		root = registerBlockSimple(BlockMod.class, Material.WOOD,root, "root", "firstWorld/root", 1, 1, 0);
+		tallGrass = registerBlockSimple(BlockModTallGrass.class, Material.GRASS, tallGrass, "tallGrass", "firstWorld/tallGrass", 1, 1, 0);
+
+		magicalTeleporter = registerBlockSimple(BlockMagicalTeleporter.class, Material.ROCK, magicalTeleporter, "magicalTeleporter", "magicPlatingBlock", 1, 1, 0);
+		magicalFurnace = registerBlockSimple(BlockMagicalFurnace.class, Material.ROCK, magicalFurnace, "magicalFurnace", "fortifiedStone", 1, 1, 0);
+		emberForge = registerBlockSimple(BlockEmberForge.class, Material.ROCK, emberForge, "emberForge", "magicPlatingBlock", 1, 1, 0);
+		levitator = registerBlockSimple(BlockMRULevitator.class, Material.ROCK, levitator, "levitator", "fortifiedStone",1,100,0);
+		spreader = registerBlockSimple(BlockMRUSpreader.class, Material.ROCK, spreader, "spreader", "fortifiedStone",1 ,100 ,0);
+
+		fence[0] = new BlockModFence(Material.ROCK, "essentialcraft:voidStone").setHardness(8.0F).setResistance(150.0F).setUnlocalizedName("essentialcraft.voidFence");
+		registerBlockSimple(fence[0], "voidFence");
+		fence[1] = new BlockModFence(Material.ROCK, "essentialcraft:magicPlatingBlock").setHardness(3.0F).setResistance(15.0F).setUnlocalizedName("essentialcraft.magicFence");
+		registerBlockSimple(fence[1], "magicFence");
+		fence[2] = new BlockModFence(Material.ROCK, "essentialcraft:fortifiedStone").setHardness(3.0F).setResistance(15.0F).setUnlocalizedName("essentialcraft.fFence");
+		registerBlockSimple(fence[2], "fFence");
+
+		torch = registerBlockSimple(BlockMagicLight.class, Material.CIRCUITS,torch, "torch", "firstWorld/root", 0, 0, 1);
 		torch.setLightLevel(1.0F);
-		
-		blockPale = registerBlockSimple(Block.class, Material.rock,blockPale, "blockPale", "paleBlock", 2, 100, 0);
-		blockPale.setStepSound(Block.soundTypeMetal);
-		platingPale = new BlockConnectedTextures(Material.rock).setTexturePath("palePlating").setHardness(3.0F).setResistance(100.0F).setBlockName("essentialcraft.platingPale").setBlockTextureName("essentialcraft:palePlatingBlock");
-		BlocksRegistry.registerBlock(platingPale, "platingPale", EssentialCraftCore.class, ItemBlockGeneric.class);
-		mruCoilHardener = registerBlockSimple(BlockMRUCoil_Hardener.class, Material.rock, mruCoilHardener, "mruCoilHardener", "fortifiedStone", 1, 100, 0);
-		mruCoil = registerBlockSimple(BlockMRUCoil_Coil.class, Material.rock, mruCoil, "mruCoil", "fortifiedStone", 1, 100, 0);
-		corruptionCleaner = registerBlockSimple(BlockCorruptionCleaner.class, Material.rock, corruptionCleaner, "corruptionCleaner", "fortifiedStone", 1, 100, 0);
-		reactorSupport = registerBlockSimple(BlockReactorSupport.class, Material.rock, reactorSupport, "reactorSupport", "fortifiedStone", 1, 10, 0);
-		reactor = registerBlockSimple(BlockMRUReactor.class, Material.rock,reactor, "reactor", "fortifiedStone", 1, 10, 0);
-		air = registerBlockSimple(Block.class, Material.rock,air, "air", "glass", -1, -1, 0);
-		air.setBlockName("air");
-		air.setBlockTextureName("cauldron_top");
-		//minEjector = registerBlockSimple(BlockMINEjector.class, Material.rock,minEjector, "minEjector", "fortifiedStone", 1, 1, 0);
-		//minInjector = registerBlockSimple(BlockMINInjector.class, Material.rock,minInjector, "minInjector", "fortifiedStone", 1, 1, 0);
-		//mim = registerBlockSimple(BlockMIM.class, Material.rock,mim, "mim", "voidStone", 1, 1, 0);
-		//Its 8ack!
-		darknessObelisk = registerBlockSimple(BlockDarknessObelisk.class, Material.rock, darknessObelisk, "darknessObelisk", "voidStone", 1, 1, 0);
-		
-		ultraHeatGen = registerBlockSimple(BlockUltraHeatGenerator.class, Material.rock, ultraHeatGen, "ultraHeatGen", "voidStone", 1, 1, 0);
-		ultraFlowerBurner = registerBlockSimple(BlockUltraFlowerBurner.class, Material.rock, ultraFlowerBurner, "ultraFlowerBurner", "voidStone", 1, 1, 0);
-		
-		assembler = registerBlockSimple(BlockMagicalAssemblerCore.class, Material.rock, assembler, "assembler", "fortifiedStone", 1, 1, 0);
-		magicalMirror = registerBlockSimple(BlockMagicalMirror.class, Material.rock, magicalMirror, "magicalMirror", "magicPlatingBlock", 1, 1, 0);
-		magicalDisplay = registerBlockSimple(BlockMagicalDisplay.class, Material.rock, magicalDisplay, "magicalDisplay", "magicalDisplay", 1, 1, 0);
-		portal = registerBlockSimple(BlockPortal.class, Material.rock, portal, "portal", "portal",-1,-1,1);
-		oreDrops = registerBlockSimple(BlockDropsOre.class, Material.rock, oreDrops, "oreDrops", "fortifiedStone",1,1,1);
-		
-		invertedBlock = new BlockConnectedTextures(Material.rock).setTexturePath("invertedPlating").setHardness(4.0F).setResistance(100.0F).setBlockName("essentialcraft.mithrilinePlating").setBlockTextureName("essentialcraft:invertedPlatingBlock");
-		BlocksRegistry.registerBlock(invertedBlock, "invertedPlating", EssentialCraftCore.class, ItemBlockGeneric.class);
-		mithrilineCrystal = new BlockMithrilineCrystal().setBlockName("essentialcraft.mithrilineCrystal").setBlockTextureName("essentialcraft:invertedPlatingBlock").setHardness(1).setResistance(1).setLightOpacity(1);
-		BlocksRegistry.registerBlock(mithrilineCrystal, "mithrilineCrystal", EssentialCraftCore.class, ItemBlockMithrilineCrystal.class);
-		mithrilineFurnace = registerBlockSimple(BlockMithrilineFurnace.class, Material.rock, mithrilineFurnace, "mithrilineFurnace", "invertedPlatingBlock",1,1,1);
+
+		blockPale = registerBlockSimple(BlockMod.class, Material.ROCK, blockPale, "blockPale", "paleBlock", 2, 100, 0);
+		((BlockMod)blockPale).setSoundType(SoundType.METAL);
+		platingPale = new BlockConnectedTextures(Material.ROCK).setBlockTextureName("essentialcraft:palePlatingBlock").setTexturePath("palePlating").setHardness(3.0F).setResistance(100.0F).setUnlocalizedName("essentialcraft.platingPale");
+		registerBlockSimple(platingPale, "platingPale");
+		mruCoilHardener = registerBlockSimple(BlockMRUCoil_Hardener.class, Material.ROCK, mruCoilHardener, "mruCoilHardener", "fortifiedStone", 1, 100, 0);
+		mruCoil = registerBlockSimple(BlockMRUCoil_Coil.class, Material.ROCK, mruCoil, "mruCoil", "fortifiedStone", 1, 100, 0);
+		corruptionCleaner = registerBlockSimple(BlockCorruptionCleaner.class, Material.ROCK, corruptionCleaner, "corruptionCleaner", "fortifiedStone", 1, 100, 0);
+		reactorSupport = new BlockReactorSupport().setUnlocalizedName("essentialcraft.reactorSupport").setHardness(1).setResistance(10).setLightOpacity(0);
+		registerBlockSimple(reactorSupport, "reactorSupport");
+		reactor = registerBlockSimple(BlockMRUReactor.class, Material.ROCK,reactor, "reactor", "fortifiedStone", 1, 10, 0);
+		air = new BlockMod(Material.ROCK).setBlockTextureName("minecraft:cauldron_top").setHardness(-1).setResistance(-1).setLightLevel(0).setUnlocalizedName("air");
+		registerBlockSimple(air, "air");
+		darknessObelisk = registerBlockSimple(BlockDarknessObelisk.class, Material.ROCK, darknessObelisk, "darknessObelisk", "voidStone", 1, 1, 0);
+
+		ultraHeatGen = registerBlockSimple(BlockUltraHeatGenerator.class, Material.ROCK, ultraHeatGen, "ultraHeatGen", "voidStone", 1, 1, 0);
+		ultraFlowerBurner = registerBlockSimple(BlockUltraFlowerBurner.class, Material.ROCK, ultraFlowerBurner, "ultraFlowerBurner", "voidStone", 1, 1, 0);
+
+		magicalMirror = registerBlockSimple(BlockMagicalMirror.class, Material.ROCK, magicalMirror, "magicalMirror", "magicPlatingBlock", 1, 1, 0);
+		magicalDisplay = registerBlockSimple(BlockMagicalDisplay.class, Material.ROCK, magicalDisplay, "magicalDisplay", "magicalDisplay", 1, 1, 0);
+		portal = (BlockPortal)registerBlockSimple(BlockPortal.class, Material.ROCK, portal, "portal", "portal",-1,-1,1);
+		oreDrops = registerBlockSimple(BlockDropsOre.class, Material.ROCK, oreDrops, "oreDrops", "fortifiedStone",1,1,1);
+
+		invertedBlock = new BlockConnectedTextures(Material.ROCK).setBlockTextureName("essentialcraft:invertedPlatingBlock").setTexturePath("invertedPlating").setHardness(4.0F).setResistance(100.0F).setUnlocalizedName("essentialcraft.mithrilinePlating");
+		registerBlockSimple(invertedBlock, "invertedPlating");
+		mithrilineCrystal = new BlockMithrilineCrystal().setUnlocalizedName("essentialcraft.mithrilineCrystal").setHardness(1).setResistance(1).setLightOpacity(1);
+		registerBlockSimple(mithrilineCrystal, "mithrilineCrystal", ItemBlockMithrilineCrystal.class);
+		mithrilineFurnace = registerBlockSimple(BlockMithrilineFurnace.class, Material.ROCK, mithrilineFurnace, "mithrilineFurnace", "invertedPlatingBlock",1,1,1);
+
+		demonicPlating = new BlockConnectedTextures(Material.ROCK).setBlockTextureName("essentialcraft:demonicPlatingBlock").setTexturePath("demonicPlating").setHardness(3.0F).setResistance(100.0F).setUnlocalizedName("essentialcraft.demonicPlating");
+		registerBlockSimple(demonicPlating, "demonicPlating");
+		playerPentacle = registerBlockSimple(BlockPlayerPentacle.class, Material.ROCK, playerPentacle, "playerPentacle", "playerPentacle",0,0,0);
+		windRune = registerBlockSimple(BlockWindRune.class, Material.ROCK, windRune, "windRune", "windRune",3,10,0);
+		rightClicker = registerBlockSimple(BlockRightClicker.class, Material.ROCK, rightClicker, "rightClicker", "fortifiedStone", 1, 1, 15);
+		redstoneTransmitter = registerBlockSimple(BlockRedstoneTransmitter.class, Material.ROCK,redstoneTransmitter, "redstoneTransmitter", "fortifiedStone",0,0,0);
+		magicalHopper = registerBlockSimple(BlockMagicalHopper.class, Material.ROCK, magicalHopper, "magicalHopper", "fortifiedStone", 1, 1, 15);
+		metadataManager = registerBlockSimple(BlockMetadataManager.class, Material.ROCK, metadataManager, "metadataManager", "fortifiedStone", 1, 1, 15);
+		blockBreaker = registerBlockSimple(BlockBlockBreaker.class, Material.ROCK, blockBreaker, "blockBreaker", "fortifiedStone", 1, 1, 15);
+		compressed = new BlockCompressedDrops().setUnlocalizedName("essentialcraft.compressed").setHardness(0.4F).setResistance(1).setLightOpacity(15);
+		registerBlockSimple(new ItemBlockMeta(compressed), "compressed");
+		demonicPentacle = registerBlockSimple(BlockDemonicPentacle.class, Material.ROCK, demonicPentacle, "demonicPentacle", "demonicPentacle",0,0,0);
+		weaponMaker = registerBlockSimple(BlockWeaponMaker.class, Material.ROCK, weaponMaker, "weaponMaker", "fortifiedStone", 1, 1, 15);
+		furnaceMagic = new BlockFurnaceMagic().setUnlocalizedName("essentialcraft.furnaceMagic").setHardness(1).setResistance(1).setLightOpacity(15);
+		registerBlockSimple(furnaceMagic, "furnaceMagic");
+		holopad = registerBlockSimple(BlockHologramSpawner.class, Material.ROCK, holopad, "holopad", "holopad", 1, 1, 15);
+		chest = registerBlockSimple(BlockEC3Chest.class, Material.ROCK, chest, "chest", "null", 1, 1, 0);
+		mimInvStorage = registerBlockSimple(BlockNewMIMInventoryStorage.class, Material.ROCK,mimInvStorage, "mimInvStorage", "null", 1, 1, 15);
+		newMim = new BlockNewMIM(Material.ROCK).setResistance(1).setHardness(1).setLightOpacity(0).setUnlocalizedName("essentialcraft.newMim");
+		registerBlockSimple(newMim, "newMim");
+		mimScreen = registerBlockSimple(BlockMIMScreen.class, Material.ROCK, mimScreen, "mimScreen", "null", 1, 1, 15);
+		mimCrafter = registerBlockSimple(BlockNewMIMCraftingManager.class, Material.ROCK, mimCrafter, "mimCrafter", "null", 1, 1, 15);
+		mimEjector = registerBlockSimple(BlockNewMIMExporter.class, Material.ROCK, mimEjector, "mimEjector", "mimNode_Ejection", 1, 1, 0);
+		mimInjector = registerBlockSimple(BlockNewMIMImporter.class, Material.ROCK, mimInjector, "mimInjector", "mimNode_Injection", 1, 1, 0);
+		device = new BlockRedstoneDeviceNotSided().setHardness(1).setResistance(1).setUnlocalizedName("essentialcraft.device");
+		registerBlockSimple(device, "device", ItemBlockRDNS.class);
+		advBreaker = registerBlockSimple(BlockAdvBlockBreaker.class, Material.ROCK,advBreaker, "advBreaker", "fortifiedStone", 1, 1, 0);
+		mimEjectorP = registerBlockSimple(BlockNewMIMExporter_Persistant.class, Material.ROCK, mimEjectorP, "mimEjectorP", "mimNode_EjectionP", 1, 1, 0);
+		mimInjectorP = registerBlockSimple(BlockNewMIMImporter_Persistant.class, Material.ROCK, mimInjectorP, "mimInjectorP", "mimNode_InjectionP", 1, 1, 0);
 	
-		demonicPlating = new BlockConnectedTextures(Material.rock).setTexturePath("demonicPlating").setHardness(3.0F).setResistance(100.0F).setBlockName("essentialcraft.demonicPlating").setBlockTextureName("essentialcraft:demonicPlatingBlock");
-		BlocksRegistry.registerBlock(demonicPlating, "demonicPlating", EssentialCraftCore.class, ItemBlockGeneric.class);
-		playerPentacle = registerBlockSimple(BlockPlayerPentacle.class, Material.rock, playerPentacle, "playerPentacle", "playerPentacle",0,0,0);
-		windRune = registerBlockSimple(BlockWindRune.class, Material.rock, windRune, "windRune", "windRune",3,10,0);
-		rightClicker = registerBlockSimple(BlockRightClicker.class, Material.rock, rightClicker, "rightClicker", "fortifiedStone", 1, 1, 15);
-		redstoneTransmitter = registerBlockSimple(BlockRedstoneTransmitter.class, Material.rock,redstoneTransmitter, "redstoneTransmitter", "fortifiedStone",0,0,0);
-		magicalHopper = registerBlockSimple(BlockMagicalHopper.class, Material.rock, magicalHopper, "magicalHopper", "fortifiedStone", 1, 1, 15);
-		metadataManager = registerBlockSimple(BlockMetadataManager.class, Material.rock, metadataManager, "metadataManager", "fortifiedStone", 1, 1, 15);
-		blockBreaker = registerBlockSimple(BlockBlockBreaker.class, Material.rock, blockBreaker, "blockBreaker", "fortifiedStone", 1, 1, 15);
-		compressed = registerBlockSimple(BlockCompressedDrops.class, Material.rock, compressed, "compressed", "compressed", 0.4F, 1, 15);
-		demonicPentacle = registerBlockSimple(BlockDemonicPentacle.class, Material.rock, demonicPentacle, "demonicPentacle", "demonicPentacle",0,0,0);
-		weaponMaker = registerBlockSimple(BlockWeaponMaker.class, Material.rock, weaponMaker, "weaponMaker", "fortifiedStone", 1, 1, 15);
-		furnaceMagic = registerBlockSimple(BlockFurnaceMagic.class, Material.rock, furnaceMagic, "furnaceMagic", "fortifiedStone", 1, 1, 15);
-		holopad = registerBlockSimple(BlockHologramSpawner.class, Material.rock, holopad, "holopad", "holopad", 1, 1, 15);
-		chest = registerBlockSimple(BlockEC3Chest.class, Material.rock, chest, "chest", "null", 1, 1, 0);
-		mimInvStorage = registerBlockSimple(BlockNewMIMInventoryStorage.class, Material.rock,mimInvStorage, "mimInvStorage", "null", 1, 1, 15);
-		newMim = registerBlockSimple(BlockNewMIM.class, Material.rock, newMim, "newMim", "voidStone", 1, 1, 0);
-		mimScreen = registerBlockSimple(BlockMIMScreen.class, Material.rock, mimScreen, "mimScreen", "null", 1, 1, 15);
-		mimCrafter = registerBlockSimple(BlockNewMIMCraftingManager.class, Material.rock, mimCrafter, "mimCrafter", "null", 1, 1, 15);
-		mimEjector = registerBlockSimple(BlockNewMIMExporter.class, Material.rock, mimEjector, "mimEjector", "mimNode_Ejection", 1, 1, 0);
-		mimInjector = registerBlockSimple(BlockNewMIMImporter.class, Material.rock, mimInjector, "mimInjector", "mimNode_Injection", 1, 1, 0);
-		device = new BlockRedstoneDeviceNotSided().setHardness(1).setResistance(1).setBlockName("essentialcraft.device");
-		BlocksRegistry.registerBlock(device, "essentialcraft.device", EssentialCraftCore.class, ItemBlockRDNS.class);
-		//device = registerBlockSimple(BlockRedstoneDeviceNotSided.class, Material.rock, device, "device", "null", 1, 1, 15);
-		advBreaker = registerBlockSimple(BlockAdvBlockBreaker.class, Material.rock,advBreaker, "advBreaker", "fortifiedStone", 1, 1, 0);
-		mimEjectorP = registerBlockSimple(BlockNewMIMExporter_Persistant.class, Material.rock, mimEjectorP, "mimEjectorP", "mimNode_EjectionP", 1, 1, 0);
-		mimInjectorP = registerBlockSimple(BlockNewMIMImporter_Persistant.class, Material.rock, mimInjectorP, "mimInjectorP", "mimNode_InjectionP", 1, 1, 0);
+		oreMithriline = new BlockMithrilineOre().setUnlocalizedName("essentialcraft.oreMithriline").setHardness(0.4F).setResistance(1).setLightOpacity(15);
+		registerBlockSimple(oreMithriline, "oreMithriline");
+		crystalLamp = new BlockCrystalLamp().setUnlocalizedName("essentialcraft.crystalLamp").setHardness(0.4F).setResistance(1).setLightOpacity(15);
+		registerBlockSimple(new ItemBlockMeta(crystalLamp), "crystalLamp");
+		mimic = new BlockMimic().setUnlocalizedName("essentialcraft.mimic").setResistance(15).setHardness(3).setLightOpacity(15);
+		registerBlockSimple(mimic, "mimic");
+		
+		water = new BlockMod(Material.WATER).setHardness(-1).setResistance(-1).setLightLevel(0).setUnlocalizedName("water");
+		registerBlockSimple(water, "water");
+		lava = new BlockMod(Material.LAVA).setHardness(-1).setResistance(-1).setLightLevel(0).setUnlocalizedName("lava");
+		registerBlockSimple(lava, "lava");
+		fire = new BlockMod(Material.FIRE).setHardness(-1).setResistance(-1).setLightLevel(0).setUnlocalizedName("fire");
+		registerBlockSimple(fire, "fire");
+
+		chunkLoader = registerBlockSimple(BlockChunkLoader.class,Material.ROCK,chunkLoader,"chunkLoader","chunkLoader",1,1,0);
+		dimTransciever = registerBlockSimple(BlockDimensionalTransciever.class,Material.ROCK,dimTransciever,"dimTransciever","dimTransciever",1,1,0);
 	}
-	
+
 	public static void postInitLoad() {
-		createFancyBlock(Material.rock, "mru", "mru", 1, 100, new ItemStack(ItemsCore.magicalSlag));
-		createFancyBlock(Material.rock, "concrete", "concrete", 1, 5, new ItemStack(concrete));
-		createFancyBlock(Material.rock, "fortifiedStone", "fortifiedStone", 1.5F, 8, new ItemStack(fortifiedStone));
-		createFancyBlock(Material.glass, "coldStone", "coldStone", 0.7F, 1, new ItemStack(coldStone));
-		createFancyBlock(Material.rock, "magicPlating", "magicPlating", 2F, 8, new ItemStack(magicPlating));
-		createFancyBlock(Material.rock, "palePlating", "palePlating", 2F, 8,new ItemStack(platingPale));
-		createFancyBlock(Material.rock, "voidStone", "voidStone", 3F, 28, new ItemStack(voidStone));
-		createFancyBlock(Material.rock, "mithrilinePlating", "mithrilinePlating", 3F, 100, new ItemStack(invertedBlock));
-		createFancyBlock(Material.rock, "demonicPlating", "demonicPlating", 3F, 100, new ItemStack(demonicPlating));
-	}
+		createFancyBlock(Material.ROCK, "mru", "mru", 1, 100, new ItemStack(ItemsCore.magicalSlag));
+		createFancyBlock(Material.ROCK, "concrete", "concrete", 1, 5, new ItemStack(concrete));
+		createFancyBlock(Material.ROCK, "fortifiedStone", "fortifiedStone", 1.5F, 8, new ItemStack(fortifiedStone));
+		createFancyBlock(Material.GLASS, "coldStone", "coldStone", 0.7F, 1, new ItemStack(coldStone));
+		createFancyBlock(Material.ROCK, "magicPlating", "magicPlating", 2F, 8, new ItemStack(magicPlating));
+		createFancyBlock(Material.ROCK, "palePlating", "palePlating", 2F, 8,new ItemStack(platingPale));
+		createFancyBlock(Material.ROCK, "voidStone", "voidStone", 3F, 28, new ItemStack(voidStone));
+		createFancyBlock(Material.ROCK, "mithrilinePlating", "mithrilinePlating", 3F, 100, new ItemStack(invertedBlock));
+		createFancyBlock(Material.ROCK, "demonicPlating", "demonicPlating", 3F, 100, new ItemStack(demonicPlating));
 	
-	public static Block registerBlockSimple(Class<? extends Block> c, Material m,Block b, String name, String texture, float hardness, float resistance, int opacity) {
+		Block mimicFancy = new BlockFancyMimic().setUnlocalizedName("essentialcraft.fancyBlock.mimic").setResistance(15).setHardness(3).setLightOpacity(15);
+		registerFancyBlock(mimicFancy, "mimic", new ItemStack(mimic));
+	}
+
+	public static Block registerBlockSimple(Class<? extends Block> c, Material m, Block b, String name, String texture, float hardness, float resistance, int opacity) {
 		try {
-			b = c.newInstance().setBlockName("essentialcraft."+name).setBlockTextureName("essentialcraft:"+texture).setResistance(resistance).setHardness(hardness).setLightOpacity(opacity);
-			BlocksRegistry.registerBlock(b, name, EssentialCraftCore.class, ItemBlockGeneric.class);
+			b = c.getConstructor().newInstance().setUnlocalizedName("essentialcraft."+name).setResistance(resistance).setHardness(hardness).setLightOpacity(opacity);
+			BlocksRegistry.registerBlock(new ItemBlockGeneric(b), name, EssentialCraftCore.class);
+			EssentialCraftCore.proxy.handleBlockRegister(b);
 			return b;
 		}
 		catch (Exception e) {
 			try {
-				if(c == Block.class) {
-					b = new ModBlock(m).setBlockName("essentialcraft:"+name).setBlockTextureName("essentialcraft:"+texture).setResistance(resistance).setHardness(hardness).setLightOpacity(opacity);
-					BlocksRegistry.registerBlock(b, name, EssentialCraftCore.class, ItemBlockGeneric.class);
+				if(c == BlockMod.class) {
+					b = new BlockMod(m).setBlockTextureName("essentialcraft:"+texture).setUnlocalizedName("essentialcraft."+name).setResistance(resistance).setHardness(hardness).setLightOpacity(opacity);
+					BlocksRegistry.registerBlock(new ItemBlockGeneric(b), name, EssentialCraftCore.class);
+					EssentialCraftCore.proxy.handleBlockRegister(b);
 					return b;
 				}
 				else {
 					c.getConstructor(Material.class).setAccessible(true);
-					b = c.getConstructor(Material.class).newInstance(m).setBlockName("essentialcraft:"+name).setBlockTextureName("essentialcraft:"+texture).setResistance(resistance).setHardness(hardness).setLightOpacity(opacity);
-					BlocksRegistry.registerBlock(b, name, EssentialCraftCore.class, ItemBlockGeneric.class);
+					b = c.getConstructor(Material.class).newInstance(m).setUnlocalizedName("essentialcraft."+name).setResistance(resistance).setHardness(hardness).setLightOpacity(opacity);
+					BlocksRegistry.registerBlock(new ItemBlockGeneric(b), name, EssentialCraftCore.class);
+					EssentialCraftCore.proxy.handleBlockRegister(b);
 					return b;
 				}
 			}
@@ -217,224 +234,48 @@ public class BlocksCore {
 			}
 		}
 	}
-	
+
+	public static Block registerBlockSimple(Block b, String name) {
+		BlocksRegistry.registerBlock(new ItemBlockGeneric(b), name, EssentialCraftCore.class);
+		EssentialCraftCore.proxy.handleBlockRegister(b);
+		return b;
+	}
+
+	public static Block registerBlockSimple(Block b, String name, Class<? extends ItemBlock> ib) {
+		try {
+			ib.getConstructor(Block.class).setAccessible(true);
+			BlocksRegistry.registerBlock(ib.getConstructor(Block.class).newInstance(b), name, EssentialCraftCore.class);
+			EssentialCraftCore.proxy.handleBlockRegister(b);
+			return b;
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	public static ItemBlock registerBlockSimple(ItemBlock ib, String name) {
+		BlocksRegistry.registerBlock(ib, name, EssentialCraftCore.class);
+		EssentialCraftCore.proxy.handleBlockRegister(ib.block);
+		return ib;
+	}
+
 	public static void createFancyBlock(Material m, String name, String texture, float hardness, float resistance, ItemStack createdFrom) {
-		Block fancy = new BlockFancy(m).setBlockName("essentialcraft.fancyBlock."+name).setBlockTextureName("essentialcraft:fancyBlocks/"+texture).setResistance(resistance).setHardness(hardness);
-		BlocksRegistry.registerBlock(fancy, "fancyBlock."+name, EssentialCraftCore.class, ItemBlockFancy.class);
+		Block fancy = new BlockFancy(m).setModelName("essentialcraft:fancyBlocks/"+texture).setUnlocalizedName("essentialcraft.fancyBlock."+name).setResistance(resistance).setHardness(hardness);
+		BlocksRegistry.registerBlock(new ItemBlockFancy(fancy), "fancyBlock."+name, EssentialCraftCore.class);
+		EssentialCraftCore.proxy.handleBlockRegister(fancy);
 		fancyBlocks.add(fancy);
-		
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(fancy, 4, 1), new Object[] {
-				createdFrom, new ItemStack(ItemsCore.magicalChisel, 1, OreDictionary.WILDCARD_VALUE)
-		}));
-		
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(fancy, 4, 2), new Object[] {
-				"## ",
-				"## ",
-				"   ",
-				'#', new ItemStack(fancy, 1, 1)
-		}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(fancy, 4, 7), new Object[] {
-				" # ",
-				"# #",
-				" # ",
-				'#', new ItemStack(fancy, 1, 2)
-		}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(fancy, 4, 0), new Object[] {
-				"# #",
-				"   ",
-				"# #",
-				'#', new ItemStack(fancy, 1, 1)
-		}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(fancy, 9, 3), new Object[] {
-				"###",
-				"###",
-				"###",
-				'#', new ItemStack(fancy, 1, 1)
-		}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(fancy, 8, 4), new Object[] {
-				"###",
-				"# #",
-				"###",
-				'#', new ItemStack(fancy, 1, 2)
-		}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(fancy, 4, 5), new Object[] {
-				"## ",
-				"## ",
-				"   ",
-				'#', new ItemStack(fancy, 1, 7)
-		}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(fancy, 9, 6), new Object[] {
-				"###",
-				"@$@",
-				"###",
-				'#', new ItemStack(fancy, 1, 1),
-				'@', new ItemStack(fancy, 1, 3),
-				'$', new ItemStack(fancy, 1, 0)
-		}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(fancy, 4, 8), new Object[] {
-				" # ",
-				"#@#",
-				" # ",
-				'#', new ItemStack(fancy, 1, 0),
-				'@', new ItemStack(fancy, 1, 3)
-		}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(fancy, 8, 9), new Object[] {
-				"###",
-				"#@#",
-				"###",
-				'#', new ItemStack(fancy, 1, 8),
-				'@', new ItemStack(Items.redstone, 1, 0)
-		}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(fancy, 8, 10), new Object[] {
-				"###",
-				"#@#",
-				"###",
-				'#', new ItemStack(fancy, 1, 1),
-				'@', new ItemStack(ItemsCore.genericItem, 1, 3)
-		}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(fancy, 8, 11), new Object[] {
-				"###",
-				"#@#",
-				"###",
-				'#', new ItemStack(fancy, 1, 1),
-				'@', new ItemStack(ItemsCore.genericItem, 1, 12)
-		}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(fancy, 8, 12), new Object[] {
-				"###",
-				"#@#",
-				"###",
-				'#', new ItemStack(fancy, 1, 1),
-				'@', new ItemStack(Items.iron_ingot)
-		}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(fancy, 8, 13), new Object[] {
-				"###",
-				"#@#",
-				"###",
-				'#', new ItemStack(fancy, 1, 1),
-				'@', new ItemStack(Items.leather)
-		}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(fancy, 4, 14), new Object[] {
-				"## ",
-				"## ",
-				"   ",
-				'#', new ItemStack(fancy, 1, 13)
-		}));
-			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(fancy, 4, 15), new Object[] {
-			"## ",
-			"## ",
-			"   ",
-			'#', new ItemStack(fancy, 1, 12)
-		}));
+		RecipeRegistry.fancyBlockRecipes.put(fancy, createdFrom);
 	}
 	
-	
-	public static void createFancyBlock(Block b, String name, int meta) {
-		Block fancy = new BlockFancy(b, meta).setBlockName("essentialcraft.fancyBlock." + name).setResistance(1).setHardness(1);
-		BlocksRegistry.registerBlock(fancy, "fancyBlock." + name, EssentialCraftCore.class, ItemBlockFancy.class);
+	public static Block registerFancyBlock(Block fancy, String name, ItemStack createdFrom) {
+		BlocksRegistry.registerBlock(new ItemBlockFancy(fancy), "fancyBlock."+name, EssentialCraftCore.class);
+		EssentialCraftCore.proxy.handleBlockRegister(fancy);
 		fancyBlocks.add(fancy);
-		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(fancy, 4, 1), new Object[]{
-				new ItemStack(b, 1, meta), new ItemStack(ItemsCore.magicalChisel, 1, OreDictionary.WILDCARD_VALUE)
-		}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(fancy, 4, 2), new Object[] {
-				"## ",
-				"## ",
-				"   ",
-				'#', new ItemStack(fancy, 1, 1)
-		}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(fancy, 4, 7), new Object[] {
-				" # ",
-				"# #",
-				" # ",
-				'#', new ItemStack(fancy, 1, 2)
-		}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(fancy, 4, 8), new Object[] {
-				" # ",
-				"#@#",
-				" # ",
-				'#', new ItemStack(fancy, 1, 0),
-				'@', new ItemStack(fancy, 1, 3)
-		}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(fancy, 4, 0), new Object[] {
-				"# #",
-				"   ",
-				"# #",
-				'#', new ItemStack(fancy, 1, 1)
-		}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(fancy, 9, 3), new Object[] {
-				"###",
-				"###",
-				"###",
-				'#', new ItemStack(fancy, 1, 1)
-		}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(fancy, 8, 4), new Object[] {
-				"###",
-				"# #",
-				"###",
-				'#', new ItemStack(fancy, 1, 2)
-		}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(fancy, 4, 5), new Object[] {
-				"## ",
-				"## ",
-				"   ",
-				'#', new ItemStack(fancy, 1, 7)
-		}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(fancy, 9, 6), new Object[] {
-				"###",
-				"@$@",
-				"###",
-				'#', new ItemStack(fancy, 1, 1),
-				'@', new ItemStack(fancy, 1, 3),
-				'$', new ItemStack(fancy, 1, 0)
-		}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(fancy, 8, 9), new Object[] {
-				"###",
-				"#@#",
-				"###",
-				'#', new ItemStack(fancy, 1, 8),
-				'@', new ItemStack(Items.redstone,1,0)
-		}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(fancy, 8, 10), new Object[] {
-				"###",
-				"#@#",
-				"###",
-				'#', new ItemStack(fancy, 1, 1),
-				'@', new ItemStack(ItemsCore.genericItem,1,3)
-		}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(fancy, 8, 11), new Object[] {
-				"###",
-				"#@#",
-				"###",
-				'#', new ItemStack(fancy, 1, 1),
-				'@', new ItemStack(ItemsCore.genericItem,1,12)
-		}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(fancy, 8, 12), new Object[] {
-				"###",
-				"#@#",
-				"###",
-				'#', new ItemStack(fancy, 1, 1),
-				'@', new ItemStack(Items.iron_ingot)
-		}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(fancy, 8, 13), new Object[] {
-				"###",
-				"#@#",
-				"###",
-				'#', new ItemStack(fancy, 1, 1),
-				'@', new ItemStack(Items.leather)
-		}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(fancy, 4, 14), new Object[] {
-				"## ",
-				"## ",
-				"   ",
-				'#', new ItemStack(fancy, 1, 13)
-		}));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(fancy, 4, 15), new Object[] {
-				"## ",
-				"## ",
-				"   ",
-				'#', new ItemStack(fancy, 1, 12)
-		}));
+		RecipeRegistry.fancyBlockRecipes.put(fancy, createdFrom);
+		return fancy;
 	}
-	
+
 	public static Block drops;
 	public static Block magicPlating;
 	public static Block fortifiedGlass;
@@ -473,7 +314,7 @@ public class BlocksCore {
 	public static Block chargingChamber;
 	public static Block voidStone;
 	public static Block voidGlass;
-	
+
 	public static Block concrete;
 	public static Block cacti;
 	public static Block dreadDirt;
@@ -482,37 +323,36 @@ public class BlocksCore {
 	public static Block root;
 	public static Block tallGrass;
 	public static Block thorns;
-	
+
 	public static Block magicalTeleporter;
 	public static Block magicalFurnace;
 	public static Block emberForge;
-	
+
 	public static Block levitator;
 	public static Block spreader;
 	public static Block[] fence = new Block[3];
 	public static Block torch;
-	
+
 	public static Block blockPale;
-	
+
 	public static Block platingPale;
 	public static Block mruCoilHardener;
 	public static Block mruCoil;
 	public static Block corruptionCleaner;
 	public static Block reactorSupport;
 	public static Block reactor;
-	
+
 	public static Block air;
-	
+
 	//public static Block minEjector;
 	//public static Block minInjector;
 	//public static Block mim;
 	public static Block darknessObelisk;
 	public static Block ultraHeatGen;
 	public static Block ultraFlowerBurner;
-	public static Block assembler;
 	public static Block magicalMirror;
 	public static Block magicalDisplay;
-	public static Block portal;
+	public static BlockPortal portal;
 	public static Block oreDrops;
 	public static Block invertedBlock;
 	public static Block mithrilineCrystal;
@@ -529,7 +369,7 @@ public class BlocksCore {
 	public static Block demonicPentacle;
 	public static Block weaponMaker;
 	public static Block furnaceMagic;
-	
+
 	public static Block holopad;
 	public static Block chest;
 	public static Block mimInvStorage;
@@ -543,7 +383,17 @@ public class BlocksCore {
 	public static Block mimEjectorP;
 	public static Block mimInjectorP;
 	
-	public static List<Block> fancyBlocks = new ArrayList<Block>();
+	public static Block oreMithriline;
+	public static Block crystalLamp;
+	public static Block mimic;
+	public static Block chunkLoader;
+	public static Block dimTransciever;
 	
+	public static Block water;
+	public static Block lava;
+	public static Block fire;
+
+	public static List<Block> fancyBlocks = new ArrayList<Block>();
+
 	public static Block[] lightCorruption = new Block[4];
 }

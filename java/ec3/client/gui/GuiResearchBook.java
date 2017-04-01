@@ -5,24 +5,25 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
+import javax.swing.Icon;
+
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
 
+import DummyCore.Utils.DrawUtils;
 import DummyCore.Utils.MathUtils;
 import DummyCore.Utils.MiscUtils;
 import DummyCore.Utils.Notifier;
-import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.common.FMLCommonHandler;
+import DummyCore.Utils.TessellatorWrapper;
 import ec3.api.ApiCore;
 import ec3.api.CategoryEntry;
 import ec3.api.DiscoveryEntry;
 import ec3.api.MagicianTableRecipe;
 import ec3.api.PageEntry;
 import ec3.api.RadiatingChamberRecipe;
-import ec3.api.ShapedAssemblerRecipe;
 import ec3.api.StructureBlock;
 import ec3.api.StructureRecipe;
+import ec3.common.block.BlocksCore;
 import ec3.common.mod.EssentialCraftCore;
 import ec3.utils.cfg.Config;
 import net.minecraft.block.Block;
@@ -30,25 +31,28 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.entity.RenderItem;
+import net.minecraft.client.renderer.RenderItem;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.IReloadableResourceManager;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.translation.I18n;
+import net.minecraftforge.fml.client.FMLClientHandler;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
-public class GuiResearchBook extends GuiScreen{
+public class GuiResearchBook extends GuiScreen {
 
-	protected static RenderItem itemRender = new RenderItem();
+	protected static RenderItem itemRender = Minecraft.getMinecraft().getRenderItem();
 
 	public int currentDepth;
 	public static int currentPage;
@@ -80,90 +84,78 @@ public class GuiResearchBook extends GuiScreen{
 
 	public int pressDelay;
 
-	public GuiResearchBook()
-	{
+	public GuiResearchBook() {
 		super();
 	}
 
-	public void updateScreen() 
-	{
+	public void updateScreen()  {
 		++ticksOpened;
 		--ticksBeforePressing;
 		--pressDelay;
-		if(!numberString.isEmpty() && pressDelay <= 0)
-		{
+		if(!numberString.isEmpty() && pressDelay <= 0) {
 			int buttonID = -1;
-			try
-			{
+			try {
 				buttonID = Integer.parseInt(numberString);
 			}
-			catch(NumberFormatException e)
-			{
+			catch(NumberFormatException e) {
 				Notifier.notifyCustomMod("EssentialCraft", "[ERROR]"+numberString+" is not a valid number!");
 			}
-			if(buttonID > -1)
-			{
+			if(buttonID > -1) {
 				buttonID -= 1;
-				if(currentCategory != null && currentDiscovery == null)
-				{
+				if(currentCategory != null && currentDiscovery == null) {
 					buttonID += 3;
 				}
 				if(buttonID >= 0)
-					if(buttonList.size() > buttonID)
-					{
+					if(buttonList.size() > buttonID) {
 						GuiButton button = GuiButton.class.cast(buttonList.get(buttonID));
 						if(button.enabled)
 							this.actionPerformed(button);
 					}
-			}
+			}	
 			numberString = "";
 
 		}
 	}
 
 	@Override
-	protected void keyTyped(char typed, int keyID)
-	{
-		super.keyTyped(typed, keyID);
-		if(keyID == 14 && currentCategory != null)
-		{
-			if(this.buttonList.size() > 0)
-			{
-				GuiButton button = (GuiButton) this.buttonList.get(0);
-				if(button.enabled)
-					this.actionPerformed(button);
+	protected void keyTyped(char typed, int keyID) {
+		try {
+			super.keyTyped(typed, keyID);
+			if(keyID == 14 && currentCategory != null) {
+				if(this.buttonList.size() > 0) {
+					GuiButton button = (GuiButton) this.buttonList.get(0);
+					if(button.enabled)
+						this.actionPerformed(button);
+				}
+			}
+			if(typed == '0' || typed == '1' || typed == '2' || typed == '3' || typed == '4' || typed == '5' || typed == '6' || typed == '7' || typed == '8' || typed == '9' || typed == '0') {
+				numberString += typed;
+				pressDelay = 20;
+			}
+			if(keyID == 28) {
+				pressDelay = 0;
+			}
+			if(currentCategory != null && (keyID == 205 || keyID == 203)) {
+				int press = keyID == 205 ? 2 : 1;
+				if(this.buttonList.size() > press)
+				{
+					GuiButton button = (GuiButton) this.buttonList.get(press);
+					if(button.enabled)
+						this.actionPerformed(button);
+				}
 			}
 		}
-		if(typed == '0' || typed == '1' || typed == '2' || typed == '3' || typed == '4' || typed == '5' || typed == '6' || typed == '7' || typed == '8' || typed == '9' || typed == '0')
-		{
-			numberString += typed;
-			pressDelay = 20;
-		}
-		if(keyID == 28)
-		{
-			pressDelay = 0;
-		}
-		if(currentCategory != null && (keyID == 205 || keyID == 203))
-		{
-			int press = keyID == 205 ? 2 : 1;
-			if(this.buttonList.size() > press)
-			{
-				GuiButton button = (GuiButton) this.buttonList.get(press);
-				if(button.enabled)
-					this.actionPerformed(button);
-			}
-		}
+		catch(Exception e) {}
 	}
 
-	public void initGui() 
-	{
+	public void initGui()  {
 		isLeftMouseKeyPressed = Mouse.isButtonDown(0);
 		isRightMouseKeyPressed = Mouse.isButtonDown(1);
 		firstOpened = false;
 
 		this.buttonList.clear();
 		this.labelList.clear();
-		bookTag = this.mc.thePlayer.getCurrentEquippedItem().getTagCompound();
+		bookTag = this.mc.thePlayer.getHeldItemMainhand().getTagCompound();
 		if(currentCategory == null)
 			initCategories();
 		if(currentCategory != null && currentDiscovery == null)
@@ -174,24 +166,19 @@ public class GuiResearchBook extends GuiScreen{
 		ticksBeforePressing = 1;
 	}
 
-	public void drawBackground(int p_146278_1_)
-	{
+	public void drawBackground(int p_146278_1_) {
 		int k = (this.width - 256) / 2;
 		int l = (this.height - 168) / 2;
-		if(currentCategory == null)
-		{
+		if(currentCategory == null) {
 			this.mc.renderEngine.bindTexture(gui);
 		}
-		if(currentCategory != null && currentDiscovery == null && currentCategory.specificBookTextures != null)
-		{
+		if(currentCategory != null && currentDiscovery == null && currentCategory.specificBookTextures != null) {
 			this.mc.renderEngine.bindTexture(currentCategory.specificBookTextures);
 		}
-		if(currentCategory != null && currentDiscovery == null && currentCategory.specificBookTextures == null)
-		{
+		if(currentCategory != null && currentDiscovery == null && currentCategory.specificBookTextures == null) {
 			this.mc.renderEngine.bindTexture(gui);
 		}
-		if(currentCategory != null && currentDiscovery != null)
-		{
+		if(currentCategory != null && currentDiscovery != null) {
 			if(currentCategory == null || currentCategory.specificBookTextures == null)
 				this.mc.renderEngine.bindTexture(gui);
 			else
@@ -201,30 +188,40 @@ public class GuiResearchBook extends GuiScreen{
 	}
 
 	@Override
-	public void drawScreen(int p_73863_1_, int p_73863_2_, float p_73863_3_)
-	{
+	public void drawScreen(int p_73863_1_, int p_73863_2_, float p_73863_3_) {
 		int k = (this.width - 256) / 2;
 		int l = (this.height - 168) / 2;
-		try
-		{
-		}catch(Exception e)
-		{
-			e.printStackTrace();return;
+		try {}
+		catch(Exception e) {
+			e.printStackTrace();
+			return;
 		}
 		int dWheel = Mouse.getDWheel();
-		if(currentDiscovery != null)
-		{
-			if(dWheel < 0)
-			{
-				if(this.buttonList.size() > 1)
-				{
+		if(currentDiscovery != null) {
+			if(dWheel < 0) {
+				if(this.buttonList.size() > 1) {
 					GuiButton button = (GuiButton) this.buttonList.get(2);
 					if(button.enabled)
 						this.actionPerformed(button);
 				}
 			}
-			if(dWheel > 0)
-			{
+			if(dWheel > 0) {
+				if(this.buttonList.size() > 1) {
+					GuiButton button = (GuiButton) this.buttonList.get(1);
+					if(button.enabled)
+						this.actionPerformed(button);
+				}
+			}
+		}
+		else if(currentCategory != null) {
+			if(dWheel < 0) {
+				if(this.buttonList.size() > 1) {
+					GuiButton button = (GuiButton) this.buttonList.get(2);
+					if(button.enabled)
+						this.actionPerformed(button);
+				}
+			}
+			if(dWheel > 0) {
 				if(this.buttonList.size() > 1)
 				{
 					GuiButton button = (GuiButton) this.buttonList.get(1);
@@ -232,39 +229,13 @@ public class GuiResearchBook extends GuiScreen{
 						this.actionPerformed(button);
 				}
 			}
-		}else
-		{
-			if(currentCategory != null)
-			{
-				if(dWheel < 0)
-				{
-					if(this.buttonList.size() > 1)
-					{
-						GuiButton button = (GuiButton) this.buttonList.get(2);
-						if(button.enabled)
-							this.actionPerformed(button);
-					}
-				}
-				if(dWheel > 0)
-				{
-					if(this.buttonList.size() > 1)
-					{
-						GuiButton button = (GuiButton) this.buttonList.get(1);
-						if(button.enabled)
-							this.actionPerformed(button);
-					}
-				}
-			}
 		}
-		if(isRightMouseKeyPressed && !Mouse.isButtonDown(1))
-		{
+		if(isRightMouseKeyPressed && !Mouse.isButtonDown(1)) {
 			isRightMouseKeyPressed = false;
 		}
-		if(!isRightMouseKeyPressed && Mouse.isButtonDown(1))
-		{
+		if(!isRightMouseKeyPressed && Mouse.isButtonDown(1)) {
 			isRightMouseKeyPressed = true;
-			if(!prevState.isEmpty())
-			{
+			if(!prevState.isEmpty()) {
 				Object[] tryArray = prevState.get(prevState.size()-1);
 				currentPage = Integer.parseInt(tryArray[1].toString());
 				currentPage_discovery = Integer.parseInt(tryArray[2].toString());
@@ -275,8 +246,7 @@ public class GuiResearchBook extends GuiScreen{
 		}
 		if(isLeftMouseKeyPressed && !Mouse.isButtonDown(0))
 			isLeftMouseKeyPressed = false;
-		if(FMLClientHandler.instance().getCurrentLanguage().equalsIgnoreCase("en_gb") && !firstOpened)
-		{
+		if(FMLClientHandler.instance().getCurrentLanguage().equalsIgnoreCase("en_gb") && !firstOpened) {
 			firstOpened = true;
 			this.fontRendererObj = new FontRenderer(mc.gameSettings, new ResourceLocation("essentialcraft","textures/special/research_font.png"), mc.renderEngine, false);
 			fontRendererObj.setUnicodeFlag(false);
@@ -285,41 +255,33 @@ public class GuiResearchBook extends GuiScreen{
 		}
 		hoveringText.clear();
 		drawBackground(0);
-		if(currentCategory == null)
-		{
+		if(currentCategory == null) {
 			drawCategories(p_73863_1_, p_73863_2_);
 		}
-		if(currentCategory != null && currentDiscovery == null)
-		{
+		if(currentCategory != null && currentDiscovery == null) {
 			drawDiscoveries(p_73863_1_,p_73863_2_);
 		}
-		if(currentCategory != null && currentDiscovery != null)
-		{
+		if(currentCategory != null && currentDiscovery != null) {
 			drawPage(p_73863_1_,p_73863_2_);
 		}
 		drawAllText();
-		if(!this.numberString.isEmpty())
-		{
+		if(!this.numberString.isEmpty()) {
 			RenderHelper.disableStandardItemLighting();
 			RenderHelper.enableGUIStandardItemLighting();
-			GL11.glTranslated(0, 0, 100);
-			GL11.glColor3f(1/(float)(5F-(float)pressDelay), 1/(float)(5F-(float)pressDelay), 1/(float)(5F-(float)pressDelay));
+			GlStateManager.translate(0, 0, 100);
+			GlStateManager.color(1/(float)(5F-(float)pressDelay), 1/(float)(5F-(float)pressDelay), 1/(float)(5F-(float)pressDelay));
 			this.drawCenteredString(fontRendererObj, numberString, k+128, l+172, 0xffffff);
-			GL11.glColor3f(1, 1, 1);
-			GL11.glTranslated(0, 0, -100);
+			GlStateManager.color(1, 1, 1);
+			GlStateManager.translate(0, 0, -100);
 			RenderHelper.enableStandardItemLighting();
 		}
 	}
 
 	@SuppressWarnings("unchecked")
-	public void drawAllText()
-	{
-		//TODO drawText
-		for(int i = 0; i < hoveringText.size(); ++i)
-		{
+	public void drawAllText() {
+		for(int i = 0; i < hoveringText.size(); ++i) {
 			Object obj = hoveringText.get(i);
-			if(obj instanceof Object[])
-			{
+			if(obj instanceof Object[]) {
 				Object[] drawable = (Object[]) obj;
 				List<String> listToDraw = (List<String>) drawable[0];
 				int x = Integer.parseInt(drawable[1].toString());
@@ -331,8 +293,7 @@ public class GuiResearchBook extends GuiScreen{
 	}
 
 	@SuppressWarnings("unchecked")
-	public void initDiscoveries()
-	{
+	public void initDiscoveries() {
 		currentPage = 0;
 		int k = (this.width - 256) / 2;
 		int l = (this.height - 168) / 2;
@@ -341,34 +302,29 @@ public class GuiResearchBook extends GuiScreen{
 		GuiButtonNoSound page_left = new GuiButtonNoSound(1,k+7,l+158,24,13,"");
 		GuiButtonNoSound page_right = new GuiButtonNoSound(2,k+227,l+158,24,13,"");
 		int discAmount = currentCategory.discoveries.size();
-		if(discAmount - 48*(currentPage_discovery+1) <= 0)
-		{
+		if(discAmount - 48*(currentPage_discovery+1) <= 0) {
 			page_left.enabled = false;
 		}
-		if(discAmount - 48*(currentPage_discovery+1) > 0)
-		{
+		if(discAmount - 48*(currentPage_discovery+1) > 0) {
 			page_right.enabled = true;
-		}else
+		}
+		else
 			page_right.enabled = false;
 
 		this.buttonList.add(page_left);
 		this.buttonList.add(page_right);
-		for(int i = 48*(currentPage_discovery); i < discAmount - 48*(currentPage_discovery); ++i)
-		{
+		for(int i = 48*(currentPage_discovery); i < discAmount - 48*(currentPage_discovery); ++i) {
 			int dx = k + (22*(i/6)) + 12;
 			if(i >= 24) dx += 40;
 			int dy = l + (22*(i%6)) + 22;
 			GuiButtonNoSound btnAdd = new GuiButtonNoSound(i + 3, dx, dy, 20, 20, "");
 			this.buttonList.add(btnAdd);
 		}
-
 	}
 
 	@SuppressWarnings("unchecked")
-	public void initCategories()
-	{
-		if(bookTag == null)
-		{
+	public void initCategories() {
+		if(bookTag == null) {
 			bookTag = new NBTTagCompound();
 			bookTag.setInteger("tier", 3);
 		}
@@ -376,11 +332,9 @@ public class GuiResearchBook extends GuiScreen{
 		int k = (this.width - 256) / 2 + 128;
 		int l = (this.height - 168) / 2;
 		if(ApiCore.categories != null)
-			for(int i = 0; i < ApiCore.categories.size(); ++i)
-			{
+			for(int i = 0; i < ApiCore.categories.size(); ++i) {
 				CategoryEntry cat = ApiCore.categories.get(i);
-				if(cat != null)
-				{
+				if(cat != null) {
 					GuiButtonNoSound added = new GuiButtonNoSound(i, k + (30*(i/5)) + 8, l + (30*(i%5)) + 28, 20, 20, "");
 					added.enabled = false;
 					int reqTier = cat.reqTier;
@@ -393,8 +347,7 @@ public class GuiResearchBook extends GuiScreen{
 	}
 
 	@SuppressWarnings("unchecked")
-	public void initPage()
-	{
+	public void initPage() {
 		int k = (this.width - 256) / 2;
 		int l = (this.height - 168) / 2;
 		GuiButtonNoSound back = new GuiButtonNoSound(0, k+236, l+7, 14, 18, "");
@@ -402,76 +355,66 @@ public class GuiResearchBook extends GuiScreen{
 		GuiButtonNoSound page_left = new GuiButtonNoSound(1,k+7,l+158,24,13,"");
 		GuiButtonNoSound page_right = new GuiButtonNoSound(2,k+227,l+158,24,13,"");
 		int pagesMax = currentDiscovery.pages.size();
-		if(currentPage <= 0)
-		{
+		if(currentPage <= 0) {
 			page_left.enabled = false;
 		}
-		if(currentPage + 2 >= pagesMax)
-		{
+		if(currentPage + 2 >= pagesMax) {
 			page_right.enabled = false;
 		}
 		this.buttonList.add(page_left);
 		this.buttonList.add(page_right);
 	}
 
-	public void drawPage(int mouseX, int mouseZ)
-	{
+	public void drawPage(int mouseX, int mouseZ) {
 		int pagesMax = currentDiscovery.pages.size();
-		for (int ik = 0; ik < this.buttonList.size(); ++ik)
-		{
-			GL11.glColor3f(1, 1, 1);
+		for (int ik = 0; ik < this.buttonList.size(); ++ik) {
+			GlStateManager.color(1, 1, 1);
 			GuiButton btn  = (GuiButton) this.buttonList.get(ik);
 			boolean hover = mouseX >= btn.xPosition && mouseZ >= btn.yPosition && mouseX < btn.xPosition + btn.width && mouseZ < btn.yPosition + btn.height;
 			int id = btn.id;
-			if(id == 0)
-			{
+			if(id == 0) {
 				if(currentCategory == null || currentCategory.specificBookTextures == null)
 					this.mc.renderEngine.bindTexture(gui);
 				else
 					this.mc.renderEngine.bindTexture(currentCategory.specificBookTextures);
 				if(hover)
-					GL11.glColor3f(1, 0.8F, 1);
+					GlStateManager.color(1, 0.8F, 1);
 				this.drawTexturedModalRect(btn.xPosition, btn.yPosition, 49, 238, 14, 18);
 			}
-			if(id == 1)
-			{
+			if(id == 1) {
 				if(currentCategory == null || currentCategory.specificBookTextures == null)
 					this.mc.renderEngine.bindTexture(gui);
 				else
 					this.mc.renderEngine.bindTexture(currentCategory.specificBookTextures);
 				if(hover && btn.enabled)
-					GL11.glColor3f(1, 0.8F, 1);
+					GlStateManager.color(1, 0.8F, 1);
 				if(!btn.enabled)
-					GL11.glColor3f(0.3F, 0.3F, 0.3F);
+					GlStateManager.color(0.3F, 0.3F, 0.3F);
 				this.drawTexturedModalRect(btn.xPosition, btn.yPosition, 0, 243, 24, 13);
 			}
-			if(id == 2)
-			{
+			if(id == 2) {
 				if(currentCategory == null || currentCategory.specificBookTextures == null)
 					this.mc.renderEngine.bindTexture(gui);
 				else
 					this.mc.renderEngine.bindTexture(currentCategory.specificBookTextures);
 				if(hover && btn.enabled)
-					GL11.glColor3f(1, 0.8F, 1);
+					GlStateManager.color(1, 0.8F, 1);
 				if(!btn.enabled)
-					GL11.glColor3f(0.3F, 0.3F, 0.3F);
+					GlStateManager.color(0.3F, 0.3F, 0.3F);
 				this.drawTexturedModalRect(btn.xPosition, btn.yPosition, 25, 243, 24, 13);
 			}
 		}
 		//Text Draw
-		for (int ik = 0; ik < this.buttonList.size(); ++ik)
-		{
-			GL11.glColor3f(1, 1, 1);
+		for(int ik = 0; ik < this.buttonList.size(); ++ik) {
+			GlStateManager.color(1, 1, 1);
 			GuiButton btn  = (GuiButton) this.buttonList.get(ik);
 			boolean hover = mouseX >= btn.xPosition && mouseZ >= btn.yPosition && mouseX < btn.xPosition + btn.width && mouseZ < btn.yPosition + btn.height;
 			int id = btn.id;
-			if(id == 0)
-			{
-				if(hover)
-				{
+			if(id == 0) {
+				if(hover) {
 					List<String> catStr = new ArrayList<String>();
-					catStr.add(StatCollector.translateToLocal("ec3.text.button.back"));
-					this.func_146283_a(catStr, mouseX, mouseZ);
+					catStr.add(I18n.translateToLocal("ec3.text.button.back"));
+					this.addHoveringText(catStr, mouseX, mouseZ);
 				}
 			}
 		}
@@ -481,85 +424,69 @@ public class GuiResearchBook extends GuiScreen{
 			this.drawPage_1(mouseX, mouseZ);
 	}
 
-	public void drawPage_0(int mouseX, int mouseY)
-	{
+	public void drawPage_0(int mouseX, int mouseY) {
 		PageEntry page = currentDiscovery.pages.get(currentPage);
 		int k = (this.width - 256) / 2;
 		int l = (this.height - 168) / 2;
-		if(currentPage == 0)
-		{
+		if(currentPage == 0) {
 			String added = "";
-			if(page.pageTitle == null || page.pageTitle.isEmpty())
-			{
-				if(currentDiscovery.name == null || currentDiscovery.name.isEmpty())
-				{
-					added = "\u00a7l"+StatCollector.translateToLocal("ec3book.discovery_"+currentDiscovery.id+".name");
+			if(page.pageTitle == null || page.pageTitle.isEmpty()) {
+				if(currentDiscovery.name == null || currentDiscovery.name.isEmpty()) {
+					added = "\u00a7l"+I18n.translateToLocal("ec3book.discovery_"+currentDiscovery.id+".name");
 				}
 				else
 					added = currentDiscovery.name;
-			}else
-			{
+			}
+			else {
 				added = page.pageTitle;
 			}
 			this.fontRendererObj.drawStringWithShadow(added, k+6, l+10, 0xaa88ff);
-		}else
-		{
-			if(page.pageTitle != null && !page.pageTitle.isEmpty())
-			{
-				this.fontRendererObj.drawStringWithShadow(page.pageTitle, k+6, l+10, 0xffffff);
-			}
+		}
+		else if(page.pageTitle != null && !page.pageTitle.isEmpty()) {
+			this.fontRendererObj.drawStringWithShadow(page.pageTitle, k+6, l+10, 0xffffff);
 		}
 
-		if(page.pageImgLink != null)
-		{
-			GL11.glColor3f(1, 1, 1);
-			GL11.glDisable(GL11.GL_LIGHTING);
+		if(page.pageImgLink != null) {
+			GlStateManager.color(1, 1, 1);
+			GlStateManager.disableLighting();
 			this.mc.renderEngine.bindTexture(page.pageImgLink);
-			func_152125_a(k+16, l+10, 0, 0, 256, 256, 100, 100, 256, 256);
+			drawScaledCustomSizeModalRect(k+16, l+10, 0, 0, 256, 256, 100, 100, 256, 256);
 			l += 86;
 		}
 
-		if(page.displayedItems != null)
-		{
-			for(int i = 0; i < page.displayedItems.length; ++i)
-			{
+		if(page.displayedItems != null) {
+			for(int i = 0; i < page.displayedItems.length; ++i) {
 				ItemStack is = page.displayedItems[i];
-				if(is != null)
-				{
+				if(is != null) {
 					this.drawIS(is, k + 10 + (i%4*20), l + 10 + (i/4 * 20), mouseX, mouseY, 0);
 				}
 			}
 
-			for(int i = 0; i < page.displayedItems.length; ++i)
-			{
+			for(int i = 0; i < page.displayedItems.length; ++i) {
 				ItemStack is = page.displayedItems[i];
-				if(is != null)
-				{
+				if(is != null) {
 					this.drawIS(is, k + 10 + (i%4*20), l + 10 + (i/4 * 20), mouseX, mouseY, 1);
 				}
 			}
 
 			l += page.displayedItems.length/4 * 20;
 		}
-		if(page.pageRecipe != null)
-		{
-			if(page.displayedItems != null)
-			{
+		if(page.pageRecipe != null) {
+			if(page.displayedItems != null) {
 				l += page.displayedItems.length/4 * 20;
 			}
 			l += this.drawRecipe(mouseX, mouseY, k, l, page.pageRecipe);
 		}
-		if(page.pageText != null && !page.pageText.isEmpty())
-		{
+		if(page.pageText != null && !page.pageText.isEmpty()) {
 			RenderHelper.enableStandardItemLighting();
-			GL11.glEnable(GL11.GL_BLEND);
-			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-			GL11.glDisable(GL11.GL_LIGHTING);
+			GlStateManager.enableBlend();
+			GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+			GlStateManager.disableLighting();
 			this.fontRendererObj.setUnicodeFlag(true);
 			this.fontRendererObj.drawSplitString(page.pageText, k+12, l+25, 110, currentCategory.textColor);
 			this.fontRendererObj.setUnicodeFlag(false);
-			GL11.glEnable(GL11.GL_LIGHTING);
-			GL11.glDisable(GL11.GL_BLEND);
+			GlStateManager.enableLighting();
+			GlStateManager.disableBlend();
 			RenderHelper.disableStandardItemLighting();
 			RenderHelper.enableGUIStandardItemLighting();
 		}
@@ -581,10 +508,10 @@ public class GuiResearchBook extends GuiScreen{
 
 			if(page.pageImgLink != null)
 			{
-				GL11.glDisable(GL11.GL_LIGHTING);
-				GL11.glColor3f(1, 1, 1);
+				GlStateManager.disableLighting();
+				GlStateManager.color(1, 1, 1);
 				this.mc.renderEngine.bindTexture(page.pageImgLink);
-				func_152125_a(k+16, l+10, 0, 0, 256, 256, 100, 100, 256, 256);
+				drawScaledCustomSizeModalRect(k+16, l+10, 0, 0, 256, 256, 100, 100, 256, 256);
 				l += 86;
 			}
 
@@ -625,14 +552,14 @@ public class GuiResearchBook extends GuiScreen{
 				{
 
 					RenderHelper.enableStandardItemLighting();
-					GL11.glEnable(GL11.GL_BLEND);
-					GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-					GL11.glDisable(GL11.GL_LIGHTING);
+					GlStateManager.enableBlend();
+					GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+					GlStateManager.disableLighting();
 					this.fontRendererObj.setUnicodeFlag(true);
 					this.fontRendererObj.drawSplitString(page.pageText, k+12, l+25, 110, currentCategory.textColor);
 					this.fontRendererObj.setUnicodeFlag(false);
-					GL11.glEnable(GL11.GL_LIGHTING);
-					GL11.glDisable(GL11.GL_BLEND);
+					GlStateManager.enableLighting();
+					GlStateManager.disableBlend();
 					RenderHelper.disableStandardItemLighting();
 					RenderHelper.enableGUIStandardItemLighting();
 				}
@@ -669,28 +596,23 @@ public class GuiResearchBook extends GuiScreen{
 		{
 			return drawStructureRecipe(mouseX,mouseZ,k,l,(StructureRecipe) toDraw);
 		}
-		//8
-		if(toDraw instanceof ShapedAssemblerRecipe)
-		{
-			return drawShapedAssemblerRecipe(mouseX,mouseZ,k,l,(ShapedAssemblerRecipe) toDraw);
-		}
 		return 0;
 	}
 
 	public int drawMagicianTableRecipe(int mouseX, int mouseZ, int k, int l, MagicianTableRecipe toDraw)
 	{
-		this.fontRendererObj.drawString(StatCollector.translateToLocal("ec3.txt.magicianRecipe"), k+24, l+12, 0x222222);
-		this.fontRendererObj.drawString(StatCollector.translateToLocal("MRU Required: "+toDraw.mruRequired), k+26, l+83, 0x222222);
+		this.fontRendererObj.drawString(I18n.translateToLocal("ec3.txt.magicianRecipe"), k+24, l+12, 0x222222);
+		this.fontRendererObj.drawString(I18n.translateToLocal("MRU Required: "+toDraw.mruRequired), k+26, l+83, 0x222222);
 
-		GL11.glDisable(GL11.GL_LIGHTING);
+		GlStateManager.disableLighting();
 		RenderHelper.disableStandardItemLighting();
 		RenderHelper.enableGUIStandardItemLighting();
-		GL11.glColor3f(1, 1, 1);
-		MiscUtils.bindTexture("essentialcraft", "textures/gui/mruStorage.png");
-		MiscUtils.drawTexturedModalRect(k+7, l+20, 0, 0, 18, 72,1);
+		GlStateManager.color(1, 1, 1);
+		DrawUtils.bindTexture("essentialcraft", "textures/gui/mruStorage.png");
+		DrawUtils.drawTexturedModalRect(k+7, l+20, 0, 0, 18, 72,1);
 		int percentageScaled = MathUtils.pixelatedTextureSize((int) (toDraw.mruRequired), 5000, 72);
-		IIcon icon = (IIcon) EssentialCraftCore.proxy.getClientIcon("mru");
-		MiscUtils.drawTexture(k+8, l-1+(74-percentageScaled)+20, icon, 16, percentageScaled-2, 2);
+		TextureAtlasSprite icon = (TextureAtlasSprite)EssentialCraftCore.proxy.getClientIcon("mru");
+		DrawUtils.drawTexture(k+8, l-1+(74-percentageScaled)+20, icon, 16, percentageScaled-2, 2);
 
 		this.drawSlotInRecipe(k, l, 13, 8);
 		this.drawSlotInRecipe(k, l, 13+36, 8);
@@ -729,46 +651,46 @@ public class GuiResearchBook extends GuiScreen{
 
 	public int drawRadiatingChamberRecipe(int mouseX, int mouseZ, int k, int l, RadiatingChamberRecipe toDraw)
 	{
-		this.fontRendererObj.drawString(StatCollector.translateToLocal("ec3.txt.radiatingRecipe"), k+8, l+12, 0x222222);
-		this.fontRendererObj.drawString(StatCollector.translateToLocal("MRU Required: "+toDraw.mruRequired), k+26, l+83, 0x222222);
-		EnumChatFormatting addeddCF = EnumChatFormatting.RESET;
+		this.fontRendererObj.drawString(I18n.translateToLocal("ec3.txt.radiatingRecipe"), k+8, l+12, 0x222222);
+		this.fontRendererObj.drawString(I18n.translateToLocal("MRU Required: "+toDraw.mruRequired), k+26, l+83, 0x222222);
+		TextFormatting addeddCF = TextFormatting.RESET;
 		float upperBalance = toDraw.upperBalanceLine;
 		if(upperBalance > 2.0F)upperBalance = 2.0F;
 		if(upperBalance > 1.0F)
-			addeddCF = EnumChatFormatting.RED;
+			addeddCF = TextFormatting.RED;
 		else if(upperBalance < 1.0F)
-			addeddCF = EnumChatFormatting.BLUE;
+			addeddCF = TextFormatting.BLUE;
 		else
-			addeddCF = EnumChatFormatting.AQUA;
+			addeddCF = TextFormatting.AQUA;
 		String balanceUpper = Float.toString(upperBalance);
 		if(balanceUpper.length() > 4)
 			balanceUpper = balanceUpper.substring(0, 4);
-		this.fontRendererObj.drawString(StatCollector.translateToLocal(StatCollector.translateToLocal("ec3.txt.format.upperBalance")+addeddCF+balanceUpper), k+44, l+32, 0x222222);
+		this.fontRendererObj.drawString(I18n.translateToLocal(I18n.translateToLocal("ec3.txt.format.upperBalance")+addeddCF+balanceUpper), k+44, l+32, 0x222222);
 
 		float lowerBalance = toDraw.lowerBalanceLine;
 		if(lowerBalance < 0.001F)lowerBalance = 0.001F;
 		if(lowerBalance > 1.0F)
-			addeddCF = EnumChatFormatting.RED;
+			addeddCF = TextFormatting.RED;
 		else if(lowerBalance < 1.0F)
-			addeddCF = EnumChatFormatting.BLUE;
+			addeddCF = TextFormatting.BLUE;
 		else
-			addeddCF = EnumChatFormatting.AQUA;
+			addeddCF = TextFormatting.AQUA;
 		String balanceLower = Float.toString(lowerBalance);
 		if(balanceLower.length() > 4)
 			balanceLower = balanceLower.substring(0, 4);
-		this.fontRendererObj.drawString(StatCollector.translateToLocal(StatCollector.translateToLocal("ec3.txt.format.lowerBalance")+addeddCF+balanceLower), k+44, l+32+36, 0x222222);
+		this.fontRendererObj.drawString(I18n.translateToLocal(I18n.translateToLocal("ec3.txt.format.lowerBalance")+addeddCF+balanceLower), k+44, l+32+36, 0x222222);
 
 		this.fontRendererObj.drawString("MRU/t "+(int)toDraw.costModifier, k+44+18, l+32+18, 0x222222);
 
-		GL11.glDisable(GL11.GL_LIGHTING);
+		GlStateManager.disableLighting();
 		RenderHelper.disableStandardItemLighting();
 		RenderHelper.enableGUIStandardItemLighting();
-		GL11.glColor3f(1, 1, 1);
-		MiscUtils.bindTexture("essentialcraft", "textures/gui/mruStorage.png");
-		MiscUtils.drawTexturedModalRect(k+7, l+20, 0, 0, 18, 72,1);
+		GlStateManager.color(1, 1, 1);
+		DrawUtils.bindTexture("essentialcraft", "textures/gui/mruStorage.png");
+		DrawUtils.drawTexturedModalRect(k+7, l+20, 0, 0, 18, 72,1);
 		int percentageScaled = MathUtils.pixelatedTextureSize((int) (toDraw.mruRequired*toDraw.costModifier), 5000, 72);
-		IIcon icon = (IIcon) EssentialCraftCore.proxy.getClientIcon("mru");
-		MiscUtils.drawTexture(k+8, l-1+(74-percentageScaled)+20, icon, 16, percentageScaled-2, 2);
+		TextureAtlasSprite icon = (TextureAtlasSprite) EssentialCraftCore.proxy.getClientIcon("mru");
+		DrawUtils.drawTexture(k+8, l-1+(74-percentageScaled)+20, icon, 16, percentageScaled-2, 2);
 		int positionY = 8;
 		this.drawSlotInRecipe(k, l, 13, 4+positionY);
 		this.drawSlotInRecipe(k, l, 13+18, 22+positionY);
@@ -788,7 +710,7 @@ public class GuiResearchBook extends GuiScreen{
 	{
 		try
 		{
-			this.fontRendererObj.drawString(StatCollector.translateToLocal("ec3.txt.structure"), k+8, l+12, 0x222222);
+			this.fontRendererObj.drawString(I18n.translateToLocal("ec3.txt.structure"), k+8, l+12, 0x222222);
 			l += 5;
 			StructureRecipe recipe = (StructureRecipe) toDraw;
 			int highestStructureBlk = 0;
@@ -826,117 +748,21 @@ public class GuiResearchBook extends GuiScreen{
 	}
 
 	@SuppressWarnings("unchecked")
-	public int drawShapedAssemblerRecipe(int mouseX, int mouseZ, int k, int l, ShapedAssemblerRecipe toDraw)
-	{
-		this.fontRendererObj.drawString(StatCollector.translateToLocal("ec3.txt.assemblerRecipe"), k+8, l+12, 0x222222);
-		ShapedAssemblerRecipe recipe = (ShapedAssemblerRecipe) toDraw;
-
-		RenderHelper.disableStandardItemLighting();
-		RenderHelper.enableGUIStandardItemLighting();
-		GL11.glColor3f(1, 1, 1);
-		this.fontRendererObj.drawString(StatCollector.translateToLocal("MRU Required: "+toDraw.mruRequired), k+16, l+83, 0x222222);
-
-		for(int i = 0; i < 9; ++i)
-		{
-			drawSlotInRecipe(k,l+6,(i%3)*18,(i/3)*18);
-		}
-		drawSlotInRecipe(k,l+6,80,(1)*18);
-		MiscUtils.bindTexture("minecraft", "textures/gui/container/crafting_table.png");
-
-		GL11.glColor3f(1, 1, 1);
-		this.drawTexturedModalRect(k+78-10, l+23+18, 90, 35, 22, 15);
-
-		Random rnd = new Random(System.currentTimeMillis()/50/20);
-
-		int[] drawingID = new int[9];
-
-		for(int i = 0; i < 9; ++i)
-		{
-			Object drawable = recipe.getInput()[i];
-			ItemStack needToDraw = null;
-			if(drawable instanceof ItemStack)
-				needToDraw = (ItemStack) drawable;
-			if(drawable instanceof Item)
-				needToDraw = new ItemStack((Item)drawable);
-			if(drawable instanceof Block)
-				needToDraw = new ItemStack((Block)drawable);
-			if(drawable instanceof ItemStack[])
-			{
-				drawingID[i] = rnd.nextInt(((ItemStack[])drawable).length);
-				needToDraw = ((ItemStack[])drawable)[drawingID[i]];
-			}
-			if(drawable instanceof String)
-			{
-				List<ItemStack> oreStacks = OreDictionary.getOres((String) drawable);
-				drawingID[i] = rnd.nextInt(oreStacks.size());
-				needToDraw = oreStacks.get(drawingID[i]);
-			}
-			if(drawable instanceof List)
-			{
-				List<ItemStack> oreStacks = (List<ItemStack>) drawable;
-				drawingID[i] = rnd.nextInt(oreStacks.size());
-				needToDraw = oreStacks.get(drawingID[i]);
-			}
-			if(needToDraw != null)
-			{
-				this.drawIS(needToDraw, k + 13 + (i%3*18), l + 23 + (i/3 * 18), mouseX, mouseZ, 0);
-			}
-		}
-
-		this.drawIS(recipe.getRecipeOutput(), k + 93, l + 41, mouseX, mouseZ, 0);
-
-		for(int i = 0; i < 9; ++i)
-		{
-			Object drawable = recipe.getInput()[i];
-			ItemStack needToDraw = null;
-			if(drawable instanceof ItemStack)
-				needToDraw = (ItemStack) drawable;
-			if(drawable instanceof Item)
-				needToDraw = new ItemStack((Item)drawable);
-			if(drawable instanceof Block)
-				needToDraw = new ItemStack((Block)drawable);
-			if(drawable instanceof ItemStack[])
-				needToDraw = ((ItemStack[])drawable)[drawingID[i]];
-			if(drawable instanceof String)
-			{
-				List<ItemStack> oreStacks = OreDictionary.getOres((String) drawable);
-				needToDraw = oreStacks.get(drawingID[i]);
-			}
-			if(drawable instanceof List)
-			{
-				List<ItemStack> oreStacks = (List<ItemStack>) drawable;
-				needToDraw = oreStacks.get(drawingID[i]);
-			}
-			if(needToDraw != null)
-			{
-				this.drawIS(needToDraw, k + 13 + (i%3*18), l + 23 + (i/3 * 18), mouseX, mouseZ, 1);
-			}
-		}
-
-		this.drawIS(recipe.getRecipeOutput(), k + 93, l + 41, mouseX, mouseZ, 1);
-
-
-		rnd = null;
-
-		return 80;
-	}
-
-	@SuppressWarnings("unchecked")
 	public int drawShapedOreRecipe(int mouseX, int mouseZ, int k, int l, ShapedOreRecipe toDraw)
 	{
-		this.fontRendererObj.drawString(StatCollector.translateToLocal("ec3.txt.shapedRecipe"), k+8, l+12, 0x222222);
+		this.fontRendererObj.drawString(I18n.translateToLocal("ec3.txt.shapedRecipe"), k+8, l+12, 0x222222);
 		ShapedOreRecipe recipe = (ShapedOreRecipe) toDraw;
 		for(int i = 0; i < 9; ++i)
 		{
 			drawSlotInRecipe(k,l+6,(i%3)*18,(i/3)*18);
 		}
 		drawSlotInRecipe(k,l+6,80,(1)*18);
-		MiscUtils.bindTexture("minecraft", "textures/gui/container/crafting_table.png");
+		DrawUtils.bindTexture("minecraft", "textures/gui/container/crafting_table.png");
 
-		GL11.glColor3f(1, 1, 1);
+		GlStateManager.color(1, 1, 1);
 		this.drawTexturedModalRect(k+78-10, l+23+18, 90, 35, 22, 15);
 
-		Random rnd = new Random(System.currentTimeMillis()/50/20);
+		Random rnd = new Random(System.currentTimeMillis()/1000);
 
 		int[] drawingID = new int[9];
 
@@ -1014,7 +840,7 @@ public class GuiResearchBook extends GuiScreen{
 	@SuppressWarnings("unchecked")
 	public int drawShapelessOreRecipe(int mouseX, int mouseZ, int k, int l, ShapelessOreRecipe toDraw)
 	{
-		this.fontRendererObj.drawString(StatCollector.translateToLocal("ec3.txt.shapelessRecipe"), k+8, l+12, 0x222222);
+		this.fontRendererObj.drawString(I18n.translateToLocal("ec3.txt.shapelessRecipe"), k+8, l+12, 0x222222);
 		l += 5;
 		ArrayList<Object> input = ((ShapelessOreRecipe)toDraw).getInput();
 		for(int i = 0; i < input.size(); ++i)
@@ -1029,12 +855,12 @@ public class GuiResearchBook extends GuiScreen{
 
 		drawSlotInRecipe(k,l,defaultX,defaultYDraw);
 
-		MiscUtils.bindTexture("minecraft", "textures/gui/container/crafting_table.png");
+		DrawUtils.bindTexture("minecraft", "textures/gui/container/crafting_table.png");
 
-		GL11.glColor3f(1, 1, 1);
+		GlStateManager.color(1, 1, 1);
 		this.drawTexturedModalRect(k+defaultX-10, l+defaultYDraw+18, 90, 35, 22, 15);
 
-		Random rnd = new Random(System.currentTimeMillis()/50/20);
+		Random rnd = new Random(System.currentTimeMillis()/1000);
 
 		int[] drawingID = new int[9];
 
@@ -1112,11 +938,11 @@ public class GuiResearchBook extends GuiScreen{
 
 	public void drawSlotInRecipe(int k, int l, int defaultX, int defaultY)
 	{
-		GL11.glColor3f(1, 1, 1);
-		GL11.glEnable(GL11.GL_LIGHTING);
-		GL11.glEnable(GL11.GL_DEPTH_TEST);
+		GlStateManager.color(1, 1, 1);
+		GlStateManager.enableLighting();
+		GlStateManager.enableDepth();
 		RenderHelper.enableStandardItemLighting();
-		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
+		GlStateManager.enableRescaleNormal();
 		this.drawGradientRect(k+12+defaultX, l+16+defaultY, k+12+18+defaultX, l+16+18+defaultY, 0x88ffaaff, 0x88886688);
 		this.drawGradientRect(k+12+defaultX, l+16+defaultY, k+12+1+defaultX, l+16+18+defaultY, 0xff660066, 0xff330033);
 		this.drawGradientRect(k+12+defaultX, l+16+17+defaultY, k+12+18+defaultX, l+16+18+defaultY, 0xff330033, 0xff110011);
@@ -1147,7 +973,6 @@ public class GuiResearchBook extends GuiScreen{
 			{
 				added += s.substring(s.length()-1);
 			}
-			//System.out.println(added+"|"+added.length()+"|"+(added.length() + (maxSymbols*(cycle-1)))+"|"+s.length()+"|"+i);
 			if(added.length() > maxSymbols || added.length() + (maxSymbols*(cycle-1)) == s.length() || i == s.length()-1)
 			{
 				int index = added.lastIndexOf(" ");
@@ -1168,15 +993,15 @@ public class GuiResearchBook extends GuiScreen{
 	{
 		int k = (this.width - 256) / 2;
 		int l = (this.height - 168) / 2;
-		this.fontRendererObj.drawStringWithShadow("\u00a76 \u00a7l" + StatCollector.translateToLocal("ec3.txt.book.startup"), k+6, l+10, 0xffffff);
+		this.fontRendererObj.drawStringWithShadow("\u00a76 \u00a7l" + I18n.translateToLocal("ec3.txt.book.startup"), k+6, l+10, 0xffffff);
 		CategoryEntry cat = currentCategory;
 		if(cat.name != null && !cat.name.isEmpty())
 			this.fontRendererObj.drawStringWithShadow("\u00a76 " + cat.name, k+6+128, l+10, 0xffffff);
 		else
-			this.fontRendererObj.drawStringWithShadow("\u00a76 " + StatCollector.translateToLocal("ec3book.category_"+currentCategory.id+".name"), k+6+128, l+10, 0xffffff);
+			this.fontRendererObj.drawStringWithShadow("\u00a76 " + I18n.translateToLocal("ec3book.category_"+currentCategory.id+".name"), k+6+128, l+10, 0xffffff);
 		for (int ik = 0; ik < this.buttonList.size(); ++ik)
 		{
-			GL11.glColor3f(1, 1, 1);
+			GlStateManager.color(1, 1, 1);
 			GuiButton btn  = (GuiButton) this.buttonList.get(ik);
 			boolean hover = mouseX >= btn.xPosition && mouseZ >= btn.yPosition && mouseX < btn.xPosition + btn.width && mouseZ < btn.yPosition + btn.height;
 			int id = btn.id;
@@ -1187,7 +1012,7 @@ public class GuiResearchBook extends GuiScreen{
 				else
 					this.mc.renderEngine.bindTexture(currentCategory.specificBookTextures);
 				if(hover)
-					GL11.glColor3f(1, 0.8F, 1);
+					GlStateManager.color(1, 0.8F, 1);
 				this.drawTexturedModalRect(btn.xPosition, btn.yPosition, 49, 238, 14, 18);
 			}
 			if(id == 1)
@@ -1197,9 +1022,9 @@ public class GuiResearchBook extends GuiScreen{
 				else
 					this.mc.renderEngine.bindTexture(currentCategory.specificBookTextures);
 				if(hover && btn.enabled)
-					GL11.glColor3f(1, 0.8F, 1);
+					GlStateManager.color(1, 0.8F, 1);
 				if(!btn.enabled)
-					GL11.glColor3f(0.3F, 0.3F, 0.3F);
+					GlStateManager.color(0.3F, 0.3F, 0.3F);
 				this.drawTexturedModalRect(btn.xPosition, btn.yPosition, 0, 243, 24, 13);
 			}
 			if(id == 2)
@@ -1209,15 +1034,15 @@ public class GuiResearchBook extends GuiScreen{
 				else
 					this.mc.renderEngine.bindTexture(currentCategory.specificBookTextures);
 				if(hover && btn.enabled)
-					GL11.glColor3f(1, 0.8F, 1);
+					GlStateManager.color(1, 0.8F, 1);
 				if(!btn.enabled)
-					GL11.glColor3f(0.3F, 0.3F, 0.3F);
+					GlStateManager.color(0.3F, 0.3F, 0.3F);
 				this.drawTexturedModalRect(btn.xPosition, btn.yPosition, 25, 243, 24, 13);
 			}
 			if(id > 2)
 			{
 				DiscoveryEntry disc = cat.discoveries.get((48*currentPage_discovery) + id - 3);
-				GL11.glColor3f(1, 1, 1);
+				GlStateManager.color(1, 1, 1);
 				RenderHelper.disableStandardItemLighting();
 				RenderHelper.enableGUIStandardItemLighting();
 
@@ -1226,31 +1051,31 @@ public class GuiResearchBook extends GuiScreen{
 				else
 					this.mc.renderEngine.bindTexture(currentCategory.specificBookTextures);
 				if(disc.isNew)
-					GL11.glColor3f(1, 1, 0);
+					GlStateManager.color(1, 1, 0);
 				if(!hover)
 					this.drawTexturedModalRect(btn.xPosition, btn.yPosition, 0, 222, 20, 20);
 				else
 					this.drawTexturedModalRect(btn.xPosition, btn.yPosition, 28, 222, 20, 20); 
-				GL11.glColor3f(1, 1, 1);
+				GlStateManager.color(1, 1, 1);
 				if(disc.displayStack != null)
 				{
-					GL11.glPushMatrix();
-					GL11.glDisable(GL11.GL_LIGHTING);
+					GlStateManager.pushMatrix();
+					GlStateManager.disableLighting();
 
-					itemRender.renderItemAndEffectIntoGUI(fontRendererObj, this.mc.renderEngine, disc.displayStack, btn.xPosition+2, btn.yPosition+2);
+					itemRender.renderItemAndEffectIntoGUI(disc.displayStack, btn.xPosition+2, btn.yPosition+2);
 
-					GL11.glPopMatrix();
+					GlStateManager.popMatrix();
 				}
 				else if(disc.displayTexture != null)
 				{
 					RenderHelper.enableStandardItemLighting();
 
-					GL11.glEnable(GL11.GL_BLEND);
-					GL11.glColor3f(1, 1, 1);
-					GL11.glDisable(GL11.GL_LIGHTING);
+					GlStateManager.enableBlend();
+					GlStateManager.color(1, 1, 1);
+					GlStateManager.disableLighting();
 
 					this.mc.renderEngine.bindTexture(disc.displayTexture);
-					Tessellator tec = Tessellator.instance;
+					TessellatorWrapper tec = TessellatorWrapper.getInstance();
 					tec.startDrawingQuads();
 
 					tec.addVertexWithUV(btn.xPosition+2, btn.yPosition+2, 0, 0, 0);
@@ -1260,8 +1085,8 @@ public class GuiResearchBook extends GuiScreen{
 
 					tec.draw();
 
-					GL11.glEnable(GL11.GL_LIGHTING);
-					GL11.glDisable(GL11.GL_BLEND);
+					GlStateManager.enableLighting();
+					GlStateManager.disableBlend();
 
 					RenderHelper.disableStandardItemLighting();
 					RenderHelper.enableGUIStandardItemLighting();
@@ -1269,11 +1094,11 @@ public class GuiResearchBook extends GuiScreen{
 
 				if(isCtrlKeyDown())
 				{
-					GL11.glTranslated(0, 0, 100);
-					GL11.glColor3f(1, 1, 1);
+					GlStateManager.translate(0, 0, 100);
+					GlStateManager.color(1, 1, 1);
 					this.drawString(fontRendererObj, btn.id-2+"", btn.xPosition+15, btn.yPosition+14, 0xffffff);
-					GL11.glColor3f(1, 1, 1);
-					GL11.glTranslated(0, 0, -100);
+					GlStateManager.color(1, 1, 1);
+					GlStateManager.translate(0, 0, -100);
 				}
 
 				RenderHelper.enableStandardItemLighting();
@@ -1282,7 +1107,7 @@ public class GuiResearchBook extends GuiScreen{
 		//Text Draw
 		for (int ik = 0; ik < this.buttonList.size(); ++ik)
 		{
-			GL11.glColor3f(1, 1, 1);
+			GlStateManager.color(1, 1, 1);
 			GuiButton btn  = (GuiButton) this.buttonList.get(ik);
 			boolean hover = mouseX >= btn.xPosition && mouseZ >= btn.yPosition && mouseX < btn.xPosition + btn.width && mouseZ < btn.yPosition + btn.height;
 			int id = btn.id;
@@ -1291,8 +1116,8 @@ public class GuiResearchBook extends GuiScreen{
 				if(hover)
 				{
 					List<String> catStr = new ArrayList<String>();
-					catStr.add(StatCollector.translateToLocal("ec3.text.button.back"));
-					this.func_146283_a(catStr, mouseX, mouseZ);
+					catStr.add(I18n.translateToLocal("ec3.text.button.back"));
+					this.addHoveringText(catStr, mouseX, mouseZ);
 				}
 			}
 			if(id > 2)
@@ -1300,20 +1125,20 @@ public class GuiResearchBook extends GuiScreen{
 				if(hover)
 				{
 					DiscoveryEntry disc = cat.discoveries.get((48*currentPage_discovery) + id - 3);
-					GL11.glColor3f(1, 1, 1);
+					GlStateManager.color(1, 1, 1);
 					List<String> discStr = new ArrayList<String>();
 					if(disc.name == null || disc.name.isEmpty())
-						discStr.add("\u00a7l"+StatCollector.translateToLocal("ec3book.discovery_"+disc.id+".name"));
+						discStr.add("\u00a7l"+I18n.translateToLocal("ec3book.discovery_"+disc.id+".name"));
 					else
 						discStr.add(disc.name);
 					if(disc.shortDescription == null || disc.shortDescription.isEmpty())
-						discStr.add("\u00a7o"+StatCollector.translateToLocal("ec3book.discovery_"+disc.id+".desc"));
+						discStr.add("\u00a7o"+I18n.translateToLocal("ec3book.discovery_"+disc.id+".desc"));
 					else
 						discStr.add(disc.shortDescription);
 					if(disc.isNew)
 						discStr.add("\u00a76"+"New");
-					discStr.add(StatCollector.translateToLocal("ec3.txt.contains")+disc.pages.size()+StatCollector.translateToLocal("ec3.txt.pages"));
-					this.func_146283_a(discStr, mouseX, mouseZ);
+					discStr.add(I18n.translateToLocal("ec3.txt.contains")+disc.pages.size()+I18n.translateToLocal("ec3.txt.pages"));
+					this.addHoveringText(discStr, mouseX, mouseZ);
 				}
 			}
 		}
@@ -1323,19 +1148,19 @@ public class GuiResearchBook extends GuiScreen{
 	{
 		int k = (this.width - 256) / 2;
 		int l = (this.height - 168) / 2;
-		this.fontRendererObj.drawStringWithShadow("\u00a76 \u00a7l" + StatCollector.translateToLocal("ec3.txt.book.startup"), k+6, l+10, 0xffffff);
-		this.fontRendererObj.drawStringWithShadow("\u00a76 \u00a7l" + StatCollector.translateToLocal("ec3.txt.book.categories"), k+134, l+10, 0xffffff);
-		this.fontRendererObj.drawStringWithShadow("\u00a76" + StatCollector.translateToLocal("ec3.txt.book.containedKnowledge"), k+16, l+25, 0xffffff);
+		this.fontRendererObj.drawStringWithShadow("\u00a76 \u00a7l" + I18n.translateToLocal("ec3.txt.book.startup"), k+6, l+10, 0xffffff);
+		this.fontRendererObj.drawStringWithShadow("\u00a76 \u00a7l" + I18n.translateToLocal("ec3.txt.book.categories"), k+134, l+10, 0xffffff);
+		this.fontRendererObj.drawStringWithShadow("\u00a76" + I18n.translateToLocal("ec3.txt.book.containedKnowledge"), k+16, l+25, 0xffffff);
 		int tier = bookTag.getInteger("tier");
 		for(int i = 0; i <= tier; ++i)
 		{
-			this.fontRendererObj.drawStringWithShadow("\u00a77-\u00a7o" + StatCollector.translateToLocal("ec3.txt.book.tier_"+i), k+16, l+35+(i*10), 0xffffff);
+			this.fontRendererObj.drawStringWithShadow("\u00a77-\u00a7o" + I18n.translateToLocal("ec3.txt.book.tier_"+i), k+16, l+35+(i*10), 0xffffff);
 		}
-		this.fontRendererObj.drawStringWithShadow("\u00a76" + StatCollector.translateToLocal("ec3.txt.book.edition"), k+16, l+90, 0xffffff);
+		this.fontRendererObj.drawStringWithShadow("\u00a76" + I18n.translateToLocal("ec3.txt.book.edition"), k+16, l+90, 0xffffff);
 		this.fontRendererObj.drawString("\u00a72" + FMLCommonHandler.instance().findContainerFor(EssentialCraftCore.core).getDisplayVersion()+"r", k+16, l+100, 0xffffff);
 		k += 128;
 		this.mc.renderEngine.bindTexture(gui);
-		GL11.glColor3f(1, 1, 1);
+		GlStateManager.color(1, 1, 1);
 		RenderHelper.disableStandardItemLighting();
 		RenderHelper.enableGUIStandardItemLighting();
 		for (int ik = 0; ik < this.buttonList.size(); ++ik)
@@ -1353,24 +1178,24 @@ public class GuiResearchBook extends GuiScreen{
 					this.drawTexturedModalRect(btn.xPosition, btn.yPosition, 28, 222, 20, 20); 
 				if(cat.displayStack != null)
 				{
-					GL11.glPushMatrix();
-					GL11.glDisable(GL11.GL_LIGHTING);
+					GlStateManager.pushMatrix();
+					GlStateManager.disableLighting();
 
-					itemRender.renderItemAndEffectIntoGUI(fontRendererObj, this.mc.renderEngine, cat.displayStack, btn.xPosition+2, btn.yPosition+2);
+					itemRender.renderItemAndEffectIntoGUI(cat.displayStack, btn.xPosition+2, btn.yPosition+2);
 
-					GL11.glPopMatrix();
+					GlStateManager.popMatrix();
 				}
 				else if(cat.displayTexture != null)
 				{
 					this.mc.renderEngine.bindTexture(cat.displayTexture);
-					func_146110_a(btn.xPosition+2, btn.yPosition+2, 0, 0, 16, 16, 16, 16);
+					drawModalRectWithCustomSizedTexture(btn.xPosition+2, btn.yPosition+2, 0, 0, 16, 16, 16, 16);
 				}
 				if(isCtrlKeyDown())
 				{
-					GL11.glTranslated(0, 0, 100);
+					GlStateManager.translate(0, 0, 100);
 					this.drawString(fontRendererObj, btn.id+1+"", btn.xPosition+15, btn.yPosition+14, 0xffffff);
-					GL11.glColor3f(1, 1, 1);
-					GL11.glTranslated(0, 0, -100);
+					GlStateManager.color(1, 1, 1);
+					GlStateManager.translate(0, 0, -100);
 				}
 			}
 		}
@@ -1388,78 +1213,60 @@ public class GuiResearchBook extends GuiScreen{
 				{
 					List<String> catStr = new ArrayList<String>();
 					if(cat.name == null || cat.name.isEmpty())
-						catStr.add("\u00a7l"+StatCollector.translateToLocal("ec3book.category_"+cat.id+".name"));
+						catStr.add("\u00a7l"+I18n.translateToLocal("ec3book.category_"+cat.id+".name"));
 					else
 						catStr.add(cat.name);
 					if(cat.shortDescription == null || cat.shortDescription.isEmpty())
-						catStr.add("\u00a7o"+StatCollector.translateToLocal("ec3book.category_"+cat.id+".desc"));
+						catStr.add("\u00a7o"+I18n.translateToLocal("ec3book.category_"+cat.id+".desc"));
 					else
 						catStr.add(cat.shortDescription);
-					catStr.add(StatCollector.translateToLocal("ec3.txt.contains")+cat.discoveries.size()+StatCollector.translateToLocal("ec3.txt.entries"));
-					this.func_146283_a(catStr, mouseX, mouseZ);
+					catStr.add(I18n.translateToLocal("ec3.txt.contains")+cat.discoveries.size()+I18n.translateToLocal("ec3.txt.entries"));
+					this.addHoveringText(catStr, mouseX, mouseZ);
 				}
 			}
 		}
 	}
 
 	@SuppressWarnings("unchecked")
-	public void drawIS(ItemStack toDraw, int pX, int pZ, int mX, int mZ, int phase)
-	{
-		if(toDraw != null)
-		{
-			if(toDraw.getItemDamage() == OreDictionary.WILDCARD_VALUE) {
-				toDraw = toDraw.copy();
-				toDraw.setItemDamage(0);
-			}
-			if(phase == 0)
-			{
-				itemRender.renderItemAndEffectIntoGUI(fontRendererObj, this.mc.renderEngine, toDraw, pX, pZ);
-				if(toDraw.stackSize > 1)
-				{
-					GL11.glTranslatef(0, 0, 500);
+	public void drawIS(ItemStack toDraw, int pX, int pZ, int mX, int mZ, int phase) {
+		if(toDraw != null) {
+			toDraw = MathUtils.<ItemStack>randomElement(MiscUtils.getSubItemsToDraw(toDraw), new Random(System.currentTimeMillis()/1000));
+			if(phase == 0) {
+				itemRender.renderItemAndEffectIntoGUI(toDraw, pX, pZ);
+				if(toDraw.stackSize > 1) {
+					GlStateManager.translate(0, 0, 500);
 					fontRendererObj.drawString(toDraw.stackSize+"", pX+10, pZ+10, 0x000000);
-					GL11.glTranslatef(0, 0, -500);
+					GlStateManager.translate(0, 0, -500);
 				}
-			}else
-			{
+			}
+			else {
 				boolean hover = mX >= pX && mZ >= pZ && mX < pX + 16 && mZ < pZ + 16;
-				if(hover)
-				{
+				if(hover) {
 					List<String> catStr = toDraw.getTooltip(this.mc.thePlayer, false);
 					DiscoveryEntry ds = ApiCore.findDiscoveryByIS(toDraw);
-					if(ds != null && ds != currentDiscovery)
-					{
-						catStr.add(EnumChatFormatting.ITALIC + StatCollector.translateToLocal("ec3.txt.is.press"));
-						if(Mouse.isButtonDown(0) && !isLeftMouseKeyPressed)
-						{
+					if(ds != null && ds != currentDiscovery) {
+						catStr.add(TextFormatting.ITALIC + I18n.translateToLocal("ec3.txt.is.press"));
+						if(Mouse.isButtonDown(0) && !isLeftMouseKeyPressed) {
 							prevState.add(new Object[]{currentDiscovery,currentPage,currentPage_discovery});
 							isLeftMouseKeyPressed = true;
 							currentPage = 0;
 							currentPage_discovery = 0;
 							currentDiscovery = ds;
-							if(ds != null)
-							{
-								f:for(int i = 0; i < ds.pages.size(); ++i)
-								{
+							if(ds != null) {
+								f:for(int i = 0; i < ds.pages.size(); ++i) {
 									PageEntry entry = ds.pages.get(i);
-									if(entry != null)
-									{
-										if(entry.displayedItems != null && entry.displayedItems.length > 0)
-										{
-											for(ItemStack is : entry.displayedItems)
-											{
-												if(toDraw.isItemEqual(is))
-												{
+									if(entry != null) {
+										if(entry.displayedItems != null && entry.displayedItems.length > 0) {
+											for(ItemStack is : entry.displayedItems) {
+												if(toDraw.isItemEqual(is)) {
 													currentPage = i - i%2;
 													break f;
 												}
 											}
 										}
-										if(entry.pageRecipe != null)
-										{
+										if(entry.pageRecipe != null) {
 											ItemStack result = entry.pageRecipe.getRecipeOutput();
-											if(result.isItemEqual(toDraw))
-											{
+											if(result.isItemEqual(toDraw)) {
 												currentPage = i - i%2;
 												break f;
 											}
@@ -1470,7 +1277,7 @@ public class GuiResearchBook extends GuiScreen{
 							initGui();
 						}
 					}
-					this.func_146283_a(catStr, mX, mZ);
+					this.addHoveringText(catStr, mX, mZ);
 				}
 			}
 		}
@@ -1479,54 +1286,63 @@ public class GuiResearchBook extends GuiScreen{
 	@SuppressWarnings("unchecked")
 	public void drawSB(StructureBlock drawable, int pX, int pZ, int mX, int mZ, int phase)
 	{
-		ItemStack toDraw = new ItemStack(drawable.blk,0,drawable.metadata);
-		if(phase == 0)
-		{
-			itemRender.renderItemAndEffectIntoGUI(fontRendererObj, this.mc.renderEngine, toDraw, pX, pZ);
-		}else
-		{
+		ItemStack toDraw;
+		if(Item.getItemFromBlock(drawable.blk) == null) {
+			//Handle stuff that can't be drawn
+			if(drawable.blk == Blocks.WATER) {
+				toDraw = new ItemStack(BlocksCore.water);
+			}
+			else if(drawable.blk == Blocks.LAVA) {
+				toDraw = new ItemStack(BlocksCore.lava);
+			}
+			else if(drawable.blk == Blocks.FIRE) {
+				toDraw = new ItemStack(BlocksCore.fire);
+			}
+			else if(drawable.blk == Blocks.AIR) {
+				toDraw = new ItemStack(BlocksCore.air);
+			}
+			else {
+				toDraw = new ItemStack((Item)null);
+			}
+		}
+		else {
+			toDraw = new ItemStack(drawable.blk,0,drawable.metadata);
+		}
+		if(phase == 0) {
+			itemRender.renderItemAndEffectIntoGUI(toDraw, pX, pZ);
+		}
+		else {
 			boolean hover = mX >= pX && mZ >= pZ && mX < pX + 16 && mZ < pZ + 16;
-			if(hover)
-			{
+			if(hover) {
 				List<String> catStr = toDraw.getTooltip(this.mc.thePlayer, false);
-				catStr.add(StatCollector.translateToLocal("ec3.txt.relativePosition"));
+				catStr.add(I18n.translateToLocal("ec3.txt.relativePosition"));
 				catStr.add("x: "+drawable.x);
 				catStr.add("y: "+drawable.y);
 				catStr.add("z: "+drawable.z);
-				if(ApiCore.findDiscoveryByIS(toDraw) != null)
-				{
-					catStr.add(EnumChatFormatting.ITALIC + StatCollector.translateToLocal("ec3.txt.is.press"));
-					if(Mouse.isButtonDown(0) && !this.isLeftMouseKeyPressed)
-					{
+				if(ApiCore.findDiscoveryByIS(toDraw) != null) {
+					catStr.add(TextFormatting.ITALIC + I18n.translateToLocal("ec3.txt.is.press"));
+					if(Mouse.isButtonDown(0) && !this.isLeftMouseKeyPressed) {
 						prevState.add(new Object[]{currentDiscovery,currentPage,currentPage_discovery});
 						isLeftMouseKeyPressed = true;
 						DiscoveryEntry switchTo = ApiCore.findDiscoveryByIS(toDraw);
 						currentPage = 0;
 						currentPage_discovery = 0;
 						currentDiscovery = switchTo;
-						if(switchTo != null)
-						{
-							f:for(int i = 0; i < switchTo.pages.size(); ++i)
-							{
+						if(switchTo != null) {
+							f:for(int i = 0; i < switchTo.pages.size(); ++i) {
 								PageEntry entry = switchTo.pages.get(i);
-								if(entry != null)
-								{
-									if(entry.displayedItems != null && entry.displayedItems.length > 0)
-									{
-										for(ItemStack is : entry.displayedItems)
-										{
-											if(toDraw.isItemEqual(is))
-											{
+								if(entry != null) {
+									if(entry.displayedItems != null && entry.displayedItems.length > 0) {
+										for(ItemStack is : entry.displayedItems) {
+											if(toDraw.isItemEqual(is)) {
 												currentPage = i - i%2;
 												break f;
 											}
 										}
 									}
-									if(entry.pageRecipe != null)
-									{
+									if(entry.pageRecipe != null) {
 										ItemStack result = entry.pageRecipe.getRecipeOutput();
-										if(result.isItemEqual(toDraw))
-										{
+										if(result.isItemEqual(toDraw)) {
 											currentPage = i - i%2;
 											break f;
 										}
@@ -1536,7 +1352,7 @@ public class GuiResearchBook extends GuiScreen{
 						}
 					}
 				}
-				this.func_146283_a(catStr, mX, mZ);
+				this.addHoveringText(catStr, mX, mZ);
 			}
 		}
 	}
@@ -1544,7 +1360,10 @@ public class GuiResearchBook extends GuiScreen{
 	@Override
 	protected void mouseClicked(int p_73864_1_, int p_73864_2_, int p_73864_3_)
 	{
-		super.mouseClicked(p_73864_1_, p_73864_2_, p_73864_3_);
+		try {
+			super.mouseClicked(p_73864_1_, p_73864_2_, p_73864_3_);
+		}
+		catch(Exception e) {}
 	}
 
 	protected void actionPerformed(GuiButton b) 
@@ -1623,7 +1442,7 @@ public class GuiResearchBook extends GuiScreen{
 			}
 			else
 			{
-				list.set(k, EnumChatFormatting.GRAY + (String)list.get(k));
+				list.set(k, TextFormatting.GRAY + (String)list.get(k));
 			}
 		}
 
@@ -1631,34 +1450,26 @@ public class GuiResearchBook extends GuiScreen{
 		drawHoveringText(list, p_146285_2_, p_146285_3_, (font == null ? fontRendererObj : font));
 	}
 
-	@SuppressWarnings("rawtypes")
-	protected void func_146283_a(List p_146283_1_, int p_146283_2_, int p_146283_3_)
-	{
-		//TODO listAdditions
+	protected void addHoveringText(List<String> p_146283_1_, int p_146283_2_, int p_146283_3_) {
 		hoveringText.add(new Object[]{p_146283_1_,p_146283_2_,p_146283_3_,fontRendererObj});
 		//drawHoveringText(p_146283_1_, p_146283_2_, p_146283_3_, fontRendererObj);   
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	protected void drawHoveringText(List p_146283_1_, int p_146283_2_, int p_146283_3_, FontRenderer font)
-	{
-		GL11.glDisable(GL11.GL_LIGHTING);
-		if (!p_146283_1_.isEmpty())
-		{
-			GL11.glDisable(GL12.GL_RESCALE_NORMAL);
+	protected void drawHoveringText(List<String> p_146283_1_, int p_146283_2_, int p_146283_3_, FontRenderer font) {
+		GlStateManager.disableLighting();
+		if(!p_146283_1_.isEmpty()) {
+			GlStateManager.disableRescaleNormal();
 			RenderHelper.disableStandardItemLighting();
-			GL11.glDisable(GL11.GL_LIGHTING);
-			GL11.glDisable(GL11.GL_DEPTH_TEST);
+			GlStateManager.disableLighting();
+			GlStateManager.disableDepth();
 			int k = 0;
 			Iterator<String> iterator = p_146283_1_.iterator();
 
-			while (iterator.hasNext())
-			{
+			while(iterator.hasNext()) {
 				String s = (String)iterator.next();
 				int l = font.getStringWidth(s);
 
-				if (l > k)
-				{
+				if(l > k) {
 					k = l;
 				}
 			}
@@ -1667,18 +1478,15 @@ public class GuiResearchBook extends GuiScreen{
 			int k2 = p_146283_3_ - 12;
 			int i1 = 8;
 
-			if (p_146283_1_.size() > 1)
-			{
+			if(p_146283_1_.size() > 1) {
 				i1 += 2 + (p_146283_1_.size() - 1) * 10;
 			}
 
-			if (j2 + k > this.width)
-			{
+			if(j2 + k > this.width) {
 				j2 -= 28 + k;
 			}
 
-			if (k2 + i1 + 6 > this.height)
-			{
+			if(k2 + i1 + 6 > this.height) {
 				k2 = this.height - i1 - 6;
 			}
 
@@ -1692,33 +1500,31 @@ public class GuiResearchBook extends GuiScreen{
 			this.drawGradientRect(j2 + k + 3, k2 - 3, j2 + k + 4, k2 + i1 + 3, j1, j1);
 			int k1 = 1347420415;
 			int l1 = (k1 & 16711422) >> 1 | k1 & -16777216;
-		this.drawGradientRect(j2 - 3, k2 - 3 + 1, j2 - 3 + 1, k2 + i1 + 3 - 1, k1, l1);
-		this.drawGradientRect(j2 + k + 2, k2 - 3 + 1, j2 + k + 3, k2 + i1 + 3 - 1, k1, l1);
-		this.drawGradientRect(j2 - 3, k2 - 3, j2 + k + 3, k2 - 3 + 1, k1, k1);
-		this.drawGradientRect(j2 - 3, k2 + i1 + 2, j2 + k + 3, k2 + i1 + 3, l1, l1);
-
-		for (int i2 = 0; i2 < p_146283_1_.size(); ++i2)
-		{
-			String s1 = (String)p_146283_1_.get(i2);
-			font.drawStringWithShadow(s1, j2, k2, -1);
-
-			if (i2 == 0)
-			{
-				k2 += 2;
+			this.drawGradientRect(j2 - 3, k2 - 3 + 1, j2 - 3 + 1, k2 + i1 + 3 - 1, k1, l1);
+			this.drawGradientRect(j2 + k + 2, k2 - 3 + 1, j2 + k + 3, k2 + i1 + 3 - 1, k1, l1);
+			this.drawGradientRect(j2 - 3, k2 - 3, j2 + k + 3, k2 - 3 + 1, k1, k1);
+			this.drawGradientRect(j2 - 3, k2 + i1 + 2, j2 + k + 3, k2 + i1 + 3, l1, l1);
+	
+			for(int i2 = 0; i2 < p_146283_1_.size(); ++i2) {
+				String s1 = (String)p_146283_1_.get(i2);
+				font.drawStringWithShadow(s1, j2, k2, -1);
+	
+				if(i2 == 0) {
+					k2 += 2;
+				}
+	
+				k2 += 10;
 			}
-
-			k2 += 10;
+	
+			this.zLevel = 0.0F;
+			itemRender.zLevel = 0.0F;
+			GlStateManager.enableLighting();
+			GlStateManager.enableDepth();
+			RenderHelper.enableStandardItemLighting();
+			GlStateManager.enableRescaleNormal();
 		}
-
-		this.zLevel = 0.0F;
-		itemRender.zLevel = 0.0F;
-		GL11.glEnable(GL11.GL_LIGHTING);
-		GL11.glEnable(GL11.GL_DEPTH_TEST);
-		RenderHelper.enableStandardItemLighting();
-		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
-		}
-		GL11.glEnable(GL11.GL_LIGHTING);
-		GL11.glColor3f(1, 1, 1);
+		GlStateManager.enableLighting();
+		GlStateManager.color(1, 1, 1);
 	}
 
 	public boolean doesGuiPauseGame()

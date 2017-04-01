@@ -4,10 +4,11 @@ import java.util.UUID;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ITickable;
 import ec3.api.EnumStructureType;
 import ec3.api.IStructurePiece;
 
-public class TileecRedstoneController extends TileEntity implements IStructurePiece {
+public class TileecRedstoneController extends TileEntity implements IStructurePiece, ITickable {
 	public TileecController controller;
 	public UUID uuid = UUID.randomUUID();
 	public int setting;
@@ -18,14 +19,15 @@ public class TileecRedstoneController extends TileEntity implements IStructurePi
 		setting = p_145839_1_.getInteger("setting");
 	}
 	
-	public void writeToNBT(NBTTagCompound p_145841_1_) {
+	public NBTTagCompound writeToNBT(NBTTagCompound p_145841_1_) {
 		super.writeToNBT(p_145841_1_);
 		p_145841_1_.setInteger("setting", setting);
+		return p_145841_1_;
 	}
 	
 	@Override
 	public EnumStructureType getStructure() {
-		return EnumStructureType.MRUCUContaigementChamber;
+		return EnumStructureType.MRUCUEnrichmentChamber;
 	}
 
 	@Override
@@ -40,11 +42,11 @@ public class TileecRedstoneController extends TileEntity implements IStructurePi
 	}
 	
 	@Override
-	public void updateEntity() {
+	public void update() {
 		++tickTimer;
 		if(tickTimer >= 20) {
 			tickTimer = 0;
-			worldObj.notifyBlockChange(xCoord, yCoord, zCoord, worldObj.getBlock(xCoord, yCoord, zCoord));
+			worldObj.notifyBlockOfStateChange(pos, worldObj.getBlockState(pos).getBlock());
 		}
 	}
 	

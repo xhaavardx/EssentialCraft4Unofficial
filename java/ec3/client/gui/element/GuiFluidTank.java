@@ -1,9 +1,10 @@
 package ec3.client.gui.element;
 
 import DummyCore.Client.GuiElement;
+import DummyCore.Utils.DrawUtils;
 import DummyCore.Utils.MathUtils;
-import DummyCore.Utils.MiscUtils;
-import net.minecraft.util.IIcon;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidTank;
@@ -24,12 +25,11 @@ public class GuiFluidTank extends GuiElement{
 
 	@Override
 	public ResourceLocation getElementTexture() {
-		// TODO Auto-generated method stub
 		return rec;
 	}
 
 	@Override
-	public void draw(int posX, int posY) {
+	public void draw(int posX, int posY, int mouseX, int mouseY) {
 		this.drawTexturedModalRect(posX, posY, 0, 0, 18, 54);
 		this.drawTexturedModalRect(posX, posY+53, 0, 71, 18, 1);
 		if(tile != null)
@@ -37,22 +37,20 @@ public class GuiFluidTank extends GuiElement{
 			FluidStack fStk = tile.getFluid();
 			if(fStk != null && fStk.amount > 0)
 			{
-				IIcon icon = fStk.getFluid().getIcon(fStk);
+				TextureAtlasSprite icon = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(fStk.getFluid().getFlowing().toString());
 				int scale = MathUtils.pixelatedTextureSize(fStk.amount, tile.getCapacity(), 52);
-				MiscUtils.drawTexture(posX+1, posY+1+(52-scale), icon, 16, scale, 1);
+				DrawUtils.drawTexture(posX+1, posY+1+(52-scale), icon, 16, scale, 1);
 			}
 		}
 	}
 
 	@Override
 	public int getX() {
-		// TODO Auto-generated method stub
 		return x;
 	}
 
 	@Override
 	public int getY() {
-		// TODO Auto-generated method stub
 		return y;
 	}
 

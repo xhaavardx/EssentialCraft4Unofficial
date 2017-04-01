@@ -1,0 +1,139 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "minecraft:cube_all",
+        "textures": { "all": "essentialcraft:blocks/fancyBlocks/coldStone" }
+    },
+    "variants": {
+        "type": {
+            "ancient_tile": {
+                "submodel": {
+                    "overlay": {
+                        "model": "essentialcraft:overlay",
+                        "textures": { "out": "essentialcraft:blocks/fancyBlocks/overlay/overlay_ancientTile" }
+                    }
+                }
+            },
+            "big_tile": {
+                "submodel": {
+                    "overlay": {
+                        "model": "essentialcraft:overlay",
+                        "textures": { "out": "essentialcraft:blocks/fancyBlocks/overlay/overlay_bigTile" }
+                    }
+                }
+            },
+            "brick": {
+                "submodel": {
+                    "overlay": {
+                        "model": "essentialcraft:overlay",
+                        "textures": { "out": "essentialcraft:blocks/fancyBlocks/overlay/overlay_brick" }
+                    }
+                }
+            },
+            "fancy_tile": {
+                "submodel": {
+                    "overlay": {
+                        "model": "essentialcraft:overlay",
+                        "textures": { "out": "essentialcraft:blocks/fancyBlocks/overlay/overlay_fancyTile" }
+                    }
+                }
+            },
+            "pressured_tile": {
+                "submodel": {
+                    "overlay": {
+                        "model": "essentialcraft:overlay",
+                        "textures": { "out": "essentialcraft:blocks/fancyBlocks/overlay/overlay_pressuredTile" }
+                    }
+                }
+            },
+            "small_tiles": {
+                "submodel": {
+                    "overlay": {
+                        "model": "essentialcraft:overlay",
+                        "textures": { "out": "essentialcraft:blocks/fancyBlocks/overlay/overlay_smallTiles" }
+                    }
+                }
+            },
+            "temple": {
+                "submodel": {
+                    "overlay": {
+                        "model": "essentialcraft:overlay",
+                        "textures": { "out": "essentialcraft:blocks/fancyBlocks/overlay/overlay_temple" }
+                    }
+                }
+            },
+            "tiles": {
+                "submodel": {
+                    "overlay": {
+                        "model": "essentialcraft:overlay",
+                        "textures": { "out": "essentialcraft:blocks/fancyBlocks/overlay/overlay_tiles" }
+                    }
+                }
+            },
+            "futuristic_tile": {
+                "submodel": {
+                    "overlay": {
+                        "model": "essentialcraft:overlay",
+                        "textures": { "out": "essentialcraft:blocks/fancyBlocks/overlay/overlay_futuristicTile" }
+                    }
+                }
+            },
+            "machine": {
+                "submodel": {
+                    "overlay": {
+                        "model": "essentialcraft:overlay",
+                        "textures": { "out": "essentialcraft:blocks/fancyBlocks/overlay/overlay_machine" }
+                    }
+                }
+            },
+            "runic": {
+                "submodel": {
+                    "overlay": {
+                        "model": "essentialcraft:overlay",
+                        "textures": { "out": "essentialcraft:blocks/fancyBlocks/overlay/overlay_runic" }
+                    }
+                }
+            },
+            "nether_star": {
+                "submodel": {
+                    "overlay": {
+                        "model": "essentialcraft:overlay",
+                        "textures": { "out": "essentialcraft:blocks/fancyBlocks/overlay/overlay_netherStar" }
+                    }
+                }
+            },
+            "plate": {
+                "submodel": {
+                    "overlay": {
+                        "model": "essentialcraft:overlay",
+                        "textures": { "out": "essentialcraft:blocks/fancyBlocks/overlay/overlay_plate" }
+                    }
+                }
+            },
+            "packed_plate": {
+                "submodel": {
+                    "overlay": {
+                        "model": "essentialcraft:overlay",
+                        "textures": { "out": "essentialcraft:blocks/fancyBlocks/overlay/overlay_packedPlate" }
+                    }
+                }
+            },
+            "double_plate": {
+                "submodel": {
+                    "overlay": {
+                        "model": "essentialcraft:overlay",
+                        "textures": { "out": "essentialcraft:blocks/fancyBlocks/overlay/overlay_doublePlate" }
+                    }
+                }
+            },
+            "gem": {
+                "submodel": {
+                    "overlay": {
+                        "model": "essentialcraft:overlay",
+                        "textures": { "out": "essentialcraft:blocks/fancyBlocks/overlay/overlay_gem" }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -5,54 +5,51 @@ import java.util.Random;
 
 import org.lwjgl.input.Keyboard;
 
+import DummyCore.Client.IModelRegisterer;
+import DummyCore.Client.ModelUtils;
 import DummyCore.Utils.DummyData;
+import DummyCore.Utils.IItemOverlayElement;
 import DummyCore.Utils.MathUtils;
 import DummyCore.Utils.MiscUtils;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import ec3.api.GunRegistry;
 import ec3.api.GunRegistry.GunMaterial;
 import ec3.api.GunRegistry.GunType;
 import ec3.api.GunRegistry.LenseMaterial;
 import ec3.api.GunRegistry.ScopeMaterial;
 import ec3.common.entity.EntityMRURay;
-import ec3.common.mod.EssentialCraftCore;
+import ec3.common.registry.SoundRegistry;
 import ec3.utils.common.ECUtils;
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.block.model.ModelBakery;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.MobEffects;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.EnumAction;
-import net.minecraft.item.EnumRarity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.IIcon;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.StatCollector;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 
-public class ItemGun extends ItemStoresMRUInNBT
-{
+public class ItemGun extends ItemStoresMRUInNBT implements IModelRegisterer {
 	Random rnd = new Random();
-	public IIcon[] baseIcons = new IIcon[GunRegistry.gunMaterials.size()];
-	public IIcon[] handleIcons = new IIcon[GunRegistry.gunMaterials.size()];
-	public IIcon[] deviceIcons = new IIcon[GunRegistry.gunMaterials.size()];
-	public IIcon[] lenseIcons = new IIcon[GunRegistry.lenseMaterials.size()];
-	public IIcon[] scopeIcons = new IIcon[GunRegistry.scopeMaterials.size()];
 
 	public String gunType;
-
-	@SideOnly(Side.CLIENT)
-	public boolean requiresMultipleRenderPasses()
-	{
-		return true;
-	}
 
 	public ItemGun(String s)
 	{
@@ -67,11 +64,11 @@ public class ItemGun extends ItemStoresMRUInNBT
 	@Override
 	public void onUpdate(ItemStack itemStack, World world, Entity entity, int indexInInventory, boolean isCurrentItem)
 	{
-		if(isCurrentItem && this.gunType.equals("gatling"))
+		if(isCurrentItem && this.gunType.equalsIgnoreCase("gatling"))
 		{
 			if(entity instanceof EntityLivingBase)
 			{
-				EntityLivingBase.class.cast(entity).addPotionEffect(new PotionEffect(Potion.moveSlowdown.id,3,3,true));
+				EntityLivingBase.class.cast(entity).addPotionEffect(new PotionEffect(MobEffects.SLOWNESS,3,3,true,true));
 			}
 		}
 		if(MiscUtils.getStackTag(itemStack).hasKey("cool"))
@@ -86,56 +83,48 @@ public class ItemGun extends ItemStoresMRUInNBT
 			float max = MiscUtils.getStackTag(itemStack).getCompoundTag("stats").getFloat("shots");
 			if(current+1 >= max)
 			{
-				Vec3 look = entity.getLookVec();
-				look.rotateAroundY(-0.5F);
-				world.spawnParticle("smoke", entity.posX+look.xCoord, entity.posY-0.5D+look.yCoord, entity.posZ+look.zCoord, 0, 0, 0);
+				Vec3d look = entity.getLookVec();
+				look.rotatePitch(-0.5F);
+				world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, entity.posX+look.xCoord, entity.posY-0.5D+look.yCoord, entity.posZ+look.zCoord, 0, 0, 0);
 			}
 		}
 		super.onUpdate(itemStack, world, entity, indexInInventory, isCurrentItem);
 	}
 
-	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
-	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4) 
+	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List<String> par3List, boolean par4) 
 	{
 		if(MiscUtils.getStackTag(par1ItemStack).hasKey("stats") && Keyboard.isKeyDown(Keyboard.KEY_LSHIFT))
 		{
 			NBTTagCompound stats = MiscUtils.getStackTag(par1ItemStack).getCompoundTag("stats");
-			par3List.add(StatCollector.translateToLocal("ec3.gun.txt.damage")+" "+MathHelper.floor_float(stats.getFloat("damage")));
-			par3List.add(StatCollector.translateToLocal("ec3.gun.txt.durability")+" "+MathHelper.floor_float(stats.getFloat("durability")));
-			par3List.add(StatCollector.translateToLocal("ec3.gun.txt.reload")+" "+MathHelper.floor_float(stats.getFloat("reload")));
-			par3List.add(StatCollector.translateToLocal("ec3.gun.txt.knockback")+" "+MathHelper.floor_float(stats.getFloat("knockback")));
-			par3List.add(StatCollector.translateToLocal("ec3.gun.txt.speed")+" "+MathHelper.floor_float(stats.getFloat("speed")));
-			par3List.add(StatCollector.translateToLocal("ec3.gun.txt.spread")+" "+MathHelper.floor_float(stats.getFloat("spread")));
-			par3List.add(StatCollector.translateToLocal("ec3.gun.txt.shots")+" "+MathHelper.floor_float(stats.getFloat("shots")));
-			par3List.add(StatCollector.translateToLocal("ec3.gun.txt.zoom")+" "+MathHelper.floor_float(stats.getFloat("zoom")));
-			par3List.add(StatCollector.translateToLocal("ec3.gun.txt.balance_"+""+MathHelper.floor_float(stats.getFloat("balance"))));
+			par3List.add(I18n.translateToLocal("ec3.gun.txt.damage")+" "+MathHelper.floor_float(stats.getFloat("damage")));
+			par3List.add(I18n.translateToLocal("ec3.gun.txt.durability")+" "+MathHelper.floor_float(stats.getFloat("durability")));
+			par3List.add(I18n.translateToLocal("ec3.gun.txt.reload")+" "+MathHelper.floor_float(stats.getFloat("reload")));
+			par3List.add(I18n.translateToLocal("ec3.gun.txt.knockback")+" "+MathHelper.floor_float(stats.getFloat("knockback")));
+			par3List.add(I18n.translateToLocal("ec3.gun.txt.speed")+" "+MathHelper.floor_float(stats.getFloat("speed")));
+			par3List.add(I18n.translateToLocal("ec3.gun.txt.spread")+" "+MathHelper.floor_float(stats.getFloat("spread")));
+			par3List.add(I18n.translateToLocal("ec3.gun.txt.shots")+" "+MathHelper.floor_float(stats.getFloat("shots")));
+			par3List.add(I18n.translateToLocal("ec3.gun.txt.zoom")+" "+MathHelper.floor_float(stats.getFloat("zoom")));
+			par3List.add(I18n.translateToLocal("ec3.gun.txt.balance_"+""+MathHelper.floor_float(stats.getFloat("balance"))));
 		}else if(MiscUtils.getStackTag(par1ItemStack).hasKey("stats"))
 		{
-			par3List.add(EnumChatFormatting.BLUE+""+EnumChatFormatting.ITALIC+StatCollector.translateToLocal("ec3.txt.viewInfoHotkey"));
+			par3List.add(TextFormatting.BLUE+""+TextFormatting.ITALIC+I18n.translateToLocal("ec3.txt.viewInfoHotkey"));
 		}
 		super.addInformation(par1ItemStack, par2EntityPlayer, par3List, par4);
 	}
 
-	@SuppressWarnings("rawtypes")
-	@Override
-	public void getSubItems(Item par1, CreativeTabs par2CreativeTabs, List par3List)
-	{
-		super.getSubItems(par1, par2CreativeTabs, par3List);
-	}
-
-	public ItemStack onItemRightClick(ItemStack gun, World w, EntityPlayer p)
+	public ActionResult<ItemStack> onItemRightClick(ItemStack gun, World w, EntityPlayer p, EnumHand h)
 	{
 		if(!gun.getTagCompound().hasKey("base") && !w.isRemote)
 		{
 			createRandomGun(gun);
-			return gun;
+			return new ActionResult(EnumActionResult.PASS,gun);
 		}
-		if(p.isUsingItem())
-			return gun;
+		if(p.isHandActive())
+			return new ActionResult(EnumActionResult.PASS,gun);
 		if(this.gunType.equalsIgnoreCase("rifle") || this.gunType.equalsIgnoreCase("gatling"))
 		{
-			p.setItemInUse(gun, this.getMaxItemUseDuration(gun));
+			p.setActiveHand(h);
 		}
 		else
 		{
@@ -145,14 +134,17 @@ public class ItemGun extends ItemStoresMRUInNBT
 				if(gun.getTagCompound().hasKey("lense"))
 				{
 					String lenseID = gun.getTagCompound().getString("lense");
-					if(lenseID.equals("chaos"))
-						balance = 1;
-					if(lenseID.equals("frozen"))
-						balance = 2;
-					if(lenseID.equals("pure"))
-						balance = 3;
-					if(lenseID.equals("shade"))
-						balance = 4;
+					LenseMaterial lense = GunRegistry.getLenseFromID(lenseID);
+					for(GunType gt : GunType.values()) {
+						if(lense != null && lense.materialData.containsKey(gt))
+						{
+							for(DummyData d : lense.materialData.get(gt))
+							{
+								if(d.fieldName.equalsIgnoreCase("balance"))
+									balance = (int)Float.parseFloat(d.fieldValue);
+							}
+						}
+					}
 				}
 				if(MiscUtils.getStackTag(gun).hasKey("stats"))
 				{
@@ -167,14 +159,14 @@ public class ItemGun extends ItemStoresMRUInNBT
 					}
 					if(MiscUtils.getStackTag(gun).hasKey("cool"))
 					{
-						return gun;
+						return new ActionResult(EnumActionResult.PASS,gun);
 					}
 					if(MiscUtils.getStackTag(gun).getFloat("gunShots")+1 <= stats.getFloat("shots"))
 						MiscUtils.getStackTag(gun).setFloat("gunShots", MiscUtils.getStackTag(gun).getFloat("gunShots")+1);
 					else
 					{
-						p.setItemInUse(gun, MathHelper.floor_float(stats.getFloat("reload")*20));
-						return gun;
+						p.setActiveHand(h);
+						return new ActionResult(EnumActionResult.PASS,gun);
 					}
 					if(ECUtils.tryToDecreaseMRUInStorage(p, (int) -stats.getFloat("damage")*10) || this.setMRU(gun, (int) -stats.getFloat("damage")*10))
 					{
@@ -184,14 +176,14 @@ public class ItemGun extends ItemStoresMRUInNBT
 						{
 							if(!w.isRemote && w.rand.nextFloat() <= 0.25F)
 							{
-								w.playSound(p.posX, p.posY, p.posZ, "random.break", 1, 1, false);
+								w.playSound(p.posX, p.posY, p.posZ, SoundEvents.ENTITY_ITEM_BREAK, SoundCategory.PLAYERS, 1, 1, false);
 								MiscUtils.getStackTag(gun).setFloat("gunShots", stats.getFloat("shots"));
 							}
 						}
 
 
 						MiscUtils.getStackTag(gun).setFloat("cool", stats.getFloat("speed")*2);
-						w.playSound(p.posX, p.posY, p.posZ, "essentialcraft:sound.beam", 0.1F+stats.getFloat("damage")/100, 2-stats.getFloat("damage")/50, false);
+						w.playSound(p.posX, p.posY, p.posZ, SoundRegistry.gunBeam, SoundCategory.PLAYERS, 0.1F+stats.getFloat("damage")/100, 2-stats.getFloat("damage")/50, false);
 						EntityMRURay ray = new EntityMRURay(w,p,stats.getFloat("damage"),stats.getFloat("spread")/2,balance);
 						if(!w.isRemote)
 							w.spawnEntityInWorld(ray);
@@ -200,7 +192,7 @@ public class ItemGun extends ItemStoresMRUInNBT
 				}
 			}
 		}
-		return gun;
+		return new ActionResult(EnumActionResult.PASS,gun);
 	}
 
 	public static void createRandomGun(ItemStack gun)
@@ -211,18 +203,15 @@ public class ItemGun extends ItemStoresMRUInNBT
 		tag.setString("device", GunRegistry.gunMaterials.get(rand.nextInt(GunRegistry.gunMaterials.size())).id);
 		tag.setString("handle", GunRegistry.gunMaterials.get(rand.nextInt(GunRegistry.gunMaterials.size())).id);
 		tag.setString("lense", GunRegistry.lenseMaterials.get(rand.nextInt(GunRegistry.lenseMaterials.size())).id);
-		ItemGun g = (ItemGun) gun.getItem();
-		if(g.gunType == "sniper")
+		ItemGun g = (ItemGun)gun.getItem();
+		if(g.gunType.equalsIgnoreCase("sniper"))
 		{
 			tag.setString("scope", GunRegistry.scopeMaterialsSniper.get(rand.nextInt(GunRegistry.scopeMaterialsSniper.size())).id);
-		}else
-			if(g.gunType == "gatling")
-			{
-
-			}else
-			{
-				tag.setString("scope", GunRegistry.scopeMaterials.get(rand.nextInt(GunRegistry.scopeMaterials.size())).id);
-			}
+		}
+		else if(!g.gunType.equalsIgnoreCase("gatling"))
+		{
+			tag.setString("scope", GunRegistry.scopeMaterials.get(rand.nextInt(GunRegistry.scopeMaterials.size())).id);
+		}
 		gun.setTagCompound(tag);
 		calculateGunStats(gun);
 	}
@@ -252,75 +241,45 @@ public class ItemGun extends ItemStoresMRUInNBT
 		float balance = 0;
 		GunType gt = 
 				iGun.gunType.equalsIgnoreCase("pistol") ? GunType.PISTOL :
-				iGun.gunType.equalsIgnoreCase("rifle") ? GunType.RIFLE :
-				iGun.gunType.equalsIgnoreCase("sniper") ? GunType.SNIPER :
-				iGun.gunType.equalsIgnoreCase("gatling") ? GunType.GATLING :
-				GunType.PISTOL;
+					iGun.gunType.equalsIgnoreCase("rifle") ? GunType.RIFLE :
+						iGun.gunType.equalsIgnoreCase("sniper") ? GunType.SNIPER :
+							iGun.gunType.equalsIgnoreCase("gatling") ? GunType.GATLING :
+								GunType.PISTOL;
 
 
 		if(gunTag.hasKey("base"))
 		{
-			for(int i = 0; i < GunRegistry.gunMaterials.size(); ++i)
-			{
-				if(GunRegistry.gunMaterials.get(i).id.equalsIgnoreCase(gunTag.getString("base")))
-				{
-					base = GunRegistry.gunMaterials.get(i);
-				}
-			}
+			base = GunRegistry.getGunFromID(gunTag.getString("base"));
 		}
+
 		if(gunTag.hasKey("device"))
 		{
-			for(int i = 0; i < GunRegistry.gunMaterials.size(); ++i)
-			{
-				if(GunRegistry.gunMaterials.get(i).id.equalsIgnoreCase(gunTag.getString("device")))
-				{
-					device = GunRegistry.gunMaterials.get(i);
-				}
-			}
+			device = GunRegistry.getGunFromID(gunTag.getString("device"));
 		}
+
 		if(gunTag.hasKey("handle"))
 		{
-			for(int i = 0; i < GunRegistry.gunMaterials.size(); ++i)
-			{
-				if(GunRegistry.gunMaterials.get(i).id.equalsIgnoreCase(gunTag.getString("handle")))
-				{
-					handle = GunRegistry.gunMaterials.get(i);
-				}
-			}
+			handle = GunRegistry.getGunFromID(gunTag.getString("handle"));
 		}
+
 		if(gunTag.hasKey("lense"))
 		{
-			for(int i = 0; i < GunRegistry.lenseMaterials.size(); ++i)
-			{
-				if(GunRegistry.lenseMaterials.get(i).id.equalsIgnoreCase(gunTag.getString("lense")))
-				{
-					lense = GunRegistry.lenseMaterials.get(i);
-				}
-			}
+			lense = GunRegistry.getLenseFromID(gunTag.getString("lense"));
 		}
+
 		if(gunTag.hasKey("scope"))
 		{
 			if(ItemGun.class.cast(gun.getItem()).gunType.equalsIgnoreCase("sniper"))
 			{
-				for(int i = 0; i < GunRegistry.scopeMaterialsSniper.size(); ++i)
-				{
-					if(GunRegistry.scopeMaterialsSniper.get(i).id.equalsIgnoreCase(gunTag.getString("scope")))
-					{
-						scope = GunRegistry.scopeMaterialsSniper.get(i);
-					}
-				}
-			}else
+				scope = GunRegistry.getScopeSniperFromID(gunTag.getString("scope"));
+			}
+			else
 			{
-				for(int i = 0; i < GunRegistry.scopeMaterials.size(); ++i)
-				{
-					if(GunRegistry.scopeMaterials.get(i).id.equalsIgnoreCase(gunTag.getString("scope")))
-					{
-						scope = GunRegistry.scopeMaterials.get(i);
-					}
-				}
+				scope = GunRegistry.getScopeFromID(gunTag.getString("scope"));
 			}
 		}
-		if(base != null)
+
+		if(base != null && base.materialData.containsKey(gt))
 		{
 			for(DummyData d : base.materialData.get(gt))
 			{
@@ -340,7 +299,8 @@ public class ItemGun extends ItemStoresMRUInNBT
 					shots += Float.parseFloat(d.fieldValue);  
 			}
 		}
-		if(handle != null)
+
+		if(handle != null && handle.materialData.containsKey(gt))
 		{
 			for(DummyData d : handle.materialData.get(gt))
 			{
@@ -360,7 +320,8 @@ public class ItemGun extends ItemStoresMRUInNBT
 					shots += Float.parseFloat(d.fieldValue)/3;   
 			}
 		}
-		if(device != null)
+
+		if(device != null && device.materialData.containsKey(gt))
 		{
 			for(DummyData d : device.materialData.get(gt))
 			{
@@ -380,7 +341,8 @@ public class ItemGun extends ItemStoresMRUInNBT
 					shots += Float.parseFloat(d.fieldValue)/3;   
 			}
 		}
-		if(lense != null && lense.materialData.get(gt) != null)
+
+		if(lense != null && lense.materialData.containsKey(gt))
 		{
 			for(DummyData d : lense.materialData.get(gt))
 			{
@@ -389,31 +351,21 @@ public class ItemGun extends ItemStoresMRUInNBT
 				if(d.fieldName.equalsIgnoreCase("damage"))
 					damage += Float.parseFloat(d.fieldValue)/3;
 				if(d.fieldName.equalsIgnoreCase("reload"))
-					reload += Float.parseFloat(d.fieldValue)/3;  
+					reload += Float.parseFloat(d.fieldValue)/3;
 				if(d.fieldName.equalsIgnoreCase("knockback"))
-					knockback += Float.parseFloat(d.fieldValue)/3;  
+					knockback += Float.parseFloat(d.fieldValue)/3;
 				if(d.fieldName.equalsIgnoreCase("spread"))
-					spread += Float.parseFloat(d.fieldValue)/3;  
+					spread += Float.parseFloat(d.fieldValue)/3;
 				if(d.fieldName.equalsIgnoreCase("speed"))
-					speed += Float.parseFloat(d.fieldValue)/3;  
+					speed += Float.parseFloat(d.fieldValue)/3;
 				if(d.fieldName.equalsIgnoreCase("shots"))
-					shots += Float.parseFloat(d.fieldValue)/3;   
+					shots += Float.parseFloat(d.fieldValue)/3;
+				if(d.fieldName.equalsIgnoreCase("balance"))
+					balance = (int)Float.parseFloat(d.fieldValue);
 			}
-
-		}
-		if(lense != null)
-		{
-			if(lense.id.equalsIgnoreCase("chaos"))
-				balance = 1;
-			if(lense.id.equalsIgnoreCase("frozen"))
-				balance = 2;
-			if(lense.id.equalsIgnoreCase("pure"))
-				balance = 3;
-			if(lense.id.equalsIgnoreCase("shade"))
-				balance = 4;
 		}
 
-		if(scope != null)
+		if(scope != null && scope.materialData.containsKey(gt))
 		{
 			for(DummyData d : scope.materialData.get(gt))
 			{
@@ -475,7 +427,7 @@ public class ItemGun extends ItemStoresMRUInNBT
 		gunTag.setTag("stats", stats);
 	}
 
-	public ItemStack onEaten(ItemStack gun, World w, EntityPlayer p)
+	public ItemStack onItemUseFinish(ItemStack gun, World w, EntityLivingBase p)
 	{
 		if(gun.hasTagCompound())
 		{
@@ -489,72 +441,40 @@ public class ItemGun extends ItemStoresMRUInNBT
 		return gun;
 	}
 
-	public void onPlayerStoppedUsing(ItemStack gun, World w, EntityPlayer p, int useTicks) 
+	public void onUsingTick(ItemStack stack, EntityLivingBase player, int count)
 	{
-	}
-
-	public EnumRarity getRarity(ItemStack gun)
-	{
-		return super.getRarity(gun);
-	}
-
-	@SideOnly(Side.CLIENT)
-	public void registerIcons(IIconRegister reg)
-	{
-		baseIcons = new IIcon[GunRegistry.gunMaterials.size()];
-		handleIcons = new IIcon[GunRegistry.gunMaterials.size()];
-		deviceIcons = new IIcon[GunRegistry.gunMaterials.size()];
-		lenseIcons = new IIcon[GunRegistry.lenseMaterials.size()];
-		if(this.gunType != "sniper")
-			scopeIcons = new IIcon[GunRegistry.scopeMaterials.size()];
-		else
-			scopeIcons = new IIcon[GunRegistry.scopeMaterialsSniper.size()];
-
-		this.itemIcon = reg.registerIcon("essentialcraft:null");
-		for(int i = 0; i < this.baseIcons.length; ++i)
-			this.baseIcons[i] = reg.registerIcon("essentialcraft:guns/"+this.gunType+"/base/"+GunRegistry.gunMaterials.get(i).id);
-		for(int i = 0; i < this.deviceIcons.length; ++i)
-			this.deviceIcons[i] = reg.registerIcon("essentialcraft:guns/"+this.gunType+"/device/"+GunRegistry.gunMaterials.get(i).id);
-		for(int i = 0; i < this.handleIcons.length; ++i)
-			this.handleIcons[i] = reg.registerIcon("essentialcraft:guns/"+this.gunType+"/handle/"+GunRegistry.gunMaterials.get(i).id);
-		for(int i = 0; i < this.lenseIcons.length; ++i)
-			this.lenseIcons[i] = reg.registerIcon("essentialcraft:guns/"+this.gunType+"/lense/"+GunRegistry.lenseMaterials.get(i).id);
-		for(int i = 0; i < this.scopeIcons.length; ++i)
-			if(this.gunType != "sniper")
-				this.scopeIcons[i] = reg.registerIcon("essentialcraft:guns/"+this.gunType+"/scope/"+GunRegistry.scopeMaterials.get(i).id);
-			else
-				this.scopeIcons[i] = reg.registerIcon("essentialcraft:guns/"+this.gunType+"/scope/"+GunRegistry.scopeMaterialsSniper.get(i).id);
-	}
-
-	public void onUsingTick(ItemStack stack, EntityPlayer player, int count)
-	{
+		if(!(player instanceof EntityPlayer))
+			return;
 		ItemStack gun = stack;
-		EntityPlayer p = player;
+		EntityPlayer p = (EntityPlayer)player;
 		World w = p.worldObj;
-		if(this.getItemUseAction(stack) == EnumAction.block)
+		if(this.getItemUseAction(stack) == EnumAction.BLOCK)
 		{
 			if(count % 20 == 0)
-				player.worldObj.playSound(player.posX, player.posY, player.posZ, "random.fizz", 0.4F, 1+MathUtils.randomFloat(player.worldObj.rand), false);
+				player.worldObj.playSound(player.posX, player.posY, player.posZ, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.PLAYERS, 0.4F, 1+MathUtils.randomFloat(player.worldObj.rand), false);
 			return;
-		}else
+		}
+		else
 		{
 			if(this.gunType.equalsIgnoreCase("rifle") && count % 3 == 0)
 			{
-
 				if(gun.getTagCompound().hasKey("base"))
 				{
 					float balance = 0;
 					if(gun.getTagCompound().hasKey("lense"))
 					{
 						String lenseID = gun.getTagCompound().getString("lense");
-						if(lenseID.equals("chaos"))
-							balance = 1;
-						if(lenseID.equals("frozen"))
-							balance = 2;
-						if(lenseID.equals("pure"))
-							balance = 3;
-						if(lenseID.equals("shade"))
-							balance = 4;
+						LenseMaterial lense = GunRegistry.getLenseFromID(lenseID);
+						for(GunType gt : GunType.values()) {
+							if(lense != null && lense.materialData.containsKey(gt))
+							{
+								for(DummyData d : lense.materialData.get(gt))
+								{
+									if(d.fieldName.equalsIgnoreCase("balance"))
+										balance = (int)Float.parseFloat(d.fieldValue);
+								}
+							}
+						}
 					}
 					if(MiscUtils.getStackTag(gun).hasKey("stats"))
 					{
@@ -571,7 +491,7 @@ public class ItemGun extends ItemStoresMRUInNBT
 							MiscUtils.getStackTag(gun).setFloat("gunShots", MiscUtils.getStackTag(gun).getFloat("gunShots")+1);
 						else
 						{
-							p.stopUsingItem();
+							p.stopActiveHand();
 							return;
 						}
 						if(ECUtils.tryToDecreaseMRUInStorage(p, (int) -stats.getFloat("damage")*3) || this.setMRU(gun, (int) -stats.getFloat("damage")*3))
@@ -582,13 +502,13 @@ public class ItemGun extends ItemStoresMRUInNBT
 							{
 								if(!w.isRemote && w.rand.nextFloat() <= 0.25F)
 								{
-									w.playSound(p.posX, p.posY, p.posZ, "random.break", 1, 1, false);
+									w.playSound(p.posX, p.posY, p.posZ, SoundEvents.ENTITY_ITEM_BREAK, SoundCategory.PLAYERS, 1, 1, false);
 									MiscUtils.getStackTag(gun).setFloat("gunShots", stats.getFloat("shots"));
 								}
 							}
 
 							MiscUtils.getStackTag(gun).setFloat("cool", stats.getFloat("speed")*2);
-							w.playSound(p.posX, p.posY, p.posZ, "essentialcraft:sound.beam", 0.1F+stats.getFloat("damage")/100, 2-stats.getFloat("damage")/50, false);
+							w.playSound(p.posX, p.posY, p.posZ, SoundRegistry.gunBeam, SoundCategory.PLAYERS, 0.1F+stats.getFloat("damage")/100, 2-stats.getFloat("damage")/50, false);
 							EntityMRURay ray = new EntityMRURay(w,p,stats.getFloat("damage"),stats.getFloat("spread")/2,balance);
 							if(!w.isRemote)
 								w.spawnEntityInWorld(ray);
@@ -601,7 +521,7 @@ public class ItemGun extends ItemStoresMRUInNBT
 				int usingTicks = 10000-count;
 				if(count >= 10000-60 && count % 5 == 0)
 				{
-					w.playSound(p.posX, p.posY, p.posZ, "minecart.inside", 0.1F, 0F+(float)usingTicks/30F, false);
+					w.playSound(p.posX, p.posY, p.posZ, SoundEvents.ENTITY_MINECART_INSIDE, SoundCategory.PLAYERS, 0.1F, 0F+(float)usingTicks/30F, false);
 				}
 				if(usingTicks >= 60)
 				{
@@ -612,14 +532,17 @@ public class ItemGun extends ItemStoresMRUInNBT
 						if(gun.getTagCompound().hasKey("lense"))
 						{
 							String lenseID = gun.getTagCompound().getString("lense");
-							if(lenseID.equals("chaos"))
-								balance = 1;
-							if(lenseID.equals("frozen"))
-								balance = 2;
-							if(lenseID.equals("pure"))
-								balance = 3;
-							if(lenseID.equals("shade"))
-								balance = 4;
+							LenseMaterial lense = GunRegistry.getLenseFromID(lenseID);
+							for(GunType gt : GunType.values()) {
+								if(lense != null && lense.materialData.containsKey(gt))
+								{
+									for(DummyData d : lense.materialData.get(gt))
+									{
+										if(d.fieldName.equalsIgnoreCase("balance"))
+											balance = (int)Float.parseFloat(d.fieldValue);
+									}
+								}
+							}
 						}
 						if(MiscUtils.getStackTag(gun).hasKey("stats"))
 						{
@@ -639,7 +562,7 @@ public class ItemGun extends ItemStoresMRUInNBT
 							}
 							else
 							{
-								p.stopUsingItem();
+								p.stopActiveHand();
 								return;
 							}
 							if(ECUtils.tryToDecreaseMRUInStorage(p, (int) -stats.getFloat("damage")*2) || this.setMRU(gun, (int) -stats.getFloat("damage")*2))
@@ -650,7 +573,7 @@ public class ItemGun extends ItemStoresMRUInNBT
 								{
 									if(!w.isRemote && w.rand.nextFloat() <= 0.25F)
 									{
-										w.playSound(p.posX, p.posY, p.posZ, "random.break", 1, 1, false);
+										w.playSound(p.posX, p.posY, p.posZ, SoundEvents.ENTITY_ITEM_BREAK, SoundCategory.PLAYERS, 1, 1, false);
 										MiscUtils.getStackTag(gun).setFloat("gunShots", stats.getFloat("shots"));
 									}
 								}
@@ -664,102 +587,6 @@ public class ItemGun extends ItemStoresMRUInNBT
 				}
 			}
 		}
-	}
-
-	public IIcon getIcon(ItemStack stack, int renderPass, EntityPlayer player, ItemStack usingItem, int useRemaining)
-	{
-		if(!stack.hasTagCompound() || !stack.getTagCompound().hasKey("base"))
-		{
-			Random rnd = new Random((EssentialCraftCore.proxy.getClientWorld().getWorldTime()/20) + (renderPass+1));
-
-			if(renderPass == 0)
-				return this.baseIcons[rnd.nextInt(baseIcons.length)];
-			if(renderPass == 1)
-				return this.handleIcons[rnd.nextInt(handleIcons.length)];
-			if(renderPass == 2)
-				return this.deviceIcons[rnd.nextInt(deviceIcons.length)];
-			if(renderPass == 3)
-				if(this.gunType != "gatling")
-					return this.scopeIcons[rnd.nextInt(scopeIcons.length)];
-				else
-					return this.itemIcon;
-			if(renderPass == 4)
-				return this.lenseIcons[rnd.nextInt(lenseIcons.length)];
-		}else
-		{
-
-			NBTTagCompound tag = MiscUtils.getStackTag(stack);
-			if(player != null && player.isSneaking() && tag.hasKey("scope") && this.gunType.equalsIgnoreCase("sniper"))
-			{
-				return this.itemIcon;
-			}
-			if(renderPass == 0)
-			{
-				for(int i = 0; i < GunRegistry.gunMaterials.size(); ++i)
-				{
-					if(GunRegistry.gunMaterials.get(i).id.equalsIgnoreCase(tag.getString("base")))
-						return this.baseIcons[i];
-				}
-			}
-			if(renderPass == 1)
-			{
-				for(int i = 0; i < GunRegistry.gunMaterials.size(); ++i)
-				{
-					if(GunRegistry.gunMaterials.get(i).id.equalsIgnoreCase(tag.getString("handle")))
-						return this.handleIcons[i];
-				}
-			}
-			if(renderPass == 2)
-			{
-				for(int i = 0; i < GunRegistry.gunMaterials.size(); ++i)
-				{
-					if(GunRegistry.gunMaterials.get(i).id.equalsIgnoreCase(tag.getString("device")))
-						return this.deviceIcons[i];
-				}
-			}
-			if(renderPass == 3)
-			{
-				if(this.gunType.equalsIgnoreCase("gatling"))
-					return this.itemIcon;
-				else
-				{
-					if(this.gunType.equalsIgnoreCase("sniper"))
-					{
-						for(int i = 0; i < GunRegistry.scopeMaterialsSniper.size(); ++i)
-						{
-							if(GunRegistry.scopeMaterialsSniper.get(i).id.equalsIgnoreCase(tag.getString("scope")))
-								return this.scopeIcons[i];
-						}	
-					}else
-					{
-						for(int i = 0; i < GunRegistry.scopeMaterials.size(); ++i)
-						{
-							if(GunRegistry.scopeMaterials.get(i).id.equalsIgnoreCase(tag.getString("scope")))
-								return this.scopeIcons[i];
-						}
-					}
-				}
-			}
-			if(renderPass == 4)
-			{
-				for(int i = 0; i < GunRegistry.lenseMaterials.size(); ++i)
-				{
-					if(GunRegistry.lenseMaterials.get(i).id.equalsIgnoreCase(tag.getString("lense")))
-						return this.lenseIcons[i];
-				}
-			}
-		}
-		return this.itemIcon;
-	}
-
-	public int getRenderPasses(int metadata)
-	{
-		return 5;
-	}
-
-	public IIcon getIcon(ItemStack stack, int pass)
-	{
-		return this.getIcon(stack, pass, null, stack, 0);
 	}
 
 	public boolean showDurabilityBar(ItemStack stack)
@@ -780,7 +607,7 @@ public class ItemGun extends ItemStoresMRUInNBT
 				return currentDamage / maxDamage;
 			}
 		}
-		return (double)stack.getItemDamageForDisplay() / (double)stack.getMaxDamage();
+		return (double)stack.getItemDamage() / (double)stack.getMaxDamage();
 	}
 
 	public EnumAction getItemUseAction(ItemStack p_77661_1_)
@@ -793,11 +620,11 @@ public class ItemGun extends ItemStoresMRUInNBT
 				float current = tag.getFloat("gunShots")+1;
 				float max = tag.getCompoundTag("stats").getFloat("shots");
 				if(current >= max)
-					return EnumAction.block;
+					return EnumAction.BLOCK;
 			}
 
 		}
-		return EnumAction.bow;
+		return EnumAction.BOW;
 	}
 
 	public int getMaxItemUseDuration(ItemStack p_77626_1_)
@@ -816,4 +643,56 @@ public class ItemGun extends ItemStoresMRUInNBT
 		return 10000;
 	}
 
+	@Override
+	public void registerModels() {
+		ModelUtils.setItemModelSingleIcon(this, "essentialcraft:item/"+getRegistryName().getResourcePath(), "internal");
+		ModelBakery.registerItemVariants(this, new ModelResourceLocation("essentialcraft:item/"+getRegistryName().getResourcePath(), "inventory"));
+		if(this == ItemsCore.sniper)
+			ModelBakery.registerItemVariants(this, new ModelResourceLocation("essentialcraft:item/blank", "inventory"));
+		MiscUtils.addItemOverlayElement(this, ItemOverlayGun.INSTANCE);
+	}
+
+	public static class ItemOverlayGun implements IItemOverlayElement {
+		public static final ItemOverlayGun INSTANCE = new ItemOverlayGun();
+
+		@Override
+		public void renderItemOverlayIntoGUI(FontRenderer fr, ItemStack item, int x, int y, String text) {
+			double health = 0;
+			if(item.hasTagCompound()) {
+				NBTTagCompound tag = MiscUtils.getStackTag(item);
+				if(tag.hasKey("stats")) {
+					float current = tag.getFloat("gunShots");
+					float max = tag.getCompoundTag("stats").getFloat("shots");
+					if(current > max)
+						current = max;
+					health = current/max;
+				}
+			}
+			int j = (int)Math.round(13.0D - health * 13.0D);
+			GlStateManager.disableLighting();
+			GlStateManager.disableDepth();
+			GlStateManager.disableTexture2D();
+			GlStateManager.disableAlpha();
+			GlStateManager.disableBlend();
+			Tessellator tessellator = Tessellator.getInstance();
+			VertexBuffer vertexbuffer = tessellator.getBuffer();
+			this.draw(vertexbuffer, x + 14, y, 2, 14, 0, 0, 0, 255);
+			this.draw(vertexbuffer, x + 14, y, 1, 13, 51, 51, 51, 255);
+			this.draw(vertexbuffer, x + 14, y + j, 1, 13-j, 186, 0, 0, 255);
+			GlStateManager.enableBlend();
+			GlStateManager.enableAlpha();
+			GlStateManager.enableTexture2D();
+			GlStateManager.enableLighting();
+			GlStateManager.enableDepth();
+		}
+
+		private void draw(VertexBuffer renderer, int x, int y, int width, int height, int red, int green, int blue, int alpha) {
+			renderer.begin(7, DefaultVertexFormats.POSITION_COLOR);
+			renderer.pos((double)(x + 0), (double)(y + 0), 0.0D).color(red, green, blue, alpha).endVertex();
+			renderer.pos((double)(x + 0), (double)(y + height), 0.0D).color(red, green, blue, alpha).endVertex();
+			renderer.pos((double)(x + width), (double)(y + height), 0.0D).color(red, green, blue, alpha).endVertex();
+			renderer.pos((double)(x + width), (double)(y + 0), 0.0D).color(red, green, blue, alpha).endVertex();
+			Tessellator.getInstance().draw();
+		}
+	}
 }

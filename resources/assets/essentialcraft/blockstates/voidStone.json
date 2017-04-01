@@ -1,0 +1,448 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "essentialcraft:cube_colored",
+        "textures": {
+            "down": "essentialcraft:blocks/voidStone",
+            "up": "essentialcraft:blocks/voidStone",
+            "north": "essentialcraft:blocks/voidStone",
+            "south": "essentialcraft:blocks/voidStone",
+            "west": "essentialcraft:blocks/voidStone",
+            "east": "essentialcraft:blocks/voidStone",
+            "particle": "essentialcraft:blocks/voidStone"
+        }
+    },
+    "variants": {
+        "down=false,east=false,north=false,south=false,up=false,west=false": [{}],
+        "down=true,east=false,north=false,south=false,up=false,west=false": [{
+            "textures": {
+                "north": "essentialcraft:blocks/ct/voidStone/t",
+                "south": "essentialcraft:blocks/ct/voidStone/t",
+                "west": "essentialcraft:blocks/ct/voidStone/t",
+                "east": "essentialcraft:blocks/ct/voidStone/t"
+            }
+        }],
+        "down=false,east=true,north=false,south=false,up=false,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/voidStone/l",
+                "up": "essentialcraft:blocks/ct/voidStone/l",
+                "north": "essentialcraft:blocks/ct/voidStone/r",
+                "south": "essentialcraft:blocks/ct/voidStone/l"
+            }
+        }],
+        "down=true,east=true,north=false,south=false,up=false,west=false": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/voidStone/l",
+                "north": "essentialcraft:blocks/ct/voidStone/tr",
+                "south": "essentialcraft:blocks/ct/voidStone/tl",
+                "west": "essentialcraft:blocks/ct/voidStone/t"
+            }
+        }],
+        "down=false,east=false,north=true,south=false,up=false,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/voidStone/t",
+                "up": "essentialcraft:blocks/ct/voidStone/b",
+                "west": "essentialcraft:blocks/ct/voidStone/r",
+                "east": "essentialcraft:blocks/ct/voidStone/l"
+            }
+        }],
+        "down=true,east=false,north=true,south=false,up=false,west=false": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/voidStone/b",
+                "south": "essentialcraft:blocks/ct/voidStone/t",
+                "west": "essentialcraft:blocks/ct/voidStone/tr",
+                "east": "essentialcraft:blocks/ct/voidStone/tl"
+            }
+        }],
+        "down=false,east=true,north=true,south=false,up=false,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/voidStone/tl",
+                "up": "essentialcraft:blocks/ct/voidStone/bl",
+                "south": "essentialcraft:blocks/ct/voidStone/l",
+                "west": "essentialcraft:blocks/ct/voidStone/r"
+            }
+        }],
+        "down=true,east=true,north=true,south=false,up=false,west=false": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/voidStone/bl",
+                "south": "essentialcraft:blocks/ct/voidStone/tl",
+                "west": "essentialcraft:blocks/ct/voidStone/tr"
+            }
+        }],
+        "down=false,east=false,north=false,south=true,up=false,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/voidStone/b",
+                "up": "essentialcraft:blocks/ct/voidStone/t",
+                "west": "essentialcraft:blocks/ct/voidStone/l",
+                "east": "essentialcraft:blocks/ct/voidStone/r"
+            }
+        }],
+        "down=true,east=false,north=false,south=true,up=false,west=false": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/voidStone/t",
+                "north": "essentialcraft:blocks/ct/voidStone/t",
+                "west": "essentialcraft:blocks/ct/voidStone/tl",
+                "east": "essentialcraft:blocks/ct/voidStone/tr"
+            }
+        }],
+        "down=false,east=true,north=false,south=true,up=false,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/voidStone/bl",
+                "up": "essentialcraft:blocks/ct/voidStone/tl",
+                "north": "essentialcraft:blocks/ct/voidStone/r",
+                "west": "essentialcraft:blocks/ct/voidStone/l"
+            }
+        }],
+        "down=true,east=true,north=false,south=true,up=false,west=false": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/voidStone/tl",
+                "north": "essentialcraft:blocks/ct/voidStone/tr",
+                "west": "essentialcraft:blocks/ct/voidStone/tl"
+            }
+        }],
+        "down=false,east=false,north=true,south=true,up=false,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/voidStone/tb",
+                "up": "essentialcraft:blocks/ct/voidStone/tb",
+                "west": "essentialcraft:blocks/ct/voidStone/lr",
+                "east": "essentialcraft:blocks/ct/voidStone/lr"
+            }
+        }],
+        "down=true,east=false,north=true,south=true,up=false,west=false": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/voidStone/tb",
+                "west": "essentialcraft:blocks/ct/voidStone/lrt",
+                "east": "essentialcraft:blocks/ct/voidStone/lrt"
+            }
+        }],
+        "down=false,east=true,north=true,south=true,up=false,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/voidStone/tbl",
+                "up": "essentialcraft:blocks/ct/voidStone/tbl",
+                "west": "essentialcraft:blocks/ct/voidStone/lr"
+            }
+        }],
+        "down=true,east=true,north=true,south=true,up=false,west=false": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/voidStone/tbl",
+                "west": "essentialcraft:blocks/ct/voidStone/lrt"
+            }
+        }],
+        "down=false,east=false,north=false,south=false,up=true,west=false": [{
+            "textures": {
+                "north": "essentialcraft:blocks/ct/voidStone/b",
+                "south": "essentialcraft:blocks/ct/voidStone/b",
+                "west": "essentialcraft:blocks/ct/voidStone/b",
+                "east": "essentialcraft:blocks/ct/voidStone/b"
+            }
+        }],
+        "down=true,east=false,north=false,south=false,up=true,west=false": [{
+            "textures": {
+                "north": "essentialcraft:blocks/ct/voidStone/tb",
+                "south": "essentialcraft:blocks/ct/voidStone/tb",
+                "west": "essentialcraft:blocks/ct/voidStone/tb",
+                "east": "essentialcraft:blocks/ct/voidStone/tb"
+            }
+        }],
+        "down=false,east=true,north=false,south=false,up=true,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/voidStone/l",
+                "north": "essentialcraft:blocks/ct/voidStone/br",
+                "south": "essentialcraft:blocks/ct/voidStone/bl",
+                "west": "essentialcraft:blocks/ct/voidStone/b"
+            }
+        }],
+        "down=true,east=true,north=false,south=false,up=true,west=false": [{
+            "textures": {
+                "north": "essentialcraft:blocks/ct/voidStone/tbr",
+                "south": "essentialcraft:blocks/ct/voidStone/tbl",
+                "west": "essentialcraft:blocks/ct/voidStone/tb"
+            }
+        }],
+        "down=false,east=false,north=true,south=false,up=true,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/voidStone/t",
+                "south": "essentialcraft:blocks/ct/voidStone/b",
+                "west": "essentialcraft:blocks/ct/voidStone/br",
+                "east": "essentialcraft:blocks/ct/voidStone/bl"
+            }
+        }],
+        "down=true,east=false,north=true,south=false,up=true,west=false": [{
+            "textures": {
+                "south": "essentialcraft:blocks/ct/voidStone/tb",
+                "west": "essentialcraft:blocks/ct/voidStone/tbr",
+                "east": "essentialcraft:blocks/ct/voidStone/tbl"
+            }
+        }],
+        "down=false,east=true,north=true,south=false,up=true,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/voidStone/tl",
+                "south": "essentialcraft:blocks/ct/voidStone/bl",
+                "west": "essentialcraft:blocks/ct/voidStone/br"
+            }
+        }],
+        "down=true,east=true,north=true,south=false,up=true,west=false": [{
+           "textures": {
+                "south": "essentialcraft:blocks/ct/voidStone/tbl",
+                "west": "essentialcraft:blocks/ct/voidStone/tbr"
+            } 
+        }],
+        "down=false,east=false,north=false,south=true,up=true,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/voidStone/b",
+                "north": "essentialcraft:blocks/ct/voidStone/b",
+                "west": "essentialcraft:blocks/ct/voidStone/bl",
+                "east": "essentialcraft:blocks/ct/voidStone/br"
+            }
+        }],
+        "down=true,east=false,north=false,south=true,up=true,west=false": [{
+            "textures": {
+                "north": "essentialcraft:blocks/ct/voidStone/tb",
+                "west": "essentialcraft:blocks/ct/voidStone/tbl",
+                "east": "essentialcraft:blocks/ct/voidStone/tbr"
+            }
+        }],
+        "down=false,east=true,north=false,south=true,up=true,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/voidStone/bl",
+                "north": "essentialcraft:blocks/ct/voidStone/br",
+                "west": "essentialcraft:blocks/ct/voidStone/bl"
+            }
+        }],
+        "down=true,east=true,north=false,south=true,up=true,west=false": [{
+            "textures": {
+                "north": "essentialcraft:blocks/ct/voidStone/tbr",
+                "west": "essentialcraft:blocks/ct/voidStone/tbl"
+            }
+        }],
+        "down=false,east=false,north=true,south=true,up=true,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/voidStone/tb",
+                "west": "essentialcraft:blocks/ct/voidStone/lrb",
+                "east": "essentialcraft:blocks/ct/voidStone/lrb"
+            }
+        }],
+        "down=true,east=false,north=true,south=true,up=true,west=false": [{
+            "textures": {
+                "west": "essentialcraft:blocks/ct/voidStone/tblr",
+                "east": "essentialcraft:blocks/ct/voidStone/tblr"
+            }
+        }],
+        "down=false,east=true,north=true,south=true,up=true,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/voidStone/tbl",
+                "west": "essentialcraft:blocks/ct/voidStone/lrb"
+            }
+        }],
+        "down=true,east=true,north=true,south=true,up=true,west=false": [{
+            "textures": {
+                "west": "essentialcraft:blocks/ct/voidStone/tblr"
+            }
+        }],
+        "down=false,east=false,north=false,south=false,up=false,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/voidStone/r",
+                "up": "essentialcraft:blocks/ct/voidStone/r",
+                "north": "essentialcraft:blocks/ct/voidStone/l",
+                "south": "essentialcraft:blocks/ct/voidStone/r"
+            }
+        }],
+        "down=true,east=false,north=false,south=false,up=false,west=true": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/voidStone/r",
+                "north": "essentialcraft:blocks/ct/voidStone/tl",
+                "south": "essentialcraft:blocks/ct/voidStone/tr",
+                "east": "essentialcraft:blocks/ct/voidStone/t"
+            }
+        }],
+        "down=false,east=true,north=false,south=false,up=false,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/voidStone/lr",
+                "up": "essentialcraft:blocks/ct/voidStone/lr",
+                "north": "essentialcraft:blocks/ct/voidStone/lr",
+                "south": "essentialcraft:blocks/ct/voidStone/lr"
+            }
+        }],
+        "down=true,east=true,north=false,south=false,up=false,west=true": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/voidStone/lr",
+                "north": "essentialcraft:blocks/ct/voidStone/lrt",
+                "south": "essentialcraft:blocks/ct/voidStone/lrt"
+            }
+        }],
+        "down=false,east=false,north=true,south=false,up=false,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/voidStone/tr",
+                "up": "essentialcraft:blocks/ct/voidStone/br",
+                "south": "essentialcraft:blocks/ct/voidStone/r",
+                "east": "essentialcraft:blocks/ct/voidStone/l"
+            }
+        }],
+        "down=true,east=false,north=true,south=false,up=false,west=true": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/voidStone/br",
+                "south": "essentialcraft:blocks/ct/voidStone/tr",
+                "east": "essentialcraft:blocks/ct/voidStone/tl"
+            }
+        }],
+        "down=false,east=true,north=true,south=false,up=false,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/voidStone/lrt",
+                "up": "essentialcraft:blocks/ct/voidStone/lrb",
+                "south": "essentialcraft:blocks/ct/voidStone/lr"
+            }
+        }],
+        "down=true,east=true,north=true,south=false,up=false,west=true": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/voidStone/lrb",
+                "south": "essentialcraft:blocks/ct/voidStone/lrt"
+            }
+        }],
+        "down=false,east=false,north=false,south=true,up=false,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/voidStone/br",
+                "up": "essentialcraft:blocks/ct/voidStone/tr",
+                "north": "essentialcraft:blocks/ct/voidStone/l",
+                "east": "essentialcraft:blocks/ct/voidStone/r"
+            }
+        }],
+        "down=true,east=false,north=false,south=true,up=false,west=true": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/voidStone/tr",
+                "north": "essentialcraft:blocks/ct/voidStone/tl",
+                "east": "essentialcraft:blocks/ct/voidStone/tr"
+            }
+        }],
+        "down=false,east=true,north=false,south=true,up=false,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/voidStone/lrb",
+                "up": "essentialcraft:blocks/ct/voidStone/lrt",
+                "north": "essentialcraft:blocks/ct/voidStone/lr"
+            }
+        }],
+        "down=true,east=true,north=false,south=true,up=false,west=true": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/voidStone/lrt",
+                "north": "essentialcraft:blocks/ct/voidStone/lrt"
+            }
+        }],
+        "down=false,east=false,north=true,south=true,up=false,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/voidStone/tbr",
+                "up": "essentialcraft:blocks/ct/voidStone/tbr",
+                "east": "essentialcraft:blocks/ct/voidStone/lr"
+            }
+        }],
+        "down=true,east=false,north=true,south=true,up=false,west=true": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/voidStone/tbr",
+                "east": "essentialcraft:blocks/ct/voidStone/lrt"
+            }
+        }],
+        "down=false,east=true,north=true,south=true,up=false,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/voidStone/tblr",
+                "up": "essentialcraft:blocks/ct/voidStone/tblr"
+            }
+        }],
+        "down=true,east=true,north=true,south=true,up=false,west=true": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/voidStone/tblr"
+            }
+        }],
+        "down=false,east=false,north=false,south=false,up=true,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/voidStone/r",
+                "north": "essentialcraft:blocks/ct/voidStone/bl",
+                "south": "essentialcraft:blocks/ct/voidStone/br",
+                "east": "essentialcraft:blocks/ct/voidStone/b"
+            }
+        }],
+        "down=true,east=false,north=false,south=false,up=true,west=true": [{
+            "textures": {
+                "north": "essentialcraft:blocks/ct/voidStone/tbl",
+                "south": "essentialcraft:blocks/ct/voidStone/tbr",
+                "east": "essentialcraft:blocks/ct/voidStone/tb"
+            }
+        }],
+        "down=false,east=true,north=false,south=false,up=true,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/voidStone/lr",
+                "north": "essentialcraft:blocks/ct/voidStone/lrb",
+                "south": "essentialcraft:blocks/ct/voidStone/lrb"
+            }
+        }],
+        "down=true,east=true,north=false,south=false,up=true,west=true": [{
+            "textures": {
+                "north": "essentialcraft:blocks/ct/voidStone/tblr",
+                "south": "essentialcraft:blocks/ct/voidStone/tblr"
+            }
+        }],
+        "down=false,east=false,north=true,south=false,up=true,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/voidStone/tr",
+                "south": "essentialcraft:blocks/ct/voidStone/br",
+                "east": "essentialcraft:blocks/ct/voidStone/bl"
+            }
+        }],
+        "down=true,east=false,north=true,south=false,up=true,west=true": [{
+            "textures": {
+                "south": "essentialcraft:blocks/ct/voidStone/tbr",
+                "east": "essentialcraft:blocks/ct/voidStone/tbl"
+            }
+        }],
+        "down=false,east=true,north=true,south=false,up=true,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/voidStone/lrt",
+                "south": "essentialcraft:blocks/ct/voidStone/lrb"
+            }
+        }],
+        "down=true,east=true,north=true,south=false,up=true,west=true": [{
+            "textures": {
+                "south": "essentialcraft:blocks/ct/voidStone/tblr"
+            }
+        }],
+        "down=false,east=false,north=false,south=true,up=true,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/voidStone/br",
+                "north": "essentialcraft:blocks/ct/voidStone/bl",
+                "east": "essentialcraft:blocks/ct/voidStone/br"
+            }
+        }],
+        "down=true,east=false,north=false,south=true,up=true,west=true": [{
+            "textures": {
+                "north": "essentialcraft:blocks/ct/voidStone/tbl",
+                "east": "essentialcraft:blocks/ct/voidStone/tbr"
+            }
+        }],
+        "down=false,east=true,north=false,south=true,up=true,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/voidStone/lrb",
+                "north": "essentialcraft:blocks/ct/voidStone/lrb"
+            }
+        }],
+        "down=true,east=true,north=false,south=true,up=true,west=true": [{
+            "textures": {
+                "north": "essentialcraft:blocks/ct/voidStone/tblr"
+            }
+        }],
+        "down=false,east=false,north=true,south=true,up=true,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/voidStone/tbr",
+                "east": "essentialcraft:blocks/ct/voidStone/lrb"
+            }
+        }],
+        "down=true,east=false,north=true,south=true,up=true,west=true": [{
+            "textures": {
+                "east": "essentialcraft:blocks/ct/voidStone/tblr"
+            }
+        }],
+        "down=false,east=true,north=true,south=true,up=true,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/voidStone/tblr"
+            }
+        }],
+        "down=true,east=true,north=true,south=true,up=true,west=true": [{}],
+        "inventory": [{}]
+    }
+}

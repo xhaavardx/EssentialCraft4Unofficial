@@ -17,7 +17,7 @@ public class ContainerMIMCraftingManager extends Container {
 	
 	public ContainerMIMCraftingManager(InventoryPlayer inventoryPlayer, TileNewMIMCraftingManager t) {
 		tile = t;
-		t.openInventory();
+		t.openInventory(inventoryPlayer.player);
 		
 		chestInventoryRows = 6;
 		chestInventoryColumns = 9;
@@ -49,7 +49,7 @@ public class ContainerMIMCraftingManager extends Container {
 	@Override
 	public void onContainerClosed(EntityPlayer entityPlayer) {
 		super.onContainerClosed(entityPlayer);
-		tile.closeInventory();
+		tile.closeInventory(entityPlayer);
 	}
 	
 	@Override

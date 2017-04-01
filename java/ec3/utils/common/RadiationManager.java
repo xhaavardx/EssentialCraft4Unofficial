@@ -8,41 +8,37 @@ import ec3.common.registry.PotionRegistry;
 import ec3.utils.cfg.Config;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.util.FakePlayer;
 
 public class RadiationManager {
 
-	public static void increasePlayerRadiation(EntityPlayer e, int amount)
-	{
+	public static void increasePlayerRadiation(EntityPlayer e, int amount) {
 		int current = getPlayerRadiation(e);
 		setPlayerRadiation(e, current+amount);
 	}
 	
-	public static void setPlayerRadiation(EntityPlayer player, int amount)
-	{
+	public static void setPlayerRadiation(EntityPlayer player, int amount) {
 		if(amount < 0)
 			amount = 0;
 		if(!(player instanceof FakePlayer))
 			ECUtils.getData(player).modifyRadiation(amount);
 	}
 	
-	public static int getPlayerRadiation(EntityPlayer player)
-	{
+	public static int getPlayerRadiation(EntityPlayer player) {
 		if((player instanceof FakePlayer)) return 0;
 		return ECUtils.getData(player).getPlayerRadiation();
 	}
 	
-	public static void playerTick(EntityPlayer player)
-	{
-		if((player instanceof FakePlayer)) return;
+	public static void playerTick(EntityPlayer player) {
+		if((player instanceof FakePlayer))
+			return;
 		int dimID = player.dimension;
-		if(dimID == Config.dimensionID)
-		{
+		if(dimID == Config.dimensionID && !player.capabilities.isCreativeMode) {
 			int chunkX = player.chunkCoordX;
 			int chunkZ = player.chunkCoordZ;
 			Random rnd = new Random(Long.parseLong((int)MathUtils.module(chunkX)*128+""+(int)MathUtils.module(chunkZ)*128));
-			BiomeGenBase biome = player.worldObj.getBiomeGenForCoords((int)player.posX, (int)player.posZ);
+			Biome biome = player.worldObj.getBiomeGenForCoords(player.getPosition());
 			int rndRad = rnd.nextInt(6);
 			if(biome == BiomeRegistry.firstWorldBiomeArray[8])
 				rndRad += 2;
@@ -58,20 +54,17 @@ public class RadiationManager {
 				increasePlayerRadiation(player,-1);
 			else
 				increasePlayerRadiation(player,-5);
-		if(amount > 0)
-		{
+		if(amount > 0) {
 			boolean hasEffect = player.getActivePotionEffect(PotionRegistry.radiation) != null;
-			if(hasEffect)
-			{
+			if(hasEffect) {
 				int currentDuration = amount;
 				int newModifier = currentDuration/10000;
-				player.removePotionEffect(PotionRegistry.radiation.id);
-				player.addPotionEffect(new PotionEffect(PotionRegistry.radiation.id,currentDuration,newModifier,true));
-			}else
-			{
-				player.addPotionEffect(new PotionEffect(PotionRegistry.radiation.id,200,0,true));
+				player.removePotionEffect(PotionRegistry.radiation);
+				player.addPotionEffect(new PotionEffect(PotionRegistry.radiation,currentDuration,newModifier,true,true));
+			}
+			else {
+				player.addPotionEffect(new PotionEffect(PotionRegistry.radiation,200,0,true,true));
 			}
 		}
 	}
-	
 }

@@ -3,20 +3,25 @@ package ec3.common.tile;
 import java.util.UUID;
 
 import DummyCore.Utils.MiscUtils;
+import ec3.api.ITETransfersMRU;
+import ec3.common.item.ItemBoundGem;
+import ec3.common.item.ItemsCore;
+import ec3.utils.common.ECUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.Packet;
-import net.minecraft.network.play.INetHandlerPlayClient;
-import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import ec3.api.ITETransfersMRU;
-import ec3.common.item.ItemsCore;
-import ec3.utils.common.ECUtils;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ITickable;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.wrapper.InvWrapper;
 
-public class TileRayTower extends TileEntity implements IInventory, ITETransfersMRU {
+public class TileRayTower extends TileEntity implements IInventory, ITETransfersMRU, ITickable {
 	public int syncTick;
 	int mru;
 	int maxMRU = 100;
@@ -33,19 +38,20 @@ public class TileRayTower extends TileEntity implements IInventory, ITETransfers
 	}
 	
 	@Override
-	public void writeToNBT(NBTTagCompound i) {
+	public NBTTagCompound writeToNBT(NBTTagCompound i) {
 		super.writeToNBT(i);
 		ECUtils.saveMRUState(this, i);
 		MiscUtils.saveInventory(this, i);
+		return i;
 	}
 	
 	@Override
-	public void updateEntity() {
+	public void update() {
 		++innerRotation;
 		//Sending the sync packets to the CLIENT. 
 		if(syncTick == 0) {
 			if(!worldObj.isRemote)
-				MiscUtils.sendPacketToAllAround(worldObj, getDescriptionPacket(), xCoord, yCoord, zCoord, worldObj.provider.dimensionId, 16);
+				MiscUtils.sendPacketToAllAround(worldObj, getUpdatePacket(), pos.getX(), pos.getY(), pos.getZ(), worldObj.provider.getDimension(), 16);
 			syncTick = 10;
 		}
 		else
@@ -54,17 +60,16 @@ public class TileRayTower extends TileEntity implements IInventory, ITETransfers
 	}
 	
 	@Override
-	public Packet getDescriptionPacket() {
+	public SPacketUpdateTileEntity getUpdatePacket() {
 		NBTTagCompound nbttagcompound = new NBTTagCompound();
 		writeToNBT(nbttagcompound);
-		return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, -10, nbttagcompound);
+		return new SPacketUpdateTileEntity(pos, -10, nbttagcompound);
 	}
 	
 	@Override
-	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
-		if(net.getNetHandler() instanceof INetHandlerPlayClient)
-			if(pkt.func_148853_f() == -10)
-				readFromNBT(pkt.func_148857_g());
+	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
+		if(pkt.getTileEntityType() == -10)
+			readFromNBT(pkt.getNbtCompound());
 	}
 	
 	@Override
@@ -139,7 +144,7 @@ public class TileRayTower extends TileEntity implements IInventory, ITETransfers
 	}
 	
 	@Override
-	public ItemStack getStackInSlotOnClosing(int par1) {
+	public ItemStack removeStackFromSlot(int par1) {
 		if (items[par1] != null) {
 			ItemStack itemstack = items[par1];
 			items[par1] = null;
@@ -160,12 +165,12 @@ public class TileRayTower extends TileEntity implements IInventory, ITETransfers
 	
 	
 	@Override
-	public String getInventoryName() {
+	public String getName() {
 		return "ec3.container.rayTower";
 	}
 	
 	@Override
-	public boolean hasCustomInventoryName() {
+	public boolean hasCustomName() {
 		return false;
 	}
 	
@@ -176,17 +181,52 @@ public class TileRayTower extends TileEntity implements IInventory, ITETransfers
 	
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer player) {
-		return worldObj.getTileEntity(xCoord, yCoord, zCoord) == this && player.dimension == worldObj.provider.dimensionId;
+		return worldObj.getTileEntity(pos) == this && player.dimension == worldObj.provider.getDimension();
 	}
 	
 	@Override
-	public void openInventory() {}
+	public void openInventory(EntityPlayer player) {}
 	
 	@Override
-	public void closeInventory() {}
+	public void closeInventory(EntityPlayer player) {}
 	
 	@Override
 	public boolean isItemValidForSlot(int p_94041_1_, ItemStack p_94041_2_) {
 		return p_94041_2_.getItem() == ItemsCore.bound_gem;
+	}
+	
+	public boolean isBoundGem(ItemStack stack) {
+		return stack.getItem() instanceof ItemBoundGem;
+	}
+	
+	@Override
+	public void clear() {
+	    for(int i = 0; i < getSizeInventory(); i++)
+	        setInventorySlotContents(i, null);
+	}
+
+	@Override
+	public int getField(int id) {
+		return 0;
+	}
+
+	@Override
+	public void setField(int id, int value) {}
+
+	@Override
+	public int getFieldCount() {
+		return 0;
+	}
+	
+	public IItemHandler itemHandler = new InvWrapper(this);
+
+	@Override
+	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
+	}
+
+	@Override
+	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ? (T)itemHandler : super.getCapability(capability, facing);
 	}
 }

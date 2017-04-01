@@ -6,7 +6,8 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntityFurnace;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumParticleTypes;
 import ec3.api.ApiCore;
 import ec3.api.IHotBlock;
 import ec3.common.item.ItemsCore;
@@ -30,34 +31,34 @@ public class TileUltraHeatGenerator extends TileMRUGeneric {
 	}
 	
 	@Override
-	public void updateEntity() {
-		super.updateEntity();
+	public void update() {
+		super.update();
 		if(balance == -1) {
 			balance = worldObj.rand.nextFloat()*2;
 		}
-		if(!worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord)) {
+		if(worldObj.isBlockIndirectlyGettingPowered(pos) == 0) {
 			if(currentBurnTime > 0) {
 				if(!worldObj.isRemote) {
 					float mruGenerated = 20;
 					float mruFactor = 1.0F;
 					Block[] b = new Block[4];
-					b[0] = worldObj.getBlock(xCoord+2, yCoord, zCoord);
-					b[1] = worldObj.getBlock(xCoord-2, yCoord, zCoord);
-					b[2] = worldObj.getBlock(xCoord, yCoord, zCoord+2);
-					b[3] = worldObj.getBlock(xCoord, yCoord, zCoord-2);
+					b[0] = worldObj.getBlockState(pos.east(2)).getBlock();
+					b[1] = worldObj.getBlockState(pos.west(2)).getBlock();
+					b[2] = worldObj.getBlockState(pos.south(2)).getBlock();
+					b[3] = worldObj.getBlockState(pos.north(2)).getBlock();
 					int[] ox = new int[] {2, -2, 0, 0};
 					int[] oz = new int[] {0, 0, 2, -2};
 					for(int i = 0; i < 4; ++i) {
-						if(b[i] == Blocks.air)
+						if(b[i] == Blocks.AIR)
 							mruFactor*=0;
-						else if(b[i] == Blocks.netherrack)
+						else if(b[i] == Blocks.NETHERRACK)
 							mruFactor*=0.75F;
-						else if(b[i] == Blocks.lava)
+						else if(b[i] == Blocks.LAVA)
 							mruFactor*=0.95F;
-						else if(b[i] == Blocks.fire)
+						else if(b[i] == Blocks.FIRE)
 	            			mruFactor*=0.7F;	
 	            		else if(b[i] instanceof IHotBlock)
-	            			mruFactor*=(((IHotBlock)b[i]).getHeatModifier(getWorldObj(), xCoord+ox[i], yCoord, zCoord+oz[i]));
+	            			mruFactor*=(((IHotBlock)b[i]).getHeatModifier(worldObj, pos.getX()+ox[i], pos.getY(), pos.getZ()+oz[i]));
 	            		else
 	            			mruFactor*=0.5F;
 						
@@ -119,25 +120,26 @@ public class TileUltraHeatGenerator extends TileMRUGeneric {
 				}
 			}
 			else if(heat > 0) {
-				worldObj.spawnParticle("flame", xCoord+0.5F, yCoord+0.5F, zCoord+0.5F, 0, 0.1f, 0);
+				worldObj.spawnParticle(EnumParticleTypes.FLAME, pos.getX()+0.5F, pos.getY()+0.5F, pos.getZ()+0.5F, 0, 0.1f, 0);
 				for(int i = 0; i < 4; ++i) {
 					if(i == 0)
-						worldObj.spawnParticle("flame", xCoord+0.05D, yCoord+1.2F, zCoord+0.05D, 0, 0.01f, 0);
+						worldObj.spawnParticle(EnumParticleTypes.FLAME, pos.getX()+0.05D, pos.getY()+1.2F, pos.getZ()+0.05D, 0, 0.01f, 0);
 					if(i == 1)
-						worldObj.spawnParticle("flame", xCoord+0.95D, yCoord+1.2F, zCoord+0.05D, 0, 0.01f, 0);
+						worldObj.spawnParticle(EnumParticleTypes.FLAME, pos.getX()+0.95D, pos.getY()+1.2F, pos.getZ()+0.05D, 0, 0.01f, 0);
 					if(i == 2)
-						worldObj.spawnParticle("flame", xCoord+0.05D, yCoord+1.2F, zCoord+0.95D, 0, 0.01f, 0);
+						worldObj.spawnParticle(EnumParticleTypes.FLAME, pos.getX()+0.05D, pos.getY()+1.2F, pos.getZ()+0.95D, 0, 0.01f, 0);
 					if(i == 3)
-						worldObj.spawnParticle("flame", xCoord+0.95D, yCoord+1.2F, zCoord+0.95D, 0, 0.01f, 0);
+						worldObj.spawnParticle(EnumParticleTypes.FLAME, pos.getX()+0.95D, pos.getY()+1.2F, pos.getZ()+0.95D, 0, 0.01f, 0);
 				}
 			}
 		}
+		
 		for(int i = 2; i < 6; ++i) {
-			ForgeDirection rotation = ForgeDirection.VALID_DIRECTIONS[i];
-			float rotXAdv = rotation.offsetX-0.5F;
-			float rotZAdv = rotation.offsetZ-0.5F;
-			EssentialCraftCore.proxy.FlameFX(xCoord+0.725F+rotXAdv/2.2F, yCoord+0.4F, zCoord+0.725F+rotZAdv/2.2F, 0, 0F, 0, 0.8D, 0.5D, 0.5F, 0.5F);
-			EssentialCraftCore.proxy.FlameFX(xCoord+0.5F+MathUtils.randomFloat(worldObj.rand)*0.2F, yCoord+0.65F, zCoord+0.5F+MathUtils.randomFloat(worldObj.rand)*0.2F, 0, 0.01F, 0, 0.8D, 0.5D, 0.5F, 1F);
+			EnumFacing rotation = EnumFacing.getFront(i);
+			float rotXAdv = rotation.getFrontOffsetX()-0.5F;
+			float rotZAdv = rotation.getFrontOffsetZ()-0.5F;
+			EssentialCraftCore.proxy.FlameFX(pos.getX()+0.725F+rotXAdv/2.2F, pos.getY()+0.4F, pos.getZ()+0.725F+rotZAdv/2.2F, 0, 0F, 0, 0.8D, 0.5D, 0.5F, 0.5F);
+			EssentialCraftCore.proxy.FlameFX(pos.getX()+0.5F+MathUtils.randomFloat(worldObj.rand)*0.2F, pos.getY()+0.65F, pos.getZ()+0.5F+MathUtils.randomFloat(worldObj.rand)*0.2F, 0, 0.01F, 0, 0.8D, 0.5D, 0.5F, 1F);
 		}
 	}
 	
@@ -150,11 +152,11 @@ public class TileUltraHeatGenerator extends TileMRUGeneric {
 	}
 	
 	@Override
-	public void writeToNBT(NBTTagCompound i) {
+	public NBTTagCompound writeToNBT(NBTTagCompound i) {
 		i.setInteger("burn", currentBurnTime);
 		i.setInteger("burnMax", currentMaxBurnTime);
 		i.setFloat("heat", heat);
-		super.writeToNBT(i);
+		return super.writeToNBT(i);
 	}
 	
 	@Override

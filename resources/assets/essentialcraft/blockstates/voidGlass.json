@@ -1,0 +1,448 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "essentialcraft:cube_colored",
+        "textures": {
+            "down": "essentialcraft:blocks/voidGlass",
+            "up": "essentialcraft:blocks/voidGlass",
+            "north": "essentialcraft:blocks/voidGlass",
+            "south": "essentialcraft:blocks/voidGlass",
+            "west": "essentialcraft:blocks/voidGlass",
+            "east": "essentialcraft:blocks/voidGlass",
+            "particle": "essentialcraft:blocks/voidGlass"
+        }
+    },
+    "variants": {
+        "down=false,east=false,north=false,south=false,up=false,west=false": [{}],
+        "down=true,east=false,north=false,south=false,up=false,west=false": [{
+            "textures": {
+                "north": "essentialcraft:blocks/ct/voidGlass/t",
+                "south": "essentialcraft:blocks/ct/voidGlass/t",
+                "west": "essentialcraft:blocks/ct/voidGlass/t",
+                "east": "essentialcraft:blocks/ct/voidGlass/t"
+            }
+        }],
+        "down=false,east=true,north=false,south=false,up=false,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/voidGlass/l",
+                "up": "essentialcraft:blocks/ct/voidGlass/l",
+                "north": "essentialcraft:blocks/ct/voidGlass/r",
+                "south": "essentialcraft:blocks/ct/voidGlass/l"
+            }
+        }],
+        "down=true,east=true,north=false,south=false,up=false,west=false": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/voidGlass/l",
+                "north": "essentialcraft:blocks/ct/voidGlass/tr",
+                "south": "essentialcraft:blocks/ct/voidGlass/tl",
+                "west": "essentialcraft:blocks/ct/voidGlass/t"
+            }
+        }],
+        "down=false,east=false,north=true,south=false,up=false,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/voidGlass/t",
+                "up": "essentialcraft:blocks/ct/voidGlass/b",
+                "west": "essentialcraft:blocks/ct/voidGlass/r",
+                "east": "essentialcraft:blocks/ct/voidGlass/l"
+            }
+        }],
+        "down=true,east=false,north=true,south=false,up=false,west=false": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/voidGlass/b",
+                "south": "essentialcraft:blocks/ct/voidGlass/t",
+                "west": "essentialcraft:blocks/ct/voidGlass/tr",
+                "east": "essentialcraft:blocks/ct/voidGlass/tl"
+            }
+        }],
+        "down=false,east=true,north=true,south=false,up=false,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/voidGlass/tl",
+                "up": "essentialcraft:blocks/ct/voidGlass/bl",
+                "south": "essentialcraft:blocks/ct/voidGlass/l",
+                "west": "essentialcraft:blocks/ct/voidGlass/r"
+            }
+        }],
+        "down=true,east=true,north=true,south=false,up=false,west=false": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/voidGlass/bl",
+                "south": "essentialcraft:blocks/ct/voidGlass/tl",
+                "west": "essentialcraft:blocks/ct/voidGlass/tr"
+            }
+        }],
+        "down=false,east=false,north=false,south=true,up=false,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/voidGlass/b",
+                "up": "essentialcraft:blocks/ct/voidGlass/t",
+                "west": "essentialcraft:blocks/ct/voidGlass/l",
+                "east": "essentialcraft:blocks/ct/voidGlass/r"
+            }
+        }],
+        "down=true,east=false,north=false,south=true,up=false,west=false": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/voidGlass/t",
+                "north": "essentialcraft:blocks/ct/voidGlass/t",
+                "west": "essentialcraft:blocks/ct/voidGlass/tl",
+                "east": "essentialcraft:blocks/ct/voidGlass/tr"
+            }
+        }],
+        "down=false,east=true,north=false,south=true,up=false,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/voidGlass/bl",
+                "up": "essentialcraft:blocks/ct/voidGlass/tl",
+                "north": "essentialcraft:blocks/ct/voidGlass/r",
+                "west": "essentialcraft:blocks/ct/voidGlass/l"
+            }
+        }],
+        "down=true,east=true,north=false,south=true,up=false,west=false": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/voidGlass/tl",
+                "north": "essentialcraft:blocks/ct/voidGlass/tr",
+                "west": "essentialcraft:blocks/ct/voidGlass/tl"
+            }
+        }],
+        "down=false,east=false,north=true,south=true,up=false,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/voidGlass/tb",
+                "up": "essentialcraft:blocks/ct/voidGlass/tb",
+                "west": "essentialcraft:blocks/ct/voidGlass/lr",
+                "east": "essentialcraft:blocks/ct/voidGlass/lr"
+            }
+        }],
+        "down=true,east=false,north=true,south=true,up=false,west=false": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/voidGlass/tb",
+                "west": "essentialcraft:blocks/ct/voidGlass/lrt",
+                "east": "essentialcraft:blocks/ct/voidGlass/lrt"
+            }
+        }],
+        "down=false,east=true,north=true,south=true,up=false,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/voidGlass/tbl",
+                "up": "essentialcraft:blocks/ct/voidGlass/tbl",
+                "west": "essentialcraft:blocks/ct/voidGlass/lr"
+            }
+        }],
+        "down=true,east=true,north=true,south=true,up=false,west=false": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/voidGlass/tbl",
+                "west": "essentialcraft:blocks/ct/voidGlass/lrt"
+            }
+        }],
+        "down=false,east=false,north=false,south=false,up=true,west=false": [{
+            "textures": {
+                "north": "essentialcraft:blocks/ct/voidGlass/b",
+                "south": "essentialcraft:blocks/ct/voidGlass/b",
+                "west": "essentialcraft:blocks/ct/voidGlass/b",
+                "east": "essentialcraft:blocks/ct/voidGlass/b"
+            }
+        }],
+        "down=true,east=false,north=false,south=false,up=true,west=false": [{
+            "textures": {
+                "north": "essentialcraft:blocks/ct/voidGlass/tb",
+                "south": "essentialcraft:blocks/ct/voidGlass/tb",
+                "west": "essentialcraft:blocks/ct/voidGlass/tb",
+                "east": "essentialcraft:blocks/ct/voidGlass/tb"
+            }
+        }],
+        "down=false,east=true,north=false,south=false,up=true,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/voidGlass/l",
+                "north": "essentialcraft:blocks/ct/voidGlass/br",
+                "south": "essentialcraft:blocks/ct/voidGlass/bl",
+                "west": "essentialcraft:blocks/ct/voidGlass/b"
+            }
+        }],
+        "down=true,east=true,north=false,south=false,up=true,west=false": [{
+            "textures": {
+                "north": "essentialcraft:blocks/ct/voidGlass/tbr",
+                "south": "essentialcraft:blocks/ct/voidGlass/tbl",
+                "west": "essentialcraft:blocks/ct/voidGlass/tb"
+            }
+        }],
+        "down=false,east=false,north=true,south=false,up=true,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/voidGlass/t",
+                "south": "essentialcraft:blocks/ct/voidGlass/b",
+                "west": "essentialcraft:blocks/ct/voidGlass/br",
+                "east": "essentialcraft:blocks/ct/voidGlass/bl"
+            }
+        }],
+        "down=true,east=false,north=true,south=false,up=true,west=false": [{
+            "textures": {
+                "south": "essentialcraft:blocks/ct/voidGlass/tb",
+                "west": "essentialcraft:blocks/ct/voidGlass/tbr",
+                "east": "essentialcraft:blocks/ct/voidGlass/tbl"
+            }
+        }],
+        "down=false,east=true,north=true,south=false,up=true,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/voidGlass/tl",
+                "south": "essentialcraft:blocks/ct/voidGlass/bl",
+                "west": "essentialcraft:blocks/ct/voidGlass/br"
+            }
+        }],
+        "down=true,east=true,north=true,south=false,up=true,west=false": [{
+           "textures": {
+                "south": "essentialcraft:blocks/ct/voidGlass/tbl",
+                "west": "essentialcraft:blocks/ct/voidGlass/tbr"
+            } 
+        }],
+        "down=false,east=false,north=false,south=true,up=true,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/voidGlass/b",
+                "north": "essentialcraft:blocks/ct/voidGlass/b",
+                "west": "essentialcraft:blocks/ct/voidGlass/bl",
+                "east": "essentialcraft:blocks/ct/voidGlass/br"
+            }
+        }],
+        "down=true,east=false,north=false,south=true,up=true,west=false": [{
+            "textures": {
+                "north": "essentialcraft:blocks/ct/voidGlass/tb",
+                "west": "essentialcraft:blocks/ct/voidGlass/tbl",
+                "east": "essentialcraft:blocks/ct/voidGlass/tbr"
+            }
+        }],
+        "down=false,east=true,north=false,south=true,up=true,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/voidGlass/bl",
+                "north": "essentialcraft:blocks/ct/voidGlass/br",
+                "west": "essentialcraft:blocks/ct/voidGlass/bl"
+            }
+        }],
+        "down=true,east=true,north=false,south=true,up=true,west=false": [{
+            "textures": {
+                "north": "essentialcraft:blocks/ct/voidGlass/tbr",
+                "west": "essentialcraft:blocks/ct/voidGlass/tbl"
+            }
+        }],
+        "down=false,east=false,north=true,south=true,up=true,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/voidGlass/tb",
+                "west": "essentialcraft:blocks/ct/voidGlass/lrb",
+                "east": "essentialcraft:blocks/ct/voidGlass/lrb"
+            }
+        }],
+        "down=true,east=false,north=true,south=true,up=true,west=false": [{
+            "textures": {
+                "west": "essentialcraft:blocks/ct/voidGlass/tblr",
+                "east": "essentialcraft:blocks/ct/voidGlass/tblr"
+            }
+        }],
+        "down=false,east=true,north=true,south=true,up=true,west=false": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/voidGlass/tbl",
+                "west": "essentialcraft:blocks/ct/voidGlass/lrb"
+            }
+        }],
+        "down=true,east=true,north=true,south=true,up=true,west=false": [{
+            "textures": {
+                "west": "essentialcraft:blocks/ct/voidGlass/tblr"
+            }
+        }],
+        "down=false,east=false,north=false,south=false,up=false,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/voidGlass/r",
+                "up": "essentialcraft:blocks/ct/voidGlass/r",
+                "north": "essentialcraft:blocks/ct/voidGlass/l",
+                "south": "essentialcraft:blocks/ct/voidGlass/r"
+            }
+        }],
+        "down=true,east=false,north=false,south=false,up=false,west=true": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/voidGlass/r",
+                "north": "essentialcraft:blocks/ct/voidGlass/tl",
+                "south": "essentialcraft:blocks/ct/voidGlass/tr",
+                "east": "essentialcraft:blocks/ct/voidGlass/t"
+            }
+        }],
+        "down=false,east=true,north=false,south=false,up=false,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/voidGlass/lr",
+                "up": "essentialcraft:blocks/ct/voidGlass/lr",
+                "north": "essentialcraft:blocks/ct/voidGlass/lr",
+                "south": "essentialcraft:blocks/ct/voidGlass/lr"
+            }
+        }],
+        "down=true,east=true,north=false,south=false,up=false,west=true": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/voidGlass/lr",
+                "north": "essentialcraft:blocks/ct/voidGlass/lrt",
+                "south": "essentialcraft:blocks/ct/voidGlass/lrt"
+            }
+        }],
+        "down=false,east=false,north=true,south=false,up=false,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/voidGlass/tr",
+                "up": "essentialcraft:blocks/ct/voidGlass/br",
+                "south": "essentialcraft:blocks/ct/voidGlass/r",
+                "east": "essentialcraft:blocks/ct/voidGlass/l"
+            }
+        }],
+        "down=true,east=false,north=true,south=false,up=false,west=true": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/voidGlass/br",
+                "south": "essentialcraft:blocks/ct/voidGlass/tr",
+                "east": "essentialcraft:blocks/ct/voidGlass/tl"
+            }
+        }],
+        "down=false,east=true,north=true,south=false,up=false,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/voidGlass/lrt",
+                "up": "essentialcraft:blocks/ct/voidGlass/lrb",
+                "south": "essentialcraft:blocks/ct/voidGlass/lr"
+            }
+        }],
+        "down=true,east=true,north=true,south=false,up=false,west=true": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/voidGlass/lrb",
+                "south": "essentialcraft:blocks/ct/voidGlass/lrt"
+            }
+        }],
+        "down=false,east=false,north=false,south=true,up=false,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/voidGlass/br",
+                "up": "essentialcraft:blocks/ct/voidGlass/tr",
+                "north": "essentialcraft:blocks/ct/voidGlass/l",
+                "east": "essentialcraft:blocks/ct/voidGlass/r"
+            }
+        }],
+        "down=true,east=false,north=false,south=true,up=false,west=true": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/voidGlass/tr",
+                "north": "essentialcraft:blocks/ct/voidGlass/tl",
+                "east": "essentialcraft:blocks/ct/voidGlass/tr"
+            }
+        }],
+        "down=false,east=true,north=false,south=true,up=false,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/voidGlass/lrb",
+                "up": "essentialcraft:blocks/ct/voidGlass/lrt",
+                "north": "essentialcraft:blocks/ct/voidGlass/lr"
+            }
+        }],
+        "down=true,east=true,north=false,south=true,up=false,west=true": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/voidGlass/lrt",
+                "north": "essentialcraft:blocks/ct/voidGlass/lrt"
+            }
+        }],
+        "down=false,east=false,north=true,south=true,up=false,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/voidGlass/tbr",
+                "up": "essentialcraft:blocks/ct/voidGlass/tbr",
+                "east": "essentialcraft:blocks/ct/voidGlass/lr"
+            }
+        }],
+        "down=true,east=false,north=true,south=true,up=false,west=true": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/voidGlass/tbr",
+                "east": "essentialcraft:blocks/ct/voidGlass/lrt"
+            }
+        }],
+        "down=false,east=true,north=true,south=true,up=false,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/voidGlass/tblr",
+                "up": "essentialcraft:blocks/ct/voidGlass/tblr"
+            }
+        }],
+        "down=true,east=true,north=true,south=true,up=false,west=true": [{
+            "textures": {
+                "up": "essentialcraft:blocks/ct/voidGlass/tblr"
+            }
+        }],
+        "down=false,east=false,north=false,south=false,up=true,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/voidGlass/r",
+                "north": "essentialcraft:blocks/ct/voidGlass/bl",
+                "south": "essentialcraft:blocks/ct/voidGlass/br",
+                "east": "essentialcraft:blocks/ct/voidGlass/b"
+            }
+        }],
+        "down=true,east=false,north=false,south=false,up=true,west=true": [{
+            "textures": {
+                "north": "essentialcraft:blocks/ct/voidGlass/tbl",
+                "south": "essentialcraft:blocks/ct/voidGlass/tbr",
+                "east": "essentialcraft:blocks/ct/voidGlass/tb"
+            }
+        }],
+        "down=false,east=true,north=false,south=false,up=true,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/voidGlass/lr",
+                "north": "essentialcraft:blocks/ct/voidGlass/lrb",
+                "south": "essentialcraft:blocks/ct/voidGlass/lrb"
+            }
+        }],
+        "down=true,east=true,north=false,south=false,up=true,west=true": [{
+            "textures": {
+                "north": "essentialcraft:blocks/ct/voidGlass/tblr",
+                "south": "essentialcraft:blocks/ct/voidGlass/tblr"
+            }
+        }],
+        "down=false,east=false,north=true,south=false,up=true,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/voidGlass/tr",
+                "south": "essentialcraft:blocks/ct/voidGlass/br",
+                "east": "essentialcraft:blocks/ct/voidGlass/bl"
+            }
+        }],
+        "down=true,east=false,north=true,south=false,up=true,west=true": [{
+            "textures": {
+                "south": "essentialcraft:blocks/ct/voidGlass/tbr",
+                "east": "essentialcraft:blocks/ct/voidGlass/tbl"
+            }
+        }],
+        "down=false,east=true,north=true,south=false,up=true,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/voidGlass/lrt",
+                "south": "essentialcraft:blocks/ct/voidGlass/lrb"
+            }
+        }],
+        "down=true,east=true,north=true,south=false,up=true,west=true": [{
+            "textures": {
+                "south": "essentialcraft:blocks/ct/voidGlass/tblr"
+            }
+        }],
+        "down=false,east=false,north=false,south=true,up=true,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/voidGlass/br",
+                "north": "essentialcraft:blocks/ct/voidGlass/bl",
+                "east": "essentialcraft:blocks/ct/voidGlass/br"
+            }
+        }],
+        "down=true,east=false,north=false,south=true,up=true,west=true": [{
+            "textures": {
+                "north": "essentialcraft:blocks/ct/voidGlass/tbl",
+                "east": "essentialcraft:blocks/ct/voidGlass/tbr"
+            }
+        }],
+        "down=false,east=true,north=false,south=true,up=true,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/voidGlass/lrb",
+                "north": "essentialcraft:blocks/ct/voidGlass/lrb"
+            }
+        }],
+        "down=true,east=true,north=false,south=true,up=true,west=true": [{
+            "textures": {
+                "north": "essentialcraft:blocks/ct/voidGlass/tblr"
+            }
+        }],
+        "down=false,east=false,north=true,south=true,up=true,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/voidGlass/tbr",
+                "east": "essentialcraft:blocks/ct/voidGlass/lrb"
+            }
+        }],
+        "down=true,east=false,north=true,south=true,up=true,west=true": [{
+            "textures": {
+                "east": "essentialcraft:blocks/ct/voidGlass/tblr"
+            }
+        }],
+        "down=false,east=true,north=true,south=true,up=true,west=true": [{
+            "textures": {
+                "down": "essentialcraft:blocks/ct/voidGlass/tblr"
+            }
+        }],
+        "down=true,east=true,north=true,south=true,up=true,west=true": [{}],
+        "inventory": [{}]
+    }
+}

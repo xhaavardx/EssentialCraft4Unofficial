@@ -41,7 +41,7 @@ public class ContainerMIMInventoryStorage extends Container {
 	@Override
 	public void onContainerClosed(EntityPlayer entityPlayer) {
 		super.onContainerClosed(entityPlayer);
-		tile.closeInventory();
+		tile.closeInventory(entityPlayer);
 	}
 	
 	@Override

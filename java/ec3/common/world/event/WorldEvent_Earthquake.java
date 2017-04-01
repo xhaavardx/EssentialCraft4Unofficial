@@ -1,7 +1,7 @@
 package ec3.common.world.event;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import ec3.api.IWorldEvent;
 import ec3.utils.cfg.Config;
@@ -11,7 +11,7 @@ public class WorldEvent_Earthquake implements IWorldEvent{
 
 	@Override
 	public void onEventBeginning(World w) {
-		ECUtils.sendChatMessageToAllPlayersInDim(Config.dimensionID, EnumChatFormatting.RED+"The ground is shaking...");
+		ECUtils.sendChatMessageToAllPlayersInDim(Config.dimensionID, TextFormatting.RED+"The ground is shaking...");
 	}
 
 	@Override
@@ -25,7 +25,7 @@ public class WorldEvent_Earthquake implements IWorldEvent{
 
 	@Override
 	public void onEventEnd(World w) {
-		ECUtils.sendChatMessageToAllPlayersInDim(Config.dimensionID, EnumChatFormatting.GREEN+"The ground is solid again!");
+		ECUtils.sendChatMessageToAllPlayersInDim(Config.dimensionID, TextFormatting.GREEN+"The ground is solid again!");
 	}
 
 	@Override
@@ -35,7 +35,7 @@ public class WorldEvent_Earthquake implements IWorldEvent{
 
 	@Override
 	public boolean possibleToApply(World w) {
-		return w.provider.dimensionId == Config.dimensionID;
+		return w.provider.getDimension() == Config.dimensionID;
 	}
 
 	@Override

@@ -1,0 +1,14 @@
+{
+    "forge_marker": 1,
+    "variants": {
+        "normal": [{
+            "model": "minecraft:block",
+            "textures": { "particle": "essentialcraft:blocks/magicPlatingBlock" }
+        }],
+        "inventory": [{
+            "model": "essentialcraft:MirrorInv.obj",
+            "transform": "forge:default-block",
+            "custom": { "flip-v": true }
+        }]
+    }
+}

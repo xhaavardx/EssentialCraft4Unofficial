@@ -2,7 +2,7 @@ package ec3.common.tile;
 
 import java.util.List;
 
-import cpw.mods.fml.common.eventhandler.Event.Result;
+import net.minecraftforge.fml.common.eventhandler.Event.Result;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockMobSpawner;
 import net.minecraft.entity.Entity;
@@ -10,10 +10,11 @@ import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.IEntityLivingData;
-import net.minecraft.world.SpawnerAnimals;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.WorldEntitySpawner;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
-import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.event.ForgeEventFactory;
 import DummyCore.Utils.DataStorage;
@@ -21,8 +22,6 @@ import DummyCore.Utils.DummyData;
 import DummyCore.Utils.MathUtils;
 import ec3.api.ApiCore;
 import ec3.utils.common.ECUtils;
-
-
 
 public class TileDarknessObelisk extends TileMRUGeneric {
 	public static float cfgMaxMRU = ApiCore.DEVICE_MAX_MRU_GENERIC;
@@ -42,20 +41,21 @@ public class TileDarknessObelisk extends TileMRUGeneric {
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
-	public void updateEntity() {
-		if(!worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord)) {
+	public void update() {
+		if(worldObj.isBlockIndirectlyGettingPowered(pos) == 0) {
 			if(getStackInSlot(1) == null || !(Block.getBlockFromItem(getStackInSlot(1).getItem()) instanceof BlockMobSpawner)) {
-				BiomeGenBase biome = worldObj.getBiomeGenForCoords(xCoord, zCoord);
-				List l = biome.getSpawnableList(EnumCreatureType.monster);
+				Biome biome = worldObj.getBiomeGenForCoords(pos);
+				List l = biome.getSpawnableList(EnumCreatureType.MONSTER);
 				if(l != null && !l.isEmpty() && !worldObj.isRemote && worldObj.rand.nextFloat() < worldSpawnChance && getMRU() > mruUsage) {
-					BiomeGenBase.SpawnListEntry spawnlistentry = null;
+					Biome.SpawnListEntry spawnlistentry = null;
 					IEntityLivingData ientitylivingdata = null;
-					int rndOffsetX = (int)(xCoord + MathUtils.randomDouble(worldObj.rand) * worldSpawnerRadius);
-					int rndOffsetY = (int)(yCoord + MathUtils.randomDouble(worldObj.rand) * worldSpawnerRadius);
-					int rndOffsetZ = (int)(zCoord + MathUtils.randomDouble(worldObj.rand) * worldSpawnerRadius);
-					if(SpawnerAnimals.canCreatureTypeSpawnAtLocation(EnumCreatureType.monster, worldObj, rndOffsetX, rndOffsetY, rndOffsetZ)) {
+					int rndOffsetX = (int)(pos.getX() + MathUtils.randomDouble(worldObj.rand) * worldSpawnerRadius);
+					int rndOffsetY = (int)(pos.getY() + MathUtils.randomDouble(worldObj.rand) * worldSpawnerRadius);
+					int rndOffsetZ = (int)(pos.getZ() + MathUtils.randomDouble(worldObj.rand) * worldSpawnerRadius);
+					BlockPos rndPos = new BlockPos(rndOffsetX, rndOffsetY, rndOffsetZ);
+					if(WorldEntitySpawner.canCreatureTypeSpawnAtLocation(EntityLiving.SpawnPlacementType.ON_GROUND, worldObj, rndPos)) {
 						WorldServer wrld = (WorldServer) worldObj;
-						spawnlistentry = wrld.spawnRandomCreature(EnumCreatureType.monster, rndOffsetX, rndOffsetY, rndOffsetZ);
+						spawnlistentry = wrld.getSpawnListEntryForTypeAt(EnumCreatureType.MONSTER, rndPos);
 						if(spawnlistentry != null) {
 							EntityLiving entityliving;
 							
@@ -67,9 +67,9 @@ public class TileDarknessObelisk extends TileMRUGeneric {
 									wrld.spawnEntityInWorld(entityliving);
 									setMRU(getMRU() - mruUsage);
 									if(generatesCorruption)
-										ECUtils.increaseCorruptionAt(worldObj, xCoord, yCoord, zCoord, worldObj.rand.nextInt(genCorruption));
+										ECUtils.increaseCorruptionAt(worldObj, pos.getX(), pos.getY(), pos.getZ(), worldObj.rand.nextInt(genCorruption));
 									if(!ForgeEventFactory.doSpecialSpawn(entityliving, wrld, (float)rndOffsetX+0.5F, (float)rndOffsetY, (float)rndOffsetZ+0.5F)) {
-										ientitylivingdata = entityliving.onSpawnWithEgg(ientitylivingdata);
+										ientitylivingdata = entityliving.onInitialSpawn(worldObj.getDifficultyForLocation(rndPos), ientitylivingdata);
 									}
 								}
 							}
@@ -88,28 +88,28 @@ public class TileDarknessObelisk extends TileMRUGeneric {
 					Entity base = EntityList.createEntityByID(metadata, worldObj);
 					if(base instanceof EntityLiving) {
 						EntityLiving entityliving = (EntityLiving) base;
-						int rndOffsetX = (int)(xCoord + MathUtils.randomDouble(worldObj.rand)*mobSpawnerRadius);
-						int rndOffsetY = (int)(yCoord + MathUtils.randomDouble(worldObj.rand));
-						int rndOffsetZ = (int)(zCoord + MathUtils.randomDouble(worldObj.rand)*mobSpawnerRadius);
+						int rndOffsetX = (int)(pos.getX() + MathUtils.randomDouble(worldObj.rand)*mobSpawnerRadius);
+						int rndOffsetY = (int)(pos.getY() + MathUtils.randomDouble(worldObj.rand));
+						int rndOffsetZ = (int)(pos.getZ() + MathUtils.randomDouble(worldObj.rand)*mobSpawnerRadius);
 						entityliving.setLocationAndAngles(rndOffsetX+0.5D, rndOffsetY, rndOffsetZ+0.5D, worldObj.rand.nextFloat()*360.0F, 0.0F);
 						if(entityliving.getCanSpawnHere()) {
 							if(!worldObj.isRemote)
 								worldObj.spawnEntityInWorld(entityliving);
 							
-							worldObj.playAuxSFX(2004, xCoord, yCoord, zCoord, 0);
+							worldObj.playEvent(2004, pos, 0);
 							
 							if(entityliving != null)
 								entityliving.spawnExplosionParticle();
 							setMRU(getMRU() - mruUsage);
 							if(generatesCorruption)
-								ECUtils.increaseCorruptionAt(worldObj, xCoord, yCoord, zCoord, worldObj.rand.nextInt(genCorruption));
+								ECUtils.increaseCorruptionAt(worldObj, pos.getX(), pos.getY(), pos.getZ(), worldObj.rand.nextInt(genCorruption));
 						}
 					}		
 				}
 			}
 		}
 		ECUtils.manage(this, 0);
-		super.updateEntity();
+		super.update();
 	}
 	
 	public static void setupConfig(Configuration cfg) {

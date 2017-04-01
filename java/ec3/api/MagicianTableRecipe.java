@@ -6,7 +6,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.world.World;
 
-public class MagicianTableRecipe implements IRecipe{
+public class MagicianTableRecipe implements IRecipe {
 
 	public UnformedItemStack[] requiredItems = new UnformedItemStack[5];
 	public ItemStack result;
@@ -46,19 +46,16 @@ public class MagicianTableRecipe implements IRecipe{
 
 	@Override
 	public ItemStack getCraftingResult(InventoryCrafting p_77572_1_) {
-		// TODO Auto-generated method stub
 		return result;
 	}
 
 	@Override
 	public int getRecipeSize() {
-		// TODO Auto-generated method stub
 		return 5;
 	}
 
 	@Override
 	public ItemStack getRecipeOutput() {
-		// TODO Auto-generated method stub
 		return result;
 	}
 	
@@ -74,4 +71,8 @@ public class MagicianTableRecipe implements IRecipe{
 		return retStr;
 	}
 
+	@Override
+	public ItemStack[] getRemainingItems(InventoryCrafting inv) {
+		return new ItemStack[5];
+	}
 }

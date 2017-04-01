@@ -1,0 +1,28 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "minecraft:cube_all"
+    },
+    "variants": {
+        "type": {
+            "fire": {
+                "textures": { "all": "essentialcraft:blocks/lamp/fire" }
+            },
+            "water": {
+                "textures": { "all": "essentialcraft:blocks/lamp/water" }
+            },
+            "earth": {
+                "textures": { "all": "essentialcraft:blocks/lamp/earth" }
+            },
+            "air": {
+                "textures": { "all": "essentialcraft:blocks/lamp/air" }
+            },
+            "elemental": {
+                "textures": { "all": "essentialcraft:blocks/lamp/elemental" }
+            },
+            "mithriline": {
+                "textures": { "all": "essentialcraft:blocks/lamp/mithriline" }
+            }
+        }
+    }
+}

@@ -1,0 +1,66 @@
+{
+    "forge_marker": 1,
+    "variants": {
+        "layer": {
+            "top": {
+                "model": "minecraft:cube_all",
+                "textures": { "all": "essentialcraft:blocks/magicPlatingBlock" }
+            },
+            "middle": {
+                "model": "essentialcraft:reactorSupportMiddle"
+            },
+            "bottom": {
+                "model": "essentialcraft:reactorSupportBottom"
+            }
+        },
+        "north": {
+            "true": {
+                "submodel": {
+                    "bars0": {
+                        "model": "essentialcraft:reactorSupportBars"
+                    }
+                }
+            },
+            "false": {}
+        },
+        "south": {
+            "true": {
+                "submodel": {
+                    "bars1": {
+                        "model": "essentialcraft:reactorSupportBars",
+                        "y": 180,
+                        "uvlock": true
+                    }
+                }
+            },
+            "false": {}
+        },
+        "west": {
+            "true": {
+                "submodel": {
+                    "bars2": {
+                        "model": "essentialcraft:reactorSupportBars",
+                        "y": -90,
+                        "uvlock": true
+                    }
+                }
+            },
+            "false": {}
+        },
+        "east": {
+            "true": {
+                "submodel": {
+                    "bars3": {
+                        "model": "essentialcraft:reactorSupportBars",
+                        "y": 90,
+                        "uvlock": true
+                    }
+                }
+            },
+            "false": {}
+        },
+        "inventory": [{
+            "model": "essentialcraft:reactorSupportMiddle"
+        }]
+    }
+}

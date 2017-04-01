@@ -2,18 +2,15 @@ package ec3.network;
 
 import net.minecraft.nbt.NBTTagCompound;
 import io.netty.buffer.ByteBuf;
-import cpw.mods.fml.common.network.ByteBufUtils;
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
+import net.minecraftforge.fml.common.network.ByteBufUtils;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 
-public class PacketNBT implements IMessage{
+public class PacketNBT implements IMessage {
 	
 	public NBTTagCompound theTag;
 	public int packetID;
 	
-	public PacketNBT()
-	{
-		//FML Initialisation
-	}
+	public PacketNBT() {}
 	
 	public PacketNBT(NBTTagCompound t)
 	{
@@ -37,5 +34,4 @@ public class PacketNBT implements IMessage{
 		theTag.setInteger("ec3packetData.id", packetID);
 		ByteBufUtils.writeTag(buf, theTag);
 	}
-
 }

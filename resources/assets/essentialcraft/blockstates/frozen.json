@@ -1,0 +1,124 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "minecraft:block",
+        "textures": {
+            "all": "essentialcraft:blocks/null",
+            "particle": "#all"
+        }
+    },
+    "variants": {
+        "level": {
+            "0": {
+                "textures": {
+                    "all": "essentialcraft:blocks/corruption/frozen/0"
+                }
+            },
+            "1": {
+                "textures": {
+                    "all": "essentialcraft:blocks/corruption/frozen/1"
+                }
+            },
+            "2": {
+                "textures": {
+                    "all": "essentialcraft:blocks/corruption/frozen/2"
+                }
+            },
+            "3": {
+                "textures": {
+                    "all": "essentialcraft:blocks/corruption/frozen/3"
+                }
+            },
+            "4": {
+                "textures": {
+                    "all": "essentialcraft:blocks/corruption/frozen/4"
+                }
+            },
+            "5": {
+                "textures": {
+                    "all": "essentialcraft:blocks/corruption/frozen/5"
+                }
+            },
+            "6": {
+                "textures": {
+                    "all": "essentialcraft:blocks/corruption/frozen/6"
+                }
+            },
+            "7": {
+                "textures": {
+                    "all": "essentialcraft:blocks/corruption/frozen/7"
+                }
+            }
+        },
+        "north": {
+            "true": {
+                "submodel": {
+                    "overlay0": {
+                        "model": "essentialcraft:offsetOverlay"
+                    }
+                }
+            },
+            "false": {}
+        },
+        "south": {
+            "true": {
+                "submodel": {
+                    "overlay1": {
+                        "model": "essentialcraft:offsetOverlay",
+                        "uvlock": true,
+                        "y": 180
+                    }
+                }
+            },
+            "false": {}
+        },
+        "west": {
+            "true": {
+                "submodel": {
+                    "overlay2": {
+                        "model": "essentialcraft:offsetOverlay",
+                        "uvlock": true,
+                        "y": -90
+                    }
+                }
+            },
+            "false": {}
+        },
+        "east": {
+            "true": {
+                "submodel": {
+                    "overlay3": {
+                        "model": "essentialcraft:offsetOverlay",
+                        "uvlock": true,
+                        "y": 90
+                    }
+                }
+            },
+            "false": {}
+        },
+        "down": {
+            "true": {
+                "submodel": {
+                    "overlay4": {
+                        "model": "essentialcraft:offsetOverlay",
+                        "uvlock": true,
+                        "x": 90
+                    }
+                }
+            },
+            "false": {}
+        },
+        "up": {
+            "true": {
+                "submodel": {
+                    "overlay5": {
+                        "model": "essentialcraft:offsetOverlay",
+                        "uvlock": true,
+                        "x": -90
+                    }
+                }
+            },
+            "false": {}
+        }
+    }
+}

@@ -6,23 +6,29 @@ import java.util.UUID;
 
 import com.mojang.authlib.GameProfile;
 
-import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
+import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import DummyCore.Utils.DataStorage;
 import DummyCore.Utils.DummyData;
+import DummyCore.Utils.MiscUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Enchantments;
 import net.minecraft.init.Items;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.util.FakePlayer;
 import ec3.api.ApiCore;
@@ -51,20 +57,20 @@ public class TileMagicalQuarry extends TileMRUGeneric {
 	public static final List<Object> voidList = new ArrayList<Object>();
 	
 	static {
-		voidList.add(Blocks.cobblestone);
-		voidList.add(Blocks.dirt);
-		voidList.add(Blocks.grass);
-		voidList.add(Blocks.stone);
-		voidList.add(Blocks.sand);
-		voidList.add(Blocks.sandstone);
-		voidList.add(Blocks.tallgrass);
-		voidList.add(Blocks.red_flower);
-		voidList.add(Blocks.yellow_flower);
-		voidList.add(Blocks.brown_mushroom);
-		voidList.add(Blocks.red_mushroom);
-		voidList.add(Blocks.leaves);
-		voidList.add(Blocks.leaves2);
-		voidList.add(Items.wheat_seeds);
+		voidList.add(Blocks.COBBLESTONE);
+		voidList.add(Blocks.DIRT);
+		voidList.add(Blocks.GRASS);
+		voidList.add(Blocks.STONE);
+		voidList.add(Blocks.SAND);
+		voidList.add(Blocks.SANDSTONE);
+		voidList.add(Blocks.TALLGRASS);
+		voidList.add(Blocks.RED_FLOWER);
+		voidList.add(Blocks.YELLOW_FLOWER);
+		voidList.add(Blocks.BROWN_MUSHROOM);
+		voidList.add(Blocks.RED_MUSHROOM);
+		voidList.add(Blocks.LEAVES);
+		voidList.add(Blocks.LEAVES2);
+		voidList.add(Items.WHEAT_SEEDS);
 	}
 	 
 	public TileMagicalQuarry() {
@@ -78,11 +84,11 @@ public class TileMagicalQuarry extends TileMRUGeneric {
 	}
 	
 	@Override
-	public void updateEntity() {
+	public void update() {
 		if(syncTick == 10)
 			syncTick = 0;
-		super.updateEntity();
-		if(!worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord))
+		super.update();
+		if(worldObj.isBlockIndirectlyGettingPowered(pos) == 0)
 			mine();
 		if(!worldObj.isRemote)
 			collectItems();
@@ -101,13 +107,14 @@ public class TileMagicalQuarry extends TileMRUGeneric {
 	}
 	
 	@Override
-	public void writeToNBT(NBTTagCompound i) {
+	public NBTTagCompound writeToNBT(NBTTagCompound i) {
 		super.writeToNBT(i);
 		i.setInteger("progressLevel", progressLevel);
 		i.setInteger("miningX", miningX);
 		i.setInteger("miningY", miningY);
 		i.setInteger("miningZ", miningZ);
 		i.setBoolean("localFlag", flag);
+		return i;
 	}
 	
 	public boolean hasInventoryUpgrade() {
@@ -171,14 +178,14 @@ public class TileMagicalQuarry extends TileMRUGeneric {
 	}
     
 	public boolean hasInventory() {
-		TileEntity t = worldObj.getTileEntity(xCoord, yCoord+1, zCoord);
+		TileEntity t = worldObj.getTileEntity(pos.up());
 		if(t != null && t instanceof IInventory)
 			return hasSpaceInInv((IInventory)t);
 		return false;
 	}
     
 	public IInventory getInventory() {
-		TileEntity t = worldObj.getTileEntity(xCoord, yCoord+1, zCoord);
+		TileEntity t = worldObj.getTileEntity(pos.up());
 		if(t != null && t instanceof IInventory)
 			return (IInventory)t;
 		return null;
@@ -213,15 +220,15 @@ public class TileMagicalQuarry extends TileMRUGeneric {
 	}
 	
 	public boolean canMineBlock(Block b) {
-		if(b == Blocks.bedrock)
+		if(b == Blocks.BEDROCK)
 			return false;
-		if(b == Blocks.obsidian && !hasMiningUpgrade())
+		if(b == Blocks.OBSIDIAN && !hasMiningUpgrade())
 			return false;
 		return true;
 	}
 	
 	public boolean shouldInstaMine(Block b) {
-		return (b instanceof BlockLiquid && ignoreLiquids) || b == null || b == Blocks.air;
+		return (b instanceof BlockLiquid && ignoreLiquids) || b == null || b == Blocks.AIR;
 	}
 	
 	public int determineFortune() {
@@ -249,21 +256,22 @@ public class TileMagicalQuarry extends TileMRUGeneric {
 	public boolean mineBlock(Block b) {
 		if(canMineBlock(b)) {
 			NBTTagCompound currentMinedCoords = new NBTTagCompound();
-			currentMinedCoords.setInteger("x", xCoord);
-			currentMinedCoords.setInteger("y", yCoord);
-			currentMinedCoords.setInteger("z", zCoord);
+			currentMinedCoords.setInteger("x", pos.getX());
+			currentMinedCoords.setInteger("y", pos.getY());
+			currentMinedCoords.setInteger("z", pos.getZ());
 			currentMinedCoords.setInteger("mx", miningX);
 			currentMinedCoords.setInteger("my", miningY);
 			currentMinedCoords.setInteger("mz", miningZ);
 			PacketNBT packet = new PacketNBT(currentMinedCoords).setID(4);
-			EssentialCraftCore.network.sendToAllAround(packet, new TargetPoint(worldObj.provider.dimensionId, xCoord, yCoord, zCoord, 16+getMiningRange()));
+			EssentialCraftCore.network.sendToAllAround(packet, new TargetPoint(worldObj.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 16+getMiningRange()));
+			BlockPos mining = new BlockPos(miningX, miningY, miningZ);
 			
 			if(shouldInstaMine(b)) {
-				worldObj.setBlock(miningX, miningY, miningZ, Blocks.air, 0, 3);
+				worldObj.setBlockToAir(mining);
 				return true;
 			}
 			else {
-				float required = b.getBlockHardness(worldObj, miningX, miningY, miningZ)*blockHardnessModifier;
+				float required = b.getBlockHardness(worldObj.getBlockState(mining),worldObj, mining)*blockHardnessModifier;
 				if(setMRU((int)(getMRU() - (mruUsage/4*getEfficency()))))
 					progressLevel += getEfficency();
 				if(progressLevel >= required) {
@@ -271,20 +279,20 @@ public class TileMagicalQuarry extends TileMRUGeneric {
 					
 					progressLevel = 0;
 					if(hasMiningUpgrade())
-						quarryFakePlayer.setCurrentItemOrArmor(0, new ItemStack(ItemsCore.wind_elemental_pick));
+						quarryFakePlayer.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(ItemsCore.wind_elemental_pick));
 					else
-						quarryFakePlayer.setCurrentItemOrArmor(0, new ItemStack(ItemsCore.weak_elemental_pick));
+						quarryFakePlayer.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(ItemsCore.weak_elemental_pick));
 					
 					if(hasFortuneUpgrade())
-						quarryFakePlayer.getCurrentEquippedItem().addEnchantment(Enchantment.fortune, determineFortune());
+						quarryFakePlayer.getHeldItemMainhand().addEnchantment(Enchantments.FORTUNE, determineFortune());
 					if(hasSilkyUpgrade())
-						quarryFakePlayer.getCurrentEquippedItem().addEnchantment(Enchantment.silkTouch, 1);
+						quarryFakePlayer.getHeldItemMainhand().addEnchantment(Enchantments.SILK_TOUCH, 1);
 					
-					b.harvestBlock(getWorldObj(), quarryFakePlayer, miningX, miningY, miningZ, worldObj.getBlockMetadata(miningX, miningY, miningZ));
+					b.harvestBlock(worldObj, quarryFakePlayer, mining, worldObj.getBlockState(mining), worldObj.getTileEntity(mining), quarryFakePlayer.getHeldItemMainhand());
 					
-					worldObj.setBlock(miningX, miningY, miningZ, Blocks.air, 0, 3);
+					worldObj.setBlockToAir(mining);
 					if(generatesCorruption)
-						ECUtils.increaseCorruptionAt(worldObj, xCoord, yCoord, zCoord, worldObj.rand.nextInt(genCorruption));
+						ECUtils.increaseCorruptionAt(worldObj, pos.getX(), pos.getY(), pos.getZ(), worldObj.rand.nextInt(genCorruption));
 					
 					quarryFakePlayer = null;
 				}
@@ -294,20 +302,20 @@ public class TileMagicalQuarry extends TileMRUGeneric {
 	}
 	
 	public boolean isMainColomnMined() {
-		int r = yCoord-2;
+		int r = pos.getY()-2;
 		while(--r >= 0) {
-			Block b = worldObj.getBlock(xCoord, r, zCoord);
-			if((b != null && b.getBlockHardness(worldObj,xCoord, r, zCoord) != -1 && b != Blocks.air && !(b instanceof BlockLiquid && ignoreLiquids) && canMineBlock(b)) && canMineBlock(b))
+			Block b = worldObj.getBlockState(pos.down(r)).getBlock();
+			if((b != null && b.getBlockHardness(worldObj.getBlockState(pos.down(r)),worldObj,pos.down(r)) != -1 && b != Blocks.AIR && !(b instanceof BlockLiquid && ignoreLiquids) && canMineBlock(b)) && canMineBlock(b))
 				return false;
 		}
 		return true;
 	}
 	
 	public int genMiningColomnY(int current)  {
-		int r = yCoord-2;
+		int r = pos.getY()-2;
 		while(--r >= 0) {
-			Block b = worldObj.getBlock(xCoord, r, zCoord);
-			if((b != null && b.getBlockHardness(worldObj,xCoord, r, zCoord) != -1 && b != Blocks.air && !(b instanceof BlockLiquid && ignoreLiquids) && canMineBlock(b)) && canMineBlock(b))
+			Block b = worldObj.getBlockState(pos.down(r)).getBlock();
+			if((b != null && b.getBlockHardness(worldObj.getBlockState(pos.down(r)),worldObj,pos.down(r)) != -1 && b != Blocks.AIR && !(b instanceof BlockLiquid && ignoreLiquids) && canMineBlock(b)) && canMineBlock(b))
 				return r;
 		}
 		return current;
@@ -317,8 +325,8 @@ public class TileMagicalQuarry extends TileMRUGeneric {
 		int rad = getMiningRange();
 		for(int x = -rad; x <= rad; ++x) {
 			for(int z = -rad; z <= rad; ++z) {
-				Block b = worldObj.getBlock(xCoord+x, miningY, zCoord+z);
-				if(b != null && b.getBlockHardness(worldObj,xCoord+x, miningY, zCoord+z) != -1 && b != Blocks.air && !(b instanceof BlockLiquid && ignoreLiquids) && canMineBlock(b))
+				Block b = worldObj.getBlockState(new BlockPos(pos.getX()+x, miningY, pos.getZ()+z)).getBlock();
+				if(b != null && b.getBlockHardness(worldObj.getBlockState(new BlockPos(pos.getX()+x, miningY, pos.getZ()+z)),worldObj,new BlockPos(pos.getX()+x, miningY, pos.getZ()+z)) != -1 && b != Blocks.AIR && !(b instanceof BlockLiquid && ignoreLiquids) && canMineBlock(b))
 					return false;
 			}
 		}
@@ -335,7 +343,7 @@ public class TileMagicalQuarry extends TileMRUGeneric {
 				
 				if(!flag) {
 					flag = true;
-					miningY = yCoord-3;
+					miningY = pos.getY()-3;
 				}
 				flag = isMainColomnMined();
 				
@@ -348,11 +356,12 @@ public class TileMagicalQuarry extends TileMRUGeneric {
 						for(int x = -rad; x <= rad; ++x) {
 							for(int z = -rad; z <= rad; ++z)
 							{
-								if(worldObj.checkChunksExist(xCoord+x-1, miningY-1, zCoord+z-1, xCoord+x+1, miningY+1, zCoord+z+1) && worldObj.blockExists(xCoord+x, miningY, zCoord+z) && worldObj.getBlock(xCoord+x, miningY, zCoord+z) != null && worldObj.getBlock(xCoord+x, miningY, zCoord+z).getBlockHardness(worldObj,xCoord+x, miningY, zCoord+z) != -1 && worldObj.getBlock(xCoord+x, miningY, zCoord+z) != Blocks.air && !(worldObj.getBlock(xCoord+x, miningY, zCoord+z) instanceof BlockLiquid))
+								BlockPos cp = new BlockPos(pos.getX()+x, miningY, pos.getZ()+z);
+								if(worldObj.isAreaLoaded(new StructureBoundingBox(pos.getX()+x-1, miningY-1, pos.getZ()+z-1, pos.getX()+x+1, miningY+1, pos.getZ()+z+1)) && worldObj.isBlockLoaded(cp) && worldObj.getBlockState(cp).getBlock() != null && worldObj.getBlockState(cp).getBlockHardness(worldObj,cp) != -1 && worldObj.getBlockState(cp).getBlock() != Blocks.AIR && !(worldObj.getBlockState(cp).getBlock() instanceof BlockLiquid))
 								{
-									miningX = xCoord+x;
-									miningZ = zCoord+z;
-									mineBlock(worldObj.getBlock(xCoord+x, miningY, zCoord+z));
+									miningX = pos.getX()+x;
+									miningZ = pos.getZ()+z;
+									mineBlock(worldObj.getBlockState(new BlockPos(pos.getX()+x, miningY, pos.getZ()+z)).getBlock());
 									break Fort;
 								}
 							}
@@ -362,11 +371,12 @@ public class TileMagicalQuarry extends TileMRUGeneric {
 			else {
 				flag = false;
 				miningY = genMiningColomnY(miningY);
-				miningX = xCoord;
-				miningZ = zCoord;
-				if(worldObj.checkChunksExist(miningX-1, miningY-1, miningZ-1, miningX+1, miningY+1, miningZ+1) && worldObj.blockExists(miningX, miningY, miningZ)){
-					if(worldObj.getBlock(miningX, miningY, miningZ) != null && worldObj.getBlock(miningX, miningY, miningZ) != Blocks.air && !(worldObj.getBlock(miningX, miningY, miningZ) instanceof BlockLiquid)){
-						if(mineBlock(worldObj.getBlock(miningX, miningY, miningZ)))
+				miningX = pos.getX();
+				miningZ = pos.getZ();
+				BlockPos mining = new BlockPos(miningX, miningY, miningZ);
+				if(worldObj.isAreaLoaded(new StructureBoundingBox(miningX-1, miningY-1, miningZ-1, miningX+1, miningY+1, miningZ+1)) && worldObj.isBlockLoaded(mining)){
+					if(worldObj.getBlockState(mining).getBlock() != null && worldObj.getBlockState(mining) != Blocks.AIR && !(worldObj.getBlockState(mining).getBlock() instanceof BlockLiquid)){
+						if(mineBlock(worldObj.getBlockState(mining).getBlock()))
 							--miningY;
 					}
 					else
@@ -378,13 +388,13 @@ public class TileMagicalQuarry extends TileMRUGeneric {
 	
 	@SuppressWarnings("unchecked")
 	public void collectItems() {
-		List<EntityItem> l = worldObj.getEntitiesWithinAABB(EntityItem.class, AxisAlignedBB.getBoundingBox(miningX, miningY, miningZ, miningX+1, miningY+1, miningZ+1).expand(4D, 2D, 4D));
+		List<EntityItem> l = worldObj.getEntitiesWithinAABB(EntityItem.class, new AxisAlignedBB(miningX, miningY, miningZ, miningX+1, miningY+1, miningZ+1).expand(4D, 2D, 4D));
 		if(!l.isEmpty()) {
 			for(int i = 0; i < l.size(); ++i) {
 				EntityItem item = l.get(i);
 				ItemStack s = item.getEntityItem();
 				if(hasSmeltingUpgrade() && s != null) {
-					ItemStack forged = FurnaceRecipes.smelting().getSmeltingResult(s);
+					ItemStack forged = FurnaceRecipes.instance().getSmeltingResult(s);
 					if(forged != null) {
 						ItemStack copy = forged.copy();
 						copy.stackSize *= s.stackSize;
@@ -420,8 +430,8 @@ public class TileMagicalQuarry extends TileMRUGeneric {
 	}
 	
 	public void splitItem(ItemStack s) {
-		EntityItem item = new EntityItem(worldObj, xCoord, yCoord, zCoord, s);
-		item.setPositionAndRotation(xCoord+0.5D, yCoord+2, zCoord+0.5D, 0, 0);
+		EntityItem item = new EntityItem(worldObj, pos.getX(), pos.getY(), pos.getZ(), s);
+		item.setPositionAndRotation(pos.getX()+0.5D, pos.getY()+2, pos.getZ()+0.5D, 0, 0);
 		worldObj.spawnEntityInWorld(item);
 	}
 	

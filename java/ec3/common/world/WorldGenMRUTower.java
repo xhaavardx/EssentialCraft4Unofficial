@@ -2,6 +2,7 @@ package ec3.common.world;
 
 import java.util.Random;
 
+import DummyCore.Utils.WeightedRandomChestContent;
 import ec3.common.block.BlocksCore;
 import ec3.common.item.ItemBaublesWearable;
 import ec3.common.item.ItemsCore;
@@ -9,11 +10,11 @@ import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityChest;
-import net.minecraft.util.WeightedRandomChestContent;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 
-public class WorldGenMRUTower extends WorldGenerator{
+public class WorldGenMRUTower extends WorldGenerator {
 	
 	
 	public WorldGenMRUTower()
@@ -40,9 +41,10 @@ public class WorldGenMRUTower extends WorldGenerator{
 	{
 		while(y > 5)
 		{
-			if(!w.isAirBlock(x, y, z) && w.getBlock(x, y, z) != Blocks.water)
+			BlockPos p = new BlockPos(x,y,z);
+			if(!w.isAirBlock(p) && w.getBlockState(p).getBlock() != Blocks.WATER)
 			{
-				if(w.getBlock(x, y, z) != BlocksCore.concrete && w.getBlock(x, y, z) != BlocksCore.fortifiedStone)
+				if(w.getBlockState(p).getBlock() != BlocksCore.concrete && w.getBlockState(p).getBlock() != BlocksCore.fortifiedStone)
 				{
 					break;
 				}else
@@ -58,15 +60,15 @@ public class WorldGenMRUTower extends WorldGenerator{
 	}
 
 	@Override
-	public boolean generate(World w, Random r,int x, int y, int z)
+	public boolean generate(World w, Random r, BlockPos p)
 	{
-		int genY = getGroundToGenerate(w,x,y,z);
+		int genY = getGroundToGenerate(w,p.getX(),p.getY(),p.getZ());
 		if(genY != -1)
 		{
-			y = genY;
+			int y = genY;
 			for(int i = 0; i < 4; ++i)
 			{
-				generateFloor(w,x,y+16*i,z,4-i);
+				generateFloor(w,p.getX(),y+16*i,p.getZ(),4-i);
 			}
 			return true;
 		}
@@ -81,21 +83,22 @@ public class WorldGenMRUTower extends WorldGenerator{
 			{
 				for(int dy = 0; dy < 16; ++dy)
 				{
+					BlockPos p = new BlockPos(x+dx, y+dy, z+dz);
 					if((dx == 1 && dz == 1) || (dx == -1 && dz == -1) || (dx == 1 && dz == -1) || (dx == -1 && dz == 1))
 					{
-						if(w.getBlock(x+dx, y+dy, z+dz) != Blocks.chest)
-							w.setBlock(x+dx, y+dy, z+dz, BlocksCore.fence[1]);
+						if(w.getBlockState(p).getBlock() != Blocks.CHEST)
+							w.setBlockState(p, BlocksCore.fence[1].getDefaultState());
 					}
 					if((dx == rad || dx == -rad || dz == -rad || dz == rad) && (dy == 8))
 					{
-						if(w.getBlock(x+dx, y+dy, z+dz) != Blocks.chest)
-							w.setBlock(x+dx, y+dy, z+dz, BlocksCore.fortifiedStone);
+						if(w.getBlockState(p).getBlock() != Blocks.CHEST)
+							w.setBlockState(p, BlocksCore.fortifiedStone.getDefaultState());
 						if(rad == 1 && (dx == 0 || dz == 0))
 						{
-							if(w.getBlock(x+dx, y+dy+1, z+dz) != Blocks.chest)
+							if(w.getBlockState(p.add(0, 1, 0)).getBlock() != Blocks.CHEST)
 							{
-								w.setBlock(x+dx, y+dy+1, z+dz, Blocks.chest);
-								TileEntityChest chest = (TileEntityChest) w.getTileEntity(x+dx, y+dy+1, z+dz);
+								w.setBlockState(p.add(0, 1, 0), Blocks.CHEST.getDefaultState());
+								TileEntityChest chest = (TileEntityChest)w.getTileEntity(p.add(0, 1, 0));
 					            if (chest != null)
 					            {
 					                WeightedRandomChestContent.generateChestContents(w.rand, WorldGenOldCatacombs.generatedItems, chest, w.rand.nextInt(12)+6);
@@ -114,40 +117,39 @@ public class WorldGenMRUTower extends WorldGenerator{
 					}
 					if((dx == -rad || dx == rad) && (dz == -rad || dz == rad))
 					{
-						if(w.getBlock(x+dx, y+dy, z+dz) != Blocks.chest)
-							w.setBlock(x+dx, y+dy, z+dz, BlocksCore.fence[2]);
+						if(w.getBlockState(p).getBlock() != Blocks.CHEST)
+							w.setBlockState(p, BlocksCore.fence[2].getDefaultState());
 					}
 					if(rad > 1 && (dx == -rad) && (dz == -rad))
 					{
-						w.setBlock(x+dx+1, y+dy, z+dz, BlocksCore.fortifiedStone);
-						w.setBlock(x+dx, y+dy, z+dz+1, BlocksCore.fortifiedStone);
+						w.setBlockState(p.add(1, 0, 0), BlocksCore.fortifiedStone.getDefaultState());
+						w.setBlockState(p.add(0, 0, 1), BlocksCore.fortifiedStone.getDefaultState());
 						if(dy == 15)
-							w.setBlock(x+dx+1, y+dy, z+dz+1, BlocksCore.fortifiedStone);
+							w.setBlockState(p.add(1, 0, 1), BlocksCore.fortifiedStone.getDefaultState());
 					}
 					if(rad > 1 && (dx == rad) && (dz == -rad))
 					{
-						w.setBlock(x+dx-1, y+dy, z+dz, BlocksCore.fortifiedStone);
-						w.setBlock(x+dx, y+dy, z+dz+1, BlocksCore.fortifiedStone);
+						w.setBlockState(p.add(-1, 0, 0), BlocksCore.fortifiedStone.getDefaultState());
+						w.setBlockState(p.add(0, 0, 1), BlocksCore.fortifiedStone.getDefaultState());
 						if(dy == 15)
-							w.setBlock(x+dx-1, y+dy, z+dz+1, BlocksCore.fortifiedStone);
+							w.setBlockState(p.add(-1, 0, 1), BlocksCore.fortifiedStone.getDefaultState());
 					}
 					if(rad > 1 && (dx == -rad) && (dz == rad))
 					{
-						w.setBlock(x+dx+1, y+dy, z+dz, BlocksCore.fortifiedStone);
-						w.setBlock(x+dx, y+dy, z+dz-1, BlocksCore.fortifiedStone);
+						w.setBlockState(p.add(1, 0, 0), BlocksCore.fortifiedStone.getDefaultState());
+						w.setBlockState(p.add(0, 0, -1), BlocksCore.fortifiedStone.getDefaultState());
 						if(dy == 15)
-							w.setBlock(x+dx+1, y+dy, z+dz-1, BlocksCore.fortifiedStone);
+							w.setBlockState(p.add(1, 0, -1), BlocksCore.fortifiedStone.getDefaultState());
 					}
 					if(rad > 1 && (dx == rad) && (dz == rad))
 					{
-						w.setBlock(x+dx-1, y+dy, z+dz, BlocksCore.fortifiedStone);
-						w.setBlock(x+dx, y+dy, z+dz-1, BlocksCore.fortifiedStone);
+						w.setBlockState(p.add(-1, 0, 0), BlocksCore.fortifiedStone.getDefaultState());
+						w.setBlockState(p.add(0, 0, -1), BlocksCore.fortifiedStone.getDefaultState());
 						if(dy == 15)
-							w.setBlock(x+dx-1, y+dy, z+dz-1, BlocksCore.fortifiedStone);
+							w.setBlockState(p.add(-1, -1, -1), BlocksCore.fortifiedStone.getDefaultState());
 					}
 				}
 			}
 		}
 	}
-
 }

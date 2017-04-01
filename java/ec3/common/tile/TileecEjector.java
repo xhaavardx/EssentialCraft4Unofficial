@@ -45,7 +45,7 @@ public class TileecEjector extends TileEntity implements ITEStoresMRU, IStructur
 
 	@Override
 	public EnumStructureType getStructure() {
-		return EnumStructureType.MRUCUContaigementChamber;
+		return EnumStructureType.MRUCUEnrichmentChamber;
 	}
 
 	@Override

@@ -1,27 +1,43 @@
 package ec3.common.block;
 
+import DummyCore.Client.IModelRegisterer;
 import ec3.common.tile.TileecEjector;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumBlockRenderType;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.client.model.ModelLoader;
 
-public class BlockecEjector extends BlockContainer{
+public class BlockecEjector extends BlockContainer implements IModelRegisterer {
 
 	protected BlockecEjector(Material p_i45386_1_) {
 		super(p_i45386_1_);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	public TileEntity createNewTileEntity(World var1, int var2) {
-		// TODO Auto-generated method stub
 		return new TileecEjector();
 	}
 
-    public boolean onBlockActivated(World p_149727_1_, int p_149727_2_, int p_149727_3_, int p_149727_4_, EntityPlayer p_149727_5_, int p_149727_6_, float p_149727_7_, float p_149727_8_, float p_149727_9_)
-    {
-        return true;
-    }
+	public boolean onBlockActivated(World par1World, BlockPos par2, IBlockState par3, EntityPlayer par4EntityPlayer, EnumHand par5, ItemStack par6, EnumFacing par7, float par8, float par9, float par10) {
+		return true;
+	}
+
+	public EnumBlockRenderType getRenderType(IBlockState s) {
+		return EnumBlockRenderType.MODEL;
+	}
+
+	@Override
+	public void registerModels() {
+		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation("essentialcraft:ecEjector", "inventory"));
+	}
 }

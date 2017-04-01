@@ -6,6 +6,7 @@ import ec3.common.tile.TileCrystalController;
 import ec3.common.tile.TileElementalCrystal;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
@@ -26,7 +27,7 @@ public class GuiCrystalState extends GuiTextField{
 	}
 
 	@Override
-	public void draw(int posX, int posY) {
+	public void draw(int posX, int posY, int mouseX, int mouseY) {
 		if(tile.getMRU() > 0)
 		{
 			this.drawTexturedModalRect(posX, posY, 0, 0, 17, 17);
@@ -48,9 +49,9 @@ public class GuiCrystalState extends GuiTextField{
 			this.drawTexturedModalRect(posX+3+16*5, posY+19, 1, 1, 17, 17);
 			this.drawTexturedModalRect(posX+3+16*5, posY+17, 1, 1, 17, 2);
 			
-			GL11.glPushMatrix();
+			GlStateManager.pushMatrix();
 			
-			GL11.glPopMatrix();
+			GlStateManager.popMatrix();
 			drawText(posX,posY);
 		}
 	}
@@ -70,7 +71,7 @@ public class GuiCrystalState extends GuiTextField{
 	@Override
 	public void drawText(int posX, int posY) {
 		TileElementalCrystal crystal = tile.getCrystal();
-		FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
+		FontRenderer fontRenderer = Minecraft.getMinecraft().fontRendererObj;
 		if(crystal != null)
 		{
 			fontRenderer.drawStringWithShadow("Fire: "+(int)crystal.fire+"%", posX+2, posY+4, 0xffffff);

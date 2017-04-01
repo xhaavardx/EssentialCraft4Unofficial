@@ -2,7 +2,7 @@ package ec3.client.gui.element;
 
 import ec3.common.tile.TileMithrilineFurnace;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.ResourceLocation;
 
 public class GuiEnderPulseStorage extends GuiTextField{
@@ -23,7 +23,7 @@ public class GuiEnderPulseStorage extends GuiTextField{
 	}
 
 	@Override
-	public void draw(int posX, int posY) {
+	public void draw(int posX, int posY, int mouseX, int mouseY) {
 		
 		TileMithrilineFurnace furnace = (TileMithrilineFurnace) tile;
 		

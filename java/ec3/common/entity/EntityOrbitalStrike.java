@@ -2,48 +2,61 @@ package ec3.common.entity;
 
 import java.util.List;
 
+import ec3.common.item.ItemsCore;
 import ec3.utils.common.ECUtils;
 import DummyCore.Utils.MathUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 
-public class EntityOrbitalStrike extends Entity
-{
-	
+public class EntityOrbitalStrike extends Entity {
+
+	public static final DataParameter<String> DATA = EntityDataManager.<String>createKey(EntityOrbitalStrike.class, DataSerializers.STRING);
+
 	public EntityOrbitalStrike(World w) {
 		super(w);
+		this.setSize(0.3F, 0.3F);
 	}
-	
+
 	public EntityOrbitalStrike(World w, double x, double y, double z) {
 		this(w);
 		this.setPositionAndRotation(x, y, z, 0, 0);
 	}
-	
+
 	public EntityOrbitalStrike(World w, double x, double y, double z, double damage, double delay, EntityLivingBase base) {
 		this(w,x,y,z);
 		this.damage = damage;
 		this.delay = delay;
 	}
-	
+
 	public EntityLivingBase attacker;
 	public double delay = 3;
 	public double damage = 1;
+
 	@Override
 	protected void entityInit() 
 	{
-		this.getDataWatcher().addObject(12, "||null:null");
+		this.getDataManager().register(DATA, "||null:null");
 	}
 
 	@Override
@@ -57,55 +70,55 @@ public class EntityOrbitalStrike extends Entity
 		tag.setDouble("delay", delay);
 		tag.setDouble("damage", damage);
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public void onUpdate()
 	{
 		delay -= 0.05D;
-		
+
 		if(!this.worldObj.isRemote)
-			this.getDataWatcher().updateObject(12, String.valueOf(delay));
-		
+			this.getDataManager().set(DATA, String.valueOf(delay));
+
 		if(this.ticksExisted == 3)
 			ECUtils.playSoundToAllNearby(posX, posY, posZ, "essentialcraft:sound.orbital_strike", 1, 1F, 16,this.dimension);
-		
+
 		if(delay <= 0 && !this.isDead)
 		{
-			List<EntityLivingBase> allEntities = this.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, AxisAlignedBB.getBoundingBox(posX-0.5D, posY-0.5D, posZ-0.5D, posX+0.5D, posY+0.5D, posZ+0.5D).expand(2, 2, 2));
+			List<EntityLivingBase> allEntities = this.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(posX-0.5D, posY-0.5D, posZ-0.5D, posX+0.5D, posY+0.5D, posZ+0.5D).expand(2, 2, 2));
 			for(int i = 0; i < allEntities.size(); ++i)
 			{
-				
+
 				EntityLivingBase elb = allEntities.get(i);
-				
+
 				if(elb == null)
 					continue;
-				
+
 				if(elb.isDead)
 					continue;
-				
+
 				if(elb == this.attacker)
 					continue;
-				
+
 				elb.attackEntityFrom(new DamageSource("orbitalStrike"){
-					
-				    public Entity getEntity()
-				    {
-				        return attacker;
-				    }
-					
+
+					public Entity getEntity()
+					{
+						return attacker;
+					}
+
 				}
 				.setDamageIsAbsolute(), (float) damage);
 			}
 			this.setDead();
-			
+
 			for(int i = 0; i < 3; ++i)
-				this.worldObj.playSound(posX, posY, posZ, "random.explode", 1, this.rand.nextFloat()*2, false);
-			
+				this.worldObj.playSound(posX, posY, posZ, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.BLOCKS, 1, this.rand.nextFloat()*2, false);
+
 			for(int i = 0; i < 20; ++i)
-				this.worldObj.spawnParticle("hugeexplosion", posX+MathUtils.randomDouble(rand), posY+MathUtils.randomDouble(rand), posZ+MathUtils.randomDouble(rand), 0, 0, 0);
-		
-			if(this.worldObj.getGameRules().getGameRuleBooleanValue("mobGriefing"))
+				this.worldObj.spawnParticle(EnumParticleTypes.EXPLOSION_HUGE, posX+MathUtils.randomDouble(rand), posY+MathUtils.randomDouble(rand), posZ+MathUtils.randomDouble(rand), 0, 0, 0);
+
+			if(this.worldObj.getGameRules().getBoolean("mobGriefing"))
 				for(int dx = -2; dx <= 2; ++dx)
 				{
 					int x = MathHelper.floor_double(posX) + dx;
@@ -115,44 +128,44 @@ public class EntityOrbitalStrike extends Entity
 						for(int dz = -2; dz <= 2; ++dz)
 						{
 							int z = MathHelper.floor_double(posZ) + dz;
-							Block b = this.worldObj.getBlock(x, y, z);
-							if(!b.isAir(worldObj, x, y, z))
+							IBlockState b = this.worldObj.getBlockState(new BlockPos(x, y, z));
+							if(!this.worldObj.isAirBlock(new BlockPos(x, y, z)))
 							{
-								if(b.getMaterial() == Material.water || b.getMaterial() == Material.ice || b.getMaterial() == Material.snow)
+								if(b.getMaterial() == Material.WATER || b.getMaterial() == Material.ICE || b.getMaterial() == Material.SNOW)
 								{
 									if(!this.worldObj.isRemote)
-										this.worldObj.setBlock(x, y, z, Blocks.air,0,2);
-									
-									worldObj.playSoundEffect((double)((float)x + 0.5F), (double)((float)y + 0.5F), (double)((float)z + 0.5F), "random.fizz", 0.5F, 2.6F + (worldObj.rand.nextFloat() - worldObj.rand.nextFloat()) * 0.8F);
-				                   
+										this.worldObj.setBlockState(new BlockPos(x, y, z), Blocks.AIR.getDefaultState(),2);
+
+									worldObj.playSound((double)((float)x + 0.5F), (double)((float)y + 0.5F), (double)((float)z + 0.5F), SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 0.5F, 2.6F + (worldObj.rand.nextFloat() - worldObj.rand.nextFloat()) * 0.8F, false);
+
 									for (int l = 0; l < 8; ++l)
-				                    {
-				                    	worldObj.spawnParticle("largesmoke", (double)x + Math.random(), (double)y + Math.random(), (double)z + Math.random(), 0.0D, 0.0D, 0.0D);
-				                    }
-									
+									{
+										worldObj.spawnParticle(EnumParticleTypes.SMOKE_LARGE, (double)x + Math.random(), (double)y + Math.random(), (double)z + Math.random(), 0.0D, 0.0D, 0.0D);
+									}
+
 									continue;
 								}
-								ItemStack is = new ItemStack(b,1,worldObj.getBlockMetadata(x, y, z));
-								ItemStack result = FurnaceRecipes.smelting().getSmeltingResult(is);
+								ItemStack is = new ItemStack(b.getBlock(),1,b.getBlock().getMetaFromState(b));
+								ItemStack result = FurnaceRecipes.instance().getSmeltingResult(is);
 								if(result != null)
 								{
 									if(result.getItem() instanceof ItemBlock)
 									{
-										Block setTo = ItemBlock.class.cast(result.getItem()).field_150939_a;
+										Block setTo = ItemBlock.class.cast(result.getItem()).block;
 										if(setTo != null && !this.worldObj.isRemote)
-											this.worldObj.setBlock(x, y, z, setTo,result.getItemDamage(),2);
+											this.worldObj.setBlockState(new BlockPos(x, y, z), setTo.getStateFromMeta(result.getItemDamage()),2);
 									}else
 									{
 										if(!this.worldObj.isRemote)
-											this.worldObj.setBlock(x, y, z, Blocks.air,0,2);
-										
+											this.worldObj.setBlockState(new BlockPos(x, y, z), Blocks.AIR.getDefaultState(),2);
+
 										EntityItem itm = new EntityItem(this.worldObj,x,y,z,result.copy());
-										
+
 										if(!this.worldObj.isRemote)
 											this.worldObj.spawnEntityInWorld(itm);
 									}
 								}
-								
+
 								is = null;
 								result = null;
 							}
@@ -160,20 +173,21 @@ public class EntityOrbitalStrike extends Entity
 					}
 				}
 		}
-		
+
 		if(this.worldObj.isRemote)
 		{
 			try
 			{
-				this.delay = Double.parseDouble(this.getDataWatcher().getWatchableObjectString(12));
+				this.delay = Double.parseDouble(this.getDataManager().get(DATA));
 			}catch(Exception e)
 			{
-				
+
 			}
-			
 		}
 	}
 	
-	
-
+	@Override
+	public ItemStack getPickedResult(RayTraceResult target) {
+		return new ItemStack(ItemsCore.entityEgg,1,EntitiesCore.registeredEntities.indexOf(this.getClass()));
+	}
 }

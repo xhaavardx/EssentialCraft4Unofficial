@@ -5,26 +5,31 @@ import java.util.List;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.FluidTankInfo;
-import net.minecraftforge.fluids.IFluidHandler;
+import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.oredict.OreDictionary;
 import DummyCore.Utils.DataStorage;
 import DummyCore.Utils.DummyData;
 import DummyCore.Utils.MathUtils;
 import ec3.api.ApiCore;
+import ec3.api.OreSmeltingRecipe;
 import ec3.common.item.ItemsCore;
 import ec3.utils.common.ECUtils;
-import ec3.utils.common.EnumOreColoring;
 
-public class TileMagmaticSmelter extends TileMRUGeneric implements IFluidTank, IFluidHandler {
+public class TileMagmaticSmelter extends TileMRUGeneric implements IFluidTank {
 	
 	public int progressLevel, smeltingLevel;
 	public FluidTank lavaTank = new FluidTank(8000);
@@ -43,19 +48,19 @@ public class TileMagmaticSmelter extends TileMRUGeneric implements IFluidTank, I
 	}
 	
 	@Override
-	public void updateEntity() {
-		super.updateEntity();
+	public void update() {
+		super.update();
 		ECUtils.manage(this, 0);
-		if(!worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord)) {
+		if(worldObj.isBlockIndirectlyGettingPowered(pos) == 0) {
 			if(!worldObj.isRemote) {
-				if(FluidContainerRegistry.getFluidForFilledItem(getStackInSlot(1)) != null && getStackInSlot(2) == null) {
+				if(FluidUtil.getFluidContained(getStackInSlot(1)) != null && getStackInSlot(2) == null) {
 					if(lavaTank.getFluid() == null) {
-						lavaTank.fill(FluidContainerRegistry.getFluidForFilledItem(getStackInSlot(1)), true);
+						lavaTank.fill(FluidUtil.getFluidContained(getStackInSlot(1)), true);
 						setInventorySlotContents(2,consumeItem(getStackInSlot(1)));
 						decrStackSize(1, 1);
 					}
-					else if(lavaTank.getFluidAmount() != 8000 && lavaTank.getFluid().isFluidEqual(FluidContainerRegistry.getFluidForFilledItem(getStackInSlot(1)))) {
-						lavaTank.fill(FluidContainerRegistry.getFluidForFilledItem(getStackInSlot(1)), true);
+					else if(lavaTank.getFluidAmount() != 8000 && lavaTank.getFluid().isFluidEqual(FluidUtil.getFluidContained(getStackInSlot(1)))) {
+						lavaTank.fill(FluidUtil.getFluidContained(getStackInSlot(1)), true);
 						setInventorySlotContents(2,consumeItem(getStackInSlot(1)));
 						decrStackSize(1, 1);
 					}
@@ -70,8 +75,8 @@ public class TileMagmaticSmelter extends TileMRUGeneric implements IFluidTank, I
 				if(oreIds.length > 0)
 					oreName = OreDictionary.getOreName(oreIds[0]);
 				int metadata = -1;
-				for(int i = 0; i < EnumOreColoring.values().length; ++i) {
-					EnumOreColoring oreColor = EnumOreColoring.values()[i];
+				for(int i = 0; i < OreSmeltingRecipe.values().length; ++i) {
+					OreSmeltingRecipe oreColor = OreSmeltingRecipe.values()[i];
 					if(oreName.equalsIgnoreCase(oreColor.oreName)) {
 						metadata = i;
 						break;
@@ -83,15 +88,15 @@ public class TileMagmaticSmelter extends TileMRUGeneric implements IFluidTank, I
 							setMRU(getMRU() - mruUsage);
 							if(worldObj.rand.nextFloat() <= 0.1F)
 								drain(1, true);
-							worldObj.spawnParticle("flame", xCoord + 0.5D + MathUtils.randomDouble(worldObj.rand) / 2.2D, yCoord, zCoord + 0.5D + MathUtils.randomDouble(worldObj.rand) / 2.2D, 0, -0.1D, 0);
+							worldObj.spawnParticle(EnumParticleTypes.FLAME, pos.getX() + 0.5D + MathUtils.randomDouble(worldObj.rand) / 2.2D, pos.getY(), pos.getZ() + 0.5D + MathUtils.randomDouble(worldObj.rand) / 2.2D, 0, -0.1D, 0);
 							++progressLevel;
 			    			if(generatesCorruption)
-			    				ECUtils.increaseCorruptionAt(worldObj, xCoord, yCoord, zCoord, worldObj.rand.nextInt(genCorruption));
+			    				ECUtils.increaseCorruptionAt(worldObj, pos.getX(), pos.getY(), pos.getZ(), worldObj.rand.nextInt(genCorruption));
 							if(progressLevel >= oreSmeltingTime) {
 								decrStackSize(3, 1);
-								int suggestedStackSize = EnumOreColoring.values()[metadata].dropAmount;
+								int suggestedStackSize = OreSmeltingRecipe.values()[metadata].dropAmount;
 								if(worldObj.rand.nextFloat() <= 1)
-									suggestedStackSize = EnumOreColoring.values()[metadata].dropAmount * 2;
+									suggestedStackSize = OreSmeltingRecipe.values()[metadata].dropAmount * 2;
 								setInventorySlotContents(4, new ItemStack(ItemsCore.magicalAlloy, suggestedStackSize, metadata));
 								progressLevel = 0;
 								if(getStackInSlot(7) == null)
@@ -111,15 +116,15 @@ public class TileMagmaticSmelter extends TileMRUGeneric implements IFluidTank, I
 							setMRU(getMRU() - mruUsage);
 							if(worldObj.rand.nextFloat() <= 0.1F)
 								drain(1, true);
-							worldObj.spawnParticle("flame", xCoord + 0.5D + MathUtils.randomDouble(worldObj.rand) / 2.2D, yCoord, zCoord + 0.5D + MathUtils.randomDouble(worldObj.rand) / 2.2D, 0, -0.1D, 0);
+							worldObj.spawnParticle(EnumParticleTypes.FLAME, pos.getX() + 0.5D + MathUtils.randomDouble(worldObj.rand) / 2.2D, pos.getY(), pos.getZ() + 0.5D + MathUtils.randomDouble(worldObj.rand) / 2.2D, 0, -0.1D, 0);
 							++progressLevel;
 			    			if(generatesCorruption)
-			    				ECUtils.increaseCorruptionAt(worldObj, xCoord, yCoord, zCoord, worldObj.rand.nextInt(genCorruption));
+			    				ECUtils.increaseCorruptionAt(worldObj, pos.getX(), pos.getY(), pos.getZ(), worldObj.rand.nextInt(genCorruption));
 							if(progressLevel >= oreSmeltingTime) {
 								decrStackSize(3, 1);
-								int suggestedStackSize = EnumOreColoring.values()[metadata].dropAmount;
+								int suggestedStackSize = OreSmeltingRecipe.values()[metadata].dropAmount;
 								if(worldObj.rand.nextFloat() <= 1)
-									suggestedStackSize = EnumOreColoring.values()[metadata].dropAmount * 2;
+									suggestedStackSize = OreSmeltingRecipe.values()[metadata].dropAmount * 2;
 								ItemStack is = getStackInSlot(4);
 								is.stackSize += suggestedStackSize;
 								if(is.stackSize > is.getMaxStackSize())
@@ -145,7 +150,7 @@ public class TileMagmaticSmelter extends TileMRUGeneric implements IFluidTank, I
 			
 			ItemStack alloy = getStackInSlot(5);
 			if(alloy != null && getStackInSlot(5).getItem() == ItemsCore.magicalAlloy) {
-				EnumOreColoring oreColor = EnumOreColoring.values()[alloy.getItemDamage()];
+				OreSmeltingRecipe oreColor = OreSmeltingRecipe.values()[alloy.getItemDamage()];
 				String oreName = oreColor.oreName;
 				String outputName = oreColor.outputName;
 				String suggestedIngotName;
@@ -160,10 +165,10 @@ public class TileMagmaticSmelter extends TileMRUGeneric implements IFluidTank, I
 					if(getStackInSlot(6) == null) {
 						if(getMRU() >= smeltMRUUsage) {
 							setMRU(getMRU() - smeltMRUUsage);
-							worldObj.spawnParticle("flame", xCoord+0.5D+MathUtils.randomDouble(worldObj.rand)/2.2D, yCoord, zCoord+0.5D+MathUtils.randomDouble(worldObj.rand)/2.2D, 0, -0.1D, 0);
+							worldObj.spawnParticle(EnumParticleTypes.FLAME, pos.getX()+0.5D+MathUtils.randomDouble(worldObj.rand)/2.2D, pos.getY(), pos.getZ()+0.5D+MathUtils.randomDouble(worldObj.rand)/2.2D, 0, -0.1D, 0);
 							++smeltingLevel;
 			    			if(generatesCorruption)
-			    				ECUtils.increaseCorruptionAt(worldObj, xCoord, yCoord, zCoord, worldObj.rand.nextInt(genCorruption));
+			    				ECUtils.increaseCorruptionAt(worldObj, pos.getX(), pos.getY(), pos.getZ(), worldObj.rand.nextInt(genCorruption));
 							if(smeltingLevel >= alloySmeltingTime) {
 								decrStackSize(5, 1);
 								int suggestedStackSize = 2;
@@ -183,10 +188,10 @@ public class TileMagmaticSmelter extends TileMRUGeneric implements IFluidTank, I
 					else if(getStackInSlot(6).isItemEqual(ingotStk) && getStackInSlot(6).stackSize+2 <= getStackInSlot(6).getMaxStackSize() && getStackInSlot(6).stackSize + 2 <= getInventoryStackLimit()) {
 						if(getMRU() >= smeltMRUUsage) {
 							setMRU(getMRU() - smeltMRUUsage);
-							worldObj.spawnParticle("flame", xCoord + 0.5D + MathUtils.randomDouble(worldObj.rand) / 2.2D, yCoord, zCoord + 0.5D + MathUtils.randomDouble(worldObj.rand) / 2.2D, 0, -0.1D, 0);
+							worldObj.spawnParticle(EnumParticleTypes.FLAME, pos.getX() + 0.5D + MathUtils.randomDouble(worldObj.rand) / 2.2D, pos.getY(), pos.getZ() + 0.5D + MathUtils.randomDouble(worldObj.rand) / 2.2D, 0, -0.1D, 0);
 							++smeltingLevel;
 			    			if(generatesCorruption)
-			    				ECUtils.increaseCorruptionAt(worldObj, xCoord, yCoord, zCoord, worldObj.rand.nextInt(genCorruption));
+			    				ECUtils.increaseCorruptionAt(worldObj, pos.getX(), pos.getY(), pos.getZ(), worldObj.rand.nextInt(genCorruption));
 							if(smeltingLevel >= alloySmeltingTime) {
 								decrStackSize(5, 1);
 								int suggestedStackSize = 2;
@@ -226,9 +231,10 @@ public class TileMagmaticSmelter extends TileMRUGeneric implements IFluidTank, I
 	}
 	
 	@Override
-	public void writeToNBT(NBTTagCompound i) {
+	public NBTTagCompound writeToNBT(NBTTagCompound i) {
 		super.writeToNBT(i);
 		lavaTank.writeToNBT(i);
+		return i;
 	}
 	
 	@Override
@@ -259,36 +265,6 @@ public class TileMagmaticSmelter extends TileMRUGeneric implements IFluidTank, I
 	@Override
 	public FluidStack drain(int maxDrain, boolean doDrain) {
 		return lavaTank.drain(maxDrain, doDrain);
-	}
-	
-	@Override
-	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
-		return fill(resource, doFill);
-	}
-	
-	@Override
-	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
-		return drain(resource.amount, doDrain);
-	}
-	
-	@Override
-	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
-		return drain(maxDrain, doDrain);
-	}
-	
-	@Override
-	public boolean canFill(ForgeDirection from, Fluid fluid) {
-		return fluid == FluidRegistry.LAVA;
-	}
-	
-	@Override
-	public boolean canDrain(ForgeDirection from, Fluid fluid) {
-		return false;
-	}
-	
-	@Override
-	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
-		return new FluidTankInfo[] {lavaTank.getInfo()};
 	}
 	
 	public static void setupConfig(Configuration cfg) {
@@ -332,6 +308,20 @@ public class TileMagmaticSmelter extends TileMRUGeneric implements IFluidTank, I
 	
 	@Override
 	public boolean isItemValidForSlot(int p_94041_1_, ItemStack p_94041_2_) {
-		return p_94041_1_ == 0 ? isBoundGem(p_94041_2_) : p_94041_1_ == 1 ? p_94041_2_.getItem() == Items.lava_bucket : p_94041_1_ == 5 ? p_94041_2_.getItem() == ItemsCore.magicalAlloy : p_94041_1_ == 3;
+		return p_94041_1_ == 0 ? isBoundGem(p_94041_2_) :
+			p_94041_1_ == 1 ? FluidUtil.getFluidContained(p_94041_2_) != null && FluidUtil.getFluidContained(p_94041_2_).getFluid() == FluidRegistry.LAVA :
+			p_94041_1_ == 5 ? p_94041_2_.getItem() == ItemsCore.magicalAlloy :
+			p_94041_1_ == 3 ? p_94041_2_.getItem() != ItemsCore.magicalAlloy :
+			false;
+	}
+
+	@Override
+	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+		return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
+	}
+
+	@Override
+	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+		return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY ? (T)lavaTank : super.getCapability(capability, facing);
 	}
 }

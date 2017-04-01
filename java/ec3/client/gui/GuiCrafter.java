@@ -5,6 +5,7 @@ import DummyCore.Client.GuiCommon;
 import DummyCore.Client.GuiElement;
 import ec3.common.tile.TileCrafter;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
@@ -23,7 +24,7 @@ public class GuiCrafter extends GuiCommon{
 	
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float f1,int i1, int i2) {
-		GL11.glColor3f(1, 1, 1);
+		GlStateManager.color(1, 1, 1);
         int k = (this.width - this.xSize) / 2;
         int l = (this.height - this.ySize) / 2;
         this.mc.renderEngine.bindTexture(guiGenLocation);
@@ -36,19 +37,19 @@ public class GuiCrafter extends GuiCommon{
 		{
 			Slot slt = (Slot) this.inventorySlots.inventorySlots.get(i);
 			renderSlot(slt);
-			GL11.glColor3f(1, 1, 1);
+			GlStateManager.color(1, 1, 1);
 			
 		}
 
-		GL11.glColor3f(1, 1, 1);
+		GlStateManager.color(1, 1, 1);
 		
 		RenderHelper.enableStandardItemLighting();
 		for(int i = 0; i < this.elementList.size(); ++i)
 		{
 			GuiElement element = elementList.get(i);
 			Minecraft.getMinecraft().renderEngine.bindTexture(element.getElementTexture());
-			element.draw(k+element.getX(),l+element.getY());
-			GL11.glColor3f(1, 1, 1);
+			element.draw(k+element.getX(),l+element.getY(),i1,i2);
+			GlStateManager.color(1, 1, 1);
 		}
 	}
 	
@@ -77,9 +78,7 @@ public class GuiCrafter extends GuiCommon{
 		                itemRender.zLevel = 100.0F;
 		                this.zLevel = 100.0F;
 		                GL11.glColor4d(0.5D, 0.5D, 0.5D, 1D);
-		                itemRender.renderWithColor = false;
-		                itemRender.renderItemAndEffectIntoGUI(this.fontRendererObj, this.mc.getTextureManager(), retStk[slt.slotNumber], k+slt.xDisplayPosition, l+slt.yDisplayPosition);
-		                itemRender.renderWithColor = true;
+		                itemRender.renderItemAndEffectIntoGUI(retStk[slt.slotNumber], k+slt.xDisplayPosition, l+slt.yDisplayPosition);
 		                itemRender.zLevel = 0.0F;
 		                this.zLevel = 0.0F;
 		        	}

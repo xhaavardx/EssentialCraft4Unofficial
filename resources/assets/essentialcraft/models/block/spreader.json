@@ -1,0 +1,37 @@
+{
+    "__comment": "Model generated using MrCrayfish's Model Creator (http://mrcrayfish.com/modelcreator/)",
+    "parent": "minecraft:block/block",
+    "ambientocclusion": false,
+    "textures": {
+        "0": "essentialcraft:blocks/magicPlatingBlock",
+        "particle": "essentialcraft:blocks/magicPlatingBlock"
+    },
+    "elements": [
+        {
+            "name": "cube_0",
+            "from": [ 6.4, 0.0, 6.4 ], 
+            "to": [ 9.6, 9.6, 9.6 ], 
+            "faces": {
+                "north": { "texture": "#0", "uv": [ 6.0, 3.0, 9.2, 12.6 ] },
+                "east": { "texture": "#0", "uv": [ 6.0, 3.0, 9.2, 12.6 ] },
+                "south": { "texture": "#0", "uv": [ 6.0, 3.0, 9.2, 12.6 ] },
+                "west": { "texture": "#0", "uv": [ 6.0, 3.0, 9.2, 12.6 ] },
+                "up": { "texture": "#-1", "uv": [ 6.0, 3.0, 9.2, 6.2 ] },
+                "down": { "texture": "#0", "uv": [ 6.0, 3.0, 9.2, 6.2 ], "cullface": "down" }
+            }
+        },
+        {
+            "name": "cube_1",
+            "from": [ 4.8, 6.4, 4.8 ], 
+            "to": [ 11.2, 12.8, 11.2 ], 
+            "faces": {
+                "north": { "texture": "#0", "uv": [ 5.0, 5.0, 11.4, 11.4 ] },
+                "east": { "texture": "#0", "uv": [ 5.0, 5.0, 11.4, 11.4 ] },
+                "south": { "texture": "#0", "uv": [ 5.0, 5.0, 11.4, 11.4 ] },
+                "west": { "texture": "#0", "uv": [ 5.0, 5.0, 11.4, 11.4 ] },
+                "up": { "texture": "#0", "uv": [ 5.0, 5.0, 11.4, 11.4 ] },
+                "down": { "texture": "#0", "uv": [ 5.0, 5.0, 11.4, 11.4 ] }
+            }
+        }
+    ]
+}

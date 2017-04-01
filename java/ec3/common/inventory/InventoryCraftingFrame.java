@@ -8,6 +8,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.text.ITextComponent;
 
 public class InventoryCraftingFrame implements IInventory {
 	
@@ -51,24 +52,17 @@ public class InventoryCraftingFrame implements IInventory {
 	}
 	
 	@Override
-	public ItemStack getStackInSlotOnClosing(int slot) {
-		ItemStack returnStack = getStackInSlot(slot);
-		setInventorySlotContents(slot, null);
-		return returnStack;
-	}
-	
-	@Override
 	public void setInventorySlotContents(int slot, ItemStack stack) {
 		inventory[slot] = stack;
 	}
 	
 	@Override
-	public String getInventoryName() {
+	public String getName() {
 		return "ec3.inventory.craftingFrame";
 	}
 	
 	@Override
-	public boolean hasCustomInventoryName() {
+	public boolean hasCustomName() {
 		return false;
 	}
 	
@@ -86,10 +80,10 @@ public class InventoryCraftingFrame implements IInventory {
 	}
 	
 	@Override
-	public void openInventory() {}
+	public void openInventory(EntityPlayer p) {}
 	
 	@Override
-	public void closeInventory() {}
+	public void closeInventory(EntityPlayer p) {}
 	
 	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack stack) {
@@ -121,7 +115,7 @@ public class InventoryCraftingFrame implements IInventory {
 		}
 	}
 	
-	public void writeToNBT(NBTTagCompound tag) {
+	public NBTTagCompound writeToNBT(NBTTagCompound tag) {
 		NBTTagList items = new NBTTagList();
 		
 		for(int i = 0; i < inventory.length; i++) {
@@ -139,5 +133,37 @@ public class InventoryCraftingFrame implements IInventory {
 		if(randomUUID == null)
 			randomUUID = UUID.randomUUID();
 		tag.setString("uniqueID", randomUUID.toString());
+		return tag;
+	}
+
+	@Override
+	public ITextComponent getDisplayName() {
+		return null;
+	}
+
+	@Override
+	public ItemStack removeStackFromSlot(int index) {
+		ItemStack returnStack = getStackInSlot(index);
+		setInventorySlotContents(index, null);
+		return returnStack;
+	}
+
+	@Override
+	public int getField(int id) {
+		return 0;
+	}
+
+	@Override
+	public void setField(int id, int value) {}
+
+	@Override
+	public int getFieldCount() {
+		return 0;
+	}
+
+	@Override
+	public void clear() {
+	    for(int i = 0; i < getSizeInventory(); i++)
+	        setInventorySlotContents(i, null);
 	}
 }

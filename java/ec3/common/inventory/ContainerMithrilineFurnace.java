@@ -5,7 +5,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
-import net.minecraft.inventory.SlotFurnace;
+import net.minecraft.inventory.SlotFurnaceOutput;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 
@@ -15,7 +15,7 @@ public class ContainerMithrilineFurnace extends Container {
 	public ContainerMithrilineFurnace(InventoryPlayer par1InventoryPlayer, TileEntity par2) {
 		inv = (IInventory)par2;
 		addSlotToContainer(new SlotGeneric(inv, 0, 80, 64));
-		addSlotToContainer(new SlotFurnace(par1InventoryPlayer.player, inv, 1, 80, 21));
+		addSlotToContainer(new SlotFurnaceOutput(par1InventoryPlayer.player, inv, 1, 80, 21));
 		int i;
 		
 		for(i = 0; i < 3; ++i) {

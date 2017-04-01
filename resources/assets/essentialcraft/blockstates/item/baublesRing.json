@@ -1,0 +1,49 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "builtin/generated",
+        "transform": "forge:default-item"
+    },
+    "variants": {
+        "bottom": {
+            "0": {
+                "textures": { "layer0": "essentialcraft:items/baubles/bauble_ring_0" }
+            },
+            "1": {
+                "textures": { "layer0": "essentialcraft:items/baubles/bauble_ring_1" }
+            },
+            "2": {
+                "textures": { "layer0": "essentialcraft:items/baubles/bauble_ring_2" }
+            },
+            "3": {
+                "textures": { "layer0": "essentialcraft:items/baubles/bauble_ring_3" }
+            },
+            "4": {
+                "textures": { "layer0": "essentialcraft:items/baubles/bauble_ring_4" }
+            },
+            "5": {
+                "textures": { "layer0": "essentialcraft:items/baubles/bauble_ring_5" }
+            }
+        },
+        "top": {
+            "0": {
+                "textures": { "layer1": "essentialcraft:items/baubles/bauble_ring_0_t" }
+            },
+            "1": {
+                "textures": { "layer1": "essentialcraft:items/baubles/bauble_ring_1_t" }
+            },
+            "2": {
+                "textures": { "layer1": "essentialcraft:items/baubles/bauble_ring_2_t" }
+            },
+            "3": {
+                "textures": { "layer1": "essentialcraft:items/baubles/bauble_ring_3_t" }
+            },
+            "4": {
+                "textures": { "layer1": "essentialcraft:items/baubles/bauble_ring_4_t" }
+            },
+            "5": {
+                "textures": { "layer1": "essentialcraft:items/baubles/bauble_ring_5_t" }
+            }
+        }
+    }
+}

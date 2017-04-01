@@ -1,88 +1,104 @@
 package ec3.common.block;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import DummyCore.Client.IModelRegisterer;
 import DummyCore.Utils.MiscUtils;
 import ec3.common.mod.EssentialCraftCore;
 import ec3.common.tile.TileMagicalHopper;
 import ec3.utils.cfg.Config;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.block.properties.PropertyDirection;
+import net.minecraft.block.state.BlockStateContainer;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.util.EnumBlockRenderType;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.Mirror;
+import net.minecraft.util.Rotation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.client.model.ModelLoader;
 
-public class BlockMagicalHopper extends BlockContainer{
+public class BlockMagicalHopper extends BlockContainer implements IModelRegisterer {
 	
-	public IIcon[] blockIcons = new IIcon[2];
+	public static final PropertyDirection FACING = PropertyDirection.create("facing");
 	
 	public BlockMagicalHopper() {
-		super(Material.rock);
+		super(Material.ROCK);
+		setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.DOWN));
 	}
 	
-    @SideOnly(Side.CLIENT)
-    public IIcon getIcon(IBlockAccess w, int x, int y, int z, int side)
-    {
-    	int meta = w.getBlockMetadata(x, y, z);
-    	return side == meta ? blockIcons[1] : blockIcons[0];
+	@Override
+    public void breakBlock(World par1World, BlockPos par2Pos, IBlockState par3State) {
+		MiscUtils.dropItemsOnBlockBreak(par1World, par2Pos.getX(), par2Pos.getY(), par2Pos.getZ(), par3State.getBlock(), 0);
+		super.breakBlock(par1World, par2Pos, par3State);
     }
 	
-    public IIcon getIcon(int side, int meta)
-    {
-        return side == 3 ? blockIcons[1] : blockIcons[0];
-    }
-    
-	@Override
-    @SideOnly(Side.CLIENT)
-    public void registerBlockIcons(IIconRegister p_149651_1_)
-    {
-    	this.blockIcons[0] = p_149651_1_.registerIcon("essentialcraft:fortifiedStone");
-    	this.blockIcons[1] = p_149651_1_.registerIcon("essentialcraft:magicalHopper");
-    }
+	public EnumBlockRenderType getRenderType(IBlockState s)
+	{
+		return EnumBlockRenderType.MODEL;
+	}
 	
-	@Override
-    public void breakBlock(World par1World, int par2, int par3, int par4, Block par5, int par6)
-    {
-		MiscUtils.dropItemsOnBlockBreak(par1World, par2, par3, par4, par5, par6);
-		super.breakBlock(par1World, par2, par3, par4, par5, par6);
-    }
-
 	@Override
 	public TileEntity createNewTileEntity(World p_149915_1_, int metadata) {
-		// TODO Auto-generated method stub
 		return new TileMagicalHopper();
 	}
 	
     @Override
-    public int onBlockPlaced(World w, int x, int y, int z, int side, float hitX, float hitY, float hitZ, int meta)
+    public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer)
     {
-        return ForgeDirection.values()[side].ordinal();
+        return this.getDefaultState().withProperty(FACING, facing);
     }
     
+	@Override
+	public IBlockState withRotation(IBlockState state, Rotation rot) {
+		return state.withProperty(FACING, rot.rotate(state.getValue(FACING)));
+	}
 	
 	@Override
-	 public boolean onBlockActivated(World par1World, int par2, int par3, int par4, EntityPlayer par5EntityPlayer, int par6, float par7, float par8, float par9)
-	    {
-	        if (par1World.isRemote)
-	        {
-	            return true;
-	        }else
-	        {
-	        	if(!par5EntityPlayer.isSneaking())
-	        	{
-	        		par5EntityPlayer.openGui(EssentialCraftCore.core, Config.guiID[0], par1World, par2, par3, par4);
-	            	return true;
-	        	}
-	        	else
-	        	{
-	        		return false;
-	        	}
-	        }
-	    }
+	public IBlockState withMirror(IBlockState state, Mirror mirrorIn) {
+		return state.withRotation(mirrorIn.toRotation(state.getValue(FACING)));
+	}
 	
+	@Override
+	public boolean onBlockActivated(World par1World, BlockPos par2, IBlockState par3, EntityPlayer par4EntityPlayer, EnumHand par5, ItemStack par6, EnumFacing par7, float par8, float par9, float par10) {
+	    if(par1World.isRemote) {
+	        return true;
+	    }
+	    else {
+	     	if(!par4EntityPlayer.isSneaking()) {
+	       		par4EntityPlayer.openGui(EssentialCraftCore.core, Config.guiID[0], par1World, par2.getX(), par2.getY(), par2.getZ());
+	           	return true;
+	       	}
+	       	else {
+	       		return false;
+	       	}
+	    }
+	}
+	
+	@Override
+	protected BlockStateContainer createBlockState() {
+		return new BlockStateContainer(this, FACING);
+	}
+	
+	@Override
+	public IBlockState getStateFromMeta(int meta) {
+		return getDefaultState().withProperty(FACING, EnumFacing.getFront(meta%6));
+	}
+
+	@Override
+	public int getMetaFromState(IBlockState state) {
+		return state.getValue(FACING).getIndex();
+	}
+
+	@Override
+	public void registerModels() {
+		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation("essentialcraft:magicalHopper", "inventory"));
+	}
 }

@@ -2,23 +2,27 @@ package ec3.common.item;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
+import DummyCore.Client.IModelRegisterer;
 import baubles.api.BaublesApi;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import baubles.api.cap.IBaublesItemHandler;
 import ec3.api.ApiCore;
-import net.minecraft.client.renderer.texture.IIconRegister;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
+import net.minecraftforge.client.model.ModelLoader;
 
-public class ItemGenericEC3 extends Item {
+public class ItemGenericEC3 extends Item implements IModelRegisterer {
 	public static String[] names = new String[] {
 			"combinedMagicalAlloys", //0
 			"elementalCore", //1
@@ -104,82 +108,74 @@ public class ItemGenericEC3 extends Item {
 			"voidUpgrade", //81
 			"unknown",//fallback
 	};
-	public static IIcon[] itemIcons = new IIcon[128];
-	
+
 	public ItemGenericEC3() {
 		setMaxDamage(0);
 		setHasSubtypes(true);
 	}
-	
-	public ItemStack getContainerItem(ItemStack itemStack) {
-		return super.getContainerItem(itemStack);
-	}
-	
-	public ItemStack onEaten(ItemStack p_77654_1_, World p_77654_2_, EntityPlayer base) {
-		if(!base.capabilities.isCreativeMode)
-			--p_77654_1_.stackSize;
-		
-		if(!p_77654_2_.isRemote && p_77654_1_.getItemDamage() == 6) {
-			int addedEnergy = 0;
-			IInventory b = BaublesApi.getBaubles(base);
-			if(b != null) {
-				for(int i = 0; i < b.getSizeInventory(); ++i) {
-					ItemStack is = b.getStackInSlot(i);
-					if(is != null && is.getItem() != null && is.getItem() instanceof BaublesModifier && is.getItemDamage() == 8)
-						addedEnergy = 500;
+
+	public ItemStack onItemUseFinish(ItemStack p_77654_1_, World p_77654_2_, EntityLivingBase base) {
+		if(base instanceof EntityPlayer) {
+			if(!((EntityPlayer)base).capabilities.isCreativeMode)
+				--p_77654_1_.stackSize;
+
+			if(!p_77654_2_.isRemote && p_77654_1_.getItemDamage() == 6) {
+				int addedEnergy = 0;
+				IBaublesItemHandler b = BaublesApi.getBaublesHandler((EntityPlayer)base);
+				if(b != null) {
+					for(int i = 0; i < b.getSlots(); ++i) {
+						ItemStack is = b.getStackInSlot(i);
+						if(is != null && is.getItem() != null && is.getItem() instanceof BaublesModifier && is.getItemDamage() == 8)
+							addedEnergy = 500;
+					}
 				}
+				int current = ApiCore.getPlayerData(((EntityPlayer)base)).getPlayerUBMRU();
+				ApiCore.getPlayerData(((EntityPlayer)base)).modifyUBMRU(current+addedEnergy);
 			}
-			int current = ApiCore.getPlayerData(base).getPlayerUBMRU();
-			ApiCore.getPlayerData(base).modifyUBMRU(current+addedEnergy);
 		}
-		
-		return p_77654_1_.stackSize <= 0 ? new ItemStack(Items.glass_bottle) : p_77654_1_;
+
+		return p_77654_1_.stackSize <= 0 ? new ItemStack(Items.GLASS_BOTTLE) : p_77654_1_;
 	}
-	
+
 	public int getMaxItemUseDuration(ItemStack p_77626_1_) {
 		return 32;
 	}
-	
+
 	public EnumAction getItemUseAction(ItemStack p_77661_1_) {
-		return EnumAction.drink;
+		if(p_77661_1_.getItemDamage() == 6)
+			return EnumAction.DRINK;
+		return super.getItemUseAction(p_77661_1_);
 	}
-	
-	@SuppressWarnings("rawtypes")
+
 	public static ItemStack getStkByName(String name) {
-		List lst = Arrays.asList(names);
+		List<String> lst = Arrays.asList(names);
 		if(lst.contains(name)) {
 			ItemStack stk = new ItemStack(ItemsCore.genericItem,1,lst.indexOf(name));
 			return stk;
 		}
 		return null;
 	}
-	
-	public ItemStack onItemRightClick(ItemStack p_77659_1_, World p_77659_2_, EntityPlayer p_77659_3_) {
-		if(p_77659_1_.getItemDamage() == 6)
-			p_77659_3_.setItemInUse(p_77659_1_, getMaxItemUseDuration(p_77659_1_));
-		return p_77659_1_;
+
+	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
+		if(itemStackIn.getItemDamage() == 6)
+			playerIn.setActiveHand(hand);
+		return new ActionResult(EnumActionResult.PASS, itemStackIn);
 	}
-	
+
 	public String getUnlocalizedName(ItemStack p_77667_1_) {
 		return getUnlocalizedName()+names[Math.min(p_77667_1_.getItemDamage(), names.length-1)];
 	}
-	
-	public void registerIcons(IIconRegister p_94581_1_) {
-		super.registerIcons(p_94581_1_);
-		for(int i = 0; i < names.length; ++i)
-			itemIcons[i] = p_94581_1_.registerIcon("essentialcraft:misc/"+names[i]);
-	}
-	
-	@SideOnly(Side.CLIENT)
-	public IIcon getIconFromDamage(int i) {
-		return itemIcons[Math.min(i, itemIcons.length-1)];
-	}
-	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@SideOnly(Side.CLIENT)
-	public void getSubItems(Item p_150895_1_, CreativeTabs p_150895_2_, List p_150895_3_) {
+
+	public void getSubItems(Item p_150895_1_, CreativeTabs p_150895_2_, List<ItemStack> p_150895_3_) {
 		for(int i = 0; i < names.length-1; ++i) {
 			p_150895_3_.add(new ItemStack(p_150895_1_,1,i));
+		}
+	}
+
+	@Override
+	public void registerModels() {
+		for(int i = 0; i < names.length-1; i++) {
+			ModelLoader.setCustomModelResourceLocation(this, i, new ModelResourceLocation("essentialcraft:item/genItem", "type=" + names[i].toLowerCase(Locale.ENGLISH)));
 		}
 	}
 }

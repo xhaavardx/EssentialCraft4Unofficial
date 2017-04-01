@@ -61,11 +61,11 @@ public class TileNewMIMCraftingManager extends TileMRUGeneric {
 		slot0IsBoundGem = false;
 	}
 	
-	public void updateEntity() {
+	public void update() {
 		if(syncTick == 60)
 			rebuildRecipes();
 		
-		super.updateEntity();
+		super.update();
 		
 		if(tickTime == 0) {
 			tickTime = 20;

@@ -3,15 +3,7 @@ package ec3.network.proxy;
 import java.util.List;
 
 import DummyCore.Utils.DummyData;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.world.World;
-import cpw.mods.fml.common.network.IGuiHandler;
 import ec3.common.entity.EntityDemon;
-import ec3.common.inventory.ContainerAMINEjector;
-import ec3.common.inventory.ContainerAMINInjector;
 import ec3.common.inventory.ContainerChargingChamber;
 import ec3.common.inventory.ContainerColdDistillator;
 import ec3.common.inventory.ContainerCorruptionCleaner;
@@ -27,15 +19,13 @@ import ec3.common.inventory.ContainerFilter;
 import ec3.common.inventory.ContainerFlowerBurner;
 import ec3.common.inventory.ContainerFurnaceMagic;
 import ec3.common.inventory.ContainerHeatGenerator;
-import ec3.common.inventory.ContainerMIM;
 import ec3.common.inventory.ContainerMIMCraftingManager;
 import ec3.common.inventory.ContainerMIMInventoryStorage;
-import ec3.common.inventory.ContainerMINEjector;
-import ec3.common.inventory.ContainerMINInjector;
 import ec3.common.inventory.ContainerMRUAcceptor;
+import ec3.common.inventory.ContainerMRUChunkLoader;
 import ec3.common.inventory.ContainerMRUCoil;
+import ec3.common.inventory.ContainerMRUDimTransciever;
 import ec3.common.inventory.ContainerMRUInfo;
-import ec3.common.inventory.ContainerMagicalAssembler;
 import ec3.common.inventory.ContainerMagicalChest;
 import ec3.common.inventory.ContainerMagicalEnchanter;
 import ec3.common.inventory.ContainerMagicalFurnace;
@@ -65,8 +55,6 @@ import ec3.common.inventory.ContainerUltraHeatGenerator;
 import ec3.common.inventory.ContainerWeaponBench;
 import ec3.common.inventory.InventoryCraftingFrame;
 import ec3.common.inventory.InventoryMagicFilter;
-import ec3.common.tile.TileAMINEjector;
-import ec3.common.tile.TileAMINInjector;
 import ec3.common.tile.TileAdvancedBlockBreaker;
 import ec3.common.tile.TileAnimalSeparator;
 import ec3.common.tile.TileChargingChamber;
@@ -81,11 +69,9 @@ import ec3.common.tile.TileEnderGenerator;
 import ec3.common.tile.TileFlowerBurner;
 import ec3.common.tile.TileFurnaceMagic;
 import ec3.common.tile.TileHeatGenerator;
-import ec3.common.tile.TileMIM;
-import ec3.common.tile.TileMINEjector;
-import ec3.common.tile.TileMINInjector;
+import ec3.common.tile.TileMRUChunkLoader;
 import ec3.common.tile.TileMRUCoil;
-import ec3.common.tile.TileMagicalAssembler;
+import ec3.common.tile.TileMRUDimensionalTransciever;
 import ec3.common.tile.TileMagicalChest;
 import ec3.common.tile.TileMagicalEnchanter;
 import ec3.common.tile.TileMagicalFurnace;
@@ -119,28 +105,41 @@ import ec3.common.tile.TileWeaponMaker;
 import ec3.common.tile.TileecAcceptor;
 import ec3.common.tile.TileecStateChecker;
 import ec3.utils.cfg.Config;
+import net.minecraft.block.Block;
+import net.minecraft.client.model.ModelBiped;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.network.IGuiHandler;
 
-public class CommonProxy implements IGuiHandler{
-
+public class CommonProxy implements IGuiHandler {
+	
+	public void firstMovement(FMLPreInitializationEvent event) {}
+	
 	@SuppressWarnings("unchecked")
 	@Override
-	public Object getServerGuiElement(int ID, EntityPlayer player, World world,
-			int x, int y, int z) {
+	public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
 		if(ID == Config.guiID[0])
 		{
-			TileEntity tile = world.getTileEntity(x, y, z);
+			TileEntity tile = world.getTileEntity(new BlockPos(x, y, z));
 			if(tile == null)
 			{
 				//Item:filter
 				if(x == 0 && y == -1 && z == 0)
 				{
-					InventoryMagicFilter inventory = new InventoryMagicFilter(player.getCurrentEquippedItem());
+					InventoryMagicFilter inventory = new InventoryMagicFilter(player.getHeldItemMainhand());
 					return new ContainerFilter(player, inventory);
 				}
 				//Item: Crafting Frame
 				if(x == 0 && y == -2 && z == 0)
 				{
-					InventoryCraftingFrame inventory = new InventoryCraftingFrame(player.getCurrentEquippedItem());
+					InventoryCraftingFrame inventory = new InventoryCraftingFrame(player.getHeldItemMainhand());
 					return new ContainerCraftingFrame(player, inventory);
 				}
 			}
@@ -256,26 +255,6 @@ public class CommonProxy implements IGuiHandler{
 			{
 				return new ContainerCorruptionCleaner(player.inventory, tile);
 			}
-			if(tile instanceof TileAMINEjector)
-			{
-				return new ContainerAMINEjector(player.inventory, tile);
-			}
-			if(tile instanceof TileMINEjector)
-			{
-				return new ContainerMINEjector(player.inventory, tile);
-			}
-			if(tile instanceof TileAMINInjector)
-			{
-				return new ContainerAMINInjector(player.inventory, tile);
-			}
-			if(tile instanceof TileMINInjector)
-			{
-				return new ContainerMINInjector(player.inventory, tile);
-			}
-			if(tile instanceof TileMIM)
-			{
-				return new ContainerMIM(player.inventory, tile);
-			}
 			if(tile instanceof TileDarknessObelisk)
 			{
 				return new ContainerDarknessObelisk(player.inventory, tile);
@@ -287,10 +266,6 @@ public class CommonProxy implements IGuiHandler{
 			if(tile instanceof TileUltraFlowerBurner)
 			{
 				return new ContainerUltraFlowerBurner(player.inventory, tile);
-			}
-			if(tile instanceof TileMagicalAssembler)
-			{
-				return new ContainerMagicalAssembler(player.inventory, tile);
 			}
 			if(tile instanceof TileMithrilineFurnace)
 			{
@@ -348,10 +323,18 @@ public class CommonProxy implements IGuiHandler{
 			{
 				return new ContainerRayTower(player.inventory, tile);
 			}
+			if(tile instanceof TileMRUChunkLoader)
+			{
+				return new ContainerMRUChunkLoader(player.inventory, tile);
+			}
+			if(tile instanceof TileMRUDimensionalTransciever)
+			{
+				return new ContainerMRUDimTransciever(player.inventory, tile);
+			}
 		}
 		if(ID == Config.guiID[1])
 		{
-			List<EntityDemon> demons = world.getEntitiesWithinAABB(EntityDemon.class, AxisAlignedBB.getBoundingBox(x-1, y-1, z-1, x+1, y+1, z+1));
+			List<EntityDemon> demons = world.getEntitiesWithinAABB(EntityDemon.class, new AxisAlignedBB(x-1, y-1, z-1, x+1, y+1, z+1));
 			if(!demons.isEmpty())
 			{
 				return new ContainerDemon(player, demons.get(0));
@@ -360,15 +343,9 @@ public class CommonProxy implements IGuiHandler{
 		return null;
 	}
 	
-	public void openBookGUIForPlayer()
-	{
-		
-	}
+	public void openBookGUIForPlayer() {}
 	
-	public void openPentacleGUIForPlayer(TileEntity tile)
-	{
-		
-	}
+	public void openPentacleGUIForPlayer(TileEntity tile) {}
 	
 	public Object getClientVoidChestGUI(EntityPlayer player, World world, int x, int y, int z, int page)
 	{
@@ -376,21 +353,17 @@ public class CommonProxy implements IGuiHandler{
 	}
 	
 	@Override
-	public Object getClientGuiElement(int ID, EntityPlayer player, World world,
-			int x, int y, int z) {
-		// TODO Auto-generated method stub
+	public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
 		return null;
 	}
 
-	public void registerRenderInformation() 
-	{
-		
-	}
+	public void registerRenderInformation() {}
 	
-	public void registerTileEntitySpecialRenderer()
-	{
-		
-	}
+	public void registerTileEntitySpecialRenderer() {}
+	
+	public void handleBlockRegister(Block b) {}
+	
+	public void handleItemRegister(Item i) {}
 	
 	public World getClientWorld()
 	{
@@ -402,19 +375,16 @@ public class CommonProxy implements IGuiHandler{
 		return null;
 	}
 	
-	public void spawnParticle(String name, float x, float y, float z, double i, double j, double k)
-	{
-		
-	}
+	public void spawnParticle(String name, float x, float y, float z, double i, double j, double k) {}
 	
 	public boolean itemHasEffect(ItemStack stk)
 	{
 		return false;
 	}
 	
-	public Object getClientModel(int id)
+	public ModelBiped getClientModel(int id)
 	{
-		return null;
+		return (ModelBiped)null;
 	}
 	
 	public Object getRenderer(int index)
@@ -424,48 +394,30 @@ public class CommonProxy implements IGuiHandler{
 	
 	public EntityPlayer getClientPlayer()
 	{
-		return null;
+		return (EntityPlayer)null;
 	}
 	
-	public void ItemFX(double... ds)
-	{
-		
-	}
+	public void registerTexture(ResourceLocation rl) {}
 	
-	public void FlameFX(double... ds)
-	{
-		
-	}
+	public void ItemFX(double... ds) {}
 	
-	public void SmokeFX(double... ds)
-	{
-		
-	}
+	public void FlameFX(double... ds) {}
 	
-	public void MRUFX(double... ds)
-	{
-		
-	}
+	public void SmokeFX(double... ds) {}
 	
-	public void wingsAction(EntityPlayer e, ItemStack s)
-	{
-		
-	}
+	public void MRUFX(double... ds) {}
 	
-	public void handlePositionChangePacket(DummyData[] packetData)
-	{
-		
-	}
+	public void wingsAction(EntityPlayer e, ItemStack s) {}
 	
-	public void handleSoundPlay(DummyData[] packetData)
-	{
-		
-	}
+	public void handlePositionChangePacket(DummyData[] packetData) {}
+	
+	public void handleSoundPlay(DummyData[] packetData) {}
 
-	public void stopSound(String soundID) {
-		
-	}
+	public void stopSound(String soundID) {}
 
-	public void startSound(String soundID, String soundName) {
-	}
+	public void startSound(String soundID, String soundName) {}
+	
+	public void startRecord(String soundID, String soundName, BlockPos pos) {}
+	
+	public void preInit() {}
 }

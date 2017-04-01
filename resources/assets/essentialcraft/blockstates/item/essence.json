@@ -1,0 +1,23 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "builtin/generated",
+        "transform": "forge:default-item"
+    },
+    "variants": {
+        "type": {
+            "fire": {
+                "textures": { "layer0": "essentialcraft:items/elemental/essenceFire" }
+            },
+            "water": {
+                "textures": { "layer0": "essentialcraft:items/elemental/essenceWater" }
+            },
+            "earth": {
+                "textures": { "layer0": "essentialcraft:items/elemental/essenceEarth" }
+            },
+            "air": {
+                "textures": { "layer0": "essentialcraft:items/elemental/essenceAir" }
+            }
+        }
+    }
+}

@@ -9,7 +9,7 @@ import ec3.client.gui.element.GuiMRUStorage;
 import net.minecraft.inventory.Container;
 import net.minecraft.tileentity.TileEntity;
 
-public class GuiCrystalFormer extends GuiCommon{
+public class GuiCrystalFormer extends GuiCommon {
 
 	public GuiCrystalFormer(Container c, TileEntity tile) {
 		super(c,tile);
@@ -18,7 +18,4 @@ public class GuiCrystalFormer extends GuiCommon{
 		this.elementList.add(new GuiBoundGemState(25, 22, tile, 0));
 		this.elementList.add(new GuiBalanceState(25, 40, tile));
 	}
-	
-	
-
 }

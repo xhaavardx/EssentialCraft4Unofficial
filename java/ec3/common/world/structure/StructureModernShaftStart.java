@@ -11,7 +11,6 @@ public class StructureModernShaftStart extends StructureStart {
     @SuppressWarnings("unchecked")
 	public StructureModernShaftStart(World p_i2039_1_, Random p_i2039_2_, int p_i2039_3_, int p_i2039_4_)
     {
-    	
         super(p_i2039_3_, p_i2039_4_);
         StructureModernShaftPieces.Room room = new StructureModernShaftPieces.Room(0, p_i2039_2_, (p_i2039_3_ << 4) + 2, (p_i2039_4_ << 4) + 2);
         this.components.add(room);

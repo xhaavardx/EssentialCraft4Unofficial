@@ -1,0 +1,26 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "builtin/generated",
+        "transform": "forge:default-item"
+    },
+    "variants": {
+        "type": {
+            "empty": {
+                "textures": { "layer0": "essentialcraft:items/matrix/mruMatrix_empty" }
+            },
+            "chaos": {
+                "textures": { "layer0": "essentialcraft:items/matrix/mruMatrix_chaos" }
+            },
+            "frozen": {
+                "textures": { "layer0": "essentialcraft:items/matrix/mruMatrix_frozen" }
+            },
+            "magic": {
+                "textures": { "layer0": "essentialcraft:items/matrix/mruMatrix_magic" }
+            },
+            "shade": {
+                "textures": { "layer0": "essentialcraft:items/matrix/mruMatrix_shade" }
+            }
+        }
+    }
+}

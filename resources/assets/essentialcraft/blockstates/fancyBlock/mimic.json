@@ -1,0 +1,58 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "essentialcraft:overlay"
+    },
+    "variants": {
+        "type": {
+            "ancient_tile": {
+                "textures": { "out": "essentialcraft:blocks/fancyBlocks/overlay/overlay_ancientTile" }
+            },
+            "big_tile": {
+                "textures": { "out": "essentialcraft:blocks/fancyBlocks/overlay/overlay_bigTile" }
+            },
+            "brick": {
+                "textures": { "out": "essentialcraft:blocks/fancyBlocks/overlay/overlay_brick" }
+            },
+            "fancy_tile": {
+                "textures": { "out": "essentialcraft:blocks/fancyBlocks/overlay/overlay_fancyTile" }
+            },
+            "pressured_tile": {
+                "textures": { "out": "essentialcraft:blocks/fancyBlocks/overlay/overlay_pressuredTile" }
+            },
+            "small_tiles": {
+                "textures": { "out": "essentialcraft:blocks/fancyBlocks/overlay/overlay_smallTiles" }
+            },
+            "temple": {
+                "textures": { "out": "essentialcraft:blocks/fancyBlocks/overlay/overlay_temple" }
+            },
+            "tiles": {
+                "textures": { "out": "essentialcraft:blocks/fancyBlocks/overlay/overlay_tiles" }
+            },
+            "futuristic_tile": {
+                "textures": { "out": "essentialcraft:blocks/fancyBlocks/overlay/overlay_futuristicTile" }
+            },
+            "machine": {
+                "textures": { "out": "essentialcraft:blocks/fancyBlocks/overlay/overlay_machine" }
+            },
+            "runic": {
+                "textures": { "out": "essentialcraft:blocks/fancyBlocks/overlay/overlay_runic" }
+            },
+            "nether_star": {
+                "textures": { "out": "essentialcraft:blocks/fancyBlocks/overlay/overlay_netherStar" }
+            },
+            "plate": {
+                "textures": { "out": "essentialcraft:blocks/fancyBlocks/overlay/overlay_plate" }
+            },
+            "packed_plate": {
+                "textures": { "out": "essentialcraft:blocks/fancyBlocks/overlay/overlay_packedPlate" }
+            },
+            "double_plate": {
+                "textures": { "out": "essentialcraft:blocks/fancyBlocks/overlay/overlay_doublePlate" }
+            },
+            "gem": {
+                "textures": { "out": "essentialcraft:blocks/fancyBlocks/overlay/overlay_gem" }
+            }
+        }
+    }
+}

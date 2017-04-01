@@ -10,7 +10,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 
 public class TileNewMIMExportNode extends TileMRUGeneric {
 
@@ -20,11 +20,10 @@ public class TileNewMIMExportNode extends TileMRUGeneric {
 		slot0IsBoundGem = false;
 	}
 	
-	public ForgeDirection getRotation() {
-		int metadata = worldObj.getBlockMetadata(xCoord, yCoord, zCoord);
-		if(metadata > 5)
-			metadata -= 6;
-		return ForgeDirection.getOrientation(metadata);
+	public EnumFacing getRotation() {
+		int metadata = this.getBlockMetadata();
+		metadata %= 6;
+		return EnumFacing.getFront(metadata);
 	}
 	
 	@Override
@@ -38,9 +37,9 @@ public class TileNewMIMExportNode extends TileMRUGeneric {
 	}
 	
 	public ISidedInventory getConnectedInventory() {
-		ForgeDirection side = getRotation();
-		if(worldObj.getTileEntity(xCoord+side.offsetX, yCoord+side.offsetY, zCoord+side.offsetZ) != null) {
-			TileEntity tile = worldObj.getTileEntity(xCoord+side.offsetX, yCoord+side.offsetY, zCoord+side.offsetZ);
+		EnumFacing side = getRotation();
+		if(worldObj.getTileEntity(pos.offset(side)) != null) {
+			TileEntity tile = worldObj.getTileEntity(pos.offset(side));
 			if(tile instanceof ISidedInventory)
 				return (ISidedInventory)tile;
 		}
@@ -49,9 +48,9 @@ public class TileNewMIMExportNode extends TileMRUGeneric {
 	}
 	
 	public IInventory getConnectedInventoryInefficent() {
-		ForgeDirection side = getRotation();
-		if(worldObj.getTileEntity(xCoord+side.offsetX, yCoord+side.offsetY, zCoord+side.offsetZ) != null) {
-			TileEntity tile = worldObj.getTileEntity(xCoord+side.offsetX, yCoord+side.offsetY, zCoord+side.offsetZ);
+		EnumFacing side = getRotation();
+		if(worldObj.getTileEntity(pos.offset(side)) != null) {
+			TileEntity tile = worldObj.getTileEntity(pos.offset(side));
 			if(tile instanceof IInventory)
 				return (IInventory) tile;
 		}
@@ -60,11 +59,11 @@ public class TileNewMIMExportNode extends TileMRUGeneric {
 	}
 	
 	public int[] getAccessibleSlots() {
-		return getConnectedInventory().getAccessibleSlotsFromSide(getRotation().getOpposite().ordinal());
+		return getConnectedInventory().getSlotsForFace(getRotation().getOpposite());
 	}
 	
 	public void exportAllPossibleItems(TileNewMIM parent) {
-		if(worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord))
+		if(worldObj.isBlockIndirectlyGettingPowered(pos) > 0)
 			return;
 		
 		ISidedInventory inv = getConnectedInventory();
@@ -77,7 +76,7 @@ public class TileNewMIMExportNode extends TileMRUGeneric {
 			
 			for(int i = 0; i < itemsToExport.size(); ++i) {
 				for(int j = 0; j < slots.length; ++j) {
-					if(inv.canInsertItem(slots[j], itemsToExport.get(i), getRotation().getOpposite().ordinal())) {
+					if(inv.canInsertItem(slots[j], itemsToExport.get(i), getRotation().getOpposite())) {
 						if(inv.getStackInSlot(slots[j]) == null || (inv.getStackInSlot(slots[j]).isItemEqual(itemsToExport.get(i)) && ItemStack.areItemStackTagsEqual(inv.getStackInSlot(slots[j]), itemsToExport.get(i)))) {
 							if(getStackInSlot(0) == null || !(getStackInSlot(0).getItem() instanceof ItemFilter)) {
 								if(inv.getStackInSlot(slots[j]) == null) {

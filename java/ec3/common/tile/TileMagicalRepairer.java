@@ -1,6 +1,7 @@
 package ec3.common.tile;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraftforge.common.config.Configuration;
 import DummyCore.Utils.DataStorage;
 import DummyCore.Utils.DummyData;
@@ -21,10 +22,10 @@ public class TileMagicalRepairer extends TileMRUGeneric {
 	}
 	
 	@Override
-	public void updateEntity() {
-		super.updateEntity();
+	public void update() {
+		super.update();
 		ECUtils.manage(this, 0);
-		if(!worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord))
+		if(worldObj.isBlockIndirectlyGettingPowered(pos) == 0)
 			repare();
 		spawnParticles();
 	}
@@ -35,7 +36,7 @@ public class TileMagicalRepairer extends TileMRUGeneric {
 			if(setMRU(getMRU() - mruUsage)) {
 				repareItem.setItemDamage(repareItem.getItemDamage() - 1);
 				if(generatesCorruption)
-					ECUtils.increaseCorruptionAt(worldObj, xCoord, yCoord, zCoord, worldObj.rand.nextInt(genCorruption));
+					ECUtils.increaseCorruptionAt(worldObj, pos.getX(), pos.getY(), pos.getZ(), worldObj.rand.nextInt(genCorruption));
 			}
 		}
 	}
@@ -47,7 +48,7 @@ public class TileMagicalRepairer extends TileMRUGeneric {
 	public void spawnParticles() {
 		if(canRepare(getStackInSlot(1)) && getMRU() > 0) {
 			for(int o = 0; o < 10; ++o) {
-				worldObj.spawnParticle("reddust", xCoord+0.25D + worldObj.rand.nextDouble()/2.2D, yCoord+0.25D+((float)o/20), zCoord+0.25D + worldObj.rand.nextDouble()/2.2D, 1.0D, 0.0D, 1.0D);
+				worldObj.spawnParticle(EnumParticleTypes.REDSTONE, pos.getX()+0.25D + worldObj.rand.nextDouble()/2.2D, pos.getY()+0.25D+((float)o/20), pos.getZ()+0.25D + worldObj.rand.nextDouble()/2.2D, 1.0D, 0.0D, 1.0D);
 			}
 		}
 	}

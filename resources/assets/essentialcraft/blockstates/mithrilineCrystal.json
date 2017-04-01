@@ -1,0 +1,35 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "minecraft:block"
+    },
+    "variants": {
+        "type": {
+            "mithriline": {
+                "textures": {
+                    "particle": "essentialcraft:blocks/invertedPlatingBlock"
+                }
+            },
+            "pale": {
+                "textures": {
+                    "particle": "essentialcraft:blocks/palePlatingBlock"
+                }
+            },
+            "void": {
+                "textures": {
+                    "particle": "essentialcraft:blocks/voidStone"
+                }
+            },
+            "demonic": {
+                "textures": {
+                    "particle": "essentialcraft:blocks/demonicPlatingBlock"
+                }
+            },
+            "shade": {
+                "textures": {
+                    "particle": "essentialcraft:blocks/corruption/shade/7"
+                }
+            }
+        }
+    }
+}

@@ -3,10 +3,10 @@ package ec3.common.tile;
 import java.util.List;
 
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.boss.IBossDisplayData;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.util.FakePlayer;
@@ -36,30 +36,31 @@ public class TileMonsterHarvester extends TileMRUGeneric {
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public void updateEntity() {
-		super.updateEntity();
+	public void update() {
+		super.update();
 		ECUtils.manage(this, 0);
-		if(!worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord)) {
+		if(worldObj.isBlockIndirectlyGettingPowered(pos) == 0) {
 			++destrTick;
 			if(destrTick >= mobDestructionTimer) {
 				destrTick = 0;
-				List<EntityLivingBase> lst = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, AxisAlignedBB.getBoundingBox(xCoord-16, yCoord-16, zCoord-16, xCoord+17, yCoord+17, zCoord+17));
+				List<EntityLivingBase> lst = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(pos.getX()-16, pos.getY()-16, pos.getZ()-16, pos.getX()+17, pos.getY()+17, pos.getZ()+17));
 				if(!lst.isEmpty() && !worldObj.isRemote) {
 					for(int i = 0; i < lst.size(); ++i) {
 						EntityLivingBase e = lst.get(i);
 						if(!(e instanceof EntityPlayer)) {
 							if(getMRU() > mruUsage) {
-								if(e instanceof IBossDisplayData && !allowBossDuplication)
+								if(!e.isNonBoss() && !allowBossDuplication)
 									return;
 								
 								EntityLivingBase copy = (EntityLivingBase)MiscUtils.cloneEntity(e);
 								worldObj.spawnEntityInWorld(copy);
 								if(clearCopyInventory) {
-									copy.setCurrentItemOrArmor(0, null);
-									copy.setCurrentItemOrArmor(1, null);
-									copy.setCurrentItemOrArmor(2, null);
-									copy.setCurrentItemOrArmor(3, null);
-									copy.setCurrentItemOrArmor(4, null);
+									copy.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, null);
+									copy.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, null);
+									copy.setItemStackToSlot(EntityEquipmentSlot.HEAD, null);
+									copy.setItemStackToSlot(EntityEquipmentSlot.CHEST, null);
+									copy.setItemStackToSlot(EntityEquipmentSlot.LEGS, null);
+									copy.setItemStackToSlot(EntityEquipmentSlot.FEET, null);
 								}
 								FakePlayer player = new FakePlayer((WorldServer)e.worldObj, ECUtils.EC3FakePlayerProfile);
 								ItemStack stk = getStackInSlot(2);
@@ -72,7 +73,7 @@ public class TileMonsterHarvester extends TileMRUGeneric {
 								if(copy.getHealth() > 0)
 									copy.setDead();
 								if(generatesCorruption)
-									ECUtils.increaseCorruptionAt(worldObj, xCoord, yCoord, zCoord, worldObj.rand.nextInt(genCorruption));
+									ECUtils.increaseCorruptionAt(worldObj, pos.getX(), pos.getY(), pos.getZ(), worldObj.rand.nextInt(genCorruption));
 							}
 						}
 					}

@@ -1,5 +1,7 @@
 package ec3.common.tile;
 
+import net.minecraft.util.math.BlockPos;
+
 public class TileRedstoneTransmitter extends TileMRUGeneric {
 	public int updateTime = 0;
 	
@@ -10,14 +12,14 @@ public class TileRedstoneTransmitter extends TileMRUGeneric {
 	}
 	
 	public int getRedstonePower(int[] c) {
-		return worldObj.getStrongestIndirectPower(c[0], c[1], c[2]);
+		return worldObj.getStrongPower(new BlockPos(c[0], c[1], c[2]));
 	}
 	
-	public void updateEntity() {
-		super.updateEntity();
+	public void update() {
+		super.update();
 		if(updateTime == 0) {
 			updateTime = 20;
-			worldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, getBlockType());
+			worldObj.notifyBlockOfStateChange(pos, blockType);
 		}
 		else
 			--updateTime;

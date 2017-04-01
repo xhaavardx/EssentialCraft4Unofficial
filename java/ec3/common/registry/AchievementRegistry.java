@@ -48,7 +48,7 @@ public class AchievementRegistry {
 	
 	public static void registerAchievementStat(Achievement ach)
 	{
-		AchievementList.achievementList.remove(ach);
+		AchievementList.ACHIEVEMENTS.remove(ach);
 	}
 	
 	public static List<String> achievementNames = new ArrayList<String>();

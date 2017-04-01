@@ -1,0 +1,22 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "essentialcraft:chest"
+    },
+    "variants": {
+        "type": {
+            "magical": {
+                "textures": {
+                    "particle": "essentialcraft:blocks/magicPlatingBlock",
+                    "chest": "essentialcraft:blocks/chests/magical"
+                }
+            },
+            "void": {
+                "textures": {
+                    "particle": "essentialcraft:blocks/voidStone",
+                    "chest": "essentialcraft:blocks/chests/void"
+                }
+            }
+        }
+    }
+}

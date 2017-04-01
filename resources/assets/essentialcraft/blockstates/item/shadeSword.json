@@ -1,0 +1,17 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "builtin/generated",
+        "transform": "forge:default-tool"
+    },
+    "variants": {
+        "active": {
+            "true": {
+                "textures": { "layer0": "essentialcraft:items/tools/swordOfTheSHADE_gen" }
+            },
+            "false": {
+                "textures": { "layer0": "essentialcraft:items/tools/swordOfTheSHADE_player" }
+            }
+        }
+    }
+}

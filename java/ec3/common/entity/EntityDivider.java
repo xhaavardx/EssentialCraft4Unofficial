@@ -2,19 +2,30 @@ package ec3.common.entity;
 
 import java.util.List;
 
+import ec3.common.item.ItemsCore;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.init.MobEffects;
+import net.minecraft.init.SoundEvents;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
 
-public class EntityDivider extends Entity
-{
+public class EntityDivider extends Entity {
+	
+	public static final DataParameter<String> DATA = EntityDataManager.<String>createKey(EntityDivider.class, DataSerializers.STRING);
 	
 	public EntityDivider(World w) {
 		super(w);
+		this.setSize(0.3F, 0.3F);
 	}
 	
 	public EntityDivider(World w, double x, double y, double z) {
@@ -35,7 +46,7 @@ public class EntityDivider extends Entity
 	@Override
 	protected void entityInit() 
 	{
-		this.getDataWatcher().addObject(12, "||null:null");
+		this.getDataManager().register(DATA, "||null:null");
 	}
 
 	@Override
@@ -57,13 +68,13 @@ public class EntityDivider extends Entity
 		delay -= 0.05D;
 		
 		if(this.ticksExisted % 10 == 0)
-			this.playSound("creeper.primed", 1.0F, 0.5F);
+			this.playSound(SoundEvents.ENTITY_CREEPER_PRIMED, 1.0F, 0.5F);
 		
-		this.worldObj.spawnParticle("reddust", posX, posY, posZ, 1, 0, 1);
+		this.worldObj.spawnParticle(EnumParticleTypes.REDSTONE, posX, posY, posZ, 1, 0, 1);
 		
 		if(delay <= 0 && !this.isDead)
 		{
-			List<EntityLivingBase> allEntities = this.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, AxisAlignedBB.getBoundingBox(posX-0.5D, posY-0.5D, posZ-0.5D, posX+0.5D, posY+0.5D, posZ+0.5D).expand(3, 3, 3));
+			List<EntityLivingBase> allEntities = this.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(posX-0.5D, posY-0.5D, posZ-0.5D, posX+0.5D, posY+0.5D, posZ+0.5D).expand(3, 3, 3));
 			for(int i = 0; i < allEntities.size(); ++i)
 			{
 				
@@ -88,10 +99,10 @@ public class EntityDivider extends Entity
 					return;
 				
 				elb.setHealth(elb.getHealth()/2);
-				elb.addPotionEffect(new PotionEffect(Potion.weakness.id,200,4,true));
-				elb.addPotionEffect(new PotionEffect(Potion.moveSlowdown.id,200,4,true));
-				elb.addPotionEffect(new PotionEffect(Potion.digSlowdown.id,200,4,true));
-				elb.addPotionEffect(new PotionEffect(Potion.blindness.id,100,0,true));
+				elb.addPotionEffect(new PotionEffect(MobEffects.WEAKNESS,200,4,true,true));
+				elb.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS,200,4,true,true));
+				elb.addPotionEffect(new PotionEffect(MobEffects.MINING_FATIGUE,200,4,true,true));
+				elb.addPotionEffect(new PotionEffect(MobEffects.BLINDNESS,100,0,true,true));
 				
 			}
 			this.setDead();
@@ -99,6 +110,8 @@ public class EntityDivider extends Entity
 		}
 	}
 	
-	
-
+	@Override
+	public ItemStack getPickedResult(RayTraceResult target) {
+		return new ItemStack(ItemsCore.entityEgg,1,EntitiesCore.registeredEntities.indexOf(this.getClass()));
+	}
 }

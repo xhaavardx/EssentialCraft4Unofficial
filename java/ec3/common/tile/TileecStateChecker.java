@@ -43,7 +43,7 @@ public class TileecStateChecker extends TileEntity implements IStructurePiece, I
 	
 	@Override
 	public EnumStructureType getStructure() {
-		return EnumStructureType.MRUCUContaigementChamber;
+		return EnumStructureType.MRUCUEnrichmentChamber;
 	}
 	
 	@Override

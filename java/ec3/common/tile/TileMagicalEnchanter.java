@@ -3,15 +3,13 @@ package ec3.common.tile;
 import java.util.List;
 import java.util.Random;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.enchantment.EnchantmentData;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.config.Configuration;
 import DummyCore.Utils.DataStorage;
@@ -48,20 +46,20 @@ public class TileMagicalEnchanter extends TileMRUGeneric {
 	}
 	
 	@Override
-	public void updateEntity() {
-		super.updateEntity();
+	public void update() {
+		super.update();
 		ECUtils.manage(this, 0);
 		
-		if(!worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord))
+		if(worldObj.isBlockIndirectlyGettingPowered(pos) == 0)
 			tryEnchant();
 		
 		field_145927_n = field_145930_m;
 		field_145925_p = field_145928_o;
-		EntityPlayer entityplayer = worldObj.getClosestPlayer((double)((float)xCoord + 0.5F), (double)((float)yCoord + 0.5F), (double)((float)zCoord + 0.5F), 3.0D);
+		EntityPlayer entityplayer = worldObj.getClosestPlayer((double)((float)pos.getX() + 0.5F), (double)((float)pos.getY() + 0.5F), (double)((float)pos.getZ() + 0.5F), 3.0D, false);
 		
 		if(entityplayer != null) {
-			double d0 = entityplayer.posX - (double)((float)xCoord + 0.5F);
-			double d1 = entityplayer.posZ - (double)((float)zCoord + 0.5F);
+			double d0 = entityplayer.posX - (double)((float)pos.getX() + 0.5F);
+			double d1 = entityplayer.posZ - (double)((float)pos.getZ() + 0.5F);
 			field_145924_q = (float)Math.atan2(d1, d0);
 			field_145930_m += 0.1F;
 			
@@ -126,7 +124,6 @@ public class TileMagicalEnchanter extends TileMRUGeneric {
 		field_145933_i += field_145929_l;
 	}
 	
-	@SideOnly(Side.CLIENT)
 	@Override
 	public AxisAlignedBB getRenderBoundingBox() {
 		AxisAlignedBB bb = INFINITE_EXTENT_AABB;
@@ -140,16 +137,16 @@ public class TileMagicalEnchanter extends TileMRUGeneric {
 	}
 	
 	@Override
-	public void writeToNBT(NBTTagCompound i) {
+	public NBTTagCompound writeToNBT(NBTTagCompound i) {
 		i.setInteger("work", progressLevel);
-		super.writeToNBT(i);
+		return super.writeToNBT(i);
 	}
 	
 	public void tryEnchant() {
 		if(canItemBeEnchanted() && !worldObj.isRemote) {
 			if(setMRU(getMRU() - mruUsage)) {
 				if(generatesCorruption)
-					ECUtils.increaseCorruptionAt(worldObj, xCoord, yCoord, zCoord, worldObj.rand.nextInt(genCorruption));
+					ECUtils.increaseCorruptionAt(worldObj, pos.getX(), pos.getY(), pos.getZ(), worldObj.rand.nextInt(genCorruption));
 				++progressLevel;
 				if(progressLevel >= getRequiredTimeToAct()) {
 					enchant();
@@ -171,8 +168,8 @@ public class TileMagicalEnchanter extends TileMRUGeneric {
     	for(int m = 0; m < enchants.size(); ++m) {
     		EnchantmentData d = enchants.get(m);
     		if(d != null) {
-    			if(enchanted.getItem() == Items.book) {
-    				enchanted = new ItemStack(Items.enchanted_book, 1, 0);
+    			if(enchanted.getItem() == Items.BOOK) {
+    				enchanted = new ItemStack(Items.ENCHANTED_BOOK, 1, 0);
     			}
     			enchanted.addEnchantment(d.enchantmentobj, d.enchantmentLevel);
     		}
@@ -184,7 +181,7 @@ public class TileMagicalEnchanter extends TileMRUGeneric {
 	@SuppressWarnings("unchecked")
 	public List<EnchantmentData> getEnchantmentsForStack(ItemStack stack) {
 		if(enchants == null)
-			enchants = EnchantmentHelper.buildEnchantmentList(worldObj.rand, stack, getMaxPower());
+			enchants = EnchantmentHelper.buildEnchantmentList(worldObj.rand, stack, getMaxPower(), false);
 		return enchants;
 	}
 	
@@ -202,7 +199,7 @@ public class TileMagicalEnchanter extends TileMRUGeneric {
 			for(int y = 0; y <= 2; ++y) {
 				for(int z = -2; z <= 2; ++z) {
 					if(x != 0 || y != 0 || z != 0) {
-						l += ForgeHooks.getEnchantPower(worldObj, xCoord+x, yCoord+y, zCoord+z);
+						l += ForgeHooks.getEnchantPower(worldObj, pos);
 					}
 				}
 			}

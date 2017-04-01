@@ -1,0 +1,257 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "builtin/generated",
+        "transform": "forge:default-item"
+    },
+    "variants": {
+        "type": {
+            "combinedmagicalalloys": {
+                "textures": { "layer0": "essentialcraft:items/misc/combinedMagicalAlloys" }
+            },
+            "elementalcore": {
+                "textures": { "layer0": "essentialcraft:items/misc/elementalCore" }
+            },
+            "enderscaleplating": {
+                "textures": { "layer0": "essentialcraft:items/misc/enderScalePlating" }
+            },
+            "magicalessence": {
+                "textures": { "layer0": "essentialcraft:items/misc/magicalEssence" }
+            },
+            "magicalgoldenorb": {
+                "textures": { "layer0": "essentialcraft:items/misc/magicalGoldenOrb" }
+            },
+            "magicalingot": {
+                "textures": { "layer0": "essentialcraft:items/misc/magicalIngot" }
+            },
+            "magicalwater": {
+                "textures": { "layer0": "essentialcraft:items/misc/magicalWater" }
+            },
+            "magicfortifiedplating": {
+                "textures": { "layer0": "essentialcraft:items/misc/magicFortifiedPlating" }
+            },
+            "magicpurifyedenderscalealloy": {
+                "textures": { "layer0": "essentialcraft:items/misc/magicPurifyedEnderScaleAlloy" }
+            },
+            "magicpurifyedglassalloy": {
+                "textures": { "layer0": "essentialcraft:items/misc/magicPurifyedGlassAlloy" }
+            },
+            "magicpurifyedgoldalloy": {
+                "textures": { "layer0": "essentialcraft:items/misc/magicPurifyedGoldAlloy" }
+            },
+            "magicpurifyedredstonealloy": {
+                "textures": { "layer0": "essentialcraft:items/misc/magicPurifyedRedstoneAlloy" }
+            },
+            "mrushard": {
+                "textures": { "layer0": "essentialcraft:items/misc/mruShard" }
+            },
+            "mrucrystal": {
+                "textures": { "layer0": "essentialcraft:items/misc/mruCrystal" }
+            },
+            "mrugem": {
+                "textures": { "layer0": "essentialcraft:items/misc/mruGem" }
+            },
+            "mruchunk": {
+                "textures": { "layer0": "essentialcraft:items/misc/mruChunk" }
+            },
+            "mrulargechunk": {
+                "textures": { "layer0": "essentialcraft:items/misc/mruLargeChunk" }
+            },
+            "inventoryupgrade": {
+                "textures": { "layer0": "essentialcraft:items/misc/inventoryUpgrade" }
+            },
+            "efficencyupgrade": {
+                "textures": { "layer0": "essentialcraft:items/misc/efficencyUpgrade" }
+            },
+            "diamondupgrade": {
+                "textures": { "layer0": "essentialcraft:items/misc/diamondUpgrade" }
+            },
+            "crystaldust": {
+                "textures": { "layer0": "essentialcraft:items/misc/crystalDust" }
+            },
+            "diamondplate": {
+                "textures": { "layer0": "essentialcraft:items/misc/diamondPlate" }
+            },
+            "emeraldplate": {
+                "textures": { "layer0": "essentialcraft:items/misc/emeraldPlate" }
+            },
+            "eyeofabsorbtion": {
+                "textures": { "layer0": "essentialcraft:items/misc/eyeOfAbsorbtion" }
+            },
+            "fortifiedframe": {
+                "textures": { "layer0": "essentialcraft:items/misc/fortifiedFrame" }
+            },
+            "heatingrod": {
+                "textures": { "layer0": "essentialcraft:items/misc/heatingRod" }
+            },
+            "ironsupport": {
+                "textures": { "layer0": "essentialcraft:items/misc/ironSupport" }
+            },
+            "magicalscreen": {
+                "textures": { "layer0": "essentialcraft:items/misc/magicalScreen" }
+            },
+            "matrixlink": {
+                "textures": { "layer0": "essentialcraft:items/misc/matrixLink" }
+            },
+            "mrucatcher": {
+                "textures": { "layer0": "essentialcraft:items/misc/mruCatcher" }
+            },
+            "mruconversionmatrix": {
+                "textures": { "layer0": "essentialcraft:items/misc/mruConversionMatrix" }
+            },
+            "obsidianplate": {
+                "textures": { "layer0": "essentialcraft:items/misc/obsidianPlate" }
+            },
+            "sunimbuedglass": {
+                "textures": { "layer0": "essentialcraft:items/misc/sunImbuedGlass" }
+            },
+            "worldinteractor": {
+                "textures": { "layer0": "essentialcraft:items/misc/worldInteractor" }
+            },
+            "magicplate": {
+                "textures": { "layer0": "essentialcraft:items/misc/magicPlate" }
+            },
+            "voidplating": {
+                "textures": { "layer0": "essentialcraft:items/misc/voidPlating" }
+            },
+            "voidcore": {
+                "textures": { "layer0": "essentialcraft:items/misc/voidCore" }
+            },
+            "voidmrureactor": {
+                "textures": { "layer0": "essentialcraft:items/misc/voidMruReactor" }
+            },
+            "palepearl": {
+                "textures": { "layer0": "essentialcraft:items/misc/palePearl" }
+            },
+            "paleingot": {
+                "textures": { "layer0": "essentialcraft:items/misc/paleIngot" }
+            },
+            "gempale": {
+                "textures": { "layer0": "essentialcraft:items/misc/gemPale" }
+            },
+            "paleplate": {
+                "textures": { "layer0": "essentialcraft:items/misc/palePlate" }
+            },
+            "palecore": {
+                "textures": { "layer0": "essentialcraft:items/misc/paleCore" }
+            },
+            "mrumagnet": {
+                "textures": { "layer0": "essentialcraft:items/misc/mruMagnet" }
+            },
+            "mruresonatingcrystal": {
+                "textures": { "layer0": "essentialcraft:items/misc/mruResonatingCrystal" }
+            },
+            "lapiscore": {
+                "textures": { "layer0": "essentialcraft:items/misc/lapisCore" }
+            },
+            "fadingdust": {
+                "textures": { "layer0": "essentialcraft:items/misc/fadingDust" }
+            },
+            "fadingcrystal": {
+                "textures": { "layer0": "essentialcraft:items/misc/fadingCrystal" }
+            },
+            "mithrilinecrystal": {
+                "textures": { "layer0": "essentialcraft:items/misc/mithrilineCrystal" }
+            },
+            "mithrilineplate": {
+                "textures": { "layer0": "essentialcraft:items/misc/mithrilinePlate" }
+            },
+            "mithrilineingot": {
+                "textures": { "layer0": "essentialcraft:items/misc/mithrilineIngot" }
+            },
+            "mithrilinedust": {
+                "textures": { "layer0": "essentialcraft:items/misc/mithrilineDust" }
+            },
+            "ackroniteingot": {
+                "textures": { "layer0": "essentialcraft:items/misc/ackroniteIngot" }
+            },
+            "demoniccore": {
+                "textures": { "layer0": "essentialcraft:items/misc/demonicCore" }
+            },
+            "demonicplate": {
+                "textures": { "layer0": "essentialcraft:items/misc/demonicPlate" }
+            },
+            "windgem": {
+                "textures": { "layer0": "essentialcraft:items/misc/windGem" }
+            },
+            "computerengine": {
+                "textures": { "layer0": "essentialcraft:items/misc/computerEngine" }
+            },
+            "forcefieldgenerator": {
+                "textures": { "layer0": "essentialcraft:items/misc/forceFieldGenerator" }
+            },
+            "forcefieldplating": {
+                "textures": { "layer0": "essentialcraft:items/misc/forceFieldPlating" }
+            },
+            "neuronicenrichedplating": {
+                "textures": { "layer0": "essentialcraft:items/misc/neuronicEnrichedPlating" }
+            },
+            "pressurestabiliser": {
+                "textures": { "layer0": "essentialcraft:items/misc/pressureStabiliser" }
+            },
+            "repulsiongenerator": {
+                "textures": { "layer0": "essentialcraft:items/misc/repulsionGenerator" }
+            },
+            "thrusterengine": {
+                "textures": { "layer0": "essentialcraft:items/misc/thrusterEngine" }
+            },
+            "visionlense": {
+                "textures": { "layer0": "essentialcraft:items/misc/visionLense" }
+            },
+            "speakerplate": {
+                "textures": { "layer0": "essentialcraft:items/misc/speakerPlate" }
+            },
+            "forcefieldcore": {
+                "textures": { "layer0": "essentialcraft:items/misc/forcefieldCore" }
+            },
+            "particlecatcher": {
+                "textures": { "layer0": "essentialcraft:items/misc/particleCatcher" }
+            },
+            "particleemitter": {
+                "textures": { "layer0": "essentialcraft:items/misc/particleEmitter" }
+            },
+            "forceemitter": {
+                "textures": { "layer0": "essentialcraft:items/misc/forceEmitter" }
+            },
+            "logiccore": {
+                "textures": { "layer0": "essentialcraft:items/misc/logicCore" }
+            },
+            "additioncore": {
+                "textures": { "layer0": "essentialcraft:items/misc/additionCore" }
+            },
+            "divisioncore": {
+                "textures": { "layer0": "essentialcraft:items/misc/divisionCore" }
+            },
+            "multiplicationcore": {
+                "textures": { "layer0": "essentialcraft:items/misc/multiplicationCore" }
+            },
+            "substructioncore": {
+                "textures": { "layer0": "essentialcraft:items/misc/substructionCore" }
+            },
+            "forceabsorber": {
+                "textures": { "layer0": "essentialcraft:items/misc/forceAbsorber" }
+            },
+            "soundmanager": {
+                "textures": { "layer0": "essentialcraft:items/misc/soundManager" }
+            },
+            "glitchycore": {
+                "textures": { "layer0": "essentialcraft:items/misc/glitchyCore" }
+            },
+            "blazingupgrade": {
+                "textures": { "layer0": "essentialcraft:items/misc/blazingUpgrade" }
+            },
+            "fortuneupgrade": {
+                "textures": { "layer0": "essentialcraft:items/misc/fortuneUpgrade" }
+            },
+            "magicpurifyedblazealloy": {
+                "textures": { "layer0": "essentialcraft:items/misc/magicPurifyedBlazeAlloy" }
+            },
+            "silkyupgrade": {
+                "textures": { "layer0": "essentialcraft:items/misc/silkyUpgrade" }
+            },
+            "voidupgrade": {
+                "textures": { "layer0": "essentialcraft:items/misc/voidUpgrade" }
+            }
+        }
+    }
+}

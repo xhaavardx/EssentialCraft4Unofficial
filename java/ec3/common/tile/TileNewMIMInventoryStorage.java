@@ -3,9 +3,9 @@ package ec3.common.tile;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
-import cpw.mods.fml.common.registry.GameRegistry;
+import org.apache.commons.lang3.tuple.Pair;
+
 import DummyCore.Utils.MiscUtils;
-import DummyCore.Utils.Pair;
 import ec3.common.item.ItemInventoryGem;
 import ec3.common.item.ItemsCore;
 import ec3.common.mod.EssentialCraftCore;
@@ -19,6 +19,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
 
 public class TileNewMIMInventoryStorage extends TileMRUGeneric {
 
@@ -53,8 +54,8 @@ public class TileNewMIMInventoryStorage extends TileMRUGeneric {
 		ArrayList<IInventory> retLst = new ArrayList<IInventory>();
 		
 		for(Pair<Integer[],IInventory> p : counted) {
-			if(worldObj.blockExists(p.obj1[0], p.obj1[1], p.obj1[2]) && worldObj.getTileEntity(p.obj1[0], p.obj1[1], p.obj1[2]) instanceof IInventory)
-				retLst.add(p.getSecond());
+			if(worldObj.isBlockLoaded(new BlockPos(p.getLeft()[0], p.getLeft()[1], p.getLeft()[2])) && worldObj.getTileEntity(new BlockPos(p.getLeft()[0], p.getLeft()[1], p.getLeft()[2])) instanceof IInventory)
+				retLst.add(p.getRight());
 		}
 		
 		return retLst;
@@ -152,10 +153,10 @@ public class TileNewMIMInventoryStorage extends TileMRUGeneric {
 			return false;
 		
 		for(int i = 0; i < counted.size(); ++i) {
-			Integer[] coords = counted.get(i).getFirst();
-			IInventory inv = counted.get(i).getSecond();
+			Integer[] coords = counted.get(i).getLeft();
+			IInventory inv = counted.get(i).getRight();
 			
-			if(!worldObj.blockExists(coords[0], coords[1], coords[2]))
+			if(!worldObj.isBlockLoaded(new BlockPos(coords[0], coords[1], coords[2])))
 				continue;
 			
 			if(inv == null)
@@ -210,7 +211,7 @@ public class TileNewMIMInventoryStorage extends TileMRUGeneric {
 			for(int j = 0; j < countedT.get(i).getSizeInventory(); ++j) {
 				ItemStack stk = countedT.get(i).getStackInSlot(j);
 				if(stk != null && stk.stackSize > 0) {
-					String id = GameRegistry.findUniqueIdentifierFor(stk.getItem()).toString() + "@" + stk.getItemDamage();
+					String id = stk.getItem().getRegistryName().toString() + "@" + stk.getItemDamage();
 					if(stk.getTagCompound() == null || stk.getTagCompound().hasNoTags()) {
 						if(found.containsKey(id))
 							found.put(id, found.get(id) + stk.stackSize);
@@ -271,13 +272,13 @@ public class TileNewMIMInventoryStorage extends TileMRUGeneric {
 					int y = coords[1];
 					int z = coords[2];
 					int dim = MiscUtils.getStackTag(stk).getInteger("dim");
-					if(dim == worldObj.provider.dimensionId) {
-						if(worldObj.blockExists(x, y, z) && worldObj.getBlock(x, y, z) instanceof ITileEntityProvider) {
-							TileEntity tile = worldObj.getTileEntity(x, y, z);
+					if(dim == worldObj.provider.getDimension()) {
+						if(worldObj.isBlockLoaded(new BlockPos(x, y, z)) && worldObj.getBlockState(new BlockPos(x, y, z)).getBlock() instanceof ITileEntityProvider) {
+							TileEntity tile = worldObj.getTileEntity(new BlockPos(x, y, z));
 							if(tile instanceof IInventory) {
 								if(!(tile instanceof TileNewMIMInventoryStorage) && !countedT.contains(tile)) {
 									countedT.add((IInventory) tile);
-									counted.add(new Pair<Integer[],IInventory>(new Integer[]{x,y,z},(IInventory)tile));
+									counted.add(Pair.<Integer[],IInventory>of(new Integer[]{x,y,z},(IInventory)tile));
 								}
 							}
 						}
@@ -299,8 +300,8 @@ public class TileNewMIMInventoryStorage extends TileMRUGeneric {
 			plrs.remove(plrs.indexOf((EntityPlayerMP) p));
 	}
 	
-	public void updateEntity() {
-		super.updateEntity();
+	public void update() {
+		super.update();
 		
 		if(updateTime <= 0)
 			rebuildInventories();
@@ -317,7 +318,7 @@ public class TileNewMIMInventoryStorage extends TileMRUGeneric {
 	public void packets(boolean force) {
 		for(int i = 0; i < plrs.size(); ++i) {
 			EntityPlayerMP player = plrs.get(i);
-			if(player == null || player.isDead || player.dimension != worldObj.provider.dimensionId)
+			if(player == null || player.isDead || player.dimension != worldObj.provider.getDimension())
 				plrs.remove(i);
 		}
 		
@@ -335,9 +336,9 @@ public class TileNewMIMInventoryStorage extends TileMRUGeneric {
 				lst.appendTag(itmTag);
 			}
 			sentTag.setTag("items", lst);
-			sentTag.setInteger("x", xCoord);
-			sentTag.setInteger("y", yCoord);
-			sentTag.setInteger("z", zCoord);
+			sentTag.setInteger("x", pos.getX());
+			sentTag.setInteger("y", pos.getY());
+			sentTag.setInteger("z", pos.getZ());
 			
 			PacketNBT packet = new PacketNBT(sentTag).setID(3);
 			

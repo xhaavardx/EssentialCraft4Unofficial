@@ -7,11 +7,12 @@ import java.util.Map;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityTNTPrimed;
-import net.minecraft.util.MathHelper;
-import net.minecraft.world.ChunkPosition;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 
@@ -19,11 +20,21 @@ public class ECExplosion extends Explosion
 {
     private int field_77289_h = 16;
     private World worldObj;
+    private float explosionSize;
+    private double explosionX;
+    private double explosionY;
+    private double explosionZ;
+    private Entity exploder;
     private Map<Object, Object> field_77288_k = new HashMap<Object, Object>();
     public ECExplosion(World p_i1948_1_, Entity p_i1948_2_, double p_i1948_3_, double p_i1948_5_, double p_i1948_7_, float p_i1948_9_)
     {
-    	super(p_i1948_1_, p_i1948_2_, p_i1948_3_, p_i1948_5_, p_i1948_7_, p_i1948_9_);
-    	worldObj = p_i1948_1_;
+    	super(p_i1948_1_, p_i1948_2_, p_i1948_3_, p_i1948_5_, p_i1948_7_, p_i1948_9_, false, true);
+    	this.worldObj = p_i1948_1_;
+    	this.exploder = p_i1948_2_;
+    	this.explosionX = p_i1948_3_;
+    	this.explosionY = p_i1948_5_;
+    	this.explosionZ = p_i1948_7_;
+    	this.explosionSize = p_i1948_9_;
     }
 
     /**
@@ -33,7 +44,7 @@ public class ECExplosion extends Explosion
 	public void doExplosionA()
     {
         float f = this.explosionSize;
-        HashSet<ChunkPosition> hashset = new HashSet<ChunkPosition>();
+        HashSet<BlockPos> hashset = new HashSet<BlockPos>();
         int i;
         int j;
         int k;
@@ -66,17 +77,18 @@ public class ECExplosion extends Explosion
                             int j1 = MathHelper.floor_double(d5);
                             int k1 = MathHelper.floor_double(d6);
                             int l1 = MathHelper.floor_double(d7);
-                            Block block = this.worldObj.getBlock(j1, k1, l1);
+                            BlockPos pos = new BlockPos(j1,k1,l1);
+                            IBlockState block = this.worldObj.getBlockState(pos);
 
-                            if (block.getMaterial() != Material.air)
+                            if (block.getMaterial() != Material.AIR)
                             {
-                                float f3 = this.exploder != null ? this.exploder.func_145772_a(this, this.worldObj, j1, k1, l1, block) : block.getExplosionResistance(this.exploder, worldObj, j1, k1, l1, explosionX, explosionY, explosionZ);
+                                float f3 = this.exploder != null ? this.exploder.getExplosionResistance(this, this.worldObj, pos, block) : block.getBlock().getExplosionResistance(worldObj, pos, this.exploder, this);
                                 f1 -= (f3 + 0.3F) * f2;
                             }
 
-                            if (f1 > 0.0F && (this.exploder == null || this.exploder.func_145774_a(this, this.worldObj, j1, k1, l1, block, f1)))
+                            if (f1 > 0.0F && (this.exploder == null || this.exploder.verifyExplosion(this, this.worldObj, pos, block, f1)))
                             {
-                                hashset.add(new ChunkPosition(j1, k1, l1));
+                                hashset.add(new BlockPos(j1, k1, l1));
                             }
 
                             d5 += d0 * (double)f2;
@@ -88,7 +100,7 @@ public class ECExplosion extends Explosion
             }
         }
 
-        this.affectedBlockPositions.addAll(hashset);
+        this.getAffectedBlockPositions().addAll(hashset);
         this.explosionSize *= 2.0F;
         i = MathHelper.floor_double(this.explosionX - (double)this.explosionSize - 1.0D);
         j = MathHelper.floor_double(this.explosionX + (double)this.explosionSize + 1.0D);
@@ -102,33 +114,28 @@ public class ECExplosion extends Explosion
     @SuppressWarnings("unchecked")
 	public void doExplosionB(boolean p_77279_1_)
     {
-        Iterator<ChunkPosition> iterator;
-        ChunkPosition chunkposition;
         int i;
         int j;
         int k;
-        Block block;
+        IBlockState block;
 
-        if (this.isSmoking)
+        if(true)
         {
-            iterator = this.affectedBlockPositions.iterator();
-
-            while (iterator.hasNext())
+            for(BlockPos chunkposition : this.getAffectedBlockPositions())
             {
-                chunkposition = (ChunkPosition)iterator.next();
-                i = chunkposition.chunkPosX;
-                j = chunkposition.chunkPosY;
-                k = chunkposition.chunkPosZ;
-                block = this.worldObj.getBlock(i, j, k);
+                i = chunkposition.getX();
+                j = chunkposition.getY();
+                k = chunkposition.getZ();
+                block = this.worldObj.getBlockState(chunkposition);
 
-                if (block.getMaterial() != Material.air)
+                if (block.getMaterial() != Material.AIR)
                 {
-                    if (block.canDropFromExplosion(this))
+                    if (block.getBlock().canDropFromExplosion(this))
                     {
                         //block.dropBlockAsItemWithChance(this.worldObj, i, j, k, this.worldObj.getBlockMetadata(i, j, k), 1.0F / this.explosionSize, 0);
                     }
 
-                    block.onBlockExploded(this.worldObj, i, j, k, this);
+                    block.getBlock().onBlockExploded(this.worldObj, chunkposition, this);
                 }
             }
         }

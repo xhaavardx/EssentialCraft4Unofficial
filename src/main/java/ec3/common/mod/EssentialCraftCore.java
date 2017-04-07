@@ -68,7 +68,7 @@ public class EssentialCraftCore {
 	@SidedProxy(clientSide = "ec3.network.proxy.ClientProxy", serverSide = "ec3.network.proxy.CommonProxy", modId = EssentialCraftCore.modid)
 	public static CommonProxy proxy;
 	public static Config cfg = new Config();
-	public static final String version = "4.7.1102.0";
+	public static final String version = "4.7.1102.3";
 	public static final String modid = "essentialcraft";
 	public static ModMetadata metadata;
 	public static SimpleNetworkWrapper network;
@@ -77,13 +77,12 @@ public class EssentialCraftCore {
 	//============================================CORE MOD===================================================//
 	@EventHandler
 	public void serverStart(FMLServerStartingEvent event) {
-		CommandHandler handler = (CommandHandler)event.getServer().getCommandManager();
-		handler.registerCommand(new CommandSetMRUInMRUCU());
-		handler.registerCommand(new CommandSetBalanceInMRUCU());
-		handler.registerCommand(new CommandCreateMRUCU());
-		handler.registerCommand(new CommandSetUBMRU());
-		handler.registerCommand(new CommandClearCorruptionEffects());
-		handler.registerCommand(new CommandHoannaEvent());
+		event.registerServerCommand(new CommandSetMRUInMRUCU());
+		event.registerServerCommand(new CommandSetBalanceInMRUCU());
+		event.registerServerCommand(new CommandCreateMRUCU());
+		event.registerServerCommand(new CommandSetUBMRU());
+		event.registerServerCommand(new CommandClearCorruptionEffects());
+		event.registerServerCommand(new CommandHoannaEvent());
 	}
 
 	@EventHandler

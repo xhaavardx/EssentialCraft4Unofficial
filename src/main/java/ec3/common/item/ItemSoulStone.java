@@ -2,13 +2,13 @@ package ec3.common.item;
 
 import java.util.List;
 
+import DummyCore.Client.IItemColor;
 import DummyCore.Client.IModelRegisterer;
 import DummyCore.Utils.MiscUtils;
 import ec3.common.mod.EssentialCraftCore;
 import ec3.network.PacketNBT;
 import ec3.utils.common.ECUtils;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;

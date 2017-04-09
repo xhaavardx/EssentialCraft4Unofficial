@@ -2,6 +2,7 @@ package ec3.common.item;
 
 import java.util.List;
 
+import DummyCore.Client.IItemColor;
 import DummyCore.Client.IModelRegisterer;
 import DummyCore.Utils.Coord3D;
 import DummyCore.Utils.MiscUtils;
@@ -10,7 +11,6 @@ import ec3.common.block.BlocksCore;
 import ec3.common.item.ItemBoundGem.MeshDefinitionBoundGem;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.IInventory;
@@ -27,6 +27,8 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemInventoryGem extends Item implements IItemColor, IModelRegisterer {
 
@@ -133,6 +135,7 @@ public class ItemInventoryGem extends Item implements IItemColor, IModelRegister
 		return 0xff66ff;
 	}
 
+	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerModels() {
 		ModelLoader.setCustomMeshDefinition(this, MeshDefinitionBoundGem.INSTANCE);

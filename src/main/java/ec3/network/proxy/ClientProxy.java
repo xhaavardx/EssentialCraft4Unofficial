@@ -112,7 +112,6 @@ import ec3.client.render.tile.RenderMonsterHarvester;
 import ec3.client.render.tile.RenderMonsterHolder;
 import ec3.client.render.tile.RenderNewMIM;
 import ec3.client.render.tile.RenderPlayerPentacle;
-import ec3.client.render.tile.RenderPotionSpreader;
 import ec3.client.render.tile.RenderRadiatingChamber;
 import ec3.client.render.tile.RenderRayTower;
 import ec3.client.render.tile.RenderWindRune;
@@ -268,7 +267,6 @@ import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ClientProxy extends CommonProxy {
 
@@ -608,7 +606,6 @@ public class ClientProxy extends CommonProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileMagicianTable.class, new RenderMagicianTable());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileMagicalQuarry.class, new RenderMagicalQuarry());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileMonsterHolder.class, new RenderMonsterHolder());
-		ClientRegistry.bindTileEntitySpecialRenderer(TilePotionSpreader.class, new RenderPotionSpreader());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileMagicalEnchanter.class, new RenderMagicalEnchanter());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileMonsterHarvester.class, new RenderMonsterHarvester());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileMagicalRepairer.class, new RenderMagicalRepairer());

@@ -3,6 +3,7 @@ package ec3.common.item;
 import java.util.List;
 import java.util.Locale;
 
+import DummyCore.Client.IItemColor;
 import DummyCore.Client.IModelRegisterer;
 import DummyCore.Utils.MathUtils;
 import baubles.api.BaubleType;
@@ -11,7 +12,6 @@ import ec3.api.IItemRequiresMRU;
 import ec3.api.IMRUStorage;
 import ec3.utils.common.ECUtils;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;

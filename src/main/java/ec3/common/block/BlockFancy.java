@@ -22,6 +22,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockFancy extends Block implements IColdBlock, IModelRegisterer {
 
@@ -91,6 +93,7 @@ public class BlockFancy extends Block implements IColdBlock, IModelRegisterer {
 		return new BlockStateContainer(this, TYPE);
 	}
 
+	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerModels() {
 		ModelLoader.setCustomStateMapper(this, new FancyBlockStateMapper());

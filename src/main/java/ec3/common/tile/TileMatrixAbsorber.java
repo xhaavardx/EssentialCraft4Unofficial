@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import DummyCore.Utils.DataStorage;
 import DummyCore.Utils.DummyData;
+import DummyCore.Utils.MiscUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -49,7 +50,7 @@ public class TileMatrixAbsorber extends TileMRUGeneric {
 					if(stk.getTagCompound() != null) {
 						String username = stk.getTagCompound().getString("playerName");
 						if(getWorld().getMinecraftServer() != null && getWorld().getMinecraftServer().getPlayerList() != null) {
-							EntityPlayer p = getWorld().getMinecraftServer().getPlayerList().getPlayerByUUID(UUID.fromString(username));
+							EntityPlayer p = MiscUtils.getPlayerFromUUID(username);
 							if(p != null) {
 								if(getMRU() + mruGenerated <= getMaxMRU()) {
 									int current = ECUtils.getData(p).getPlayerUBMRU();

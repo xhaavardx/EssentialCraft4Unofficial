@@ -2,13 +2,12 @@ package ec3.common.item;
 
 import java.util.List;
 
+import DummyCore.Client.IItemColor;
 import DummyCore.Client.IModelRegisterer;
 import DummyCore.Client.ModelUtils;
 import ec3.common.entity.EntitiesCore;
 import ec3.common.entity.EntityMRUPresence;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockSlab;
-import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;

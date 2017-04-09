@@ -17,42 +17,18 @@ import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 
 public class GuiMRUGenerated extends GuiTextField{
-	
+
 	public TileEntity tile;
 	public String tileValue;
-	
+
 	public GuiMRUGenerated(int i, int j, TileEntity t, String tileType)
 	{
 		super(i,j);
 		tile = t;
 		tileValue = tileType;
-	}
-
-	@Override
-	public ResourceLocation getElementTexture() {
-		// TODO Auto-generated method stub
-		return super.getElementTexture();
-	}
-
-	@Override
-	public void draw(int posX, int posY, int mouseX, int mouseY) {
-		super.draw(posX, posY, mouseX, mouseY);
-	}
-
-	@Override
-	public int getX() {
-		// TODO Auto-generated method stub
-		return super.getX();
-	}
-
-	@Override
-	public int getY() {
-		// TODO Auto-generated method stub
-		return super.getY();
 	}
 
 	@Override
@@ -73,39 +49,39 @@ public class GuiMRUGenerated extends GuiTextField{
 					int scaledSize = MathUtils.pixelatedTextureSize(furnace.currentBurnTime, furnace.currentMaxBurnTime, 14)+1;
 					this.drawTexturedModalRect(posX+101, posY+2+15-scaledSize, 176, 15-scaledSize, 15, scaledSize);
 				}
-            	float mruGenerated = TileHeatGenerator.mruGenerated;
-            	float mruFactor = 1.0F;
-            	Block[] b = new Block[4];
-            	b[0] = furnace.getWorld().getBlockState(furnace.getPos().add(2, 0, 0)).getBlock();
-            	b[1] = furnace.getWorld().getBlockState(furnace.getPos().add(-2, 0, 0)).getBlock();
-            	b[2] = furnace.getWorld().getBlockState(furnace.getPos().add(0, 0, 2)).getBlock();
-            	b[3] = furnace.getWorld().getBlockState(furnace.getPos().add(0, 0, -2)).getBlock();
-            	int[] ox = new int[]{2,-2,0,0};
-            	int[] oz = new int[]{0,0,2,-2};
-            	for(int i = 0; i < 4; ++i)
-            	{
-            		if(b[i] == Blocks.AIR)
-            		{
-            			mruFactor*=0;
-            		}else if(b[i] == Blocks.NETHERRACK)
-            		{
-            			mruFactor*=0.75F;
-            		}else if(b[i] == Blocks.LAVA)
-            		{
-            			mruFactor*=0.95F;
-            		}else if(b[i] == Blocks.FIRE)
-            		{
-            			mruFactor*=0.7F;
-            		}else if(b[i] instanceof IHotBlock)
-            		{
-            			mruFactor*=(((IHotBlock)b[i]).getHeatModifier(tile.getWorld(), tile.getPos().getX()+ox[i], tile.getPos().getY(), tile.getPos().getZ()+oz[i]));
-            		}else
-            		{
-            			mruFactor*=0.5F;
-            		}
-            		
-            	}
-            	mruGenerated*=mruFactor;
+				float mruGenerated = TileHeatGenerator.mruGenerated;
+				float mruFactor = 1.0F;
+				Block[] b = new Block[4];
+				b[0] = furnace.getWorld().getBlockState(furnace.getPos().add(2, 0, 0)).getBlock();
+				b[1] = furnace.getWorld().getBlockState(furnace.getPos().add(-2, 0, 0)).getBlock();
+				b[2] = furnace.getWorld().getBlockState(furnace.getPos().add(0, 0, 2)).getBlock();
+				b[3] = furnace.getWorld().getBlockState(furnace.getPos().add(0, 0, -2)).getBlock();
+				int[] ox = new int[]{2,-2,0,0};
+				int[] oz = new int[]{0,0,2,-2};
+				for(int i = 0; i < 4; ++i)
+				{
+					if(b[i] == Blocks.AIR)
+					{
+						mruFactor*=0;
+					}else if(b[i] == Blocks.NETHERRACK)
+					{
+						mruFactor*=0.75F;
+					}else if(b[i] == Blocks.LAVA)
+					{
+						mruFactor*=0.95F;
+					}else if(b[i] == Blocks.FIRE)
+					{
+						mruFactor*=0.7F;
+					}else if(b[i] instanceof IHotBlock)
+					{
+						mruFactor*=(((IHotBlock)b[i]).getHeatModifier(tile.getWorld(), tile.getPos().getX()+ox[i], tile.getPos().getY(), tile.getPos().getZ()+oz[i]));
+					}else
+					{
+						mruFactor*=0.5F;
+					}
+
+				}
+				mruGenerated*=mruFactor;
 				Minecraft.getMinecraft().fontRendererObj.drawStringWithShadow((int)mruGenerated+" MRU/t", posX+2, posY+5, 0xffffff);
 			}
 		}
@@ -121,37 +97,37 @@ public class GuiMRUGenerated extends GuiTextField{
 					int scaledSize = MathUtils.pixelatedTextureSize(furnace.currentBurnTime, furnace.currentMaxBurnTime, 14)+1;
 					this.drawTexturedModalRect(posX+101, posY+2+15-scaledSize, 176, 15-scaledSize, 15, scaledSize);
 				}
-            	float mruGenerated = 20;
-            	Block[] b = new Block[4];
-            	b[0] = furnace.getWorld().getBlockState(furnace.getPos().add(2, 0, 0)).getBlock();
-            	b[1] = furnace.getWorld().getBlockState(furnace.getPos().add(-2, 0, 0)).getBlock();
-            	b[2] = furnace.getWorld().getBlockState(furnace.getPos().add(0, 0, 2)).getBlock();
-            	b[3] = furnace.getWorld().getBlockState(furnace.getPos().add(0, 0, -2)).getBlock();
-            	for(int i = 0; i < 4; ++i)
-            	{
-            		if(b[i] == Blocks.AIR)
-            		{
-            		}else if(b[i] == Blocks.NETHERRACK)
-            		{
-            		}else if(b[i] == Blocks.LAVA)
-            		{
-            		}else if(b[i] == Blocks.FIRE)
-            		{
-            		}else if(b[i] instanceof IHotBlock)
-            		{
-            		}else
-            		{
-            		}
-            		
-            	}
-            	float heat = furnace.heat;
-            	if(heat < 1000)
-            		mruGenerated = heat/100;
-            	else
-            		if(heat > 10000)
-            			mruGenerated = 80+heat/1000;
-            		else
-            			mruGenerated = heat/124;
+				float mruGenerated = 20;
+				Block[] b = new Block[4];
+				b[0] = furnace.getWorld().getBlockState(furnace.getPos().add(2, 0, 0)).getBlock();
+				b[1] = furnace.getWorld().getBlockState(furnace.getPos().add(-2, 0, 0)).getBlock();
+				b[2] = furnace.getWorld().getBlockState(furnace.getPos().add(0, 0, 2)).getBlock();
+				b[3] = furnace.getWorld().getBlockState(furnace.getPos().add(0, 0, -2)).getBlock();
+				for(int i = 0; i < 4; ++i)
+				{
+					if(b[i] == Blocks.AIR)
+					{
+					}else if(b[i] == Blocks.NETHERRACK)
+					{
+					}else if(b[i] == Blocks.LAVA)
+					{
+					}else if(b[i] == Blocks.FIRE)
+					{
+					}else if(b[i] instanceof IHotBlock)
+					{
+					}else
+					{
+					}
+
+				}
+				float heat = furnace.heat;
+				if(heat < 1000)
+					mruGenerated = heat/100;
+				else
+					if(heat > 10000)
+						mruGenerated = 80+heat/1000;
+					else
+						mruGenerated = heat/124;
 				Minecraft.getMinecraft().fontRendererObj.drawStringWithShadow((int)mruGenerated+" MRU/t", posX+2, posY+5, 0xffffff);
 				Minecraft.getMinecraft().fontRendererObj.drawStringWithShadow("Heat: "+(int)furnace.heat+"C", posX+82, posY-10, 0xffffff);
 			}
@@ -229,46 +205,46 @@ public class GuiMRUGenerated extends GuiTextField{
 			float moonFactor = 1.0F;
 			switch(moonPhase)
 			{
-				case 0:
-				{
-					moonFactor = 1.0F;
-					break;
-				}
-				case 1:
-				{
-					moonFactor = 0.75F;
-					break;
-				}
-				case 7:
-				{
-					moonFactor = 0.75F;
-					break;
-				}
-				case 2:
-				{
-					moonFactor = 0.5F;
-					break;
-				}
-				case 6:
-				{
-					moonFactor = 0.5F;
-					break;
-				}
-				case 3:
-				{
-					moonFactor = 0.25F;
-					break;
-				}
-				case 5:
-				{
-					moonFactor = 0.25F;
-					break;
-				}
-				case 4:
-				{
-					moonFactor = 0.0F;
-					break;
-				}
+			case 0:
+			{
+				moonFactor = 1.0F;
+				break;
+			}
+			case 1:
+			{
+				moonFactor = 0.75F;
+				break;
+			}
+			case 7:
+			{
+				moonFactor = 0.75F;
+				break;
+			}
+			case 2:
+			{
+				moonFactor = 0.5F;
+				break;
+			}
+			case 6:
+			{
+				moonFactor = 0.5F;
+				break;
+			}
+			case 3:
+			{
+				moonFactor = 0.25F;
+				break;
+			}
+			case 5:
+			{
+				moonFactor = 0.25F;
+				break;
+			}
+			case 4:
+			{
+				moonFactor = 0.0F;
+				break;
+			}
 			}
 			mruGenerated *= moonFactor;
 			float heightFactor = 1.0F;

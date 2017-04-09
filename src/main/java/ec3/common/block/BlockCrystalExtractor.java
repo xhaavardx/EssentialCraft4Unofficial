@@ -23,6 +23,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockCrystalExtractor extends BlockContainer implements IModelRegisterer {
 
@@ -82,6 +84,7 @@ public class BlockCrystalExtractor extends BlockContainer implements IModelRegis
 		}
 	}
 
+	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerModels() {
 		if(Loader.isModLoaded("codechickenlib") || Loader.isModLoaded("CodeChickenLib")) {

@@ -30,6 +30,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockWeaponMaker extends BlockContainer implements IModelRegisterer {
 
@@ -136,6 +138,7 @@ public class BlockWeaponMaker extends BlockContainer implements IModelRegisterer
 		return new BlockStateContainer(this, TYPE);
 	}
 
+	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerModels() {
 		ModelLoader.setCustomStateMapper(this, new StateMap.Builder().ignore(TYPE).build());

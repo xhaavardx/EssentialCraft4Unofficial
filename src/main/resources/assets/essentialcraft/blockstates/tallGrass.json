@@ -2,7 +2,7 @@
     "forge_marker": 1,
     "variants": {
         "normal": [{
-            "model": "minecraft:cross",
+            "model": "minecraft:tinted_cross",
             "textures": { "cross": "essentialcraft:blocks/firstWorld/tallGrass" }
         }],
         "inventory": [{

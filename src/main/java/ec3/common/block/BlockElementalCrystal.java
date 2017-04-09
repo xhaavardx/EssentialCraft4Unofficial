@@ -33,6 +33,8 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockElementalCrystal extends BlockContainer implements IModelRegisterer {
 
@@ -152,6 +154,7 @@ public class BlockElementalCrystal extends BlockContainer implements IModelRegis
 		return new BlockStateContainer(this, FACING);
 	}
 
+	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerModels() {
 		ModelLoader.setCustomStateMapper(this, new StateMap.Builder().ignore(FACING).build());

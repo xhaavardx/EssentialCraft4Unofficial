@@ -24,6 +24,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.property.ExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockFancyMimic extends BlockMimic {
 
@@ -66,6 +68,7 @@ public class BlockFancyMimic extends BlockMimic {
 		return getBoundingBox(blockState, worldIn, pos);
 	}
 
+	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerModels() {
 		for(int i = 0; i < 16; i++) {

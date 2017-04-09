@@ -39,6 +39,8 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.property.ExtendedBlockState;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockRightClicker extends BlockContainer implements IModelRegisterer {
 
@@ -149,6 +151,7 @@ public class BlockRightClicker extends BlockContainer implements IModelRegistere
 		return state;
 	}
 
+	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerModels() {
 		for(int i = 0; i < 6; i++) {

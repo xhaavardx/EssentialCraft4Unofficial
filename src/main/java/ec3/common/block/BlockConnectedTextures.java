@@ -1,5 +1,6 @@
 package ec3.common.block;
 
+import DummyCore.Client.IBlockColor;
 import DummyCore.Client.IModelRegisterer;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -9,7 +10,6 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMap;
-import net.minecraft.client.renderer.color.IBlockColor;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.Item;
@@ -24,6 +24,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 
 public class BlockConnectedTextures extends Block implements IBlockColor, IModelRegisterer {
@@ -230,6 +232,7 @@ public class BlockConnectedTextures extends Block implements IBlockColor, IModel
 		}
 	}
 
+	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerModels() {
 		ModelLoader.setCustomStateMapper(this, new StateMap.Builder().ignore(COLOR).build());

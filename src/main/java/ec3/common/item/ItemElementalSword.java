@@ -36,6 +36,8 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemElementalSword extends ItemSword implements IItemRequiresMRU, IModelRegisterer /*ItemStoresMRUInNBT*/ {
 
@@ -556,6 +558,7 @@ public class ItemElementalSword extends ItemSword implements IItemRequiresMRU, I
 		return new ActionResult(EnumActionResult.PASS, par1ItemStack);
 	}
 
+	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerModels() {
 		ModelLoader.setCustomMeshDefinition(this, new MeshDefinitionElementalSword());

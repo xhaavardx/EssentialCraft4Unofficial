@@ -22,6 +22,8 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemBaublesWearable extends Item implements IBauble, IModelRegisterer {
 
@@ -105,6 +107,8 @@ public class ItemBaublesWearable extends Item implements IBauble, IModelRegister
 	public boolean canUnequip(ItemStack itemstack, EntityLivingBase player) {
 		return true;
 	}
+
+	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerModels() {
 		ModelLoader.setCustomMeshDefinition(this, new MeshDefinitionBaublesWearable());

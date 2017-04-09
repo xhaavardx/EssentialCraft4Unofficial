@@ -2,11 +2,11 @@ package ec3.common.item;
 
 import java.util.List;
 
-import ec3.common.tile.TileElementalCrystal;
+import DummyCore.Client.IItemColor;
 import DummyCore.Utils.MiscUtils;
+import ec3.common.tile.TileElementalCrystal;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;

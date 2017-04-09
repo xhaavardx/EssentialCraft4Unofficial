@@ -11,6 +11,7 @@ import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeHooks;
 
 public class RecipeArmorDyesHandler implements IRecipe {
 
@@ -131,6 +132,6 @@ public class RecipeArmorDyesHandler implements IRecipe {
 
 	@Override
 	public ItemStack[] getRemainingItems(InventoryCrafting inv) {
-		return new ItemStack[inv.getSizeInventory()];
+		return ForgeHooks.defaultRecipeGetRemainingItems(inv);
 	}
 }

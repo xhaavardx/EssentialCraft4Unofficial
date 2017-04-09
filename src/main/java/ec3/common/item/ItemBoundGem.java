@@ -28,6 +28,8 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemBoundGem extends Item implements IModelRegisterer {
 
@@ -145,6 +147,7 @@ public class ItemBoundGem extends Item implements IModelRegisterer {
 		return retStk;
 	}
 
+	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerModels() {
 		ModelLoader.setCustomMeshDefinition(this, MeshDefinitionBoundGem.INSTANCE);

@@ -39,6 +39,7 @@ import ec3.common.item.ItemWindShovel;
 import ec3.common.item.ItemWindSword;
 import ec3.common.item.ItemsCore;
 import ec3.common.mod.EssentialCraftCore;
+import ec3.common.registry.AchievementRegistry;
 import ec3.common.registry.ResearchRegistry;
 import ec3.common.tile.TilePlayerPentacle;
 import ec3.common.tile.TileWeaponMaker;
@@ -207,7 +208,7 @@ public class ECEventHandler {
 
 	@SuppressWarnings("unchecked")
 	@SubscribeEvent
-	public void attckTargetEvent(LivingSetAttackTargetEvent event)
+	public void attackTargetEvent(LivingSetAttackTargetEvent event)
 	{
 		if(event.getTarget() != null)
 		{
@@ -1154,6 +1155,7 @@ public class ECEventHandler {
 				{
 					int currentEnergy_int = ECUtils.getData((EntityPlayer) base).getPlayerUBMRU();
 					addedEnergy += currentEnergy_int;
+					player.addStat(AchievementRegistry.achievementList.get("darkSouls"));
 				}
 				else
 				{

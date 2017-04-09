@@ -27,6 +27,8 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockMithrilineCrystal extends BlockContainer implements IModelRegisterer {
 
@@ -151,6 +153,7 @@ public class BlockMithrilineCrystal extends BlockContainer implements IModelRegi
 		return new BlockStateContainer(this, TYPE, LAYER);
 	}
 
+	@SideOnly(Side.CLIENT)
 	@Override
 	public void registerModels() {
 		ModelLoader.setCustomStateMapper(this, new StateMap.Builder().ignore(LAYER).build());

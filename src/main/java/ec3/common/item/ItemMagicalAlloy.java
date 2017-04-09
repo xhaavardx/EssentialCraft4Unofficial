@@ -2,10 +2,10 @@ package ec3.common.item;
 
 import java.util.List;
 
+import DummyCore.Client.IItemColor;
 import DummyCore.Client.IModelRegisterer;
 import DummyCore.Client.ModelUtils;
 import ec3.api.OreSmeltingRecipe;
-import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;

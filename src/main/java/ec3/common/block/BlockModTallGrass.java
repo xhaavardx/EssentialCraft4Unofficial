@@ -3,6 +3,8 @@ package ec3.common.block;
 import java.util.ArrayList;
 import java.util.Random;
 
+import DummyCore.Client.IBlockColor;
+import DummyCore.Client.IItemColor;
 import DummyCore.Client.IModelRegisterer;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
@@ -12,8 +14,6 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.client.renderer.color.IBlockColor;
-import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;

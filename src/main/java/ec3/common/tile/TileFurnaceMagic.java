@@ -62,8 +62,8 @@ public class TileFurnaceMagic extends TileMRUGeneric {
 				if(oreIds.length > 0)
 					oreName = OreDictionary.getOreName(oreIds[0]);
 				int metadata = -1;
-				for(int i = 0; i < OreSmeltingRecipe.values().length; ++i) {
-					OreSmeltingRecipe oreColor = OreSmeltingRecipe.values()[i];
+				for(int i = 0; i < OreSmeltingRecipe.RECIPES.size(); ++i) {
+					OreSmeltingRecipe oreColor = OreSmeltingRecipe.RECIPES.get(i);
 					if(oreName.equalsIgnoreCase(oreColor.oreName)) {
 						metadata = i;
 						break;
@@ -81,7 +81,7 @@ public class TileFurnaceMagic extends TileMRUGeneric {
 							
 			    			if(progressLevel >= time && !getWorld().isRemote) {
 								decrStackSize(1, 1);
-								int suggestedStackSize = OreSmeltingRecipe.values()[metadata].dropAmount;
+								int suggestedStackSize = OreSmeltingRecipe.RECIPES.get(metadata).dropAmount;
 								setInventorySlotContents(2, new ItemStack(ItemsCore.magicalAlloy,suggestedStackSize,metadata));
 								progressLevel = 0;
 								syncTick = 0;
@@ -100,7 +100,7 @@ public class TileFurnaceMagic extends TileMRUGeneric {
 			    			
 							if(progressLevel >= time && !getWorld().isRemote) {
 								decrStackSize(1, 1);
-								int suggestedStackSize = OreSmeltingRecipe.values()[metadata].dropAmount;
+								int suggestedStackSize = OreSmeltingRecipe.RECIPES.get(metadata).dropAmount;
 								
 								ItemStack is = getStackInSlot(2);
 								is.stackSize += suggestedStackSize;
@@ -121,7 +121,7 @@ public class TileFurnaceMagic extends TileMRUGeneric {
 			
 			ItemStack alloy = getStackInSlot(1);
 			if(alloy != null && getStackInSlot(1).getItem() == ItemsCore.magicalAlloy) {
-				OreSmeltingRecipe oreColor = OreSmeltingRecipe.values()[alloy.getItemDamage()];
+				OreSmeltingRecipe oreColor = OreSmeltingRecipe.RECIPES.get(alloy.getItemDamage());
 				String oreName = oreColor.oreName;
 				String outputName = oreColor.outputName;
 				String suggestedIngotName;

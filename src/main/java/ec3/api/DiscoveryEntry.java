@@ -71,7 +71,7 @@ public class DiscoveryEntry {
 	
 	public DiscoveryEntry setReferal(ItemStack... stk)
 	{
-		referalItemStackLst.addAll(Arrays.asList(stk));
+		referalItemStackLst.addAll(Arrays.<ItemStack>asList(stk));
 		for(int i = 0;i < stk.length; ++i)
 		{
 			ItemStack is = stk[i];

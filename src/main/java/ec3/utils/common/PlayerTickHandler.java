@@ -637,10 +637,9 @@ public class PlayerTickHandler {
 					WorldEventLibrary.currentEvent.playerTick(e, WorldEventLibrary.currentEventDuration);
 
 				World wrd = e.getEntityWorld();
-				List<EntityItem> itemList = wrd.getEntitiesWithinAABB(EntityItem.class,new AxisAlignedBB(e.posX-0.5D, e.posY-0.5D, e.posZ-0.5D, e.posX+0.5D, e.posY+0.5D, e.posZ+0.5D).expand(2, 1, 2));
-				for(int i = 0; i < itemList.size(); ++i)
-				{
-					doGroundItemChecks((EntityItem)itemList.get(i));
+				List<EntityItem> itemList = wrd.<EntityItem>getEntitiesWithinAABB(EntityItem.class,new AxisAlignedBB(e.posX-0.5D, e.posY-0.5D, e.posZ-0.5D, e.posX+0.5D, e.posY+0.5D, e.posZ+0.5D).expand(2, 1, 2));
+				for(int i = 0; i < itemList.size(); ++i) {
+					doGroundItemChecks(itemList.get(i));
 				}
 			}
 		}
@@ -750,7 +749,7 @@ public class PlayerTickHandler {
 		}
 		else if(item.getEntityItem().getItem() == Items.DIAMOND) {
 			Block b = item.getEntityWorld().getBlockState(new BlockPos(MathHelper.floor(item.posX), MathHelper.floor(item.posY)-1, MathHelper.floor(item.posZ))).getBlock();
-			if(b instanceof BlockCompressedDrops) {
+			if(b == Blocks.EMERALD_BLOCK) {
 				if(item.getEntityWorld().isAirBlock(new BlockPos(MathHelper.floor(item.posX), (int)item.posY, MathHelper.floor(item.posZ)))) {
 					if(item.getEntityItem().stackSize == 1)
 						item.lifespan = 0;
@@ -766,7 +765,7 @@ public class PlayerTickHandler {
 		}
 		else if(item.getEntityItem().getItem() == Items.EMERALD) {
 			Block b = item.getEntityWorld().getBlockState(new BlockPos(MathHelper.floor(item.posX), MathHelper.floor(item.posY)-1, MathHelper.floor(item.posZ))).getBlock();
-			if(b instanceof BlockCompressedDrops) {
+			if(b == Blocks.EMERALD_BLOCK) {
 				if(item.getEntityWorld().isAirBlock(new BlockPos(MathHelper.floor(item.posX), (int)item.posY, MathHelper.floor(item.posZ)))) {
 					if(item.getEntityItem().stackSize == 1)
 						item.lifespan = 0;

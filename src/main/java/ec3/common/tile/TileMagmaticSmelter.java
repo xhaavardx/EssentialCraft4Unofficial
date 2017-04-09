@@ -75,8 +75,8 @@ public class TileMagmaticSmelter extends TileMRUGeneric implements IFluidTank {
 				if(oreIds.length > 0)
 					oreName = OreDictionary.getOreName(oreIds[0]);
 				int metadata = -1;
-				for(int i = 0; i < OreSmeltingRecipe.values().length; ++i) {
-					OreSmeltingRecipe oreColor = OreSmeltingRecipe.values()[i];
+				for(int i = 0; i < OreSmeltingRecipe.RECIPES.size(); ++i) {
+					OreSmeltingRecipe oreColor = OreSmeltingRecipe.RECIPES.get(i);
 					if(oreName.equalsIgnoreCase(oreColor.oreName)) {
 						metadata = i;
 						break;
@@ -94,9 +94,9 @@ public class TileMagmaticSmelter extends TileMRUGeneric implements IFluidTank {
 			    				ECUtils.increaseCorruptionAt(getWorld(), pos.getX(), pos.getY(), pos.getZ(), getWorld().rand.nextInt(genCorruption));
 							if(progressLevel >= oreSmeltingTime) {
 								decrStackSize(3, 1);
-								int suggestedStackSize = OreSmeltingRecipe.values()[metadata].dropAmount;
+								int suggestedStackSize = OreSmeltingRecipe.RECIPES.get(metadata).dropAmount;
 								if(getWorld().rand.nextFloat() <= 1)
-									suggestedStackSize = OreSmeltingRecipe.values()[metadata].dropAmount * 2;
+									suggestedStackSize = OreSmeltingRecipe.RECIPES.get(metadata).dropAmount * 2;
 								setInventorySlotContents(4, new ItemStack(ItemsCore.magicalAlloy, suggestedStackSize, metadata));
 								progressLevel = 0;
 								if(getStackInSlot(7) == null)
@@ -122,9 +122,9 @@ public class TileMagmaticSmelter extends TileMRUGeneric implements IFluidTank {
 			    				ECUtils.increaseCorruptionAt(getWorld(), pos.getX(), pos.getY(), pos.getZ(), getWorld().rand.nextInt(genCorruption));
 							if(progressLevel >= oreSmeltingTime) {
 								decrStackSize(3, 1);
-								int suggestedStackSize = OreSmeltingRecipe.values()[metadata].dropAmount;
+								int suggestedStackSize = OreSmeltingRecipe.RECIPES.get(metadata).dropAmount;
 								if(getWorld().rand.nextFloat() <= 1)
-									suggestedStackSize = OreSmeltingRecipe.values()[metadata].dropAmount * 2;
+									suggestedStackSize = OreSmeltingRecipe.RECIPES.get(metadata).dropAmount * 2;
 								ItemStack is = getStackInSlot(4);
 								is.stackSize += suggestedStackSize;
 								if(is.stackSize > is.getMaxStackSize())
@@ -150,7 +150,7 @@ public class TileMagmaticSmelter extends TileMRUGeneric implements IFluidTank {
 			
 			ItemStack alloy = getStackInSlot(5);
 			if(alloy != null && getStackInSlot(5).getItem() == ItemsCore.magicalAlloy) {
-				OreSmeltingRecipe oreColor = OreSmeltingRecipe.values()[alloy.getItemDamage()];
+				OreSmeltingRecipe oreColor = OreSmeltingRecipe.RECIPES.get(alloy.getItemDamage());
 				String oreName = oreColor.oreName;
 				String outputName = oreColor.outputName;
 				String suggestedIngotName;

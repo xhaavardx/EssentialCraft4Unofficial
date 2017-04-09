@@ -21,26 +21,26 @@ public class ItemMagicalAlloy extends Item implements IItemColor, IModelRegister
 	}
 
 	public void getSubItems(Item p_150895_1_, CreativeTabs p_150895_2_, List<ItemStack> p_150895_3_) {
-		for(int i = 0; i < OreSmeltingRecipe.values().length; ++i) {
+		for(int i = 0; i < OreSmeltingRecipe.RECIPES.size(); ++i) {
 			p_150895_3_.add(new ItemStack(p_150895_1_, 1, i));
 		}
 	}
 
 	public void addInformation(ItemStack p_77624_1_, EntityPlayer p_77624_2_, List<String> p_77624_3_, boolean p_77624_4_) {
-		if(p_77624_1_.getItemDamage() >= OreSmeltingRecipe.values().length)
+		if(p_77624_1_.getItemDamage() >= OreSmeltingRecipe.RECIPES.size())
 			return;
-		OreSmeltingRecipe ore = OreSmeltingRecipe.values()[p_77624_1_.getItemDamage()];
+		OreSmeltingRecipe ore = OreSmeltingRecipe.RECIPES.get(p_77624_1_.getItemDamage());
 		List<ItemStack> oreLst = OreDictionary.getOres(ore.oreName);
 		if(oreLst != null && !oreLst.isEmpty())
 			p_77624_3_.add(oreLst.get(0).getDisplayName());
 		else	
-			p_77624_3_.add(I18n.translateToLocal("tile."+OreSmeltingRecipe.values()[p_77624_1_.getItemDamage()].oreName+".name"));
+			p_77624_3_.add(I18n.translateToLocal("tile."+OreSmeltingRecipe.RECIPES.get(p_77624_1_.getItemDamage()).oreName+".name"));
 	}
 
 	public int getColorFromItemstack(ItemStack p_82790_1_, int p_82790_2_) {
-		if(p_82790_2_ == 0 || p_82790_1_.getItemDamage() >= OreSmeltingRecipe.values().length)
+		if(p_82790_2_ == 0 || p_82790_1_.getItemDamage() >= OreSmeltingRecipe.RECIPES.size())
 			return 16777215;
-		return OreSmeltingRecipe.values()[p_82790_1_.getItemDamage()].color;
+		return OreSmeltingRecipe.RECIPES.get(p_82790_1_.getItemDamage()).color;
 	}
 
 	@Override

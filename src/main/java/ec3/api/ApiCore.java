@@ -122,7 +122,8 @@ public class ApiCore {
 	 */
 	public static DiscoveryEntry findDiscoveryByIS(ItemStack referal)
 	{
-		if(referal == null)return null;
+		if(referal == null || referal.getItem() == null)
+			return null;
 		int size = referal.stackSize;
 		referal.stackSize = 0;
 		DiscoveryEntry de = ApiCore.discoveriesByIS.get(referal.toString());

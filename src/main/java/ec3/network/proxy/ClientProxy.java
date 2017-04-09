@@ -838,13 +838,10 @@ public class ClientProxy extends CommonProxy {
 	public static TextureAtlasSprite[] c_spell_particle_array = new TextureAtlasSprite[4];
 	public static TextureAtlasSprite chaosIcon;
 	public static TextureAtlasSprite frozenIcon;
-
-	@SideOnly(Side.CLIENT)
-	private static IRenderHandler skyedRenderer = new RenderSkyFirstWorld();
-
-	@SideOnly(Side.CLIENT)
-	private static IRenderHandler cloudedRenderer = new RenderCloudsFirstWorld();
 	public static TextureAtlasSprite fogIcon;
+
+	private static IRenderHandler skyedRenderer = new RenderSkyFirstWorld();
+	private static IRenderHandler cloudedRenderer = new RenderCloudsFirstWorld();
 
 	private static final ModelArmorEC3 chest = new ModelArmorEC3(1.0F);
 	private static final ModelArmorEC3 chest1 = new ModelArmorEC3(0.75F);

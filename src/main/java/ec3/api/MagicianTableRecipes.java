@@ -83,11 +83,11 @@ public class MagicianTableRecipes {
 				else
 					req[i] = null;
 			}
-			recipes.put(Arrays.asList(req), rec);
+			recipes.put(Arrays.<UnformedItemStack>asList(req), rec);
 			ItemStack result = rec.result.copy();
 			result.stackSize = 0;
 			result = null;
-			craftMatrixByID.add(Arrays.asList(req));
+			craftMatrixByID.add(Arrays.<UnformedItemStack>asList(req));
 			req = null;
 			return true;
 		}
@@ -151,11 +151,11 @@ public class MagicianTableRecipes {
 				else
 					req[i] = null;
 			}
-			recipes.remove(Arrays.asList(req));
+			recipes.remove(Arrays.<UnformedItemStack>asList(req));
 			ItemStack result = rec.result.copy();
 			result.stackSize = 0;
 			result = null;
-			craftMatrixByID.remove(Arrays.asList(req));
+			craftMatrixByID.remove(Arrays.<UnformedItemStack>asList(req));
 			req = null;
 			return true;
 		}

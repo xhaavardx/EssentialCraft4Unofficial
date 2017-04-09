@@ -1288,3 +1288,11 @@ jei.essentialcraft.recipe.windImbue=Wind Imbue
 modifier.mrureinforced.name=MRU Reinforced
 modifier.mrureinforced.desc=§oPlaceholder Text§r\nEach level adds a %s chance to use stored MRU instead of durability.
 modifier.mrureinforced.extra=MRU Use: %s
+
+ec3book.discovery_ec3.disc.crystalLamp.name=Crystal Lamp
+ec3book.discovery_ec3.disc.crystalLamp.desc=Placeholder Text
+ec3book.discovery_ec3.disc.mimic.name=Mimic Block
+ec3book.discovery_ec3.disc.mimic.desc=Placeholder Text
+
+ec3.page.crystalLamp_0.txt=Placeholder Text
+ec3.page.mimic_0.txt=Placeholder Text

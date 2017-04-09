@@ -17,7 +17,7 @@ public class StructureRecipe implements IRecipe{
 	public StructureRecipe(ItemStack ref, StructureBlock... positions)
 	{
 		referal = ref;
-		structure = Arrays.asList(positions);
+		structure = Arrays.<StructureBlock>asList(positions);
 	}
 
 	@Override

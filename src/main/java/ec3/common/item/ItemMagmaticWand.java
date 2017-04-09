@@ -39,9 +39,9 @@ public class ItemMagmaticWand extends ItemStoresMRUInNBT implements IModelRegist
 			if(oreIds.length > 0)
 				oreName = OreDictionary.getOreName(oreIds[0]);
 			int metadata = -1;
-			for(int i = 0; i < OreSmeltingRecipe.values().length; ++i)
+			for(int i = 0; i < OreSmeltingRecipe.RECIPES.size(); ++i)
 			{
-				OreSmeltingRecipe oreColor = OreSmeltingRecipe.values()[i];
+				OreSmeltingRecipe oreColor = OreSmeltingRecipe.RECIPES.get(i);
 				if(oreName.equalsIgnoreCase(oreColor.oreName))
 				{
 					metadata = i;
@@ -50,9 +50,9 @@ public class ItemMagmaticWand extends ItemStoresMRUInNBT implements IModelRegist
 			}
 			if(!player.getEntityWorld().isRemote && metadata != -1 && (ECUtils.tryToDecreaseMRUInStorage(player, -500) || this.setMRU(stack, -500)))
 			{
-				int suggestedStackSize = OreSmeltingRecipe.values()[metadata].dropAmount;
+				int suggestedStackSize = OreSmeltingRecipe.RECIPES.get(metadata).dropAmount;
 				if(world.rand.nextFloat() <= 0.33F)
-					suggestedStackSize = OreSmeltingRecipe.values()[metadata].dropAmount*2;
+					suggestedStackSize = OreSmeltingRecipe.RECIPES.get(metadata).dropAmount*2;
 				ItemStack sugStk = new ItemStack(ItemsCore.magicalAlloy,suggestedStackSize,metadata);
 
 				GameType type = GameType.SURVIVAL;

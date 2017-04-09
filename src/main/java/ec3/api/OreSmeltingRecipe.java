@@ -62,10 +62,6 @@ public class OreSmeltingRecipe {
 		return RECIPES.remove(rec);
 	}
 
-	public static OreSmeltingRecipe[] values() {
-		return RECIPES.toArray(new OreSmeltingRecipe[0]);
-	}
-
 	static {
 		addRecipe("oreCoal","gemCoal",0x343434);
 		addRecipe("oreIron",0xe2c0aa);

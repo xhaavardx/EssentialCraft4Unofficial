@@ -25,8 +25,7 @@ public class FogFX extends Particle{
 	public FogFX(World w, double x, double y,double z, double i, double j,double k) 
 	{
 		super(w, x, y, z, i, j,k);
-		if(w != null && w.rand != null && this != null) //wat? this!=null? what code is this sh*t? o_O
-		{
+		if(w != null && w.rand != null) {
 			this.motionX = MathUtils.randomDouble(w.rand);
 			this.motionY = MathUtils.randomDouble(w.rand);
 			this.motionZ = MathUtils.randomDouble(w.rand);
@@ -37,7 +36,7 @@ public class FogFX extends Particle{
 			this.mruPosY = this.posY = y;
 			this.mruPosZ = this.posZ = z;
 			this.rand.nextFloat();
-			this.particleScale = 1F;
+			this.particleScale = 10F;
 			this.particleRed = (float) red;
 			this.particleGreen = (float) green;
 			this.particleBlue = (float) blue;
@@ -51,36 +50,11 @@ public class FogFX extends Particle{
 	public void renderParticle(VertexBuffer var1, Entity var2, float p_70539_2_, float p_70539_3_, float p_70539_4_, float p_70539_5_, float p_70539_6_, float p_70539_7_)
 	{
 		TessellatorWrapper var3 = TessellatorWrapper.getInstance();
-		var3.draw().begin(6, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
-		Minecraft.getMinecraft().renderEngine.bindTexture(rec);
-		float f6 = (float)2 / 16.0F;
-		float f7 = f6 + 0.0624375F;
-		float f8 = (float)2 / 16.0F;
-		float f9 = f8 + 0.0624375F;
-		float f10 = 1F * this.particleScale;
-
-		if (this.particleTexture != null)
-		{
-			f6 = this.particleTexture.getMinU();
-			f7 = this.particleTexture.getMaxU();
-			f8 = this.particleTexture.getMinV();
-			f9 = this.particleTexture.getMaxV();
-		}
-
-		boolean enabled = GL11.glIsEnabled(GL11.GL_BLEND);
-		GlStateManager.enableBlend();
-		float f11 = (float)(this.prevPosX + (this.posX - this.prevPosX) * (double)p_70539_2_ - interpPosX);
-		float f12 = (float)(this.prevPosY + (this.posY - this.prevPosY) * (double)p_70539_2_ - interpPosY);
-		float f13 = (float)(this.prevPosZ + (this.posZ - this.prevPosZ) * (double)p_70539_2_ - interpPosZ);
-		var1.pos((double)(f11 - p_70539_3_ * f10 - p_70539_6_ * f10), (double)(f12 - p_70539_4_ * f10), (double)(f13 - p_70539_5_ * f10 - p_70539_7_ * f10)).tex((double)f7, (double)f9).color(particleRed, particleGreen, particleBlue, particleAlpha).endVertex();
-		var1.pos((double)(f11 - p_70539_3_ * f10 + p_70539_6_ * f10), (double)(f12 + p_70539_4_ * f10), (double)(f13 - p_70539_5_ * f10 + p_70539_7_ * f10)).tex((double)f7, (double)f8).color(particleRed, particleGreen, particleBlue, particleAlpha).endVertex();
-		var1.pos((double)(f11 + p_70539_3_ * f10 + p_70539_6_ * f10), (double)(f12 + p_70539_4_ * f10), (double)(f13 + p_70539_5_ * f10 + p_70539_7_ * f10)).tex((double)f6, (double)f8).color(particleRed, particleGreen, particleBlue, particleAlpha).endVertex();
-		var1.pos((double)(f11 + p_70539_3_ * f10 - p_70539_6_ * f10), (double)(f12 - p_70539_4_ * f10), (double)(f13 + p_70539_5_ * f10 - p_70539_7_ * f10)).tex((double)f6, (double)f9).color(particleRed, particleGreen, particleBlue, particleAlpha).endVertex();
 		var3.draw().begin(7, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
-		if(!enabled)
-			GlStateManager.disableBlend();
+		Minecraft.getMinecraft().renderEngine.bindTexture(rec);
+		super.renderParticle(var1, var2, p_70539_2_, p_70539_3_, p_70539_4_, p_70539_5_, p_70539_6_, p_70539_7_);
+		var3.draw().begin(7, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
 		Minecraft.getMinecraft().renderEngine.bindTexture(particleTextures);
-		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 	}
 
 	public int getBrightnessForRender(float p_70070_1_)

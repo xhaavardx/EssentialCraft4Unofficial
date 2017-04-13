@@ -6,7 +6,8 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
-import net.minecraft.world.World;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.client.model.ModelLoader;
 
 public class BlockColdStone extends Block implements IColdBlock, IModelRegisterer {
@@ -20,7 +21,7 @@ public class BlockColdStone extends Block implements IColdBlock, IModelRegistere
 	}
 
 	@Override
-	public float getColdModifier(World w, int x, int y, int z,int meta) 
+	public float getColdModifier(IBlockAccess w, BlockPos pos) 
 	{
 		return 0.5F;
 	}

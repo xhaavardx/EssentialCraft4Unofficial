@@ -82,14 +82,14 @@ public class RenderMRUPresence extends Render<EntityMRUPresence> {
 		Minecraft.getMinecraft().renderEngine.bindTexture(RenderHandlerEC3.whitebox);
 		GlStateManager.scale(0.0000075F*mru, 0.0000075F*mru, 0.0000075F*mru);
 		for(int var7 = 0; (float)var7 < (par1Entity.getMRU())/50; ++var7) {
-			GlStateManager.rotate(var6.nextFloat() * 360.0F, 1.0F, 0.0F, 0.0F);
-			GlStateManager.rotate(var6.nextFloat() * 360.0F, 0.0F, 1.0F, 0.0F);
-			GlStateManager.rotate(var6.nextFloat() * 360.0F, 0.0F, 0.0F, 1.0F);
+			//GlStateManager.rotate(var6.nextFloat() * 360.0F, 1.0F, 0.0F, 0.0F);
+			//GlStateManager.rotate(var6.nextFloat() * 360.0F, 0.0F, 1.0F, 0.0F);
+			//GlStateManager.rotate(var6.nextFloat() * 360.0F, 0.0F, 0.0F, 1.0F);
 			GlStateManager.rotate(var6.nextFloat() * 360.0F, 1.0F, 0.0F, 0.0F);
 			GlStateManager.rotate(var6.nextFloat() * 360.0F, 0.0F, 1.0F, 0.0F);
 			GlStateManager.rotate(var6.nextFloat() * 360.0F + var4 * 90.0F, 0.0F, 0.0F, 1.0F);
 			GlStateManager.color(colorRRender, colorGRender, colorBRender, 1);
-			var3.startDrawing(6);
+			var3.startDrawing(GL11.GL_TRIANGLE_FAN);
 			float var8 = var6.nextFloat() * 20.0F + 5.0F + var5 * 10.0F;
 			float var9 = var6.nextFloat() * 2.0F + 1.0F + var5 * 2.0F;
 			var3.addVertex(0.0D, 0.0D, 0.0D);
@@ -103,9 +103,8 @@ public class RenderMRUPresence extends Render<EntityMRUPresence> {
 		GlStateManager.disableBlend();
 		GlStateManager.enableAlpha();
 		GlStateManager.depthMask(true);
-
+		GlStateManager.color(1, 1, 1, 1);
 		GlStateManager.popMatrix();
-		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 	}
 
 	public void doRender(EntityMRUPresence par1Entity, double par2, double par4, double par6, float par8, float par9) {

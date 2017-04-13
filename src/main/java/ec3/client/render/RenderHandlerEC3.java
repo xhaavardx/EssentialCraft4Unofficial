@@ -36,6 +36,7 @@ import ec3.common.block.BlocksCore;
 import ec3.common.item.ItemBoundGem;
 import ec3.common.item.ItemComputerArmor;
 import ec3.common.item.ItemComputerBoard;
+import ec3.common.item.ItemGun;
 import ec3.common.item.ItemInventoryGem;
 import ec3.common.item.ItemMagicalBuilder;
 import ec3.common.item.ItemOrbitalRemote;
@@ -263,9 +264,9 @@ public class RenderHandlerEC3 {
 				GlStateManager.pushMatrix();
 
 				GlStateManager.rotate(180, 1, 0, 0);
-				GlStateManager.rotate(90, 0, 1, 0);
+				GlStateManager.rotate(p.rotationYaw-90, 0, 1, 0);
 
-				GlStateManager.translate(0, -1.5F, 0);
+				GlStateManager.translate(0, 0, 0);
 
 				GlStateManager.scale(0.8F, 0.8F, 0.8F);
 
@@ -284,7 +285,6 @@ public class RenderHandlerEC3 {
 		ItemStack is = p.getHeldItemMainhand();
 		if(is != null) {
 			if(is.getItem() instanceof ItemOrbitalRemote) {
-				//ItemOrbitalRemote remote = ItemOrbitalRemote.class.cast(is.getItem());
 				float f = 1;
 				double d0 = p.prevPosX + (p.posX - p.prevPosX) * (double)f;
 				double d1 = p.prevPosY + (p.posY - p.prevPosY) * (double)f + (double)p.getEyeHeight();
@@ -309,7 +309,7 @@ public class RenderHandlerEC3 {
 					GlStateManager.disableFog();
 					DrawUtils.bindTexture("minecraft", "textures/entity/beacon_beam.png");
 					GlStateManager.translate(mop.getBlockPos().getX()-TileEntityRendererDispatcher.staticPlayerX,mop.getBlockPos().getY()+1-TileEntityRendererDispatcher.staticPlayerY, mop.getBlockPos().getZ()-TileEntityRendererDispatcher.staticPlayerZ);
-					TileEntityBeaconRenderer.renderBeamSegment(0, 0, 0, evt.getRenderPartialTicks(), 1, p.getEntityWorld().getTotalWorldTime(), 0, 255-mop.getBlockPos().getY(), new float[] {1,0,1}, 0.2F, 0.5F);
+					TileEntityBeaconRenderer.renderBeamSegment(0, 0, 0, evt.getRenderPartialTicks(), 1, p.getEntityWorld().getTotalWorldTime(), 0, 255-mop.getBlockPos().getY(), new float[] {1,0,1}, 0.2D, 0.5D);
 					GlStateManager.enableFog();
 					GlStateManager.popMatrix();
 				}
@@ -1120,6 +1120,63 @@ public class RenderHandlerEC3 {
 				event.getModelRegistry().putObject(new ModelResourceLocation("essentialcraft:darknessObeliskTemp", "inventory"), new RenderDarknessObeliskAsItem());
 				event.getModelRegistry().putObject(new ModelResourceLocation("essentialcraft:enderGeneratorTemp", "inventory"), new RenderEnderGeneratorAsItem());
 				event.getModelRegistry().putObject(new ModelResourceLocation("essentialcraft:magicalRepairerTemp", "inventory"), new RenderMagicalRepairerAsItem());
+			}
+		}
+	}
+	
+	ResourceLocation loc = new ResourceLocation("essentialcraft","textures/hud/sniper_scope.png");
+
+	@SideOnly(Side.CLIENT)
+	@SubscribeEvent
+	public void onClientRenderTick(RenderGameOverlayEvent.Pre event)
+	{
+		if(event.getType() != ElementType.ALL)
+		{
+			EntityPlayer p = Minecraft.getMinecraft().player;
+			if(p.getHeldItemMainhand() != null && p.getHeldItemMainhand().getItem() instanceof ItemGun && p.isSneaking() && p.getHeldItemMainhand().getTagCompound() != null && p.getHeldItemMainhand().getTagCompound().hasKey("scope") && ItemGun.class.cast(p.getHeldItemMainhand().getItem()).gunType.equalsIgnoreCase("sniper"))
+			{
+				if(event.getType() == ElementType.CROSSHAIRS)
+				{
+					Minecraft mc = Minecraft.getMinecraft();
+					ScaledResolution scaledresolution = new ScaledResolution(mc);
+					int k = scaledresolution.getScaledWidth();
+					int l = scaledresolution.getScaledHeight();
+					if(k < l) k = l;
+					if(k > l) k = l;
+
+					Minecraft.getMinecraft().getTextureManager().bindTexture(loc);
+					GlStateManager.depthMask(false);
+
+					TessellatorWrapper tessellator = TessellatorWrapper.getInstance();
+					tessellator.startDrawingQuads();
+					tessellator.addVertexWithUV(scaledresolution.getScaledWidth()/2-scaledresolution.getScaledWidth()/4, (double)l, -90.0D, 0.0D, 1.0D);
+					tessellator.addVertexWithUV((double)k+scaledresolution.getScaledWidth()/2-scaledresolution.getScaledWidth()/4, (double)l, -90.0D, 1.0D, 1.0D);
+					tessellator.addVertexWithUV((double)k+scaledresolution.getScaledWidth()/2-scaledresolution.getScaledWidth()/4, 0.0D, -90.0D, 1.0D, 0.0D);
+					tessellator.addVertexWithUV(scaledresolution.getScaledWidth()/2-scaledresolution.getScaledWidth()/4, 0.0D, -90.0D, 0.0D, 0.0D);
+					tessellator.draw();
+					Minecraft.getMinecraft().getTextureManager().bindTexture(RenderHandlerEC3.whitebox);
+
+					GlStateManager.color(0, 0, 0);
+
+					tessellator.startDrawingQuads();
+					tessellator.addVertexWithUV(0, (double)l, -90.0D, 0.0D, 1.0D);
+					tessellator.addVertexWithUV(scaledresolution.getScaledWidth()/2-scaledresolution.getScaledWidth()/4, (double)l, -90.0D, 1.0D, 1.0D);
+					tessellator.addVertexWithUV(scaledresolution.getScaledWidth()/2-scaledresolution.getScaledWidth()/4, 0.0D, -90.0D, 1.0D, 0.0D);
+					tessellator.addVertexWithUV(0, 0.0D, -90.0D, 0.0D, 0.0D);
+					tessellator.draw();
+					tessellator.startDrawingQuads();
+					tessellator.addVertexWithUV((double)k+scaledresolution.getScaledWidth()/2-scaledresolution.getScaledWidth()/4, (double)l, -90.0D, 0.0D, 1.0D);
+					tessellator.addVertexWithUV(scaledresolution.getScaledWidth(), (double)l, -90.0D, 1.0D, 1.0D);
+					tessellator.addVertexWithUV(scaledresolution.getScaledWidth(), 0.0D, -90.0D, 1.0D, 0.0D);
+					tessellator.addVertexWithUV((double)k+scaledresolution.getScaledWidth()/2-scaledresolution.getScaledWidth()/4, 0.0D, -90.0D, 0.0D, 0.0D);
+					tessellator.draw();
+
+					GlStateManager.color(1, 1, 1);
+
+					GlStateManager.depthMask(true);
+
+				}
+				event.setCanceled(true);
 			}
 		}
 	}

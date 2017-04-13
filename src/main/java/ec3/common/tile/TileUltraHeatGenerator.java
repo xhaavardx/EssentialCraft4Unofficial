@@ -1,6 +1,10 @@
 package ec3.common.tile;
 
 import DummyCore.Utils.MathUtils;
+import ec3.api.ApiCore;
+import ec3.api.IHotBlock;
+import ec3.common.item.ItemsCore;
+import ec3.common.mod.EssentialCraftCore;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -8,10 +12,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
-import ec3.api.ApiCore;
-import ec3.api.IHotBlock;
-import ec3.common.item.ItemsCore;
-import ec3.common.mod.EssentialCraftCore;
 
 public class TileUltraHeatGenerator extends TileMRUGeneric {
 	
@@ -58,7 +58,7 @@ public class TileUltraHeatGenerator extends TileMRUGeneric {
 						else if(b[i] == Blocks.FIRE)
 	            			mruFactor*=0.7F;	
 	            		else if(b[i] instanceof IHotBlock)
-	            			mruFactor*=(((IHotBlock)b[i]).getHeatModifier(getWorld(), pos.getX()+ox[i], pos.getY(), pos.getZ()+oz[i]));
+	            			mruFactor*=(((IHotBlock)b[i]).getHeatModifier(getWorld(), pos.add(ox[i], 0, oz[i])));
 	            		else
 	            			mruFactor*=0.5F;
 						

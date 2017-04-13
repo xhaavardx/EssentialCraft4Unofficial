@@ -93,7 +93,7 @@ public class TileColdDistillator extends TileMRUGeneric {
 					}
 					Block b = getWorld().getBlockState(pos.add(x, y, z)).getBlock();
 					if(b != null && b instanceof IColdBlock) {
-						i += ((IColdBlock)b).getColdModifier(getWorld(), pos.getX()+x, pos.getY()+y, pos.getZ()+z, b.getMetaFromState(getWorld().getBlockState(pos.add(x, y, z))));
+						i += ((IColdBlock)b).getColdModifier(getWorld(), pos);
 					}
 				}
 			}

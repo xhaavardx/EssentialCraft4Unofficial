@@ -38,7 +38,7 @@ public class RenderOrbitalStrike extends Render<EntityOrbitalStrike> {
 		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240F, 240F);
 		DrawUtils.bindTexture("minecraft", "textures/entity/beacon_beam.png");
 		GlStateManager.translate(-0.5F, 0, -0.5F);
-		TileEntityBeaconRenderer.renderBeamSegment(screenX, screenY, screenZ, 0, 1, e.getEntityWorld().getTotalWorldTime(), 0, (int)(255D-e.posY), new float[] {1,0,1}, 0.2D, eos.delay/6);
+		TileEntityBeaconRenderer.renderBeamSegment(screenX, screenY, screenZ, 0, 1, e.getEntityWorld().getTotalWorldTime(), 0, (int)(255D-e.posY), new float[] {1,0,1}, eos.delay/15, eos.delay/6);
 		GlStateManager.enableLighting();
 		GlStateManager.enableFog();
 		GlStateManager.popMatrix();

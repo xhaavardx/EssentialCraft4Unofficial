@@ -68,7 +68,6 @@ import ec3.client.gui.GuiUltraFlowerBurner;
 import ec3.client.gui.GuiUltraHeatGenerator;
 import ec3.client.gui.GuiWeaponBench;
 import ec3.client.model.ModelArmorEC3;
-import ec3.client.render.ClientRenderHandler;
 import ec3.client.render.RenderCloudsFirstWorld;
 import ec3.client.render.RenderHandlerEC3;
 import ec3.client.render.RenderSkyFirstWorld;
@@ -590,7 +589,6 @@ public class ClientProxy extends CommonProxy {
 		RenderingRegistry.registerEntityRenderingHandler(EntityPlayerClone.class, new RenderPlayerClone.Factory());
 		RenderingRegistry.registerEntityRenderingHandler(EntityOrbitalStrike.class, new RenderOrbitalStrike.Factory());
 		RenderingRegistry.registerEntityRenderingHandler(EntityDivider.class, new RenderDivider.Factory());
-		MinecraftForge.EVENT_BUS.register(new ClientRenderHandler());
 		MinecraftForge.EVENT_BUS.register(new RenderHandlerEC3());
 
 		kbArmorBoost = new KeyBinding("ComputerArmorBoost", Keyboard.KEY_Z, "key.categories.gameplay");

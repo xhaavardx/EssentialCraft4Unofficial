@@ -1,6 +1,7 @@
 package ec3.api;
 
-import net.minecraft.world.World;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 
 /**
  * 
@@ -14,6 +15,6 @@ public interface IHotBlock {
 	 * This is used to check how the mru gain will get affected(it is basically a multiplier)
 	 * @return the multiplier of MRU gain
 	 */
-	public float getHeatModifier(World w, int x, int y, int z);
+	public float getHeatModifier(IBlockAccess w, BlockPos pos);
 
 }

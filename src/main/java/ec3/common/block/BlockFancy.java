@@ -20,6 +20,7 @@ import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
@@ -74,7 +75,7 @@ public class BlockFancy extends Block implements IColdBlock, IModelRegisterer {
 	}
 
 	@Override
-	public float getColdModifier(World w, int x, int y, int z,int meta)  {
+	public float getColdModifier(IBlockAccess w, BlockPos pos)  {
 		return this == BlocksCore.fancyBlocks.get(3) ? 0.5F : 0;
 	}
 

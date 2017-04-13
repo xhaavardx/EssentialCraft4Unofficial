@@ -44,7 +44,6 @@ public class ItemFX extends Particle{
 		Random var6 = new Random((long) (this.posX*100+this.posY*100+this.posZ*100));
 		GlStateManager.disableTexture2D();
 		GlStateManager.shadeModel(GL11.GL_SMOOTH);
-		GlStateManager.enableBlend();
 		GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
 		GlStateManager.pushMatrix();
 		GlStateManager.translate(f11, f12, f13);
@@ -52,10 +51,10 @@ public class ItemFX extends Particle{
 		GlStateManager.scale(0.0000075F*mru, 0.0000075F*mru, 0.0000075F*mru);
 		for (int var7 = 0; var7 < 100; ++var7)
 		{
-			var3.draw().begin(6, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
-			GlStateManager.rotate(var6.nextFloat() * 360.0F, 1.0F, 0.0F, 0.0F);
-			GlStateManager.rotate(var6.nextFloat() * 360.0F, 0.0F, 1.0F, 0.0F);
-			GlStateManager.rotate(var6.nextFloat() * 360.0F, 0.0F, 0.0F, 1.0F);
+			var3.begin(GL11.GL_TRIANGLE_FAN, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
+			//GlStateManager.rotate(var6.nextFloat() * 360.0F, 1.0F, 0.0F, 0.0F);
+			//GlStateManager.rotate(var6.nextFloat() * 360.0F, 0.0F, 1.0F, 0.0F);
+			//GlStateManager.rotate(var6.nextFloat() * 360.0F, 0.0F, 0.0F, 1.0F);
 			GlStateManager.rotate(var6.nextFloat() * 360.0F, 1.0F, 0.0F, 0.0F);
 			GlStateManager.rotate(var6.nextFloat() * 360.0F, 0.0F, 1.0F, 0.0F);
 			GlStateManager.rotate(var6.nextFloat() * 360.0F + 1 * 90.0F, 0.0F, 0.0F, 1.0F);
@@ -64,14 +63,14 @@ public class ItemFX extends Particle{
 			var1.pos(0.0D, 0.0D, 0.0D).color((float)red, (float)green, (float)blue, 1F).endVertex();
 			var1.pos(-0.866D * (double)var9, (double)var8, (double)(-0.5F * var9)).color((float)red, (float)green, (float)blue, 1F).endVertex();
 			var1.pos(0.866D * (double)var9, (double)var8, (double)(-0.5F * var9)).color((float)red, (float)green, (float)blue, 1F).endVertex();
-			var1.pos(0.0D, (double)var8, (double)(1.0F * var9)).color((float)red, (float)green, (float)blue, 1F).endVertex();
+			var1.pos(0.0D, (double)var8, (double)var9).color((float)red, (float)green, (float)blue, 1F).endVertex();
 			var1.pos(-0.866D * (double)var9, (double)var8, (double)(-0.5F * var9)).color((float)red, (float)green, (float)blue, 1F).endVertex();
+			var3.draw();
 		}
 
-		var3.draw().begin(7, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
+		var3.begin(GL11.GL_QUADS, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
 		GlStateManager.popMatrix();
 		GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-		GlStateManager.disableBlend();
 		GlStateManager.shadeModel(GL11.GL_FLAT);
 		GlStateManager.enableTexture2D();
 	}

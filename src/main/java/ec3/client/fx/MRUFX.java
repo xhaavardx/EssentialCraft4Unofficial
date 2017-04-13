@@ -54,8 +54,6 @@ public class MRUFX extends Particle{
 		TessellatorWrapper.getInstance().draw().begin(7, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
 		Minecraft.getMinecraft().renderEngine.bindTexture(ecparticleTextures);
 		GlStateManager.disableAlpha();
-		boolean enabled = GL11.glIsEnabled(GL11.GL_BLEND);
-		GlStateManager.enableBlend();
 		if(ECUtils.canPlayerSeeMRU(Minecraft.getMinecraft().player))
 		{
 			float sc = this.particleScale;
@@ -80,9 +78,6 @@ public class MRUFX extends Particle{
 		}
 		TessellatorWrapper.getInstance().draw().begin(7, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
 		Minecraft.getMinecraft().renderEngine.bindTexture(particleTextures);
-
-		if(!enabled)
-			GlStateManager.disableBlend();
 		GlStateManager.enableAlpha();
 	}
 

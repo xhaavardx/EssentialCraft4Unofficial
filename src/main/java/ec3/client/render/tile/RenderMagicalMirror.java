@@ -93,7 +93,7 @@ public class RenderMagicalMirror extends TileEntitySpecialRenderer
 				DrawUtils.renderItemStack_Full(tile.transferingStack, tile.getPos().getX(), tile.getPos().getY(), tile.getPos().getZ(), p_76986_2_, p_76986_4_, p_76986_6_, tile.getWorld().getWorldTime()%360, 0, 1, 1, 1, 0.5F, -0.3F+((float)tile.transferTime/20F), 0.5F, false);
 			}else
 			{
-				Vec3d vec = new Vec3d(tile.inventoryPos.x+0.5F - (tile.getPos().getX()+0.5F), tile.inventoryPos.y - (tile.getPos().getY()+0.5F), tile.inventoryPos.z - (tile.getPos().getZ()+0.5F));
+				Vec3d vec = new Vec3d(tile.inventoryPos.x - (tile.getPos().getX()+0.5F), tile.inventoryPos.y - (tile.getPos().getY()+0.5F), tile.inventoryPos.z - (tile.getPos().getZ()+0.5F));
 
 				DrawUtils.renderItemStack_Full(tile.transferingStack, tile.getPos().getX(), tile.getPos().getY(), tile.getPos().getZ(), p_76986_2_, p_76986_4_, p_76986_6_, tile.getWorld().getWorldTime()%360, 0, 1, 1, 1, 0.5F+((float)vec.xCoord*(tile.transferTime-20F)/40), 0.5F+((float)vec.yCoord*(tile.transferTime-20F)/40), 0.5F+((float)vec.zCoord*(tile.transferTime-20F)/40), false);
 			}

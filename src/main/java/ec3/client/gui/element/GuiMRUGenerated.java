@@ -1,6 +1,5 @@
 package ec3.client.gui.element;
 
-import DummyCore.Client.TextureUtils;
 import DummyCore.Utils.DrawUtils;
 import DummyCore.Utils.MathUtils;
 import ec3.api.IHotBlock;
@@ -14,8 +13,12 @@ import ec3.common.tile.TileSunRayAbsorber;
 import ec3.common.tile.TileUltraFlowerBurner;
 import ec3.common.tile.TileUltraHeatGenerator;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 
@@ -33,19 +36,15 @@ public class GuiMRUGenerated extends GuiTextField{
 
 	@Override
 	public void drawText(int posX, int posY) {
-		if(tileValue.equals("matrixAbsorber"))
-		{
+		if(tileValue.equals("matrixAbsorber")) {
 			Minecraft.getMinecraft().fontRendererObj.drawStringWithShadow(TileMatrixAbsorber.mruUsage+"UBMRU > "+TileMatrixAbsorber.mruGenerated+"MRU", posX+2, posY+5, 0xffffff);
 		}
-		if(tileValue.equals("heatGenerator"))
-		{
-			if(tile instanceof TileHeatGenerator)
-			{
+		if(tileValue.equals("heatGenerator")) {
+			if(tile instanceof TileHeatGenerator) {
 				TileHeatGenerator furnace = (TileHeatGenerator) tile;
 				DrawUtils.bindTexture("minecraft", "textures/gui/container/furnace.png");
 				this.drawTexturedModalRect(posX+100, posY+2, 55, 36, 15, 15);
-				if(furnace.currentBurnTime > 0)
-				{
+				if(furnace.currentBurnTime > 0) {
 					int scaledSize = MathUtils.pixelatedTextureSize(furnace.currentBurnTime, furnace.currentMaxBurnTime, 14)+1;
 					this.drawTexturedModalRect(posX+101, posY+2+15-scaledSize, 176, 15-scaledSize, 15, scaledSize);
 				}
@@ -58,42 +57,36 @@ public class GuiMRUGenerated extends GuiTextField{
 				b[3] = furnace.getWorld().getBlockState(furnace.getPos().add(0, 0, -2)).getBlock();
 				int[] ox = new int[]{2,-2,0,0};
 				int[] oz = new int[]{0,0,2,-2};
-				for(int i = 0; i < 4; ++i)
-				{
-					if(b[i] == Blocks.AIR)
-					{
+				for(int i = 0; i < 4; ++i) {
+					if(b[i] == Blocks.AIR) {
 						mruFactor*=0;
-					}else if(b[i] == Blocks.NETHERRACK)
-					{
+					}
+					else if(b[i] == Blocks.NETHERRACK) {
 						mruFactor*=0.75F;
-					}else if(b[i] == Blocks.LAVA)
-					{
+					}
+					else if(b[i] == Blocks.LAVA) {
 						mruFactor*=0.95F;
-					}else if(b[i] == Blocks.FIRE)
-					{
+					}
+					else if(b[i] == Blocks.FIRE) {
 						mruFactor*=0.7F;
-					}else if(b[i] instanceof IHotBlock)
-					{
-						mruFactor*=(((IHotBlock)b[i]).getHeatModifier(tile.getWorld(), tile.getPos().getX()+ox[i], tile.getPos().getY(), tile.getPos().getZ()+oz[i]));
-					}else
-					{
+					}
+					else if(b[i] instanceof IHotBlock) {
+						mruFactor*=(((IHotBlock)b[i]).getHeatModifier(tile.getWorld(), tile.getPos().add(ox[i], 0, oz[i])));
+					}
+					else {
 						mruFactor*=0.5F;
 					}
-
 				}
 				mruGenerated*=mruFactor;
 				Minecraft.getMinecraft().fontRendererObj.drawStringWithShadow((int)mruGenerated+" MRU/t", posX+2, posY+5, 0xffffff);
 			}
 		}
-		if(tileValue.equals("ultraHeatGenerator"))
-		{
-			if(tile instanceof TileUltraHeatGenerator)
-			{
+		if(tileValue.equals("ultraHeatGenerator")) {
+			if(tile instanceof TileUltraHeatGenerator) {
 				TileUltraHeatGenerator furnace = (TileUltraHeatGenerator) tile;
 				DrawUtils.bindTexture("minecraft", "textures/gui/container/furnace.png");
 				this.drawTexturedModalRect(posX+100, posY+2, 55, 36, 15, 15);
-				if(furnace.currentBurnTime > 0)
-				{
+				if(furnace.currentBurnTime > 0) {
 					int scaledSize = MathUtils.pixelatedTextureSize(furnace.currentBurnTime, furnace.currentMaxBurnTime, 14)+1;
 					this.drawTexturedModalRect(posX+101, posY+2+15-scaledSize, 176, 15-scaledSize, 15, scaledSize);
 				}
@@ -103,22 +96,13 @@ public class GuiMRUGenerated extends GuiTextField{
 				b[1] = furnace.getWorld().getBlockState(furnace.getPos().add(-2, 0, 0)).getBlock();
 				b[2] = furnace.getWorld().getBlockState(furnace.getPos().add(0, 0, 2)).getBlock();
 				b[3] = furnace.getWorld().getBlockState(furnace.getPos().add(0, 0, -2)).getBlock();
-				for(int i = 0; i < 4; ++i)
-				{
-					if(b[i] == Blocks.AIR)
-					{
-					}else if(b[i] == Blocks.NETHERRACK)
-					{
-					}else if(b[i] == Blocks.LAVA)
-					{
-					}else if(b[i] == Blocks.FIRE)
-					{
-					}else if(b[i] instanceof IHotBlock)
-					{
-					}else
-					{
-					}
-
+				for(int i = 0; i < 4; ++i) {
+					if(b[i] == Blocks.AIR) {}
+					else if(b[i] == Blocks.NETHERRACK) {}
+					else if(b[i] == Blocks.LAVA) {}
+					else if(b[i] == Blocks.FIRE) {}
+					else if(b[i] instanceof IHotBlock) {}
+					else {}
 				}
 				float heat = furnace.heat;
 				if(heat < 1000)
@@ -140,12 +124,13 @@ public class GuiMRUGenerated extends GuiTextField{
 				Minecraft.getMinecraft().fontRendererObj.drawStringWithShadow((int)TileFlowerBurner.mruGenerated+" MRU/t", posX+2, posY+5, 0xffffff);
 				DrawUtils.bindTexture("essentialcraft", "textures/gui/slot_common.png");
 				this.drawTexturedModalRect(posX+82, posY, 0, 0, 18, 18);
+				RenderItem renderitem = Minecraft.getMinecraft().getRenderItem();
 				if(furnace.burnedFlower != null)
 				{
-					Block b = furnace.getWorld().getBlockState(new BlockPos((int)furnace.burnedFlower.x,(int)furnace.burnedFlower.y, (int)furnace.burnedFlower.z)).getBlock();
-					if(b != null)
+					IBlockState b = furnace.getWorld().getBlockState(new BlockPos((int)furnace.burnedFlower.x,(int)furnace.burnedFlower.y, (int)furnace.burnedFlower.z));
+					if(b != null && Item.getItemFromBlock(b.getBlock()) != null)
 					{
-						DrawUtils.drawTexture(posX+83, posY+1, TextureUtils.fromBlock(furnace.getWorld(), (int)furnace.burnedFlower.x,(int)furnace.burnedFlower.y, (int)furnace.burnedFlower.z), 16, 16, 1);
+						renderitem.renderItemIntoGUI(new ItemStack(b.getBlock(), 1, b.getBlock().damageDropped(b)), posX+83, posY+1);
 					}
 				}
 				DrawUtils.bindTexture("minecraft", "textures/gui/container/furnace.png");
@@ -165,12 +150,13 @@ public class GuiMRUGenerated extends GuiTextField{
 				Minecraft.getMinecraft().fontRendererObj.drawStringWithShadow((int)furnace.mruProduced+" MRU/t", posX+2, posY+5, 0xffffff);
 				DrawUtils.bindTexture("essentialcraft", "textures/gui/slot_common.png");
 				this.drawTexturedModalRect(posX+82, posY, 0, 0, 18, 18);
+				RenderItem renderitem = Minecraft.getMinecraft().getRenderItem();
 				if(furnace.burnedFlower != null)
 				{
-					Block b = furnace.getWorld().getBlockState(new BlockPos((int)furnace.burnedFlower.x,(int)furnace.burnedFlower.y, (int)furnace.burnedFlower.z)).getBlock();
-					if(b != null)
+					IBlockState b = furnace.getWorld().getBlockState(new BlockPos((int)furnace.burnedFlower.x,(int)furnace.burnedFlower.y, (int)furnace.burnedFlower.z));
+					if(b != null && Item.getItemFromBlock(b.getBlock()) != null)
 					{
-						DrawUtils.drawTexture(posX+83, posY+1, TextureUtils.fromBlock(furnace.getWorld(), (int)furnace.burnedFlower.x,(int)furnace.burnedFlower.y, (int)furnace.burnedFlower.z), 16, 16, 1);
+						renderitem.renderItemIntoGUI(new ItemStack(b.getBlock(), 1, b.getBlock().damageDropped(b)), posX+83, posY+1);
 					}
 				}
 				DrawUtils.bindTexture("minecraft", "textures/gui/container/furnace.png");

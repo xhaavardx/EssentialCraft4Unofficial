@@ -1,6 +1,7 @@
 package ec3.api;
 
-import net.minecraft.world.World;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 
 /**
  * 
@@ -15,5 +16,5 @@ public interface IColdBlock {
 	 * @param meta - the metadata of the block 
 	 * @return amount of mru per tick will this block add
 	 */
-	public float getColdModifier(World w, int x, int y, int z, int meta);
+	public float getColdModifier(IBlockAccess w, BlockPos p);
 }

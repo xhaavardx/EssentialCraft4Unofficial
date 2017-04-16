@@ -2,11 +2,9 @@ package ec3.common.block;
 
 import DummyCore.Client.IModelRegisterer;
 import DummyCore.Utils.MiscUtils;
-import ec3.common.item.ItemBoundGem;
 import ec3.common.mod.EssentialCraftCore;
 import ec3.common.tile.TileRedstoneTransmitter;
 import ec3.utils.cfg.Config;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyDirection;
@@ -119,37 +117,9 @@ public class BlockRedstoneTransmitter extends BlockContainer implements IModelRe
 		return true;
 	}
 
-	public boolean canConnectRedstone(IBlockState s, IBlockAccess w, BlockPos p, EnumFacing side)
-	{
-		TileRedstoneTransmitter trt = (TileRedstoneTransmitter)w.getTileEntity(p);
-		return trt.getStackInSlot(0) != null;
-	}
-
 	public int getWeakPower(IBlockState s, IBlockAccess w, BlockPos p, EnumFacing side) {
 		TileRedstoneTransmitter trt = (TileRedstoneTransmitter) w.getTileEntity(p);
-
-		if(trt.getStackInSlot(0) != null && trt.getStackInSlot(0).getItem() instanceof ItemBoundGem) {
-			int[] c = ItemBoundGem.getCoords(trt.getStackInSlot(0));
-
-			if(c != null && c.length > 0) {
-				if(w.getBlockState(new BlockPos(c[0], c[1], c[2])) == this) {
-					return trt.getRedstonePower(c);
-				}
-			}
-		}
-		return 0;
-	}
-
-	public void neighborChanged(IBlockState s, World w, BlockPos p, Block n) {
-		TileRedstoneTransmitter trt = (TileRedstoneTransmitter) w.getTileEntity(p);
-		if(trt.getStackInSlot(0) != null && trt.getStackInSlot(0).getItem() instanceof ItemBoundGem) {
-			int[] c = ItemBoundGem.getCoords(trt.getStackInSlot(0));
-			if(c != null && c.length > 0) {
-				if(w.getBlockState(new BlockPos(c[0], c[1], c[2])).getBlock() == this) {
-					w.notifyNeighborsOfStateChange(new BlockPos(c[0], c[1], c[2]), this);
-				}
-			}
-		}
+		return trt.getRedstonePower();
 	}
 
 	@Override

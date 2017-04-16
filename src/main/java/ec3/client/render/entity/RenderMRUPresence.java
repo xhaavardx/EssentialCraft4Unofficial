@@ -2,21 +2,18 @@ package ec3.client.render.entity;
 
 import java.util.Random;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.client.registry.IRenderFactory;
-
 import org.lwjgl.opengl.GL11;
 
 import DummyCore.Utils.TessellatorWrapper;
 import ec3.client.render.RenderHandlerEC3;
 import ec3.common.entity.EntityMRUPresence;
 import ec3.utils.common.ECUtils;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.client.registry.IRenderFactory;
 
 public class RenderMRUPresence extends Render<EntityMRUPresence> {
 
@@ -25,9 +22,7 @@ public class RenderMRUPresence extends Render<EntityMRUPresence> {
 	}
 
 	public void doActualRender(EntityMRUPresence par1Entity, double par2, double par4, double par6, float par8, float par9) {
-		TessellatorWrapper var3 = TessellatorWrapper.getInstance();
 		float var4 = par1Entity.renderIndex;
-		float var5 = 0.0F;
 		float stability = par1Entity.getBalance();
 		float colorRRender = 0.0F;
 		float colorGRender = 1.0F;
@@ -89,15 +84,15 @@ public class RenderMRUPresence extends Render<EntityMRUPresence> {
 			GlStateManager.rotate(var6.nextFloat() * 360.0F, 0.0F, 1.0F, 0.0F);
 			GlStateManager.rotate(var6.nextFloat() * 360.0F + var4 * 90.0F, 0.0F, 0.0F, 1.0F);
 			GlStateManager.color(colorRRender, colorGRender, colorBRender, 1);
-			var3.startDrawing(GL11.GL_TRIANGLE_FAN);
-			float var8 = var6.nextFloat() * 20.0F + 5.0F + var5 * 10.0F;
-			float var9 = var6.nextFloat() * 2.0F + 1.0F + var5 * 2.0F;
-			var3.addVertex(0.0D, 0.0D, 0.0D);
-			var3.addVertexWithUV(-0.866D * (double)var9, (double)var8, (double)(-0.5F * var9),0,0);
-			var3.addVertexWithUV(0.866D * (double)var9, (double)var8, (double)(-0.5F * var9),0,1);
-			var3.addVertexWithUV(0.0D, (double)var8, (double)(1.0F * var9),1,1);
-			var3.addVertexWithUV(-0.866D * (double)var9, (double)var8, (double)(-0.5F * var9),1,0);
-			var3.draw();
+			float var8 = var6.nextFloat() * 20F + 5F;
+			float var9 = var6.nextFloat() * 2F + 1F;
+			GlStateManager.glBegin(GL11.GL_TRIANGLE_FAN);
+			GlStateManager.glVertex3f(0, 0, 0);
+			GlStateManager.glVertex3f(-0.866F*var9, var8, -0.5F*var9);
+			GlStateManager.glVertex3f(0.866F*var9, var8, -0.5F*var9);
+			GlStateManager.glVertex3f(0, var8, var9);
+			GlStateManager.glVertex3f(-0.866F*var9, var8, -0.5F*var9);
+			GlStateManager.glEnd();
 		}
 
 		GlStateManager.disableBlend();

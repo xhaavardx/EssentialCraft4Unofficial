@@ -5,10 +5,8 @@ import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 
 public class ModelArmorEC3 extends ModelBiped {
-	//fields
 	ModelRenderer bodyCross;
 	ModelRenderer bodyPlate;
-	//ModelRenderer body;
 	ModelRenderer bodyPlateb;
 	ModelRenderer bodyPlatel;
 	ModelRenderer bodyPlater;
@@ -17,15 +15,10 @@ public class ModelArmorEC3 extends ModelBiped {
 	ModelRenderer lap2;
 	ModelRenderer lap1;
 	ModelRenderer lap;
-	//ModelRenderer leftarm;
-	//ModelRenderer rightleg;
-	//ModelRenderer leftleg;
-	// ModelRenderer rightarm;
 	ModelRenderer rap1;
 	ModelRenderer rap2;
 	ModelRenderer rap;
 	ModelRenderer helml;
-	//ModelRenderer head;
 	ModelRenderer helmt;
 	ModelRenderer helms;
 
@@ -49,14 +42,6 @@ public class ModelArmorEC3 extends ModelBiped {
 		bodyPlate.mirror = true;
 		setRotation(bodyPlate, 0.1919862F, 0F, 0F);
 		this.bipedBody.addChild(bodyPlate);
-		/*
-      body = new ModelRenderer(this, 16, 16);
-      body.addBox(-4F, 0F, -2F, 8, 12, 4);
-      body.setRotationPoint(0F, 0F, 0F);
-      body.setTextureSize(128, 64);
-      body.mirror = true;
-      setRotation(body, 0F, 0F, 0F);
-		 */
 		bodyPlateb = new ModelRenderer(this, 14, 39);
 		bodyPlateb.addBox(-3F, 5F, 3F, 6, 3, 1);
 		bodyPlateb.setRotationPoint(0F, 0F, 1F);
@@ -113,32 +98,6 @@ public class ModelArmorEC3 extends ModelBiped {
 		lap.mirror = true;
 		setRotation(lap, 0F, 0F, -0.0872665F);
 		this.bipedLeftArm.addChild(lap);
-		/*
-      leftarm = new ModelRenderer(this, 40, 16);
-      leftarm.addBox(-1F, -2F, -2F, 4, 12, 4);
-      leftarm.setRotationPoint(5F, 2F, 0F);
-      leftarm.setTextureSize(128, 64);
-      leftarm.mirror = true;
-      setRotation(leftarm, 0F, 0F, 0F);
-      rightleg = new ModelRenderer(this, 0, 16);
-      rightleg.addBox(-2F, 0F, -2F, 4, 12, 4);
-      rightleg.setRotationPoint(-2F, 12F, 0F);
-      rightleg.setTextureSize(128, 64);
-      rightleg.mirror = true;
-      setRotation(rightleg, 0F, 0F, 0F);
-      leftleg = new ModelRenderer(this, 0, 16);
-      leftleg.addBox(-2F, 0F, -2F, 4, 12, 4);
-      leftleg.setRotationPoint(2F, 12F, 0F);
-      leftleg.setTextureSize(128, 64);
-      leftleg.mirror = true;
-      setRotation(leftleg, 0F, 0F, 0F);
-      rightarm = new ModelRenderer(this, 40, 16);
-      rightarm.addBox(-3F, -2F, -2F, 4, 12, 4);
-      rightarm.setRotationPoint(-5F, 2F, 0F);
-      rightarm.setTextureSize(128, 64);
-      rightarm.mirror = true;
-      setRotation(rightarm, 0F, 0F, 0F);
-		 */
 		rap1 = new ModelRenderer(this, 0, 32);
 		rap1.addBox(2.5F, 1F, -2F, 1, 4, 4);
 		rap1.setRotationPoint(-6.75F, 0F, 0F);
@@ -195,7 +154,6 @@ public class ModelArmorEC3 extends ModelBiped {
 	{
 		bodyCross.render(f5);
 		bodyPlate.render(f5);
-		//body.render(f5);
 		bodyPlateb.render(f5);
 		bodyPlatel.render(f5);
 		bodyPlater.render(f5);
@@ -204,15 +162,10 @@ public class ModelArmorEC3 extends ModelBiped {
 		lap2.render(f5);
 		lap1.render(f5);
 		lap.render(f5);
-		//leftarm.render(f5);
-		//rightleg.render(f5);
-		//leftleg.render(f5);
-		//rightarm.render(f5);
 		rap1.render(f5);
 		rap2.render(f5);
 		rap.render(f5);
 		helml.render(f5);
-		//head.render(f5);
 		helmt.render(f5);
 		helms.render(f5);
 	}

@@ -73,4 +73,9 @@ public class RenderMRUCoil extends TileEntitySpecialRenderer
 	public void renderTileEntityAt(TileEntity p_147500_1_, double p_147500_2_, double p_147500_4_, double p_147500_6_, float p_147500_8_, int destroyStage) {
 		this.doRender((TileMRUCoil) p_147500_1_, p_147500_2_, p_147500_4_, p_147500_6_, p_147500_8_, 0);
 	}
+
+	@Override
+	public boolean isGlobalRenderer(TileEntity te) {
+		return true;
+	}
 }

@@ -31,7 +31,10 @@ public class ItemGenericArmor extends ItemArmor implements IItemColor, IModelReg
 
 	@Override 
 	public String getArmorTexture(ItemStack itemstack, Entity entity, EntityEquipmentSlot slot, String type)
-	{ 
+	{
+		if(type != null && type.equalsIgnoreCase("overlay")) {
+			return "essentialcraft:textures/blocks/null.png";
+		}
 		switch(slot)
 		{ 
 		case LEGS: return "essentialcraft:textures/special/armor/wind_layer_2.png"; //2 should be the slot for legs

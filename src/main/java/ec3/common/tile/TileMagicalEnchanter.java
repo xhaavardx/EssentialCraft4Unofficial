@@ -125,12 +125,6 @@ public class TileMagicalEnchanter extends TileMRUGeneric {
 	}
 	
 	@Override
-	public AxisAlignedBB getRenderBoundingBox() {
-		AxisAlignedBB bb = INFINITE_EXTENT_AABB;
-		return bb;
-	}
-	
-	@Override
 	public void readFromNBT(NBTTagCompound i) {
 		progressLevel = i.getInteger("work");
 		super.readFromNBT(i);

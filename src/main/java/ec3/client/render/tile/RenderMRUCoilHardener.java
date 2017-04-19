@@ -33,13 +33,6 @@ public class RenderMRUCoilHardener extends TileEntitySpecialRenderer
     public void doRender(TileMRUCoil_Hardener tile, double p_76986_2_, double p_76986_4_, double p_76986_6_, float p_76986_8_, float p_76986_9_)
     {
     	RenderHelper.disableStandardItemLighting();
-    	
-        GlStateManager.pushMatrix();
-        GlStateManager.translate((float)p_76986_2_+0.5F, (float)p_76986_4_, (float)p_76986_6_+0.5F);
-        this.bindTexture(textures);
-        model.renderAll();
-        
-        GlStateManager.popMatrix();
         GlStateManager.pushMatrix();
         if(tile.localLightning != null)
         	tile.localLightning.render(p_76986_2_, p_76986_4_, p_76986_6_, p_76986_8_);
@@ -59,5 +52,10 @@ public class RenderMRUCoilHardener extends TileEntitySpecialRenderer
 	public void renderTileEntityAt(TileEntity p_147500_1_, double p_147500_2_, double p_147500_4_, double p_147500_6_, float p_147500_8_, int destroyStage) {
 		if(p_147500_1_.getBlockMetadata() == 0)
 		this.doRender((TileMRUCoil_Hardener) p_147500_1_, p_147500_2_, p_147500_4_, p_147500_6_, p_147500_8_, 0);
+	}
+
+	@Override
+	public boolean isGlobalRenderer(TileEntity te) {
+		return true;
 	}
 }

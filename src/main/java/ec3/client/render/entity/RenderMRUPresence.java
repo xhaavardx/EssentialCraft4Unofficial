@@ -4,7 +4,6 @@ import java.util.Random;
 
 import org.lwjgl.opengl.GL11;
 
-import DummyCore.Utils.TessellatorWrapper;
 import ec3.client.render.RenderHandlerEC3;
 import ec3.common.entity.EntityMRUPresence;
 import ec3.utils.common.ECUtils;
@@ -17,6 +16,8 @@ import net.minecraftforge.fml.client.registry.IRenderFactory;
 
 public class RenderMRUPresence extends Render<EntityMRUPresence> {
 
+	static final float HALF_SQRT_3 = 0.8660254F;
+	
 	public RenderMRUPresence(RenderManager renderManager) {
 		super(renderManager);
 	}
@@ -88,10 +89,10 @@ public class RenderMRUPresence extends Render<EntityMRUPresence> {
 			float var9 = var6.nextFloat() * 2F + 1F;
 			GlStateManager.glBegin(GL11.GL_TRIANGLE_FAN);
 			GlStateManager.glVertex3f(0, 0, 0);
-			GlStateManager.glVertex3f(-0.866F*var9, var8, -0.5F*var9);
-			GlStateManager.glVertex3f(0.866F*var9, var8, -0.5F*var9);
+			GlStateManager.glVertex3f(-HALF_SQRT_3*var9, var8, -var9/2F);
+			GlStateManager.glVertex3f(HALF_SQRT_3*var9, var8, -var9/2F);
 			GlStateManager.glVertex3f(0, var8, var9);
-			GlStateManager.glVertex3f(-0.866F*var9, var8, -0.5F*var9);
+			GlStateManager.glVertex3f(-HALF_SQRT_3*var9, var8, -var9/2F);
 			GlStateManager.glEnd();
 		}
 

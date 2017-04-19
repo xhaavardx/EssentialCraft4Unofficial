@@ -57,10 +57,8 @@ public class BlockMagicLight extends Block implements IModelRegisterer {
 			for(int i = 0; i < 5; ++i)
 			{
 				Vec3d rotateVec = new Vec3d(1, 1, 1);
-				rotateVec.rotatePitch(p_149734_4_.nextFloat()*360F);
-				rotateVec.rotateYaw(p_149734_4_.nextFloat()*360F);
-				rotateVec.rotatePitch(p_149734_4_.nextFloat()*360F);
-				rotateVec.rotateYaw(p_149734_4_.nextFloat()*360F);
+				rotateVec = rotateVec.rotatePitch(p_149734_4_.nextFloat()*360F);
+				rotateVec = rotateVec.rotateYaw(p_149734_4_.nextFloat()*360F);
 				EssentialCraftCore.proxy.spawnParticle("mruFX",p_149734_3_.getX()+0.5F, p_149734_3_.getY()+0.5F, p_149734_3_.getZ()+0.5F, rotateVec.xCoord/5, rotateVec.yCoord/5, rotateVec.zCoord/5);
 				rotateVec = null;
 			}

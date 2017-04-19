@@ -22,6 +22,7 @@ public class MRUFX extends Particle{
 	public float tickPos;
 	private static final ResourceLocation particleTextures = new ResourceLocation("textures/particle/particles.png");
 	private static final ResourceLocation ecparticleTextures = new ResourceLocation("essentialcraft","textures/special/particles.png");
+	
 	public MRUFX(World w, double x, double y,double z, double i, double j,double k) 
 	{
 		super(w, x, y, z, i, j,k);
@@ -35,7 +36,8 @@ public class MRUFX extends Particle{
 		this.particleScale = 0.5F;
 		this.particleRed = 0;
 		this.particleGreen = 0F;
-		this.particleRed = 0.8F;
+		this.particleBlue = 0.8F;
+		this.particleAlpha = 0.99F;
 		this.particleMaxAge = (int)(Math.random() * 10.0D) + 40;
 		this.canCollide = true;
 		this.setParticleTextureIndex((int)(Math.random() * 8.0D));
@@ -53,7 +55,8 @@ public class MRUFX extends Particle{
 	{
 		TessellatorWrapper.getInstance().draw().begin(7, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
 		Minecraft.getMinecraft().renderEngine.bindTexture(ecparticleTextures);
-		GlStateManager.disableAlpha();
+		boolean enabled = GL11.glIsEnabled(GL11.GL_BLEND);
+		GlStateManager.enableBlend();
 		if(ECUtils.canPlayerSeeMRU(Minecraft.getMinecraft().player))
 		{
 			float sc = this.particleScale;
@@ -65,12 +68,10 @@ public class MRUFX extends Particle{
 			this.particleRed = 1;
 			this.particleGreen = 0F;
 			this.particleBlue = 1F;
-			this.particleAlpha = 1F;
-			GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
+			this.particleAlpha = 0.99F;
 			super.renderParticle(var1, var2, par2, par3, par4, par5, par6, par7);
-			GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 			this.particleScale = sc;
-			this.particleRed =  cR;
+			this.particleRed = cR;
 			this.particleGreen =  cG;
 			this.particleBlue =  cB;
 			this.particleAlpha = cA;
@@ -78,7 +79,8 @@ public class MRUFX extends Particle{
 		}
 		TessellatorWrapper.getInstance().draw().begin(7, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
 		Minecraft.getMinecraft().renderEngine.bindTexture(particleTextures);
-		GlStateManager.enableAlpha();
+		if(!enabled)
+			GlStateManager.disableBlend();
 	}
 
 	public int getBrightnessForRender(float p_70070_1_)

@@ -129,4 +129,9 @@ public class RenderMonsterHolder extends TileEntitySpecialRenderer
 		if(p_147500_1_.getBlockMetadata() == 0)
 		this.doRender((TileEntity) p_147500_1_, p_147500_2_, p_147500_4_, p_147500_6_, p_147500_8_, 0);
 	}
+
+	@Override
+	public boolean isGlobalRenderer(TileEntity te) {
+		return true;
+	}
 }

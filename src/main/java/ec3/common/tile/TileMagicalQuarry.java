@@ -26,6 +26,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
@@ -302,21 +303,21 @@ public class TileMagicalQuarry extends TileMRUGeneric {
 	}
 	
 	public boolean isMainColomnMined() {
-		int r = pos.getY()-2;
-		while(--r >= 0) {
+		int r = 2;
+		while(++r <= pos.getY()-2) {
 			Block b = getWorld().getBlockState(pos.down(r)).getBlock();
-			if((b != null && b.getBlockHardness(getWorld().getBlockState(pos.down(r)),getWorld(),pos.down(r)) != -1 && b != Blocks.AIR && !(b instanceof BlockLiquid && ignoreLiquids) && canMineBlock(b)) && canMineBlock(b))
+			if((b != null && b.getBlockHardness(getWorld().getBlockState(pos.down(r)),getWorld(),pos.down(r)) >= 0 && b != Blocks.AIR && !(b instanceof BlockLiquid && ignoreLiquids) && canMineBlock(b)) && canMineBlock(b))
 				return false;
 		}
 		return true;
 	}
 	
-	public int genMiningColomnY(int current)  {
-		int r = pos.getY()-2;
-		while(--r >= 0) {
+	public int genMiningColomnY(int current) {
+		int r = 2;
+		while(++r <= pos.getY()-2) {
 			Block b = getWorld().getBlockState(pos.down(r)).getBlock();
-			if((b != null && b.getBlockHardness(getWorld().getBlockState(pos.down(r)),getWorld(),pos.down(r)) != -1 && b != Blocks.AIR && !(b instanceof BlockLiquid && ignoreLiquids) && canMineBlock(b)) && canMineBlock(b))
-				return r;
+			if(b != null && b.getBlockHardness(getWorld().getBlockState(pos.down(r)),getWorld(),pos.down(r)) >= 0 && b != Blocks.AIR && !(b instanceof BlockLiquid && ignoreLiquids) && canMineBlock(b))
+				return pos.getY()-r;
 		}
 		return current;
 	}
@@ -397,7 +398,7 @@ public class TileMagicalQuarry extends TileMRUGeneric {
 					ItemStack forged = FurnaceRecipes.instance().getSmeltingResult(s);
 					if(forged != null) {
 						ItemStack copy = forged.copy();
-						copy.stackSize *= s.stackSize;
+						copy.stackSize = s.stackSize;
 						if(hasFortuneUpgrade()) {
 							int fortune = determineFortune();
 							for(int i1 = 0; i1 < s.stackSize; ++i1) {
@@ -499,5 +500,11 @@ public class TileMagicalQuarry extends TileMRUGeneric {
 		return new int[0];
 	}
 	
+	@Override
+	public AxisAlignedBB getRenderBoundingBox() {
+		AxisAlignedBB bb = INFINITE_EXTENT_AABB;
+		return bb;
+	}
+
 	public static GameProfile quarryFakePlayerProfile = new GameProfile(UUID.fromString("5cd89d0b-e9ba-0000-89f4-badbb05963dd"), "[EC3]Quarry");
 }

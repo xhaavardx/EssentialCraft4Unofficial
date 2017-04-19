@@ -25,6 +25,7 @@ public class ColoredFlameFX extends Particle {
 		this.motionZ = this.motionZ * 0.009999999776482582D + mZ;
 		this.flameScale = this.particleScale;
 		this.particleRed = this.particleGreen = this.particleBlue = 1.0F;
+		this.particleAlpha = 0.99F;
 		this.particleMaxAge = (int)(8.0D / (Math.random() * 0.8D + 0.2D)) + 4;
 		this.canCollide = true;
 		this.setParticleTextureIndex(48);
@@ -40,6 +41,7 @@ public class ColoredFlameFX extends Particle {
 		this.particleRed = (float) r;
 		this.particleGreen = (float) g;
 		this.particleBlue = (float) b;
+		this.particleAlpha = 0.99F;
 		this.particleMaxAge = (int)(8.0D / (Math.random() * 0.8D + 0.2D)) + 4;
 		this.canCollide = true;
 		this.setParticleTextureIndex(48);

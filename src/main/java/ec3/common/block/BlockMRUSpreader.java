@@ -27,15 +27,12 @@ public class BlockMRUSpreader extends Block implements IModelRegisterer {
 	public void randomDisplayTick(IBlockState s, World p_149734_1_, BlockPos p_149734_2_, Random p_149734_5_) {
 		for(int i = 0; i < 5; ++i) {
 			Vec3d rotateVec = new Vec3d(1, 1, 1);
-			rotateVec.rotatePitch(p_149734_5_.nextFloat()*360F);
-			rotateVec.rotateYaw(p_149734_5_.nextFloat()*360F);
-			rotateVec.rotatePitch(p_149734_5_.nextFloat()*360F);
-			rotateVec.rotateYaw(p_149734_5_.nextFloat()*360F);
+			rotateVec = rotateVec.rotatePitch(p_149734_5_.nextFloat()*360F);
+			rotateVec = rotateVec.rotateYaw(p_149734_5_.nextFloat()*360F);
 			for(int i1 = 0; i1 < 10; ++i1)
 				EssentialCraftCore.proxy.spawnParticle("mruFX", p_149734_2_.getX()+0.5F, p_149734_2_.getY()+1F, p_149734_2_.getZ()+0.5F, rotateVec.xCoord*10, rotateVec.yCoord*10, rotateVec.zCoord*10);
 			rotateVec = null;
 		}
-
 	}
 
 	public boolean isOpaqueCube(IBlockState s)

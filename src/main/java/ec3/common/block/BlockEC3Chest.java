@@ -23,7 +23,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
@@ -63,18 +62,12 @@ public class BlockEC3Chest extends BlockContainer implements IModelRegisterer {
 		return new TileMagicalChest(metadata);
 	}
 
-	public void getStateForPlacementBy(World w, BlockPos p, IBlockState s, EntityLivingBase p_149689_5_, ItemStack p_149689_6_)
-	{
-		int l = determineOrientation(w, p.getX(), p.getY(), p.getZ(), p_149689_5_);
-		TileMagicalChest tile = TileMagicalChest.class.cast(w.getTileEntity(p));
+	@Override
+	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+		int l = placer.getHorizontalFacing().getHorizontalIndex();
+		TileMagicalChest tile = TileMagicalChest.class.cast(worldIn.getTileEntity(pos));
 		tile.rotation = l;
-		tile.ownerName = p_149689_5_.getCommandSenderEntity().getName();
-	}
-
-	public static int determineOrientation(World p_150071_0_, int p_150071_1_, int p_150071_2_, int p_150071_3_, EntityLivingBase p_150071_4_)
-	{
-		int l = MathHelper.floor((double)(p_150071_4_.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
-		return l;
+		tile.ownerName = placer.getName();
 	}
 
 	@Override

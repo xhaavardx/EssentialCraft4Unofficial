@@ -2,6 +2,7 @@ package ec3.common.tile;
 
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.config.Configuration;
 import DummyCore.Utils.Coord3D;
@@ -129,6 +130,12 @@ public class TileCorruptionCleaner extends TileMRUGeneric {
 		catch(Exception e) {
 			return;
 		}
+	}
+	
+	@Override
+	public AxisAlignedBB getRenderBoundingBox() {
+		AxisAlignedBB bb = INFINITE_EXTENT_AABB;
+		return bb;
 	}
 	
 	@Override

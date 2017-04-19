@@ -24,6 +24,7 @@ public class CSpellFX extends Particle{
 		this.particleRed = 0;
 		this.particleGreen = 0F;
 		this.particleBlue = 0.0F;
+		this.particleAlpha = 0.99F;
 		this.particleMaxAge = (int)(Math.random() * 10.0D) + 40;
 		this.canCollide = false;
 		this.setParticleTextureIndex((int)(Math.random() * 8.0D));

@@ -50,7 +50,7 @@ public class EC3PacketDispatcher implements IMessageHandler<PacketNBT,IMessage>{
 			EntityPlayer clientPlayer = MiscUtils.getPlayerFromUUID(message.theTag.getString("sender"));
 			if(target != null) {
 				NBTTagCompound theTag = new NBTTagCompound();
-				theTag.setString("syncplayer", target.getCommandSenderEntity().getName());
+				theTag.setString("syncplayer", MiscUtils.getUUIDFromPlayer(target).toString());
 				ECUtils.getData(target).writeToNBTTagCompound(theTag);
 				PacketNBT pkt = new PacketNBT(theTag).setID(0);
 				EssentialCraftCore.network.sendTo(pkt, (EntityPlayerMP)clientPlayer);

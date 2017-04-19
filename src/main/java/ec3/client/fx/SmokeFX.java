@@ -20,11 +20,12 @@ public class SmokeFX extends ParticleSmokeNormal {
 	public SmokeFX(World w, double x, double y,	double z, double mX, double mY,	double mZ, float scale)
 	{
 		super(w, x, y, z, mX, mY,mZ, scale);
+		this.particleAlpha = 0.99F;
 	}
 
 	public SmokeFX(World w, double x, double y,	double z, double mX, double mY,	double mZ, float scale, double r, double g, double b)
 	{
-		super(w, x, y, z, mX, mY,mZ, scale);
+		this(w, x, y, z, mX, mY,mZ, scale);
 		this.particleRed = (float) r;
 		this.particleGreen = (float) g;
 		this.particleBlue = (float) b;
@@ -34,7 +35,7 @@ public class SmokeFX extends ParticleSmokeNormal {
 		TessellatorWrapper.getInstance().draw().begin(7, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
 		Minecraft.getMinecraft().renderEngine.bindTexture(ecparticleTextures);
 		GlStateManager.pushMatrix();
-		GlStateManager.disableAlpha();
+		//GlStateManager.disableAlpha();
 		boolean enabled = GL11.glIsEnabled(GL11.GL_BLEND);
 		GlStateManager.enableBlend();
 		super.renderParticle(var1, var2, par2, par3, par4, par5, par6, par7);
@@ -42,7 +43,7 @@ public class SmokeFX extends ParticleSmokeNormal {
 		Minecraft.getMinecraft().renderEngine.bindTexture(particleTextures);
 		if(!enabled)
 			GlStateManager.disableBlend();
-		GlStateManager.enableAlpha();
+		//GlStateManager.enableAlpha();
 		GlStateManager.popMatrix();
 	}
 }

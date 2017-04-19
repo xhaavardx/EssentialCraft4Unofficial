@@ -25,10 +25,10 @@ public class BlockMRULevitator extends Block implements IModelRegisterer {
 	}
 
 	public void randomDisplayTick(IBlockState s, World p_149734_1_, BlockPos p_149734_2_, Random p_149734_5_) {
-		for(int i = 0; i < 10; ++i) {
+		for(int i = 0; i < 12; ++i) {
 			EssentialCraftCore.proxy.spawnParticle("mruFX", p_149734_2_.getX()+0.5F+MathUtils.randomFloat(p_149734_5_)/5, p_149734_2_.getY()+0.5F, p_149734_2_.getZ()+0.5F+MathUtils.randomFloat(p_149734_5_)/5, 0, -5-MathUtils.randomFloat(p_149734_5_)*5, 0);
 			Vec3d rotateVec = new Vec3d(1, 0, 1);
-			rotateVec.rotateYaw(i*36);
+			rotateVec = rotateVec.rotateYaw(i*30);
 			for(int i1 = 0; i1 < 3; ++i1)
 				EssentialCraftCore.proxy.spawnParticle("mruFX", p_149734_2_.getX()+0.5F+MathUtils.randomFloat(p_149734_5_)/5, p_149734_2_.getY()+0.25F, p_149734_2_.getZ()+0.5F+MathUtils.randomFloat(p_149734_5_)/5, rotateVec.xCoord, 0, rotateVec.zCoord);
 			rotateVec = null;

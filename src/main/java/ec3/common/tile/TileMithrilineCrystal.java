@@ -14,6 +14,7 @@ import net.minecraft.network.play.INetHandlerPlayClient;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.common.config.Configuration;
 
 public class TileMithrilineCrystal extends TileEntity implements ITickable {
@@ -110,5 +111,11 @@ public class TileMithrilineCrystal extends TileEntity implements ITickable {
 		catch(Exception e) {
 			return;
 		}
+	}
+	
+	@Override
+	public AxisAlignedBB getRenderBoundingBox() {
+		AxisAlignedBB bb = new AxisAlignedBB(pos, pos.add(1, 3, 1));
+		return bb;
 	}
 }

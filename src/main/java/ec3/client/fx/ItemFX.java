@@ -13,8 +13,9 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
 
-public class ItemFX extends Particle{
+public class ItemFX extends Particle {
 
+	static final float HALF_SQRT_3 = 0.8660254F;
 	public double red,green,blue;
 
 	public ItemFX(World w, double x, double y,double z, double r, double g, double b, double mX, double mY, double mZ)
@@ -60,10 +61,10 @@ public class ItemFX extends Particle{
 			float var9 = var6.nextFloat() * 2F + 3F;
 			GlStateManager.glBegin(GL11.GL_TRIANGLE_FAN);
 			GlStateManager.glVertex3f(0, 0, 0);
-			GlStateManager.glVertex3f(-0.866F*var9, var8, -0.5F*var9);
-			GlStateManager.glVertex3f(0.866F*var9, var8, -0.5F*var9);
+			GlStateManager.glVertex3f(-HALF_SQRT_3*var9, var8, -var9/2F);
+			GlStateManager.glVertex3f(HALF_SQRT_3*var9, var8, -var9/2F);
 			GlStateManager.glVertex3f(0, var8, var9);
-			GlStateManager.glVertex3f(-0.866F*var9, var8, -0.5F*var9);
+			GlStateManager.glVertex3f(-HALF_SQRT_3*var9, var8, -var9/2F);
 			GlStateManager.glEnd();
 		}
 

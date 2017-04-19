@@ -84,7 +84,7 @@ public class ItemGun extends ItemStoresMRUInNBT implements IModelRegisterer {
 			if(current+1 >= max)
 			{
 				Vec3d look = entity.getLookVec();
-				look.rotatePitch(-0.5F);
+				look = look.rotatePitch(-0.5F);
 				world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, entity.posX+look.xCoord, entity.posY-0.5D+look.yCoord, entity.posZ+look.zCoord, 0, 0, 0);
 			}
 		}

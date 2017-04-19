@@ -69,12 +69,6 @@ public class TileRadiatingChamber extends TileMRUGeneric {
 		}
 	}
 	
-	@Override
-	public AxisAlignedBB getRenderBoundingBox() {
-		AxisAlignedBB bb = INFINITE_EXTENT_AABB;
-		return bb;
-	}
-	
 	public boolean canFunction(RadiatingChamberRecipe rec) {
 		ItemStack result = rec.result;
 		if(result != null) {

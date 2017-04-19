@@ -13,6 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.common.config.Configuration;
@@ -165,6 +166,12 @@ public class TileMagicalMirror extends TileMRUGeneric {
 		catch(Exception e) {
 			return;
 		}
+	}
+	
+	@Override
+	public AxisAlignedBB getRenderBoundingBox() {
+		AxisAlignedBB bb = INFINITE_EXTENT_AABB;
+		return bb;
 	}
 	
 	@Override

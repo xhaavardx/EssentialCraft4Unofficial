@@ -154,10 +154,8 @@ public class EntityMRUPresence extends EntityLivingBase implements IMRUPressence
 				float mainMRUState = (diff*getMRU()/60000F)*10F;
 				Vec3d vec = new Vec3d(1, 0, 0);
 				//Spinning the vec right 'round...
-				vec.rotatePitch(this.getEntityWorld().rand.nextFloat()*360);
-				vec.rotateYaw(this.getEntityWorld().rand.nextFloat()*360);
-				vec.rotatePitch(this.getEntityWorld().rand.nextFloat()*360);
-				vec.rotateYaw(this.getEntityWorld().rand.nextFloat()*360);
+				vec = vec.rotatePitch(this.getEntityWorld().rand.nextFloat()*360);
+				vec = vec.rotateYaw(this.getEntityWorld().rand.nextFloat()*360);
 				if(!this.getFlag()) {
 					for(int i = 0; i < mainMRUState; ++i) {
 						//From now on even me, @Modbder, is unsure of the things, happening here. No idea, how and why this works, but it does.

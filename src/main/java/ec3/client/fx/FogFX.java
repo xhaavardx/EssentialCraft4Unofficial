@@ -40,6 +40,7 @@ public class FogFX extends Particle{
 			this.particleRed = (float) red;
 			this.particleGreen = (float) green;
 			this.particleBlue = (float) blue;
+			this.particleAlpha = 0.99F;
 			this.particleMaxAge = (int)(Math.random() * 10.0D) + 100;
 			this.canCollide = true;
 			this.setParticleTextureIndex((int)(Math.random() * 8.0D));
@@ -52,9 +53,13 @@ public class FogFX extends Particle{
 		TessellatorWrapper var3 = TessellatorWrapper.getInstance();
 		var3.draw().begin(7, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
 		Minecraft.getMinecraft().renderEngine.bindTexture(rec);
+		boolean enabled = GL11.glIsEnabled(GL11.GL_BLEND);
+		GlStateManager.enableBlend();
 		super.renderParticle(var1, var2, p_70539_2_, p_70539_3_, p_70539_4_, p_70539_5_, p_70539_6_, p_70539_7_);
 		var3.draw().begin(7, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
 		Minecraft.getMinecraft().renderEngine.bindTexture(particleTextures);
+		if(!enabled)
+			GlStateManager.disableBlend();
 	}
 
 	public int getBrightnessForRender(float p_70070_1_)

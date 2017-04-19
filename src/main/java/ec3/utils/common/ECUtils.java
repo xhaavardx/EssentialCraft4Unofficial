@@ -445,10 +445,10 @@ public class ECUtils {
 			int newDuration = currentDuration+2;
 			int newModifier = currentDuration/2000;
 			player.removePotionEffect(PotionRegistry.mruCorruptionPotion);
-			player.addPotionEffect(new PotionEffect(PotionRegistry.mruCorruptionPotion,newDuration,newModifier));
+			player.addPotionEffect(new PotionEffect(PotionRegistry.mruCorruptionPotion,newDuration,newModifier,true,true));
 		}else
 		{
-			player.addPotionEffect(new PotionEffect(PotionRegistry.mruCorruptionPotion,200,0));
+			player.addPotionEffect(new PotionEffect(PotionRegistry.mruCorruptionPotion,200,0,true,true));
 		}
 	}
 
@@ -461,10 +461,10 @@ public class ECUtils {
 			int newDuration = currentDuration+index2;
 			int newModifier = currentDuration/index;
 			player.removePotionEffect(potion);
-			player.addPotionEffect(new PotionEffect(potion,newDuration,newModifier));
+			player.addPotionEffect(new PotionEffect(potion,newDuration,newModifier,true,true));
 		}else
 		{
-			player.addPotionEffect(new PotionEffect(potion,index2,0));
+			player.addPotionEffect(new PotionEffect(potion,index2,0,true,true));
 		}
 	}
 

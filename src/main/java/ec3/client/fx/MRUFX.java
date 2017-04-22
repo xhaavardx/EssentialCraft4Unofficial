@@ -51,6 +51,11 @@ public class MRUFX extends Particle{
 		this.particleBlue = (float) cB;
 	}
 
+	@Override
+	public boolean isTransparent() {
+		return true;
+	}
+
 	public void renderParticle(VertexBuffer var1, Entity var2, float par2, float par3, float par4, float par5, float par6, float par7)
 	{
 		TessellatorWrapper.getInstance().draw().begin(7, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);

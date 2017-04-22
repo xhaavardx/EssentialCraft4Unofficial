@@ -32,8 +32,7 @@ public class SmokeFX extends ParticleSmokeNormal {
 	}
 
 	@Override
-	public boolean isTransparent()
-	{
+	public boolean isTransparent() {
 		return true;
 	}
 

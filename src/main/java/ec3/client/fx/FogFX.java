@@ -47,7 +47,6 @@ public class FogFX extends Particle{
 		}
 	}
 
-
 	public void renderParticle(VertexBuffer var1, Entity var2, float p_70539_2_, float p_70539_3_, float p_70539_4_, float p_70539_5_, float p_70539_6_, float p_70539_7_)
 	{
 		TessellatorWrapper var3 = TessellatorWrapper.getInstance();

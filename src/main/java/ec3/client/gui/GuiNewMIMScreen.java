@@ -121,7 +121,6 @@ public class GuiNewMIMScreen extends GuiContainer{
 
 	public static class GuiRequestButton extends GuiButton
 	{
-
 		public GuiRequestButton(int id, int x, int y,int sizeX, int sizeY, String string) {
 			super(id, x, y, sizeX, sizeY, string);
 		}
@@ -288,11 +287,15 @@ public class GuiNewMIMScreen extends GuiContainer{
 
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float partialTicks,int mX, int mY) {
+		ItemStack ttis = null;
+		int ttix = 0, ttiy = 0;
+		boolean ttib = false;
+
 		int k = (this.width - this.xSize)/2;
 		int l = (this.height - this.ySize)/2;
 		Minecraft.getMinecraft().renderEngine.bindTexture(textures);
 		this.drawTexturedModalRect(k, l, 0, 0, xSize, ySize);
-		
+
 		this.search.drawTextBox();
 		this.stackSize.drawTextBox();
 
@@ -415,10 +418,8 @@ public class GuiNewMIMScreen extends GuiContainer{
 			{
 				int x = k+32+i%10*19;
 				int y = l+28+i/10*19-scrollIndex*19;
-				if(selectedStack != null)
-				{
-					if(drawnItems.get(i) != null && drawnItems.get(i).isItemEqual(selectedStack) && ItemStack.areItemStackTagsEqual(drawnItems.get(i), selectedStack) && ((recipeSelected == -1 && i < regSize)|| (recipeSelected > -1 && i == recipeSelected)))
-					{
+				if(selectedStack != null) {
+					if(drawnItems.get(i) != null && drawnItems.get(i).isItemEqual(selectedStack) && ItemStack.areItemStackTagsEqual(drawnItems.get(i), selectedStack) && ((recipeSelected == -1 && i < regSize)|| (recipeSelected > -1 && i == recipeSelected))) {
 						x -= 2;
 						y -= 2;
 						this.drawGradientRect(x, y, x+18, y+18, 0x88ffaaff, 0x88886688);
@@ -432,6 +433,7 @@ public class GuiNewMIMScreen extends GuiContainer{
 				}
 
 				itemRender.renderItemAndEffectIntoGUI(drawnItems.get(i), x, y);
+
 				int alterSize = drawnItems.get(i).stackSize;
 				boolean greaterThan1K = alterSize >= 1000;
 				boolean greaterThan1M = alterSize >= 1000000;
@@ -446,36 +448,28 @@ public class GuiNewMIMScreen extends GuiContainer{
 				GlStateManager.disableLighting();
 				GlStateManager.disableDepth();
 				GlStateManager.disableBlend();
-				if(i >= regSize)
-				{
+				if(i >= regSize) {
 					boolean unicode = Minecraft.getMinecraft().gameSettings.forceUnicodeFont || Minecraft.getMinecraft().fontRendererObj.getUnicodeFlag();
-					if(!unicode)
-					{
+					if(!unicode) {
 						GlStateManager.scale(0.5F, 0.5F, 1);
-						GlStateManager.translate(0, 0, 100);
 						GlStateManager.translate(1D, 1D, 0);
 						fontRendererObj.drawString(s, x*2, (y+8)*2+6, 0x000000);
 						GlStateManager.translate(-1D, -1D, 0);
 						fontRendererObj.drawString(s, x*2, (y+8)*2+6, 0xffffff);
-						GlStateManager.translate(0, 0, -100);
 						GlStateManager.scale(2F, 2F, 1);
-					}else
-					{
-						GlStateManager.translate(0, 0, 100);
+					}
+					else {
 						GlStateManager.translate(0.5D, 0.5D, 0);
 						fontRendererObj.drawString(s, x, y+8, 0x000000);
 						GlStateManager.translate(-0.5D, -0.5D, 0);
 						fontRendererObj.drawString(s, x, y+8, 0xffffff);
-						GlStateManager.translate(0, 0, -100);
 					}
-				}else
-				{
-					GlStateManager.translate(0, 0, 100);
+				}
+				else {
 					GlStateManager.translate(0.5D, 0.5D, 0);
 					fontRendererObj.drawString(s, x, y+8, 0x000000);
 					GlStateManager.translate(-0.5D, -0.5D, 0);
 					fontRendererObj.drawString(s, x, y+8, 0xffffff);
-					GlStateManager.translate(0, 0, -100);
 				}
 				GlStateManager.enableLighting();
 				GlStateManager.enableDepth();
@@ -485,46 +479,12 @@ public class GuiNewMIMScreen extends GuiContainer{
 				{
 					if(mY >= y && mY <= y + 16)
 					{
-						this.renderToolTip(drawnItems.get(i), mX, mY);
+						ttis = drawnItems.get(i);
+						ttix = x;
+						ttiy = y;
 						if(i >= regSize)
 						{
-							GlStateManager.translate(0, 0, 200);
-							int j2 = mX+12;
-							int k2 = mY+drawnItems.get(i).getTooltip(player, false).size()*10-8;
-							int i1 = 50;
-							int sX = 50;
-							this.drawGradientRect(j2 - 3, k2 - 4, j2 + sX + 3, k2 - 3, 0xff000000, 0xff000000);
-							this.drawGradientRect(j2 - 3, k2 + i1 + 3, j2 + sX + 3, k2 + i1 + 4, 0xff000000, 0xff000000);
-							this.drawGradientRect(j2 - 3, k2 - 3, j2 + sX + 3, k2 + i1 + 3, 0xff223366, 0xff000611);
-							this.drawGradientRect(j2 - 4, k2 - 3, j2 - 3, k2 + i1 + 3, 0xff000000, 0xff000000);
-							this.drawGradientRect(j2 + sX + 3, k2 - 3, j2 + sX + 4, k2 + i1 + 3, 0xff000000, 0xff000000);
-							GlStateManager.translate(0, 0, -200);
-
-							if(drawnItems.get(i) != null && this.craftsByItemStack.containsKey(drawnItems.get(i)))
-							{
-								for(int j = 0; j < this.craftsByItemStack.get(drawnItems.get(i)).input.length; ++j)
-								{
-									int pX = mX+j/3*17+10 - 10;
-									int pY = mY+j%3*17+4 - 17;
-									GlStateManager.translate(0, 0, 300);
-									this.drawGradientRect(pX+12, pY+16, pX+12+16, pY+16+16, 0x88ffaaff, 0x88886688);
-									this.drawGradientRect(pX+12, pY+16, pX+12+1, pY+16+16, 0xff660066, 0xff330033);
-									this.drawGradientRect(pX+12, pY+16+15, pX+12+16, pY+16+16, 0xff330033, 0xff110011);
-									this.drawGradientRect(pX+12+15, pY+16, pX+12+16, pY+16+16, 0xff990099, 0xff110011);
-									this.drawGradientRect(pX+12, pY+16, pX+12+16, pY+16+1, 0xff660066, 0xff990099);
-
-									if(this.craftsByItemStack.get(drawnItems.get(i)).input[j] != null)
-									{
-
-										GlStateManager.translate(0, 0, 300);
-										GuiResearchBook.itemRender.renderItemAndEffectIntoGUI(this.craftsByItemStack.get(drawnItems.get(i)).input[j], mX+j/3*17+12, mY+j%3*17+3);
-										GlStateManager.translate(0, 0, -300);
-
-									}
-									GlStateManager.translate(0, 0, -300);
-								}
-							}
-
+							ttib = true;
 						}
 						if(Mouse.isButtonDown(0) && !isLeftMouseButtonPressed)
 						{
@@ -608,7 +568,6 @@ public class GuiNewMIMScreen extends GuiContainer{
 											}
 											setupMaxInt();
 										}
-
 									}
 								}
 							}
@@ -617,90 +576,43 @@ public class GuiNewMIMScreen extends GuiContainer{
 				}
 			}
 
+			if(ttis != null) {
+				if(ttib) {
+					int j2 = mX+12;
+					int k2 = mY+ttis.getTooltip(player, false).size()*10+6;
+					int i1 = 50;
+					int sX = 50;
+					this.drawGradientRect(j2 - 3, k2 - 4, j2 + sX + 3, k2 - 3, 0xff000000, 0xff000000);
+					this.drawGradientRect(j2 - 3, k2 + i1 + 3, j2 + sX + 3, k2 + i1 + 4, 0xff000000, 0xff000000);
+					this.drawGradientRect(j2 - 3, k2 - 3, j2 + sX + 3, k2 + i1 + 3, 0xff223366, 0xff000611);
+					this.drawGradientRect(j2 - 4, k2 - 3, j2 - 3, k2 + i1 + 3, 0xff000000, 0xff000000);
+					this.drawGradientRect(j2 + sX + 3, k2 - 3, j2 + sX + 4, k2 + i1 + 3, 0xff000000, 0xff000000);
+
+					if(this.craftsByItemStack.containsKey(ttis)) {
+						for(int j = 0; j < this.craftsByItemStack.get(ttis).input.length; ++j) {
+							int pX = mX+j/3*17+10 - 10;
+							int pY = mY+j%3*17+4 + 6;
+							this.drawGradientRect(pX+12, pY+16, pX+12+16, pY+16+16, 0x88ffaaff, 0x88886688);
+							this.drawGradientRect(pX+12, pY+16, pX+12+1, pY+16+16, 0xff660066, 0xff330033);
+							this.drawGradientRect(pX+12, pY+16+15, pX+12+16, pY+16+16, 0xff330033, 0xff110011);
+							this.drawGradientRect(pX+12+15, pY+16, pX+12+16, pY+16+16, 0xff990099, 0xff110011);
+							this.drawGradientRect(pX+12, pY+16, pX+12+16, pY+16+1, 0xff660066, 0xff990099);
+
+							if(this.craftsByItemStack.get(ttis).input[j] != null)
+							{
+								GuiResearchBook.itemRender.renderItemAndEffectIntoGUI(this.craftsByItemStack.get(ttis).input[j], mX+j/3*17+12, mY+j%3*17+26);
+							}
+						}
+					}
+				}
+
+				this.renderToolTip(ttis, mX, mY);
+			}
+
 			RenderHelper.enableStandardItemLighting();
 			drawnItems.clear();
 			drawnItems = null;
-
 		}
-	}
-
-	@Override
-	protected void drawHoveringText(List<String> p_146283_1_, int p_146283_2_, int p_146283_3_, FontRenderer font)
-	{
-        /*GlStateManager.disableRescaleNormal();
-        RenderHelper.disableStandardItemLighting();
-        GlStateManager.disableLighting();
-        GlStateManager.disableDepth();
-		GlStateManager.translate(0, 0, 100);
-		if (!p_146283_1_.isEmpty())
-		{
-			int k = 0;
-			Iterator iterator = p_146283_1_.iterator();
-
-			while (iterator.hasNext())
-			{
-				String s = (String)iterator.next();
-				int l = font.getStringWidth(s);
-
-				if (l > k)
-				{
-					k = l;
-				}
-			}
-
-			int j2 = p_146283_2_ + 12;
-			int k2 = p_146283_3_ - 12;
-			int i1 = 8;
-
-			if (p_146283_1_.size() > 1)
-			{
-				i1 += 2 + (p_146283_1_.size() - 1) * 10;
-			}
-
-			if (j2 + k > this.width)
-			{
-				j2 -= 28 + k;
-			}
-
-			if (k2 + i1 + 6 > this.height)
-			{
-				k2 = this.height - i1 - 6;
-			}
-
-			this.zLevel = 300.0F;
-			//itemRender.zLevel = 300.0F;
-			this.drawGradientRect(j2 - 3, k2 - 4, j2 + k + 3, k2 - 3, 0xff000000, 0xff000000);
-			this.drawGradientRect(j2 - 3, k2 + i1 + 3, j2 + k + 3, k2 + i1 + 4, 0xff000000, 0xff000000);
-			this.drawGradientRect(j2 - 3, k2 - 3, j2 + k + 3, k2 + i1 + 3, 0xff223366, 0xff000611);
-			this.drawGradientRect(j2 - 4, k2 - 3, j2 - 3, k2 + i1 + 3, 0xff000000, 0xff000000);
-			this.drawGradientRect(j2 + k + 3, k2 - 3, j2 + k + 4, k2 + i1 + 3, 0xff000000, 0xff000000);
-
-			for (int i2 = 0; i2 < p_146283_1_.size(); ++i2)
-			{
-				String s1 = (String)p_146283_1_.get(i2);
-				GlStateManager.translate(0, 0, 300);
-				font.drawString(s1, j2, k2, 0xffffff);
-				GlStateManager.translate(0, 0, -300);
-
-
-				if (i2 == 0)
-				{
-					k2 += 2;
-				}
-
-				k2 += 10;
-			}
-
-			this.zLevel = 0.0F;
-			//itemRender.zLevel = 0.0F;
-			GlStateManager.translate(0, 0, -100);
-            GlStateManager.enableLighting();
-            GlStateManager.enableDepth();
-            RenderHelper.enableStandardItemLighting();
-            GlStateManager.enableRescaleNormal();
-		}
-		*/
-		super.drawHoveringText(p_146283_1_, p_146283_2_, p_146283_3_, font);
 	}
 
 	public void setupMaxInt()
@@ -723,8 +635,6 @@ public class GuiNewMIMScreen extends GuiContainer{
 			if(i > selectedStack.stackSize && recipeSelected == -1)
 				this.stackSize.setText(String.valueOf(selectedStack.stackSize));
 		}
-
-
 	}
 
 	public boolean isCorrectInteger()

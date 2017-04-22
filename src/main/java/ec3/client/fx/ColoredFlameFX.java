@@ -31,6 +31,11 @@ public class ColoredFlameFX extends Particle {
 		this.setParticleTextureIndex(48);
 	}
 
+	@Override
+	public boolean isTransparent() {
+		return true;
+	}
+
 	public ColoredFlameFX(World w, double x,double y, double z, double mX,double mY, double mZ, double r, double g, double b, double scale) 
 	{
 		super(w, x, y, z, mX, mY,mZ);

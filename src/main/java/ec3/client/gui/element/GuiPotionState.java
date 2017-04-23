@@ -11,7 +11,7 @@ import net.minecraft.potion.Potion;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 
-public class GuiPotionState extends GuiTextField{
+public class GuiPotionState extends GuiTextElement{
 	public TilePotionSpreader tile;
 	
 	public GuiPotionState(int i, int j, TileEntity t)

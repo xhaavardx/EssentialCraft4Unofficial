@@ -7,7 +7,7 @@ import ec3.common.tile.TileMagicianTable;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 
-public class GuiProgressBar_MagicianTable extends GuiTextField{
+public class GuiProgressBar_MagicianTable extends GuiTextElement{
 	public TileMagicianTable tile;
 	
 	public GuiProgressBar_MagicianTable(int i, int j, TileEntity table)

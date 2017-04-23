@@ -292,7 +292,7 @@ ec3book.discovery_ec3.disc.overworld.desc=Past remains...
 ec3.page.wind_0.txt=Magical wind. What is it? We all know it, we all had met it at some point in our lives, but what it actually is? Well, the answer is pretty simple!|The wind is somewhat of a living creature, that likes to observe people with unique fate!
 ec3.page.wind_1.txt=This effect you can get randomly just by doing random stuff in the world. It does nothing on it's own. It will only happen if you are bound to the wind!
 ec3.page.wind_2.txt=Wind mages can randomly spawn in your world.
-ec3.page.wind_3.txt=Wind mages occasionaly drop these items. You can right-click them to release the trapped wind, and, therefore, increase your relations with it. Read the Enderstar section to learn how to bind yourself to the wind.
+ec3.page.wind_3.txt=Wind mages occasionally drop these items. You can right-click them to release the trapped wind, and, therefore, increase your relations with it. Read the Enderstar section to learn how to bind yourself to the wind.
 ec3.page.wind_4.txt=Wind archmages rarely drop one of the armour pieces. Each piece of the armorset will increase the amount of wind relation points you gain from any source by 23%
 ec3.page.wind_5.txt=You can drink the Air Potion to increase the chance of random wind-related world events. The potions stack with themselves!
 ec3.page.drops_0.txt=You can use specific items on specific structures to hardness the power of elements of nature into gems! Just create an appropriate structure and throw the required item in the middle. You can throw stacks, it does not matter. There is a 60% chance for elements to condense.
@@ -402,7 +402,7 @@ ec3.page.matrixDestructor_2.txt=So, basically if you want to generate 5000MRU en
 ec3.page.matrixDestructor_3.txt=To use this device just put a Soul Stone into the only slot. It will start consuming the matrix of the person the stone is bound to - so NEVER give your soul stone to ANYONE!
 ec3.page.radiatingChamber_0.txt=Sometimes you need to radiate 2 items with MRU to get something different. Something interesting. Something, that you can use in crafts. And this device serves this exact purpose!
 ec3.page.radiatingChamber_1.txt=This device is able to radiate both blocks you put in the top and in the bottom slots with MRU you supply it with. However, there is one thing to note - it take the BALANCE of the MRU in count.
-ec3.page.radiatingChamber_2.txt=Every recipe in this thing has an upper balance treshhold(▲) and the lower balance treshhold(▼). If the supplied balance is above or below the craft will not work.
+ec3.page.radiatingChamber_2.txt=Every recipe in this thing has an upper balance threshold(▲) and the lower balance threshold(▼). If the supplied balance is above or below the craft will not work.
 ec3.page.radiatingChamber_3.txt=The Balance in the device will be the same, as in the block, that acts as an MRU source for this device.
 ec3.page.radiatingChamber_4.txt=It is worth saying, that while this device works it generates some unstable MRU in the world - it means, that it will create and empower MRUCU around itself. It will also put a nasty potion effect on you.
 ec3.page.miscRadiation_0.txt=You will certainly need some items to use in crafts - and, well, here they are:
@@ -460,12 +460,6 @@ ec3book.discovery_ec3.disc.magnetizingStaff.desc=Your resistance only makes my m
 ec3book.discovery_ec3.disc.spawnerCollector.name=Spawner Collector
 ec3book.discovery_ec3.disc.spawnerCollector.desc=Better than silk touch!
 ec3book.discovery_ec3.disc.lifeStaff.name=Staff Of Life
-
-
-
-
-
-
 ec3book.discovery_ec3.disc.lifeStaff.desc=GreenIsGood
 ec3book.discovery_ec3.disc.holyMace.name=Holy Mace
 ec3book.discovery_ec3.disc.holyMace.desc=How sad it is not a Holy Hand Grenade...
@@ -562,7 +556,7 @@ ec3.page.holyMace_0.txt=This item is a weapon, that has a Smite6 enchantment on 
 ec3.page.emeraldHeart_0.txt=This item restores half of your life upon eating. You are not actually eating it, so it will only consume some MRU.
 ec3.page.magicalWings_0.txt=This item pushes you up in the air while you hold it. As you remove it from your hand you will start descending. Holding shift while it is in your inventory will negate all fall damage and make you slide instead of falling!
 ec3.page.magicalPorkchop_0.txt=At some cost of MRU restores some hunger. Pretty self-explanatory.
-ec3.page.magicalWater_0.txt=This item, at a cost of some MRU will remove ALL status effects from you if you drink it. Can remove Thaumcraft warp effects aswell. Unable to remove radiation, however.
+ec3.page.magicalWater_0.txt=This item, at a cost of some MRU will remove ALL status effects from you if you drink it. Can remove Thaumcraft warp effects as well. Unable to remove radiation, however.
 ec3.page.magicalShield_0.txt=Upon blocking with this item the player will be granted invincibility to all incoming damage at a huge cost of MRU. The upgraded version also damages all enemies of a player in a range of 5 blocks when the block wears off.
 ec3.page.biomeWand_0.txt=We all know, that in Minecraft biomes are permanent and unchangeable. No longer the case! This item can store any kind of biome in it upon right-clicking the ground. After that, you can right-click the ground anywhere else, and the biome at that position will be changed to the stored one! You can reset the biome the wand holds if right-clicking while sneaking.
 ec3.page.chaosFork_0.txt=This weapon only functions if your MRU Matrix is set to Chaos. Upon the first strike this weapon will deal 6 damage. Upon every next hit 2 unblockable damage will get added. Stacks infinitely.
@@ -649,7 +643,7 @@ ec3.page.radiation_2.txt=Different areas seem more poisoned, than the others, so
 ec3.page.radiation_3.txt=There is no cure for radiation, and no way of removing it. If you got affected by it - time is your only panacea. No magical "milk drinking", no "amulets".
 ec3.page.radiation_4.txt=However, some special constructed armor may help you with fighting that radiation. For example, the Magical Hazmat Suit one. Just be sure to wear a full set - otherwise it is as useless as an Iron armor in this world.
 ec3.page.radiation_5.txt=Sometimes the loot in this world contains some baubles - the seem to help with fighting radiation too!
-ec3.page.radiation_6.txt=This world is a dreadful place - sometimes those "events" occurs. Like, it is suddenly so dark, that you can barely see your hand! Or the opposite - it is so bright, that everything, including air is burning! And sometimes the posionous gas comes from the cracks in the ground...
+ec3.page.radiation_6.txt=This world is a dreadful place - sometimes those "events" occurs. Like, it is suddenly so dark, that you can barely see your hand! Or the opposite - it is so bright, that everything, including air is burning! And sometimes the poisonous gas comes from the cracks in the ground...
 ec3.page.radiation_7.txt=Overall - this place is really dangerous, yet it may yield lots of interesting loot!
 ec3.page.loot_0.txt=The Hoanna contains remains of past civilizations - they left some loot! Rarely, in towns or underground you can find chests with different items in them!
 ec3.page.voidStone_0.txt=Different materials you've found in Hoanna allow to create much more advanced blocks, which can almost fully negate MRU flowing through them. You sure can use them for some things!
@@ -662,7 +656,7 @@ ec3.page.magicalFurnace_0.txt=This structure is able to smelt items thrown on to
 ec3.page.magicalFurnace_2.txt=Row 0. A 5x5 layer of Void Stone.
 ec3.page.magicalFurnace_3.txt=Row 1. Row 1 means that it is higher than row 0 by 1 on Y axis.
 ec3.page.magicalFurnace_4.txt=Row 2. Row 2 means that it is higher than row 0 by 2 on Y axis.
-ec3.page.emberForge_0.txt=This structure allows the production of so called "Elemental Swords". Basically, throw some Elemental Focis at the Magic Plating Blocks, and then throw some Embers you found in the dungeons on the Pale Plating blocks, wait for it to be night time... and wait a little bit.
+ec3.page.emberForge_0.txt=This structure allows the production of so called "Elemental Swords". Basically, throw some Elemental Foci at the Magic Plating Blocks, and then throw some Embers you found in the dungeons on the Pale Plating blocks, wait for it to be night time... and wait a little bit.
 ec3.page.emberForge_2.txt=Row 0. A 5x5 layer of Void Stone.
 ec3.page.emberForge_3.txt=Row 1. Row 1 means that it is higher than row 0 by 1 on Y axis.
 ec3.page.emberForge_4.txt=Row 2. Row 2 means that it is higher than row 0 by 2 on Y axis.
@@ -1180,8 +1174,8 @@ tile.essentialcraft.mimScreen.name=Magical Inventory Manager Screen Module
 tile.essentialcraft.mimCrafter.name=Magical Inventory Manager Crafting Module
 tile.essentialcraft.mimEjector.name=Magical Inventory Manager Export Node
 tile.essentialcraft.mimInjector.name=Magical Inventory Manager Import Node
-tile.essentialcraft.mimEjectorP.name=Magical Inventory Manager Persistant Export Node
-tile.essentialcraft.mimInjectorP.name=Magical Inventory Manager Persistant Import Node
+tile.essentialcraft.mimEjectorP.name=Magical Inventory Manager Persistent Export Node
+tile.essentialcraft.mimInjectorP.name=Magical Inventory Manager Persistent Import Node
 tile.essentialcraft.device.name=Magical Device
 tile.essentialcraft.device.replanter.name=Magical Replanter
 tile.essentialcraft.device.itemShuffler.name=Magical Item Shuffler
@@ -1286,7 +1280,7 @@ jei.essentialcraft.recipe.radiatingChamber=Radiating Chamber
 jei.essentialcraft.recipe.windImbue=Wind Imbue
 
 modifier.mrureinforced.name=MRU Reinforced
-modifier.mrureinforced.desc=§oPlaceholder Text§r\nEach level adds a %s chance to use stored MRU instead of durability.
+modifier.mrureinforced.desc=§oRadiated and Reinforced!§r\nEach level adds a %s chance to use stored MRU instead of durability.
 modifier.mrureinforced.extra=MRU Use: %s
 
 ec3book.discovery_ec3.disc.crystalLamp.name=Crystal Lamp
@@ -1294,5 +1288,5 @@ ec3book.discovery_ec3.disc.crystalLamp.desc=Placeholder Text
 ec3book.discovery_ec3.disc.mimic.name=Mimic Block
 ec3book.discovery_ec3.disc.mimic.desc=Placeholder Text
 
-ec3.page.crystalLamp_0.txt=Placeholder Text
+ec3.page.crystalLamp_0.txt=Those crystals are very transparent and can let light through. On its own this discovery is not worth much, but you were able to surround a regular torch with the crystals, fortify the construction with some cobble, and you've got yourself an amazing lamp that, while purely decorative, is a pretty nice light source!
 ec3.page.mimic_0.txt=Placeholder Text

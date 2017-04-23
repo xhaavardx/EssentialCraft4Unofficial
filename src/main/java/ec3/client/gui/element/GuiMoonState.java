@@ -5,7 +5,7 @@ import DummyCore.Utils.MiscUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 
-public class GuiMoonState extends GuiTextField{
+public class GuiMoonState extends GuiTextElement{
 	
 	public GuiMoonState(int i, int j)
 	{

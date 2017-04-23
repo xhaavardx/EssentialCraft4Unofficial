@@ -7,7 +7,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 
-public class GuiRepairState extends GuiTextField{
+public class GuiRepairState extends GuiTextElement{
 	
 	public TileEntity tile;
 	public int slotNum;

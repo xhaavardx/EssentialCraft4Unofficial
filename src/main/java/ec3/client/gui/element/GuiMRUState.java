@@ -4,7 +4,7 @@ import ec3.api.ITEHasMRU;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 
-public class GuiMRUState extends GuiTextField {
+public class GuiMRUState extends GuiTextElement {
 	
 	public ITEHasMRU tile;
 	public int mru;

@@ -39,7 +39,6 @@ public class TileMagicalJukebox extends TileMRUGeneric {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void update() {
-		
 		super.update();
 		ECUtils.manage(this, 0);
 		

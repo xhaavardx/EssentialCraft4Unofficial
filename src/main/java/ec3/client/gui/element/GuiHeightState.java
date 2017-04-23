@@ -11,7 +11,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 
-public class GuiHeightState extends GuiTextField{
+public class GuiHeightState extends GuiTextElement{
 	
 	public TileEntity tile;
 	public int mru;

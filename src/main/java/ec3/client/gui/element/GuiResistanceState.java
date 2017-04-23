@@ -6,7 +6,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 
-public class GuiResistanceState extends GuiTextField{
+public class GuiResistanceState extends GuiTextElement{
 	
 	public TileEntity tile;
 	

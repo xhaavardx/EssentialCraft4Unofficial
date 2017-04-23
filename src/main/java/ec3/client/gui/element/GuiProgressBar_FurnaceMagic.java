@@ -7,7 +7,7 @@ import ec3.common.tile.TileFurnaceMagic;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 
-public class GuiProgressBar_FurnaceMagic extends GuiTextField{
+public class GuiProgressBar_FurnaceMagic extends GuiTextElement{
 	public TileFurnaceMagic tile;
 	
 	public GuiProgressBar_FurnaceMagic(int i, int j, TileEntity table)

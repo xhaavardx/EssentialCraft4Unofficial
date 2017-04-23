@@ -12,7 +12,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 
-public class GuiBoundGemStateDimTransciever extends GuiTextField {
+public class GuiBoundGemStateDimTransciever extends GuiTextElement {
 
 	public TileEntity tile;
 	public int slotNum;

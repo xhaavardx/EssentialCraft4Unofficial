@@ -8,15 +8,18 @@ import DummyCore.Utils.MathUtils;
 import DummyCore.Utils.MiscUtils;
 import ec3.api.ApiCore;
 import ec3.common.item.ItemCollectedMonsterSpawner;
+import ec3.common.item.ItemsCore;
 import ec3.utils.common.ECUtils;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockMobSpawner;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.IEntityLivingData;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldEntitySpawner;
@@ -119,6 +122,15 @@ public class TileDarknessObelisk extends TileMRUGeneric {
 		}
 		ECUtils.manage(this, 0);
 		super.update();
+		
+		//The following code is to make the secret record acquirable
+		List<EntityPlayer> playerlist = getWorld().getEntitiesWithinAABB(EntityPlayer.class, new AxisAlignedBB(pos).expandXyz(8));
+		if(!playerlist.isEmpty()) {
+			if(world.rand.nextFloat() < 0.0001F) {
+				EntityItem ei = new EntityItem(world, pos.getX()+0.5, pos.getY()+1, pos.getZ()+0.5, new ItemStack(ItemsCore.secret,1,0));
+				getWorld().spawnEntity(ei);
+			}
+		}
 	}
 
 	public static void setupConfig(Configuration cfg) {

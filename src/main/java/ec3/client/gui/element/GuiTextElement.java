@@ -3,21 +3,19 @@ package ec3.client.gui.element;
 import DummyCore.Client.GuiElement;
 import net.minecraft.util.ResourceLocation;
 
-public abstract class GuiTextField extends GuiElement{
+public abstract class GuiTextElement extends GuiElement {
 	private ResourceLocation rec = new ResourceLocation("essentialcraft","textures/gui/slot_common.png");
 
 	public int x;
 	public int y;
 
-	public GuiTextField(int i, int j)
-	{
+	public GuiTextElement(int i, int j) {
 		x = i;
 		y = j;
 	}
 
 	@Override
 	public ResourceLocation getElementTexture() {
-		// TODO Auto-generated method stub
 		return rec;
 	}
 

@@ -11,7 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 
-public class GuiCrystalState extends GuiTextField{
+public class GuiCrystalState extends GuiTextElement{
 	public TileCrystalController tile;
 	
 	public GuiCrystalState(int i, int j, TileEntity t)

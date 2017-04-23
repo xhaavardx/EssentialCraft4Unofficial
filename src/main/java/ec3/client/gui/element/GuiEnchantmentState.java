@@ -7,7 +7,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 
-public class GuiEnchantmentState extends GuiTextField{
+public class GuiEnchantmentState extends GuiTextElement{
 
 	public TileEntity tile;
 	public int slotNum;
@@ -21,7 +21,6 @@ public class GuiEnchantmentState extends GuiTextField{
 
 	@Override
 	public ResourceLocation getElementTexture() {
-		// TODO Auto-generated method stub
 		return super.getElementTexture();
 	}
 
@@ -41,13 +40,11 @@ public class GuiEnchantmentState extends GuiTextField{
 
 	@Override
 	public int getX() {
-		// TODO Auto-generated method stub
 		return super.getX();
 	}
 
 	@Override
 	public int getY() {
-		// TODO Auto-generated method stub
 		return super.getY();
 	}
 

@@ -25,7 +25,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 
-public class GuiMRUGenerated extends GuiTextField{
+public class GuiMRUGenerated extends GuiTextElement{
 
 	public TileEntity tile;
 	public String tileValue;

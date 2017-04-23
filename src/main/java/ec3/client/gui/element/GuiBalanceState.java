@@ -5,7 +5,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 
-public class GuiBalanceState extends GuiTextField{
+public class GuiBalanceState extends GuiTextElement{
 
 	public TileEntity tile;
 

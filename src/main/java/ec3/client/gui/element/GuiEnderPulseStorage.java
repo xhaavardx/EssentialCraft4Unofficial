@@ -5,7 +5,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.ResourceLocation;
 
-public class GuiEnderPulseStorage extends GuiTextField{
+public class GuiEnderPulseStorage extends GuiTextElement{
 	
 	public TileEntity tile;
 	private ResourceLocation rec = new ResourceLocation("essentialcraft","textures/gui/mithrilineFurnaceElements.png");

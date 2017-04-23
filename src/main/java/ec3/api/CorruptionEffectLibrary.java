@@ -13,7 +13,7 @@ public class CorruptionEffectLibrary {
 			allPossibleEffects.add(effect);
 	}
 	
-	public static ArrayList<ICorruptionEffect> findSutableEffects(int maxCost)
+	public static ArrayList<ICorruptionEffect> findSuitableEffects(int maxCost)
 	{
 		ArrayList<ICorruptionEffect> retLst = new ArrayList<ICorruptionEffect>();
 		

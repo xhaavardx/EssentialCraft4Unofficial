@@ -68,7 +68,7 @@ public class RenderMRUPresence extends Render<EntityMRUPresence> {
 
 		GlStateManager.pushMatrix();
 
-		GlStateManager.depthMask(false);
+		GlStateManager.depthFunc(GL11.GL_ALWAYS);
 		GlStateManager.enableBlend();
 		GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
 		GlStateManager.disableAlpha();
@@ -84,7 +84,7 @@ public class RenderMRUPresence extends Render<EntityMRUPresence> {
 			GlStateManager.rotate(var6.nextFloat() * 360.0F, 1.0F, 0.0F, 0.0F);
 			GlStateManager.rotate(var6.nextFloat() * 360.0F, 0.0F, 1.0F, 0.0F);
 			GlStateManager.rotate(var6.nextFloat() * 360.0F + var4 * 90.0F, 0.0F, 0.0F, 1.0F);
-			GlStateManager.color(colorRRender, colorGRender, colorBRender, 1);
+			GlStateManager.color(colorRRender, colorGRender, colorBRender, 1F);
 			float var8 = var6.nextFloat() * 20F + 5F;
 			float var9 = var6.nextFloat() * 2F + 1F;
 			GlStateManager.glBegin(GL11.GL_TRIANGLE_FAN);
@@ -98,7 +98,7 @@ public class RenderMRUPresence extends Render<EntityMRUPresence> {
 
 		GlStateManager.disableBlend();
 		GlStateManager.enableAlpha();
-		GlStateManager.depthMask(true);
+		GlStateManager.depthFunc(GL11.GL_LEQUAL);
 		GlStateManager.color(1, 1, 1, 1);
 		GlStateManager.popMatrix();
 	}

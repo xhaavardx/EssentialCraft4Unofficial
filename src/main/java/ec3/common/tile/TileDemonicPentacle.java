@@ -148,7 +148,7 @@ public class TileDemonicPentacle extends TileEntity implements ITickable {
 		tier = -1;
 		
 		if(
-				w.getBlockState(cp) == BlocksCore.voidStone &&
+				w.getBlockState(cp).getBlock() == BlocksCore.voidStone &&
 				w.getBlockState(cp.add(2, 0, 0)).getBlock() == BlocksCore.voidStone &&	
 				w.getBlockState(cp.add(-2, 0, 0)).getBlock() == BlocksCore.voidStone &&
 				w.getBlockState(cp.add(0, 0, -2)).getBlock() == BlocksCore.voidStone &&
@@ -189,7 +189,7 @@ public class TileDemonicPentacle extends TileEntity implements ITickable {
 				w.getBlockState(cp.add(2, 0, -3)).getBlock() == BlocksCore.platingPale &&
 				w.getBlockState(cp.add(-2, 0, 3)).getBlock() == BlocksCore.platingPale &&
 				w.getBlockState(cp.add(-2, 0, -3)).getBlock() == BlocksCore.platingPale &&
-				w.getBlockState(cp.add(3, 0, 2)).getBlock() == BlocksCore.mithrilineCrystal &&
+				w.getBlockState(cp.add(3, 1, 2)).getBlock() == BlocksCore.mithrilineCrystal &&
 				w.getBlockState(cp.add(3, 1, -2)).getBlock() == BlocksCore.mithrilineCrystal &&
 				w.getBlockState(cp.add(-3, 1, 2)).getBlock() == BlocksCore.mithrilineCrystal &&
 				w.getBlockState(cp.add(-3, 1, -2)).getBlock() == BlocksCore.mithrilineCrystal &&

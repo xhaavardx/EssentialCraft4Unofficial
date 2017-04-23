@@ -2,7 +2,13 @@ package ec3.common.tile;
 
 import java.util.List;
 
-import net.minecraftforge.fml.common.eventhandler.Event.Result;
+import DummyCore.Utils.DataStorage;
+import DummyCore.Utils.DummyData;
+import DummyCore.Utils.MathUtils;
+import DummyCore.Utils.MiscUtils;
+import ec3.api.ApiCore;
+import ec3.common.item.ItemCollectedMonsterSpawner;
+import ec3.utils.common.ECUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockMobSpawner;
 import net.minecraft.entity.Entity;
@@ -10,18 +16,15 @@ import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.IEntityLivingData;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.WorldEntitySpawner;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldEntitySpawner;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.event.ForgeEventFactory;
-import DummyCore.Utils.DataStorage;
-import DummyCore.Utils.DummyData;
-import DummyCore.Utils.MathUtils;
-import ec3.api.ApiCore;
-import ec3.utils.common.ECUtils;
+import net.minecraftforge.fml.common.eventhandler.Event.Result;
 
 public class TileDarknessObelisk extends TileMRUGeneric {
 	public static float cfgMaxMRU = ApiCore.DEVICE_MAX_MRU_GENERIC;
@@ -32,18 +35,18 @@ public class TileDarknessObelisk extends TileMRUGeneric {
 	public static int mobSpanwerDelay = 100;
 	public static boolean enableMobSpawners = true;
 	public static int mobSpawnerRadius = 3, worldSpawnerRadius = 8;
-	
+
 	public TileDarknessObelisk() {
 		super();
 		maxMRU = (int)cfgMaxMRU;
 		setSlotsNum(2);
 	}
-	
+
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public void update() {
 		if(getWorld().isBlockIndirectlyGettingPowered(pos) == 0) {
-			if(getStackInSlot(1) == null || !(Block.getBlockFromItem(getStackInSlot(1).getItem()) instanceof BlockMobSpawner)) {
+			if(getStackInSlot(1) == null || !(getStackInSlot(1).getItem() instanceof ItemCollectedMonsterSpawner)) {
 				Biome biome = getWorld().getBiome(pos);
 				List l = biome.getSpawnableList(EnumCreatureType.MONSTER);
 				if(l != null && !l.isEmpty() && !getWorld().isRemote && getWorld().rand.nextFloat() < worldSpawnChance && getMRU() > mruUsage) {
@@ -58,7 +61,7 @@ public class TileDarknessObelisk extends TileMRUGeneric {
 						spawnlistentry = wrld.getSpawnListEntryForTypeAt(EnumCreatureType.MONSTER, rndPos);
 						if(spawnlistentry != null) {
 							EntityLiving entityliving;
-							
+
 							try {
 								entityliving = (EntityLiving)spawnlistentry.entityClass.getConstructor(new Class[] {World.class}).newInstance(new Object[] {wrld});
 								entityliving.setLocationAndAngles((double)rndOffsetX+0.5F, (double)rndOffsetY, (double)rndOffsetZ+0.5D, wrld.rand.nextFloat()*360.0F, 0.0F);
@@ -81,37 +84,43 @@ public class TileDarknessObelisk extends TileMRUGeneric {
 					}
 				}
 			}
-			else if(Block.getBlockFromItem(getStackInSlot(1).getItem()) instanceof BlockMobSpawner && enableMobSpawners) {
+			else if(getStackInSlot(1).getItem() instanceof ItemCollectedMonsterSpawner && enableMobSpawners) {
 				if(innerRotation >= mobSpanwerDelay && getMRU() > mruUsage) {
-					innerRotation = 0;
-					int metadata = getStackInSlot(1).getItemDamage();
-					Entity base = EntityList.createEntityByID(metadata, getWorld());
-					if(base instanceof EntityLiving) {
-						EntityLiving entityliving = (EntityLiving) base;
-						int rndOffsetX = (int)(pos.getX() + MathUtils.randomDouble(getWorld().rand)*mobSpawnerRadius);
-						int rndOffsetY = (int)(pos.getY() + MathUtils.randomDouble(getWorld().rand));
-						int rndOffsetZ = (int)(pos.getZ() + MathUtils.randomDouble(getWorld().rand)*mobSpawnerRadius);
-						entityliving.setLocationAndAngles(rndOffsetX+0.5D, rndOffsetY, rndOffsetZ+0.5D, getWorld().rand.nextFloat()*360.0F, 0.0F);
-						if(entityliving.getCanSpawnHere()) {
-							if(!getWorld().isRemote)
-								getWorld().spawnEntity(entityliving);
-							
-							getWorld().playEvent(2004, pos, 0);
-							
-							if(entityliving != null)
-								entityliving.spawnExplosionParticle();
-							setMRU(getMRU() - mruUsage);
-							if(generatesCorruption)
-								ECUtils.increaseCorruptionAt(getWorld(), pos.getX(), pos.getY(), pos.getZ(), getWorld().rand.nextInt(genCorruption));
-						}
-					}		
+					NBTTagCompound tag = MiscUtils.getStackTag(getStackInSlot(1));
+					if(tag.hasKey("monsterSpawner")) {
+						NBTTagCompound spTag = tag.getCompoundTag("monsterSpawner");
+						NBTTagCompound mobTag = spTag.getCompoundTag("SpawnData");
+						String id = mobTag.getString("id");
+						innerRotation = 0;
+						int metadata = getStackInSlot(1).getItemDamage();
+						Entity base = EntityList.createEntityByName(id, getWorld());
+						if(base != null && base instanceof EntityLiving) {
+							EntityLiving entityliving = (EntityLiving) base;
+							int rndOffsetX = (int)(pos.getX() + MathUtils.randomDouble(getWorld().rand)*mobSpawnerRadius);
+							int rndOffsetY = (int)(pos.getY() + MathUtils.randomDouble(getWorld().rand));
+							int rndOffsetZ = (int)(pos.getZ() + MathUtils.randomDouble(getWorld().rand)*mobSpawnerRadius);
+							entityliving.setLocationAndAngles(rndOffsetX+0.5D, rndOffsetY, rndOffsetZ+0.5D, getWorld().rand.nextFloat()*360.0F, 0.0F);
+							if(entityliving.getCanSpawnHere()) {
+								if(!getWorld().isRemote)
+									getWorld().spawnEntity(entityliving);
+
+								getWorld().playEvent(2004, pos, 0);
+
+								if(entityliving != null)
+									entityliving.spawnExplosionParticle();
+								setMRU(getMRU() - mruUsage);
+								if(generatesCorruption)
+									ECUtils.increaseCorruptionAt(getWorld(), pos.getX(), pos.getY(), pos.getZ(), getWorld().rand.nextInt(genCorruption));
+							}
+						}		
+					}
 				}
 			}
 		}
 		ECUtils.manage(this, 0);
 		super.update();
 	}
-	
+
 	public static void setupConfig(Configuration cfg) {
 		try {
 			cfg.load();
@@ -127,12 +136,12 @@ public class TileDarknessObelisk extends TileMRUGeneric {
 					"Radius for no spawner:8"
 			}, "");
 			String dataString = "";
-			
+
 			for(int i = 0; i < cfgArrayString.length; ++i)
 				dataString += "||" + cfgArrayString[i];
-			
+
 			DummyData[] data = DataStorage.parseData(dataString);
-			
+
 			mruUsage = Integer.parseInt(data[1].fieldValue);
 			mobSpanwerDelay = Integer.parseInt(data[2].fieldValue);
 			cfgMaxMRU = Float.parseFloat(data[0].fieldValue);
@@ -142,14 +151,14 @@ public class TileDarknessObelisk extends TileMRUGeneric {
 			enableMobSpawners = Boolean.parseBoolean(data[6].fieldValue);
 			mobSpawnerRadius = Integer.parseInt(data[7].fieldValue);
 			worldSpawnerRadius = Integer.parseInt(data[8].fieldValue);
-			
+
 			cfg.save();
 		}
 		catch(Exception e) {
 			return;
 		}
 	}
-	
+
 	@Override
 	public int[] getOutputSlots() {
 		return new int[0];

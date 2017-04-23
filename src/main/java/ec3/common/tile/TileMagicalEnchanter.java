@@ -193,7 +193,7 @@ public class TileMagicalEnchanter extends TileMRUGeneric {
 			for(int y = 0; y <= 2; ++y) {
 				for(int z = -2; z <= 2; ++z) {
 					if(x != 0 || y != 0 || z != 0) {
-						l += ForgeHooks.getEnchantPower(getWorld(), pos);
+						l += ForgeHooks.getEnchantPower(getWorld(), pos.add(x, y, z));
 					}
 				}
 			}

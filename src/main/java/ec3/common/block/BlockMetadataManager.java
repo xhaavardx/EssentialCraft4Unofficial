@@ -26,7 +26,7 @@ public class BlockMetadataManager extends Block implements IModelRegisterer {
 		setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.DOWN));
 	}
 
-	public boolean canProvidePower()
+	public boolean canProvidePower(IBlockState s)
 	{
 		return true;
 	}
@@ -46,13 +46,13 @@ public class BlockMetadataManager extends Block implements IModelRegisterer {
 
 	public boolean canConnectRedstone(IBlockState s, IBlockAccess world, BlockPos p, EnumFacing side)
 	{
-		return side != s.getValue(FACING);
+		return side != s.getValue(FACING).getOpposite();
 	}
 
 	public int getWeakPower(IBlockState s, IBlockAccess w, BlockPos p, EnumFacing side)
 	{
 		EnumFacing d = s.getValue(FACING);
-		return w.getBlockState(p.offset(d)).getBlock().getMetaFromState(w.getBlockState(p.offset(d)));
+		return side != d.getOpposite()? w.getBlockState(p.offset(d)).getBlock().getMetaFromState(w.getBlockState(p.offset(d))) : 0;
 	}
 
 	@Override

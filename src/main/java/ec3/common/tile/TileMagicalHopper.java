@@ -6,8 +6,10 @@ import DummyCore.Utils.DataStorage;
 import DummyCore.Utils.DummyData;
 import ec3.common.inventory.InventoryMagicFilter;
 import ec3.common.item.ItemFilter;
+import ec3.common.item.ItemsCore;
 import ec3.utils.common.ECUtils;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.EnumFacing;
@@ -28,7 +30,8 @@ public class TileMagicalHopper extends TileMRUGeneric {
 	public TileMagicalHopper() {
 		super();
 		setSlotsNum(1);
-		setMaxMRU(0);	
+		setMaxMRU(0);
+		slot0IsBoundGem = false;
 	}
 	
 	@Override
@@ -97,6 +100,11 @@ public class TileMagicalHopper extends TileMRUGeneric {
 		}
 	}
 	
+	@Override
+	public boolean isItemValidForSlot(int p_94041_1_, ItemStack p_94041_2_) {
+		return p_94041_2_.getItem() == ItemsCore.filter;
+	}
+
 	@Override
 	public int[] getOutputSlots() {
 		return new int[0];

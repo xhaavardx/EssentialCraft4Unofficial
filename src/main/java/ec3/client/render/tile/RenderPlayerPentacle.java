@@ -62,7 +62,7 @@ public class RenderPlayerPentacle extends TileEntitySpecialRenderer
 		}
 
 		if(p.tier != -1)
-			GlStateManager.rotate(tile.getWorld().getWorldTime()%360, 0, 1, 0);
+			GlStateManager.rotate(tile.getWorld().getTotalWorldTime()%360, 0, 1, 0);
 		model.renderPart("pPlane1");
 		GlStateManager.popMatrix();
 	}

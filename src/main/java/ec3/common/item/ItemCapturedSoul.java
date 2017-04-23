@@ -26,11 +26,11 @@ public class ItemCapturedSoul extends Item implements IModelRegisterer {
 		}
 	}
 
-	public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean par4) {
-		super.addInformation(stack, player, list, par4);
+	@Override
+	public String getItemStackDisplayName(ItemStack stack) {
 		Class<? extends Entity> e = stack.getItemDamage() < DemonTrade.allMobs.size() ? DemonTrade.allMobs.get(stack.getItemDamage()) : null;
-		String s = "entity." + EntityList.CLASS_TO_NAME.get(e) + ".name";
-		list.add(I18n.translateToLocal(s));
+		String s = e != null ? "entity." + EntityList.CLASS_TO_NAME.get(e) + ".name" : "";
+		return super.getItemStackDisplayName(stack) + " - " + I18n.translateToLocal(s);
 	}
 
 	@Override

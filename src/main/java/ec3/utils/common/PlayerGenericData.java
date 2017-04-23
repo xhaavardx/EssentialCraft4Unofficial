@@ -107,7 +107,6 @@ public class PlayerGenericData implements IPlayerData {
 
 	@Override
 	public NBTTagCompound writeToNBTTagCompound(NBTTagCompound tag) {
-
 		tag.setInteger("damage", damage);
 		tag.setInteger("radiation", radiation);
 		tag.setInteger("wind", wind);

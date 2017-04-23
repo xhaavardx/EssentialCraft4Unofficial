@@ -103,9 +103,9 @@ public class ECUtils {
 				int x = ticket.getModData().getInteger("xCoord");
 				int y = ticket.getModData().getInteger("yCoord");
 				int z = ticket.getModData().getInteger("zCoord");
-				
+
 				TileEntity tileEntity = world.getTileEntity(new BlockPos(x, y, z));
-				
+
 				if(tileEntity instanceof TileMRUChunkLoader) {
 					((TileMRUChunkLoader)tileEntity).forceChunks(ticket);
 				}
@@ -455,15 +455,14 @@ public class ECUtils {
 	public static void calculateAndAddPE(EntityPlayer player, Potion potion, int index, int index2)
 	{
 		boolean hasEffect = player.getActivePotionEffect(potion) != null;
-		if(hasEffect)
-		{
+		if(hasEffect) {
 			int currentDuration = player.getActivePotionEffect(potion).getDuration();
 			int newDuration = currentDuration+index2;
 			int newModifier = currentDuration/index;
 			player.removePotionEffect(potion);
 			player.addPotionEffect(new PotionEffect(potion,newDuration,newModifier,true,true));
-		}else
-		{
+		}
+		else {
 			player.addPotionEffect(new PotionEffect(potion,index2,0,true,true));
 		}
 	}

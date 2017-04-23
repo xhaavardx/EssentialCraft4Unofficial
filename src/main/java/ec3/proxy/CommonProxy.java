@@ -44,6 +44,7 @@ import ec3.common.inventory.ContainerMoonWell;
 import ec3.common.inventory.ContainerNewMIM;
 import ec3.common.inventory.ContainerNewMIMScreen;
 import ec3.common.inventory.ContainerNewMIMSimpleNode;
+import ec3.common.inventory.ContainerPlayerPentacle;
 import ec3.common.inventory.ContainerPotionSpreader;
 import ec3.common.inventory.ContainerRadiatingChamber;
 import ec3.common.inventory.ContainerRayTower;
@@ -93,6 +94,7 @@ import ec3.common.tile.TileNewMIMExportNode;
 import ec3.common.tile.TileNewMIMImportNode;
 import ec3.common.tile.TileNewMIMInventoryStorage;
 import ec3.common.tile.TileNewMIMScreen;
+import ec3.common.tile.TilePlayerPentacle;
 import ec3.common.tile.TilePotionSpreader;
 import ec3.common.tile.TileRadiatingChamber;
 import ec3.common.tile.TileRayTower;
@@ -330,6 +332,10 @@ public class CommonProxy implements IGuiHandler {
 			if(tile instanceof TileMRUDimensionalTransciever)
 			{
 				return new ContainerMRUDimTransciever(player.inventory, tile);
+			}
+			if(tile instanceof TilePlayerPentacle)
+			{
+				return new ContainerPlayerPentacle();
 			}
 		}
 		if(ID == Config.guiID[1])

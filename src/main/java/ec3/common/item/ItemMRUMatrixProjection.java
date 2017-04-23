@@ -45,7 +45,7 @@ public class ItemMRUMatrixProjection extends Item implements IModelRegisterer {
 		if(par1ItemStack.getTagCompound() != null)
 		{
 			String username = par1ItemStack.getTagCompound().getString("playerName");
-			if(username.equals(par3EntityPlayer.getGameProfile().getId()))
+			if(username.equals(MiscUtils.getUUIDFromPlayer(par3EntityPlayer).toString()))
 				par3EntityPlayer.setActiveHand(hand);
 		}
 		if(par1ItemStack.getTagCompound() == null && !par2World.isRemote && !par3EntityPlayer.isSneaking())

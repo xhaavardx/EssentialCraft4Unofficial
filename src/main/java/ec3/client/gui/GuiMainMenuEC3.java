@@ -120,8 +120,7 @@ public class GuiMainMenuEC3 extends GuiMainMenu implements IMainMenu {
 	/**
 	 * Draws the main menu panorama
 	 */
-	private void drawPanorama(int p_73970_1_, int p_73970_2_, float p_73970_3_)
-	{
+	private void drawPanorama(int p_73970_1_, int p_73970_2_, float p_73970_3_) {
 		Tessellator tessellator = Tessellator.getInstance();
 		VertexBuffer vertexbuffer = tessellator.getBuffer();
 		GlStateManager.matrixMode(5889);
@@ -133,7 +132,6 @@ public class GuiMainMenuEC3 extends GuiMainMenu implements IMainMenu {
 		GlStateManager.loadIdentity();
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		GlStateManager.rotate(180.0F, 1.0F, 0.0F, 0.0F);
-		GlStateManager.rotate(90.0F, 0.0F, 0.0F, 1.0F);
 		GlStateManager.enableBlend();
 		GlStateManager.disableAlpha();
 		GlStateManager.disableCull();
@@ -217,56 +215,54 @@ public class GuiMainMenuEC3 extends GuiMainMenu implements IMainMenu {
 		GlStateManager.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
 		GlStateManager.glCopyTexSubImage2D(GL11.GL_TEXTURE_2D, 0, 0, 0, 0, 0, 256, 256);
 		GlStateManager.enableBlend();
-		OpenGlHelper.glBlendFunc(770, 771, 1, 0);
+		GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
 		GlStateManager.colorMask(true, true, true, false);
 		TessellatorWrapper tessellator = TessellatorWrapper.getInstance();
+		VertexBuffer vertexbuffer = Tessellator.getInstance().getBuffer();
+		tessellator.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
 		GlStateManager.disableAlpha();
-		byte b0 = 3;
 
-		for (int i = 0; i < b0; ++i)
-		{
-			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F / (float)(i + 1));
-			tessellator.startDrawingQuadsWithColor();
-			int j = this.width;
-			int k = this.height;
-			float f1 = (float)(i - b0 / 2) / 256.0F;
-			tessellator.addVertexWithUV((double)j, (double)k, (double)this.zLevel, (double)(0.0F + f1), 1.0D);
-			tessellator.addVertexWithUV((double)j, 0.0D, (double)this.zLevel, (double)(1.0F + f1), 1.0D);
-			tessellator.addVertexWithUV(0.0D, 0.0D, (double)this.zLevel, (double)(1.0F + f1), 0.0D);
-			tessellator.addVertexWithUV(0.0D, (double)k, (double)this.zLevel, (double)(0.0F + f1), 0.0D);
-			tessellator.draw();
-			GlStateManager.color(1F, 1F, 1F, 1F);
+		for(int i = 0; i < 3; ++i) {
+			float f = 1.0F / (float)(i + 1);
+			int k = this.width;
+			int l = this.height;
+			float f1 = (float)(i - 1) / 256.0F;
+			vertexbuffer.pos((double)k, (double)l, (double)this.zLevel).tex((double)(0.0F + f1), 1.0D).color(1.0F, 1.0F, 1.0F, f).endVertex();
+			vertexbuffer.pos((double)k, 0.0D, (double)this.zLevel).tex((double)(1.0F + f1), 1.0D).color(1.0F, 1.0F, 1.0F, f).endVertex();
+			vertexbuffer.pos(0.0D, 0.0D, (double)this.zLevel).tex((double)(1.0F + f1), 0.0D).color(1.0F, 1.0F, 1.0F, f).endVertex();
+			vertexbuffer.pos(0.0D, (double)l, (double)this.zLevel).tex((double)(0.0F + f1), 0.0D).color(1.0F, 1.0F, 1.0F, f).endVertex();
 		}
 
+		tessellator.draw();
 		GlStateManager.enableAlpha();
 		GlStateManager.colorMask(true, true, true, true);
 	}
 
-	private void renderSkybox(int p_73971_1_, int p_73971_2_, float p_73971_3_)
-	{
+	private void renderSkybox(int mouseX, int mouseY, float partialTicks) {
 		this.mc.getFramebuffer().unbindFramebuffer();
 		GlStateManager.viewport(0, 0, 256, 256);
-		this.drawPanorama(p_73971_1_, p_73971_2_, p_73971_3_);
-		this.rotateAndBlurSkybox(p_73971_3_);
-		this.rotateAndBlurSkybox(p_73971_3_);
-		this.rotateAndBlurSkybox(p_73971_3_);
-		this.rotateAndBlurSkybox(p_73971_3_);
-		this.rotateAndBlurSkybox(p_73971_3_);
-		this.rotateAndBlurSkybox(p_73971_3_);
-		this.rotateAndBlurSkybox(p_73971_3_);
+		this.drawPanorama(mouseX, mouseY, partialTicks);
+		this.rotateAndBlurSkybox(partialTicks);
+		this.rotateAndBlurSkybox(partialTicks);
+		this.rotateAndBlurSkybox(partialTicks);
+		this.rotateAndBlurSkybox(partialTicks);
+		this.rotateAndBlurSkybox(partialTicks);
+		this.rotateAndBlurSkybox(partialTicks);
+		this.rotateAndBlurSkybox(partialTicks);
 		this.mc.getFramebuffer().bindFramebuffer(true);
 		GlStateManager.viewport(0, 0, this.mc.displayWidth, this.mc.displayHeight);
-		TessellatorWrapper tessellator = TessellatorWrapper.getInstance();
-		tessellator.startDrawingQuads();
-		float f1 = this.width > this.height ? 120.0F / (float)this.width : 120.0F / (float)this.height;
-		float f2 = (float)this.height * f1 / 256.0F;
-		float f3 = (float)this.width * f1 / 256.0F;
-		int k = this.width;
-		int l = this.height;
-		tessellator.addVertexWithUV(0.0D, (double)l, (double)this.zLevel, (double)(0.5F - f2), (double)(0.5F + f3));
-		tessellator.addVertexWithUV((double)k, (double)l, (double)this.zLevel, (double)(0.5F - f2), (double)(0.5F - f3));
-		tessellator.addVertexWithUV((double)k, 0.0D, (double)this.zLevel, (double)(0.5F + f2), (double)(0.5F - f3));
-		tessellator.addVertexWithUV(0.0D, 0.0D, (double)this.zLevel, (double)(0.5F + f2), (double)(0.5F + f3));
+		float f = 120.0F / (float)(this.width > this.height ? this.width : this.height);
+		float f1 = (float)this.height * f / 256.0F;
+		float f2 = (float)this.width * f / 256.0F;
+		int i = this.width;
+		int j = this.height;
+		Tessellator tessellator = Tessellator.getInstance();
+		VertexBuffer vertexbuffer = tessellator.getBuffer();
+		vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
+		vertexbuffer.pos(0.0D, (double)j, (double)this.zLevel).tex((double)(0.5F - f1), (double)(0.5F + f2)).color(1.0F, 1.0F, 1.0F, 1.0F).endVertex();
+		vertexbuffer.pos((double)i, (double)j, (double)this.zLevel).tex((double)(0.5F - f1), (double)(0.5F - f2)).color(1.0F, 1.0F, 1.0F, 1.0F).endVertex();
+		vertexbuffer.pos((double)i, 0.0D, (double)this.zLevel).tex((double)(0.5F + f1), (double)(0.5F - f2)).color(1.0F, 1.0F, 1.0F, 1.0F).endVertex();
+		vertexbuffer.pos(0.0D, 0.0D, (double)this.zLevel).tex((double)(0.5F + f1), (double)(0.5F + f2)).color(1.0F, 1.0F, 1.0F, 1.0F).endVertex();
 		tessellator.draw();
 	}
 

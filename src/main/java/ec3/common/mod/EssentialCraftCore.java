@@ -3,21 +3,7 @@ package ec3.common.mod;
 
 import java.util.Arrays;
 
-import net.minecraft.command.CommandHandler;
-import net.minecraft.server.MinecraftServer;
 import DummyCore.Core.Core;
-import net.minecraftforge.common.ForgeChunkManager;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.Mod.EventHandler;
-import net.minecraftforge.fml.common.Mod.Instance;
-import net.minecraftforge.fml.common.ModMetadata;
-import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
-import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import ec3.common.block.BlocksCore;
 import ec3.common.entity.EntitiesCore;
 import ec3.common.item.ItemsCore;
@@ -44,7 +30,7 @@ import ec3.integration.versionChecker.Check;
 import ec3.integration.waila.WailaInitializer;
 import ec3.proxy.CommonProxy;
 import ec3.utils.cfg.Config;
-import ec3.utils.commands.CommandClearCorruptionEffects;
+import ec3.utils.commands.CommandCorruptionEffect;
 import ec3.utils.commands.CommandCreateMRUCU;
 import ec3.utils.commands.CommandHoannaEvent;
 import ec3.utils.commands.CommandSetBalanceInMRUCU;
@@ -52,6 +38,18 @@ import ec3.utils.commands.CommandSetMRUInMRUCU;
 import ec3.utils.commands.CommandSetUBMRU;
 import ec3.utils.common.ECEventHandler;
 import ec3.utils.common.ECUtils;
+import net.minecraftforge.common.ForgeChunkManager;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.Mod.EventHandler;
+import net.minecraftforge.fml.common.Mod.Instance;
+import net.minecraftforge.fml.common.ModMetadata;
+import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
+import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 @Mod(
 		modid = EssentialCraftCore.modid,
@@ -81,8 +79,8 @@ public class EssentialCraftCore {
 		event.registerServerCommand(new CommandSetBalanceInMRUCU());
 		event.registerServerCommand(new CommandCreateMRUCU());
 		event.registerServerCommand(new CommandSetUBMRU());
-		event.registerServerCommand(new CommandClearCorruptionEffects());
 		event.registerServerCommand(new CommandHoannaEvent());
+		event.registerServerCommand(new CommandCorruptionEffect());
 	}
 
 	@EventHandler

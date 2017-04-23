@@ -42,7 +42,7 @@ public class GuiDemon extends GuiCommon{
         if(demon != null && demon.desiredItem != null)
         {
         	GlStateManager.translate(0, 0, 100);
-        	this.drawItemStack(demon.desiredItem, k + 79, l + 29, demon.desiredItem.stackSize+"");
+        	this.drawItemStack(demon.desiredItem, k + 80, l + 30, demon.desiredItem.stackSize+"");
         	this.fontRendererObj.drawString(demon.desiredItem.getDisplayName(), k + 5, l + 59, 0xffffff);
         	GlStateManager.translate(0, 0, -100);
         }

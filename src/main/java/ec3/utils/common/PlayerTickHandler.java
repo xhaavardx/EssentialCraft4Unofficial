@@ -336,7 +336,7 @@ public class PlayerTickHandler {
 			if(f != null)
 			{
 				String fPath = f.getAbsolutePath();
-				File saveFile = new File(fPath+"//"+e.getName()+".ecdat");
+				File saveFile = new File(fPath+"//"+MiscUtils.getUUIDFromPlayer(e)+".ecdat");
 				if(saveFile.isDirectory())
 				{
 					//???
@@ -385,7 +385,7 @@ public class PlayerTickHandler {
 			if(f != null)
 			{
 				String fPath = f.getAbsolutePath();
-				File saveFile = new File(fPath+"//"+e.getName()+".ecdat");
+				File saveFile = new File(fPath+"//"+MiscUtils.getUUIDFromPlayer(e)+".ecdat");
 				if(saveFile.isDirectory())
 				{
 					//???
@@ -598,7 +598,7 @@ public class PlayerTickHandler {
 					if(e.getEntityWorld().rand.nextInt(36000) <= data.getOverhaulDamage()) {
 						ArrayList<ICorruptionEffect> possibleEffects = new ArrayList<ICorruptionEffect>();
 						ArrayList<ICorruptionEffect> playerEffects = ArrayList.class.cast(data.getEffects());
-						ArrayList<ICorruptionEffect> costSelected = CorruptionEffectLibrary.findSutableEffects(data.getOverhaulDamage());
+						ArrayList<ICorruptionEffect> costSelected = CorruptionEffectLibrary.findSuitableEffects(data.getOverhaulDamage());
 						for(int i = 0; i < costSelected.size(); ++i) {
 							ICorruptionEffect selected = costSelected.get(i);
 							boolean canAdd = selected != null;

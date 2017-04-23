@@ -182,7 +182,7 @@ public class TilePlayerPentacle extends TileEntity implements ITickable {
 				w.getBlockState(cp.add(1, 1, -2)).getValue(BlockMithrilineCrystal.TYPE).getIndex() == 0 &&
 				w.getBlockState(cp.add(2, 1, -1)).getValue(BlockMithrilineCrystal.TYPE).getIndex() == 0 &&
 				w.getBlockState(cp.add(2, 1, 1)).getValue(BlockMithrilineCrystal.TYPE).getIndex() == 0 &&
-				w.getBlockState(cp.add(-2, 1, -2)).getValue(BlockMithrilineCrystal.TYPE).getIndex() == 0 &&
+				w.getBlockState(cp.add(-2, 1, -1)).getValue(BlockMithrilineCrystal.TYPE).getIndex() == 0 &&
 				w.getBlockState(cp.add(-2, 1, 1)).getValue(BlockMithrilineCrystal.TYPE).getIndex() == 0
 				)
 			tier = 0;
@@ -224,18 +224,22 @@ public class TilePlayerPentacle extends TileEntity implements ITickable {
 			tier = 2;
 		else return;
 		if(
-				w.getBlockState(cp.add(2, 0, 0)) == BlocksCore.demonicPlating &&
-				w.getBlockState(cp.add(-2, 0, 0)) == BlocksCore.demonicPlating &&
-				w.getBlockState(cp.add(0, 0, 2)) == BlocksCore.demonicPlating &&
-				w.getBlockState(cp.add(0, 0, -2)) == BlocksCore.demonicPlating &&
-				w.getBlockState(cp.add(2, 4, 0)) == BlocksCore.mithrilineCrystal &&
-				w.getBlockState(cp.add(-2, 4, 0)) == BlocksCore.mithrilineCrystal	&&
-				w.getBlockState(cp.add(0, 4, 2)) == BlocksCore.mithrilineCrystal &&
-				w.getBlockState(cp.add(0, 4, -2)) == BlocksCore.mithrilineCrystal &&
+				w.getBlockState(cp.add(2, 0, 0)).getBlock() == BlocksCore.demonicPlating &&
+				w.getBlockState(cp.add(-2, 0, 0)).getBlock() == BlocksCore.demonicPlating &&
+				w.getBlockState(cp.add(0, 0, 2)).getBlock() == BlocksCore.demonicPlating &&
+				w.getBlockState(cp.add(0, 0, -2)).getBlock() == BlocksCore.demonicPlating &&
+				w.getBlockState(cp.add(2, 4, 0)).getBlock() == BlocksCore.mithrilineCrystal &&
+				w.getBlockState(cp.add(-2, 4, 0)).getBlock() == BlocksCore.mithrilineCrystal	&&
+				w.getBlockState(cp.add(0, 4, 2)).getBlock() == BlocksCore.mithrilineCrystal &&
+				w.getBlockState(cp.add(0, 4, -2)).getBlock() == BlocksCore.mithrilineCrystal &&
 				w.getBlockState(cp.add(2, 4, 0)).getValue(BlockMithrilineCrystal.TYPE).getIndex() == 3 &&
 				w.getBlockState(cp.add(-2, 4, 0)).getValue(BlockMithrilineCrystal.TYPE).getIndex() == 3 &&
 				w.getBlockState(cp.add(0, 4, 2)).getValue(BlockMithrilineCrystal.TYPE).getIndex() == 3 &&
-				w.getBlockState(cp.add(0, 4, -2)).getValue(BlockMithrilineCrystal.TYPE).getIndex() == 3
+				w.getBlockState(cp.add(0, 4, -2)).getValue(BlockMithrilineCrystal.TYPE).getIndex() == 3 &&
+				w.getBlockState(cp.add(2, 4, 0)).getValue(BlockMithrilineCrystal.LAYER).getIndexThree() == 0 &&
+				w.getBlockState(cp.add(-2, 4, 0)).getValue(BlockMithrilineCrystal.LAYER).getIndexThree() == 0 &&
+				w.getBlockState(cp.add(0, 4, 2)).getValue(BlockMithrilineCrystal.LAYER).getIndexThree() == 0 &&
+				w.getBlockState(cp.add(0, 4, -2)).getValue(BlockMithrilineCrystal.LAYER).getIndexThree() == 0
 				)
 			tier = 3;
 		else return;

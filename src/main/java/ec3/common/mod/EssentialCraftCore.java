@@ -66,7 +66,7 @@ public class EssentialCraftCore {
 	@SidedProxy(clientSide = "ec3.proxy.ClientProxy", serverSide = "ec3.proxy.CommonProxy", modId = EssentialCraftCore.modid)
 	public static CommonProxy proxy;
 	public static Config cfg = new Config();
-	public static final String version = "4.7.1102.13";
+	public static final String version = "4.7.1102.14";
 	public static final String modid = "essentialcraft";
 	public static ModMetadata metadata;
 	public static SimpleNetworkWrapper network;

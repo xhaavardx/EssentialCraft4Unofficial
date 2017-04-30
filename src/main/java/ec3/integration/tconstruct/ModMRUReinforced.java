@@ -10,6 +10,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.text.translation.I18n;
+import slimeknights.tconstruct.library.TinkerRegistry;
 import slimeknights.tconstruct.library.Util;
 import slimeknights.tconstruct.library.modifiers.ModifierAspect.DataAspect;
 import slimeknights.tconstruct.library.modifiers.ModifierAspect.FreeFirstModifierAspect;
@@ -70,5 +71,9 @@ public class ModMRUReinforced extends ModifierTrait {
 	private float getReinforcedChance(NBTTagCompound modifierTag) {
 		IntegerNBT data = ModifierNBT.readInteger(modifierTag);
 		return (float)data.level * 0.2F;
+	}
+	
+	public static void register() {
+		TinkerRegistry.registerModifier(ModMRUReinforced.INSTANCE);
 	}
 }

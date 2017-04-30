@@ -9,7 +9,8 @@ public class TConstructRegistry {
 	public static void register() {
 		if(Loader.isModLoaded("tconstruct")) {
 			try {
-				TinkerRegistry.registerModifier(ModMRUReinforced.INSTANCE);
+				//Directly registering the modifier in this class causes a NoClassDefFoundError
+				ModMRUReinforced.register();
 				LogManager.getLogger().trace("Successfully registered TConstruct integration!");
 			}
 			catch(Exception e) {

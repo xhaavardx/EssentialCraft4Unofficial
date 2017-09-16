@@ -22,16 +22,18 @@ public class BlockHologramSpawner extends Block implements IModelRegisterer {
 
 	public static final AxisAlignedBB BLOCK_AABB = new AxisAlignedBB(0,0,0,1,0.5F,1);
 
-	public BlockHologramSpawner() 
+	public BlockHologramSpawner()
 	{
 		super(Material.ROCK);
 	}
 
+	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
 	{
 		return BLOCK_AABB;
 	}
 
+	@Override
 	public boolean onBlockActivated(World w, BlockPos p, IBlockState s, EntityPlayer ep, EnumHand h, ItemStack is, EnumFacing f, float hx, float hy, float hz) {
 		if(!w.isRemote && w.provider != null && (w.provider.getDimension() == Config.dimensionID || Config.allowHologramInOtherDimensions)) {
 			w.setBlockToAir(p);

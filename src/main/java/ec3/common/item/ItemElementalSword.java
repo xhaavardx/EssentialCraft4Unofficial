@@ -79,6 +79,7 @@ public class ItemElementalSword extends ItemSword implements IItemRequiresMRU, I
 		return true;
 	}
 
+	@Override
 	public boolean hitEntity(ItemStack par1ItemStack, EntityLivingBase par2EntityLivingBase, EntityLivingBase par3EntityLivingBase)
 	{
 		if(par3EntityLivingBase instanceof EntityPlayer) {
@@ -198,6 +199,7 @@ public class ItemElementalSword extends ItemSword implements IItemRequiresMRU, I
 		ECUtils.initMRUTag(itemStack, maxMRU);
 	}
 
+	@Override
 	public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot s, ItemStack stack)
 	{
 		Multimap<String, AttributeModifier> multimap = HashMultimap.<String, AttributeModifier>create();
@@ -230,7 +232,8 @@ public class ItemElementalSword extends ItemSword implements IItemRequiresMRU, I
 		return multimap;
 	}
 
-	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List<String> par3List, boolean par4) 
+	@Override
+	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List<String> par3List, boolean par4)
 	{
 		super.addInformation(par1ItemStack, par2EntityPlayer, par3List, par4);
 		if(par1ItemStack.getTagCompound() != null && par1ItemStack.getTagCompound().hasKey("ember_0"))
@@ -357,7 +360,7 @@ public class ItemElementalSword extends ItemSword implements IItemRequiresMRU, I
 		if(s.hasTagCompound())
 			return s.getTagCompound().getString("primary");
 		else
-			return "combined";	
+			return "combined";
 	}
 
 	public static String getSecondaryAttribute(ItemStack s)
@@ -365,7 +368,7 @@ public class ItemElementalSword extends ItemSword implements IItemRequiresMRU, I
 		if(s.hasTagCompound())
 			return s.getTagCompound().getString("secondary");
 		else
-			return "combined";	
+			return "combined";
 	}
 
 	public static String getA(ItemStack s, int pass)
@@ -519,7 +522,7 @@ public class ItemElementalSword extends ItemSword implements IItemRequiresMRU, I
 		String attrib = getSecondaryAttribute(par1ItemStack);
 		if(attrib.contains("Fire"))
 		{
-			if((ECUtils.tryToDecreaseMRUInStorage((EntityPlayer) par3EntityPlayer, -50) || this.setMRU(par1ItemStack, -50)))
+			if((ECUtils.tryToDecreaseMRUInStorage(par3EntityPlayer, -50) || this.setMRU(par1ItemStack, -50)))
 			{
 				par3EntityPlayer.addPotionEffect(new PotionEffect(MobEffects.FIRE_RESISTANCE,50,0));
 				List<EntityLivingBase> l = par2World.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(par3EntityPlayer.posX-2, par3EntityPlayer.posY-1, par3EntityPlayer.posZ-2, par3EntityPlayer.posX+2, par3EntityPlayer.posY+3, par3EntityPlayer.posZ+2));
@@ -535,21 +538,21 @@ public class ItemElementalSword extends ItemSword implements IItemRequiresMRU, I
 		}
 		if(attrib.contains("Water"))
 		{
-			if((ECUtils.tryToDecreaseMRUInStorage((EntityPlayer) par3EntityPlayer, -50) || this.setMRU(par1ItemStack, -50)))
+			if((ECUtils.tryToDecreaseMRUInStorage(par3EntityPlayer, -50) || this.setMRU(par1ItemStack, -50)))
 			{
 				par3EntityPlayer.addPotionEffect(new PotionEffect(MobEffects.REGENERATION,40,0));
 			}
 		}
 		if(attrib.contains("Earth"))
 		{
-			if((ECUtils.tryToDecreaseMRUInStorage((EntityPlayer) par3EntityPlayer, -50) || this.setMRU(par1ItemStack, -50)))
+			if((ECUtils.tryToDecreaseMRUInStorage(par3EntityPlayer, -50) || this.setMRU(par1ItemStack, -50)))
 			{
 				par3EntityPlayer.addPotionEffect(new PotionEffect(MobEffects.RESISTANCE,40,0));
 			}
 		}
 		if(attrib.contains("Air"))
 		{
-			if((ECUtils.tryToDecreaseMRUInStorage((EntityPlayer) par3EntityPlayer, -50) || this.setMRU(par1ItemStack, -50)))
+			if((ECUtils.tryToDecreaseMRUInStorage(par3EntityPlayer, -50) || this.setMRU(par1ItemStack, -50)))
 			{
 				par3EntityPlayer.addPotionEffect(new PotionEffect(MobEffects.SPEED,30,0));
 				par3EntityPlayer.addPotionEffect(new PotionEffect(MobEffects.STRENGTH,30,0));

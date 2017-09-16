@@ -1,6 +1,5 @@
 package ec3.common.block;
 
-import java.util.List;
 import java.util.Random;
 
 import DummyCore.Client.IModelRegisterer;
@@ -49,10 +48,12 @@ public class BlockElementalCrystal extends BlockContainer implements IModelRegis
 		super(Material.ROCK);
 	}
 
+	@Override
 	public boolean isOpaqueCube(IBlockState s) {
 		return false;
 	}
 
+	@Override
 	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
 		ItemStack is = new ItemStack(this, 1);
 		TileElementalCrystal c = (TileElementalCrystal)world.getTileEntity(pos);
@@ -72,6 +73,7 @@ public class BlockElementalCrystal extends BlockContainer implements IModelRegis
 		return BlockRenderLayer.SOLID;
 	}
 
+	@Override
 	public boolean isFullCube(IBlockState s)
 	{
 		return false;
@@ -104,6 +106,7 @@ public class BlockElementalCrystal extends BlockContainer implements IModelRegis
 		world.removeTileEntity(pos);
 	}
 
+	@Override
 	public int getLightValue(IBlockState s, IBlockAccess world, BlockPos pos) {
 		try {
 			Block block = s.getBlock();

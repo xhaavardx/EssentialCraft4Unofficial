@@ -93,7 +93,8 @@ public class ItemInventoryGem extends Item implements IItemColor, IModelRegister
 		return new ActionResult(EnumActionResult.PASS, par1ItemStack);
 	}
 
-	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List<String> par3List, boolean par4) 
+	@Override
+	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List<String> par3List, boolean par4)
 	{
 		if(par1ItemStack.getTagCompound() != null)
 		{
@@ -111,10 +112,11 @@ public class ItemInventoryGem extends Item implements IItemColor, IModelRegister
 		return MiscUtils.getStackTag(stack).getIntArray("pos");
 	}
 
+	@Override
 	public EnumRarity getRarity(ItemStack par1ItemStack)
 	{
 		return par1ItemStack.getTagCompound() != null ? EnumRarity.EPIC : EnumRarity.COMMON;
-	}	 
+	}
 
 	public ItemStack createTag(ItemStack stack)
 	{
@@ -131,6 +133,7 @@ public class ItemInventoryGem extends Item implements IItemColor, IModelRegister
 		return retStk;
 	}
 
+	@Override
 	public int getColorFromItemstack(ItemStack stk, int pass) {
 		return 0xff66ff;
 	}

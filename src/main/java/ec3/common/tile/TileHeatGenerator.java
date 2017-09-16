@@ -3,6 +3,10 @@ package ec3.common.tile;
 import DummyCore.Utils.DataStorage;
 import DummyCore.Utils.DummyData;
 import DummyCore.Utils.MathUtils;
+import ec3.api.ApiCore;
+import ec3.api.IHotBlock;
+import ec3.common.item.ItemsCore;
+import ec3.common.mod.EssentialCraftCore;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -10,18 +14,14 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.config.Configuration;
-import ec3.api.ApiCore;
-import ec3.api.IHotBlock;
-import ec3.common.item.ItemsCore;
-import ec3.common.mod.EssentialCraftCore;
 
 public class TileHeatGenerator extends TileMRUGeneric {
-	
+
 	public int currentBurnTime, currentMaxBurnTime;
 	public static float cfgMaxMRU = ApiCore.GENERATOR_MAX_MRU_GENERIC;
 	public static float cfgBalance = -1F;
 	public static float mruGenerated = 20;
-	
+
 	public TileHeatGenerator() {
 		super();
 		balance = cfgBalance;
@@ -29,11 +29,11 @@ public class TileHeatGenerator extends TileMRUGeneric {
 		slot0IsBoundGem = false;
 		setSlotsNum(2);
 	}
-	
+
 	public boolean canGenerateMRU() {
 		return false;
 	}
-	
+
 	@Override
 	public void update() {
 		float mruGen = mruGenerated;
@@ -67,7 +67,7 @@ public class TileHeatGenerator extends TileMRUGeneric {
 						else
 							mruFactor *= 0.5F;
 					}
-					
+
 					mruGen *= mruFactor;
 					if(mruGen >= 1) {
 						setMRU((int)(getMRU() + mruGen));
@@ -76,12 +76,12 @@ public class TileHeatGenerator extends TileMRUGeneric {
 					}
 				}
 			}
-			
+
 			if(!getWorld().isRemote) {
 				if(getStackInSlot(0) != null) {
 					if(currentBurnTime == 0 && getMRU() < getMaxMRU()) {
 						currentMaxBurnTime = currentBurnTime = TileEntityFurnace.getItemBurnTime(getStackInSlot(0));
-						
+
 						if(currentBurnTime > 0) {
 							if(getStackInSlot(0) != null) {
 								if(getStackInSlot(1) == null || getStackInSlot(1).stackSize < getInventoryStackLimit()) {
@@ -114,21 +114,21 @@ public class TileHeatGenerator extends TileMRUGeneric {
 		}
 		EssentialCraftCore.proxy.SmokeFX(pos.getX()+0.5F + MathUtils.randomFloat(getWorld().rand)*0.05F, pos.getY()+0.8F, pos.getZ()+0.5F + MathUtils.randomFloat(getWorld().rand)*0.05F, 0, 0, 0, 1);
 	}
-	
+
 	@Override
 	public void readFromNBT(NBTTagCompound i) {
 		currentBurnTime = i.getInteger("burn");
 		currentMaxBurnTime = i.getInteger("burnMax");
 		super.readFromNBT(i);
 	}
-	
+
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound i) {
 		i.setInteger("burn", currentBurnTime);
 		i.setInteger("burnMax", currentMaxBurnTime);
 		return super.writeToNBT(i);
 	}
-	
+
 	public static void setupConfig(Configuration cfg) {
 		try {
 			cfg.load();
@@ -138,28 +138,28 @@ public class TileHeatGenerator extends TileMRUGeneric {
 					"Max MRU generated per tick:20"
 			}, "");
 			String dataString = "";
-			
+
 			for(int i = 0; i < cfgArrayString.length; ++i)
 				dataString += "||" + cfgArrayString[i];
-			
+
 			DummyData[] data = DataStorage.parseData(dataString);
-			
+
 			cfgMaxMRU = Float.parseFloat(data[0].fieldValue);
 			cfgBalance = Float.parseFloat(data[1].fieldValue);
 			mruGenerated = Float.parseFloat(data[2].fieldValue);
-			
+
 			cfg.save();
 		}
 		catch(Exception e) {
 			return;
 		}
 	}
-	
+
 	@Override
 	public int[] getOutputSlots() {
 		return new int[] {1};
 	}
-	
+
 	@Override
 	public boolean isItemValidForSlot(int p_94041_1_, ItemStack p_94041_2_) {
 		return p_94041_1_ == 0;

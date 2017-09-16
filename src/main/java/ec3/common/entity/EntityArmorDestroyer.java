@@ -3,7 +3,6 @@ package ec3.common.entity;
 import ec3.common.item.ItemsCore;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.projectile.EntitySnowball;
 import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
@@ -23,6 +22,7 @@ public class EntityArmorDestroyer extends EntityThrowable {
 		super(p_i1774_1_, p_i1774_2_);
 	}
 
+	@Override
 	protected void onImpact(RayTraceResult p_70184_1_) {
 		if(p_70184_1_.entityHit != null) {
 			if(p_70184_1_.entityHit == this.getThrower())

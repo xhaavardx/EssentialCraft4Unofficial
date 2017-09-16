@@ -37,6 +37,7 @@ public class BlockMatrixAbsorber extends BlockContainer implements IModelRegiste
 		super.breakBlock(par1World, par2Pos, par3State);
 	}
 
+	@Override
 	public boolean isOpaqueCube(IBlockState s)
 	{
 		return false;
@@ -48,6 +49,7 @@ public class BlockMatrixAbsorber extends BlockContainer implements IModelRegiste
 		return BlockRenderLayer.SOLID;
 	}
 
+	@Override
 	public boolean isFullCube(IBlockState s)
 	{
 		return false;

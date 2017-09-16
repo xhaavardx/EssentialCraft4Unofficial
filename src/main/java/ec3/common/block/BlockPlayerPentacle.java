@@ -31,15 +31,18 @@ public class BlockPlayerPentacle extends BlockContainer implements IModelRegiste
 		super(Material.ROCK);
 	}
 
+	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState s, IBlockAccess w, BlockPos p) {
 		return BLOCK_AABB;
 	}
 
+	@Override
 	public boolean isOpaqueCube(IBlockState s)
 	{
 		return false;
 	}
 
+	@Override
 	public boolean isFullCube(IBlockState s)
 	{
 		return false;
@@ -51,6 +54,7 @@ public class BlockPlayerPentacle extends BlockContainer implements IModelRegiste
 		return BlockRenderLayer.SOLID;
 	}
 
+	@Override
 	public EnumBlockRenderType getRenderType(IBlockState s) {
 		return EnumBlockRenderType.MODEL;
 	}

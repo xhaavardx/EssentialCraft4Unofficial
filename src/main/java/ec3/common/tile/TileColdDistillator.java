@@ -4,35 +4,34 @@ import java.util.List;
 
 import DummyCore.Utils.DataStorage;
 import DummyCore.Utils.DummyData;
+import ec3.api.ApiCore;
+import ec3.api.IColdBlock;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.MobEffects;
-import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.common.config.Configuration;
-import ec3.api.ApiCore;
-import ec3.api.IColdBlock;
 
 public class TileColdDistillator extends TileMRUGeneric {
-	
+
 	public static float balanceProduced = 0F;
 	public static float cfgMaxMRU = ApiCore.GENERATOR_MAX_MRU_GENERIC*10;
 	public static boolean harmEntities = true;
-	
+
 	public TileColdDistillator() {
 		super();
 		maxMRU = (int)cfgMaxMRU;
 		slot0IsBoundGem = false;
 	}
-	
+
 	public boolean canGenerateMRU() {
 		return false;
 	}
-	
+
 	@Override
 	public void update() {
 		super.update();
@@ -40,7 +39,7 @@ public class TileColdDistillator extends TileMRUGeneric {
 		if(!getWorld().isRemote) {
 			if(getWorld().isBlockIndirectlyGettingPowered(pos) == 0) {
 				int mruGenerated = CgetMru();
-				setMRU((int) (getMRU()+mruGenerated));
+				setMRU(getMRU()+mruGenerated);
 				if(getMRU() > getMaxMRU())
 					setMRU(getMaxMRU());
 				if(harmEntities)
@@ -48,8 +47,8 @@ public class TileColdDistillator extends TileMRUGeneric {
 			}
 		}
 	}
-	
-	
+
+
 	@SuppressWarnings("unchecked")
 	public void CdamageAround() {
 		List<EntityLivingBase> l = getWorld().getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(pos).expand(3D, 3D, 3D));
@@ -73,7 +72,7 @@ public class TileColdDistillator extends TileMRUGeneric {
 			}
 		}
 	}
-	
+
 	public int CgetMru() {
 		float i = 0;
 		for(int x = -3; x <= 3; ++x) {
@@ -100,26 +99,26 @@ public class TileColdDistillator extends TileMRUGeneric {
 		}
 		return (int)i;
 	}
-	
+
 	public static void setupConfig(Configuration cfg) {
 		try {
 			cfg.load();
-			
+
 			String[] cfgArrayString = cfg.getStringList("ColdDistillatorSettings", "tileentities", new String[]{
 					"Produced Balance:0.0",
 					"Max MRU:" + ApiCore.GENERATOR_MAX_MRU_GENERIC*10,
 					"Damage Entities Around:true"
 			}, "Settings of the given Device.");
 			String dataString = "";
-			
+
 			for(int i = 0; i < cfgArrayString.length; ++i)
 				dataString += "||" + cfgArrayString[i];
-			
+
 			DummyData[] data = DataStorage.parseData(dataString);
 			balanceProduced = Float.parseFloat(data[0].fieldValue);
 			cfgMaxMRU = (int)Float.parseFloat(data[1].fieldValue);
 			harmEntities = Boolean.parseBoolean(data[2].fieldValue);
-			
+
 			cfg.save();
 		}
 		catch(Exception e) {

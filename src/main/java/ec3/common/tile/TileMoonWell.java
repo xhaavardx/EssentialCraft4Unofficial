@@ -1,9 +1,9 @@
 package ec3.common.tile;
 
-import net.minecraftforge.common.config.Configuration;
 import DummyCore.Utils.DataStorage;
 import DummyCore.Utils.DummyData;
 import ec3.api.ApiCore;
+import net.minecraftforge.common.config.Configuration;
 
 public class TileMoonWell extends TileMRUGeneric {
 
@@ -70,14 +70,14 @@ public class TileMoonWell extends TileMRUGeneric {
 			if(pos.getY() > 80)
 				heightFactor = 0F;
 			else {
-				heightFactor = 1.0F - (float)pos.getY()/80F;
+				heightFactor = 1.0F - pos.getY()/80F;
 				mruGenerated *= heightFactor;
 			}
 			if(mruGenerated > 0 && canGenerateMRU() && !getWorld().isRemote) {
 				setMRU((int)(getMRU() + mruGenerated));
 				if(getMRU() > getMaxMRU())
 					setMRU(getMaxMRU());
-			}	
+			}
 		}
 	}
 

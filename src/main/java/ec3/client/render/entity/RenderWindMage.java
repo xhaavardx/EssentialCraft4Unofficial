@@ -1,8 +1,6 @@
 package ec3.client.render.entity;
 
-import net.minecraftforge.fml.client.registry.IRenderFactory;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import ec3.common.entity.EntityWindMage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.GlStateManager;
@@ -10,14 +8,10 @@ import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.layers.LayerBipedArmor;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.ResourceLocation;
-
-import org.lwjgl.opengl.GL11;
-
-import ec3.common.entity.EntityWindMage;
+import net.minecraftforge.fml.client.registry.IRenderFactory;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class RenderWindMage extends RenderLiving<EntityWindMage> {
@@ -38,6 +32,7 @@ public class RenderWindMage extends RenderLiving<EntityWindMage> {
 		this.villagerModel = (ModelBiped)this.mainModel;
 	}
 
+	@Override
 	protected ResourceLocation getEntityTexture(EntityWindMage p_110775_1_) {
 		switch (p_110775_1_.getType()) {
 		case 1:
@@ -49,6 +44,7 @@ public class RenderWindMage extends RenderLiving<EntityWindMage> {
 		}
 	}
 
+	@Override
 	protected void preRenderCallback(EntityWindMage p_77041_1_, float p_77041_2_) {
 		float f1 = 0.9375F;
 

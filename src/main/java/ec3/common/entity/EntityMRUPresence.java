@@ -25,15 +25,15 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumHandSide;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class EntityMRUPresence extends EntityLivingBase implements IMRUPressence {
@@ -56,6 +56,7 @@ public class EntityMRUPresence extends EntityLivingBase implements IMRUPressence
 		this.setSize(0.3F, 0.3F);
 	}
 
+	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
 
@@ -251,7 +252,7 @@ public class EntityMRUPresence extends EntityLivingBase implements IMRUPressence
 		}
 		else {
 			if(this.getEntityWorld().rand.nextFloat() < 0.025F)
-				this.getEntityWorld().playSound(posX, posY, posZ, SoundRegistry.entityMRUCUNoise, SoundCategory.BLOCKS, (float)this.getMRU()/60000F, 0.1F+this.getEntityWorld().rand.nextFloat(), false);
+				this.getEntityWorld().playSound(posX, posY, posZ, SoundRegistry.entityMRUCUNoise, SoundCategory.BLOCKS, this.getMRU()/60000F, 0.1F+this.getEntityWorld().rand.nextFloat(), false);
 		}
 		if(this.getMRU() > 20000) {
 			this.setMRU(20000);
@@ -277,11 +278,13 @@ public class EntityMRUPresence extends EntityLivingBase implements IMRUPressence
 		}
 	}
 
+	@Override
 	public void setMRU(int i) {
 		if(this != null && !this.isDead)
 			this.dataManager.set(MRU, i);
 	}
 
+	@Override
 	public int getMRU() {
 		return this.dataManager.get(MRU);
 	}
@@ -295,19 +298,23 @@ public class EntityMRUPresence extends EntityLivingBase implements IMRUPressence
 		}
 	}
 
+	@Override
 	public float getBalance() {
-		return ((float)this.dataManager.get(BALANCE));
+		return (this.dataManager.get(BALANCE));
 	}
 
+	@Override
 	public void setBalance(float f) {
 		if(this != null && !this.isDead)
 			this.dataManager.set(BALANCE, f);;
 	}
 
+	@Override
 	public boolean canAlwaysStay() {
 		return this.dataManager.get(STAY);
 	}
 
+	@Override
 	public void setAlwaysStay(boolean b) {
 		if(this != null && !this.isDead)
 			this.dataManager.set(STAY, b);
@@ -322,11 +329,13 @@ public class EntityMRUPresence extends EntityLivingBase implements IMRUPressence
 		}
 	}
 
+	@Override
 	public void setFlag(boolean b) {
 		if(this != null && !this.isDead)
 			this.dataManager.set(FLAG, b);
 	}
 
+	@Override
 	public boolean getFlag() {
 		return this.dataManager.get(FLAG);
 	}
@@ -390,7 +399,7 @@ public class EntityMRUPresence extends EntityLivingBase implements IMRUPressence
 
 	@Override
 	public EnumHandSide getPrimaryHand() { return EnumHandSide.RIGHT; }
-	
+
 	//Required to remove MRUCUs
 	@Override
 	public void onKillCommand() { setDead(); }

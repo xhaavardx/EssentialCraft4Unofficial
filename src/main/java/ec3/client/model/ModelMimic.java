@@ -1,42 +1,28 @@
 package ec3.client.model;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
-import com.google.common.base.Function;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
 
-import ec3.common.block.BlockFancy;
 import ec3.common.block.BlockMimic;
-import ec3.common.block.BlocksCore;
 import ec3.common.tile.TileMimic;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
-import net.minecraft.client.renderer.block.model.ItemOverride;
 import net.minecraft.client.renderer.block.model.ItemOverrideList;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.vertex.VertexFormat;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.client.MinecraftForgeClient;
-import net.minecraftforge.client.model.IModel;
-import net.minecraftforge.common.model.IModelState;
 import net.minecraftforge.common.property.IExtendedBlockState;
 
 public class ModelMimic implements IBakedModel {
@@ -50,11 +36,11 @@ public class ModelMimic implements IBakedModel {
 		IBlockState heldState = ((IExtendedBlockState)state).getValue(BlockMimic.STATE);
 		IBlockAccess heldWorld = ((IExtendedBlockState)state).getValue(BlockMimic.WORLD);
 		BlockPos heldPos = ((IExtendedBlockState)state).getValue(BlockMimic.POS);
-		
+
 		if(heldWorld == null || heldPos == null) {
 			return ImmutableList.<BakedQuad>of();
 		}
-		
+
 		Minecraft mc = Minecraft.getMinecraft();
 		if(heldState == null && layer == BlockRenderLayer.SOLID) {
 			ModelResourceLocation path = new ModelResourceLocation("essentialcraft:mimic", "inventory");
@@ -72,7 +58,7 @@ public class ModelMimic implements IBakedModel {
 				return model.getQuads(extended, side, rand);
 			}
 		}
-		
+
 		return ImmutableList.<BakedQuad>of();
 	}
 
@@ -105,7 +91,7 @@ public class ModelMimic implements IBakedModel {
 	public ItemOverrideList getOverrides() {
 		return ItemOverrideList.NONE;
 	}
-	
+
 	private static class FakeBlockAccess implements IBlockAccess {
 
 		private final IBlockAccess compose;

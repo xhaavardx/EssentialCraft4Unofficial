@@ -21,17 +21,19 @@ import net.minecraftforge.client.model.ModelLoader;
 public class ItemMagnetizingStaff extends ItemStoresMRUInNBT implements IModelRegisterer {
 
 	public ItemMagnetizingStaff() {
-		super();	
+		super();
 		this.setMaxMRU(5000);
 		this.maxStackSize = 1;
 		this.bFull3D = true;
 	}
 
+	@Override
 	public int getMaxItemUseDuration(ItemStack p_77626_1_)
 	{
 		return Integer.MAX_VALUE;
 	}
 
+	@Override
 	public void onUsingTick(ItemStack stack, EntityLivingBase player, int count)
 	{
 		if(count % 8 == 0 && player instanceof EntityPlayer && (ECUtils.tryToDecreaseMRUInStorage((EntityPlayer)player, -50) || this.setMRU(stack, -50)))
@@ -79,11 +81,13 @@ public class ItemMagnetizingStaff extends ItemStoresMRUInNBT implements IModelRe
 		}
 	}
 
+	@Override
 	public EnumAction getItemUseAction(ItemStack p_77661_1_)
 	{
 		return EnumAction.BOW;
 	}
 
+	@Override
 	public ActionResult<ItemStack> onItemRightClick(ItemStack p_77659_1_, World p_77659_2_, EntityPlayer p_77659_3_, EnumHand hand)
 	{
 		p_77659_3_.setActiveHand(hand);

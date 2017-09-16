@@ -30,7 +30,8 @@ public class ItemSoulStone extends Item implements IItemColor, IModelRegisterer 
 		this.maxStackSize = 1;
 	}
 
-	public void onUpdate(ItemStack stk, World w, Entity e, int slotnum, boolean held) 
+	@Override
+	public void onUpdate(ItemStack stk, World w, Entity e, int slotnum, boolean held)
 	{
 		if(stk.getTagCompound() != null && stk.getItemDamage() == 0 && stk.getTagCompound().hasKey("bloodInfused"))
 		{
@@ -55,7 +56,8 @@ public class ItemSoulStone extends Item implements IItemColor, IModelRegisterer 
 		return new ActionResult(EnumActionResult.PASS,par1ItemStack);
 	}
 
-	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List<String> par3List, boolean par4) 
+	@Override
+	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List<String> par3List, boolean par4)
 	{
 		if(par1ItemStack.getTagCompound() != null)
 		{
@@ -148,6 +150,7 @@ public class ItemSoulStone extends Item implements IItemColor, IModelRegisterer 
 		}
 	}
 
+	@Override
 	public int getColorFromItemstack(ItemStack p_82790_1_, int p_82790_2_)
 	{
 		if(p_82790_1_.getItemDamage() == 1)

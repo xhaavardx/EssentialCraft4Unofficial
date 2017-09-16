@@ -18,7 +18,7 @@ public class GuiMonsterHolder extends GuiCommon{
 		this.elementList.add(new GuiBalanceState(25, 58-18, tile));
 		this.elementList.add(new GuiMRUState(25, 58, (ITEHasMRU) tile, 0));
 	}
-	
-	
+
+
 
 }

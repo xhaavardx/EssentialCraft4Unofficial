@@ -26,48 +26,50 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 
 public class BlockMIMScreen extends BlockContainer implements IModelRegisterer {
-	
+
 	public static final PropertyDirection FACING = PropertyDirection.create("facing");
-	
+
 	public BlockMIMScreen() {
 		super(Material.ROCK);
 		setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.DOWN));
 	}
-	
-    public boolean canProvidePower(IBlockState s)
-    {
-        return true;
-    }
-    
+
+	@Override
+	public boolean canProvidePower(IBlockState s)
+	{
+		return true;
+	}
+
+	@Override
 	public EnumBlockRenderType getRenderType(IBlockState s)
 	{
 		return EnumBlockRenderType.MODEL;
 	}
-    
-    @Override
-    public IBlockState getStateForPlacement(World w, BlockPos p, EnumFacing side, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
-        return getDefaultState().withProperty(FACING, side);
-    }
+
+	@Override
+	public IBlockState getStateForPlacement(World w, BlockPos p, EnumFacing side, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
+		return getDefaultState().withProperty(FACING, side);
+	}
 
 	@Override
 	public TileEntity createNewTileEntity(World p_149915_1_, int p_149915_2_) {
 		return new TileNewMIMScreen();
 	}
-	
+
 	@Override
 	public boolean onBlockActivated(World par1World, BlockPos par2, IBlockState par3, EntityPlayer par4EntityPlayer, EnumHand par5, ItemStack par6, EnumFacing par7, float par8, float par9, float par10) {
-	    if(par1World.isRemote) {
-	        return true;
-	    }
-	    else {
-	     	if(!par4EntityPlayer.isSneaking()) {
-	       		par4EntityPlayer.openGui(EssentialCraftCore.core, Config.guiID[0], par1World, par2.getX(), par2.getY(), par2.getZ());
-	           	return true;
-	       	}
-	       	else {
-	       		return false;
-	       	}
-	    }
+		if(par1World.isRemote) {
+			return true;
+		}
+		else {
+			if(!par4EntityPlayer.isSneaking()) {
+				par4EntityPlayer.openGui(EssentialCraftCore.core, Config.guiID[0], par1World, par2.getX(), par2.getY(), par2.getZ());
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
 	}
 
 	@Override
@@ -79,17 +81,17 @@ public class BlockMIMScreen extends BlockContainer implements IModelRegisterer {
 	public int getMetaFromState(IBlockState state) {
 		return state.getValue(FACING).getIndex();
 	}
-	
+
 	@Override
 	public IBlockState withRotation(IBlockState state, Rotation rot) {
 		return state.withProperty(FACING, rot.rotate(state.getValue(FACING)));
 	}
-	
+
 	@Override
 	public IBlockState withMirror(IBlockState state, Mirror mirrorIn) {
 		return state.withRotation(mirrorIn.toRotation(state.getValue(FACING)));
 	}
-	
+
 	@Override
 	protected BlockStateContainer createBlockState() {
 		return new BlockStateContainer(this, new IProperty[] {FACING});

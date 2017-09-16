@@ -36,6 +36,7 @@ public class BlockRedstoneTransmitter extends BlockContainer implements IModelRe
 		super(p_i45394_1_);
 	}
 
+	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState s, IBlockAccess p_149719_1_, BlockPos p_149719_2_) {
 		int metadata = s.getValue(FACING).getIndex();
 		if(metadata == 0) {
@@ -70,10 +71,12 @@ public class BlockRedstoneTransmitter extends BlockContainer implements IModelRe
 		super.breakBlock(par1World, par2Pos, par3State);
 	}
 
+	@Override
 	public boolean isOpaqueCube(IBlockState s) {
 		return false;
 	}
 
+	@Override
 	public boolean isFullCube(IBlockState s) {
 		return false;
 	}
@@ -83,6 +86,7 @@ public class BlockRedstoneTransmitter extends BlockContainer implements IModelRe
 		return BlockRenderLayer.CUTOUT_MIPPED;
 	}
 
+	@Override
 	public EnumBlockRenderType getRenderType(IBlockState s) {
 		return EnumBlockRenderType.MODEL;
 	}
@@ -113,10 +117,12 @@ public class BlockRedstoneTransmitter extends BlockContainer implements IModelRe
 		}
 	}
 
+	@Override
 	public boolean canProvidePower(IBlockState s) {
 		return true;
 	}
 
+	@Override
 	public int getWeakPower(IBlockState s, IBlockAccess w, BlockPos p, EnumFacing side) {
 		TileRedstoneTransmitter trt = (TileRedstoneTransmitter) w.getTileEntity(p);
 		return trt.getRedstonePower();

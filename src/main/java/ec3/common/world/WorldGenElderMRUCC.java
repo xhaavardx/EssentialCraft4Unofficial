@@ -21,7 +21,7 @@ import net.minecraftforge.common.DungeonHooks;
 
 public class WorldGenElderMRUCC extends WorldGenerator {
 	public int type;
-	
+
 	public static void handleGeneration(Random random, int chunkX, int chunkZ, World world,IChunkGenerator chunkGenerator, IChunkProvider chunkProvider)
 	{
 		for(int i = 0; i < Config.eMRUCUGenAttempts; ++i)
@@ -32,7 +32,7 @@ public class WorldGenElderMRUCC extends WorldGenerator {
 			new WorldGenElderMRUCC(random.nextInt(4)).generate(world, random, new BlockPos(rndX, rndY, rndZ));
 		}
 	}
-	
+
 	public WorldGenElderMRUCC(int i)
 	{
 		type = i;
@@ -77,12 +77,12 @@ public class WorldGenElderMRUCC extends WorldGenerator {
 					if((x == -3 && z == -3) || (x == 3 && z == -3) || (x == 3 && z == 3) || (x == -3 && z == 3))
 					{
 						var1.setBlockState(var3.add(x, 1, z), Block.getBlockFromName("minecraft:chest").getStateFromMeta(4), 3);
-                        TileEntityChest tileentitychest = (TileEntityChest)var1.getTileEntity(var3.add(x, 1, z));
+						TileEntityChest tileentitychest = (TileEntityChest)var1.getTileEntity(var3.add(x, 1, z));
 
-                        if (tileentitychest != null)
-                        {
-                            tileentitychest.setLootTable(LootTableList.CHESTS_SIMPLE_DUNGEON, var2.nextLong());
-                        }
+						if (tileentitychest != null)
+						{
+							tileentitychest.setLootTable(LootTableList.CHESTS_SIMPLE_DUNGEON, var2.nextLong());
+						}
 					}
 				}
 			}
@@ -142,27 +142,27 @@ public class WorldGenElderMRUCC extends WorldGenerator {
 					if((x == -3 && z == -3) || (x == 3 && z == -3) || (x == 3 && z == 3) || (x == -3 && z == 3))
 					{
 						var1.setBlockState(var3.add(x, 1, z), Block.getBlockFromName("minecraft:chest").getStateFromMeta(var2.nextInt(4)), 3);
-                        TileEntityChest tileentitychest = (TileEntityChest)var1.getTileEntity(new BlockPos(var3.getX()+x, var3.getY()+1, var3.getZ()+z));
+						TileEntityChest tileentitychest = (TileEntityChest)var1.getTileEntity(new BlockPos(var3.getX()+x, var3.getY()+1, var3.getZ()+z));
 
-                        if (tileentitychest != null)
-                        {
-                        	tileentitychest.setLootTable(LootTableList.CHESTS_SIMPLE_DUNGEON, var2.nextLong());
-                        }
+						if (tileentitychest != null)
+						{
+							tileentitychest.setLootTable(LootTableList.CHESTS_SIMPLE_DUNGEON, var2.nextLong());
+						}
 					}
 					if((x == -1 && z == 0) || (x == 1 && z == 0) || (x == 0 && z == 1) || (x == 0 && z == -1))
 					{
 						var1.setBlockState(var3.add(x, 1, z), Block.getBlockFromName("minecraft:mob_spawner").getStateFromMeta(0), 3);
-                        TileEntityMobSpawner tileentitymobspawner = (TileEntityMobSpawner)var1.getTileEntity(new BlockPos(var3.getX()+x, var3.getY()+1, var3.getZ()+z));
+						TileEntityMobSpawner tileentitymobspawner = (TileEntityMobSpawner)var1.getTileEntity(new BlockPos(var3.getX()+x, var3.getY()+1, var3.getZ()+z));
 
-                        if (tileentitymobspawner != null)
-                        {
-                        	tileentitymobspawner.getSpawnerBaseLogic().setEntityName(DungeonHooks.getRandomDungeonMob(var2));
-                        }
+						if (tileentitymobspawner != null)
+						{
+							tileentitymobspawner.getSpawnerBaseLogic().setEntityName(DungeonHooks.getRandomDungeonMob(var2));
+						}
 					}
 				}
 			}
 		}
-		
+
 		return false;
 	}
 
@@ -187,7 +187,7 @@ public class WorldGenElderMRUCC extends WorldGenerator {
 						else
 							return false;
 					}
-						
+
 				}else
 					return false;
 			}

@@ -53,7 +53,7 @@ public class ItemWindTablet extends ItemStoresMRUInNBT implements IModelRegister
 	};
 
 	public ItemWindTablet() {
-		super();	
+		super();
 		this.setMaxMRU(5000);
 		this.maxStackSize = 1;
 	}
@@ -61,6 +61,7 @@ public class ItemWindTablet extends ItemStoresMRUInNBT implements IModelRegister
 	/**
 	 * Called whenever this item is equipped and the right mouse button is pressed. Args: itemStack, world, entityPlayer, enumHand
 	 */
+	@Override
 	public ActionResult<ItemStack> onItemRightClick(ItemStack is, World world, EntityPlayer player, EnumHand hand)
 	{
 		if((ECUtils.tryToDecreaseMRUInStorage(player, -500) || this.setMRU(is, -500)))
@@ -176,7 +177,7 @@ public class ItemWindTablet extends ItemStoresMRUInNBT implements IModelRegister
 	}
 
 	@Override
-	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List<String> par3List, boolean par4) 
+	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List<String> par3List, boolean par4)
 	{
 		super.addInformation(par1ItemStack, par2EntityPlayer, par3List, par4);
 		int currentWindRev = WindRelations.getPlayerWindRelations(par2EntityPlayer);

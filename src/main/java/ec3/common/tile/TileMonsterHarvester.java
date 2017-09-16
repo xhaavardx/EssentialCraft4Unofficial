@@ -2,6 +2,11 @@ package ec3.common.tile;
 
 import java.util.List;
 
+import DummyCore.Utils.DataStorage;
+import DummyCore.Utils.DummyData;
+import DummyCore.Utils.MiscUtils;
+import ec3.api.ApiCore;
+import ec3.utils.common.ECUtils;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -10,11 +15,6 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.util.FakePlayer;
-import DummyCore.Utils.DataStorage;
-import DummyCore.Utils.DummyData;
-import DummyCore.Utils.MiscUtils;
-import ec3.api.ApiCore;
-import ec3.utils.common.ECUtils;
 
 public class TileMonsterHarvester extends TileMRUGeneric {
 	public static float rad = 12F;
@@ -27,13 +27,13 @@ public class TileMonsterHarvester extends TileMRUGeneric {
 	public static int mobDestructionTimer = 1440;
 	public static boolean allowBossDuplication = false;
 	public static boolean clearCopyInventory = true;
-	
+
 	public TileMonsterHarvester() {
 		super();
 		maxMRU = (int)cfgMaxMRU;
 		setSlotsNum(6);
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public void update() {
@@ -51,7 +51,7 @@ public class TileMonsterHarvester extends TileMRUGeneric {
 							if(getMRU() > mruUsage) {
 								if(!e.isNonBoss() && !allowBossDuplication)
 									return;
-								
+
 								EntityLivingBase copy = (EntityLivingBase)MiscUtils.cloneEntity(e);
 								getWorld().spawnEntity(copy);
 								if(clearCopyInventory) {
@@ -81,7 +81,7 @@ public class TileMonsterHarvester extends TileMRUGeneric {
 			}
 		}
 	}
-	
+
 	public static void setupConfig(Configuration cfg) {
 		try {
 			cfg.load();
@@ -96,12 +96,12 @@ public class TileMonsterHarvester extends TileMRUGeneric {
 					"Remove inventory of a duplicate before killing it:true"
 			}, "");
 			String dataString = "";
-			
+
 			for(int i = 0; i < cfgArrayString.length; ++i)
 				dataString += "||" + cfgArrayString[i];
-			
+
 			DummyData[] data = DataStorage.parseData(dataString);
-			
+
 			mruUsage = Integer.parseInt(data[1].fieldValue);
 			cfgMaxMRU = Float.parseFloat(data[0].fieldValue);
 			generatesCorruption = Boolean.parseBoolean(data[2].fieldValue);
@@ -110,14 +110,14 @@ public class TileMonsterHarvester extends TileMRUGeneric {
 			mobDestructionTimer = Integer.parseInt(data[5].fieldValue);
 			allowBossDuplication = Boolean.parseBoolean(data[6].fieldValue);
 			clearCopyInventory = Boolean.parseBoolean(data[7].fieldValue);
-			
+
 			cfg.save();
 		}
 		catch(Exception e) {
 			return;
 		}
 	}
-	
+
 	@Override
 	public int[] getOutputSlots() {
 		return new int[0];

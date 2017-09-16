@@ -4,9 +4,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-
 import DummyCore.Utils.DrawUtils;
 import DummyCore.Utils.MiscUtils;
 import ec3.common.inventory.InventoryCraftingFrame;
@@ -33,8 +30,9 @@ public class GuiCraftingFrame extends GuiContainer{
 		return false;
 	}
 
+	@Override
 	@SuppressWarnings("unchecked")
-	public void initGui() 
+	public void initGui()
 	{
 		int k = (this.width - this.xSize) / 2;
 		int l = (this.height - this.ySize) / 2;
@@ -42,7 +40,8 @@ public class GuiCraftingFrame extends GuiContainer{
 		super.initGui();
 	}
 
-	protected void actionPerformed(GuiButton par1GuiButton) 
+	@Override
+	protected void actionPerformed(GuiButton par1GuiButton)
 	{
 		MiscUtils.handleButtonPress(par1GuiButton.id, this.getClass(), par1GuiButton.getClass(), this.mc.player, 0, 0, 0);
 	}
@@ -54,6 +53,7 @@ public class GuiCraftingFrame extends GuiContainer{
 		this.drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
 	}
 
+	@Override
 	public void drawScreen(int mX, int mY, float partialTicks)
 	{
 		if(!this.crafter.filterStack.isItemEqual(mc.player.getHeldItemMainhand()))
@@ -66,7 +66,7 @@ public class GuiCraftingFrame extends GuiContainer{
 		{
 			RenderHelper.disableStandardItemLighting();
 			GlStateManager.color(1, 1, 1);
-			GuiButton btn  = (GuiButton) this.buttonList.get(ik);
+			GuiButton btn  = this.buttonList.get(ik);
 			boolean hover = mX >= btn.xPosition && mY >= btn.yPosition && mX < btn.xPosition + btn.width && mY < btn.yPosition + btn.height;
 			int id = btn.id;
 			if(id == 0)
@@ -99,6 +99,7 @@ public class GuiCraftingFrame extends GuiContainer{
 		}
 	}
 
+	@Override
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	protected void drawHoveringText(List p_146283_1_, int p_146283_2_, int p_146283_3_, FontRenderer font)
 	{
@@ -114,7 +115,7 @@ public class GuiCraftingFrame extends GuiContainer{
 
 			while (iterator.hasNext())
 			{
-				String s = (String)iterator.next();
+				String s = iterator.next();
 				int l = font.getStringWidth(s);
 
 				if (l > k)

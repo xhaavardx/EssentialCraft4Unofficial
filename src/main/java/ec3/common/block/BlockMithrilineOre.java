@@ -18,7 +18,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
@@ -57,6 +56,7 @@ public class BlockMithrilineOre extends Block implements IModelRegisterer {
 		return BlockRenderLayer.CUTOUT_MIPPED;
 	}
 
+	@Override
 	public void getSubBlocks(Item p_149666_1_, CreativeTabs p_149666_2_, List<ItemStack> p_149666_3_) {
 		for(int i = 0; i < 3; ++i)
 			p_149666_3_.add(new ItemStack(p_149666_1_, 1, i));
@@ -72,6 +72,7 @@ public class BlockMithrilineOre extends Block implements IModelRegisterer {
 		return ItemsCore.genericItem;
 	}
 
+	@Override
 	public ArrayList<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune)
 	{
 		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();

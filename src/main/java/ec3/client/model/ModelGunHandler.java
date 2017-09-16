@@ -36,7 +36,7 @@ import net.minecraftforge.common.model.TRSRTransformation;
 public class ModelGunHandler implements IPerspectiveAwareModel {
 
 	public static IBakedModel blankItem;
-	
+
 	private IBakedModel baseModel;
 
 	public ModelGunHandler(IBakedModel baseModel) {
@@ -145,10 +145,10 @@ public class ModelGunHandler implements IPerspectiveAwareModel {
 					return new ModelGun(
 							originalModel,
 							base == null ? null : new ResourceLocation(base.baseTextures.get(iGun.gunType)),
-							handle == null ? null : new ResourceLocation(handle.handleTextures.get(iGun.gunType)),
-							device == null ? null : new ResourceLocation(device.deviceTextures.get(iGun.gunType)),
-							scope == null ? null : new ResourceLocation(scope.textures.get(iGun.gunType)),
-							lense == null ? null : new ResourceLocation(lense.textures.get(iGun.gunType))
+									handle == null ? null : new ResourceLocation(handle.handleTextures.get(iGun.gunType)),
+											device == null ? null : new ResourceLocation(device.deviceTextures.get(iGun.gunType)),
+													scope == null ? null : new ResourceLocation(scope.textures.get(iGun.gunType)),
+															lense == null ? null : new ResourceLocation(lense.textures.get(iGun.gunType))
 							);
 				}
 			}

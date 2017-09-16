@@ -7,12 +7,12 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.world.World;
 
 public class MithrilineFurnaceRecipe implements IRecipe {
-	
+
 	public final UnformedItemStack smelted;
 	public final ItemStack result;
 	public final float enderStarPulsesRequired;
 	public final int requiredRecipeSize;
-	
+
 	public MithrilineFurnaceRecipe(UnformedItemStack is, ItemStack is_1, float f1, int reqStack)
 	{
 		smelted = is;

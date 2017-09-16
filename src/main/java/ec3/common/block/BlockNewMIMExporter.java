@@ -36,6 +36,7 @@ public class BlockNewMIMExporter extends BlockContainer implements IModelRegiste
 		setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.DOWN));
 	}
 
+	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState s, IBlockAccess p_149719_1_, BlockPos p_149719_2_)
 	{
 		int metadata = s.getValue(FACING).getIndex();
@@ -71,6 +72,7 @@ public class BlockNewMIMExporter extends BlockContainer implements IModelRegiste
 		super.breakBlock(par1World, par2Pos, par3State);
 	}
 
+	@Override
 	public boolean isOpaqueCube(IBlockState s)
 	{
 		return false;
@@ -82,11 +84,12 @@ public class BlockNewMIMExporter extends BlockContainer implements IModelRegiste
 		return false;
 	}
 
+	@Override
 	public EnumBlockRenderType getRenderType(IBlockState s)
 	{
 		return EnumBlockRenderType.MODEL;
 	}
-	
+
 	@Override
 	public TileEntity createNewTileEntity(World p_149915_1_, int metadata) {
 		return new TileNewMIMExportNode();

@@ -26,11 +26,13 @@ public class BlockMoonWell extends BlockContainer implements IModelRegisterer {
 		super(p_i45394_1_);
 	}
 
+	@Override
 	public boolean isOpaqueCube(IBlockState s)
 	{
 		return false;
 	}
 
+	@Override
 	public boolean isFullCube(IBlockState s)
 	{
 		return false;
@@ -42,6 +44,7 @@ public class BlockMoonWell extends BlockContainer implements IModelRegisterer {
 		return BlockRenderLayer.TRANSLUCENT;
 	}
 
+	@Override
 	public EnumBlockRenderType getRenderType(IBlockState s)
 	{
 		return EnumBlockRenderType.MODEL;

@@ -11,6 +11,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -67,10 +68,17 @@ public class ItemMagicalDigger extends ItemPickaxe implements IItemRequiresMRU, 
 		return true;
 	}
 
-	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List<String> par3List, boolean par4) 
+	@Override
+	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List<String> par3List, boolean par4)
 	{
 		super.addInformation(par1ItemStack, par2EntityPlayer, par3List, par4);
 		par3List.add(ECUtils.getStackTag(par1ItemStack).getInteger("mru") + "/" + ECUtils.getStackTag(par1ItemStack).getInteger("maxMRU") + " MRU");
+	}
+
+	@Override
+	public void onUpdate(ItemStack itemStack, World world, Entity entity, int indexInInventory, boolean isCurrentItem)
+	{
+		ECUtils.initMRUTag(itemStack, maxMRU);
 	}
 
 	@Override
@@ -107,6 +115,7 @@ public class ItemMagicalDigger extends ItemPickaxe implements IItemRequiresMRU, 
 		return true;
 	}
 
+	@Override
 	public float getStrVsBlock(ItemStack par1ItemStack, IBlockState par2Block)
 	{
 		if(this.getMRU(par1ItemStack) > 9)

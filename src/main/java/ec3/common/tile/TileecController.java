@@ -18,17 +18,15 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.Packet;
-import net.minecraft.network.play.INetHandlerPlayClient;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.ITickable;
 import net.minecraftforge.common.config.Configuration;
 
 public class TileecController extends TileEntity implements ITEHasMRU, ITickable {
-	
+
 	//============================Variables================================//
 	public int syncTick;
 	public int structureCheckTick;
@@ -37,19 +35,19 @@ public class TileecController extends TileEntity implements ITEHasMRU, ITickable
 	public float resistance;
 	public Coord3D upperCoord;
 	public Coord3D lowerCoord;
-	
+
 	public boolean isCorrect;
-	
+
 	public float balance;
-	
+
 	public UUID uuid = UUID.randomUUID();
-	
+
 	public List<BlockPosition> blocksInStructure = new ArrayList<BlockPosition>();
-	
+
 	public static float cfgMaxMRU = 60000;
 	public static float cfgMRUPerStorage = 100000;
 	//===========================Functions=================================//
-	
+
 	@Override
 	public void update() {
 		//Retrying structure checks. Basically, every 10 seconds the structure will re-initialize//
@@ -59,8 +57,8 @@ public class TileecController extends TileEntity implements ITEHasMRU, ITickable
 		}
 		else
 			--structureCheckTick;
-		
-		//Sending the sync packets to the CLIENT. 
+
+		//Sending the sync packets to the CLIENT.
 		if(syncTick == 0) {
 			if(!getWorld().isRemote)
 				MiscUtils.sendPacketToAllAround(getWorld(), getUpdatePacket(), pos.getX(), pos.getY(), pos.getZ(), getWorld().provider.getDimension(), 16);
@@ -69,7 +67,7 @@ public class TileecController extends TileEntity implements ITEHasMRU, ITickable
 		else
 			--syncTick;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public IMRUPressence getMRUCU() {
 		if(isCorrect) {
@@ -85,34 +83,34 @@ public class TileecController extends TileEntity implements ITEHasMRU, ITickable
 		}
 		return null;
 	}
-	
+
 	@Override
-    public SPacketUpdateTileEntity getUpdatePacket() {
-        NBTTagCompound nbttagcompound = new NBTTagCompound();
-        writeToNBT(nbttagcompound);
-        return new SPacketUpdateTileEntity(pos, -10, nbttagcompound);
-    }
-	
+	public SPacketUpdateTileEntity getUpdatePacket() {
+		NBTTagCompound nbttagcompound = new NBTTagCompound();
+		writeToNBT(nbttagcompound);
+		return new SPacketUpdateTileEntity(pos, -10, nbttagcompound);
+	}
+
 	@Override
-    public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
+	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
 		if(pkt.getTileEntityType() == -10)
 			readFromNBT(pkt.getNbtCompound());
-    }
+	}
 
-	
+
 	@Override
-    public void readFromNBT(NBTTagCompound i) {
+	public void readFromNBT(NBTTagCompound i) {
 		super.readFromNBT(i);
 		ECUtils.loadMRUState(this, i);
-    }
-	
+	}
+
 	@Override
-    public NBTTagCompound writeToNBT(NBTTagCompound i) {
-    	super.writeToNBT(i);
-    	ECUtils.saveMRUState(this, i);
-    	return i;
-    }
-	
+	public NBTTagCompound writeToNBT(NBTTagCompound i) {
+		super.writeToNBT(i);
+		ECUtils.saveMRUState(this, i);
+		return i;
+	}
+
 	/**
 	 * Checking the shape of the structure;
 	 * @return - false, if the structure is incorrect, true otherwise
@@ -276,7 +274,7 @@ public class TileecController extends TileEntity implements ITEHasMRU, ITickable
 				--checkInt0;
 			}
 			++checkInt0;
-				minY = checkInt0;
+			minY = checkInt0;
 		}
 		if(minY == 0 && minX != 0 && minZ != 0) {
 			checkInt0 = 0;
@@ -387,7 +385,7 @@ public class TileecController extends TileEntity implements ITEHasMRU, ITickable
 		maxMRU = (int)f;
 		return true;
 	}
-	
+
 	public static void setupConfig(Configuration cfg) {
 		try {
 			cfg.load();
@@ -396,15 +394,15 @@ public class TileecController extends TileEntity implements ITEHasMRU, ITickable
 					"MRU Increasement per Storage:100000"
 			},"");
 			String dataString = "";
-			
+
 			for(int i = 0; i < cfgArrayString.length; ++i)
 				dataString += "||" + cfgArrayString[i];
-			
+
 			DummyData[] data = DataStorage.parseData(dataString);
-			
+
 			cfgMaxMRU = Float.parseFloat(data[0].fieldValue);
 			cfgMRUPerStorage = Float.parseFloat(data[1].fieldValue);
-			
+
 			cfg.save();
 		}
 		catch(Exception e) {

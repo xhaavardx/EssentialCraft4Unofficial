@@ -34,6 +34,7 @@ public class ItemMRUMatrixProjection extends Item implements IModelRegisterer {
 		this.setMaxDamage(0);
 	}
 
+	@Override
 	public String getUnlocalizedName(ItemStack p_77667_1_)
 	{
 		return super.getUnlocalizedName(p_77667_1_)+"_"+names[Math.min(p_77667_1_.getItemDamage(),names.length-1)];
@@ -57,7 +58,8 @@ public class ItemMRUMatrixProjection extends Item implements IModelRegisterer {
 		return new ActionResult(EnumActionResult.PASS,par1ItemStack);
 	}
 
-	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List<String> par3List, boolean par4) 
+	@Override
+	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List<String> par3List, boolean par4)
 	{
 		if(par1ItemStack.getTagCompound() != null)
 		{
@@ -66,6 +68,7 @@ public class ItemMRUMatrixProjection extends Item implements IModelRegisterer {
 		}
 	}
 
+	@Override
 	public void getSubItems(Item p_150895_1_, CreativeTabs p_150895_2_, List<ItemStack> p_150895_3_)
 	{
 		for(int i = 0; i < 5; ++i)
@@ -74,16 +77,19 @@ public class ItemMRUMatrixProjection extends Item implements IModelRegisterer {
 		}
 	}
 
+	@Override
 	public EnumAction getItemUseAction(ItemStack p_77661_1_)
 	{
 		return EnumAction.BLOCK;
 	}
 
+	@Override
 	public int getMaxItemUseDuration(ItemStack p_77626_1_)
 	{
 		return 200;
 	}
 
+	@Override
 	public void onUsingTick(ItemStack stack, EntityLivingBase player, int count)
 	{
 		if(count % 40 == 0)
@@ -100,6 +106,7 @@ public class ItemMRUMatrixProjection extends Item implements IModelRegisterer {
 
 	}
 
+	@Override
 	public ItemStack onItemUseFinish(ItemStack p_77654_1_, World p_77654_2_, EntityLivingBase p_77654_3_)
 	{
 		if(p_77654_3_ instanceof EntityPlayer) {

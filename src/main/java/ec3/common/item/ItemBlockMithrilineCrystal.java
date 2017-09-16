@@ -12,11 +12,13 @@ public class ItemBlockMithrilineCrystal extends ItemBlock{
 		this.setMaxDamage(0);
 	}
 
+	@Override
 	public int getMetadata(int par1)
 	{
 		return par1;
 	}
 
+	@Override
 	public String getUnlocalizedName(ItemStack p_77667_1_)
 	{
 		int meta = p_77667_1_.getItemDamage()/3;

@@ -1,31 +1,28 @@
 package ec3.common.tile;
 
-import java.util.UUID;
-
 import DummyCore.Utils.DataStorage;
 import DummyCore.Utils.DummyData;
 import DummyCore.Utils.MiscUtils;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.SoundCategory;
-import net.minecraftforge.common.config.Configuration;
 import ec3.api.ApiCore;
 import ec3.common.item.ItemSoulStone;
 import ec3.common.registry.SoundRegistry;
 import ec3.utils.common.ECUtils;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.SoundCategory;
+import net.minecraftforge.common.config.Configuration;
 
 public class TileMatrixAbsorber extends TileMRUGeneric {
-	
+
 	public int sndTime;
 	public static float cfgMaxMRU =  ApiCore.GENERATOR_MAX_MRU_GENERIC/10;
 	public static float cfgBalance = 1F;
 	public static float mruGenerated = 1;
 	public static float mruUsage = 10;
 	public static boolean requestImmidiateSync;
-	
+
 	public TileMatrixAbsorber() {
 		super();
 		balance = cfgBalance;
@@ -33,11 +30,11 @@ public class TileMatrixAbsorber extends TileMRUGeneric {
 		slot0IsBoundGem = false;
 		setSlotsNum(1);
 	}
-	
+
 	public boolean canGenerateMRU() {
 		return false;
 	}
-	
+
 	@Override
 	public void update() {
 		balance = cfgBalance;
@@ -81,17 +78,17 @@ public class TileMatrixAbsorber extends TileMRUGeneric {
 				sndTime = 0;
 		}
 	}
-	
+
 	@Override
 	public void readFromNBT(NBTTagCompound i) {
 		super.readFromNBT(i);
 	}
-	
+
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound i) {
 		return super.writeToNBT(i);
 	}
-	
+
 	public static void setupConfig(Configuration cfg) {
 		try {
 			cfg.load();
@@ -103,25 +100,25 @@ public class TileMatrixAbsorber extends TileMRUGeneric {
 					"Request Immidiate Data Sync:true"
 			}, "");
 			String dataString = "";
-			
+
 			for(int i = 0; i < cfgArrayString.length; ++i)
 				dataString += "||" + cfgArrayString[i];
-			
+
 			DummyData[] data = DataStorage.parseData(dataString);
-			
+
 			cfgMaxMRU = Float.parseFloat(data[0].fieldValue);
 			cfgBalance = Float.parseFloat(data[1].fieldValue);
 			mruGenerated = Float.parseFloat(data[2].fieldValue);
 			mruUsage = Float.parseFloat(data[3].fieldValue);
 			requestImmidiateSync = Boolean.parseBoolean(data[4].fieldValue);
-			
+
 			cfg.save();
 		}
 		catch(Exception e) {
 			return;
 		}
 	}
-	
+
 	@Override
 	public int[] getOutputSlots() {
 		return new int[] {0};

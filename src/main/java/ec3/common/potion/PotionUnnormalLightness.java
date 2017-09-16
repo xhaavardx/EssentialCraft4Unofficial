@@ -10,7 +10,7 @@ import net.minecraft.util.ResourceLocation;
 
 public class PotionUnnormalLightness extends Potion{
 
-	public PotionUnnormalLightness(int p_i1573_1_, boolean p_i1573_2_,int p_i1573_3_) 
+	public PotionUnnormalLightness(int p_i1573_1_, boolean p_i1573_2_,int p_i1573_3_)
 	{
 		super(p_i1573_2_, p_i1573_3_);
 		this.setIconIndex(3, 2);
@@ -25,22 +25,26 @@ public class PotionUnnormalLightness extends Potion{
 		return true;
 	}
 
+	@Override
 	public void performEffect(EntityLivingBase p_76394_1_, int p_76394_2_)
 	{
 		int duration = p_76394_1_.getActivePotionEffect(this).getDuration();
 		p_76394_1_.addPotionEffect(new PotionEffect(MobEffects.JUMP_BOOST,duration,p_76394_2_));
 	}
 
+	@Override
 	public boolean isReady(int p_76397_1_, int p_76397_2_)
 	{
 		return true;
 	}
 
+	@Override
 	public boolean hasStatusIcon()
 	{
 		return true;
 	}
 
+	@Override
 	public int getStatusIconIndex()
 	{
 		Minecraft.getMinecraft().renderEngine.bindTexture(rl);

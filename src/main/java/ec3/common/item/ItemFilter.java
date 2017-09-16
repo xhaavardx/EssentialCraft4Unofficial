@@ -22,17 +22,19 @@ import net.minecraftforge.client.model.ModelLoader;
 
 public class ItemFilter extends Item implements IModelRegisterer {
 
+	@Override
 	public ActionResult<ItemStack> onItemRightClick(ItemStack is, World w, EntityPlayer p, EnumHand hand)
 	{
 		p.openGui(EssentialCraftCore.core, Config.guiID[0], w, 0, -1, 0);
 		return new ActionResult(EnumActionResult.PASS, is);
 	}
 
-	protected int containerMatchesItem(Container openContainer) 
-	{       
+	protected int containerMatchesItem(Container openContainer)
+	{
 		return 0;
 	}
 
+	@Override
 	public void getSubItems(Item par1, CreativeTabs par2CreativeTabs, List<ItemStack> par3List)
 	{
 		for(int var4 = 0; var4 < 4; ++var4)
@@ -42,7 +44,8 @@ public class ItemFilter extends Item implements IModelRegisterer {
 		}
 	}
 
-	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List<String> par3List, boolean par4) 
+	@Override
+	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List<String> par3List, boolean par4)
 	{
 		if(par1ItemStack.getItemDamage() == 1 || par1ItemStack.getItemDamage() == 3)
 			par3List.add(I18n.translateToLocal("ec3.txt.desc.advanced"));
@@ -64,7 +67,7 @@ public class ItemFilter extends Item implements IModelRegisterer {
 			return;
 		}
 		int containerType = containerMatchesItem(((EntityPlayer)entity).openContainer);
-		if (containerType == 0) 
+		if (containerType == 0)
 		{
 			ContainerFilter c = (ContainerFilter)((EntityPlayer)entity).openContainer;
 			c.saveToNBT(itemStack);

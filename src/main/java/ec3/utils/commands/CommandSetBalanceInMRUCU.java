@@ -9,15 +9,16 @@ import ec3.utils.common.ECUtils;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 
 public class CommandSetBalanceInMRUCU extends CommandBase {
+	@Override
 	public String getName() {
 		return "setBalanceInMRUCU";
 	}
 
+	@Override
 	public String getUsage(ICommandSender par1ICommandSender) {
 		return "/setBalanceInMRUCU <x> <y> <z> <balance>";
 	}
@@ -25,10 +26,12 @@ public class CommandSetBalanceInMRUCU extends CommandBase {
 	/**
 	 * Return the required permission level for this command.
 	 */
+	@Override
 	public int getRequiredPermissionLevel() {
 		return 3;
 	}
 
+	@Override
 	public void execute(MinecraftServer server, ICommandSender par1ICommandSender, String[] par2ArrayOfStr) throws CommandException {
 		double var3 = parseDouble(par2ArrayOfStr[3], 0, 2);
 		BlockPos p = parseBlockPos(par1ICommandSender, par2ArrayOfStr, 0, true);

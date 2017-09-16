@@ -37,11 +37,13 @@ public class BlockRadiatingChamber extends BlockContainer implements IModelRegis
 		super.breakBlock(par1World, par2Pos, par3State);
 	}
 
+	@Override
 	public boolean isOpaqueCube(IBlockState s)
 	{
 		return false;
 	}
 
+	@Override
 	public boolean isFullCube(IBlockState s)
 	{
 		return false;
@@ -53,6 +55,7 @@ public class BlockRadiatingChamber extends BlockContainer implements IModelRegis
 		return BlockRenderLayer.SOLID;
 	}
 
+	@Override
 	public EnumBlockRenderType getRenderType(IBlockState s)
 	{
 		return EnumBlockRenderType.MODEL;

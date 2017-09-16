@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Random;
 
 import DummyCore.Utils.Coord2D;
-import net.minecraftforge.fml.common.eventhandler.Event.Result;
 import ec3.common.block.BlocksCore;
 import ec3.common.world.ECExplosion;
 import ec3.common.world.WorldGenDestroyedHouse;
@@ -14,17 +13,11 @@ import ec3.common.world.WorldGenMRUSpreader;
 import ec3.common.world.WorldGenMRUTower;
 import ec3.utils.cfg.Config;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockLog;
-import net.minecraft.block.BlockNewLog;
-import net.minecraft.block.BlockOldLog;
-import net.minecraft.block.BlockPlanks;
 import net.minecraft.block.BlockSandStone;
 import net.minecraft.block.BlockStairs;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -35,8 +28,6 @@ import net.minecraft.world.biome.BiomeProvider;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureComponent;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.terraingen.BiomeEvent;
 
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class StructureTownPieces
@@ -303,6 +294,7 @@ public class StructureTownPieces
 		 * second Part of Structure generating, this for example places Spiderwebs, Mob Spawners, it closes
 		 * Mineshafts at the end, it adds Fences...
 		 */
+		@Override
 		public boolean addComponentParts(World p_74875_1_, Random p_74875_2_, StructureBoundingBox p_74875_3_)
 		{
 			if (this.field_143015_k < 0)
@@ -324,6 +316,7 @@ public class StructureTownPieces
 		/**
 		 * Returns the villager type to spawn in this component, based on the number of villagers already spawned.
 		 */
+		@Override
 		protected int getVillagerType(int p_74888_1_)
 		{
 			return 2;
@@ -357,6 +350,7 @@ public class StructureTownPieces
 
 		}
 
+		@Override
 		protected void writeStructureToNBT(NBTTagCompound p_143012_1_)
 		{
 			super.writeStructureToNBT(p_143012_1_);
@@ -366,6 +360,7 @@ public class StructureTownPieces
 			p_143012_1_.setInteger("CD", Block.REGISTRY.getIDForObject(this.cropTypeD));
 		}
 
+		@Override
 		protected void readStructureFromNBT(NBTTagCompound p_143011_1_)
 		{
 			super.readStructureFromNBT(p_143011_1_);
@@ -378,18 +373,18 @@ public class StructureTownPieces
 		private Block getRandomCropType(Random p_151559_1_)
 		{
 			switch (p_151559_1_.nextInt(10))
-            {
-                case 0:
-                case 1:
-                    return Blocks.CARROTS;
-                case 2:
-                case 3:
-                    return Blocks.POTATOES;
-                case 4:
-                    return Blocks.BEETROOTS;
-                default:
-                    return Blocks.WHEAT;
-            }
+			{
+			case 0:
+			case 1:
+				return Blocks.CARROTS;
+			case 2:
+			case 3:
+				return Blocks.POTATOES;
+			case 4:
+				return Blocks.BEETROOTS;
+			default:
+				return Blocks.WHEAT;
+			}
 		}
 
 		public static StructureTownPieces.Field1 createPiece(StructureTownPieces.Start p_74900_0_, List p_74900_1_, Random p_74900_2_, int p_74900_3_, int p_74900_4_, int p_74900_5_, EnumFacing p_74900_6_, int p_74900_7_)
@@ -402,6 +397,7 @@ public class StructureTownPieces
 		 * second Part of Structure generating, this for example places Spiderwebs, Mob Spawners, it closes
 		 * Mineshafts at the end, it adds Fences...
 		 */
+		@Override
 		public boolean addComponentParts(World p_74875_1_, Random p_74875_2_, StructureBoundingBox p_74875_3_)
 		{
 			if (this.field_143015_k < 0)
@@ -437,6 +433,7 @@ public class StructureTownPieces
 			this.cropTypeB = this.getRandomCropType(p_i2096_3_);
 		}
 
+		@Override
 		protected void writeStructureToNBT(NBTTagCompound p_143012_1_)
 		{
 			super.writeStructureToNBT(p_143012_1_);
@@ -444,6 +441,7 @@ public class StructureTownPieces
 			p_143012_1_.setInteger("CB", Block.REGISTRY.getIDForObject(this.cropTypeB));
 		}
 
+		@Override
 		protected void readStructureFromNBT(NBTTagCompound p_143011_1_)
 		{
 			super.readStructureFromNBT(p_143011_1_);
@@ -455,16 +453,16 @@ public class StructureTownPieces
 		{
 			switch (p_151560_1_.nextInt(10))
 			{
-            case 0:
-            case 1:
-                return Blocks.CARROTS;
-            case 2:
-            case 3:
-                return Blocks.POTATOES;
-            case 4:
-                return Blocks.BEETROOTS;
-            default:
-                return Blocks.WHEAT;
+			case 0:
+			case 1:
+				return Blocks.CARROTS;
+			case 2:
+			case 3:
+				return Blocks.POTATOES;
+			case 4:
+				return Blocks.BEETROOTS;
+			default:
+				return Blocks.WHEAT;
 			}
 		}
 
@@ -478,6 +476,7 @@ public class StructureTownPieces
 		 * second Part of Structure generating, this for example places Spiderwebs, Mob Spawners, it closes
 		 * Mineshafts at the end, it adds Fences...
 		 */
+		@Override
 		public boolean addComponentParts(World p_74875_1_, Random p_74875_2_, StructureBoundingBox p_74875_3_)
 		{
 			if (this.field_143015_k < 0)
@@ -517,6 +516,7 @@ public class StructureTownPieces
 		 * second Part of Structure generating, this for example places Spiderwebs, Mob Spawners, it closes
 		 * Mineshafts at the end, it adds Fences...
 		 */
+		@Override
 		public boolean addComponentParts(World p_74875_1_, Random p_74875_2_, StructureBoundingBox p_74875_3_)
 		{
 			if (this.field_143015_k < 0)
@@ -538,6 +538,7 @@ public class StructureTownPieces
 		/**
 		 * Returns the villager type to spawn in this component, based on the number of villagers already spawned.
 		 */
+		@Override
 		protected int getVillagerType(int p_74888_1_)
 		{
 			return p_74888_1_ == 0 ? 4 : 0;
@@ -565,6 +566,7 @@ public class StructureTownPieces
 		 * second Part of Structure generating, this for example places Spiderwebs, Mob Spawners, it closes
 		 * Mineshafts at the end, it adds Fences...
 		 */
+		@Override
 		public boolean addComponentParts(World p_74875_1_, Random p_74875_2_, StructureBoundingBox p_74875_3_)
 		{
 			if (this.field_143015_k < 0)
@@ -587,6 +589,7 @@ public class StructureTownPieces
 		/**
 		 * Returns the villager type to spawn in this component, based on the number of villagers already spawned.
 		 */
+		@Override
 		protected int getVillagerType(int p_74888_1_)
 		{
 			return 1;
@@ -612,12 +615,14 @@ public class StructureTownPieces
 			return canVillageGoDeeper(structureboundingbox) && StructureComponent.findIntersecting(p_74915_1_, structureboundingbox) == null ? new StructureTownPieces.House2(p_74915_0_, p_74915_7_, p_74915_2_, structureboundingbox, p_74915_6_) : null;
 		}
 
+		@Override
 		protected void writeStructureToNBT(NBTTagCompound p_143012_1_)
 		{
 			super.writeStructureToNBT(p_143012_1_);
 			p_143012_1_.setBoolean("Chest", this.hasMadeChest);
 		}
 
+		@Override
 		protected void readStructureFromNBT(NBTTagCompound p_143011_1_)
 		{
 			super.readStructureFromNBT(p_143011_1_);
@@ -628,6 +633,7 @@ public class StructureTownPieces
 		 * second Part of Structure generating, this for example places Spiderwebs, Mob Spawners, it closes
 		 * Mineshafts at the end, it adds Fences...
 		 */
+		@Override
 		public boolean addComponentParts(World p_74875_1_, Random p_74875_2_, StructureBoundingBox p_74875_3_)
 		{
 			if (this.field_143015_k < 0)
@@ -650,6 +656,7 @@ public class StructureTownPieces
 		/**
 		 * Returns the villager type to spawn in this component, based on the number of villagers already spawned.
 		 */
+		@Override
 		protected int getVillagerType(int p_74888_1_)
 		{
 			return 3;
@@ -678,6 +685,7 @@ public class StructureTownPieces
 		 * second Part of Structure generating, this for example places Spiderwebs, Mob Spawners, it closes
 		 * Mineshafts at the end, it adds Fences...
 		 */
+		@Override
 		public boolean addComponentParts(World p_74875_1_, Random p_74875_2_, StructureBoundingBox p_74875_3_)
 		{
 			if (this.field_143015_k < 0)
@@ -710,12 +718,14 @@ public class StructureTownPieces
 			this.isRoofAccessible = p_i2100_3_.nextBoolean();
 		}
 
+		@Override
 		protected void writeStructureToNBT(NBTTagCompound p_143012_1_)
 		{
 			super.writeStructureToNBT(p_143012_1_);
 			p_143012_1_.setBoolean("Terrace", this.isRoofAccessible);
 		}
 
+		@Override
 		protected void readStructureFromNBT(NBTTagCompound p_143011_1_)
 		{
 			super.readStructureFromNBT(p_143011_1_);
@@ -732,6 +742,7 @@ public class StructureTownPieces
 		 * second Part of Structure generating, this for example places Spiderwebs, Mob Spawners, it closes
 		 * Mineshafts at the end, it adds Fences...
 		 */
+		@Override
 		public boolean addComponentParts(World p_74875_1_, Random p_74875_2_, StructureBoundingBox p_74875_3_)
 		{
 			if (this.field_143015_k < 0)
@@ -766,12 +777,14 @@ public class StructureTownPieces
 			this.averageGroundLevel = Math.max(p_i2105_4_.getXSize(), p_i2105_4_.getZSize());
 		}
 
+		@Override
 		protected void writeStructureToNBT(NBTTagCompound p_143012_1_)
 		{
 			super.writeStructureToNBT(p_143012_1_);
 			p_143012_1_.setInteger("Length", this.averageGroundLevel);
 		}
 
+		@Override
 		protected void readStructureFromNBT(NBTTagCompound p_143011_1_)
 		{
 			super.readStructureFromNBT(p_143011_1_);
@@ -781,6 +794,7 @@ public class StructureTownPieces
 		/**
 		 * Initiates construction of the Structure Component picked, at the current Location of StructGen
 		 */
+		@Override
 		public void buildComponent(StructureComponent p_74861_1_, List p_74861_2_, Random p_74861_3_)
 		{
 			boolean flag = false;
@@ -869,10 +883,11 @@ public class StructureTownPieces
 		 * second Part of Structure generating, this for example places Spiderwebs, Mob Spawners, it closes
 		 * Mineshafts at the end, it adds Fences...
 		 */
+		@Override
 		public boolean addComponentParts(World p_74875_1_, Random p_74875_2_, StructureBoundingBox p_74875_3_)
 		{
 			IBlockState block = this.getBiomeSpecificBlockState(BlocksCore.concrete.getDefaultState());
-			
+
 			BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
 			for (int i = this.boundingBox.minX; i <= this.boundingBox.maxX; ++i)
 			{
@@ -986,6 +1001,7 @@ public class StructureTownPieces
 		 * second Part of Structure generating, this for example places Spiderwebs, Mob Spawners, it closes
 		 * Mineshafts at the end, it adds Fences...
 		 */
+		@Override
 		public boolean addComponentParts(World p_74875_1_, Random p_74875_2_, StructureBoundingBox p_74875_3_)
 		{
 			if (this.field_143015_k < 0)
@@ -1037,6 +1053,7 @@ public class StructureTownPieces
 			}
 		}
 
+		@Override
 		protected void writeStructureToNBT(NBTTagCompound p_143012_1_)
 		{
 			p_143012_1_.setInteger("HPos", this.field_143015_k);
@@ -1044,6 +1061,7 @@ public class StructureTownPieces
 			p_143012_1_.setBoolean("Desert", this.field_143014_b);
 		}
 
+		@Override
 		protected void readStructureFromNBT(NBTTagCompound p_143011_1_)
 		{
 			this.field_143015_k = p_143011_1_.getInteger("HPos");
@@ -1096,34 +1114,34 @@ public class StructureTownPieces
 		 * all the levels in the BB's horizontal rectangle).
 		 */
 		protected int getAverageGroundLevel(World worldIn, StructureBoundingBox structurebb)
-        {
-            int i = 0;
-            int j = 0;
-            BlockPos.MutableBlockPos blockpos$mutableblockpos = new BlockPos.MutableBlockPos();
+		{
+			int i = 0;
+			int j = 0;
+			BlockPos.MutableBlockPos blockpos$mutableblockpos = new BlockPos.MutableBlockPos();
 
-            for (int k = this.boundingBox.minZ; k <= this.boundingBox.maxZ; ++k)
-            {
-                for (int l = this.boundingBox.minX; l <= this.boundingBox.maxX; ++l)
-                {
-                    blockpos$mutableblockpos.setPos(l, 64, k);
+			for (int k = this.boundingBox.minZ; k <= this.boundingBox.maxZ; ++k)
+			{
+				for (int l = this.boundingBox.minX; l <= this.boundingBox.maxX; ++l)
+				{
+					blockpos$mutableblockpos.setPos(l, 64, k);
 
-                    if (structurebb.isVecInside(blockpos$mutableblockpos))
-                    {
-                        i += Math.max(worldIn.getTopSolidOrLiquidBlock(blockpos$mutableblockpos).getY(), worldIn.provider.getAverageGroundLevel() - 1);
-                        ++j;
-                    }
-                }
-            }
+					if (structurebb.isVecInside(blockpos$mutableblockpos))
+					{
+						i += Math.max(worldIn.getTopSolidOrLiquidBlock(blockpos$mutableblockpos).getY(), worldIn.provider.getAverageGroundLevel() - 1);
+						++j;
+					}
+				}
+			}
 
-            if (j == 0)
-            {
-                return -1;
-            }
-            else
-            {
-                return i / j;
-            }
-        }
+			if (j == 0)
+			{
+				return -1;
+			}
+			else
+			{
+				return i / j;
+			}
+		}
 
 		protected static boolean canVillageGoDeeper(StructureBoundingBox p_74895_0_)
 		{
@@ -1162,50 +1180,51 @@ public class StructureTownPieces
 			return 0;
 		}
 
-        protected IBlockState getBiomeSpecificBlockState(IBlockState blockstateIn)
-        {
-            net.minecraftforge.event.terraingen.BiomeEvent.GetVillageBlockID event = new net.minecraftforge.event.terraingen.BiomeEvent.GetVillageBlockID(startPiece == null ? null : startPiece.biome, blockstateIn);
-            net.minecraftforge.common.MinecraftForge.TERRAIN_GEN_BUS.post(event);
-            if (event.getResult() == net.minecraftforge.fml.common.eventhandler.Event.Result.DENY) return event.getReplacement();
-            if (this.field_143014_b)
-            {
-                if (blockstateIn.getBlock() == Blocks.LOG || blockstateIn.getBlock() == Blocks.LOG2)
-                {
-                    return Blocks.SANDSTONE.getDefaultState();
-                }
+		protected IBlockState getBiomeSpecificBlockState(IBlockState blockstateIn)
+		{
+			net.minecraftforge.event.terraingen.BiomeEvent.GetVillageBlockID event = new net.minecraftforge.event.terraingen.BiomeEvent.GetVillageBlockID(startPiece == null ? null : startPiece.biome, blockstateIn);
+			net.minecraftforge.common.MinecraftForge.TERRAIN_GEN_BUS.post(event);
+			if (event.getResult() == net.minecraftforge.fml.common.eventhandler.Event.Result.DENY) return event.getReplacement();
+			if (this.field_143014_b)
+			{
+				if (blockstateIn.getBlock() == Blocks.LOG || blockstateIn.getBlock() == Blocks.LOG2)
+				{
+					return Blocks.SANDSTONE.getDefaultState();
+				}
 
-                if (blockstateIn.getBlock() == Blocks.COBBLESTONE)
-                {
-                    return Blocks.SANDSTONE.getStateFromMeta(BlockSandStone.EnumType.DEFAULT.getMetadata());
-                }
+				if (blockstateIn.getBlock() == Blocks.COBBLESTONE)
+				{
+					return Blocks.SANDSTONE.getStateFromMeta(BlockSandStone.EnumType.DEFAULT.getMetadata());
+				}
 
-                if (blockstateIn.getBlock() == Blocks.PLANKS)
-                {
-                    return Blocks.SANDSTONE.getStateFromMeta(BlockSandStone.EnumType.SMOOTH.getMetadata());
-                }
+				if (blockstateIn.getBlock() == Blocks.PLANKS)
+				{
+					return Blocks.SANDSTONE.getStateFromMeta(BlockSandStone.EnumType.SMOOTH.getMetadata());
+				}
 
-                if (blockstateIn.getBlock() == Blocks.OAK_STAIRS)
-                {
-                    return Blocks.SANDSTONE_STAIRS.getDefaultState().withProperty(BlockStairs.FACING, blockstateIn.getValue(BlockStairs.FACING));
-                }
+				if (blockstateIn.getBlock() == Blocks.OAK_STAIRS)
+				{
+					return Blocks.SANDSTONE_STAIRS.getDefaultState().withProperty(BlockStairs.FACING, blockstateIn.getValue(BlockStairs.FACING));
+				}
 
-                if (blockstateIn.getBlock() == Blocks.STONE_STAIRS)
-                {
-                    return Blocks.SANDSTONE_STAIRS.getDefaultState().withProperty(BlockStairs.FACING, blockstateIn.getValue(BlockStairs.FACING));
-                }
+				if (blockstateIn.getBlock() == Blocks.STONE_STAIRS)
+				{
+					return Blocks.SANDSTONE_STAIRS.getDefaultState().withProperty(BlockStairs.FACING, blockstateIn.getValue(BlockStairs.FACING));
+				}
 
-                if (blockstateIn.getBlock() == Blocks.GRAVEL)
-                {
-                    return Blocks.SANDSTONE.getDefaultState();
-                }
-            }
+				if (blockstateIn.getBlock() == Blocks.GRAVEL)
+				{
+					return Blocks.SANDSTONE.getDefaultState();
+				}
+			}
 
-            return blockstateIn;
-        }
+			return blockstateIn;
+		}
 
 		/**
 		 * current Position depends on currently set Coordinates mode, is computed here
 		 */
+		@Override
 		protected void setBlockState(World p_151550_1_, IBlockState p_151550_2_, int p_151550_4_, int p_151550_5_, int p_151550_6_, StructureBoundingBox p_151550_7_)
 		{
 			IBlockState block1 = this.getBiomeSpecificBlockState(p_151550_2_);
@@ -1216,6 +1235,7 @@ public class StructureTownPieces
 		 * arguments: (World getEntityWorld(), StructureBoundingBox structBB, int minX, int minY, int minZ, int maxX, int
 		 * maxY, int maxZ, int placeBlock, int replaceBlock, boolean alwaysreplace)
 		 */
+		@Override
 		protected void fillWithBlocks(World p_151549_1_, StructureBoundingBox p_151549_2_, int p_151549_3_, int p_151549_4_, int p_151549_5_, int p_151549_6_, int p_151549_7_, int p_151549_8_, IBlockState p_151549_9_, IBlockState p_151549_10_, boolean p_151549_11_)
 		{
 			IBlockState block2 = this.getBiomeSpecificBlockState(p_151549_9_);
@@ -1223,6 +1243,7 @@ public class StructureTownPieces
 			super.fillWithBlocks(p_151549_1_, p_151549_2_, p_151549_3_, p_151549_4_, p_151549_5_, p_151549_6_, p_151549_7_, p_151549_8_, block2, block3, p_151549_11_);
 		}
 
+		@Override
 		protected void replaceAirAndLiquidDownwards(World p_151554_1_, IBlockState p_151554_2_, int p_151554_4_, int p_151554_5_, int p_151554_6_, StructureBoundingBox p_151554_7_)
 		{
 			IBlockState block1 = this.getBiomeSpecificBlockState(p_151554_2_);
@@ -1254,6 +1275,7 @@ public class StructureTownPieces
 		/**
 		 * Initiates construction of the Structure Component picked, at the current Location of StructGen
 		 */
+		@Override
 		public void buildComponent(StructureComponent p_74861_1_, List p_74861_2_, Random p_74861_3_)
 		{
 			StructureTownPieces.generateAndAddRoadPiece((StructureTownPieces.Start)p_74861_1_, p_74861_2_, p_74861_3_, this.boundingBox.minX - 1, this.boundingBox.maxY - 4, this.boundingBox.minZ + 1, EnumFacing.WEST, this.getComponentType());
@@ -1266,6 +1288,7 @@ public class StructureTownPieces
 		 * second Part of Structure generating, this for example places Spiderwebs, Mob Spawners, it closes
 		 * Mineshafts at the end, it adds Fences...
 		 */
+		@Override
 		public boolean addComponentParts(World p_74875_1_, Random p_74875_2_, StructureBoundingBox p_74875_3_)
 		{
 			if (this.field_143015_k < 0)
@@ -1331,6 +1354,7 @@ public class StructureTownPieces
 			this.tablePosition = p_i2101_3_.nextInt(3);
 		}
 
+		@Override
 		protected void writeStructureToNBT(NBTTagCompound p_143012_1_)
 		{
 			super.writeStructureToNBT(p_143012_1_);
@@ -1338,6 +1362,7 @@ public class StructureTownPieces
 			p_143012_1_.setBoolean("C", this.isTallHouse);
 		}
 
+		@Override
 		protected void readStructureFromNBT(NBTTagCompound p_143011_1_)
 		{
 			super.readStructureFromNBT(p_143011_1_);
@@ -1355,6 +1380,7 @@ public class StructureTownPieces
 		 * second Part of Structure generating, this for example places Spiderwebs, Mob Spawners, it closes
 		 * Mineshafts at the end, it adds Fences...
 		 */
+		@Override
 		public boolean addComponentParts(World p_74875_1_, Random p_74875_2_, StructureBoundingBox p_74875_3_)
 		{
 			if (this.field_143015_k < 0)
@@ -1369,13 +1395,13 @@ public class StructureTownPieces
 				this.boundingBox.offset(0, this.field_143015_k - this.boundingBox.maxY + 6 - 1, 0);
 			}
 			//do
-				if(p_74875_1_.provider.getDimension() == Config.dimensionID)
-				{
-					ECExplosion explosion = new ECExplosion(p_74875_1_, null, p_74875_3_.minX,  this.getAverageGroundLevel(p_74875_1_, p_74875_3_)-3, p_74875_3_.minZ, 15F);
-					explosion.doExplosionA();
-					explosion.doExplosionB(true);
-				}
-				return true;
+			if(p_74875_1_.provider.getDimension() == Config.dimensionID)
+			{
+				ECExplosion explosion = new ECExplosion(p_74875_1_, null, p_74875_3_.minX,  this.getAverageGroundLevel(p_74875_1_, p_74875_3_)-3, p_74875_3_.minZ, 15F);
+				explosion.doExplosionA();
+				explosion.doExplosionB(true);
+			}
+			return true;
 		}
 	}
 }

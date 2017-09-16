@@ -24,46 +24,46 @@ import net.minecraft.world.gen.feature.WorldGenerator;
 public class WorldGenOldCatacombs extends WorldGenerator{
 
 	public static final WeightedRandomChestContent[] generatedItems = new WeightedRandomChestContent[] {
-		new WeightedRandomChestContent(ItemsCore.titanite, 0, 8, 32, 20),
-		new WeightedRandomChestContent(ItemsCore.twinkling_titanite, 0, 2, 16, 10),
-		new WeightedRandomChestContent(ItemsCore.genericItem, 5, 1, 16, 15),
-		new WeightedRandomChestContent(ItemsCore.genericItem, 6, 1, 16, 15),
-		new WeightedRandomChestContent(ItemsCore.genericItem, 7, 1, 16, 15),
-		new WeightedRandomChestContent(ItemsCore.genericItem, 8, 1, 16, 15), 
-		new WeightedRandomChestContent(ItemsCore.genericItem, 9, 1, 16, 15),
-		new WeightedRandomChestContent(ItemsCore.genericItem, 10, 1, 16, 15),
-		new WeightedRandomChestContent(ItemsCore.genericItem, 11, 1, 16, 15),
-		new WeightedRandomChestContent(ItemsCore.genericItem, 20, 1, 12, 10),
-		new WeightedRandomChestContent(ItemsCore.genericItem, 3, 1, 16, 15),
-		new WeightedRandomChestContent(ItemsCore.genericItem, 35, 1, 1, 6),
-		new WeightedRandomChestContent(ItemsCore.genericItem, 36, 1, 1, 6),
-		new WeightedRandomChestContent(ItemsCore.genericItem, 37, 1, 1, 6),
-		new WeightedRandomChestContent(ItemsCore.magicalSlag, 0, 1, 16, 70),
-		new WeightedRandomChestContent(ItemsCore.ember, 0, 1, 16, 10),
-		new WeightedRandomChestContent(ItemsCore.ember, 1, 1, 16, 10),
-		new WeightedRandomChestContent(ItemsCore.ember, 2, 1, 16, 10),
-		new WeightedRandomChestContent(ItemsCore.ember, 3, 1, 16, 10),
-		new WeightedRandomChestContent(ItemsCore.ember, 4, 1, 16, 10),
-		new WeightedRandomChestContent(ItemsCore.ember, 5, 1, 16, 10),
-		new WeightedRandomChestContent(ItemsCore.ember, 7, 1, 16, 10),
-		new WeightedRandomChestContent(ItemsCore.ember, 6, 1, 16, 10),
-		new WeightedRandomChestContent(ItemsCore.bauble, 0, 1, 1, 15)
+			new WeightedRandomChestContent(ItemsCore.titanite, 0, 8, 32, 20),
+			new WeightedRandomChestContent(ItemsCore.twinkling_titanite, 0, 2, 16, 10),
+			new WeightedRandomChestContent(ItemsCore.genericItem, 5, 1, 16, 15),
+			new WeightedRandomChestContent(ItemsCore.genericItem, 6, 1, 16, 15),
+			new WeightedRandomChestContent(ItemsCore.genericItem, 7, 1, 16, 15),
+			new WeightedRandomChestContent(ItemsCore.genericItem, 8, 1, 16, 15),
+			new WeightedRandomChestContent(ItemsCore.genericItem, 9, 1, 16, 15),
+			new WeightedRandomChestContent(ItemsCore.genericItem, 10, 1, 16, 15),
+			new WeightedRandomChestContent(ItemsCore.genericItem, 11, 1, 16, 15),
+			new WeightedRandomChestContent(ItemsCore.genericItem, 20, 1, 12, 10),
+			new WeightedRandomChestContent(ItemsCore.genericItem, 3, 1, 16, 15),
+			new WeightedRandomChestContent(ItemsCore.genericItem, 35, 1, 1, 6),
+			new WeightedRandomChestContent(ItemsCore.genericItem, 36, 1, 1, 6),
+			new WeightedRandomChestContent(ItemsCore.genericItem, 37, 1, 1, 6),
+			new WeightedRandomChestContent(ItemsCore.magicalSlag, 0, 1, 16, 70),
+			new WeightedRandomChestContent(ItemsCore.ember, 0, 1, 16, 10),
+			new WeightedRandomChestContent(ItemsCore.ember, 1, 1, 16, 10),
+			new WeightedRandomChestContent(ItemsCore.ember, 2, 1, 16, 10),
+			new WeightedRandomChestContent(ItemsCore.ember, 3, 1, 16, 10),
+			new WeightedRandomChestContent(ItemsCore.ember, 4, 1, 16, 10),
+			new WeightedRandomChestContent(ItemsCore.ember, 5, 1, 16, 10),
+			new WeightedRandomChestContent(ItemsCore.ember, 7, 1, 16, 10),
+			new WeightedRandomChestContent(ItemsCore.ember, 6, 1, 16, 10),
+			new WeightedRandomChestContent(ItemsCore.bauble, 0, 1, 1, 15)
 	};
-	
+
 	public int maxSizeTries = 100;
 	public int corridorMinLength = 32;
 	public int corridorMaxLength = 64;
-	
+
 	public float lootRoomChance = 0.003F;
 	public float destroyedRoomChance = 0.012F;
 	public float greenRoomChance = 0.012F;
 	public float weirdRoomChance = 0.003F;
 	public float experimentRoomChance = 0.003F;
-	
+
 	public Block blockToGenerateOf;
-	
+
 	public boolean isFirstTry = true;
-	
+
 	public EnumFacing cameFrom;
 	@Override
 	public boolean generate(World w, Random r, BlockPos p)
@@ -71,8 +71,8 @@ public class WorldGenOldCatacombs extends WorldGenerator{
 		int x = p.getX();
 		int y = p.getY();
 		int z = p.getZ();
-		
-		int lengthGenned = r.nextInt(corridorMaxLength-corridorMinLength)+corridorMinLength;		
+
+		int lengthGenned = r.nextInt(corridorMaxLength-corridorMinLength)+corridorMinLength;
 		EnumFacing[] genTry = new EnumFacing[4];
 		if(this.cameFrom != EnumFacing.SOUTH)
 			genTry[0] = EnumFacing.NORTH;
@@ -105,24 +105,24 @@ public class WorldGenOldCatacombs extends WorldGenerator{
 				w.setBlockState(p, Blocks.CHEST.getDefaultState(), 3);
 				w.setBlockState(p.add(0, -1, 0), BlocksCore.voidStone.getDefaultState());
 				TileEntityChest chest = (TileEntityChest)w.getTileEntity(p);
-	            if (chest != null)
-	            {
-	                WeightedRandomChestContent.generateChestContents(w.rand, generatedItems, chest, w.rand.nextInt(12)+6);
-	                IInventory inv = chest;
-	                for(int i = 0; i < inv.getSizeInventory(); ++i)
-	                {
-	                	ItemStack stk = inv.getStackInSlot(i);
-	                	if(stk != null && stk.getItem() instanceof ItemBaublesWearable)
-	                	{
-	                		ItemBaublesWearable.initRandomTag(stk, w.rand);
-	                	}
-	                }
-	            }
+				if (chest != null)
+				{
+					WeightedRandomChestContent.generateChestContents(w.rand, generatedItems, chest, w.rand.nextInt(12)+6);
+					IInventory inv = chest;
+					for(int i = 0; i < inv.getSizeInventory(); ++i)
+					{
+						ItemStack stk = inv.getStackInSlot(i);
+						if(stk != null && stk.getItem() instanceof ItemBaublesWearable)
+						{
+							ItemBaublesWearable.initRandomTag(stk, w.rand);
+						}
+					}
+				}
 			}
 		}
 		return false;
 	}
-	
+
 	public boolean generateCorridor(World w, int x, int y, int z, int length, EnumFacing direction, boolean green)
 	{
 		int generatedLength = 0;
@@ -257,12 +257,12 @@ public class WorldGenOldCatacombs extends WorldGenerator{
 		}
 		return false;
 	}
-	
+
 	public Block getBlockToGenFrom()
 	{
 		return this.blockToGenerateOf == null ? BlocksCore.fortifiedStone : blockToGenerateOf;
 	}
-	
+
 	public void generateBrokenPath(World w, int x, int y, int z)
 	{
 		for(int i = -2; i <= 2; ++i)
@@ -279,7 +279,7 @@ public class WorldGenOldCatacombs extends WorldGenerator{
 			}
 		}
 	}
-	
+
 	public void generateGrownPath(World w, int x, int y, int z)
 	{
 		Vec3d rootVec = new Vec3d(MathUtils.randomDouble(w.rand)*3, -6, MathUtils.randomDouble(w.rand)*3);
@@ -304,7 +304,7 @@ public class WorldGenOldCatacombs extends WorldGenerator{
 			}
 		}
 	}
-	
+
 	public boolean generateWayUp(World w, int x, int y, int z)
 	{
 		int maxY = y;
@@ -320,7 +320,7 @@ public class WorldGenOldCatacombs extends WorldGenerator{
 			if(isAir)
 				break;
 		}
-		
+
 		for(int dx = -2; dx <= 2; ++dx)
 		{
 			for(int dy = y+3; dy < maxY; ++dy)
@@ -331,7 +331,7 @@ public class WorldGenOldCatacombs extends WorldGenerator{
 				}
 			}
 		}
-		
+
 		for(int dx = -1; dx <= 1; ++dx)
 		{
 			for(int dy = y+3; dy < maxY; ++dy)
@@ -342,7 +342,7 @@ public class WorldGenOldCatacombs extends WorldGenerator{
 				}
 			}
 		}
-		
+
 		for(int dy = y-3; dy < maxY; ++dy)
 		{
 			w.setBlockState(new BlockPos(x-1, dy, z), Blocks.LADDER.getStateFromMeta(5), 3);

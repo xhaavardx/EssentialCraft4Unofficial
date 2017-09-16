@@ -32,7 +32,7 @@ import net.minecraftforge.client.model.ModelLoader;
 public class ItemChaosFork extends ItemSword implements IItemRequiresMRU, IModelRegisterer {
 
 	public ItemChaosFork() {
-		super(ItemsCore.elemental);	
+		super(ItemsCore.elemental);
 		this.setMaxMRU(5000);
 		this.maxStackSize = 1;
 		this.bFull3D = true;
@@ -67,7 +67,8 @@ public class ItemChaosFork extends ItemSword implements IItemRequiresMRU, IModel
 		return true;
 	}
 
-	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List<String> par3List, boolean par4) 
+	@Override
+	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List<String> par3List, boolean par4)
 	{
 		super.addInformation(par1ItemStack, par2EntityPlayer, par3List, par4);
 		par3List.add(ECUtils.getStackTag(par1ItemStack).getInteger("mru") + "/" + ECUtils.getStackTag(par1ItemStack).getInteger("maxMRU") + " MRU");
@@ -106,11 +107,13 @@ public class ItemChaosFork extends ItemSword implements IItemRequiresMRU, IModel
 	/**
 	 * How long it takes to use or consume an item
 	 */
+	@Override
 	public int getMaxItemUseDuration(ItemStack p_77626_1_)
 	{
 		return 32;
 	}
 
+	@Override
 	public boolean hitEntity(ItemStack p_77644_1_, EntityLivingBase p_77644_2_, EntityLivingBase p_77644_3_)
 	{
 		try {
@@ -150,6 +153,7 @@ public class ItemChaosFork extends ItemSword implements IItemRequiresMRU, IModel
 		return false;
 	}
 
+	@Override
 	public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot equipmentSlot, ItemStack stack)
 	{
 		Multimap<String, AttributeModifier> multimap = HashMultimap.<String, AttributeModifier>create();
@@ -161,6 +165,7 @@ public class ItemChaosFork extends ItemSword implements IItemRequiresMRU, IModel
 	/**
 	 * returns the action that specifies what animation to play when the items is being used
 	 */
+	@Override
 	public EnumAction getItemUseAction(ItemStack p_77661_1_)
 	{
 		return EnumAction.BOW;
@@ -169,6 +174,7 @@ public class ItemChaosFork extends ItemSword implements IItemRequiresMRU, IModel
 	/**
 	 * Called whenever this item is equipped and the right mouse button is pressed. Args: itemStack, world, entityPlayer
 	 */
+	@Override
 	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand)
 	{
 		playerIn.setActiveHand(hand);

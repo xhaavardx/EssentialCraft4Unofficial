@@ -9,9 +9,7 @@ import ec3.common.item.ItemsCore;
 import ec3.common.registry.PotionRegistry;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
@@ -79,7 +77,7 @@ public class WindRelations {
 		if(!ECUtils.getData(player).isWindbound()) return;
 
 		int mod = 1;
-		if(player.getActivePotionEffect(PotionRegistry.paranormalLightness) != null) 
+		if(player.getActivePotionEffect(PotionRegistry.paranormalLightness) != null)
 			mod = player.getActivePotionEffect(PotionRegistry.paranormalLightness).getAmplifier()+1;
 
 		if(!player.getEntityWorld().isRemote && player.getEntityWorld().rand.nextDouble() < (0.0002F)*mod)

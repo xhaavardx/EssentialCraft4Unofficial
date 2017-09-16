@@ -1,6 +1,5 @@
 package ec3.common.registry;
 
-import DummyCore.Utils.MiscUtils;
 import ec3.common.potion.PotionChaosInfluence;
 import ec3.common.potion.PotionFrozenMind;
 import ec3.common.potion.PotionMRUCorruption;
@@ -10,7 +9,6 @@ import ec3.common.potion.PotionRadiation;
 import ec3.common.potion.PotionShadeCorruption;
 import ec3.common.potion.PotionUnnormalLightness;
 import ec3.common.potion.PotionWindTouch;
-import net.minecraft.potion.Potion;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class PotionRegistry {
@@ -24,7 +22,7 @@ public class PotionRegistry {
 		paranormalLightness = new PotionUnnormalLightness(0, true, 0xffffcc);
 		radiation = new PotionRadiation(0, true, 0x660066);
 		paradox = new PotionMindfoldParadox(0, true, 0xffffff);
-		
+
 		GameRegistry.register(mruCorruptionPotion);
 		GameRegistry.register(chaosInfluence);
 		GameRegistry.register(frozenMind);

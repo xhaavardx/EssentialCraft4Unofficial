@@ -8,13 +8,13 @@ import net.minecraft.item.Item;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
 
 public class ThrowableRenderFactory implements IRenderFactory {
-	
+
 	public Item itemToRender;
-	
+
 	public ThrowableRenderFactory(Item i) {
 		itemToRender = i;
 	}
-	
+
 	@Override
 	public Render createRenderFor(RenderManager manager) {
 		return new RenderSnowball(manager, itemToRender, Minecraft.getMinecraft().getRenderItem());

@@ -9,7 +9,7 @@ public class TileFluidEjector extends TileMRUGeneric {
 		metadata %= 6;
 		return EnumFacing.getFront(metadata);
 	}
-	
+
 	public TileFluidEjector() {
 		super();
 		setSlotsNum(0);

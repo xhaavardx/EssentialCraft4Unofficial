@@ -1,19 +1,16 @@
 package ec3.client.render.tile;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import DummyCore.Client.AdvancedModelLoader;
+import DummyCore.Client.IModelCustom;
+import ec3.common.tile.TilePlayerPentacle;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
-
-import org.lwjgl.opengl.GL11;
-
-import DummyCore.Client.AdvancedModelLoader;
-import DummyCore.Client.IModelCustom;
-import ec3.common.tile.TilePlayerPentacle;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class RenderPlayerPentacle extends TileEntitySpecialRenderer
@@ -70,6 +67,6 @@ public class RenderPlayerPentacle extends TileEntitySpecialRenderer
 	@Override
 	public void renderTileEntityAt(TileEntity p_147500_1_, double p_147500_2_, double p_147500_4_, double p_147500_6_, float p_147500_8_, int destroyStage) {
 		if(p_147500_1_.getBlockMetadata() == 0)
-			this.doRender((TileEntity) p_147500_1_, p_147500_2_, p_147500_4_, p_147500_6_, p_147500_8_, 0);
+			this.doRender(p_147500_1_, p_147500_2_, p_147500_4_, p_147500_6_, p_147500_8_, 0);
 	}
 }

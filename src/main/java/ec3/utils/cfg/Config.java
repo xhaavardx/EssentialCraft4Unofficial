@@ -1,16 +1,11 @@
 package ec3.utils.cfg;
 
-import net.minecraft.block.Block;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.common.util.EnumHelper;
 import DummyCore.Utils.IDummyConfig;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import ec3.api.OreSmeltingRecipe;
-import ec3.common.block.BlocksCore;
 import ec3.common.entity.EntitiesCore;
 import ec3.common.registry.TileRegistry;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.config.Configuration;
 
 public class Config implements IDummyConfig {
 

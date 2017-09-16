@@ -12,11 +12,12 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
 
 /**
- * 
+ *
  * @author Modbder
  * @Description Just some nifty functions to help you out.
  */
@@ -221,4 +222,18 @@ public class ApiCore {
 		return ret;
 	}
 
+	public static void registerTexture(ResourceLocation rl) {
+		try {
+			Class<?> coreClass = Class.forName("ec3.common.mod.EssentialCraftCore");
+			Class<?> proxyClass = Class.forName("ec3.proxy.CommonProxy");
+			Field proxyField = coreClass.getDeclaredField("proxy");
+			proxyField.setAccessible(true);
+			Method regMethod = proxyClass.getDeclaredMethod("registerTexture", ResourceLocation.class);
+			regMethod.setAccessible(true);
+			regMethod.invoke(proxyField.get(null), rl);
+		}
+		catch(Exception e) {
+
+		}
+	}
 }

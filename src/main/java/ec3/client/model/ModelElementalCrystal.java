@@ -168,6 +168,7 @@ public class ModelElementalCrystal extends ModelBase {
 		setRotation(Shape22, -0.715585F, -0.9599311F, 0.9250245F);
 	}
 
+	@Override
 	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5)
 	{
 		super.render(entity, f, f1, f2, f3, f4, f5);
@@ -203,6 +204,7 @@ public class ModelElementalCrystal extends ModelBase {
 		model.rotateAngleZ = z;
 	}
 
+	@Override
 	public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, Entity par7Entity)
 	{
 		super.setRotationAngles(f, f1, f2, f3, f4, f5, par7Entity);

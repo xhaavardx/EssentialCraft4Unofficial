@@ -1,17 +1,13 @@
 package ec3.integration.bloodmagic;
 
-import java.lang.reflect.Method;
-
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.common.Loader;
-
-import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 
 import ec3.common.item.ItemsCore;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.common.Loader;
 
 public class BloodMagicRegistry {
-	
+
 	public static void register() {
 		try {
 			if(Loader.isModLoaded("BloodMagic")) {

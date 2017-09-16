@@ -39,16 +39,19 @@ public class BlockMagicalDisplay extends BlockContainer implements IModelRegiste
 		setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.DOWN));
 	}
 
+	@Override
 	public Item getItemDropped(IBlockState state, Random rand, int fortune)
 	{
 		return ItemsCore.genericItem;
 	}
 
+	@Override
 	public int damageDropped(IBlockState p_149692_1_)
 	{
 		return 27;
 	}
 
+	@Override
 	public EnumBlockRenderType getRenderType(IBlockState s)
 	{
 		return EnumBlockRenderType.MODEL;
@@ -64,6 +67,7 @@ public class BlockMagicalDisplay extends BlockContainer implements IModelRegiste
 		return new TileMagicalDisplay();
 	}
 
+	@Override
 	public boolean onBlockActivated(World w, BlockPos pos, IBlockState par3, EntityPlayer p, EnumHand par5, ItemStack par6, EnumFacing p_149727_6_, float p_149727_7_, float p_149727_8_, float p_149727_9_)
 	{
 		ItemStack is = par6;
@@ -124,6 +128,7 @@ public class BlockMagicalDisplay extends BlockContainer implements IModelRegiste
 		return this.getDefaultState().withProperty(FACING, side);
 	}
 
+	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
 	{
 		int metadata = state.getValue(FACING).getIndex();
@@ -154,6 +159,7 @@ public class BlockMagicalDisplay extends BlockContainer implements IModelRegiste
 		return super.getBoundingBox(state, source, pos);
 	}
 
+	@Override
 	public boolean isOpaqueCube(IBlockState s)
 	{
 		return false;
@@ -165,6 +171,7 @@ public class BlockMagicalDisplay extends BlockContainer implements IModelRegiste
 		return BlockRenderLayer.SOLID;
 	}
 
+	@Override
 	public boolean isFullCube(IBlockState s)
 	{
 		return false;

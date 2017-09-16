@@ -11,7 +11,7 @@ public class GuiMithrilineFurnace extends GuiCommon{
 		super(c,tile);
 		this.elementList.add(new GuiEnderPulseStorage(4, 64, tile));
 	}
-	
-	
+
+
 
 }

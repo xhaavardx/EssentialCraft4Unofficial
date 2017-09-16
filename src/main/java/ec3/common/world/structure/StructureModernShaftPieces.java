@@ -5,15 +5,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
-import DummyCore.Utils.WeightedRandomChestContent;
 import ec3.common.block.BlocksCore;
-import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecartChest;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntityMobSpawner;
@@ -108,6 +104,7 @@ public class StructureModernShaftPieces
 		private int sectionCount;
 		public Corridor() {}
 
+		@Override
 		protected void writeStructureToNBT(NBTTagCompound p_143012_1_)
 		{
 			p_143012_1_.setBoolean("hr", this.hasRails);
@@ -116,6 +113,7 @@ public class StructureModernShaftPieces
 			p_143012_1_.setInteger("Num", this.sectionCount);
 		}
 
+		@Override
 		protected void readStructureFromNBT(NBTTagCompound p_143011_1_)
 		{
 			this.hasRails = p_143011_1_.getBoolean("hr");
@@ -185,6 +183,7 @@ public class StructureModernShaftPieces
 		/**
 		 * Initiates construction of the Structure Component picked, at the current Location of StructGen
 		 */
+		@Override
 		public void buildComponent(StructureComponent p_74861_1_, List p_74861_2_, Random p_74861_3_)
 		{
 			int i = this.getComponentType();
@@ -308,7 +307,7 @@ public class StructureModernShaftPieces
 				int l1 = p_74879_3_.nextBoolean() ? 1 : 0;
 				p_74879_1_.setBlockState(new BlockPos(i1, j1, k1), Blocks.RAIL.getDefaultState(), 2);
 				p_74879_1_.setBlockState(new BlockPos(i1, j1-1, k1), BlocksCore.voidStone.getStateFromMeta(0), 2);
-				EntityMinecartChest entityminecartchest = new EntityMinecartChest(p_74879_1_, (double)((float)i1 + 0.5F), (double)((float)j1 + 0.5F), (double)((float)k1 + 0.5F));
+				EntityMinecartChest entityminecartchest = new EntityMinecartChest(p_74879_1_, i1 + 0.5F, j1 + 0.5F, k1 + 0.5F);
 				entityminecartchest.setLootTable(loot, p_74879_3_.nextLong());
 				p_74879_1_.spawnEntity(entityminecartchest);
 				return true;
@@ -323,6 +322,7 @@ public class StructureModernShaftPieces
 		 * second Part of Structure generating, this for example places Spiderwebs, Mob Spawners, it closes
 		 * Mineshafts at the end, it adds Fences...
 		 */
+		@Override
 		public boolean addComponentParts(World p_74875_1_, Random p_74875_2_, StructureBoundingBox p_74875_3_)
 		{
 			if (this.isLiquidInStructureBoundingBox(p_74875_1_, p_74875_3_))
@@ -374,7 +374,7 @@ public class StructureModernShaftPieces
 					this.randomlyPlaceBlock(p_74875_1_, p_74875_3_, p_74875_2_, 0.05F, 2, 2, k + 2, Blocks.WEB.getDefaultState());
 					this.randomlyPlaceBlock(p_74875_1_, p_74875_3_, p_74875_2_, 0.05F, 1, 2, k - 1, Blocks.TORCH.getStateFromMeta(0));
 					this.randomlyPlaceBlock(p_74875_1_, p_74875_3_, p_74875_2_, 0.05F, 1, 2, k + 1, Blocks.TORCH.getStateFromMeta(0));
-					
+
 					if (p_74875_2_.nextInt(100) == 0)
 					{
 						this.generateChest(p_74875_1_, p_74875_3_, p_74875_2_, 2, 0, k - 1, LootTableList.CHESTS_ABANDONED_MINESHAFT);
@@ -391,7 +391,7 @@ public class StructureModernShaftPieces
 						int i1 = k - 1 + p_74875_2_.nextInt(3);
 						int j1 = this.getXWithOffset(1, i1);
 						i1 = this.getZWithOffset(1, i1);
-						
+
 						if (p_74875_3_.isVecInside(new BlockPos(j1, l, i1)))
 						{
 							this.spawnerPlaced = true;
@@ -448,12 +448,14 @@ public class StructureModernShaftPieces
 		private boolean isMultipleFloors;
 		public Cross() {}
 
+		@Override
 		protected void writeStructureToNBT(NBTTagCompound p_143012_1_)
 		{
 			p_143012_1_.setBoolean("tf", this.isMultipleFloors);
 			p_143012_1_.setInteger("D", this.corridorDirection.getIndex());
 		}
 
+		@Override
 		protected void readStructureFromNBT(NBTTagCompound p_143011_1_)
 		{
 			this.isMultipleFloors = p_143011_1_.getBoolean("tf");
@@ -509,6 +511,7 @@ public class StructureModernShaftPieces
 		/**
 		 * Initiates construction of the Structure Component picked, at the current Location of StructGen
 		 */
+		@Override
 		@SuppressWarnings({ "rawtypes" })
 		public void buildComponent(StructureComponent p_74861_1_, List p_74861_2_, Random p_74861_3_)
 		{
@@ -568,6 +571,7 @@ public class StructureModernShaftPieces
 		 * second Part of Structure generating, this for example places Spiderwebs, Mob Spawners, it closes
 		 * Mineshafts at the end, it adds Fences...
 		 */
+		@Override
 		public boolean addComponentParts(World p_74875_1_, Random p_74875_2_, StructureBoundingBox p_74875_3_)
 		{
 			if (this.isLiquidInStructureBoundingBox(p_74875_1_, p_74875_3_))
@@ -627,6 +631,7 @@ public class StructureModernShaftPieces
 		/**
 		 * Initiates construction of the Structure Component picked, at the current Location of StructGen
 		 */
+		@Override
 		public void buildComponent(StructureComponent p_74861_1_, List p_74861_2_, Random p_74861_3_)
 		{
 			int i = this.getComponentType();
@@ -718,6 +723,7 @@ public class StructureModernShaftPieces
 		 * second Part of Structure generating, this for example places Spiderwebs, Mob Spawners, it closes
 		 * Mineshafts at the end, it adds Fences...
 		 */
+		@Override
 		public boolean addComponentParts(World p_74875_1_, Random p_74875_2_, StructureBoundingBox p_74875_3_)
 		{
 			if (this.isLiquidInStructureBoundingBox(p_74875_1_, p_74875_3_))
@@ -741,6 +747,7 @@ public class StructureModernShaftPieces
 			}
 		}
 
+		@Override
 		protected void writeStructureToNBT(NBTTagCompound p_143012_1_)
 		{
 			NBTTagList nbttaglist = new NBTTagList();
@@ -755,6 +762,7 @@ public class StructureModernShaftPieces
 			p_143012_1_.setTag("Entrances", nbttaglist);
 		}
 
+		@Override
 		protected void readStructureFromNBT(NBTTagCompound p_143011_1_)
 		{
 			NBTTagList nbttaglist = p_143011_1_.getTagList("Entrances", 11);
@@ -777,8 +785,10 @@ public class StructureModernShaftPieces
 			this.boundingBox = p_i2038_3_;
 		}
 
+		@Override
 		protected void writeStructureToNBT(NBTTagCompound p_143012_1_) {}
 
+		@Override
 		protected void readStructureFromNBT(NBTTagCompound p_143011_1_) {}
 
 		/**
@@ -817,6 +827,7 @@ public class StructureModernShaftPieces
 		/**
 		 * Initiates construction of the Structure Component picked, at the current Location of StructGen
 		 */
+		@Override
 		@SuppressWarnings({ "rawtypes" })
 		public void buildComponent(StructureComponent p_74861_1_, List p_74861_2_, Random p_74861_3_)
 		{
@@ -845,6 +856,7 @@ public class StructureModernShaftPieces
 		 * second Part of Structure generating, this for example places Spiderwebs, Mob Spawners, it closes
 		 * Mineshafts at the end, it adds Fences...
 		 */
+		@Override
 		public boolean addComponentParts(World p_74875_1_, Random p_74875_2_, StructureBoundingBox p_74875_3_)
 		{
 			if (this.isLiquidInStructureBoundingBox(p_74875_1_, p_74875_3_))

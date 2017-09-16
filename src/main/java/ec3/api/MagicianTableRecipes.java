@@ -5,11 +5,11 @@ import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.List;
 
+import DummyCore.Utils.Notifier;
+import DummyCore.Utils.UnformedItemStack;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
-import DummyCore.Utils.Notifier;
-import DummyCore.Utils.UnformedItemStack;
 
 public class MagicianTableRecipes {
 
@@ -141,7 +141,7 @@ public class MagicianTableRecipes {
 			return false;
 		}
 	}
-	
+
 	public static boolean removeRecipe(MagicianTableRecipe rec) {
 		try {
 			UnformedItemStack[] req = new UnformedItemStack[rec.requiredItems.length];
@@ -165,7 +165,7 @@ public class MagicianTableRecipes {
 			return false;
 		}
 	}
-	
+
 	public static boolean removeRecipeIS(ItemStack result) {
 		try {
 			MagicianTableRecipe removedRecipe = getRecipeByResult(result);
@@ -177,7 +177,7 @@ public class MagicianTableRecipes {
 			return false;
 		}
 	}
-	
+
 	public static boolean removeRecipeCP(ItemStack[] craftingPair) {
 		try {
 			MagicianTableRecipe removedRecipe = getRecipeByCP(craftingPair);

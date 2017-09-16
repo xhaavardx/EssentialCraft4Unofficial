@@ -3,19 +3,14 @@ package ec3.client.render.entity;
 import org.lwjgl.opengl.GL11;
 
 import DummyCore.Utils.DrawUtils;
-import DummyCore.Utils.TessellatorWrapper;
-import ec3.common.entity.EntityOrbitalStrike;
 import ec3.common.entity.EntitySolarBeam;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.tileentity.TileEntityBeaconRenderer;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.math.MathHelper;
-import net.minecraftforge.fml.client.registry.IRenderFactory;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.client.registry.IRenderFactory;
 
 public class RenderSolarBeam extends Render<EntitySolarBeam> {
 

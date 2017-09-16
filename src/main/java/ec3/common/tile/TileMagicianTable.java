@@ -2,36 +2,36 @@ package ec3.common.tile;
 
 import DummyCore.Utils.DataStorage;
 import DummyCore.Utils.DummyData;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.common.config.Configuration;
 import ec3.api.ApiCore;
 import ec3.api.MagicianTableRecipe;
 import ec3.api.MagicianTableRecipes;
 import ec3.api.MagicianTableUpgrades;
 import ec3.utils.common.ECUtils;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.config.Configuration;
 
 public class TileMagicianTable extends TileMRUGeneric {
-	
+
 	public float progressLevel, progressRequired, speedFactor = 1, mruConsume = 1;
 	public int upgrade = -1;
 	public MagicianTableRecipe currentRecipe;
-	
+
 	public static float cfgMaxMRU = ApiCore.DEVICE_MAX_MRU_GENERIC;
 	public static boolean generatesCorruption = true;
 	public static int genCorruption = 1;
 	public static float mruUsage = 1;
-	
+
 	public TileMagicianTable() {
 		super();
 		maxMRU = (int)cfgMaxMRU;
 		setSlotsNum(7);
 	}
-	
+
 	public boolean canGenerateMRU() {
 		return false;
 	}
-	
+
 	@Override
 	public void update() {
 		if(upgrade == -1)
@@ -94,7 +94,7 @@ public class TileMagicianTable extends TileMRUGeneric {
 			}
 		}
 	}
-	
+
 	@Override
 	public void readFromNBT(NBTTagCompound i) {
 		super.readFromNBT(i);
@@ -104,7 +104,7 @@ public class TileMagicianTable extends TileMRUGeneric {
 		mruConsume = i.getFloat("mruConsume");
 		upgrade = i.getInteger("upgrade");
 	}
-	
+
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound i) {
 		super.writeToNBT(i);
@@ -115,7 +115,7 @@ public class TileMagicianTable extends TileMRUGeneric {
 		i.setInteger("upgrade", upgrade);
 		return i;
 	}
-	
+
 	public boolean canFunction(MagicianTableRecipe rec){
 		ItemStack result = rec.result;
 		if(result != null) {
@@ -131,7 +131,7 @@ public class TileMagicianTable extends TileMRUGeneric {
 		}
 		return false;
 	}
-	
+
 	public void craft() {
 		if(canFunction(currentRecipe)) {
 			ItemStack stk = currentRecipe.result;
@@ -148,7 +148,7 @@ public class TileMagicianTable extends TileMRUGeneric {
 			}
 		}
 	}
-	
+
 	public static void setupConfig(Configuration cfg) {
 		try {
 			cfg.load();
@@ -159,24 +159,24 @@ public class TileMagicianTable extends TileMRUGeneric {
 					"The amount of corruption generated each tick(do not set to 0!):1"
 			}, "");
 			String dataString = "";
-			
+
 			for(int i = 0; i < cfgArrayString.length; ++i)
 				dataString += "||" + cfgArrayString[i];
-			
+
 			DummyData[] data = DataStorage.parseData(dataString);
-			
+
 			mruUsage = Float.parseFloat(data[1].fieldValue);
 			cfgMaxMRU = Float.parseFloat(data[0].fieldValue);
 			generatesCorruption = Boolean.parseBoolean(data[2].fieldValue);
 			genCorruption = Integer.parseInt(data[3].fieldValue);
-			
+
 			cfg.save();
 		}
 		catch(Exception e) {
 			return;
 		}
 	}
-	
+
 	@Override
 	public int[] getOutputSlots() {
 		return new int[] {6};

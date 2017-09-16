@@ -24,6 +24,7 @@ public class BlockDreadCacti extends BlockCactus implements IModelRegisterer {
 		this.setSoundType(SoundType.PLANT);
 	}
 
+	@Override
 	public void onEntityCollidedWithBlock(World p_149670_1_, BlockPos p_149670_2_, IBlockState p_149670_3_, Entity p_149670_5_) {
 		super.onEntityCollidedWithBlock(p_149670_1_, p_149670_2_, p_149670_3_, p_149670_5_);
 		if(p_149670_5_ instanceof EntityLivingBase) {

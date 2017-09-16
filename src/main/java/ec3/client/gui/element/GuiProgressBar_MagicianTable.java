@@ -2,14 +2,13 @@ package ec3.client.gui.element;
 
 import DummyCore.Utils.DrawUtils;
 import DummyCore.Utils.MathUtils;
-import DummyCore.Utils.MiscUtils;
 import ec3.common.tile.TileMagicianTable;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 
 public class GuiProgressBar_MagicianTable extends GuiTextElement{
 	public TileMagicianTable tile;
-	
+
 	public GuiProgressBar_MagicianTable(int i, int j, TileEntity table)
 	{
 		super(i,j);
@@ -49,7 +48,7 @@ public class GuiProgressBar_MagicianTable extends GuiTextElement{
 
 	@Override
 	public void drawText(int posX, int posY) {
-		
+
 	}
 
 }

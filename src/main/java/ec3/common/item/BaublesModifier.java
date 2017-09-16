@@ -117,10 +117,12 @@ public class BaublesModifier extends Item implements IBauble, IUBMRUGainModifier
 		setMaxStackSize(1);
 	}
 
+	@Override
 	public BaubleType getBaubleType(ItemStack itemstack) {
 		return btALST.length > itemstack.getItemDamage() ? btALST[itemstack.getItemDamage()] : BaubleType.RING;
 	}
 
+	@Override
 	@SuppressWarnings("unchecked")
 	public void onWornTick(ItemStack itemstack, EntityLivingBase player) {
 		if(itemstack.getItemDamage() == 0 && player instanceof EntityPlayer) {
@@ -129,7 +131,7 @@ public class BaublesModifier extends Item implements IBauble, IUBMRUGainModifier
 				--ubmrucu;
 				ApiCore.getPlayerData((EntityPlayer)player).modifyUBMRU(ubmrucu);
 			}
-		}	
+		}
 		if(itemstack.getItemDamage() == 17 && player instanceof EntityPlayer) {
 			EntityPlayer p = (EntityPlayer)player;
 			p.addExhaustion(0.01F);
@@ -149,7 +151,7 @@ public class BaublesModifier extends Item implements IBauble, IUBMRUGainModifier
 		if(itemstack.getItemDamage() == 7 && player instanceof EntityPlayer) {
 			EntityPlayer p = (EntityPlayer)player;
 			PotionEffect[] peArray = new PotionEffect[p.getActivePotionEffects().size()];
-			peArray = (PotionEffect[]) p.getActivePotionEffects().toArray(peArray);
+			peArray = p.getActivePotionEffects().toArray(peArray);
 			for(int i = 0; i < peArray.length; ++i) {
 				PotionEffect effect = p.getActivePotionEffect(peArray[i].getPotion());
 				if(isPotionBad(peArray[i].getPotion())) {
@@ -174,28 +176,35 @@ public class BaublesModifier extends Item implements IBauble, IUBMRUGainModifier
 		return p == MobEffects.WITHER || p == MobEffects.POISON || p == MobEffects.HUNGER || p == MobEffects.BLINDNESS || p == MobEffects.NAUSEA || p == MobEffects.MINING_FATIGUE || p == MobEffects.SLOWNESS || p == MobEffects.WEAKNESS;
 	}
 
+	@Override
 	public void onEquipped(ItemStack itemstack, EntityLivingBase player) {}
 
+	@Override
 	public void onUnequipped(ItemStack itemstack, EntityLivingBase player) {}
 
+	@Override
 	public boolean canEquip(ItemStack itemstack, EntityLivingBase player) {
 		return true;
 	}
 
+	@Override
 	public boolean canUnequip(ItemStack itemstack, EntityLivingBase player) {
 		return true;
 	}
 
+	@Override
 	public void getSubItems(Item p_150895_1_, CreativeTabs p_150895_2_, List<ItemStack> p_150895_3_) {
 		for(int i = 0; i < names.length-1; ++i) {
 			p_150895_3_.add(new ItemStack(p_150895_1_, 1, i));
 		}
 	}
 
+	@Override
 	public String getUnlocalizedName(ItemStack p_77667_1_) {
 		return getUnlocalizedName() + "." + names[Math.min(p_77667_1_.getItemDamage(), names.length-1)];
 	}
 
+	@Override
 	@SuppressWarnings("unchecked")
 	public float getModifiedValue(float original, ItemStack mod, Random rng, EntityPlayer p) {
 		if(mod.getItemDamage() == 31)
@@ -243,6 +252,7 @@ public class BaublesModifier extends Item implements IBauble, IUBMRUGainModifier
 		return original;
 	}
 
+	@Override
 	public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean par4) {
 		super.addInformation(stack, player, list, par4);
 		if(stack.getItemDamage() == 0)
@@ -251,6 +261,7 @@ public class BaublesModifier extends Item implements IBauble, IUBMRUGainModifier
 		list.addAll(buildHelpList(I18n.translateToLocal("ec3.txt.help.baubles."+stack.getItemDamage())));
 	}
 
+	@Override
 	public boolean setMRU(ItemStack stack, int amount) {
 		if(getMRU(stack) + amount >= 0 && getMRU(stack) + amount <= getMaxMRU(stack)) {
 			MiscUtils.getStackTag(stack).setInteger("mru", MiscUtils.getStackTag(stack).getInteger("mru")+amount);
@@ -259,18 +270,22 @@ public class BaublesModifier extends Item implements IBauble, IUBMRUGainModifier
 		return false;
 	}
 
+	@Override
 	public int getMRU(ItemStack stack) {
 		return stack.getItemDamage() == 0 ? MiscUtils.getStackTag(stack).getInteger("mru") : 0;
 	}
 
+	@Override
 	public int getMaxMRU(ItemStack stack) {
 		return stack.getItemDamage() == 0 ? 5000 : 0;
 	}
 
+	@Override
 	public boolean resistWind(EntityPlayer p, ItemStack stk) {
 		return stk.getItemDamage() == 3;
 	}
 
+	@Override
 	public float getModifier(ItemStack stk, EntityPlayer p) {
 		if(stk.getItemDamage() == 5) {
 			if(!p.getEntityWorld().isRemote && p.getEntityWorld().rand.nextFloat() <= 0.15F) {
@@ -280,7 +295,7 @@ public class BaublesModifier extends Item implements IBauble, IUBMRUGainModifier
 				p.sendMessage(new TextComponentString(TextFormatting.DARK_RED+""+TextFormatting.ITALIC+"The wind catcher catches some wind..."));
 			}
 			return -0.1F;
-		}	
+		}
 		if(stk.getItemDamage() == 6)
 			return 0.3F;
 		return 0;
@@ -309,10 +324,10 @@ public class BaublesModifier extends Item implements IBauble, IUBMRUGainModifier
 
 				}
 			}
-			else if(charType.equals("r")) 
-				s = s.substring(0,index)+TextFormatting.RESET+s.substring(index); 
-			else 
-				s = s.substring(0,index)+findByChar(charType.charAt(0))+s.substring(index); 
+			else if(charType.equals("r"))
+				s = s.substring(0,index)+TextFormatting.RESET+s.substring(index);
+			else
+				s = s.substring(0,index)+findByChar(charType.charAt(0))+s.substring(index);
 		}
 		addedString += s;
 		ret.add(addedString);

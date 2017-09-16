@@ -8,10 +8,10 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 
 public class GuiRepairState extends GuiTextElement{
-	
+
 	public TileEntity tile;
 	public int slotNum;
-	
+
 	public GuiRepairState(int i, int j, TileEntity t, int slot)
 	{
 		super(i,j);
@@ -51,31 +51,31 @@ public class GuiRepairState extends GuiTextElement{
 	public void drawText(int posX, int posY) {
 		FontRenderer fontRenderer = Minecraft.getMinecraft().fontRendererObj;
 		IInventory inventory = (IInventory) tile;
-        if(inventory.getStackInSlot(1) == null)
-        {
-        	fontRenderer.drawStringWithShadow("Nothing To Fix!", posX+5, posY+6, 0xffff00);
-        }else
-        {
-            if(!inventory.getStackInSlot(1).getItem().isRepairable())
-            {
-            	fontRenderer.drawStringWithShadow("Can't Fix This!", posX+5, posY+6, 0xff0000);
-            }else
-            {
-            	if(inventory.getStackInSlot(1).getItemDamage() == 0)
-            	{
-            		fontRenderer.drawStringWithShadow("Already Fixed!", posX+5, posY+6, 0xffff00);
-            	}else
-            	{
-            		if(((ITEHasMRU) inventory).getMRU() == 0)
-            		{
-            			fontRenderer.drawStringWithShadow("No MRU!", posX+5, posY+6, 0xff0000);
-            		}else
-            		{
-            			fontRenderer.drawStringWithShadow("Working...", posX+5, posY+6, 0x00ff00);
-            		}
-            	}
-            }
-        }
+		if(inventory.getStackInSlot(1) == null)
+		{
+			fontRenderer.drawStringWithShadow("Nothing To Fix!", posX+5, posY+6, 0xffff00);
+		}else
+		{
+			if(!inventory.getStackInSlot(1).getItem().isRepairable())
+			{
+				fontRenderer.drawStringWithShadow("Can't Fix This!", posX+5, posY+6, 0xff0000);
+			}else
+			{
+				if(inventory.getStackInSlot(1).getItemDamage() == 0)
+				{
+					fontRenderer.drawStringWithShadow("Already Fixed!", posX+5, posY+6, 0xffff00);
+				}else
+				{
+					if(((ITEHasMRU) inventory).getMRU() == 0)
+					{
+						fontRenderer.drawStringWithShadow("No MRU!", posX+5, posY+6, 0xff0000);
+					}else
+					{
+						fontRenderer.drawStringWithShadow("Working...", posX+5, posY+6, 0x00ff00);
+					}
+				}
+			}
+		}
 	}
 
 }

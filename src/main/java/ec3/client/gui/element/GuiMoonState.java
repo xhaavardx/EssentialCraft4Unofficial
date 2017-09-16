@@ -1,12 +1,11 @@
 package ec3.client.gui.element;
 
 import DummyCore.Utils.DrawUtils;
-import DummyCore.Utils.MiscUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 
 public class GuiMoonState extends GuiTextElement{
-	
+
 	public GuiMoonState(int i, int j)
 	{
 		super(i,j);
@@ -41,7 +40,7 @@ public class GuiMoonState extends GuiTextElement{
 
 	@Override
 	public void drawText(int posX, int posY) {
-		
+
 	}
 
 }

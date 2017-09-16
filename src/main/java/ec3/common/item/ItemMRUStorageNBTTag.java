@@ -50,10 +50,12 @@ public class ItemMRUStorageNBTTag extends Item implements IMRUStorage, IItemRequ
 		ECUtils.initMRUTag(itemStack, maxMRU[itemStack.getItemDamage()]);
 	}
 
+	@Override
 	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List<String> par3List, boolean par4) {
 		par3List.add(ECUtils.getStackTag(par1ItemStack).getInteger("mru") + "/" + ECUtils.getStackTag(par1ItemStack).getInteger("maxMRU") + " MRU");
 	}
 
+	@Override
 	public void getSubItems(Item par1, CreativeTabs par2CreativeTabs, List<ItemStack> par3List) {
 		for(int var4 = 0; var4 < 5; ++var4) {
 			ItemStack min = new ItemStack(par1, 1, var4);
@@ -66,15 +68,18 @@ public class ItemMRUStorageNBTTag extends Item implements IMRUStorage, IItemRequ
 		}
 	}
 
+	@Override
 	public String getUnlocalizedName(ItemStack p_77667_1_) {
 		return getUnlocalizedName()+dropNames[Math.min(p_77667_1_.getItemDamage(), dropNames.length-1)];
 	}
 
+	@Override
 	public int getMaxMRU(ItemStack stack) {
 		int dam = stack.getItemDamage();
 		return maxMRU[dam];
 	}
 
+	@Override
 	public int getColorFromItemstack(ItemStack par1ItemStack, int par2) {
 		int dam = par1ItemStack.getItemDamage();
 		if(dam != -1) {
@@ -87,20 +92,26 @@ public class ItemMRUStorageNBTTag extends Item implements IMRUStorage, IItemRequ
 		return 16777215;
 	}
 
+	@Override
 	public BaubleType getBaubleType(ItemStack itemstack) {
 		return BaubleType.RING;
 	}
 
+	@Override
 	public void onWornTick(ItemStack itemstack, EntityLivingBase player) {}
 
+	@Override
 	public void onEquipped(ItemStack itemstack, EntityLivingBase player) {}
 
+	@Override
 	public void onUnequipped(ItemStack itemstack, EntityLivingBase player) {}
 
+	@Override
 	public boolean canEquip(ItemStack itemstack, EntityLivingBase player) {
 		return true;
 	}
 
+	@Override
 	public boolean canUnequip(ItemStack itemstack, EntityLivingBase player) {
 		return true;
 	}

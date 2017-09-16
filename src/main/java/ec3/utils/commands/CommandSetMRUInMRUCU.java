@@ -6,21 +6,21 @@ import java.util.List;
 import DummyCore.Utils.Coord3D;
 import ec3.common.entity.EntityMRUPresence;
 import ec3.utils.common.ECUtils;
-import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 
-public class CommandSetMRUInMRUCU extends CommandBase 
+public class CommandSetMRUInMRUCU extends CommandBase
 {
+	@Override
 	public String getName()
 	{
 		return "setMRUInMRUCU";
 	}
 
+	@Override
 	public String getUsage(ICommandSender par1ICommandSender)
 	{
 		return "/setMRUInMRUCU <x> <y> <z> <mruAmount>";
@@ -29,11 +29,13 @@ public class CommandSetMRUInMRUCU extends CommandBase
 	/**
 	 * Return the required permission level for this command.
 	 */
+	@Override
 	public int getRequiredPermissionLevel()
 	{
 		return 3;
 	}
 
+	@Override
 	public void execute(MinecraftServer s, ICommandSender par1ICommandSender, String[] par2ArrayOfStr) throws CommandException {
 		int var3 = parseInt(par2ArrayOfStr[3], 0);
 		BlockPos p = parseBlockPos(par1ICommandSender, par2ArrayOfStr, 0, true);
@@ -49,6 +51,7 @@ public class CommandSetMRUInMRUCU extends CommandBase
 		}
 	}
 
+	@Override
 	public List<String> getTabCompletions(MinecraftServer server, ICommandSender par1ICommandSender, String[] par2ArrayOfStr, BlockPos pos) {
 		return par2ArrayOfStr.length > 0 && par2ArrayOfStr.length <= 3 ? getTabCompletionCoordinate(par2ArrayOfStr, 0, pos) : Collections.<String>emptyList();
 	}

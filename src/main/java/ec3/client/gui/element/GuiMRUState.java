@@ -5,10 +5,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 
 public class GuiMRUState extends GuiTextElement {
-	
+
 	public ITEHasMRU tile;
 	public int mru;
-	
+
 	public GuiMRUState(int i, int j, ITEHasMRU t, int mruToSearch) {
 		super(i,j);
 		tile = t;

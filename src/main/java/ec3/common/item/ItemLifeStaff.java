@@ -23,12 +23,13 @@ import net.minecraftforge.client.model.ModelLoader;
 public class ItemLifeStaff extends ItemStoresMRUInNBT implements IModelRegisterer {
 
 	public ItemLifeStaff() {
-		super();	
+		super();
 		this.setMaxMRU(5000);
 		this.maxStackSize = 1;
 		this.bFull3D = true;
 	}
 
+	@Override
 	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ)
 	{
 		if(ECUtils.tryToDecreaseMRUInStorage(player, -100) || this.setMRU(stack, -100))
@@ -52,6 +53,7 @@ public class ItemLifeStaff extends ItemStoresMRUInNBT implements IModelRegistere
 		return EnumActionResult.PASS;
 	}
 
+	@Override
 	public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity entity)
 	{
 		if(entity instanceof EntityZombie)

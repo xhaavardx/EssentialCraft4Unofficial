@@ -7,7 +7,6 @@ import DummyCore.Utils.TessellatorWrapper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
@@ -22,7 +21,7 @@ public class FogFX extends Particle{
 	public double red, green, blue;
 	public static final ResourceLocation rec = new ResourceLocation("essentialcraft","textures/items/particles/fog.png");
 	private static final ResourceLocation particleTextures = new ResourceLocation("textures/particle/particles.png");
-	public FogFX(World w, double x, double y,double z, double i, double j,double k) 
+	public FogFX(World w, double x, double y,double z, double i, double j,double k)
 	{
 		super(w, x, y, z, i, j,k);
 		if(w != null && w.rand != null) {
@@ -47,6 +46,7 @@ public class FogFX extends Particle{
 		}
 	}
 
+	@Override
 	public void renderParticle(VertexBuffer var1, Entity var2, float p_70539_2_, float p_70539_3_, float p_70539_4_, float p_70539_5_, float p_70539_6_, float p_70539_7_)
 	{
 		TessellatorWrapper var3 = TessellatorWrapper.getInstance();
@@ -61,6 +61,7 @@ public class FogFX extends Particle{
 			GlStateManager.disableBlend();
 	}
 
+	@Override
 	public int getBrightnessForRender(float p_70070_1_)
 	{
 		int i = super.getBrightnessForRender(p_70070_1_);
@@ -93,15 +94,16 @@ public class FogFX extends Particle{
 	/**
 	 * Called to update the entity's position/logic.
 	 */
+	@Override
 	public void onUpdate()
 	{
 		this.prevPosX = this.posX;
 		this.prevPosY = this.posY;
 		this.prevPosZ = this.posZ;
 		float f = (float)this.particleAge / (float)this.particleMaxAge;
-		this.posX = this.mruPosX + this.motionX * (double)f;
-		this.posY = this.mruPosY + this.motionY * (double)f;
-		this.posZ = this.mruPosZ + this.motionZ * (double)f;
+		this.posX = this.mruPosX + this.motionX * f;
+		this.posY = this.mruPosY + this.motionY * f;
+		this.posZ = this.mruPosZ + this.motionZ * f;
 		this.particleScale *= 1.01F;
 		if (this.particleAge++ >= this.particleMaxAge)
 		{

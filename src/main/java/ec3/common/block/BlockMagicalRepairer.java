@@ -20,7 +20,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.relauncher.Side;
@@ -42,6 +41,7 @@ public class BlockMagicalRepairer extends BlockContainer implements IModelRegist
 		super.breakBlock(par1World, par2Pos, par3State);
 	}
 
+	@Override
 	public boolean isOpaqueCube(IBlockState s)
 	{
 		return false;
@@ -53,6 +53,7 @@ public class BlockMagicalRepairer extends BlockContainer implements IModelRegist
 		return BlockRenderLayer.SOLID;
 	}
 
+	@Override
 	public boolean isFullCube(IBlockState s)
 	{
 		return false;

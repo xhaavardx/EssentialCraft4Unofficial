@@ -6,12 +6,13 @@ public class TileCreativeMRUSource extends TileMRUGeneric {
 		setSlotsNum(0);
 		setMaxMRU(100000);
 	}
-	
+
 	@Override
 	public int[] getOutputSlots() {
 		return new int[0];
 	}
 
+	@Override
 	public void update()  {
 		setMRU(getMaxMRU());
 		super.update();

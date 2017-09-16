@@ -21,19 +21,21 @@ import net.minecraftforge.client.model.ModelLoader;
 
 public class ItemCraftingFrame extends Item implements IModelRegisterer {
 
+	@Override
 	public ActionResult<ItemStack> onItemRightClick(ItemStack is, World w, EntityPlayer p, EnumHand h)
 	{
 		p.openGui(EssentialCraftCore.core, Config.guiID[0], w, 0, -2, 0);
 		return new ActionResult(EnumActionResult.PASS, is);
 	}
 
-	protected int containerMatchesItem(Container openContainer) 
-	{       
+	protected int containerMatchesItem(Container openContainer)
+	{
 		return 0;
 	}
 
+	@Override
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4) 
+	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4)
 	{
 		InventoryCraftingFrame inv = new InventoryCraftingFrame(par1ItemStack);
 		if(inv != null)
@@ -69,7 +71,7 @@ public class ItemCraftingFrame extends Item implements IModelRegisterer {
 			return;
 		}
 		int containerType = containerMatchesItem(((EntityPlayer)entity).openContainer);
-		if(containerType == 0) 
+		if(containerType == 0)
 		{
 			ContainerCraftingFrame c = (ContainerCraftingFrame)((EntityPlayer)entity).openContainer;
 			c.saveToNBT(itemStack);

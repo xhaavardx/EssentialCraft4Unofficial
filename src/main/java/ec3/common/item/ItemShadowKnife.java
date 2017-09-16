@@ -23,6 +23,7 @@ import net.minecraft.world.World;
 
 public class ItemShadowKnife extends ItemSword_Mod {
 
+	@Override
 	public boolean onEntitySwing(EntityLivingBase entityLiving, ItemStack stack) {
 		if(stack.stackSize >= 2 && (entityLiving instanceof IShadeCreature || (entityLiving instanceof EntityPlayer && ECUtils.getData(EntityPlayer.class.cast(entityLiving)).getMatrixTypeID() == 4))) {
 			if(!(entityLiving instanceof EntityPlayer && EntityPlayer.class.cast(entityLiving).capabilities.isCreativeMode))
@@ -52,11 +53,13 @@ public class ItemShadowKnife extends ItemSword_Mod {
 		}
 	}
 
+	@Override
 	public boolean onEntityItemUpdate(EntityItem entityItem) {
 		toggleActivity(entityItem.getEntityItem(),false);
 		return super.onEntityItemUpdate(entityItem);
 	}
 
+	@Override
 	public void onUpdate(ItemStack sword, World w, Entity e, int slotNum, boolean held) {
 		if(e.ticksExisted % 20 == 0 && !w.isRemote && held) {
 			sword.stackSize += 1;
@@ -88,6 +91,7 @@ public class ItemShadowKnife extends ItemSword_Mod {
 		return true;
 	}
 
+	@Override
 	public boolean hitEntity(ItemStack weapon, EntityLivingBase attacked, EntityLivingBase attacker) {
 		if(attacker instanceof IShadeCreature) {
 			if(attacked instanceof EntityPlayer) {

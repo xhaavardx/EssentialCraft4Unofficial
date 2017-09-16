@@ -31,6 +31,7 @@ public class BlockecRedstoneController extends BlockContainer implements IModelR
 		return new TileecRedstoneController();
 	}
 
+	@Override
 	public boolean onBlockActivated(World par1World, BlockPos par2, IBlockState par3, EntityPlayer par4EntityPlayer, EnumHand par5, ItemStack par6, EnumFacing par7, float par8, float par9, float par10) {
 		if(par4EntityPlayer.isSneaking()) {
 			TileecRedstoneController rc = (TileecRedstoneController)par1World.getTileEntity(par2);
@@ -48,16 +49,19 @@ public class BlockecRedstoneController extends BlockContainer implements IModelR
 		return true;
 	}
 
+	@Override
 	public boolean canProvidePower(IBlockState s) {
 		return true;
 	}
 
+	@Override
 	public int getWeakPower(IBlockState s, IBlockAccess w, BlockPos p, EnumFacing f){
 		TileecRedstoneController rc = (TileecRedstoneController)w.getTileEntity(p);
 
 		return rc.outputRedstone() ? 15 : 0;
 	}
 
+	@Override
 	public EnumBlockRenderType getRenderType(IBlockState s)
 	{
 		return EnumBlockRenderType.MODEL;

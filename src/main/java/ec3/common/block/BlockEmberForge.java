@@ -27,10 +27,11 @@ public class BlockEmberForge extends BlockContainer implements IModelRegisterer 
 		return new TileEmberForge();
 	}
 
+	@Override
 	public EnumBlockRenderType getRenderType(IBlockState s) {
 		return EnumBlockRenderType.MODEL;
 	}
-	
+
 	@Override
 	public void registerModels() {
 		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation("essentialcraft:emberForge"));

@@ -37,11 +37,13 @@ public class BlockMonsterHolder extends BlockContainer implements IModelRegister
 		super.breakBlock(par1World, par2Pos, par3State);
 	}
 
+	@Override
 	public boolean isOpaqueCube(IBlockState s)
 	{
 		return false;
 	}
 
+	@Override
 	public boolean isFullCube(IBlockState s)
 	{
 		return false;
@@ -53,6 +55,7 @@ public class BlockMonsterHolder extends BlockContainer implements IModelRegister
 		return BlockRenderLayer.CUTOUT_MIPPED;
 	}
 
+	@Override
 	public EnumBlockRenderType getRenderType(IBlockState s)
 	{
 		return EnumBlockRenderType.MODEL;

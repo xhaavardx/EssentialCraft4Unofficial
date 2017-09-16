@@ -29,14 +29,14 @@ public class TileRayTower extends TileEntity implements IInventory, ITETransfers
 	float balance;
 	public int innerRotation;
 	public ItemStack[] items = new ItemStack[1];
-	
+
 	@Override
 	public void readFromNBT(NBTTagCompound i) {
 		super.readFromNBT(i);
 		ECUtils.loadMRUState(this, i);
 		MiscUtils.loadInventory(this, i);
 	}
-	
+
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound i) {
 		super.writeToNBT(i);
@@ -44,11 +44,11 @@ public class TileRayTower extends TileEntity implements IInventory, ITETransfers
 		MiscUtils.saveInventory(this, i);
 		return i;
 	}
-	
+
 	@Override
 	public void update() {
 		++innerRotation;
-		//Sending the sync packets to the CLIENT. 
+		//Sending the sync packets to the CLIENT.
 		if(syncTick == 0) {
 			if(!getWorld().isRemote)
 				MiscUtils.sendPacketToAllAround(getWorld(), getUpdatePacket(), pos.getX(), pos.getY(), pos.getZ(), getWorld().provider.getDimension(), 16);
@@ -58,91 +58,91 @@ public class TileRayTower extends TileEntity implements IInventory, ITETransfers
 			--syncTick;
 		ECUtils.manage(this, 0);
 	}
-	
+
 	@Override
 	public SPacketUpdateTileEntity getUpdatePacket() {
 		NBTTagCompound nbttagcompound = new NBTTagCompound();
 		writeToNBT(nbttagcompound);
 		return new SPacketUpdateTileEntity(pos, -10, nbttagcompound);
 	}
-	
+
 	@Override
 	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
 		if(pkt.getTileEntityType() == -10)
 			readFromNBT(pkt.getNbtCompound());
 	}
-	
+
 	@Override
 	public int getMRU() {
 		return mru;
 	}
-	
+
 	@Override
 	public int getMaxMRU() {
 		return maxMRU;
 	}
-	
+
 	@Override
 	public boolean setMRU(int i) {
 		mru = i;
 		return true;
 	}
-	
+
 	@Override
 	public float getBalance() {
 		return balance;
 	}
-	
+
 	@Override
 	public boolean setBalance(float f) {
 		balance = f;
 		return true;
 	}
-	
+
 	@Override
 	public boolean setMaxMRU(float f) {
 		maxMRU = (int)f;
 		return true;
 	}
-	
+
 	@Override
 	public UUID getUUID() {
 		return uuid;
 	}
-	
+
 	@Override
 	public int getSizeInventory() {
 		return items.length;
 	}
-	
+
 	@Override
 	public ItemStack getStackInSlot(int par1) {
 		return items[par1];
 	}
-	
+
 	@Override
 	public ItemStack decrStackSize(int par1, int par2) {
 		if(items[par1] != null) {
 			ItemStack itemstack;
-			
+
 			if(items[par1].stackSize <= par2) {
 				itemstack = items[par1];
 				items[par1] = null;
 				return itemstack;
-            }
+			}
 			else {
 				itemstack = items[par1].splitStack(par2);
-				
+
 				if(items[par1].stackSize == 0)
 					items[par1] = null;
-				
+
 				return itemstack;
 			}
 		}
 		else
 			return null;
 	}
-	
+
 	@Override
 	public ItemStack removeStackFromSlot(int par1) {
 		if (items[par1] != null) {
@@ -153,56 +153,56 @@ public class TileRayTower extends TileEntity implements IInventory, ITETransfers
 		else
 			return null;
 	}
-	
-	
+
+
 	@Override
 	public void setInventorySlotContents(int par1, ItemStack par2ItemStack) {
 		items[par1] = par2ItemStack;
-		
+
 		if(par2ItemStack != null && par2ItemStack.stackSize > getInventoryStackLimit())
 			par2ItemStack.stackSize = getInventoryStackLimit();
 	}
-	
-	
+
+
 	@Override
 	public String getName() {
 		return "ec3.container.rayTower";
 	}
-	
+
 	@Override
 	public boolean hasCustomName() {
 		return false;
 	}
-	
+
 	@Override
 	public int getInventoryStackLimit() {
 		return 64;
 	}
-	
+
 	@Override
 	public boolean isUsableByPlayer(EntityPlayer player) {
 		return getWorld().getTileEntity(pos) == this && player.dimension == getWorld().provider.getDimension();
 	}
-	
+
 	@Override
 	public void openInventory(EntityPlayer player) {}
-	
+
 	@Override
 	public void closeInventory(EntityPlayer player) {}
-	
+
 	@Override
 	public boolean isItemValidForSlot(int p_94041_1_, ItemStack p_94041_2_) {
 		return p_94041_2_.getItem() == ItemsCore.bound_gem;
 	}
-	
+
 	public boolean isBoundGem(ItemStack stack) {
 		return stack.getItem() instanceof ItemBoundGem;
 	}
-	
+
 	@Override
 	public void clear() {
-	    for(int i = 0; i < getSizeInventory(); i++)
-	        setInventorySlotContents(i, null);
+		for(int i = 0; i < getSizeInventory(); i++)
+			setInventorySlotContents(i, null);
 	}
 
 	@Override
@@ -217,7 +217,7 @@ public class TileRayTower extends TileEntity implements IInventory, ITETransfers
 	public int getFieldCount() {
 		return 0;
 	}
-	
+
 	public IItemHandler itemHandler = new InvWrapper(this);
 
 	@Override

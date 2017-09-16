@@ -16,7 +16,7 @@ import net.minecraftforge.client.model.ModelLoader;
 public class ItemMagicalWater extends ItemStoresMRUInNBT implements IModelRegisterer {
 
 	public ItemMagicalWater() {
-		super();	
+		super();
 		this.setMaxMRU(5000);
 		this.maxStackSize = 1;
 		this.bFull3D = true;
@@ -35,6 +35,7 @@ public class ItemMagicalWater extends ItemStoresMRUInNBT implements IModelRegist
 	/**
 	 * How long it takes to use or consume an item
 	 */
+	@Override
 	public int getMaxItemUseDuration(ItemStack p_77626_1_)
 	{
 		return 32;
@@ -43,6 +44,7 @@ public class ItemMagicalWater extends ItemStoresMRUInNBT implements IModelRegist
 	/**
 	 * returns the action that specifies what animation to play when the items is being used
 	 */
+	@Override
 	public EnumAction getItemUseAction(ItemStack p_77661_1_)
 	{
 		return EnumAction.DRINK;
@@ -51,6 +53,7 @@ public class ItemMagicalWater extends ItemStoresMRUInNBT implements IModelRegist
 	/**
 	 * Called whenever this item is equipped and the right mouse button is pressed. Args: itemStack, world, entityPlayer, enumHand
 	 */
+	@Override
 	public ActionResult<ItemStack> onItemRightClick(ItemStack p_77659_1_, World p_77659_2_, EntityPlayer p_77659_3_, EnumHand hand)
 	{
 		p_77659_3_.setActiveHand(hand);

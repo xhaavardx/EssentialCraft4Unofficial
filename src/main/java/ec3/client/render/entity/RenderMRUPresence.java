@@ -17,7 +17,7 @@ import net.minecraftforge.fml.client.registry.IRenderFactory;
 public class RenderMRUPresence extends Render<EntityMRUPresence> {
 
 	static final float HALF_SQRT_3 = 0.8660254F;
-	
+
 	public RenderMRUPresence(RenderManager renderManager) {
 		super(renderManager);
 	}
@@ -103,6 +103,7 @@ public class RenderMRUPresence extends Render<EntityMRUPresence> {
 		GlStateManager.popMatrix();
 	}
 
+	@Override
 	public void doRender(EntityMRUPresence par1Entity, double par2, double par4, double par6, float par8, float par9) {
 		if(ECUtils.canPlayerSeeMRU(Minecraft.getMinecraft().player)) {
 			doActualRender(par1Entity, par2, par4, par6, par8, par9);

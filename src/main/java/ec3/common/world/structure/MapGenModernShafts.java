@@ -11,40 +11,42 @@ import net.minecraft.world.gen.structure.StructureStart;
 
 public class MapGenModernShafts extends MapGenStructure{
 
-	 private double field_82673_e = 0.004D;
-	 
+	private double field_82673_e = 0.004D;
+
 	@Override
 	public String getStructureName() {
 		return "ModernMineshaft";
 	}
-	
+
 	public MapGenModernShafts() {}
 
-    @SuppressWarnings("rawtypes")
+	@SuppressWarnings("rawtypes")
 	public MapGenModernShafts(Map p_i2034_1_)
-    {
-        Iterator iterator = p_i2034_1_.entrySet().iterator();
+	{
+		Iterator iterator = p_i2034_1_.entrySet().iterator();
 
-        while (iterator.hasNext())
-        {
-            Entry entry = (Entry)iterator.next();
+		while (iterator.hasNext())
+		{
+			Entry entry = (Entry)iterator.next();
 
-            if (((String)entry.getKey()).equals("chance"))
-            {
-                this.field_82673_e = MathHelper.getDouble((String)entry.getValue(), this.field_82673_e);
-            }
-        }
-    }
-    
-    
-    protected boolean canSpawnStructureAtCoords(int p_75047_1_, int p_75047_2_)
-    {
-        return this.rand.nextDouble() < this.field_82673_e && this.rand.nextInt(80) < Math.max(Math.abs(p_75047_1_), Math.abs(p_75047_2_)) && this.world.provider.getDimension() == Config.dimensionID;
-    }
+			if (((String)entry.getKey()).equals("chance"))
+			{
+				this.field_82673_e = MathHelper.getDouble((String)entry.getValue(), this.field_82673_e);
+			}
+		}
+	}
 
-    protected StructureStart getStructureStart(int p_75049_1_, int p_75049_2_)
-    {
-        return new StructureModernShaftStart(this.world, this.rand, p_75049_1_, p_75049_2_);
-    }
+
+	@Override
+	protected boolean canSpawnStructureAtCoords(int p_75047_1_, int p_75047_2_)
+	{
+		return this.rand.nextDouble() < this.field_82673_e && this.rand.nextInt(80) < Math.max(Math.abs(p_75047_1_), Math.abs(p_75047_2_)) && this.world.provider.getDimension() == Config.dimensionID;
+	}
+
+	@Override
+	protected StructureStart getStructureStart(int p_75049_1_, int p_75049_2_)
+	{
+		return new StructureModernShaftStart(this.world, this.rand, p_75049_1_, p_75049_2_);
+	}
 
 }

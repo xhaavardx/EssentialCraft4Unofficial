@@ -80,7 +80,7 @@ import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 
 public class ECUtils {
-	public static Hashtable<EnumStructureType,List<Block>> allowedBlocks = new Hashtable<EnumStructureType, List<Block>>(); 
+	public static Hashtable<EnumStructureType,List<Block>> allowedBlocks = new Hashtable<EnumStructureType, List<Block>>();
 	public static Hashtable<String, Float> mruResistance = new Hashtable<String, Float>();
 	public static Hashtable<String, Boolean> ignoreMeta = new Hashtable<String, Boolean>();
 	public static List<SpellEntry> spells = new ArrayList<SpellEntry>();

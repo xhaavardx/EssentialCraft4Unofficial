@@ -5,14 +5,14 @@ import ec3.common.block.BlocksCore;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ITickable;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
 public class TilePlayerPentacle extends TileEntity implements ITickable {
 	public int tier = -1;
 	public int sCheckTick = 0;
-	
+
 	public int getEnderstarEnergy() {
 		int[][] coords = new int[][] {
 			{2, 0, 1}, {2, 0, -1}, {-2, 0, 1}, {-2, 0, -1},
@@ -44,10 +44,10 @@ public class TilePlayerPentacle extends TileEntity implements ITickable {
 					energy += tmc.energy*2;
 			}
 		}
-		
+
 		return MathHelper.floor(energy*consumeModifier);
 	}
-	
+
 	public boolean consumeEnderstarEnergy(int consumed) {
 		int[][] coords = new int[][] {
 			{2, 0, 1}, {2, 0, -1}, {-2, 0, 1}, {-2, 0, -1},
@@ -83,13 +83,13 @@ public class TilePlayerPentacle extends TileEntity implements ITickable {
 		}
 		if(aconsumed*consumeModifier < consumed)
 			return false;
-		
+
 		aconsumed = 0;
 		for(int i = 0; i < tierCheck; ++i) {
 			TileEntity tile = getWorld().getTileEntity(pos.add(coords[i][0], coords[i][1], coords[i][2]));
 			if(tile instanceof TileMithrilineCrystal) {
 				TileMithrilineCrystal tmc = TileMithrilineCrystal.class.cast(tile);
-				
+
 				if(tier < 3)
 					aconsumed += tmc.energy;
 				else
@@ -105,7 +105,7 @@ public class TilePlayerPentacle extends TileEntity implements ITickable {
 		}
 		return false;
 	}
-	
+
 	@Override
 	public void update() {
 		if(sCheckTick == 0) {
@@ -113,7 +113,7 @@ public class TilePlayerPentacle extends TileEntity implements ITickable {
 			sCheckTick = 200;
 		}else
 			--sCheckTick;
-		
+
 		float movement = getWorld().getWorldTime() % 60;
 		if(movement > 30)
 			movement = 60F - movement;
@@ -149,7 +149,7 @@ public class TilePlayerPentacle extends TileEntity implements ITickable {
 			}
 		}
 	}
-	
+
 	public void checkStructureAndTier() {
 		World w = getWorld();
 		BlockPos cp = pos.down();

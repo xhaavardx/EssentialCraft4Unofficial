@@ -14,10 +14,10 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
 
 public class TileUltraHeatGenerator extends TileMRUGeneric {
-	
+
 	public int currentBurnTime, currentMaxBurnTime;
 	public float heat;
-	
+
 	public TileUltraHeatGenerator() {
 		super();
 		balance = -1;
@@ -25,11 +25,11 @@ public class TileUltraHeatGenerator extends TileMRUGeneric {
 		slot0IsBoundGem = false;
 		setSlotsNum(2);
 	}
-	
+
 	public boolean canGenerateMRU() {
 		return false;
 	}
-	
+
 	@Override
 	public void update() {
 		super.update();
@@ -56,14 +56,14 @@ public class TileUltraHeatGenerator extends TileMRUGeneric {
 						else if(b[i] == Blocks.LAVA)
 							mruFactor*=0.95F;
 						else if(b[i] == Blocks.FIRE)
-	            			mruFactor*=0.7F;	
-	            		else if(b[i] instanceof IHotBlock)
-	            			mruFactor*=(((IHotBlock)b[i]).getHeatModifier(getWorld(), pos.add(ox[i], 0, oz[i])));
-	            		else
-	            			mruFactor*=0.5F;
-						
+							mruFactor*=0.7F;
+						else if(b[i] instanceof IHotBlock)
+							mruFactor*=(((IHotBlock)b[i]).getHeatModifier(getWorld(), pos.add(ox[i], 0, oz[i])));
+						else
+							mruFactor*=0.5F;
+
 					}
-					
+
 					float scaledHeatFactor = 0F;
 					if(heat < 1000) {
 						scaledHeatFactor = 0.1F + heat/1000F;
@@ -91,13 +91,13 @@ public class TileUltraHeatGenerator extends TileMRUGeneric {
 					}
 				}
 			}
-			
-			
+
+
 			if(!getWorld().isRemote) {
 				if(getStackInSlot(0) != null) {
 					if(currentBurnTime <= 0 && getMRU() < getMaxMRU()) {
 						currentMaxBurnTime = currentBurnTime = TileEntityFurnace.getItemBurnTime(getStackInSlot(0));
-						
+
 						if(currentBurnTime > 0) {
 							if(getStackInSlot(0) != null) {
 								if(getStackInSlot(1) == null || getStackInSlot(1).stackSize < getInventoryStackLimit()) {
@@ -133,7 +133,7 @@ public class TileUltraHeatGenerator extends TileMRUGeneric {
 				}
 			}
 		}
-		
+
 		for(int i = 2; i < 6; ++i) {
 			EnumFacing rotation = EnumFacing.getFront(i);
 			float rotXAdv = rotation.getFrontOffsetX()-0.5F;
@@ -142,7 +142,7 @@ public class TileUltraHeatGenerator extends TileMRUGeneric {
 			EssentialCraftCore.proxy.FlameFX(pos.getX()+0.5F+MathUtils.randomFloat(getWorld().rand)*0.2F, pos.getY()+0.65F, pos.getZ()+0.5F+MathUtils.randomFloat(getWorld().rand)*0.2F, 0, 0.01F, 0, 0.8D, 0.5D, 0.5F, 1F);
 		}
 	}
-	
+
 	@Override
 	public void readFromNBT(NBTTagCompound i) {
 		currentBurnTime = i.getInteger("burn");
@@ -150,7 +150,7 @@ public class TileUltraHeatGenerator extends TileMRUGeneric {
 		heat = i.getFloat("heat");
 		super.readFromNBT(i);
 	}
-	
+
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound i) {
 		i.setInteger("burn", currentBurnTime);
@@ -158,12 +158,12 @@ public class TileUltraHeatGenerator extends TileMRUGeneric {
 		i.setFloat("heat", heat);
 		return super.writeToNBT(i);
 	}
-	
+
 	@Override
 	public int[] getOutputSlots() {
 		return new int[] {1};
 	}
-	
+
 	@Override
 	public boolean isItemValidForSlot(int p_94041_1_, ItemStack p_94041_2_) {
 		return p_94041_1_ == 0;

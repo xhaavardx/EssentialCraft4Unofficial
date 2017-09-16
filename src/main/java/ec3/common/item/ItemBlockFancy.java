@@ -17,14 +17,15 @@ public class ItemBlockFancy extends ItemBlock {
 		this.setMaxDamage(0);
 	}
 
-    public int getMetadata(int par1)
-    {
-        return par1;
-    }
-    
 	@Override
-    public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List<String> par3List, boolean par4) 
-    {
+	public int getMetadata(int par1)
+	{
+		return par1;
+	}
+
+	@Override
+	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List<String> par3List, boolean par4)
+	{
 		par3List.add(I18n.translateToLocal("ec3.desc.fancy."+BlockFancy.overlays[par1ItemStack.getItemDamage()]));
-    }
+	}
 }

@@ -4,11 +4,10 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 
+import DummyCore.Utils.DummyData;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.ResourceLocation;
-import DummyCore.Utils.DummyData;
-import ec3.common.mod.EssentialCraftCore;
 
 public class GunRegistry {
 
@@ -16,7 +15,7 @@ public class GunRegistry {
 	public static final List<LenseMaterial> lenseMaterials = new ArrayList<LenseMaterial>();
 	public static final List<ScopeMaterial> scopeMaterials = new ArrayList<ScopeMaterial>();
 	public static final List<ScopeMaterial> scopeMaterialsSniper = new ArrayList<ScopeMaterial>();
-	
+
 	public static ScopeMaterial getScopeFromID(String s) {
 		for(int i = 0; i < GunRegistry.scopeMaterials.size(); ++i)
 		{
@@ -27,7 +26,7 @@ public class GunRegistry {
 		}
 		return null;
 	}
-	
+
 	public static ScopeMaterial getScopeSniperFromID(String s) {
 		for(int i = 0; i < GunRegistry.scopeMaterialsSniper.size(); ++i)
 		{
@@ -38,7 +37,7 @@ public class GunRegistry {
 		}
 		return null;
 	}
-	
+
 	public static LenseMaterial getLenseFromID(String s) {
 		for(int i = 0; i < GunRegistry.lenseMaterials.size(); ++i)
 		{
@@ -49,7 +48,7 @@ public class GunRegistry {
 		}
 		return null;
 	}
-	
+
 	public static GunMaterial getGunFromID(String s) {
 		for(int i = 0; i < GunRegistry.gunMaterials.size(); ++i)
 		{
@@ -60,7 +59,7 @@ public class GunRegistry {
 		}
 		return null;
 	}
-	
+
 	public static class ScopeMaterial
 	{
 		public String id;
@@ -80,23 +79,23 @@ public class GunRegistry {
 			recipe = is;
 			return this;
 		}
-		
+
 		public ScopeMaterial setTextures(String... rl) {
 			if(rl.length == 3) {
 				textures.put("pistol", rl[0]);
 				textures.put("rifle", rl[1]);
 				textures.put("sniper", rl[2]);
-				
+
 				for(int i = 0; i < 3; i++)
-					EssentialCraftCore.proxy.registerTexture(new ResourceLocation(rl[i]));
+					ApiCore.registerTexture(new ResourceLocation(rl[i]));
 			}
 			return this;
 		}
-		
+
 		public ScopeMaterial setTexture(String rl) {
 			textures.put("sniper", rl);
-			
-			EssentialCraftCore.proxy.registerTexture(new ResourceLocation(rl));
+
+			ApiCore.registerTexture(new ResourceLocation(rl));
 			return this;
 		}
 
@@ -128,7 +127,7 @@ public class GunRegistry {
 			}
 			return this;
 		}
-		
+
 		public ScopeMaterial register() {
 			if(!sniper)
 				scopeMaterials.add(this);
@@ -155,16 +154,16 @@ public class GunRegistry {
 			recipe = is;
 			return this;
 		}
-		
+
 		public LenseMaterial setTextures(String... rl) {
 			if(rl.length == 4) {
 				textures.put("pistol", rl[0]);
 				textures.put("rifle", rl[1]);
 				textures.put("sniper", rl[2]);
 				textures.put("gatling", rl[3]);
-				
+
 				for(int i = 0; i < 4; i++)
-					EssentialCraftCore.proxy.registerTexture(new ResourceLocation(rl[i]));
+					ApiCore.registerTexture(new ResourceLocation(rl[i]));
 			}
 			return this;
 		}
@@ -197,7 +196,7 @@ public class GunRegistry {
 			}
 			return this;
 		}
-		
+
 		public LenseMaterial register() {
 			lenseMaterials.add(this);
 			return this;
@@ -223,26 +222,26 @@ public class GunRegistry {
 			recipe = is;
 			return this;
 		}
-		
+
 		public GunMaterial setTextures(String... rl) {
 			if(rl.length == 12) {
 				baseTextures.put("pistol", rl[0]);
 				baseTextures.put("rifle", rl[1]);
 				baseTextures.put("sniper", rl[2]);
 				baseTextures.put("gatling", rl[3]);
-				
+
 				handleTextures.put("pistol", rl[4]);
 				handleTextures.put("rifle", rl[5]);
 				handleTextures.put("sniper", rl[6]);
 				handleTextures.put("gatling", rl[7]);
-				
+
 				deviceTextures.put("pistol", rl[8]);
 				deviceTextures.put("rifle", rl[9]);
 				deviceTextures.put("sniper", rl[10]);
 				deviceTextures.put("gatling", rl[11]);
 
 				for(int i = 0; i < 12; i++)
-					EssentialCraftCore.proxy.registerTexture(new ResourceLocation(rl[i]));
+					ApiCore.registerTexture(new ResourceLocation(rl[i]));
 			}
 			return this;
 		}
@@ -275,7 +274,7 @@ public class GunRegistry {
 			}
 			return this;
 		}
-		
+
 		public GunMaterial register() {
 			gunMaterials.add(this);
 			return this;
@@ -297,10 +296,12 @@ public class GunRegistry {
 			name = s;
 		}
 
+		@Override
 		public String getName() {
 			return name;
 		}
 
+		@Override
 		public String toString() {
 			return name;
 		}

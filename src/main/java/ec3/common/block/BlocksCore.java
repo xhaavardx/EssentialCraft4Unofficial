@@ -171,14 +171,14 @@ public class BlocksCore {
 		advBreaker = registerBlockSimple(BlockAdvBlockBreaker.class, Material.ROCK,advBreaker, "advBreaker", "fortifiedStone", 1, 1, 0);
 		mimEjectorP = registerBlockSimple(BlockNewMIMExporter_Persistant.class, Material.ROCK, mimEjectorP, "mimEjectorP", "mimNode_EjectionP", 1, 1, 0);
 		mimInjectorP = registerBlockSimple(BlockNewMIMImporter_Persistant.class, Material.ROCK, mimInjectorP, "mimInjectorP", "mimNode_InjectionP", 1, 1, 0);
-	
+
 		oreMithriline = new BlockMithrilineOre().setUnlocalizedName("essentialcraft.oreMithriline").setHardness(0.4F).setResistance(1).setLightOpacity(15);
 		registerBlockSimple(oreMithriline, "oreMithriline");
 		crystalLamp = new BlockCrystalLamp().setUnlocalizedName("essentialcraft.crystalLamp").setHardness(0.4F).setResistance(1).setLightOpacity(15);
 		registerBlockSimple(new ItemBlockMeta(crystalLamp), "crystalLamp");
 		mimic = new BlockMimic().setUnlocalizedName("essentialcraft.mimic").setResistance(15).setHardness(3).setLightOpacity(15);
 		registerBlockSimple(mimic, "mimic");
-		
+
 		water = new BlockMod(Material.WATER).setHardness(-1).setResistance(-1).setLightLevel(0).setUnlocalizedName("water");
 		registerBlockSimple(water, "water");
 		lava = new BlockMod(Material.LAVA).setHardness(-1).setResistance(-1).setLightLevel(0).setUnlocalizedName("lava");
@@ -200,7 +200,7 @@ public class BlocksCore {
 		createFancyBlock(Material.ROCK, "voidStone", "voidStone", 3F, 28, new ItemStack(voidStone));
 		createFancyBlock(Material.ROCK, "mithrilinePlating", "mithrilinePlating", 3F, 100, new ItemStack(invertedBlock));
 		createFancyBlock(Material.ROCK, "demonicPlating", "demonicPlating", 3F, 100, new ItemStack(demonicPlating));
-	
+
 		Block mimicFancy = new BlockFancyMimic().setUnlocalizedName("essentialcraft.fancyBlock.mimic").setResistance(15).setHardness(3).setLightOpacity(15);
 		registerFancyBlock(mimicFancy, "mimic", new ItemStack(mimic));
 	}
@@ -267,7 +267,7 @@ public class BlocksCore {
 		fancyBlocks.add(fancy);
 		RecipeRegistry.fancyBlockRecipes.put(fancy, createdFrom);
 	}
-	
+
 	public static Block registerFancyBlock(Block fancy, String name, ItemStack createdFrom) {
 		BlocksRegistry.registerBlock(new ItemBlockFancy(fancy), "fancyBlock."+name, EssentialCraftCore.class);
 		EssentialCraftCore.proxy.handleBlockRegister(fancy);
@@ -382,13 +382,13 @@ public class BlocksCore {
 	public static Block advBreaker;
 	public static Block mimEjectorP;
 	public static Block mimInjectorP;
-	
+
 	public static Block oreMithriline;
 	public static Block crystalLamp;
 	public static Block mimic;
 	public static Block chunkLoader;
 	public static Block dimTransciever;
-	
+
 	public static Block water;
 	public static Block lava;
 	public static Block fire;

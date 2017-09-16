@@ -37,6 +37,7 @@ public class BlockMagicalMirror extends BlockContainer implements IModelRegister
 		super.breakBlock(par1World, par2Pos, par3State);
 	}
 
+	@Override
 	public boolean isOpaqueCube(IBlockState s)
 	{
 		return false;
@@ -48,6 +49,7 @@ public class BlockMagicalMirror extends BlockContainer implements IModelRegister
 		return BlockRenderLayer.SOLID;
 	}
 
+	@Override
 	public boolean isFullCube(IBlockState s)
 	{
 		return false;

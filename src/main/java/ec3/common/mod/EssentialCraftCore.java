@@ -7,13 +7,13 @@ import DummyCore.Core.Core;
 import ec3.common.block.BlocksCore;
 import ec3.common.entity.EntitiesCore;
 import ec3.common.item.ItemsCore;
-import ec3.common.registry.AchievementRegistry;
 import ec3.common.registry.BiomeRegistry;
 import ec3.common.registry.CERegistry;
 import ec3.common.registry.CoreRegistry;
 import ec3.common.registry.DimensionRegistry;
 import ec3.common.registry.EnchantRegistry;
 import ec3.common.registry.GunInitialization;
+import ec3.common.registry.OreDictionaryRegistry;
 import ec3.common.registry.PotionRegistry;
 import ec3.common.registry.RecipeRegistry;
 import ec3.common.registry.ResearchRegistry;
@@ -37,8 +37,6 @@ import ec3.utils.commands.CommandSetBalanceInMRUCU;
 import ec3.utils.commands.CommandSetMRUInMRUCU;
 import ec3.utils.commands.CommandSetUBMRU;
 import ec3.utils.common.ECEventHandler;
-import ec3.utils.common.ECUtils;
-import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
@@ -66,11 +64,11 @@ public class EssentialCraftCore {
 	@SidedProxy(clientSide = "ec3.proxy.ClientProxy", serverSide = "ec3.proxy.CommonProxy", modId = EssentialCraftCore.modid)
 	public static CommonProxy proxy;
 	public static Config cfg = new Config();
-	public static final String version = "4.7.1102.14";
+	public static final String version = "4.7.1102.15";
 	public static final String modid = "essentialcraft";
 	public static ModMetadata metadata;
 	public static SimpleNetworkWrapper network;
-	public static final boolean Unofficial = true; 
+	public static final boolean Unofficial = true;
 	//============================================CORE FUNCTIONS=============================================//
 	//============================================CORE MOD===================================================//
 	@EventHandler
@@ -96,7 +94,6 @@ public class EssentialCraftCore {
 		}
 		proxy.firstMovement(event);
 
-		ForgeChunkManager.setForcedChunkLoadingCallback(core, ECUtils.getTHObj());
 		Check.checkerCommit();
 		WailaInitializer.sendIMC();
 		RCLoadingHandler.runPreInitChecks();
@@ -108,26 +105,25 @@ public class EssentialCraftCore {
 		ItemsCore.loadItems();
 		BlocksCore.postInitLoad();
 		TileRegistry.register();
-		
+
 		EntitiesCore.registerEntities();
 		proxy.registerRenderInformation();
-		
-		AchievementRegistry.register();
+
 		PotionRegistry.registerPotions();
-		
+
 		DimensionRegistry.registerDimensionMagic();
 		BiomeRegistry.register();
-		
+		VillagersRegistry.register();
+		EnchantRegistry.register();
+
 		TConstructRegistry.register();
+		OreDictionaryRegistry.register();
+		GunInitialization.register();
 	}
 
 	@EventHandler
 	public void secondMovement(FMLInitializationEvent event) {
-		GunInitialization.register();
 		RecipeRegistry.main();
-
-		EnchantRegistry.register();
-		VillagersRegistry.register();
 
 		StructureRegistry.register();
 		proxy.registerTileEntitySpecialRenderer();

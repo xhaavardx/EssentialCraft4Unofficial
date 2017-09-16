@@ -1,7 +1,6 @@
 package ec3.integration.jei;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import com.google.common.collect.Lists;
@@ -15,18 +14,15 @@ import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.BlankRecipeCategory;
 import mezz.jei.api.recipe.BlankRecipeWrapper;
-import mezz.jei.api.recipe.IRecipeCategory;
 import mezz.jei.api.recipe.IRecipeHandler;
-import mezz.jei.api.recipe.IRecipeWrapper;
-import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.translation.I18n;
 
 public class DemonTrading {
-	
+
 	public static final String UID = "essentialcraft:demonTrade";
-	
+
 	public static List<DemonTrading.Wrapper> getRecipes() {
 		ArrayList<DemonTrading.Wrapper> ret = Lists.<DemonTrading.Wrapper>newArrayList();
 		for(DemonTrade rec : DemonTrade.trades) {
@@ -34,15 +30,15 @@ public class DemonTrading {
 		}
 		return ret;
 	}
-	
+
 	public static class Wrapper extends BlankRecipeWrapper {
-		
+
 		private DemonTrade rec;
-		
+
 		public Wrapper(DemonTrade rec) {
 			this.rec = rec;
 		}
-		
+
 		@Override
 		public List<ItemStack> getInputs() {
 			ItemStack ret;
@@ -56,9 +52,9 @@ public class DemonTrading {
 		@Override
 		public void getIngredients(IIngredients arg0) {}
 	}
-	
+
 	public static class Handler implements IRecipeHandler<DemonTrading.Wrapper> {
-		
+
 		@Override
 		public String getRecipeCategoryUid() {
 			return UID;
@@ -84,15 +80,15 @@ public class DemonTrading {
 			return !arg0.getInputs().isEmpty();
 		}
 	}
-	
+
 	public static class Category extends BlankRecipeCategory<DemonTrading.Wrapper> {
-		
+
 		private final IDrawable BG;
-		
+
 		public Category(IGuiHelper gh) {
 			BG = gh.createDrawable(new ResourceLocation("essentialcraft:textures/gui/demon.png"), 0, 0, 176, 76);
 		}
-		
+
 		@Override
 		public IDrawable getBackground() {
 			return BG;

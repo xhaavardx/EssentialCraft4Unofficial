@@ -33,7 +33,7 @@ public class RenderCrystalControllerAsItem implements IItemRenderer, IPerspectiv
 		RenderCrystalController.model.renderAll();
 		GlStateManager.popMatrix();
 	}
-	
+
 	@Override
 	public List<BakedQuad> getQuads(IBlockState state, EnumFacing side, long rand) {
 		return ImmutableList.<BakedQuad>of();
@@ -71,6 +71,6 @@ public class RenderCrystalControllerAsItem implements IItemRenderer, IPerspectiv
 
 	@Override
 	public Pair<? extends IBakedModel, Matrix4f> handlePerspective(TransformType cameraTransformType) {
-        return MapWrapper.handlePerspective(this, TransformUtils.DEFAULT_BLOCK.getTransforms(), cameraTransformType);
+		return MapWrapper.handlePerspective(this, TransformUtils.DEFAULT_BLOCK.getTransforms(), cameraTransformType);
 	}
 }

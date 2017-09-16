@@ -22,37 +22,40 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 
 public class BlockMonsterHarvester extends BlockContainer implements IModelRegisterer {
-	
+
 	public BlockMonsterHarvester(Material p_i45394_1_) {
 		super(p_i45394_1_);
 	}
-	
+
 	public BlockMonsterHarvester() {
 		super(Material.ROCK);
 	}
-	
+
 	@Override
-    public void breakBlock(World par1World, BlockPos par2Pos, IBlockState par3State) {
+	public void breakBlock(World par1World, BlockPos par2Pos, IBlockState par3State) {
 		MiscUtils.dropItemsOnBlockBreak(par1World, par2Pos.getX(), par2Pos.getY(), par2Pos.getZ(), par3State.getBlock(), 0);
 		super.breakBlock(par1World, par2Pos, par3State);
-    }
-	
-    public boolean isOpaqueCube(IBlockState s)
-    {
-        return false;
-    }
-    
-    public boolean isFullCube(IBlockState s)
-    {
-        return false;
-    }
-    
+	}
+
 	@Override
-    public BlockRenderLayer getBlockLayer()
-    {
-        return BlockRenderLayer.SOLID;
-    }
-	
+	public boolean isOpaqueCube(IBlockState s)
+	{
+		return false;
+	}
+
+	@Override
+	public boolean isFullCube(IBlockState s)
+	{
+		return false;
+	}
+
+	@Override
+	public BlockRenderLayer getBlockLayer()
+	{
+		return BlockRenderLayer.SOLID;
+	}
+
+	@Override
 	public EnumBlockRenderType getRenderType(IBlockState s)
 	{
 		return EnumBlockRenderType.MODEL;
@@ -62,21 +65,21 @@ public class BlockMonsterHarvester extends BlockContainer implements IModelRegis
 	public TileEntity createNewTileEntity(World p_149915_1_, int p_149915_2_) {
 		return new TileMonsterHarvester();
 	}
-	
+
 	@Override
 	public boolean onBlockActivated(World par1World, BlockPos par2, IBlockState par3, EntityPlayer par4EntityPlayer, EnumHand par5, ItemStack par6, EnumFacing par7, float par8, float par9, float par10) {
-	    if(par1World.isRemote) {
-	        return true;
-	    }
-	    else {
-	     	if(!par4EntityPlayer.isSneaking()) {
-	       		par4EntityPlayer.openGui(EssentialCraftCore.core, Config.guiID[0], par1World, par2.getX(), par2.getY(), par2.getZ());
-	           	return true;
-	       	}
-	       	else {
-	       		return false;
-	       	}
-	    }
+		if(par1World.isRemote) {
+			return true;
+		}
+		else {
+			if(!par4EntityPlayer.isSneaking()) {
+				par4EntityPlayer.openGui(EssentialCraftCore.core, Config.guiID[0], par1World, par2.getX(), par2.getY(), par2.getZ());
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
 	}
 
 	@Override

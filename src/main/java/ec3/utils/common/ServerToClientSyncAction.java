@@ -9,7 +9,7 @@ public class ServerToClientSyncAction extends ScheduledServerAction {
 
 	EntityPlayer p;
 	TileEntity t;
-	
+
 	public ServerToClientSyncAction(EntityPlayer requester, TileEntity tile)  {
 		super(20);
 		p = requester;

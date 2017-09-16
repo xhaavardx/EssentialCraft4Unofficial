@@ -26,6 +26,7 @@ public class BlockFlowerBurner extends BlockContainer implements IModelRegistere
 		super(p_i45394_1_);
 	}
 
+	@Override
 	public boolean isOpaqueCube(IBlockState s)
 	{
 		return false;
@@ -37,16 +38,18 @@ public class BlockFlowerBurner extends BlockContainer implements IModelRegistere
 		return BlockRenderLayer.SOLID;
 	}
 
+	@Override
 	public boolean isFullCube(IBlockState s)
 	{
 		return false;
 	}
-	
+
+	@Override
 	public EnumBlockRenderType getRenderType(IBlockState s)
 	{
 		return EnumBlockRenderType.MODEL;
 	}
-	
+
 	@Override
 	public TileEntity createNewTileEntity(World p_149915_1_, int p_149915_2_) {
 		return new TileFlowerBurner();

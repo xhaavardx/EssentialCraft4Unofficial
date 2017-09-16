@@ -26,6 +26,7 @@ public class ItemCollectedMonsterSpawner extends Item implements IModelRegistere
 		this.setHasSubtypes(true);
 	}
 
+	@Override
 	public EnumActionResult onItemUse(ItemStack stk, EntityPlayer placer, World w, BlockPos pos, EnumHand hand, EnumFacing side, float vecX, float vecY, float vecZ)
 	{
 		BlockPos nP = pos.offset(side);
@@ -55,6 +56,7 @@ public class ItemCollectedMonsterSpawner extends Item implements IModelRegistere
 		return EnumActionResult.PASS;
 	}
 
+	@Override
 	public void addInformation(ItemStack stk, EntityPlayer player, List<String> lst, boolean isCurrentItem) {
 		NBTTagCompound tag = MiscUtils.getStackTag(stk);
 		if(tag.hasKey("monsterSpawner")) {

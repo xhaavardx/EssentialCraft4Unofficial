@@ -72,9 +72,9 @@ public class PortalGeneratorFirstWorld extends DummyPortalGenerator {
 				destinationCoordinateCache.put(l, worldIn.getDefaultTeleporter().new PortalPosition(blockpos, worldIn.getTotalWorldTime()));
 			}
 
-			double d5 = (double) blockpos.getX() + 0.5D;
-			double d6 = (double) blockpos.getY() + 0.5D;
-			double d7 = (double) blockpos.getZ() + 0.5D;
+			double d5 = blockpos.getX() + 0.5D;
+			double d6 = blockpos.getY() + 0.5D;
+			double d7 = blockpos.getZ() + 0.5D;
 			int zP = 0;
 			int xP = 0;
 			double origYd6 = d6;
@@ -84,23 +84,23 @@ public class PortalGeneratorFirstWorld extends DummyPortalGenerator {
 
 			double aG0 = blockpattern$patternhelper.getForwards().getAxis() == EnumFacing.Axis.X ? (double) blockpattern$patternhelper.getFrontTopLeft().getZ() : (double) blockpattern$patternhelper.getFrontTopLeft().getX();
 			double aG1 = blockpattern$patternhelper.getForwards().getAxis() == EnumFacing.Axis.X ? entityIn.posZ : entityIn.posX;
-			aG1 = Math.abs(MathHelper.pct(aG1 - (double) (blockpattern$patternhelper.getForwards().rotateY().getAxisDirection() == EnumFacing.AxisDirection.NEGATIVE ? 1 : 0), aG0, aG0 - (double) blockpattern$patternhelper.getWidth()));
-			double aG2 = MathHelper.pct(entityIn.posY - 1.0D, (double) blockpattern$patternhelper.getFrontTopLeft().getY(), (double) (blockpattern$patternhelper.getFrontTopLeft().getY() - blockpattern$patternhelper.getHeight()));
+			aG1 = Math.abs(MathHelper.pct(aG1 - (blockpattern$patternhelper.getForwards().rotateY().getAxisDirection() == EnumFacing.AxisDirection.NEGATIVE ? 1 : 0), aG0, aG0 - blockpattern$patternhelper.getWidth()));
+			double aG2 = MathHelper.pct(entityIn.posY - 1.0D, blockpattern$patternhelper.getFrontTopLeft().getY(), blockpattern$patternhelper.getFrontTopLeft().getY() - blockpattern$patternhelper.getHeight());
 			Vec3d aG = new Vec3d(aG1, aG2, 0.0D);
 			EnumFacing eTD = blockpattern$patternhelper.getForwards();
 
-			d6 = (double)(blockpattern$patternhelper.getFrontTopLeft().getY() + 1) - aG.yCoord * (double)blockpattern$patternhelper.getHeight();
+			d6 = blockpattern$patternhelper.getFrontTopLeft().getY() + 1 - aG.yCoord * blockpattern$patternhelper.getHeight();
 
 			if(flag1) {
 				++d2;
 			}
 
 			if(blockpattern$patternhelper.getForwards().getAxis() == EnumFacing.Axis.X) {
-				d7 = d2 + (1.0D - aG.xCoord) * (double) blockpattern$patternhelper.getWidth() * (double) blockpattern$patternhelper.getForwards().rotateY().getAxisDirection().getOffset();
+				d7 = d2 + (1.0D - aG.xCoord) * blockpattern$patternhelper.getWidth() * blockpattern$patternhelper.getForwards().rotateY().getAxisDirection().getOffset();
 				xP = 1;
 			}
 			else {
-				d5 = d2 + (1.0D - aG.xCoord) * (double) blockpattern$patternhelper.getWidth() * (double) blockpattern$patternhelper.getForwards().rotateY().getAxisDirection().getOffset();
+				d5 = d2 + (1.0D - aG.xCoord) * blockpattern$patternhelper.getWidth() * blockpattern$patternhelper.getForwards().rotateY().getAxisDirection().getOffset();
 				zP = 1;
 			}
 
@@ -128,9 +128,9 @@ public class PortalGeneratorFirstWorld extends DummyPortalGenerator {
 
 			double d3 = entityIn.motionX;
 			double d4 = entityIn.motionZ;
-			entityIn.motionX = d3 * (double) f + d4 * (double) f3;
-			entityIn.motionZ = d3 * (double) f2 + d4 * (double) f1;
-			entityIn.rotationYaw = rotationYaw - (float) (eTD.getOpposite().getHorizontalIndex() * 90) + (float) (blockpattern$patternhelper.getForwards().getHorizontalIndex() * 90);
+			entityIn.motionX = d3 * f + d4 * f3;
+			entityIn.motionZ = d3 * f2 + d4 * f1;
+			entityIn.rotationYaw = rotationYaw - eTD.getOpposite().getHorizontalIndex() * 90 + blockpattern$patternhelper.getForwards().getHorizontalIndex() * 90;
 			d6 = d6 < origYd6 ? origYd6 + 1 : d6;
 			if(entityIn instanceof EntityPlayerMP) {
 				((EntityPlayerMP) entityIn).connection.setPlayerLocation(blockpos.getX() + 0.5D + xP, blockpos.getY() + 0.5D, blockpos.getZ() + 0.5D + zP, entityIn.rotationYaw, entityIn.rotationPitch);
@@ -161,10 +161,10 @@ public class PortalGeneratorFirstWorld extends DummyPortalGenerator {
 
 		for(int j2 = j - i; j2 <= j + i; ++j2) {
 
-			double d1 = (double) j2 + 0.5D - entityIn.posX;
+			double d1 = j2 + 0.5D - entityIn.posX;
 
 			for(int l2 = l - i; l2 <= l + i; ++l2) {
-				double d2 = (double) l2 + 0.5D - entityIn.posZ;
+				double d2 = l2 + 0.5D - entityIn.posZ;
 				label142: for(int j3 = worldIn.getActualHeight() - 1; j3 >= 0; --j3) {
 					if(worldIn.isAirBlock(blockpos$mutableblockpos.setPos(j2, j3, l2))) {
 						while (j3 > 0 && worldIn.isAirBlock(blockpos$mutableblockpos.setPos(j2, j3 - 1, l2))) {
@@ -195,7 +195,7 @@ public class PortalGeneratorFirstWorld extends DummyPortalGenerator {
 								}
 							}
 
-							double d5 = (double) j3 + 0.5D - entityIn.posY;
+							double d5 = j3 + 0.5D - entityIn.posY;
 							double d7 = d1 * d1 + d5 * d5 + d2 * d2;
 
 							if(d0 < 0.0D || d7 < d0) {
@@ -213,10 +213,10 @@ public class PortalGeneratorFirstWorld extends DummyPortalGenerator {
 
 		if(d0 < 0.0D) {
 			for(int l5 = j - i; l5 <= j + i; ++l5) {
-				double d3 = (double) l5 + 0.5D - entityIn.posX;
+				double d3 = l5 + 0.5D - entityIn.posX;
 
 				for(int j6 = l - i; j6 <= l + i; ++j6) {
-					double d4 = (double) j6 + 0.5D - entityIn.posZ;
+					double d4 = j6 + 0.5D - entityIn.posZ;
 					label562: for(int i7 = worldIn.getActualHeight() - 1; i7 >= 0; --i7) {
 						if(worldIn.isAirBlock(blockpos$mutableblockpos.setPos(l5, i7, j6))) {
 							while (i7 > 0 && worldIn.isAirBlock(blockpos$mutableblockpos.setPos(l5, i7 - 1, j6))) {
@@ -240,7 +240,7 @@ public class PortalGeneratorFirstWorld extends DummyPortalGenerator {
 									}
 								}
 
-								double d6 = (double) i7 + 0.5D - entityIn.posY;
+								double d6 = i7 + 0.5D - entityIn.posY;
 								double d8 = d3 * d3 + d6 * d6 + d4 * d4;
 
 								if(d0 < 0.0D || d8 < d0) {

@@ -26,18 +26,22 @@ public class BlockPortal extends net.minecraft.block.BlockPortal implements IMod
 		super();
 	}
 
+	@Override
 	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {}
 
+	@Override
 	public void onEntityCollidedWithBlock(World p_149670_1_, BlockPos p_149670_2_, IBlockState s, Entity p_149670_5_) {
 		if(!p_149670_1_.isRemote) {
 			DummyPortalHandler.transferEntityToDimension(p_149670_5_);
 		}
 	}
 
+	@Override
 	public void randomDisplayTick(IBlockState state, World worldIn, BlockPos pos, Random rand) {}
 
+	@Override
 	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn) {
-		EnumFacing.Axis enumfacing$axis = (EnumFacing.Axis)state.getValue(AXIS);
+		EnumFacing.Axis enumfacing$axis = state.getValue(AXIS);
 
 		if (enumfacing$axis == EnumFacing.Axis.X) {
 			BlockPortal.Size blockportal$size = new BlockPortal.Size(worldIn, pos, EnumFacing.Axis.X);
@@ -55,6 +59,7 @@ public class BlockPortal extends net.minecraft.block.BlockPortal implements IMod
 		}
 	}
 
+	@Override
 	public BlockPattern.PatternHelper createPatternHelper(World worldIn, BlockPos p_181089_2_) {
 		EnumFacing.Axis enumfacing$axis = EnumFacing.Axis.Z;
 		BlockPortal.Size blockportal$size = new BlockPortal.Size(worldIn, p_181089_2_, EnumFacing.Axis.X);
@@ -99,6 +104,7 @@ public class BlockPortal extends net.minecraft.block.BlockPortal implements IMod
 		}
 	}
 
+	@Override
 	public boolean trySpawnPortal(World worldIn, BlockPos pos) {
 		BlockPortal.Size blockportal$size = new BlockPortal.Size(worldIn, pos, EnumFacing.Axis.X);
 

@@ -3,18 +3,15 @@ package ec3.integration.minetweaker;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Consumer;
 
 import DummyCore.Utils.UnformedItemStack;
+import ec3.api.MagicianTableRecipe;
+import ec3.api.MagicianTableRecipes;
 import minetweaker.IUndoableAction;
 import minetweaker.MineTweakerAPI;
-import minetweaker.api.data.DataInt;
 import minetweaker.api.item.IIngredient;
 import minetweaker.api.item.IItemStack;
 import minetweaker.api.minecraft.MineTweakerMC;
-import net.minecraft.item.ItemStack;
-import ec3.api.MagicianTableRecipe;
-import ec3.api.MagicianTableRecipes;
 import stanhebben.zenscript.annotations.Optional;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
@@ -99,26 +96,32 @@ public class MagicianTable {
 			this.rec = rec;
 		}
 
+		@Override
 		public void apply() {
 			MagicianTableRecipes.addRecipe(rec);
 		}
 
+		@Override
 		public boolean canUndo() {
 			return true;
 		}
 
+		@Override
 		public void undo() {
 			MagicianTableRecipes.removeRecipe(rec);
 		}
 
+		@Override
 		public String describe() {
 			return "Adding Magician Table Recipe for "+rec.result.getDisplayName();
 		}
 
+		@Override
 		public String describeUndo() {
 			return "Removing Magician Table Recipe for "+rec.result.getDisplayName();
 		}
 
+		@Override
 		public Object getOverrideKey() {
 			return null;
 		}
@@ -131,30 +134,36 @@ public class MagicianTable {
 			this.rec = rec;
 		}
 
+		@Override
 		public void apply() {
 			for(MagicianTableRecipe entry : rec) {
 				MagicianTableRecipes.removeRecipe(entry);
 			}
 		}
 
+		@Override
 		public boolean canUndo() {
 			return true;
 		}
 
+		@Override
 		public void undo() {
 			for(MagicianTableRecipe entry : rec) {
 				MagicianTableRecipes.addRecipe(entry);
 			}
 		}
 
+		@Override
 		public String describe() {
 			return "Removing "+rec.size()+" Magician Table Recipe(s)";
 		}
 
+		@Override
 		public String describeUndo() {
 			return "Restoring "+rec.size()+" Magician Table Recipe(s)";
 		}
 
+		@Override
 		public Object getOverrideKey() {
 			return null;
 		}

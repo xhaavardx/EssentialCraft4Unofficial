@@ -28,10 +28,12 @@ public class BlockecEjector extends BlockContainer implements IModelRegisterer {
 		return new TileecEjector();
 	}
 
+	@Override
 	public boolean onBlockActivated(World par1World, BlockPos par2, IBlockState par3, EntityPlayer par4EntityPlayer, EnumHand par5, ItemStack par6, EnumFacing par7, float par8, float par9, float par10) {
 		return true;
 	}
 
+	@Override
 	public EnumBlockRenderType getRenderType(IBlockState s) {
 		return EnumBlockRenderType.MODEL;
 	}

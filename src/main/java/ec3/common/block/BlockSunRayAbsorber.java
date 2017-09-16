@@ -31,16 +31,19 @@ public class BlockSunRayAbsorber extends BlockContainer implements IModelRegiste
 		return false;
 	}
 
+	@Override
 	public boolean isOpaqueCube(IBlockState s)
 	{
 		return false;
 	}
 
+	@Override
 	public boolean isFullCube(IBlockState s)
 	{
 		return false;
 	}
-	
+
+	@Override
 	public EnumBlockRenderType getRenderType(IBlockState s)
 	{
 		return EnumBlockRenderType.MODEL;

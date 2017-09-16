@@ -1,18 +1,14 @@
 package ec3.client.render;
 
-import org.lwjgl.opengl.GL11;
-
-import DummyCore.Utils.TessellatorWrapper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.client.IRenderHandler;
 
@@ -28,19 +24,19 @@ public class RenderCloudsFirstWorld extends IRenderHandler{
 		for(int layer = 0; layer < 3; ++layer) {
 			GlStateManager.pushMatrix();
 			GlStateManager.disableCull();
-			float f1 = (float)(mc.getRenderViewEntity().lastTickPosY + (mc.getRenderViewEntity().posY - mc.getRenderViewEntity().lastTickPosY) * (double)partialTicks);
+			float f1 = (float)(mc.getRenderViewEntity().lastTickPosY + (mc.getRenderViewEntity().posY - mc.getRenderViewEntity().lastTickPosY) * partialTicks);
 			Tessellator tessellator = Tessellator.getInstance();
 			VertexBuffer vertexbuffer = tessellator.getBuffer();
 			float f2 = 12.0F;
 			float f3 = 4.0F;
-			double d0 = (double)((float)this.cloudTickCounter + partialTicks);
-			double d1 = (mc.getRenderViewEntity().prevPosX + (mc.getRenderViewEntity().posX - mc.getRenderViewEntity().prevPosX) * (double)partialTicks + d0* layer*layer * 0.03D) / (double)f2 ;
-			double d2 = (mc.getRenderViewEntity().prevPosZ + (mc.getRenderViewEntity().posZ - mc.getRenderViewEntity().prevPosZ) * (double)partialTicks) / (double)f2* layer*layer + 0.33D ;
+			double d0 = this.cloudTickCounter + partialTicks;
+			double d1 = (mc.getRenderViewEntity().prevPosX + (mc.getRenderViewEntity().posX - mc.getRenderViewEntity().prevPosX) * partialTicks + d0* layer*layer * 0.03D) / f2 ;
+			double d2 = (mc.getRenderViewEntity().prevPosZ + (mc.getRenderViewEntity().posZ - mc.getRenderViewEntity().prevPosZ) * partialTicks) / f2* layer*layer + 0.33D ;
 			float f4 = world.provider.getCloudHeight() - f1 + 0.33F + layer*36;
 			int i = MathHelper.floor(d1 / 2048.0D);
 			int j = MathHelper.floor(d2 / 2048.0D);
-			d1 -= (double)(i * 2048);
-			d2 -= (double)(j * 2048);
+			d1 -= i * 2048;
+			d2 -= j * 2048;
 			mc.renderEngine.bindTexture(locationCloudsPng);
 			GlStateManager.enableBlend();
 			GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
@@ -68,10 +64,10 @@ public class RenderCloudsFirstWorld extends IRenderHandler{
 			f8 = (float)(d1 * 0.0D);
 			f9 = (float)(d2 * 0.0D);
 			f10 = 0.00390625F;
-			f8 = (float)MathHelper.floor(d1) * f10;
-			f9 = (float)MathHelper.floor(d2) * f10;
-			float f11 = (float)(d1 - (double)MathHelper.floor(d1));
-			float f12 = (float)(d2 - (double)MathHelper.floor(d2));
+			f8 = MathHelper.floor(d1) * f10;
+			f9 = MathHelper.floor(d2) * f10;
+			float f11 = (float)(d1 - MathHelper.floor(d1));
+			float f12 = (float)(d2 - MathHelper.floor(d2));
 			byte b0 = 8;
 			byte b1 = 4;
 			float f13 = 9.765625E-4F;
@@ -98,60 +94,60 @@ public class RenderCloudsFirstWorld extends IRenderHandler{
 				for (int l = -b1 + 1; l <= b1; ++l) {
 					for (int i1 = -b1 + 1; i1 <= b1; ++i1) {
 						vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR_NORMAL);
-						float f14 = (float)(l * b0);
-						float f15 = (float)(i1 * b0);
+						float f14 = l * b0;
+						float f15 = i1 * b0;
 						float f16 = f14 - f11;
 						float f17 = f15 - f12;
 
 						if (f4 > -f3 - 1.0F) {
-							vertexbuffer.pos((double)(f16 + 0.0F), (double)(f4 + 0.0F), (double)(f17 + (float)b0)).tex((double)((f14 + 0.0F) * f10 + f8), (double)((f15 + (float)b0) * f10 + f9)).color(f5 * 0.7F, f6 * 0.7F, f7 * 0.7F, 0.8F).normal(0.0F, -1.0F, 0.0F).endVertex();
-							vertexbuffer.pos((double)(f16 + (float)b0), (double)(f4 + 0.0F), (double)(f17 + (float)b0)).tex((double)((f14 + (float)b0) * f10 + f8), (double)((f15 + (float)b0) * f10 + f9)).color(f5 * 0.7F, f6 * 0.7F, f7 * 0.7F, 0.8F).normal(0.0F, -1.0F, 0.0F).endVertex();
-							vertexbuffer.pos((double)(f16 + (float)b0), (double)(f4 + 0.0F), (double)(f17 + 0.0F)).tex((double)((f14 + (float)b0) * f10 + f8), (double)((f15 + 0.0F) * f10 + f9)).color(f5 * 0.7F, f6 * 0.7F, f7 * 0.7F, 0.8F).normal(0.0F, -1.0F, 0.0F).endVertex();
-							vertexbuffer.pos((double)(f16 + 0.0F), (double)(f4 + 0.0F), (double)(f17 + 0.0F)).tex((double)((f14 + 0.0F) * f10 + f8), (double)((f15 + 0.0F) * f10 + f9)).color(f5 * 0.7F, f6 * 0.7F, f7 * 0.7F, 0.8F).normal(0.0F, -1.0F, 0.0F).endVertex();
+							vertexbuffer.pos(f16 + 0.0F, f4 + 0.0F, f17 + b0).tex((f14 + 0.0F) * f10 + f8, (f15 + b0) * f10 + f9).color(f5 * 0.7F, f6 * 0.7F, f7 * 0.7F, 0.8F).normal(0.0F, -1.0F, 0.0F).endVertex();
+							vertexbuffer.pos(f16 + b0, f4 + 0.0F, f17 + b0).tex((f14 + b0) * f10 + f8, (f15 + b0) * f10 + f9).color(f5 * 0.7F, f6 * 0.7F, f7 * 0.7F, 0.8F).normal(0.0F, -1.0F, 0.0F).endVertex();
+							vertexbuffer.pos(f16 + b0, f4 + 0.0F, f17 + 0.0F).tex((f14 + b0) * f10 + f8, (f15 + 0.0F) * f10 + f9).color(f5 * 0.7F, f6 * 0.7F, f7 * 0.7F, 0.8F).normal(0.0F, -1.0F, 0.0F).endVertex();
+							vertexbuffer.pos(f16 + 0.0F, f4 + 0.0F, f17 + 0.0F).tex((f14 + 0.0F) * f10 + f8, (f15 + 0.0F) * f10 + f9).color(f5 * 0.7F, f6 * 0.7F, f7 * 0.7F, 0.8F).normal(0.0F, -1.0F, 0.0F).endVertex();
 						}
 
 						if (f4 <= f3 + 1.0F) {
-							vertexbuffer.pos((double)(f16 + 0.0F), (double)(f4 + f3 - f13), (double)(f17 + (float)b0)).tex((double)((f14 + 0.0F) * f10 + f8), (double)((f15 + (float)b0) * f10 + f9)).color(f5, f6, f7, 0.8F).normal(0.0F, 1.0F, 0.0F).endVertex();
-							vertexbuffer.pos((double)(f16 + (float)b0), (double)(f4 + f3 - f13), (double)(f17 + (float)b0)).tex((double)((f14 + (float)b0) * f10 + f8), (double)((f15 + (float)b0) * f10 + f9)).color(f5, f6, f7, 0.8F).normal(0.0F, 1.0F, 0.0F).endVertex();
-							vertexbuffer.pos((double)(f16 + (float)b0), (double)(f4 + f3 - f13), (double)(f17 + 0.0F)).tex((double)((f14 + (float)b0) * f10 + f8), (double)((f15 + 0.0F) * f10 + f9)).color(f5, f6, f7, 0.8F).normal(0.0F, 1.0F, 0.0F).endVertex();
-							vertexbuffer.pos((double)(f16 + 0.0F), (double)(f4 + f3 - f13), (double)(f17 + 0.0F)).tex((double)((f14 + 0.0F) * f10 + f8), (double)((f15 + 0.0F) * f10 + f9)).color(f5, f6, f7, 0.8F).normal(0.0F, 1.0F, 0.0F).endVertex();
+							vertexbuffer.pos(f16 + 0.0F, f4 + f3 - f13, f17 + b0).tex((f14 + 0.0F) * f10 + f8, (f15 + b0) * f10 + f9).color(f5, f6, f7, 0.8F).normal(0.0F, 1.0F, 0.0F).endVertex();
+							vertexbuffer.pos(f16 + b0, f4 + f3 - f13, f17 + b0).tex((f14 + b0) * f10 + f8, (f15 + b0) * f10 + f9).color(f5, f6, f7, 0.8F).normal(0.0F, 1.0F, 0.0F).endVertex();
+							vertexbuffer.pos(f16 + b0, f4 + f3 - f13, f17 + 0.0F).tex((f14 + b0) * f10 + f8, (f15 + 0.0F) * f10 + f9).color(f5, f6, f7, 0.8F).normal(0.0F, 1.0F, 0.0F).endVertex();
+							vertexbuffer.pos(f16 + 0.0F, f4 + f3 - f13, f17 + 0.0F).tex((f14 + 0.0F) * f10 + f8, (f15 + 0.0F) * f10 + f9).color(f5, f6, f7, 0.8F).normal(0.0F, 1.0F, 0.0F).endVertex();
 						}
 
 						int j1;
 
 						if (l > -1) {
 							for (j1 = 0; j1 < b0; ++j1) {
-								vertexbuffer.pos((double)(f16 + (float)j1 + 0.0F), (double)(f4 + 0.0F), (double)(f17 + (float)b0)).tex((double)((f14 + (float)j1 + 0.5F) * f10 + f8), (double)((f15 + (float)b0) * f10 + f9)).color(f5 * 0.9F, f6 * 0.9F, f7 * 0.9F, 0.8F).normal(-1.0F, 0.0F, 0.0F).endVertex();
-								vertexbuffer.pos((double)(f16 + (float)j1 + 0.0F), (double)(f4 + f3), (double)(f17 + (float)b0)).tex((double)((f14 + (float)j1 + 0.5F) * f10 + f8), (double)((f15 + (float)b0) * f10 + f9)).color(f5 * 0.9F, f6 * 0.9F, f7 * 0.9F, 0.8F).normal(-1.0F, 0.0F, 0.0F).endVertex();
-								vertexbuffer.pos((double)(f16 + (float)j1 + 0.0F), (double)(f4 + f3), (double)(f17 + 0.0F)).tex((double)((f14 + (float)j1 + 0.5F) * f10 + f8), (double)((f15 + 0.0F) * f10 + f9)).color(f5 * 0.9F, f6 * 0.9F, f7 * 0.9F, 0.8F).normal(-1.0F, 0.0F, 0.0F).endVertex();
-								vertexbuffer.pos((double)(f16 + (float)j1 + 0.0F), (double)(f4 + 0.0F), (double)(f17 + 0.0F)).tex((double)((f14 + (float)j1 + 0.5F) * f10 + f8), (double)((f15 + 0.0F) * f10 + f9)).color(f5 * 0.9F, f6 * 0.9F, f7 * 0.9F, 0.8F).normal(-1.0F, 0.0F, 0.0F).endVertex();
+								vertexbuffer.pos(f16 + j1 + 0.0F, f4 + 0.0F, f17 + b0).tex((f14 + j1 + 0.5F) * f10 + f8, (f15 + b0) * f10 + f9).color(f5 * 0.9F, f6 * 0.9F, f7 * 0.9F, 0.8F).normal(-1.0F, 0.0F, 0.0F).endVertex();
+								vertexbuffer.pos(f16 + j1 + 0.0F, f4 + f3, f17 + b0).tex((f14 + j1 + 0.5F) * f10 + f8, (f15 + b0) * f10 + f9).color(f5 * 0.9F, f6 * 0.9F, f7 * 0.9F, 0.8F).normal(-1.0F, 0.0F, 0.0F).endVertex();
+								vertexbuffer.pos(f16 + j1 + 0.0F, f4 + f3, f17 + 0.0F).tex((f14 + j1 + 0.5F) * f10 + f8, (f15 + 0.0F) * f10 + f9).color(f5 * 0.9F, f6 * 0.9F, f7 * 0.9F, 0.8F).normal(-1.0F, 0.0F, 0.0F).endVertex();
+								vertexbuffer.pos(f16 + j1 + 0.0F, f4 + 0.0F, f17 + 0.0F).tex((f14 + j1 + 0.5F) * f10 + f8, (f15 + 0.0F) * f10 + f9).color(f5 * 0.9F, f6 * 0.9F, f7 * 0.9F, 0.8F).normal(-1.0F, 0.0F, 0.0F).endVertex();
 							}
 						}
 
 						if (l <= 1) {
 							for (j1 = 0; j1 < b0; ++j1) {
-								vertexbuffer.pos((double)(f16 + (float)j1 + 1.0F - f13), (double)(f4 + 0.0F), (double)(f17 + (float)b0)).tex((double)((f14 + (float)j1 + 0.5F) * f10 + f8), (double)((f15 + (float)b0) * f10 + f9)).color(f5 * 0.9F, f6 * 0.9F, f7 * 0.9F, 0.8F).normal(1.0F, 0.0F, 0.0F).endVertex();
-								vertexbuffer.pos((double)(f16 + (float)j1 + 1.0F - f13), (double)(f4 + f3), (double)(f17 + (float)b0)).tex((double)((f14 + (float)j1 + 0.5F) * f10 + f8), (double)((f15 + (float)b0) * f10 + f9)).color(f5 * 0.9F, f6 * 0.9F, f7 * 0.9F, 0.8F).normal(1.0F, 0.0F, 0.0F).endVertex();
-								vertexbuffer.pos((double)(f16 + (float)j1 + 1.0F - f13), (double)(f4 + f3), (double)(f17 + 0.0F)).tex((double)((f14 + (float)j1 + 0.5F) * f10 + f8), (double)((f15 + 0.0F) * f10 + f9)).color(f5 * 0.9F, f6 * 0.9F, f7 * 0.9F, 0.8F).normal(1.0F, 0.0F, 0.0F).endVertex();
-								vertexbuffer.pos((double)(f16 + (float)j1 + 1.0F - f13), (double)(f4 + 0.0F), (double)(f17 + 0.0F)).tex((double)((f14 + (float)j1 + 0.5F) * f10 + f8), (double)((f15 + 0.0F) * f10 + f9)).color(f5 * 0.9F, f6 * 0.9F, f7 * 0.9F, 0.8F).normal(1.0F, 0.0F, 0.0F).endVertex();
+								vertexbuffer.pos(f16 + j1 + 1.0F - f13, f4 + 0.0F, f17 + b0).tex((f14 + j1 + 0.5F) * f10 + f8, (f15 + b0) * f10 + f9).color(f5 * 0.9F, f6 * 0.9F, f7 * 0.9F, 0.8F).normal(1.0F, 0.0F, 0.0F).endVertex();
+								vertexbuffer.pos(f16 + j1 + 1.0F - f13, f4 + f3, f17 + b0).tex((f14 + j1 + 0.5F) * f10 + f8, (f15 + b0) * f10 + f9).color(f5 * 0.9F, f6 * 0.9F, f7 * 0.9F, 0.8F).normal(1.0F, 0.0F, 0.0F).endVertex();
+								vertexbuffer.pos(f16 + j1 + 1.0F - f13, f4 + f3, f17 + 0.0F).tex((f14 + j1 + 0.5F) * f10 + f8, (f15 + 0.0F) * f10 + f9).color(f5 * 0.9F, f6 * 0.9F, f7 * 0.9F, 0.8F).normal(1.0F, 0.0F, 0.0F).endVertex();
+								vertexbuffer.pos(f16 + j1 + 1.0F - f13, f4 + 0.0F, f17 + 0.0F).tex((f14 + j1 + 0.5F) * f10 + f8, (f15 + 0.0F) * f10 + f9).color(f5 * 0.9F, f6 * 0.9F, f7 * 0.9F, 0.8F).normal(1.0F, 0.0F, 0.0F).endVertex();
 							}
 						}
 
 						if (i1 > -1) {
 							for (j1 = 0; j1 < b0; ++j1) {
-								vertexbuffer.pos((double)(f16 + 0.0F), (double)(f4 + f3), (double)(f17 + (float)j1 + 0.0F)).tex((double)((f14 + 0.0F) * f10 + f8), (double)((f15 + (float)j1 + 0.5F) * f10 + f9)).color(f5 * 0.8F, f6 * 0.8F, f7 * 0.8F, 0.8F).normal(0.0F, 0.0F, -1.0F).endVertex();
-								vertexbuffer.pos((double)(f16 + (float)b0), (double)(f4 + f3), (double)(f17 + (float)j1 + 0.0F)).tex((double)((f14 + (float)b0) * f10 + f8), (double)((f15 + (float)j1 + 0.5F) * f10 + f9)).color(f5 * 0.8F, f6 * 0.8F, f7 * 0.8F, 0.8F).normal(0.0F, 0.0F, -1.0F).endVertex();
-								vertexbuffer.pos((double)(f16 + (float)b0), (double)(f4 + 0.0F), (double)(f17 + (float)j1 + 0.0F)).tex((double)((f14 + (float)b0) * f10 + f8), (double)((f15 + (float)j1 + 0.5F) * f10 + f9)).color(f5 * 0.8F, f6 * 0.8F, f7 * 0.8F, 0.8F).normal(0.0F, 0.0F, -1.0F).endVertex();
-								vertexbuffer.pos((double)(f16 + 0.0F), (double)(f4 + 0.0F), (double)(f17 + (float)j1 + 0.0F)).tex((double)((f14 + 0.0F) * f10 + f8), (double)((f15 + (float)j1 + 0.5F) * f10 + f9)).color(f5 * 0.8F, f6 * 0.8F, f7 * 0.8F, 0.8F).normal(0.0F, 0.0F, -1.0F).endVertex();
+								vertexbuffer.pos(f16 + 0.0F, f4 + f3, f17 + j1 + 0.0F).tex((f14 + 0.0F) * f10 + f8, (f15 + j1 + 0.5F) * f10 + f9).color(f5 * 0.8F, f6 * 0.8F, f7 * 0.8F, 0.8F).normal(0.0F, 0.0F, -1.0F).endVertex();
+								vertexbuffer.pos(f16 + b0, f4 + f3, f17 + j1 + 0.0F).tex((f14 + b0) * f10 + f8, (f15 + j1 + 0.5F) * f10 + f9).color(f5 * 0.8F, f6 * 0.8F, f7 * 0.8F, 0.8F).normal(0.0F, 0.0F, -1.0F).endVertex();
+								vertexbuffer.pos(f16 + b0, f4 + 0.0F, f17 + j1 + 0.0F).tex((f14 + b0) * f10 + f8, (f15 + j1 + 0.5F) * f10 + f9).color(f5 * 0.8F, f6 * 0.8F, f7 * 0.8F, 0.8F).normal(0.0F, 0.0F, -1.0F).endVertex();
+								vertexbuffer.pos(f16 + 0.0F, f4 + 0.0F, f17 + j1 + 0.0F).tex((f14 + 0.0F) * f10 + f8, (f15 + j1 + 0.5F) * f10 + f9).color(f5 * 0.8F, f6 * 0.8F, f7 * 0.8F, 0.8F).normal(0.0F, 0.0F, -1.0F).endVertex();
 							}
 						}
 
 						if (i1 <= 1) {
 							for (j1 = 0; j1 < b0; ++j1) {
-								vertexbuffer.pos((double)(f16 + 0.0F), (double)(f4 + f3), (double)(f17 + (float)j1 + 1.0F - f13)).tex((double)((f14 + 0.0F) * f10 + f8), (double)((f15 + (float)j1 + 0.5F) * f10 + f9)).color(f5 * 0.8F, f6 * 0.8F, f7 * 0.8F, 0.8F).normal(0.0F, 0.0F, 1.0F).endVertex();
-								vertexbuffer.pos((double)(f16 + (float)b0), (double)(f4 + f3), (double)(f17 + (float)j1 + 1.0F - f13)).tex((double)((f14 + (float)b0) * f10 + f8), (double)((f15 + (float)j1 + 0.5F) * f10 + f9)).color(f5 * 0.8F, f6 * 0.8F, f7 * 0.8F, 0.8F).normal(0.0F, 0.0F, 1.0F).endVertex();
-								vertexbuffer.pos((double)(f16 + (float)b0), (double)(f4 + 0.0F), (double)(f17 + (float)j1 + 1.0F - f13)).tex((double)((f14 + (float)b0) * f10 + f8), (double)((f15 + (float)j1 + 0.5F) * f10 + f9)).color(f5 * 0.8F, f6 * 0.8F, f7 * 0.8F, 0.8F).normal(0.0F, 0.0F, 1.0F).endVertex();
-								vertexbuffer.pos((double)(f16 + 0.0F), (double)(f4 + 0.0F), (double)(f17 + (float)j1 + 1.0F - f13)).tex((double)((f14 + 0.0F) * f10 + f8), (double)((f15 + (float)j1 + 0.5F) * f10 + f9)).color(f5 * 0.8F, f6 * 0.8F, f7 * 0.8F, 0.8F).normal(0.0F, 0.0F, 1.0F).endVertex();
+								vertexbuffer.pos(f16 + 0.0F, f4 + f3, f17 + j1 + 1.0F - f13).tex((f14 + 0.0F) * f10 + f8, (f15 + j1 + 0.5F) * f10 + f9).color(f5 * 0.8F, f6 * 0.8F, f7 * 0.8F, 0.8F).normal(0.0F, 0.0F, 1.0F).endVertex();
+								vertexbuffer.pos(f16 + b0, f4 + f3, f17 + j1 + 1.0F - f13).tex((f14 + b0) * f10 + f8, (f15 + j1 + 0.5F) * f10 + f9).color(f5 * 0.8F, f6 * 0.8F, f7 * 0.8F, 0.8F).normal(0.0F, 0.0F, 1.0F).endVertex();
+								vertexbuffer.pos(f16 + b0, f4 + 0.0F, f17 + j1 + 1.0F - f13).tex((f14 + b0) * f10 + f8, (f15 + j1 + 0.5F) * f10 + f9).color(f5 * 0.8F, f6 * 0.8F, f7 * 0.8F, 0.8F).normal(0.0F, 0.0F, 1.0F).endVertex();
+								vertexbuffer.pos(f16 + 0.0F, f4 + 0.0F, f17 + j1 + 1.0F - f13).tex((f14 + 0.0F) * f10 + f8, (f15 + j1 + 0.5F) * f10 + f9).color(f5 * 0.8F, f6 * 0.8F, f7 * 0.8F, 0.8F).normal(0.0F, 0.0F, 1.0F).endVertex();
 							}
 						}
 

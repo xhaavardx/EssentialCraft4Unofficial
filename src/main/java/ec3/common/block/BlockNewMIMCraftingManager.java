@@ -22,7 +22,7 @@ import net.minecraftforge.client.model.ModelLoader;
 
 public class BlockNewMIMCraftingManager extends BlockContainer implements IModelRegisterer {
 
-	public BlockNewMIMCraftingManager() 
+	public BlockNewMIMCraftingManager()
 	{
 		super(Material.ROCK);
 	}
@@ -32,11 +32,12 @@ public class BlockNewMIMCraftingManager extends BlockContainer implements IModel
 		return new TileNewMIMCraftingManager();
 	}
 
+	@Override
 	public EnumBlockRenderType getRenderType(IBlockState s)
 	{
 		return EnumBlockRenderType.MODEL;
 	}
-	
+
 	@Override
 	public void breakBlock(World par1World, BlockPos par2Pos, IBlockState par3State) {
 		MiscUtils.dropItemsOnBlockBreak(par1World, par2Pos.getX(), par2Pos.getY(), par2Pos.getZ(), par3State.getBlock(), 0);

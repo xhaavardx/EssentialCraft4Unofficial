@@ -25,7 +25,7 @@ public class MithrilineFurnaceRecipes {
 	public static void addRecipe(MithrilineFurnaceRecipe rec) {
 		if(allRegisteredRecipes.contains(rec))
 			return;
-		else 
+		else
 			allRegisteredRecipes.add(rec);
 	}
 

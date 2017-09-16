@@ -4,12 +4,9 @@ import java.util.Random;
 
 import org.lwjgl.opengl.GL11;
 
-import DummyCore.Utils.TessellatorWrapper;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
 
@@ -30,15 +27,16 @@ public class ItemFX extends Particle {
 		this.particleMaxAge = 25;
 	}
 
+	@Override
 	public void renderParticle(VertexBuffer var1, Entity var2, float x, float y, float z, float u1, float u2, float u3)
 	{
 		this.canCollide = true;
 		prevPosX = posX;
 		prevPosY = posY;
 		prevPosZ = posZ;
-		float f11 = (float)(this.prevPosX + (this.posX - this.prevPosX) * (double)x - interpPosX);
-		float f12 = (float)(this.prevPosY + (this.posY - this.prevPosY) * (double)x - interpPosY);
-		float f13 = (float)(this.prevPosZ + (this.posZ - this.prevPosZ) * (double)x - interpPosZ);
+		float f11 = (float)(this.prevPosX + (this.posX - this.prevPosX) * x - interpPosX);
+		float f12 = (float)(this.prevPosY + (this.posY - this.prevPosY) * x - interpPosY);
+		float f13 = (float)(this.prevPosZ + (this.posZ - this.prevPosZ) * x - interpPosZ);
 
 		Random var6 = new Random((long) (this.posX*100+this.posY*100+this.posZ*100));
 		GlStateManager.disableTexture2D();

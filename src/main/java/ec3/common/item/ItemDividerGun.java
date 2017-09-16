@@ -35,6 +35,7 @@ public class ItemDividerGun extends ItemStoresMRUInNBT implements IModelRegister
 		return new ActionResult(EnumActionResult.PASS, stk);
 	}
 
+	@Override
 	public EnumAction getItemUseAction(ItemStack p_77661_1_)
 	{
 		return EnumAction.BOW;
@@ -43,11 +44,13 @@ public class ItemDividerGun extends ItemStoresMRUInNBT implements IModelRegister
 	/**
 	 * How long it takes to use or consume an item
 	 */
+	@Override
 	public int getMaxItemUseDuration(ItemStack p_77626_1_)
 	{
 		return 20;
 	}
 
+	@Override
 	public ItemStack onItemUseFinish(ItemStack stk, World w, EntityLivingBase p) {
 		if(p instanceof EntityPlayer && (ECUtils.tryToDecreaseMRUInStorage((EntityPlayer)p, -5000) || this.setMRU(stk, -5000))) {
 			w.playSound(p.posX, p.posY, p.posZ, SoundRegistry.gunBeam, SoundCategory.PLAYERS, 1, 2, false);

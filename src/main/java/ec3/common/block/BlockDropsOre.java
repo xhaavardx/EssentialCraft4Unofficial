@@ -58,6 +58,7 @@ public class BlockDropsOre extends Block implements IModelRegisterer {
 		return BlockRenderLayer.CUTOUT_MIPPED;
 	}
 
+	@Override
 	public void getSubBlocks(Item p_149666_1_, CreativeTabs p_149666_2_, List<ItemStack> p_149666_3_)
 	{
 		for(int i = 0; i < 15; ++i)
@@ -77,6 +78,7 @@ public class BlockDropsOre extends Block implements IModelRegisterer {
 		return ItemsCore.drops;
 	}
 
+	@Override
 	public ArrayList<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune)
 	{
 		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
@@ -130,10 +132,12 @@ public class BlockDropsOre extends Block implements IModelRegisterer {
 			name = s;
 		}
 
+		@Override
 		public String getName() {
 			return name;
 		}
 
+		@Override
 		public String toString() {
 			return name;
 		}

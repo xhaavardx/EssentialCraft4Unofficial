@@ -11,11 +11,11 @@ import net.minecraftforge.fluids.IFluidTank;
 
 public class GuiFluidTank extends GuiElement{
 	private ResourceLocation rec = new ResourceLocation("essentialcraft","textures/gui/mruStorage.png");
-	
+
 	public int x;
 	public int y;
 	public IFluidTank tile;
-	
+
 	public GuiFluidTank(int i, int j, IFluidTank t)
 	{
 		x = i;

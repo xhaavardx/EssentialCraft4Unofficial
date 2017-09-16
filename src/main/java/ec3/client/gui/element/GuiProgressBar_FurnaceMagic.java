@@ -2,14 +2,13 @@ package ec3.client.gui.element;
 
 import DummyCore.Utils.DrawUtils;
 import DummyCore.Utils.MathUtils;
-import DummyCore.Utils.MiscUtils;
 import ec3.common.tile.TileFurnaceMagic;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 
 public class GuiProgressBar_FurnaceMagic extends GuiTextElement{
 	public TileFurnaceMagic tile;
-	
+
 	public GuiProgressBar_FurnaceMagic(int i, int j, TileEntity table)
 	{
 		super(i,j);
@@ -25,11 +24,11 @@ public class GuiProgressBar_FurnaceMagic extends GuiTextElement{
 	@Override
 	public void draw(int posX, int posY, int mouseX, int mouseY) {
 		DrawUtils.bindTexture("essentialcraft", "textures/gui/progressBars.png");
-		int current = (int) tile.progressLevel;
+		int current = tile.progressLevel;
 		if(current == 0)
 			current = tile.smeltingLevel;
-		
-		int max = (int) TileFurnaceMagic.smeltingTime/(tile.getBlockMetadata()/4+1);
+
+		int max = TileFurnaceMagic.smeltingTime/(tile.getBlockMetadata()/4+1);
 		//System.out.println(current);
 		int progress = MathUtils.pixelatedTextureSize(current, max, 25);
 		this.drawTexturedModalRect(posX, posY, 0, 17, 24, 17);
@@ -50,7 +49,7 @@ public class GuiProgressBar_FurnaceMagic extends GuiTextElement{
 
 	@Override
 	public void drawText(int posX, int posY) {
-		
+
 	}
 
 }

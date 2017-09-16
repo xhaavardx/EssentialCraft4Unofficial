@@ -2,8 +2,6 @@ package ec3.client.gui;
 
 import java.util.ArrayList;
 
-import org.lwjgl.opengl.GL11;
-
 import DummyCore.Utils.MathUtils;
 import DummyCore.Utils.MiscUtils;
 import DummyCore.Utils.TessellatorWrapper;
@@ -20,10 +18,9 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.gui.inventory.GuiInventory;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextFormatting;
 
 public class GuiPlayerPentacle extends GuiScreen {
 
@@ -31,12 +28,12 @@ public class GuiPlayerPentacle extends GuiScreen {
 	{
 		public int listIndex;
 
-		public EffectButton(int id, int x, int y,int sX, int sY, String name) 
+		public EffectButton(int id, int x, int y,int sX, int sY, String name)
 		{
 			super(id,x,y,sX,sY,name);
 		}
 
-		public EffectButton(int id, int x, int y,int sX, int sY, String name, int index) 
+		public EffectButton(int id, int x, int y,int sX, int sY, String name, int index)
 		{
 			super(id,x,y,sX,sY,name);
 			listIndex = index;
@@ -48,6 +45,7 @@ public class GuiPlayerPentacle extends GuiScreen {
 				this.enabled = false;
 		}
 
+		@Override
 		public void drawButton(Minecraft mc, int mX, int mY)
 		{
 			if(!this.enabled)
@@ -84,10 +82,10 @@ public class GuiPlayerPentacle extends GuiScreen {
 
 				TessellatorWrapper tessellator = TessellatorWrapper.getInstance();
 				tessellator.startDrawingQuads();
-				tessellator.addVertexWithUV((double)(p_73729_1_ + 0), (double)(p_73729_2_ + p_73729_6_), (double)this.zLevel, 0, 1);
-				tessellator.addVertexWithUV((double)(p_73729_1_ + p_73729_5_), (double)(p_73729_2_ + p_73729_6_), (double)this.zLevel, 1, 1);
-				tessellator.addVertexWithUV((double)(p_73729_1_ + p_73729_5_), (double)(p_73729_2_ + 0), (double)this.zLevel, 1, 0);
-				tessellator.addVertexWithUV((double)(p_73729_1_ + 0), (double)(p_73729_2_ + 0), (double)this.zLevel, 0, 0);
+				tessellator.addVertexWithUV(p_73729_1_ + 0, p_73729_2_ + p_73729_6_, this.zLevel, 0, 1);
+				tessellator.addVertexWithUV(p_73729_1_ + p_73729_5_, p_73729_2_ + p_73729_6_, this.zLevel, 1, 1);
+				tessellator.addVertexWithUV(p_73729_1_ + p_73729_5_, p_73729_2_ + 0, this.zLevel, 1, 0);
+				tessellator.addVertexWithUV(p_73729_1_ + 0, p_73729_2_ + 0, this.zLevel, 0, 0);
 				tessellator.draw();
 
 				if(mX >= this.xPosition && mX <= this.xPosition+20)
@@ -139,6 +137,7 @@ public class GuiPlayerPentacle extends GuiScreen {
 		timeOpened = tile.getWorld().getTotalWorldTime();
 	}
 
+	@Override
 	public boolean doesGuiPauseGame()
 	{
 		return false;
@@ -149,7 +148,8 @@ public class GuiPlayerPentacle extends GuiScreen {
 		super();
 	}
 
-	protected void actionPerformed(GuiButton p_146284_1_) 
+	@Override
+	protected void actionPerformed(GuiButton p_146284_1_)
 	{
 		EffectButton eb = (EffectButton) p_146284_1_;
 		if(eb.enabled)
@@ -170,8 +170,9 @@ public class GuiPlayerPentacle extends GuiScreen {
 
 	}
 
+	@Override
 	@SuppressWarnings("unchecked")
-	public void initGui() 
+	public void initGui()
 	{
 		int k = (this.width - this.xSize) / 2;
 		int l = (this.height - this.ySize) / 2;
@@ -192,13 +193,14 @@ public class GuiPlayerPentacle extends GuiScreen {
 		this.buttonList.add(new EffectButton(14,k + 150 ,l + 174,20,20,"14",14));
 	}
 
+	@Override
 	public void drawScreen(int p_73863_1_, int p_73863_2_, float p_73863_3_)
 	{
 		renderTime = (int)((Minecraft.getMinecraft().world.getTotalWorldTime() - this.timeOpened) % 24000L);
 		int k = (this.width - this.xSize) / 2;
 		int l = (this.height - this.ySize) / 2;
 
-		float opacityIndex = (float)renderTime / 100F;
+		float opacityIndex = renderTime / 100F;
 		if(opacityIndex > 1)opacityIndex = 1;
 
 		GlStateManager.pushMatrix();

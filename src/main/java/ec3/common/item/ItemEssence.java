@@ -20,10 +20,12 @@ public class ItemEssence extends Item implements IModelRegisterer {
 		setHasSubtypes(true);
 	}
 
+	@Override
 	public String getUnlocalizedName(ItemStack p_77667_1_) {
 		return getUnlocalizedName()+dropNames[p_77667_1_.getItemDamage()%4];
 	}
 
+	@Override
 	public void getSubItems(Item p_150895_1_, CreativeTabs p_150895_2_, List<ItemStack> p_150895_3_) {
 		for(int var4 = 0; var4 < 16; ++var4) {
 			ItemStack min = new ItemStack(p_150895_1_, 1, var4);
@@ -31,6 +33,7 @@ public class ItemEssence extends Item implements IModelRegisterer {
 		}
 	}
 
+	@Override
 	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List<String> par3List, boolean par4) {
 		int t = par1ItemStack.getItemDamage()/4;
 		if(t == 0)
@@ -43,6 +46,7 @@ public class ItemEssence extends Item implements IModelRegisterer {
 			par3List.add("Rarity: \247d"+"Exceptional");
 	}
 
+	@Override
 	public EnumRarity getRarity(ItemStack par1ItemStack) {
 		int t = par1ItemStack.getItemDamage()/4;
 		if(t == 1)

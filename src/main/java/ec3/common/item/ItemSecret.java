@@ -27,12 +27,13 @@ import net.minecraftforge.client.model.ModelLoader;
 
 public class ItemSecret extends Item implements IModelRegisterer {
 	public static String[] dropNames = new String[] {"410_ticket", "d6", "ironwood_branch", "mysterious_stick", "smoothandsilkystone", "strange_figure", "strange_symbol", "the_true_unknown"};
-	
+
 	public ItemSecret() {
 		setMaxDamage(0);
 		setHasSubtypes(true);
 	}
-	
+
+	@Override
 	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List<String> par3List, boolean par4) {
 		super.addInformation(par1ItemStack, par2EntityPlayer, par3List, par4);
 		int metadata = par1ItemStack.getItemDamage();
@@ -84,7 +85,8 @@ public class ItemSecret extends Item implements IModelRegisterer {
 		}
 		}
 	}
-	
+
+	@Override
 	@SuppressWarnings("rawtypes")
 	public ActionResult<ItemStack> onItemRightClick(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer, EnumHand hand) {
 		int metadata = par1ItemStack.getItemDamage();
@@ -118,17 +120,20 @@ public class ItemSecret extends Item implements IModelRegisterer {
 		}
 		return new ActionResult(EnumActionResult.PASS, par1ItemStack);
 	}
-	
+
+	@Override
 	public String getUnlocalizedName(ItemStack p_77667_1_) {
 		return getUnlocalizedName()+dropNames[Math.min(p_77667_1_.getItemDamage(), dropNames.length-1)];
 	}
-	
+
+	@Override
 	public void getSubItems(Item p_150895_1_, CreativeTabs p_150895_2_, List<ItemStack> p_150895_3_) {
 		for(int i = 0; i < 7; ++i) {
 			p_150895_3_.add(new ItemStack(p_150895_1_,1,i));
 		}
 	}
-	
+
+	@Override
 	public boolean hasEffect(ItemStack par1ItemStack) {
 		int metadata = par1ItemStack.getItemDamage();
 		switch(metadata) {
@@ -138,7 +143,8 @@ public class ItemSecret extends Item implements IModelRegisterer {
 		}
 		return super.hasEffect(par1ItemStack);
 	}
-	
+
+	@Override
 	public EnumRarity getRarity(ItemStack p_77613_1_) {
 		return EssentialCraftCore.proxy.itemHasEffect(p_77613_1_) ? EnumRarity.RARE : EnumRarity.COMMON;
 	}

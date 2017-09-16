@@ -9,48 +9,48 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
 public class CategoryEntry {
-	
+
 	public List<DiscoveryEntry> discoveries = new ArrayList<DiscoveryEntry>();
-	
+
 	public String id;
-	
+
 	public ItemStack displayStack;
-	
+
 	public String name;
-	
+
 	public String shortDescription;
-	
+
 	public ResourceLocation displayTexture;
-	
+
 	public int reqTier;
-	
+
 	public ResourceLocation specificBookTextures;
-	
+
 	public int textColor = 0x222222;
-	
+
 	public CategoryEntry(String i)
 	{
 		id = i;
 	}
-	
+
 	public CategoryEntry setName(String s)
 	{
 		name = s;
 		return this;
 	}
-	
+
 	public CategoryEntry setTier(int i)
 	{
 		reqTier = i;
 		return this;
 	}
-	
+
 	public CategoryEntry setTextColor(int i)
 	{
 		textColor = i;
 		return this;
 	}
-	
+
 	public CategoryEntry setDisplayStack(Object obj)
 	{
 		if(obj instanceof ItemStack)
@@ -63,19 +63,19 @@ public class CategoryEntry {
 			displayTexture = (ResourceLocation) obj;
 		return this;
 	}
-	
+
 	public CategoryEntry setDesc(String s)
 	{
 		shortDescription = s;
 		return this;
 	}
-	
+
 	public CategoryEntry setSpecificTexture(ResourceLocation l)
 	{
 		specificBookTextures = l;
 		return this;
 	}
-	
+
 	public CategoryEntry apendDiscovery(DiscoveryEntry disc)
 	{
 		discoveries.add(disc);

@@ -19,7 +19,7 @@ import net.minecraftforge.client.model.ModelLoader;
 public class ItemLiquidAir extends Item implements IModelRegisterer {
 
 	public ItemLiquidAir() {
-		super();	
+		super();
 	}
 
 	@Override
@@ -36,6 +36,7 @@ public class ItemLiquidAir extends Item implements IModelRegisterer {
 	/**
 	 * How long it takes to use or consume an item
 	 */
+	@Override
 	public int getMaxItemUseDuration(ItemStack p_77626_1_)
 	{
 		return 32;
@@ -44,6 +45,7 @@ public class ItemLiquidAir extends Item implements IModelRegisterer {
 	/**
 	 * returns the action that specifies what animation to play when the items is being used
 	 */
+	@Override
 	public EnumAction getItemUseAction(ItemStack p_77661_1_)
 	{
 		return EnumAction.DRINK;
@@ -52,6 +54,7 @@ public class ItemLiquidAir extends Item implements IModelRegisterer {
 	/**
 	 * Called whenever this item is equipped and the right mouse button is pressed. Args: itemStack, world, entityPlayer, enumHand
 	 */
+	@Override
 	public ActionResult<ItemStack> onItemRightClick(ItemStack p_77659_1_, World p_77659_2_, EntityPlayer p_77659_3_, EnumHand hand)
 	{
 		p_77659_3_.setActiveHand(hand);

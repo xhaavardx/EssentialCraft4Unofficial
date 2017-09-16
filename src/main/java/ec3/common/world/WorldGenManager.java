@@ -23,16 +23,16 @@ public class WorldGenManager implements IWorldGenerator {
 			}
 		}
 	}
-	
+
 	public void handleNetherGen(Random random, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) {
 		WorldGenElementalDrops.handleGeneration(random, chunkX, chunkZ, world, chunkGenerator, chunkProvider);
 	}
-	
+
 	public void handlePossibleOverworldGen(Random random, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) {
 		WorldGenElementalDrops.handleGeneration(random, chunkX, chunkZ, world, chunkGenerator, chunkProvider);
 		WorldGenElderMRUCC.handleGeneration(random, chunkX, chunkZ, world, chunkGenerator, chunkProvider);
 	}
-	
+
 	public void handleEndGen(Random random, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) {
 		WorldGenElementalDrops.handleGeneration(random, chunkX, chunkZ, world, chunkGenerator, chunkProvider);
 	}

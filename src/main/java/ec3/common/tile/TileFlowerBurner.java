@@ -4,6 +4,8 @@ import DummyCore.Utils.Coord3D;
 import DummyCore.Utils.DataStorage;
 import DummyCore.Utils.DummyData;
 import DummyCore.Utils.MathUtils;
+import ec3.api.ApiCore;
+import ec3.common.mod.EssentialCraftCore;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFlower;
 import net.minecraft.block.BlockSapling;
@@ -16,8 +18,6 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.oredict.OreDictionary;
-import ec3.api.ApiCore;
-import ec3.common.mod.EssentialCraftCore;
 
 public class TileFlowerBurner extends TileMRUGeneric {
 

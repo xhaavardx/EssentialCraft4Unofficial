@@ -1,10 +1,5 @@
 package ec3.common.tile;
 
-import net.minecraft.block.Block;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.common.config.Configuration;
 import DummyCore.Utils.Coord3D;
 import DummyCore.Utils.DataStorage;
 import DummyCore.Utils.DummyData;
@@ -12,29 +7,34 @@ import DummyCore.Utils.MathUtils;
 import ec3.api.ApiCore;
 import ec3.common.block.BlockCorruption_Light;
 import ec3.utils.common.ECUtils;
+import net.minecraft.block.Block;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.common.config.Configuration;
 
 public class TileCorruptionCleaner extends TileMRUGeneric {
-	
+
 	public Coord3D cleared;
 	public int clearTime = 0;
-	
+
 	public static int maxRadius = 8;
 	public static boolean removeBlock = false;
 	public static int mruUsage = 20;
 	public static int ticksRequired = 200;
 	public static float cfgMaxMRU = ApiCore.DEVICE_MAX_MRU_GENERIC;
-	
+
 	public TileCorruptionCleaner() {
 		super();
 		maxMRU = (int) cfgMaxMRU;
 		setSlotsNum(1);
 	}
-	
+
 	@Override
 	public void update() {
 		super.update();
 		ECUtils.manage(this, 0);
-		
+
 		if(getWorld().isBlockIndirectlyGettingPowered(pos) == 0) {
 			if(cleared == null) {
 				if(!getWorld().isRemote) {
@@ -73,7 +73,7 @@ public class TileCorruptionCleaner extends TileMRUGeneric {
 			}
 		}
 	}
-    
+
 	@Override
 	public void readFromNBT(NBTTagCompound i) {
 		if(i.hasKey("coord")) {
@@ -89,7 +89,7 @@ public class TileCorruptionCleaner extends TileMRUGeneric {
 		clearTime = i.getInteger("clear");
 		super.readFromNBT(i);
 	}
-	
+
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound i) {
 		if(cleared != null) {
@@ -101,7 +101,7 @@ public class TileCorruptionCleaner extends TileMRUGeneric {
 		i.setInteger("clear", clearTime);
 		return super.writeToNBT(i);
 	}
-	
+
 	public static void setupConfig(Configuration cfg) {
 		try {
 			cfg.load();
@@ -113,31 +113,31 @@ public class TileCorruptionCleaner extends TileMRUGeneric {
 					"A radius in which the device will detect corruption blocks:8"
 			}, "");
 			String dataString = "";
-			
+
 			for(int i = 0; i < cfgArrayString.length; ++i)
 				dataString += "||" + cfgArrayString[i];
-			
+
 			DummyData[] data = DataStorage.parseData(dataString);
-			
+
 			maxRadius = Integer.parseInt(data[4].fieldValue);
 			removeBlock = Boolean.parseBoolean(data[3].fieldValue);
 			mruUsage = Integer.parseInt(data[1].fieldValue);
 			ticksRequired = Integer.parseInt(data[2].fieldValue);
 			cfgMaxMRU = Float.parseFloat(data[0].fieldValue);
-			
+
 			cfg.save();
 		}
 		catch(Exception e) {
 			return;
 		}
 	}
-	
+
 	@Override
 	public AxisAlignedBB getRenderBoundingBox() {
 		AxisAlignedBB bb = INFINITE_EXTENT_AABB;
 		return bb;
 	}
-	
+
 	@Override
 	public int[] getOutputSlots() {
 		return new int[0];

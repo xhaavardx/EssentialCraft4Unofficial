@@ -15,28 +15,28 @@ import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 
 public class WorldGenMRUTower extends WorldGenerator {
-	
-	
+
+
 	public WorldGenMRUTower()
 	{
 	}
 	public static final WeightedRandomChestContent[] generatedItems = new WeightedRandomChestContent[] {
-		new WeightedRandomChestContent(ItemsCore.titanite, 0, 8, 64, 20),
-		new WeightedRandomChestContent(ItemsCore.twinkling_titanite, 0, 2, 16, 10),
-		new WeightedRandomChestContent(ItemsCore.genericItem, 5, 1, 64, 15),
-		new WeightedRandomChestContent(ItemsCore.genericItem, 6, 1, 64, 15),
-		new WeightedRandomChestContent(ItemsCore.genericItem, 7, 1, 64, 15),
-		new WeightedRandomChestContent(ItemsCore.genericItem, 8, 1, 64, 15), 
-		new WeightedRandomChestContent(ItemsCore.genericItem, 9, 1, 64, 15),
-		new WeightedRandomChestContent(ItemsCore.genericItem, 10, 1, 64, 15),
-		new WeightedRandomChestContent(ItemsCore.genericItem, 11, 1, 64, 15),
-		new WeightedRandomChestContent(ItemsCore.genericItem, 20, 1, 12, 10),
-		new WeightedRandomChestContent(ItemsCore.genericItem, 3, 1, 64, 15),
-		new WeightedRandomChestContent(ItemsCore.genericItem, 35, 1, 1, 6),
-		new WeightedRandomChestContent(ItemsCore.genericItem, 36, 1, 1, 6),
-		new WeightedRandomChestContent(ItemsCore.genericItem, 37, 1, 1, 6)
+			new WeightedRandomChestContent(ItemsCore.titanite, 0, 8, 64, 20),
+			new WeightedRandomChestContent(ItemsCore.twinkling_titanite, 0, 2, 16, 10),
+			new WeightedRandomChestContent(ItemsCore.genericItem, 5, 1, 64, 15),
+			new WeightedRandomChestContent(ItemsCore.genericItem, 6, 1, 64, 15),
+			new WeightedRandomChestContent(ItemsCore.genericItem, 7, 1, 64, 15),
+			new WeightedRandomChestContent(ItemsCore.genericItem, 8, 1, 64, 15),
+			new WeightedRandomChestContent(ItemsCore.genericItem, 9, 1, 64, 15),
+			new WeightedRandomChestContent(ItemsCore.genericItem, 10, 1, 64, 15),
+			new WeightedRandomChestContent(ItemsCore.genericItem, 11, 1, 64, 15),
+			new WeightedRandomChestContent(ItemsCore.genericItem, 20, 1, 12, 10),
+			new WeightedRandomChestContent(ItemsCore.genericItem, 3, 1, 64, 15),
+			new WeightedRandomChestContent(ItemsCore.genericItem, 35, 1, 1, 6),
+			new WeightedRandomChestContent(ItemsCore.genericItem, 36, 1, 1, 6),
+			new WeightedRandomChestContent(ItemsCore.genericItem, 37, 1, 1, 6)
 	};
-	
+
 	public int getGroundToGenerate(World w, int x, int y, int z)
 	{
 		while(y > 5)
@@ -74,7 +74,7 @@ public class WorldGenMRUTower extends WorldGenerator {
 		}
 		return false;
 	}
-	
+
 	public void generateFloor(World w, int x, int y, int z, int rad)
 	{
 		for(int dx = -rad; dx <= rad; ++dx)
@@ -99,19 +99,19 @@ public class WorldGenMRUTower extends WorldGenerator {
 							{
 								w.setBlockState(p.add(0, 1, 0), Blocks.CHEST.getDefaultState());
 								TileEntityChest chest = (TileEntityChest)w.getTileEntity(p.add(0, 1, 0));
-					            if (chest != null)
-					            {
-					                WeightedRandomChestContent.generateChestContents(w.rand, WorldGenOldCatacombs.generatedItems, chest, w.rand.nextInt(12)+6);
-					                IInventory inv = chest;
-					                for(int i = 0; i < inv.getSizeInventory(); ++i)
-					                {
-					                	ItemStack stk = inv.getStackInSlot(i);
-					                	if(stk != null && stk.getItem() instanceof ItemBaublesWearable)
-					                	{
-					                		ItemBaublesWearable.initRandomTag(stk, w.rand);
-					                	}
-					                }
-					            }
+								if (chest != null)
+								{
+									WeightedRandomChestContent.generateChestContents(w.rand, WorldGenOldCatacombs.generatedItems, chest, w.rand.nextInt(12)+6);
+									IInventory inv = chest;
+									for(int i = 0; i < inv.getSizeInventory(); ++i)
+									{
+										ItemStack stk = inv.getStackInSlot(i);
+										if(stk != null && stk.getItem() instanceof ItemBaublesWearable)
+										{
+											ItemBaublesWearable.initRandomTag(stk, w.rand);
+										}
+									}
+								}
 							}
 						}
 					}

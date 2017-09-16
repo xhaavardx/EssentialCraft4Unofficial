@@ -11,14 +11,14 @@ import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 
 public class WorldGenDestroyedHouse extends WorldGenerator{
-	
+
 	public int floorsAmount, rad;
-	
+
 	public WorldGenDestroyedHouse(int i)
 	{
 		floorsAmount = i;
 	}
-	
+
 	public WorldGenDestroyedHouse(int i, int j)
 	{
 		floorsAmount = i;
@@ -26,22 +26,22 @@ public class WorldGenDestroyedHouse extends WorldGenerator{
 	}
 
 	public static final WeightedRandomChestContent[] generatedItems = new WeightedRandomChestContent[] {
-		new WeightedRandomChestContent(ItemsCore.titanite, 0, 8, 64, 20),
-		new WeightedRandomChestContent(ItemsCore.twinkling_titanite, 0, 2, 16, 10),
-		new WeightedRandomChestContent(ItemsCore.genericItem, 5, 1, 64, 15),
-		new WeightedRandomChestContent(ItemsCore.genericItem, 6, 1, 64, 15),
-		new WeightedRandomChestContent(ItemsCore.genericItem, 7, 1, 64, 15),
-		new WeightedRandomChestContent(ItemsCore.genericItem, 8, 1, 64, 15), 
-		new WeightedRandomChestContent(ItemsCore.genericItem, 9, 1, 64, 15),
-		new WeightedRandomChestContent(ItemsCore.genericItem, 10, 1, 64, 15),
-		new WeightedRandomChestContent(ItemsCore.genericItem, 11, 1, 64, 15),
-		new WeightedRandomChestContent(ItemsCore.genericItem, 20, 1, 12, 10),
-		new WeightedRandomChestContent(ItemsCore.genericItem, 3, 1, 64, 15),
-		new WeightedRandomChestContent(ItemsCore.genericItem, 35, 1, 1, 6),
-		new WeightedRandomChestContent(ItemsCore.genericItem, 36, 1, 1, 6),
-		new WeightedRandomChestContent(ItemsCore.genericItem, 37, 1, 1, 6)
+			new WeightedRandomChestContent(ItemsCore.titanite, 0, 8, 64, 20),
+			new WeightedRandomChestContent(ItemsCore.twinkling_titanite, 0, 2, 16, 10),
+			new WeightedRandomChestContent(ItemsCore.genericItem, 5, 1, 64, 15),
+			new WeightedRandomChestContent(ItemsCore.genericItem, 6, 1, 64, 15),
+			new WeightedRandomChestContent(ItemsCore.genericItem, 7, 1, 64, 15),
+			new WeightedRandomChestContent(ItemsCore.genericItem, 8, 1, 64, 15),
+			new WeightedRandomChestContent(ItemsCore.genericItem, 9, 1, 64, 15),
+			new WeightedRandomChestContent(ItemsCore.genericItem, 10, 1, 64, 15),
+			new WeightedRandomChestContent(ItemsCore.genericItem, 11, 1, 64, 15),
+			new WeightedRandomChestContent(ItemsCore.genericItem, 20, 1, 12, 10),
+			new WeightedRandomChestContent(ItemsCore.genericItem, 3, 1, 64, 15),
+			new WeightedRandomChestContent(ItemsCore.genericItem, 35, 1, 1, 6),
+			new WeightedRandomChestContent(ItemsCore.genericItem, 36, 1, 1, 6),
+			new WeightedRandomChestContent(ItemsCore.genericItem, 37, 1, 1, 6)
 	};
-	
+
 	public int getGroundToGenerate(World w, int x, int y, int z)
 	{
 		while(y > 5)
@@ -81,7 +81,7 @@ public class WorldGenDestroyedHouse extends WorldGenerator{
 		}
 		return false;
 	}
-	
+
 	public void generateFloor(World w, Random r,int x, int y, int z,int floorNum, int size)
 	{
 		for(int dx = -size; dx <= size; ++dx)
@@ -126,9 +126,9 @@ public class WorldGenDestroyedHouse extends WorldGenerator{
 					if(floorsAmount == 0)floorsAmount = 1;
 					if(r.nextInt(floorsAmount*10)<floorNum)
 					{
-		                ECExplosion explosion = new ECExplosion(w,null,x+dx, y+dy, z+dz, 3+(floorNum/3));
-		                explosion.doExplosionA();
-		                explosion.doExplosionB(true);
+						ECExplosion explosion = new ECExplosion(w,null,x+dx, y+dy, z+dz, 3+(floorNum/3));
+						explosion.doExplosionA();
+						explosion.doExplosionB(true);
 					}
 				}
 			}

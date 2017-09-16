@@ -14,20 +14,20 @@ public class TileNewMIMExportNode_Persistant extends TileNewMIMExportNode {
 	public TileNewMIMExportNode_Persistant() {
 		super();
 	}
-	
+
 	@Override
 	public void exportAllPossibleItems(TileNewMIM parent) {
 		if(getWorld().isBlockIndirectlyGettingPowered(pos) > 0)
 			return;
-		
+
 		ISidedInventory inv = getConnectedInventory();
 		if(inv != null) {
 			ArrayList<ItemStack> itemsToExport = parent.getAllItems();
 			int[] slots = getAccessibleSlots();
-			
+
 			if(slots.length <= 0)
 				return;
-			
+
 			for(int i = 0; i < itemsToExport.size(); ++i) {
 				for(int j = 0; j < slots.length; ++j) {
 					if(inv.canInsertItem(slots[j], itemsToExport.get(i), getRotation().getOpposite())) {
@@ -37,7 +37,7 @@ public class TileNewMIMExportNode_Persistant extends TileNewMIMExportNode {
 									ItemStack copied = itemsToExport.get(i).copy();
 									if(copied.stackSize >= 2)
 										copied.stackSize = 1;
-									
+
 									if(parent.retrieveItemStackFromSystem(copied, false, true) == 0)
 										inv.setInventorySlotContents(slots[j], copied);
 								}
@@ -47,7 +47,7 @@ public class TileNewMIMExportNode_Persistant extends TileNewMIMExportNode {
 								if(ECUtils.canFilterAcceptItem(new InventoryMagicFilter(getStackInSlot(0)), copied, getStackInSlot(0))) {
 									if(copied.stackSize >= 2)
 										copied.stackSize = 2;
-									
+
 									if(inv.getStackInSlot(slots[j]) == null) {
 										if(parent.retrieveItemStackFromSystem(copied, false, true) == 0)
 											inv.setInventorySlotContents(slots[j], copied);
@@ -61,12 +61,12 @@ public class TileNewMIMExportNode_Persistant extends TileNewMIMExportNode {
 		}
 		else {
 			IInventory iinv = getConnectedInventoryInefficent();
-			
+
 			ArrayList<ItemStack> itemsToExport = parent.getAllItems();
-			
+
 			if(iinv.getSizeInventory() <= 0)
 				return;
-			
+
 			for(int i = 0; i < itemsToExport.size(); ++i) {
 				for(int j = 0; j < iinv.getSizeInventory(); ++j) {
 					if(iinv.isItemValidForSlot(j, itemsToExport.get(i))) {
@@ -76,7 +76,7 @@ public class TileNewMIMExportNode_Persistant extends TileNewMIMExportNode {
 									ItemStack copied = itemsToExport.get(i).copy();
 									if(copied.stackSize >= iinv.getInventoryStackLimit())
 										copied.stackSize = iinv.getInventoryStackLimit();
-									
+
 									if(parent.retrieveItemStackFromSystem(copied, false, true) == 0)
 										iinv.setInventorySlotContents(j, copied);
 								}
@@ -84,7 +84,7 @@ public class TileNewMIMExportNode_Persistant extends TileNewMIMExportNode {
 									ItemStack copied = itemsToExport.get(i).copy();
 									if(copied.stackSize >= iinv.getInventoryStackLimit())
 										copied.stackSize = iinv.getInventoryStackLimit();
-									
+
 									if(iinv.getStackInSlot(j).stackSize + copied.stackSize <= iinv.getInventoryStackLimit() && iinv.getStackInSlot(j).stackSize + copied.stackSize <= copied.getMaxStackSize()) {
 										if(parent.retrieveItemStackFromSystem(copied, false, true) == 0)
 											iinv.getStackInSlot(j).stackSize += copied.stackSize;
@@ -104,7 +104,7 @@ public class TileNewMIMExportNode_Persistant extends TileNewMIMExportNode {
 								if(ECUtils.canFilterAcceptItem(new InventoryMagicFilter(getStackInSlot(0)), copied, getStackInSlot(0))) {
 									if(copied.stackSize >= iinv.getInventoryStackLimit())
 										copied.stackSize = iinv.getInventoryStackLimit();
-									
+
 									if(iinv.getStackInSlot(j) == null) {
 										if(parent.retrieveItemStackFromSystem(copied, false, true) == 0)
 											iinv.setInventorySlotContents(j, copied);

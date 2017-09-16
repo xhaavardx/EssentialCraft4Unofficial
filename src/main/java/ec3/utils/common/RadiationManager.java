@@ -17,19 +17,19 @@ public class RadiationManager {
 		int current = getPlayerRadiation(e);
 		setPlayerRadiation(e, current+amount);
 	}
-	
+
 	public static void setPlayerRadiation(EntityPlayer player, int amount) {
 		if(amount < 0)
 			amount = 0;
 		if(!(player instanceof FakePlayer))
 			ECUtils.getData(player).modifyRadiation(amount);
 	}
-	
+
 	public static int getPlayerRadiation(EntityPlayer player) {
 		if((player instanceof FakePlayer)) return 0;
 		return ECUtils.getData(player).getPlayerRadiation();
 	}
-	
+
 	public static void playerTick(EntityPlayer player) {
 		if((player instanceof FakePlayer))
 			return;
@@ -44,7 +44,7 @@ public class RadiationManager {
 				rndRad += 2;
 			if(biome == BiomeRegistry.firstWorldBiomeArray[4])
 				rndRad += 6;
-			rndRad = (int) ((float)rndRad * ECUtils.getGenResistance(2, player));
+			rndRad = (int) (rndRad * ECUtils.getGenResistance(2, player));
 			increasePlayerRadiation(player,rndRad);
 			rnd = null;
 		}

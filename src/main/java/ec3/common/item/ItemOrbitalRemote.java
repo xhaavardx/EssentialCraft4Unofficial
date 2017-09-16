@@ -32,9 +32,9 @@ public class ItemOrbitalRemote extends ItemStoresMRUInNBT implements IModelRegis
 	public ActionResult<ItemStack> onItemRightClick(ItemStack stk, World w, EntityPlayer p, EnumHand hand)
 	{
 		float f = 1;
-		double d0 = p.prevPosX + (p.posX - p.prevPosX) * (double)f;
-		double d1 = p.prevPosY + (p.posY - p.prevPosY) * (double)f + (double)p.getEyeHeight();
-		double d2 = p.prevPosZ + (p.posZ - p.prevPosZ) * (double)f;
+		double d0 = p.prevPosX + (p.posX - p.prevPosX) * f;
+		double d1 = p.prevPosY + (p.posY - p.prevPosY) * f + p.getEyeHeight();
+		double d2 = p.prevPosZ + (p.posZ - p.prevPosZ) * f;
 
 		Vec3d lookVec = new Vec3d(d0, d1, d2);
 		float f1 = p.prevRotationPitch + (p.rotationPitch - p.prevRotationPitch);
@@ -46,7 +46,7 @@ public class ItemOrbitalRemote extends ItemStoresMRUInNBT implements IModelRegis
 		float f7 = f4 * f5;
 		float f8 = f3 * f5;
 		double d3 = 32.0D;
-		Vec3d distanced = lookVec.addVector((double)f7 * d3, (double)f6 * d3, (double)f8 * d3);
+		Vec3d distanced = lookVec.addVector(f7 * d3, f6 * d3, f8 * d3);
 		RayTraceResult mop = p.getEntityWorld().rayTraceBlocks(lookVec, distanced, true, false, false);
 		if(mop != null && mop.typeOfHit == Type.BLOCK)
 		{

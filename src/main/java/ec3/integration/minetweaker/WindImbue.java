@@ -1,21 +1,14 @@
 package ec3.integration.minetweaker;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import ec3.api.WindImbueRecipe;
 import minetweaker.IUndoableAction;
 import minetweaker.MineTweakerAPI;
-import minetweaker.api.data.DataInt;
-import minetweaker.api.item.IIngredient;
 import minetweaker.api.item.IItemStack;
 import minetweaker.api.minecraft.MineTweakerMC;
 import net.minecraft.item.ItemStack;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Consumer;
-import java.util.function.Predicate;
-
-import ec3.api.MagicianTableRecipe;
-import ec3.api.MagicianTableRecipes;
-import ec3.api.WindImbueRecipe;
 import stanhebben.zenscript.annotations.Optional;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
@@ -74,26 +67,32 @@ public class WindImbue {
 			this.energy = energy;
 		}
 
+		@Override
 		public void apply() {
 			rec = new WindImbueRecipe(input, output, energy);
 		}
 
+		@Override
 		public boolean canUndo() {
 			return true;
 		}
 
+		@Override
 		public void undo() {
 			WindImbueRecipe.removeRecipe(rec);
 		}
 
+		@Override
 		public String describe() {
 			return "Adding Wind Imbue Recipe for "+output.getDisplayName();
 		}
 
+		@Override
 		public String describeUndo() {
 			return "Removing Wind Imbue Recipe for "+output.getDisplayName();
 		}
 
+		@Override
 		public Object getOverrideKey() {
 			return null;
 		}
@@ -106,30 +105,36 @@ public class WindImbue {
 			this.rec = rec;
 		}
 
+		@Override
 		public void apply() {
 			for(WindImbueRecipe entry : rec) {
 				WindImbueRecipe.removeRecipe(entry);
 			}
 		}
 
+		@Override
 		public boolean canUndo() {
 			return true;
 		}
 
+		@Override
 		public void undo() {
 			for(WindImbueRecipe entry : rec) {
 				new WindImbueRecipe(entry.transforming, entry.result, entry.enderEnergy);
 			}
 		}
 
+		@Override
 		public String describe() {
 			return "Removing "+rec.size()+" Wind Imbue Recipes";
 		}
 
+		@Override
 		public String describeUndo() {
 			return "Restoring "+rec.size()+" Wind Imbue Recipes";
 		}
 
+		@Override
 		public Object getOverrideKey() {
 			return null;
 		}

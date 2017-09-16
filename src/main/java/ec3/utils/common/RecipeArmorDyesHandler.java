@@ -3,7 +3,6 @@ package ec3.utils.common;
 import java.util.ArrayList;
 
 import ec3.common.item.ItemGenericArmor;
-import net.minecraft.block.BlockColored;
 import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.InventoryCrafting;
@@ -21,7 +20,7 @@ public class RecipeArmorDyesHandler implements IRecipe {
 		ArrayList<ItemStack> arraylist = new ArrayList<ItemStack>();
 
 		for(int i = 0; i < p_77569_1_.getSizeInventory(); ++i) {
-			ItemStack itemstack1 = p_77569_1_.getStackInSlot(i);		
+			ItemStack itemstack1 = p_77569_1_.getStackInSlot(i);
 
 			if(itemstack1 != null) {
 				if(itemstack1.getItem() instanceof ItemGenericArmor) {
@@ -47,6 +46,7 @@ public class RecipeArmorDyesHandler implements IRecipe {
 	/**
 	 * Returns an Item that is the result of this recipe
 	 */
+	@Override
 	public ItemStack getCraftingResult(InventoryCrafting p_77572_1_) {
 		ItemStack itemstack = null;
 		int[] aint = new int[3];
@@ -75,13 +75,13 @@ public class RecipeArmorDyesHandler implements IRecipe {
 
 					if(itemarmor.hasColor(itemstack1)) {
 						l = itemarmor.getColor(itemstack);
-						f = (float)(l >> 16 & 255) / 255.0F;
-						f1 = (float)(l >> 8 & 255) / 255.0F;
-						float f2 = (float)(l & 255) / 255.0F;
-						i = (int)((float)i + Math.max(f, Math.max(f1, f2)) * 255.0F);
-						aint[0] = (int)((float)aint[0] + f * 255.0F);
-						aint[1] = (int)((float)aint[1] + f1 * 255.0F);
-						aint[2] = (int)((float)aint[2] + f2 * 255.0F);
+						f = (l >> 16 & 255) / 255.0F;
+						f1 = (l >> 8 & 255) / 255.0F;
+						float f2 = (l & 255) / 255.0F;
+						i = (int)(i + Math.max(f, Math.max(f1, f2)) * 255.0F);
+						aint[0] = (int)(aint[0] + f * 255.0F);
+						aint[1] = (int)(aint[1] + f1 * 255.0F);
+						aint[2] = (int)(aint[2] + f2 * 255.0F);
 						++j;
 					}
 				}
@@ -111,10 +111,10 @@ public class RecipeArmorDyesHandler implements IRecipe {
 			int i1 = aint[1] / j;
 			l = aint[2] / j;
 			f = (float)i / (float)j;
-			f1 = (float)Math.max(k, Math.max(i1, l));
-			k = (int)((float)k * f / f1);
-			i1 = (int)((float)i1 * f / f1);
-			l = (int)((float)l * f / f1);
+			f1 = Math.max(k, Math.max(i1, l));
+			k = (int)(k * f / f1);
+			i1 = (int)(i1 * f / f1);
+			l = (int)(l * f / f1);
 			l1 = (k << 8) + i1;
 			l1 = (l1 << 8) + l;
 			itemarmor.setColor(itemstack, l1);
@@ -122,10 +122,12 @@ public class RecipeArmorDyesHandler implements IRecipe {
 		}
 	}
 
+	@Override
 	public int getRecipeSize() {
 		return 10;
 	}
 
+	@Override
 	public ItemStack getRecipeOutput() {
 		return null;
 	}

@@ -8,6 +8,7 @@ import net.minecraftforge.client.model.ModelLoader;
 
 public class ItemMagicalChisel extends Item implements IModelRegisterer {
 
+	@Override
 	public ItemStack getContainerItem(ItemStack itemStack)
 	{
 		if(!hasContainerItem(itemStack))
@@ -17,6 +18,7 @@ public class ItemMagicalChisel extends Item implements IModelRegisterer {
 		return new ItemStack(itemStack.getItem(),itemStack.stackSize,itemStack.getItemDamage()+1);
 	}
 
+	@Override
 	public boolean hasContainerItem(ItemStack stack)
 	{
 		return stack.getItemDamage() < stack.getMaxDamage();

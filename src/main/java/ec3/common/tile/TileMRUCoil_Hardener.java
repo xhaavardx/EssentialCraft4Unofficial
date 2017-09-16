@@ -2,6 +2,8 @@ package ec3.common.tile;
 
 import DummyCore.Utils.Coord3D;
 import DummyCore.Utils.Lightning;
+import ec3.common.block.BlocksCore;
+import ec3.common.registry.SoundRegistry;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
@@ -10,14 +12,12 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import ec3.common.block.BlocksCore;
-import ec3.common.registry.SoundRegistry;
 
 public class TileMRUCoil_Hardener extends TileEntity implements ITickable {
-	
+
 	@SideOnly(Side.CLIENT)
 	public Lightning localLightning;
-	
+
 	@Override
 	public void update() {
 		if(getWorld().isRemote) {
@@ -32,8 +32,8 @@ public class TileMRUCoil_Hardener extends TileEntity implements ITickable {
 					TileMRUCoil tile = (TileMRUCoil)getWorld().getTileEntity(dp);
 					if(tile.isStructureCorrect()) {
 						EnumFacing fDir = EnumFacing.getHorizontal(getWorld().rand.nextInt(4));
-						localLightning = new Lightning(getWorld().rand, new Coord3D(0.5F+(float)fDir.getFrontOffsetX()/2.3F, 0, 0.5F+(float)fDir.getFrontOffsetZ()/2.3F), new Coord3D(0.5F+(float)fDir.getFrontOffsetX()/2.3F, 1, 0.5F+(float)fDir.getFrontOffsetZ()/2.3F), 0.03F, 1.0F, 0.1F, 0.8F);
-						getWorld().playSound(pos.getX()+0.5F+(float)fDir.getFrontOffsetX()/2.3F, pos.getY()+0.5F, pos.getZ()+0.5F+(float)fDir.getFrontOffsetZ()/2.3F, SoundRegistry.machineGenElectricity, SoundCategory.BLOCKS, 0.1F, 1F, false);
+						localLightning = new Lightning(getWorld().rand, new Coord3D(0.5F+fDir.getFrontOffsetX()/2.3F, 0, 0.5F+fDir.getFrontOffsetZ()/2.3F), new Coord3D(0.5F+fDir.getFrontOffsetX()/2.3F, 1, 0.5F+fDir.getFrontOffsetZ()/2.3F), 0.03F, 1.0F, 0.1F, 0.8F);
+						getWorld().playSound(pos.getX()+0.5F+fDir.getFrontOffsetX()/2.3F, pos.getY()+0.5F, pos.getZ()+0.5F+fDir.getFrontOffsetZ()/2.3F, SoundRegistry.machineGenElectricity, SoundCategory.BLOCKS, 0.1F, 1F, false);
 					}
 				}
 			}
@@ -41,7 +41,7 @@ public class TileMRUCoil_Hardener extends TileEntity implements ITickable {
 				localLightning = null;
 		}
 	}
-	
+
 	@Override
 	public AxisAlignedBB getRenderBoundingBox() {
 		AxisAlignedBB bb = INFINITE_EXTENT_AABB;

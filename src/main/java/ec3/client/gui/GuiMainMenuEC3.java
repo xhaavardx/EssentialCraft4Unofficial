@@ -4,23 +4,17 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 import org.apache.commons.io.Charsets;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.Project;
 
-import com.google.common.base.Strings;
-import com.google.common.collect.Lists;
-
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import DummyCore.Utils.IMainMenu;
 import DummyCore.Utils.TessellatorWrapper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiLabel;
 import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -28,10 +22,8 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.client.settings.GameSettings;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.ForgeHooksClient;
+import net.minecraft.util.math.MathHelper;
 
 public class GuiMainMenuEC3 extends GuiMainMenu implements IMainMenu {
 	private int panoramaTimer;
@@ -39,7 +31,7 @@ public class GuiMainMenuEC3 extends GuiMainMenu implements IMainMenu {
 			new ResourceLocation("essentialcraft","textures/gui/mainMenu/panorama_0.png"),
 			new ResourceLocation("essentialcraft","textures/gui/mainMenu/panorama_1.png"),
 			new ResourceLocation("essentialcraft","textures/gui/mainMenu/panorama_2.png"),
-			new ResourceLocation("essentialcraft","textures/gui/mainMenu/panorama_3.png"), 
+			new ResourceLocation("essentialcraft","textures/gui/mainMenu/panorama_3.png"),
 			new ResourceLocation("essentialcraft","textures/gui/mainMenu/panorama_4.png"),
 			new ResourceLocation("essentialcraft","textures/gui/mainMenu/panorama_5.png")
 	};
@@ -53,11 +45,12 @@ public class GuiMainMenuEC3 extends GuiMainMenu implements IMainMenu {
 	private int field_92022_t;
 	private int field_92021_u;
 	private int field_92020_v;
-	private int field_92019_w; 
+	private int field_92019_w;
 	private String field_92025_p;
 	private String field_146972_A;
 	public static ResourceLocation buttonTextures = new ResourceLocation("essentialcraft","textures/gui/widgets.png");
 
+	@Override
 	public void initGui()
 	{
 		super.initGui();
@@ -83,7 +76,7 @@ public class GuiMainMenuEC3 extends GuiMainMenu implements IMainMenu {
 			{
 				do
 				{
-					this.splashText = (String)arraylist.get(rand.nextInt(arraylist.size()));
+					this.splashText = arraylist.get(rand.nextInt(arraylist.size()));
 				}
 				while (this.splashText.hashCode() == 125780783);
 			}
@@ -111,6 +104,7 @@ public class GuiMainMenuEC3 extends GuiMainMenu implements IMainMenu {
 		this.field_110351_G = this.mc.getTextureManager().getDynamicTextureLocation("background", this.viewportTexture);
 	}
 
+	@Override
 	public void updateScreen()
 	{
 		++this.panoramaTimer;
@@ -142,12 +136,12 @@ public class GuiMainMenuEC3 extends GuiMainMenu implements IMainMenu {
 		for (int j = 0; j < 64; ++j)
 		{
 			GlStateManager.pushMatrix();
-			float f = ((float)(j % 8) / 8.0F - 0.5F) / 64.0F;
-			float f1 = ((float)(j / 8) / 8.0F - 0.5F) / 64.0F;
+			float f = (j % 8 / 8.0F - 0.5F) / 64.0F;
+			float f1 = (j / 8 / 8.0F - 0.5F) / 64.0F;
 			float f2 = 0.0F;
 			GlStateManager.translate(f, f1, 0.0F);
-			GlStateManager.rotate(MathHelper.sin(((float)this.panoramaTimer + p_73970_3_) / 400.0F) * 25.0F + 20.0F, 1.0F, 0.0F, 0.0F);
-			GlStateManager.rotate(-((float)this.panoramaTimer + p_73970_3_) * 0.1F, 0.0F, 1.0F, 0.0F);
+			GlStateManager.rotate(MathHelper.sin((this.panoramaTimer + p_73970_3_) / 400.0F) * 25.0F + 20.0F, 1.0F, 0.0F, 0.0F);
+			GlStateManager.rotate(-(this.panoramaTimer + p_73970_3_) * 0.1F, 0.0F, 1.0F, 0.0F);
 
 			for (int k = 0; k < 6; ++k)
 			{
@@ -223,14 +217,14 @@ public class GuiMainMenuEC3 extends GuiMainMenu implements IMainMenu {
 		GlStateManager.disableAlpha();
 
 		for(int i = 0; i < 3; ++i) {
-			float f = 1.0F / (float)(i + 1);
+			float f = 1.0F / (i + 1);
 			int k = this.width;
 			int l = this.height;
-			float f1 = (float)(i - 1) / 256.0F;
-			vertexbuffer.pos((double)k, (double)l, (double)this.zLevel).tex((double)(0.0F + f1), 1.0D).color(1.0F, 1.0F, 1.0F, f).endVertex();
-			vertexbuffer.pos((double)k, 0.0D, (double)this.zLevel).tex((double)(1.0F + f1), 1.0D).color(1.0F, 1.0F, 1.0F, f).endVertex();
-			vertexbuffer.pos(0.0D, 0.0D, (double)this.zLevel).tex((double)(1.0F + f1), 0.0D).color(1.0F, 1.0F, 1.0F, f).endVertex();
-			vertexbuffer.pos(0.0D, (double)l, (double)this.zLevel).tex((double)(0.0F + f1), 0.0D).color(1.0F, 1.0F, 1.0F, f).endVertex();
+			float f1 = (i - 1) / 256.0F;
+			vertexbuffer.pos(k, l, this.zLevel).tex(0.0F + f1, 1.0D).color(1.0F, 1.0F, 1.0F, f).endVertex();
+			vertexbuffer.pos(k, 0.0D, this.zLevel).tex(1.0F + f1, 1.0D).color(1.0F, 1.0F, 1.0F, f).endVertex();
+			vertexbuffer.pos(0.0D, 0.0D, this.zLevel).tex(1.0F + f1, 0.0D).color(1.0F, 1.0F, 1.0F, f).endVertex();
+			vertexbuffer.pos(0.0D, l, this.zLevel).tex(0.0F + f1, 0.0D).color(1.0F, 1.0F, 1.0F, f).endVertex();
 		}
 
 		tessellator.draw();
@@ -251,18 +245,18 @@ public class GuiMainMenuEC3 extends GuiMainMenu implements IMainMenu {
 		this.rotateAndBlurSkybox(partialTicks);
 		this.mc.getFramebuffer().bindFramebuffer(true);
 		GlStateManager.viewport(0, 0, this.mc.displayWidth, this.mc.displayHeight);
-		float f = 120.0F / (float)(this.width > this.height ? this.width : this.height);
-		float f1 = (float)this.height * f / 256.0F;
-		float f2 = (float)this.width * f / 256.0F;
+		float f = 120.0F / (this.width > this.height ? this.width : this.height);
+		float f1 = this.height * f / 256.0F;
+		float f2 = this.width * f / 256.0F;
 		int i = this.width;
 		int j = this.height;
 		Tessellator tessellator = Tessellator.getInstance();
 		VertexBuffer vertexbuffer = tessellator.getBuffer();
 		vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
-		vertexbuffer.pos(0.0D, (double)j, (double)this.zLevel).tex((double)(0.5F - f1), (double)(0.5F + f2)).color(1.0F, 1.0F, 1.0F, 1.0F).endVertex();
-		vertexbuffer.pos((double)i, (double)j, (double)this.zLevel).tex((double)(0.5F - f1), (double)(0.5F - f2)).color(1.0F, 1.0F, 1.0F, 1.0F).endVertex();
-		vertexbuffer.pos((double)i, 0.0D, (double)this.zLevel).tex((double)(0.5F + f1), (double)(0.5F - f2)).color(1.0F, 1.0F, 1.0F, 1.0F).endVertex();
-		vertexbuffer.pos(0.0D, 0.0D, (double)this.zLevel).tex((double)(0.5F + f1), (double)(0.5F + f2)).color(1.0F, 1.0F, 1.0F, 1.0F).endVertex();
+		vertexbuffer.pos(0.0D, j, this.zLevel).tex(0.5F - f1, 0.5F + f2).color(1.0F, 1.0F, 1.0F, 1.0F).endVertex();
+		vertexbuffer.pos(i, j, this.zLevel).tex(0.5F - f1, 0.5F - f2).color(1.0F, 1.0F, 1.0F, 1.0F).endVertex();
+		vertexbuffer.pos(i, 0.0D, this.zLevel).tex(0.5F + f1, 0.5F - f2).color(1.0F, 1.0F, 1.0F, 1.0F).endVertex();
+		vertexbuffer.pos(0.0D, 0.0D, this.zLevel).tex(0.5F + f1, 0.5F + f2).color(1.0F, 1.0F, 1.0F, 1.0F).endVertex();
 		tessellator.draw();
 	}
 
@@ -280,7 +274,7 @@ public class GuiMainMenuEC3 extends GuiMainMenu implements IMainMenu {
 		this.mc.getTextureManager().bindTexture(minecraftTitleTextures);
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 
-		if ((double)this.updateCounter < 1.0E-4D)
+		if (this.updateCounter < 1.0E-4D)
 		{
 			this.drawTexturedModalRect(j + 0, 30, 0, 0, 99, 44);
 			this.drawTexturedModalRect(j + 99, 30, 129, 0, 27, 44);
@@ -297,10 +291,10 @@ public class GuiMainMenuEC3 extends GuiMainMenu implements IMainMenu {
 		this.splashText = net.minecraftforge.client.ForgeHooksClient.renderMainMenu(this, this.fontRendererObj, this.width, this.height, this.splashText);
 
 		GlStateManager.pushMatrix();
-		GlStateManager.translate((float)(this.width / 2 + 90), 70.0F, 0.0F);
+		GlStateManager.translate(this.width / 2 + 90, 70.0F, 0.0F);
 		GlStateManager.rotate(-20.0F, 0.0F, 0.0F, 1.0F);
-		float f = 1.8F - MathHelper.abs(MathHelper.sin((float)(Minecraft.getSystemTime() % 1000L) / 1000.0F * ((float)Math.PI * 2F)) * 0.1F);
-		f = f * 100.0F / (float)(this.fontRendererObj.getStringWidth(this.splashText) + 32);
+		float f = 1.8F - MathHelper.abs(MathHelper.sin(Minecraft.getSystemTime() % 1000L / 1000.0F * ((float)Math.PI * 2F)) * 0.1F);
+		f = f * 100.0F / (this.fontRendererObj.getStringWidth(this.splashText) + 32);
 		GlStateManager.scale(f, f, f);
 		this.drawCenteredString(this.fontRendererObj, this.splashText, 0, -8, -256);
 		GlStateManager.popMatrix();

@@ -2,33 +2,33 @@ package ec3.common.tile;
 
 import java.util.List;
 
-import net.minecraftforge.fml.common.Loader;
 import DummyCore.Utils.DataStorage;
 import DummyCore.Utils.DummyData;
-import net.minecraft.entity.monster.EntityEnderman;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.DamageSource;
-import net.minecraftforge.common.config.Configuration;
 import ec3.api.ApiCore;
+import net.minecraft.entity.monster.EntityEnderman;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.fml.common.Loader;
 
 public class TileEnderGenerator extends TileMRUGeneric {
-	
+
 	public static float cfgMaxMRU = ApiCore.GENERATOR_MAX_MRU_GENERIC;
 	public static float cfgBalance = -1F;
 	public static float mruGenerated = 500;
 	public static int endermenCatchRadius = 8;
-	
+
 	public TileEnderGenerator() {
 		super();
 		maxMRU = (int)cfgMaxMRU;
 		balance = cfgBalance;
 		slot0IsBoundGem = false;
 	}
-	
+
 	public boolean canGenerateMRU() {
 		return false;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public void update() {
@@ -82,7 +82,7 @@ public class TileEnderGenerator extends TileMRUGeneric {
 			}
 		}
 	}
-	
+
 	public static void setupConfig(Configuration cfg) {
 		try {
 			cfg.load();
@@ -93,24 +93,24 @@ public class TileEnderGenerator extends TileMRUGeneric {
 					"Radius of Endermen detection:8"
 			}, "");
 			String dataString = "";
-			
+
 			for(int i = 0; i < cfgArrayString.length; ++i)
 				dataString += "||" + cfgArrayString[i];
-			
+
 			DummyData[] data = DataStorage.parseData(dataString);
-			
+
 			cfgMaxMRU = Float.parseFloat(data[0].fieldValue);
 			cfgBalance = Float.parseFloat(data[1].fieldValue);
 			mruGenerated = Float.parseFloat(data[2].fieldValue);
 			endermenCatchRadius = Integer.parseInt(data[3].fieldValue);
-			
+
 			cfg.save();
 		}
 		catch(Exception e) {
 			return;
 		}
 	}
-	
+
 	@Override
 	public int[] getOutputSlots() {
 		return new int[0];

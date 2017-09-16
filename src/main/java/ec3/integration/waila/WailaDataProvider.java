@@ -8,6 +8,10 @@ import ec3.common.block.BlockRightClicker;
 import ec3.common.item.ItemBoundGem;
 import ec3.common.tile.TileMimic;
 import ec3.common.tile.TileRightClicker;
+import mcp.mobius.waila.api.IWailaConfigHandler;
+import mcp.mobius.waila.api.IWailaDataAccessor;
+import mcp.mobius.waila.api.IWailaDataProvider;
+import mcp.mobius.waila.api.IWailaRegistrar;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.IInventory;
@@ -18,10 +22,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-import mcp.mobius.waila.api.IWailaConfigHandler;
-import mcp.mobius.waila.api.IWailaDataAccessor;
-import mcp.mobius.waila.api.IWailaDataProvider;
-import mcp.mobius.waila.api.IWailaRegistrar;
 
 public class WailaDataProvider implements IWailaDataProvider {
 
@@ -55,7 +55,7 @@ public class WailaDataProvider implements IWailaDataProvider {
 				if(tile.getMaxMRU() > 0) {
 					currenttip.add("MRU: " + tile.getMRU() + "/" + tile.getMaxMRU());
 					float balance = tile.getBalance();
-					String str = Float.toString(((ITEHasMRU)tile).getBalance());
+					String str = Float.toString(tile.getBalance());
 					if(str.length() > 6)
 						str = str.substring(0, 6);
 					for(int i = str.length()-1; i > 2; --i) {

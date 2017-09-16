@@ -12,10 +12,10 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 
 public class GuiHeightState extends GuiTextElement{
-	
+
 	public TileEntity tile;
 	public int mru;
-	
+
 	public GuiHeightState(int i, int j, TileEntity t)
 	{
 		super(i,j);

@@ -31,6 +31,7 @@ public class ItemWindKeeper extends Item implements IModelRegisterer {
 		return this;
 	}
 
+	@Override
 	public ActionResult<ItemStack> onItemRightClick(ItemStack p_77659_1_, World p_77659_2_, EntityPlayer p_77659_3_, EnumHand p_77659_4_)
 	{
 		--p_77659_1_.stackSize;

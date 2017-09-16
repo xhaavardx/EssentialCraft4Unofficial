@@ -46,6 +46,7 @@ public class BlockecStateChecker extends BlockContainer implements IModelRegiste
 		}
 	}
 
+	@Override
 	public EnumBlockRenderType getRenderType(IBlockState s)
 	{
 		return EnumBlockRenderType.MODEL;

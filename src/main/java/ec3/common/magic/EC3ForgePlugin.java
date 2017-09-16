@@ -5,7 +5,7 @@ import java.util.Map;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 
 /**
- * 
+ *
  * @author Modbder
  * @Description ASM features with TConstruct.
  */

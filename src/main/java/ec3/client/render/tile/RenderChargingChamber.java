@@ -1,20 +1,12 @@
 package ec3.client.render.tile;
 
-import DummyCore.Client.AdvancedModelLoader;
-import DummyCore.Client.IModelCustom;
 import DummyCore.Utils.DrawUtils;
-import DummyCore.Utils.MiscUtils;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import ec3.common.tile.TileChargingChamber;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ResourceLocation;
-
-import org.lwjgl.opengl.GL11;
-
-import ec3.common.tile.TileChargingChamber;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class RenderChargingChamber extends TileEntitySpecialRenderer<TileChargingChamber> {
@@ -36,8 +28,8 @@ public class RenderChargingChamber extends TileEntitySpecialRenderer<TileChargin
 
 		rotation = rotation + 360F/tile.getWorld().getWorldTime() % 360;
 
-		GlStateManager.pushMatrix(); 
-		DrawUtils.renderItemStack_Full(tile.getStackInSlot(1),tile.getPos().getX()+0.5D,tile.getPos().getY()+10D , tile.getPos().getZ()+0.5D, p_76986_2_, p_76986_4_, p_76986_6_, rotation,0F, 1, 1, 1, 0.5F, 0.65F+((float)upperIndex/500F),0.5F, false);
+		GlStateManager.pushMatrix();
+		DrawUtils.renderItemStack_Full(tile.getStackInSlot(1),tile.getPos().getX()+0.5D,tile.getPos().getY()+10D , tile.getPos().getZ()+0.5D, p_76986_2_, p_76986_4_, p_76986_6_, rotation,0F, 1, 1, 1, 0.5F, 0.65F+(upperIndex/500F),0.5F, false);
 		GlStateManager.popMatrix();
 		RenderHelper.enableStandardItemLighting();
 	}

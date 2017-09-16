@@ -18,7 +18,7 @@ public class GuiMagicalQuarry extends GuiCommon{
 		this.elementList.add(new GuiBoundGemState(25, 22, tile, 0));
 		this.elementList.add(new GuiBalanceState(25, 40, tile));
 	}
-	
-	
+
+
 
 }

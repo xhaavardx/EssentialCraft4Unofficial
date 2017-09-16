@@ -15,7 +15,6 @@ import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.BlankRecipeCategory;
 import mezz.jei.api.recipe.BlankRecipeWrapper;
 import mezz.jei.api.recipe.IRecipeHandler;
-import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
@@ -25,7 +24,7 @@ import net.minecraft.util.text.translation.I18n;
 public class MithrilineFurnace {
 
 	public static final String UID = "essentialcraft:mithrilineFurnace";
-	
+
 	public static List<MithrilineFurnace.Wrapper> getRecipes() {
 		ArrayList<MithrilineFurnace.Wrapper> ret = Lists.<MithrilineFurnace.Wrapper>newArrayList();
 		for(MithrilineFurnaceRecipe rec : MithrilineFurnaceRecipes.allRegisteredRecipes) {
@@ -33,15 +32,15 @@ public class MithrilineFurnace {
 		}
 		return ret;
 	}
-	
+
 	public static class Wrapper extends BlankRecipeWrapper {
-		
+
 		private MithrilineFurnaceRecipe rec;
-		
+
 		public Wrapper(MithrilineFurnaceRecipe rec) {
 			this.rec = rec;
 		}
-		
+
 		@Override
 		public List<List<ItemStack>> getInputs() {
 			ArrayList<ItemStack> get = Lists.<ItemStack>newArrayList(rec.smelted.possibleStacks);
@@ -68,7 +67,7 @@ public class MithrilineFurnace {
 		@Override
 		public void getIngredients(IIngredients arg0) {}
 	}
-	
+
 	public static class Handler implements IRecipeHandler<MithrilineFurnace.Wrapper> {
 
 		@Override
@@ -96,15 +95,15 @@ public class MithrilineFurnace {
 			return !arg0.getInputs().get(0).isEmpty() && !arg0.getOutputs().isEmpty();
 		}
 	}
-	
+
 	public static class Category extends BlankRecipeCategory<MithrilineFurnace.Wrapper> {
 
 		private final IDrawable BG;
-		
+
 		public Category(IGuiHelper gh) {
 			BG = gh.createDrawable(new ResourceLocation("essentialcraft:textures/gui/jei/mithriline_furnace.png"), 0, 0, 57, 30);
 		}
-		
+
 		@Override
 		public IDrawable getBackground() {
 			return BG;
@@ -124,7 +123,7 @@ public class MithrilineFurnace {
 		public void setRecipe(IRecipeLayout arg0, MithrilineFurnace.Wrapper arg1, IIngredients arg2) {
 			arg0.getItemStacks().init(0, true, 2, 0);
 			arg0.getItemStacks().init(1, false, 38, 0);
-			
+
 			arg0.getItemStacks().set(0, arg1.getInputs().get(0));
 			arg0.getItemStacks().set(1, arg1.getOutputs().get(0));
 		}

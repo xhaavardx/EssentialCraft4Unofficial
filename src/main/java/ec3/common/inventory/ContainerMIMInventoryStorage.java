@@ -9,71 +9,71 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 public class ContainerMIMInventoryStorage extends Container {
-	
+
 	TileNewMIMInventoryStorage tile;
 	private int chestInventoryRows;
-	private int chestInventoryColumns;	
-	
+	private int chestInventoryColumns;
+
 	public ContainerMIMInventoryStorage(InventoryPlayer inventoryPlayer, TileNewMIMInventoryStorage t) {
 		tile = t;
 		t.openInventory(inventoryPlayer.player);
-		
+
 		chestInventoryRows = 6;
 		chestInventoryColumns = 9;
-		
+
 		for(int chestRowIndex = 0; chestRowIndex < chestInventoryRows; ++chestRowIndex) {
 			for(int chestColumnIndex = 0; chestColumnIndex < chestInventoryColumns; ++chestColumnIndex) {
 				addSlotToContainer(new Slot(t, chestColumnIndex + chestRowIndex*chestInventoryColumns, 8 + chestColumnIndex*18, 18 + chestRowIndex*18));
 			}
 		}
-		
+
 		for(int inventoryRowIndex = 0; inventoryRowIndex < 3; ++inventoryRowIndex) {
 			for(int inventoryColumnIndex = 0; inventoryColumnIndex < 9; ++inventoryColumnIndex) {
 				addSlotToContainer(new Slot(inventoryPlayer, inventoryColumnIndex + inventoryRowIndex*9 + 9, 8 + inventoryColumnIndex*18, 140 + inventoryRowIndex*18));
 			}
 		}
-		
+
 		for(int actionBarSlotIndex = 0; actionBarSlotIndex < 9; ++actionBarSlotIndex) {
 			addSlotToContainer(new Slot(inventoryPlayer, actionBarSlotIndex, 8 + actionBarSlotIndex*18, 198));
 		}
 	}
-	
+
 	@Override
 	public void onContainerClosed(EntityPlayer entityPlayer) {
 		super.onContainerClosed(entityPlayer);
 		tile.closeInventory(entityPlayer);
 	}
-	
+
 	@Override
 	public boolean canInteractWith(EntityPlayer entityPlayer) {
 		return tile.isUsableByPlayer(entityPlayer);
 	}
-	
+
 	@Override
 	public ItemStack transferStackInSlot(EntityPlayer entityPlayer, int slotIndex) {
 		ItemStack newItemStack = null;
-		Slot slot = (Slot)inventorySlots.get(slotIndex);
-		
+		Slot slot = inventorySlots.get(slotIndex);
+
 		if(slot != null && slot.getHasStack()) {
 			ItemStack itemStack = slot.getStack();
 			newItemStack = itemStack.copy();
-			
+
 			if(slotIndex < chestInventoryRows*chestInventoryColumns) {
 				if(!mergeItemStack(itemStack, chestInventoryRows*chestInventoryColumns, inventorySlots.size(), false))
 					return null;
 			}
 			else if(!mergeItemStack(itemStack, 0, chestInventoryRows*chestInventoryColumns, false))
 				return null;
-			
+
 			if(itemStack.stackSize == 0)
 				slot.putStack(null);
 			else
 				slot.onSlotChanged();
 		}
-		
+
 		return newItemStack;
-	}    
-	
+	}
+
 	@Override
 	protected boolean mergeItemStack(ItemStack itemStack, int slotMin, int slotMax, boolean ascending) {
 		boolean slotFound = false;
@@ -82,7 +82,7 @@ public class ContainerMIMInventoryStorage extends Container {
 		ItemStack stackInSlot;
 		if(itemStack.isStackable()) {
 			while(itemStack.stackSize > 0 && (!ascending && currentSlotIndex < slotMax || ascending && currentSlotIndex >= slotMin)) {
-				slot = (Slot) inventorySlots.get(currentSlotIndex);
+				slot = inventorySlots.get(currentSlotIndex);
 				stackInSlot = slot.getStack();
 				if(slot.isItemValid(itemStack) && equalsIgnoreStackSize(itemStack, stackInSlot)) {
 					int combinedStackSize = stackInSlot.stackSize + itemStack.stackSize;
@@ -103,11 +103,11 @@ public class ContainerMIMInventoryStorage extends Container {
 				currentSlotIndex += ascending ? -1 : 1;
 			}
 		}
-		
+
 		if(itemStack.stackSize > 0) {
 			currentSlotIndex = ascending ? slotMax - 1 : slotMin;
 			while(!ascending && currentSlotIndex < slotMax || ascending && currentSlotIndex >= slotMin) {
-				slot = (Slot) inventorySlots.get(currentSlotIndex);
+				slot = inventorySlots.get(currentSlotIndex);
 				stackInSlot = slot.getStack();
 				if(slot.isItemValid(itemStack) && stackInSlot == null) {
 					slot.putStack(cloneItemStack(itemStack, Math.min(itemStack.stackSize, slot.getSlotStackLimit())));
@@ -123,13 +123,13 @@ public class ContainerMIMInventoryStorage extends Container {
 		}
 		return slotFound;
 	}
-	
+
 	public static ItemStack cloneItemStack(ItemStack itemStack, int stackSize) {
 		ItemStack clonedItemStack = itemStack.copy();
 		clonedItemStack.stackSize = stackSize;
 		return clonedItemStack;
 	}
-	
+
 	public static boolean equalsIgnoreStackSize(ItemStack itemStack1, ItemStack itemStack2) {
 		if(itemStack1 != null && itemStack2 != null) {
 			if(Item.getIdFromItem(itemStack1.getItem()) == Item.getIdFromItem(itemStack2.getItem())) {
@@ -145,7 +145,7 @@ public class ContainerMIMInventoryStorage extends Container {
 				}
 			}
 		}
-		
+
 		return false;
 	}
 }

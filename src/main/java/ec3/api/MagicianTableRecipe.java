@@ -11,14 +11,14 @@ public class MagicianTableRecipe implements IRecipe {
 	public UnformedItemStack[] requiredItems = new UnformedItemStack[5];
 	public ItemStack result;
 	public int mruRequired;
-	
+
 	public MagicianTableRecipe(UnformedItemStack[] i, ItemStack j, int k)
 	{
 		requiredItems = i;
 		result = j;
 		mruRequired = k;
 	}
-	
+
 	public MagicianTableRecipe(MagicianTableRecipe recipeByResult) {
 		requiredItems = recipeByResult.requiredItems;
 		result = recipeByResult.result;
@@ -58,7 +58,8 @@ public class MagicianTableRecipe implements IRecipe {
 	public ItemStack getRecipeOutput() {
 		return result;
 	}
-	
+
+	@Override
 	public String toString()
 	{
 		String retStr = super.toString();

@@ -16,7 +16,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
@@ -46,11 +45,13 @@ public class EntityPlayerClone extends EntityZombie {
 		return playerToAttack;
 	}
 
+	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
 		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(2.0D);
 	}
 
+	@Override
 	protected void dropEquipment(boolean p_82160_1_, int p_82160_2_) {}
 
 	@Override
@@ -68,21 +69,24 @@ public class EntityPlayerClone extends EntityZombie {
 		firstTick = false;
 	}
 
+	@Override
 	protected SoundEvent getAmbientSound() {
-		return (SoundEvent)null;
+		return null;
 	}
 
+	@Override
 	protected SoundEvent getHurtSound() {
-		return (SoundEvent)null;
+		return null;
 	}
 
+	@Override
 	protected SoundEvent getDeathSound() {
-		return (SoundEvent)null;
+		return null;
 	}
 
 	@Override
 	protected ResourceLocation getLootTable() {
-		return (ResourceLocation)null;
+		return null;
 	}
 
 	public UUID getClonedPlayer() {

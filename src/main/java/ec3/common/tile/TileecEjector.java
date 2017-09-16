@@ -2,15 +2,15 @@ package ec3.common.tile;
 
 import java.util.UUID;
 
-import net.minecraft.tileentity.TileEntity;
 import ec3.api.EnumStructureType;
 import ec3.api.IStructurePiece;
 import ec3.api.ITEStoresMRU;
+import net.minecraft.tileentity.TileEntity;
 
 public class TileecEjector extends TileEntity implements ITEStoresMRU, IStructurePiece {
 	public TileecController controller;
 	public UUID uuid = UUID.randomUUID();
-	
+
 	@Override
 	public int getMRU() {
 		if(controller!=null)

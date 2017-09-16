@@ -9,17 +9,18 @@ import ec3.common.entity.EntityMRUPresence;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 
-public class CommandCreateMRUCU extends CommandBase 
+public class CommandCreateMRUCU extends CommandBase
 {
+	@Override
 	public String getName()
 	{
 		return "createMRUCU";
 	}
 
+	@Override
 	public String getUsage(ICommandSender par1ICommandSender)
 	{
 		return "/createMRUCU <x> <y> <z> <mruAmount> <balance>";
@@ -28,11 +29,13 @@ public class CommandCreateMRUCU extends CommandBase
 	/**
 	 * Return the required permission level for this command.
 	 */
+	@Override
 	public int getRequiredPermissionLevel()
 	{
 		return 3;
 	}
 
+	@Override
 	public void execute(MinecraftServer server, ICommandSender sender, String[] par2ArrayOfStr) throws CommandException {
 		int var3 = parseInt(par2ArrayOfStr[3], 0);
 		double var4 = parseDouble(par2ArrayOfStr[4], 0, 2);

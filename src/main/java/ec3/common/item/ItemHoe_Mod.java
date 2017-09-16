@@ -6,13 +6,13 @@ import net.minecraft.item.ItemHoe;
 import net.minecraftforge.client.model.ModelLoader;
 
 public class ItemHoe_Mod extends ItemHoe implements IModelRegisterer {
-	
+
 	public String textureName = "";
-	
+
 	public ItemHoe_Mod(ToolMaterial p_i45347_1_) {
 		super(p_i45347_1_);
 	}
-	
+
 	public ItemHoe_Mod setTextureName(String name) {
 		textureName = name;
 		return this;

@@ -12,26 +12,26 @@ public class TileNewMIMImportNode_Persistant extends TileNewMIMImportNode {
 	public TileNewMIMImportNode_Persistant() {
 		super();
 	}
-	
+
 	@Override
 	public void importAllPossibleItems(TileNewMIM parent) {
 		if(getWorld().isBlockIndirectlyGettingPowered(pos) > 0)
 			return;
-		
+
 		ISidedInventory inv = getConnectedInventory();
 		if(inv != null) {
 			int[] slots = getAccessibleSlots();
-			
+
 			if(slots.length <= 0)
 				return;
-			
+
 			for(int j = 0; j < slots.length; ++j) {
 				ItemStack stk = inv.getStackInSlot(slots[j]);
 				if(stk != null) {
 					if(getStackInSlot(0) == null || !(getStackInSlot(0).getItem() instanceof ItemFilter)) {
 						ItemStack current = stk.copy();
 						current.stackSize -= 1;
-						
+
 						if(current.stackSize > 0)
 							if(parent.addItemStackToSystem(current))
 								stk.stackSize = 1;
@@ -39,7 +39,7 @@ public class TileNewMIMImportNode_Persistant extends TileNewMIMImportNode {
 					else if(ECUtils.canFilterAcceptItem(new InventoryMagicFilter(getStackInSlot(0)), stk, getStackInSlot(0))) {
 						ItemStack current = stk.copy();
 						current.stackSize -= 1;
-						
+
 						if(current.stackSize > 0)
 							if(parent.addItemStackToSystem(current))
 								stk.stackSize = 1;
@@ -49,10 +49,10 @@ public class TileNewMIMImportNode_Persistant extends TileNewMIMImportNode {
 		}
 		else {
 			IInventory iinv = getConnectedInventoryInefficent();
-			
+
 			if(iinv.getSizeInventory() <= 0)
 				return;
-			
+
 			for(int j = 0; j < iinv.getSizeInventory(); ++j) {
 				ItemStack stk = iinv.getStackInSlot(j);
 				if(stk != null) {

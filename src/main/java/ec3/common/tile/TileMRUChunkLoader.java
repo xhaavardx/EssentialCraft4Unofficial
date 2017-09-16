@@ -7,7 +7,6 @@ import ec3.common.mod.EssentialCraftCore;
 import ec3.utils.common.ECUtils;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.ChunkPos;
-import net.minecraft.world.chunk.storage.IChunkLoader;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.ForgeChunkManager.Ticket;
 import net.minecraftforge.common.ForgeChunkManager.Type;
@@ -17,7 +16,7 @@ public class TileMRUChunkLoader extends TileMRUGeneric {
 	public Ticket chunkTicket;
 	public Set<ChunkPos> chunkSet = new HashSet<ChunkPos>();
 	public boolean getChunks = true;
-	
+
 	public TileMRUChunkLoader() {
 		setMaxMRU(5000F);
 		setSlotsNum(1);
@@ -31,7 +30,7 @@ public class TileMRUChunkLoader extends TileMRUGeneric {
 		if(!getWorld().isRemote) {
 			manage();
 		}
-		
+
 		if(getMRU() >= 5) {
 			try {
 
@@ -57,7 +56,7 @@ public class TileMRUChunkLoader extends TileMRUGeneric {
 			getChunks = false;
 			chunkSet.add(new ChunkPos(pos));
 		}
-		
+
 		if(chunkTicket != null && (!canOperate() || chunkTicket.world != getWorld()))
 			release();
 
@@ -74,7 +73,7 @@ public class TileMRUChunkLoader extends TileMRUGeneric {
 				forceChunks(ticket);
 			}
 		}
-		
+
 		if(canOperate()) {
 			setMRU(getMRU() - 5);
 		}

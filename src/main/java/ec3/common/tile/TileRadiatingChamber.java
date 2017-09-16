@@ -1,30 +1,29 @@
 package ec3.common.tile;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraftforge.common.config.Configuration;
 import DummyCore.Utils.DataStorage;
 import DummyCore.Utils.DummyData;
 import ec3.api.ApiCore;
 import ec3.api.RadiatingChamberRecipe;
 import ec3.api.RadiatingChamberRecipes;
 import ec3.utils.common.ECUtils;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.config.Configuration;
 
 public class TileRadiatingChamber extends TileMRUGeneric {
-	
+
 	public int progressLevel;
 	public RadiatingChamberRecipe currentRecipe;
 	public static float cfgMaxMRU = ApiCore.DEVICE_MAX_MRU_GENERIC;
 	public static boolean generatesCorruption = true;
 	public static int genCorruption = 1;
 	public static float mruUsage = 1F;
-	
+
 	public TileRadiatingChamber() {
 		super();
 		maxMRU = (int)cfgMaxMRU;
 		setSlotsNum(4);
 	}
-	
+
 	@Override
 	public void update() {
 		super.update();
@@ -68,7 +67,7 @@ public class TileRadiatingChamber extends TileMRUGeneric {
 			}
 		}
 	}
-	
+
 	public boolean canFunction(RadiatingChamberRecipe rec) {
 		ItemStack result = rec.result;
 		if(result != null) {
@@ -81,12 +80,12 @@ public class TileRadiatingChamber extends TileMRUGeneric {
 		}
 		return false;
 	}
-	
+
 	public void craft()
 	{
 		if(canFunction(currentRecipe)) {
 			ItemStack stk = currentRecipe.result.copy();
-			
+
 			if(getStackInSlot(3) == null)
 				setInventorySlotContents(3, stk.copy());
 			else if (getStackInSlot(3).getItem() == stk.getItem())
@@ -96,7 +95,7 @@ public class TileRadiatingChamber extends TileMRUGeneric {
 			}
 		}
 	}
-	
+
 	public static void setupConfig(Configuration cfg) {
 		try {
 			cfg.load();
@@ -107,24 +106,24 @@ public class TileRadiatingChamber extends TileMRUGeneric {
 					"The amount of corruption generated each tick(do not set to 0!):1"
 			}, "");
 			String dataString = "";
-			
+
 			for(int i = 0; i < cfgArrayString.length; ++i)
 				dataString += "||" + cfgArrayString[i];
-			
+
 			DummyData[] data = DataStorage.parseData(dataString);
-			
+
 			mruUsage = Float.parseFloat(data[1].fieldValue);
 			cfgMaxMRU = Float.parseFloat(data[0].fieldValue);
 			generatesCorruption = Boolean.parseBoolean(data[2].fieldValue);
 			genCorruption = Integer.parseInt(data[3].fieldValue);
-			
+
 			cfg.save();
 		}
 		catch(Exception e) {
 			return;
 		}
 	}
-	
+
 	@Override
 	public int[] getOutputSlots() {
 		return new int[] {3};

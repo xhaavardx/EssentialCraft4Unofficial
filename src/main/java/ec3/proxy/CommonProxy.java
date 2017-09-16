@@ -121,9 +121,9 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.IGuiHandler;
 
 public class CommonProxy implements IGuiHandler {
-	
+
 	public void firstMovement(FMLPreInitializationEvent event) {}
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
@@ -348,82 +348,82 @@ public class CommonProxy implements IGuiHandler {
 		}
 		return null;
 	}
-	
+
 	public void openBookGUIForPlayer() {}
-	
+
 	public void openPentacleGUIForPlayer(TileEntity tile) {}
-	
+
 	public Object getClientVoidChestGUI(EntityPlayer player, World world, int x, int y, int z, int page)
 	{
 		return null;
 	}
-	
+
 	@Override
 	public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
 		return null;
 	}
 
 	public void registerRenderInformation() {}
-	
+
 	public void registerTileEntitySpecialRenderer() {}
-	
+
 	public void handleBlockRegister(Block b) {}
-	
+
 	public void handleItemRegister(Item i) {}
-	
+
 	public World getClientWorld()
 	{
 		return null;
 	}
-	
+
 	public Object getClientIcon(String iconName)
 	{
 		return null;
 	}
-	
+
 	public void spawnParticle(String name, float x, float y, float z, double i, double j, double k) {}
-	
+
 	public boolean itemHasEffect(ItemStack stk)
 	{
 		return false;
 	}
-	
+
 	public ModelBiped getClientModel(int id)
 	{
-		return (ModelBiped)null;
+		return null;
 	}
-	
+
 	public Object getRenderer(int index)
 	{
 		return null;
 	}
-	
+
 	public EntityPlayer getClientPlayer()
 	{
-		return (EntityPlayer)null;
+		return null;
 	}
-	
+
 	public void registerTexture(ResourceLocation rl) {}
-	
+
 	public void ItemFX(double... ds) {}
-	
+
 	public void FlameFX(double... ds) {}
-	
+
 	public void SmokeFX(double... ds) {}
-	
+
 	public void MRUFX(double... ds) {}
-	
+
 	public void wingsAction(EntityPlayer e, ItemStack s) {}
-	
+
 	public void handlePositionChangePacket(DummyData[] packetData) {}
-	
+
 	public void handleSoundPlay(DummyData[] packetData) {}
 
 	public void stopSound(String soundID) {}
 
 	public void startSound(String soundID, String soundName) {}
-	
+
 	public void startRecord(String soundID, String soundName, BlockPos pos) {}
-	
+
 	public void preInit() {}
 }

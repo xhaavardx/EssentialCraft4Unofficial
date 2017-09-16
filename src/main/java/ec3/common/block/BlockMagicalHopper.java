@@ -26,67 +26,68 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 
 public class BlockMagicalHopper extends BlockContainer implements IModelRegisterer {
-	
+
 	public static final PropertyDirection FACING = PropertyDirection.create("facing");
-	
+
 	public BlockMagicalHopper() {
 		super(Material.ROCK);
 		setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.DOWN));
 	}
-	
+
 	@Override
-    public void breakBlock(World par1World, BlockPos par2Pos, IBlockState par3State) {
+	public void breakBlock(World par1World, BlockPos par2Pos, IBlockState par3State) {
 		MiscUtils.dropItemsOnBlockBreak(par1World, par2Pos.getX(), par2Pos.getY(), par2Pos.getZ(), par3State.getBlock(), 0);
 		super.breakBlock(par1World, par2Pos, par3State);
-    }
-	
+	}
+
+	@Override
 	public EnumBlockRenderType getRenderType(IBlockState s)
 	{
 		return EnumBlockRenderType.MODEL;
 	}
-	
+
 	@Override
 	public TileEntity createNewTileEntity(World p_149915_1_, int metadata) {
 		return new TileMagicalHopper();
 	}
-	
-    @Override
-    public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer)
-    {
-        return this.getDefaultState().withProperty(FACING, facing);
-    }
-    
+
+	@Override
+	public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer)
+	{
+		return this.getDefaultState().withProperty(FACING, facing);
+	}
+
 	@Override
 	public IBlockState withRotation(IBlockState state, Rotation rot) {
 		return state.withProperty(FACING, rot.rotate(state.getValue(FACING)));
 	}
-	
+
 	@Override
 	public IBlockState withMirror(IBlockState state, Mirror mirrorIn) {
 		return state.withRotation(mirrorIn.toRotation(state.getValue(FACING)));
 	}
-	
+
 	@Override
 	public boolean onBlockActivated(World par1World, BlockPos par2, IBlockState par3, EntityPlayer par4EntityPlayer, EnumHand par5, ItemStack par6, EnumFacing par7, float par8, float par9, float par10) {
-	    if(par1World.isRemote) {
-	        return true;
-	    }
-	    else {
-	     	if(!par4EntityPlayer.isSneaking()) {
-	       		par4EntityPlayer.openGui(EssentialCraftCore.core, Config.guiID[0], par1World, par2.getX(), par2.getY(), par2.getZ());
-	           	return true;
-	       	}
-	       	else {
-	       		return false;
-	       	}
-	    }
+		if(par1World.isRemote) {
+			return true;
+		}
+		else {
+			if(!par4EntityPlayer.isSneaking()) {
+				par4EntityPlayer.openGui(EssentialCraftCore.core, Config.guiID[0], par1World, par2.getX(), par2.getY(), par2.getZ());
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
 	}
-	
+
 	@Override
 	protected BlockStateContainer createBlockState() {
 		return new BlockStateContainer(this, FACING);
 	}
-	
+
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
 		return getDefaultState().withProperty(FACING, EnumFacing.getFront(meta%6));

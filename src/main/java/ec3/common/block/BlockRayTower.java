@@ -33,6 +33,7 @@ public class BlockRayTower extends BlockContainer implements IModelRegisterer {
 		setDefaultState(this.blockState.getBaseState().withProperty(LAYER, EnumLayer.BOTTOM));
 	}
 
+	@Override
 	public void onBlockAdded(World w, BlockPos p, IBlockState s)
 	{
 		super.onBlockAdded(w, p, s);
@@ -45,16 +46,19 @@ public class BlockRayTower extends BlockContainer implements IModelRegisterer {
 		}
 	}
 
+	@Override
 	public boolean canPlaceBlockAt(World p_149742_1_, BlockPos p_149742_2_)
 	{
 		return p_149742_1_.getBlockState(p_149742_2_).getBlock().isReplaceable(p_149742_1_, p_149742_2_) && p_149742_1_.isAirBlock(p_149742_2_.up());
 	}
 
+	@Override
 	public boolean isOpaqueCube(IBlockState s)
 	{
 		return false;
 	}
 
+	@Override
 	public boolean isFullCube(IBlockState s)
 	{
 		return false;
@@ -65,7 +69,8 @@ public class BlockRayTower extends BlockContainer implements IModelRegisterer {
 	{
 		return BlockRenderLayer.CUTOUT_MIPPED;
 	}
-	
+
+	@Override
 	public EnumBlockRenderType getRenderType(IBlockState s)
 	{
 		return EnumBlockRenderType.MODEL;

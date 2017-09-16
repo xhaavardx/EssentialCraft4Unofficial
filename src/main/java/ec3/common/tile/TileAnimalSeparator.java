@@ -2,11 +2,11 @@ package ec3.common.tile;
 
 import java.util.List;
 
+import ec3.api.ApiCore;
+import ec3.utils.common.ECUtils;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.util.math.AxisAlignedBB;
-import ec3.api.ApiCore;
-import ec3.utils.common.ECUtils;
 
 public class TileAnimalSeparator extends TileMRUGeneric {
 
@@ -14,18 +14,18 @@ public class TileAnimalSeparator extends TileMRUGeneric {
 		setSlotsNum(1);
 		setMaxMRU(ApiCore.DEVICE_MAX_MRU_GENERIC);
 	}
-	
+
 	@Override
 	public int[] getOutputSlots() {
 		return new int[0];
 	}
-	
+
 	@Override
 	public void update() {
 		super.update();
 		ECUtils.manage(this, 0);
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public void separate(boolean b) {
 		AxisAlignedBB toTeleport = new AxisAlignedBB(pos).expand(24, 24, 24);

@@ -5,9 +5,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 
 public class ShadeUtils {
-	
+
 	public static void attackPlayerWithShade(EntityPlayer attacked, EntityLivingBase attacker, ItemStack weapon)
 	{
-		
+
 	}
 }

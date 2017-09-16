@@ -34,26 +34,31 @@ public class BlockDrops extends Block implements IModelRegisterer {
 		setDefaultState(blockState.getBaseState().withProperty(TYPE, EnumDropType.AIR));
 	}
 
+	@Override
 	public boolean isOpaqueCube(IBlockState s)
 	{
 		return false;
 	}
 
+	@Override
 	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, World worldIn, BlockPos pos)
 	{
 		return null;
 	}
 
+	@Override
 	public AxisAlignedBB getSelectedBoundingBox(IBlockState state, World worldIn, BlockPos pos)
 	{
 		return BLOCK_AABB.offset(pos);
 	}
 
+	@Override
 	public boolean isFullCube(IBlockState s)
 	{
 		return false;
 	}
 
+	@Override
 	public void getSubBlocks(Item p_149666_1_, CreativeTabs p_149666_2_, List<ItemStack> p_149666_3_)
 	{
 		for(int i = 0; i < 4; ++i)
@@ -83,6 +88,7 @@ public class BlockDrops extends Block implements IModelRegisterer {
 		return 1+p_149745_1_.nextInt(6);
 	}
 
+	@Override
 	public ArrayList<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
 		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
 

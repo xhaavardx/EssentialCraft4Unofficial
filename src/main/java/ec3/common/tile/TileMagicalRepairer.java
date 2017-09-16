@@ -1,26 +1,26 @@
 package ec3.common.tile;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumParticleTypes;
-import net.minecraftforge.common.config.Configuration;
 import DummyCore.Utils.DataStorage;
 import DummyCore.Utils.DummyData;
 import ec3.api.ApiCore;
 import ec3.utils.common.ECUtils;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraftforge.common.config.Configuration;
 
 public class TileMagicalRepairer extends TileMRUGeneric {
-	
+
 	public static float cfgMaxMRU = ApiCore.DEVICE_MAX_MRU_GENERIC;
 	public static boolean generatesCorruption = true;
 	public static int genCorruption = 3;
 	public static int mruUsage = 70;
-	
+
 	public TileMagicalRepairer() {
 		super();
 		maxMRU = (int)cfgMaxMRU;
 		setSlotsNum(2);
 	}
-	
+
 	@Override
 	public void update() {
 		super.update();
@@ -29,7 +29,7 @@ public class TileMagicalRepairer extends TileMRUGeneric {
 			repare();
 		spawnParticles();
 	}
-	
+
 	public void repare() {
 		ItemStack repareItem = getStackInSlot(1);
 		if(canRepare(repareItem)) {
@@ -40,11 +40,11 @@ public class TileMagicalRepairer extends TileMRUGeneric {
 			}
 		}
 	}
-	
+
 	public boolean canRepare(ItemStack s) {
 		return s != null && s.getItemDamage() != 0 && s.getItem().isRepairable() && getMRU() >= mruUsage;
 	}
-	
+
 	public void spawnParticles() {
 		if(canRepare(getStackInSlot(1)) && getMRU() > 0) {
 			for(int o = 0; o < 10; ++o) {
@@ -52,7 +52,7 @@ public class TileMagicalRepairer extends TileMRUGeneric {
 			}
 		}
 	}
-	
+
 	public static void setupConfig(Configuration cfg) {
 		try {
 			cfg.load();
@@ -63,24 +63,24 @@ public class TileMagicalRepairer extends TileMRUGeneric {
 					"The amount of corruption generated each tick(do not set to 0!):3"
 			}, "");
 			String dataString = "";
-			
+
 			for(int i = 0; i < cfgArrayString.length; ++i)
 				dataString += "||" + cfgArrayString[i];
-			
+
 			DummyData[] data = DataStorage.parseData(dataString);
-			
+
 			mruUsage = Integer.parseInt(data[1].fieldValue);
 			cfgMaxMRU = Float.parseFloat(data[0].fieldValue);
 			generatesCorruption = Boolean.parseBoolean(data[2].fieldValue);
 			genCorruption = Integer.parseInt(data[3].fieldValue);
-			
+
 			cfg.save();
 		}
 		catch(Exception e) {
 			return;
 		}
 	}
-	
+
 	@Override
 	public int[] getOutputSlots() {
 		return new int[] {1};

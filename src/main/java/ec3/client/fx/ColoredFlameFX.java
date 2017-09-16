@@ -3,7 +3,6 @@ package ec3.client.fx;
 import DummyCore.Utils.TessellatorWrapper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
@@ -17,7 +16,7 @@ public class ColoredFlameFX extends Particle {
 	private static final ResourceLocation particleTextures = new ResourceLocation("textures/particle/particles.png");
 	private static final ResourceLocation ecparticleTextures = new ResourceLocation("essentialcraft","textures/special/particles.png");
 
-	public ColoredFlameFX(World w, double x,double y, double z, double mX,double mY, double mZ) 
+	public ColoredFlameFX(World w, double x,double y, double z, double mX,double mY, double mZ)
 	{
 		super(w, x, y, z, mX, mY,mZ);
 		this.motionX = this.motionX * 0.009999999776482582D + mX;
@@ -36,7 +35,7 @@ public class ColoredFlameFX extends Particle {
 		return true;
 	}
 
-	public ColoredFlameFX(World w, double x,double y, double z, double mX,double mY, double mZ, double r, double g, double b, double scale) 
+	public ColoredFlameFX(World w, double x,double y, double z, double mX,double mY, double mZ, double r, double g, double b, double scale)
 	{
 		super(w, x, y, z, mX, mY,mZ);
 		this.motionX = this.motionX * 0.009999999776482582D + mX;
@@ -52,12 +51,13 @@ public class ColoredFlameFX extends Particle {
 		this.setParticleTextureIndex(48);
 	}
 
+	@Override
 	public void renderParticle(VertexBuffer var1, Entity var2, float p_70539_2_, float p_70539_3_, float p_70539_4_, float p_70539_5_, float p_70539_6_, float p_70539_7_)
 	{
 		TessellatorWrapper.getInstance().draw().begin(7, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
 		Minecraft.getMinecraft().renderEngine.bindTexture(ecparticleTextures);
 
-		float f6 = ((float)this.particleAge + p_70539_2_) / (float)this.particleMaxAge;
+		float f6 = (this.particleAge + p_70539_2_) / this.particleMaxAge;
 		this.particleScale = this.flameScale * (1.0F - f6 * f6 * 0.5F);
 		super.renderParticle(var1, var2, p_70539_2_, p_70539_3_, p_70539_4_, p_70539_5_, p_70539_6_, p_70539_7_);
 
@@ -65,9 +65,10 @@ public class ColoredFlameFX extends Particle {
 		Minecraft.getMinecraft().renderEngine.bindTexture(particleTextures);
 	}
 
+	@Override
 	public int getBrightnessForRender(float p_70070_1_)
 	{
-		float f1 = ((float)this.particleAge + p_70070_1_) / (float)this.particleMaxAge;
+		float f1 = (this.particleAge + p_70070_1_) / this.particleMaxAge;
 
 		if (f1 < 0.0F)
 		{
@@ -97,7 +98,7 @@ public class ColoredFlameFX extends Particle {
 	 */
 	public float getBrightness(float p_70013_1_)
 	{
-		float f1 = ((float)this.particleAge + p_70013_1_) / (float)this.particleMaxAge;
+		float f1 = (this.particleAge + p_70013_1_) / this.particleMaxAge;
 
 		if (f1 < 0.0F)
 		{
@@ -116,6 +117,7 @@ public class ColoredFlameFX extends Particle {
 	/**
 	 * Called to update the entity's position/logic.
 	 */
+	@Override
 	public void onUpdate()
 	{
 		this.prevPosX = this.posX;

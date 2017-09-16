@@ -123,12 +123,6 @@ public class ModelGun implements IPerspectiveAwareModel {
 	public Pair<? extends IBakedModel, Matrix4f> handlePerspective(TransformType cameraTransformType) {
 		if(baseModel instanceof IPerspectiveAwareModel) {
 			Matrix4f matrix4f = ((IPerspectiveAwareModel)baseModel).handlePerspective(cameraTransformType).getRight();
-			if(cameraTransformType == TransformType.GUI) {
-				BakedQuad overlay0 = createBakedQuadForFace(15/16,2/16,8/16,14/16,-DISTANCE_BEHIND_ITEM_FACE+(DELTA_FOR_OVERLAP),0,
-						Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite("essentialcraft:specia"),EnumFacing.SOUTH);
-				BakedQuad overlay1;
-				BakedQuad overlay2;
-			}
 			return Pair.of(this, matrix4f);
 		}
 		else {

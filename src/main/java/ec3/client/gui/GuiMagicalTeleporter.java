@@ -18,7 +18,7 @@ public class GuiMagicalTeleporter extends GuiCommon{
 		this.elementList.add(new GuiBoundGemState(25, 22, tile, 0));
 		this.elementList.add(new GuiMRUState(25, 58, (ITEHasMRU) tile, 0));
 	}
-	
-	
+
+
 
 }

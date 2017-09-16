@@ -53,19 +53,19 @@ public class RenderMagicalDisplay extends TileEntitySpecialRenderer<TileMagicalD
 				//GlStateManager.rotate(180, 0, 1, 0);
 				switch(metadata) {
 				case 2: {
-					GlStateManager.translate(1-((float)drawedName.length()/160F), -0.4F, -0.949F);
+					GlStateManager.translate(1-(drawedName.length()/160F), -0.4F, -0.949F);
 					break;
 				}
 				case 3: {
-					GlStateManager.translate(((float)drawedName.length()/160F), -0.4F, -0.051F);
+					GlStateManager.translate((drawedName.length()/160F), -0.4F, -0.051F);
 					break;
 				}
 				case 4: {
-					GlStateManager.translate(0.949F, -0.4F, -((float)drawedName.length()/160F));
+					GlStateManager.translate(0.949F, -0.4F, -(drawedName.length()/160F));
 					break;
 				}
 				case 5: {
-					GlStateManager.translate(0.051F, -0.4F, -1+((float)drawedName.length()/160F));
+					GlStateManager.translate(0.051F, -0.4F, -1+(drawedName.length()/160F));
 					break;
 				}
 				}
@@ -89,19 +89,19 @@ public class RenderMagicalDisplay extends TileEntitySpecialRenderer<TileMagicalD
 				//GlStateManager.rotate(180, 0, 1, 0);
 				switch(metadata) {
 				case 2: {
-					GlStateManager.translate(-0.4F+1-((float)drawedName.length()/160F), -0.8F, -0.949F);
+					GlStateManager.translate(-0.4F+1-(drawedName.length()/160F), -0.8F, -0.949F);
 					break;
 				}
 				case 3: {
-					GlStateManager.translate(0.4F+((float)drawedName.length()/160F), -0.8F, -0.051F);
+					GlStateManager.translate(0.4F+(drawedName.length()/160F), -0.8F, -0.051F);
 					break;
 				}
 				case 4: {
-					GlStateManager.translate(0.949F, -0.8F, -0.4F-((float)drawedName.length()/160F));
+					GlStateManager.translate(0.949F, -0.8F, -0.4F-(drawedName.length()/160F));
 					break;
 				}
 				case 5: {
-					GlStateManager.translate(0.051F, -0.8F, 0.4F-1+((float)drawedName.length()/160F));
+					GlStateManager.translate(0.051F, -0.8F, 0.4F-1+(drawedName.length()/160F));
 					break;
 				}
 				}

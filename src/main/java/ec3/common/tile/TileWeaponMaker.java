@@ -15,33 +15,33 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 
 public class TileWeaponMaker extends TileMRUGeneric {
-	
+
 	public int index;
 	public ItemStack previewStack;
-	
+
 	public TileWeaponMaker() {
 		super();
 		slot0IsBoundGem = false;
 		setSlotsNum(19);
 	}
-	
+
 	@Override
 	public void update() {
 		index = this.getBlockMetadata();
 		super.update();
 	}
-	
+
 	@Override
 	public void readFromNBT(NBTTagCompound i) {
 		if(i.hasKey("preview"))
 			previewStack = ItemStack.loadItemStackFromNBT(i.getCompoundTag("preview"));
 		else
 			previewStack = null;
-		
+
 		index = i.getInteger("index");
 		super.readFromNBT(i);
 	}
-	
+
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound i) {
 		if(previewStack != null) {
@@ -51,11 +51,11 @@ public class TileWeaponMaker extends TileMRUGeneric {
 		}
 		else
 			i.removeTag("preview");
-		
+
 		i.setInteger("index", index);
 		return super.writeToNBT(i);
 	}
-	
+
 	public String getBase() {
 		String baseName = "";
 		if(index == 0) {
@@ -128,7 +128,7 @@ public class TileWeaponMaker extends TileMRUGeneric {
 		}
 		return baseName;
 	}
-	
+
 	public String getHandle() {
 		String handleName = "";
 		if(index == 0) {
@@ -193,7 +193,7 @@ public class TileWeaponMaker extends TileMRUGeneric {
 		}
 		return handleName;
 	}
-	
+
 	public String getDevice() {
 		String deviceName = "";
 		if(index == 0) {
@@ -250,7 +250,7 @@ public class TileWeaponMaker extends TileMRUGeneric {
 		}
 		return deviceName;
 	}
-	
+
 	public String getLense() {
 		String lenseName = "";
 		if(index == 0 || index == 1 || index == 2) {
@@ -273,7 +273,7 @@ public class TileWeaponMaker extends TileMRUGeneric {
 									if(lenseName.isEmpty())
 										lenseName = material.id;
 									else if(!lenseName.equalsIgnoreCase(material.id))
-											return "";
+										return "";
 								}
 							}
 						}
@@ -285,7 +285,7 @@ public class TileWeaponMaker extends TileMRUGeneric {
 		}
 		return lenseName;
 	}
-	
+
 	public String getScope() {
 		String scopeName = "";
 		if(index == 0 || index == 1) {
@@ -297,7 +297,7 @@ public class TileWeaponMaker extends TileMRUGeneric {
 				}
 			}
 		}
-		
+
 		if(index == 2) {
 			if(getStackInSlot(4) != null) {
 				for(int i = 0; i < GunRegistry.scopeMaterials.size(); ++i) {
@@ -322,10 +322,10 @@ public class TileWeaponMaker extends TileMRUGeneric {
 				}
 			}
 		}
-		
+
 		return scopeName;
 	}
-	
+
 	public boolean isOreDict(ItemStack stk, String target) {
 		UnformedItemStack s = new UnformedItemStack(target);
 		boolean ret = s.itemStackMatches(stk);
@@ -333,7 +333,7 @@ public class TileWeaponMaker extends TileMRUGeneric {
 		s = null;
 		return ret;
 	}
-	
+
 	public boolean areIngridientsCorrect() {
 		//If output is empty
 		if(getStackInSlot(0) == null) {
@@ -365,7 +365,7 @@ public class TileWeaponMaker extends TileMRUGeneric {
 		}
 		return false;
 	}
-	
+
 	public void previewWeapon() {
 		previewStack = null;
 		if(getStackInSlot(0) == null) {
@@ -379,7 +379,7 @@ public class TileWeaponMaker extends TileMRUGeneric {
 						previewStack = new ItemStack(ItemsCore.sniper);
 					if(index == 3)
 						previewStack = new ItemStack(ItemsCore.gatling);
-					
+
 					String lense = getLense();
 					String base = getBase();
 					String handle = getHandle();
@@ -395,7 +395,7 @@ public class TileWeaponMaker extends TileMRUGeneric {
 			}
 		}
 	}
-	
+
 	public void makeWeapon() {
 		if(areIngridientsCorrect()) {
 			ItemStack result = previewStack.copy();
@@ -405,32 +405,32 @@ public class TileWeaponMaker extends TileMRUGeneric {
 				decrStackSize(i, 1);
 		}
 	}
-	
+
 	@Override
 	public ItemStack decrStackSize(int par1, int par2)  {
 		ItemStack is = super.decrStackSize(par1, par2);
 		markDirty();
 		return is;
 	}
-	
+
 	@Override
 	public void setInventorySlotContents(int par1, ItemStack par2ItemStack) {
 		super.setInventorySlotContents(par1, par2ItemStack);
 		markDirty();
 	}
-	
+
 	@Override
 	public void markDirty() {
 		super.markDirty();
 		previewWeapon();
 		syncTick = 0;
 	}
-	
+
 	@Override
 	public int[] getOutputSlots() {
 		return new int[] {0};
 	}
-	
+
 	@Override
 	public int[] getSlotsForFace(EnumFacing facing) {
 		switch(index) {
@@ -445,12 +445,12 @@ public class TileWeaponMaker extends TileMRUGeneric {
 		}
 		return new int[0];
 	}
-	
+
 	@Override
 	public boolean isItemValidForSlot(int p_94041_1_, ItemStack p_94041_2_) {
 		if(p_94041_1_ == 0)
 			return false;
-		
+
 		switch(index) {
 		case 0:
 			return p_94041_1_ <= 9;

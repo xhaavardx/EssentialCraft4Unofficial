@@ -34,16 +34,19 @@ public class BlockReactorSupport extends Block implements IModelRegisterer {
 		setDefaultState(blockState.getBaseState().withProperty(SOUTH, false).withProperty(EAST, false).withProperty(NORTH, false).withProperty(WEST, false).withProperty(LAYER, EnumLayer.BOTTOM));
 	}
 
+	@Override
 	public boolean isOpaqueCube(IBlockState s)
 	{
 		return false;
 	}
 
+	@Override
 	public boolean isFullCube(IBlockState s)
 	{
 		return false;
 	}
 
+	@Override
 	public EnumBlockRenderType getRenderType(IBlockState s)
 	{
 		return EnumBlockRenderType.MODEL;
@@ -72,6 +75,7 @@ public class BlockReactorSupport extends Block implements IModelRegisterer {
 				withProperty(SOUTH, s).withProperty(EAST, e).withProperty(NORTH, n).withProperty(WEST, w);
 	}
 
+	@Override
 	public IBlockState withRotation(IBlockState state, Rotation rot)
 	{
 		switch(rot)
@@ -87,6 +91,7 @@ public class BlockReactorSupport extends Block implements IModelRegisterer {
 		}
 	}
 
+	@Override
 	public IBlockState withMirror(IBlockState state, Mirror mirrorIn)
 	{
 		switch (mirrorIn)

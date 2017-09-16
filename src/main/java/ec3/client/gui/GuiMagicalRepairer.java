@@ -20,7 +20,7 @@ public class GuiMagicalRepairer extends GuiCommon{
 		this.elementList.add(new GuiMRUState(25, 58, (ITEHasMRU) tile, 0));
 		this.elementList.add(new GuiRepairState(25, 40, tile, 0));
 	}
-	
-	
+
+
 
 }

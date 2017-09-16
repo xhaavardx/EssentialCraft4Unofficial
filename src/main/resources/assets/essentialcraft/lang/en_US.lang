@@ -1284,9 +1284,9 @@ modifier.mrureinforced.desc=§oRadiated and Reinforced!§r\nEach level adds a %s
 modifier.mrureinforced.extra=MRU Use: %s
 
 ec3book.discovery_ec3.disc.crystalLamp.name=Crystal Lamp
-ec3book.discovery_ec3.disc.crystalLamp.desc=Placeholder Text
+ec3book.discovery_ec3.disc.crystalLamp.desc=Lights of the elements
 ec3book.discovery_ec3.disc.mimic.name=Mimic Block
-ec3book.discovery_ec3.disc.mimic.desc=Placeholder Text
+ec3book.discovery_ec3.disc.mimic.desc=Totally my idea
 
 ec3.page.crystalLamp_0.txt=Those crystals are very transparent and can let light through. On its own this discovery is not worth much, but you were able to surround a regular torch with the crystals, fortify the construction with some cobble, and you've got yourself an amazing lamp that, while purely decorative, is a pretty nice light source!
-ec3.page.mimic_0.txt=Placeholder Text
+ec3.page.mimic_0.txt=This block, when right-clicked with a block, mimics the appearance of it. It has no collision in its normal form, but in its fancy form it does. 

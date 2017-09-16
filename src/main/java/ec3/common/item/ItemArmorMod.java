@@ -63,6 +63,7 @@ public class ItemArmorMod extends ItemArmor implements /*IRepairable, IVisDiscou
 		return this;
 	}
 
+	@Override
 	public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean par4)
 	{
 		super.addInformation(stack, player, list, par4);
@@ -72,9 +73,10 @@ public class ItemArmorMod extends ItemArmor implements /*IRepairable, IVisDiscou
 		if(this.aType == 1)
 		{
 			list.add(this.getMRU(stack) + "/" + this.getMaxMRU(stack) + " MRU");
-		}	
+		}
 	}
 
+	@Override
 	public Multimap<String,AttributeModifier> getAttributeModifiers(EntityEquipmentSlot s, ItemStack stack)
 	{
 		Multimap<String,AttributeModifier> mods = HashMultimap.<String,AttributeModifier>create();
@@ -95,10 +97,10 @@ public class ItemArmorMod extends ItemArmor implements /*IRepairable, IVisDiscou
 	}
 
 	@Override
-	public String getArmorTexture(ItemStack itemstack, Entity entity, EntityEquipmentSlot slot, String type) { 
-		switch(slot) { 
+	public String getArmorTexture(ItemStack itemstack, Entity entity, EntityEquipmentSlot slot, String type) {
+		switch(slot) {
 		case LEGS: return "essentialcraft:textures/special/armor/"+armorTexture+"_1.png"; //2 should be the slot for legs
-		default: return "essentialcraft:textures/special/armor/"+armorTexture+"_0.png"; 
+		default: return "essentialcraft:textures/special/armor/"+armorTexture+"_0.png";
 		}
 	}
 
@@ -124,8 +126,8 @@ public class ItemArmorMod extends ItemArmor implements /*IRepairable, IVisDiscou
 	@SideOnly(Side.CLIENT)
 	public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot, ModelBiped _default)  {
 		ModelBiped armorModel = null;
-		if(itemStack != null) { 
-			if(itemStack.getItem() instanceof ItemArmorMod) { 
+		if(itemStack != null) {
+			if(itemStack.getItem() instanceof ItemArmorMod) {
 				GlStateManager.enableBlend();
 				OpenGlHelper.glBlendFunc(770, 771, 1, 0);
 				EntityEquipmentSlot type = ((ItemArmor)itemStack.getItem()).armorType;
@@ -135,8 +137,8 @@ public class ItemArmorMod extends ItemArmor implements /*IRepairable, IVisDiscou
 				else if(type == EntityEquipmentSlot.CHEST) {
 					armorModel = EssentialCraftCore.proxy.getClientModel(2);
 				}
-				else { 
-					armorModel = EssentialCraftCore.proxy.getClientModel(1); 
+				else {
+					armorModel = EssentialCraftCore.proxy.getClientModel(1);
 				}
 			}
 			if(armorModel != null) {
@@ -145,14 +147,14 @@ public class ItemArmorMod extends ItemArmor implements /*IRepairable, IVisDiscou
 				armorModel.bipedBody.showModel = armorSlot == EntityEquipmentSlot.CHEST || armorSlot == EntityEquipmentSlot.LEGS;
 				armorModel.bipedRightArm.showModel = armorSlot == EntityEquipmentSlot.CHEST;
 				armorModel.bipedLeftArm.showModel = armorSlot == EntityEquipmentSlot.CHEST;
-				armorModel.bipedRightLeg.showModel = armorSlot == EntityEquipmentSlot.LEGS || armorSlot == EntityEquipmentSlot.FEET; 
+				armorModel.bipedRightLeg.showModel = armorSlot == EntityEquipmentSlot.LEGS || armorSlot == EntityEquipmentSlot.FEET;
 				armorModel.bipedLeftLeg.showModel = armorSlot == EntityEquipmentSlot.LEGS || armorSlot == EntityEquipmentSlot.FEET;
-				armorModel.isSneak = entityLiving.isSneaking(); 
-				armorModel.isRiding = entityLiving.isRiding(); 
+				armorModel.isSneak = entityLiving.isSneaking();
+				armorModel.isRiding = entityLiving.isRiding();
 				armorModel.isChild = entityLiving.isChild();
-				armorModel.rightArmPose = entityLiving.getHeldItem(EnumHand.MAIN_HAND) != null ? ModelBiped.ArmPose.ITEM : ModelBiped.ArmPose.EMPTY; 
-				armorModel.leftArmPose = entityLiving.getHeldItem(EnumHand.OFF_HAND) != null ? ModelBiped.ArmPose.ITEM : ModelBiped.ArmPose.EMPTY; 
-				if(entityLiving instanceof EntityPlayer) { 
+				armorModel.rightArmPose = entityLiving.getHeldItem(EnumHand.MAIN_HAND) != null ? ModelBiped.ArmPose.ITEM : ModelBiped.ArmPose.EMPTY;
+				armorModel.leftArmPose = entityLiving.getHeldItem(EnumHand.OFF_HAND) != null ? ModelBiped.ArmPose.ITEM : ModelBiped.ArmPose.EMPTY;
+				if(entityLiving instanceof EntityPlayer) {
 					armorModel.rightArmPose =((EntityPlayer)entityLiving).getItemInUseCount() > 2 ? ModelBiped.ArmPose.BOW_AND_ARROW : ModelBiped.ArmPose.EMPTY;
 				}
 			}

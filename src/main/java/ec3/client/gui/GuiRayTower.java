@@ -18,7 +18,7 @@ public class GuiRayTower extends GuiCommon{
 		this.elementList.add(new GuiBalanceState(46, 31, tile));
 		this.elementList.add(new GuiMRUState(25, 58, (ITEHasMRU) tile, 0));
 	}
-	
-	
+
+
 
 }

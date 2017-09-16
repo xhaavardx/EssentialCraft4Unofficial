@@ -19,6 +19,7 @@ public class ItemBlockGeneric extends ItemBlock {
 		this.setMaxDamage(0);
 	}
 
+	@Override
 	public int getMetadata(int par1)
 	{
 		return par1;

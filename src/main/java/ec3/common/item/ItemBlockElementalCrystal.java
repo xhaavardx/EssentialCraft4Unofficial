@@ -62,6 +62,7 @@ public class ItemBlockElementalCrystal extends ItemBlock implements IItemColor {
 		return (((int)(red*255D))<<16)+(((int)(blue*255D))<<8)+((int)(green*255D));
 	}
 
+	@Override
 	public EnumActionResult onItemUse(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, World par3World, BlockPos pos, EnumHand hand, EnumFacing facing, float par8, float par9, float par10) {
 		float size = 0;
 		float fire = 0;
@@ -136,7 +137,7 @@ public class ItemBlockElementalCrystal extends ItemBlock implements IItemColor {
 			if (placeBlockAt(par1ItemStack, par2EntityPlayer, par3World, pos, facing, par8, par9, par10, k1))
 			{
 				par3World.setBlockState(pos, k1, 3);
-				par3World.playSound(par2EntityPlayer, (double)((float)pos.getX() + 0.5F), (double)((float)pos.getY() + 0.5F), (double)((float)pos.getZ() + 0.5F), block.getSoundType().getPlaceSound(), SoundCategory.BLOCKS, (block.getSoundType().getVolume() + 1.0F) / 2.0F, block.getSoundType().getPitch() * 0.8F);
+				par3World.playSound(par2EntityPlayer, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, block.getSoundType().getPlaceSound(), SoundCategory.BLOCKS, (block.getSoundType().getVolume() + 1.0F) / 2.0F, block.getSoundType().getPitch() * 0.8F);
 				--par1ItemStack.stackSize;
 				TileElementalCrystal c = (TileElementalCrystal) par3World.getTileEntity(pos);
 				if(c != null)
@@ -161,10 +162,12 @@ public class ItemBlockElementalCrystal extends ItemBlock implements IItemColor {
 	/**
 	 * Returns the metadata of the block which this Item (ItemBlock) can place
 	 */
+	@Override
 	public int getMetadata(int par1) {
 		return par1;
 	}
 
+	@Override
 	public void getSubItems(Item p_150895_1_, CreativeTabs p_150895_2_, List<ItemStack> p_150895_3_) {
 		for(int i = 0; i < 5; ++i) {
 			for(int i1 = 0; i1 < 4; ++i1) {

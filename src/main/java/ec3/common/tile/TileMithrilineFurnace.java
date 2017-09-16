@@ -7,14 +7,18 @@ import DummyCore.Utils.MathUtils;
 import DummyCore.Utils.MiscUtils;
 import DummyCore.Utils.Notifier;
 import DummyCore.Utils.TileStatTracker;
+import ec3.api.MithrilineFurnaceRecipe;
+import ec3.api.MithrilineFurnaceRecipes;
+import ec3.common.block.BlockMithrilineCrystal;
+import ec3.common.block.BlocksCore;
+import ec3.common.mod.EssentialCraftCore;
+import ec3.utils.common.ECUtils;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.Packet;
-import net.minecraft.network.play.INetHandlerPlayClient;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -26,15 +30,9 @@ import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.SidedInvWrapper;
-import ec3.api.MithrilineFurnaceRecipe;
-import ec3.api.MithrilineFurnaceRecipes;
-import ec3.common.block.BlockMithrilineCrystal;
-import ec3.common.block.BlocksCore;
-import ec3.common.mod.EssentialCraftCore;
-import ec3.utils.common.ECUtils;
 
 public class TileMithrilineFurnace extends TileEntity implements ISidedInventory, ITickable {
-	
+
 	public static float maxEnergy = 10000F;
 	public float energy;
 	public float progress;
@@ -48,24 +46,24 @@ public class TileMithrilineFurnace extends TileEntity implements ISidedInventory
 		super();
 		tracker = new TileStatTracker(this);
 	}
-	
+
 	@Override
-    public void readFromNBT(NBTTagCompound i) {
+	public void readFromNBT(NBTTagCompound i) {
 		super.readFromNBT(i);
 		MiscUtils.loadInventory(this, i);
 		energy = i.getFloat("energy");
 		progress = i.getFloat("progress");
-    }
-	
+	}
+
 	@Override
-    public NBTTagCompound writeToNBT(NBTTagCompound i) {
-    	super.writeToNBT(i);
-    	MiscUtils.saveInventory(this, i);
-    	i.setFloat("energy", energy);
-    	i.setFloat("progress", progress);
-    	return i;
-    }
-	
+	public NBTTagCompound writeToNBT(NBTTagCompound i) {
+		super.writeToNBT(i);
+		MiscUtils.saveInventory(this, i);
+		i.setFloat("energy", energy);
+		i.setFloat("progress", progress);
+		return i;
+	}
+
 	@Override
 	public void update() {
 		boolean correct = isStructureCorrect();
@@ -79,19 +77,19 @@ public class TileMithrilineFurnace extends TileEntity implements ISidedInventory
 		}
 		else
 			--syncTick;
-		
+
 		if(requestSync && getWorld().isRemote) {
 			requestSync = false;
 			ECUtils.requestScheduledTileSync(this, EssentialCraftCore.proxy.getClientPlayer());
 		}
-		
+
 		if(correct) {
 			Coord3D[] possiblePowerSources = new Coord3D[] {
 					new Coord3D(0, 1, 0),
 					new Coord3D(1, 0, 1), new Coord3D(-1, 0, 1), new Coord3D(1, 0, -1), new Coord3D(-1, 0, -1),
 					new Coord3D(2, 1, 0), new Coord3D(-2, 1, 0), new Coord3D(0, 1, 2), new Coord3D(0, 1, -2),
 					new Coord3D(2, 2, 2), new Coord3D(-2, 2, 2), new Coord3D(2, 2, -2), new Coord3D(-2, 2, -2)
-					
+
 			};
 			if(energy < maxEnergy)
 				for(int i = 0; i < possiblePowerSources.length; ++i) {
@@ -108,7 +106,7 @@ public class TileMithrilineFurnace extends TileEntity implements ISidedInventory
 							float movement = getWorld().getWorldTime() % 60;
 							if(movement > 30)
 								movement = 60F - movement;
-							
+
 							if(energy + c_energy <= maxEnergy) {
 								energy += c_energy;
 								crystal.energy = 0;
@@ -125,7 +123,7 @@ public class TileMithrilineFurnace extends TileEntity implements ISidedInventory
 						}
 					}
 				}
-			
+
 			if(getStackInSlot(0) != null) {
 				MithrilineFurnaceRecipe rec = MithrilineFurnaceRecipes.findRecipeByComponent(getStackInSlot(0));
 				if(rec != null && getStackInSlot(0).stackSize >= rec.requiredRecipeSize) {
@@ -145,7 +143,7 @@ public class TileMithrilineFurnace extends TileEntity implements ISidedInventory
 								setInventorySlotContents(1, rec.result.copy());
 							else
 								getStackInSlot(1).stackSize += rec.result.stackSize;
-							
+
 							progress = 0;
 						}
 					}
@@ -159,14 +157,14 @@ public class TileMithrilineFurnace extends TileEntity implements ISidedInventory
 				progress = 0;
 				reqProgress = 0;
 			}
-			
+
 			for(int i = 0; i < 10; ++i)
 				EssentialCraftCore.proxy.FlameFX(pos.getX()+0.5F + MathUtils.randomFloat(getWorld().rand)*0.4F, pos.getY()+0.2F + MathUtils.randomFloat(getWorld().rand)*0.6F, pos.getZ()+0.5F + MathUtils.randomFloat(getWorld().rand)*0.4F, 0, 0.01F, 0, 0D, 1D, 0F, 1F);
 		}
 	}
-	
+
 	public boolean isStructureCorrect() {
-		boolean hasPlatformBelow = 
+		boolean hasPlatformBelow =
 				getWorld().getBlockState(pos.add(-1, -1, 0)).getBlock() == BlocksCore.invertedBlock &&
 				getWorld().getBlockState(pos.add(1, -1, 0)).getBlock() == BlocksCore.invertedBlock &&
 				getWorld().getBlockState(pos.add(0, -1, -1)).getBlock() == BlocksCore.invertedBlock &&
@@ -179,8 +177,8 @@ public class TileMithrilineFurnace extends TileEntity implements ISidedInventory
 				getWorld().getBlockState(pos.add(2, -1, 0)).getBlock() == BlocksCore.invertedBlock &&
 				getWorld().getBlockState(pos.add(0, -1, -2)).getBlock() == BlocksCore.invertedBlock &&
 				getWorld().getBlockState(pos.add(0, -1, 2)).getBlock() == BlocksCore.invertedBlock;
-		
-		boolean hasGenericOutline = 
+
+		boolean hasGenericOutline =
 				getWorld().getBlockState(pos.add(-2, 0, 0)).getBlock() == BlocksCore.invertedBlock &&
 				getWorld().getBlockState(pos.add(2, 0, 0)).getBlock() == BlocksCore.invertedBlock &&
 				getWorld().getBlockState(pos.add(0, 0, -2)).getBlock() == BlocksCore.invertedBlock &&
@@ -193,23 +191,23 @@ public class TileMithrilineFurnace extends TileEntity implements ISidedInventory
 				getWorld().getBlockState(pos.add(2, 1, -2)).getBlock() == BlocksCore.invertedBlock &&
 				getWorld().getBlockState(pos.add(-2, 1, -2)).getBlock() == BlocksCore.invertedBlock &&
 				getWorld().getBlockState(pos.add(2, 1, 2)).getBlock() == BlocksCore.invertedBlock;
-		
+
 		return hasPlatformBelow && hasGenericOutline;
 	}
-	
+
 	@Override
-    public SPacketUpdateTileEntity getUpdatePacket() {
+	public SPacketUpdateTileEntity getUpdatePacket() {
 		NBTTagCompound nbttagcompound = new NBTTagCompound();
 		writeToNBT(nbttagcompound);
 		return new SPacketUpdateTileEntity(pos, -10, nbttagcompound);
 	}
-	
+
 	@Override
 	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
 		if(pkt.getTileEntityType() == -10)
 			readFromNBT(pkt.getNbtCompound());
 	}
-	
+
 	public static void setupConfig(Configuration cfg) {
 		try {
 			cfg.load();
@@ -217,37 +215,37 @@ public class TileMithrilineFurnace extends TileEntity implements ISidedInventory
 					"Maximum enderstar pulse stored:10000"
 			}, "");
 			String dataString = "";
-			
+
 			for(int i = 0; i < cfgArrayString.length; ++i)
 				dataString += "||" + cfgArrayString[i];
-			
+
 			DummyData[] data = DataStorage.parseData(dataString);
-			
+
 			maxEnergy = Float.parseFloat(data[0].fieldValue);
-			
+
 			cfg.save();
 		}
 		catch(Exception e) {
 			return;
 		}
 	}
-	
-	
+
+
 	@Override
 	public int getSizeInventory() {
 		return items.length;
 	}
-	
+
 	@Override
 	public ItemStack getStackInSlot(int par1) {
 		return items[par1];
 	}
-	
+
 	@Override
 	public ItemStack decrStackSize(int par1, int par2) {
 		if(items[par1] != null) {
 			ItemStack itemstack;
-			
+
 			if(items[par1].stackSize <= par2) {
 				itemstack = items[par1];
 				items[par1] = null;
@@ -255,17 +253,17 @@ public class TileMithrilineFurnace extends TileEntity implements ISidedInventory
 			}
 			else {
 				itemstack = items[par1].splitStack(par2);
-				
+
 				if(items[par1].stackSize == 0)
 					items[par1] = null;
-				
+
 				return itemstack;
 			}
 		}
 		else
 			return null;
 	}
-	
+
 	@Override
 	public ItemStack removeStackFromSlot(int par1) {
 		if(items[par1] != null) {
@@ -276,66 +274,66 @@ public class TileMithrilineFurnace extends TileEntity implements ISidedInventory
 		else
 			return null;
 	}
-	
+
 	@Override
 	public void setInventorySlotContents(int par1, ItemStack par2ItemStack) {
 		items[par1] = par2ItemStack;
-		
+
 		if(par2ItemStack != null && par2ItemStack.stackSize > getInventoryStackLimit()) {
 			par2ItemStack.stackSize = getInventoryStackLimit();
 		}
 	}
-	
+
 	@Override
 	public String getName() {
 		return "ec3.container.mithrilineFurnace";
 	}
-	
+
 	@Override
 	public boolean hasCustomName() {
 		return false;
 	}
-	
+
 	@Override
 	public int getInventoryStackLimit() {
 		return 64;
 	}
-	
+
 	@Override
 	public boolean isUsableByPlayer(EntityPlayer player) {
 		return getWorld().getTileEntity(pos) == this && player.dimension == getWorld().provider.getDimension();
 	}
-	
+
 	@Override
 	public void openInventory(EntityPlayer p) {}
-	
+
 	@Override
 	public void closeInventory(EntityPlayer p) {}
-	
+
 	@Override
 	public boolean isItemValidForSlot(int p_94041_1_, ItemStack p_94041_2_) {
 		return p_94041_1_ == 0;
 	}
-	
+
 	@Override
 	public int[] getSlotsForFace(EnumFacing p_94128_1_) {
 		return new int[] {0, 1};
 	}
-	
+
 	@Override
 	public boolean canInsertItem(int p_102007_1_, ItemStack p_102007_2_, EnumFacing p_102007_3_) {
 		return isItemValidForSlot(p_102007_1_, p_102007_2_);
 	}
-	
+
 	@Override
 	public boolean canExtractItem(int p_102008_1_, ItemStack p_102008_2_, EnumFacing p_102008_3_) {
 		return p_102008_1_ == 1;
 	}
-	
+
 	@Override
 	public void clear() {
-	    for(int i = 0; i < getSizeInventory(); i++)
-	        setInventorySlotContents(i, null);
+		for(int i = 0; i < getSizeInventory(); i++)
+			setInventorySlotContents(i, null);
 	}
 
 	@Override

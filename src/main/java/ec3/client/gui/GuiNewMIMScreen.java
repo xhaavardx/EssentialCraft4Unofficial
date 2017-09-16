@@ -2,7 +2,6 @@ package ec3.client.gui;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.List;
 
 import org.lwjgl.input.Keyboard;
@@ -65,6 +64,7 @@ public class GuiNewMIMScreen extends GuiContainer{
 		packetArrived = true;
 	}
 
+	@Override
 	public void updateScreen()
 	{
 		if(lastPressedTime > 0)
@@ -74,6 +74,7 @@ public class GuiNewMIMScreen extends GuiContainer{
 		super.updateScreen();
 	}
 
+	@Override
 	public void onGuiClosed()
 	{
 		super.onGuiClosed();
@@ -85,6 +86,7 @@ public class GuiNewMIMScreen extends GuiContainer{
 		return keyID == 1 || keyID == 3 || keyID == 22 || keyID == 24 || (keyID == 14) || (keyID == 199) || (keyID == 203) || (keyID == 205) || (keyID == 207) || (keyID == 211) || c == '0' || c == '1' || c == '2' || c == '3' || c == '4' || c == '5' || c == '6' || c == '7' || c == '8' || c == '9';
 	}
 
+	@Override
 	protected void keyTyped(char c, int keyID)
 	{
 		try {
@@ -104,6 +106,7 @@ public class GuiNewMIMScreen extends GuiContainer{
 		catch(Exception e) {}
 	}
 
+	@Override
 	protected void mouseClicked(int p_73864_1_, int p_73864_2_, int p_73864_3_)
 	{
 		try {
@@ -114,6 +117,7 @@ public class GuiNewMIMScreen extends GuiContainer{
 		catch(Exception e) {}
 	}
 
+	@Override
 	public void drawScreen(int p_73863_1_, int p_73863_2_, float p_73863_3_)
 	{
 		super.drawScreen(p_73863_1_, p_73863_2_, p_73863_3_);
@@ -173,6 +177,7 @@ public class GuiNewMIMScreen extends GuiContainer{
 
 	}
 
+	@Override
 	@SuppressWarnings("unchecked")
 	public void initGui()
 	{
@@ -212,7 +217,7 @@ public class GuiNewMIMScreen extends GuiContainer{
 	}
 
 	@Override
-	protected void actionPerformed(GuiButton b) 
+	protected void actionPerformed(GuiButton b)
 	{
 		try {
 			super.actionPerformed(b);
@@ -273,7 +278,7 @@ public class GuiNewMIMScreen extends GuiContainer{
 						EssentialCraftCore.network.sendToServer(sent);
 						packetArrived = false;
 					}
-				}	
+				}
 			}
 		}
 		catch(Exception e) {}
@@ -319,9 +324,9 @@ public class GuiNewMIMScreen extends GuiContainer{
 				{
 					int yIndex = mY - (l+25);
 					int percentage = MathHelper.floor((double)yIndex/126*100);
-					double dIndex = (double)percentage/100D*maxScrollIndex;
+					double dIndex = percentage/100D*maxScrollIndex;
 					int iIndex = (int)dIndex;
-					double lIndex = dIndex-(double)iIndex;
+					double lIndex = dIndex-iIndex;
 					int index = lIndex >= 0.5D ? iIndex+1 : iIndex;
 					scrollIndex = Math.min(index, maxScrollIndex);
 				}
@@ -618,7 +623,7 @@ public class GuiNewMIMScreen extends GuiContainer{
 	public void setupMaxInt()
 	{
 		if(selectedStack == null)
-		{		
+		{
 			if(!isCorrectInteger())
 				this.stackSize.setText("0");
 

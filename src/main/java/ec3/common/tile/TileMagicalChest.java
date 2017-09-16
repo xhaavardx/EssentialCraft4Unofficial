@@ -47,7 +47,7 @@ public class TileMagicalChest extends TileEntity implements IInventory, ISidedIn
 		super();
 		tracker = new TileStatTracker(this);
 	}
-	
+
 	public void setSlotsNum(int meta) {
 		inventory = new ItemStack[meta == 0 ? 54 : 117];
 	}

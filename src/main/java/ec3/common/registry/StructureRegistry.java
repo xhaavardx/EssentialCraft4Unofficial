@@ -7,19 +7,16 @@ import java.util.List;
 
 import ec3.api.EnumStructureType;
 import ec3.common.block.BlocksCore;
-import ec3.common.item.BaublesModifier;
-import ec3.common.item.ItemsCore;
 import ec3.common.world.structure.MapGenTown;
 import ec3.common.world.structure.StructureModernShaftPieces;
 import ec3.common.world.structure.StructureModernShaftStart;
 import ec3.common.world.structure.StructureTownPieces;
 import ec3.utils.common.ECUtils;
 import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
 
 public class StructureRegistry {
-	
+
 	public static void register() {
 		MapGenStructureIO.registerStructure(MapGenTown.Start.class, "ec3.Town");
 		MapGenStructureIO.registerStructure(StructureModernShaftStart.class, "ec3.ModernShafts");
@@ -48,7 +45,7 @@ public class StructureRegistry {
 		//structureBlocks_mrucucc.add(BlocksCore.fancyBlocks.get(6));
 		//structureBlocks_mrucucc.add(BlocksCore.fancyBlocks.get(7));
 		allowedBlocks.put(EnumStructureType.MRUCUEnrichmentChamber, structureBlocks_mrucucc);
-		
+
 		List<Block> structureBlocks_mrucoil = new ArrayList<Block>();
 		structureBlocks_mrucoil.add(BlocksCore.platingPale);
 		structureBlocks_mrucoil.add(BlocksCore.magicPlating);
@@ -59,9 +56,9 @@ public class StructureRegistry {
 		//structureBlocks_mrucoil.add(BlocksCore.fancyBlocks.get(5));
 		//structureBlocks_mrucoil.add(BlocksCore.fancyBlocks.get(6));
 		//structureBlocks_mrucoil.add(BlocksCore.fancyBlocks.get(7));
-		
+
 		allowedBlocks.put(EnumStructureType.MRUCoil, structureBlocks_mrucoil);
-		
+
 		ECUtils.registerBlockResistance(BlocksCore.fortifiedGlass, 0, 3F);
 		//ECUtils.registerBlockResistance(BlocksCore.fancyBlocks.get(0), -1, 8F);
 		//ECUtils.registerBlockResistance(BlocksCore.fancyBlocks.get(2), -1, 3F);
@@ -69,7 +66,7 @@ public class StructureRegistry {
 		//ECUtils.registerBlockResistance(BlocksCore.fancyBlocks.get(5), -1, 10F);
 		//ECUtils.registerBlockResistance(BlocksCore.fancyBlocks.get(6), -1, 18F);
 		//ECUtils.registerBlockResistance(BlocksCore.fancyBlocks.get(7), -1, 36F);
-		
+
 		ECUtils.registerBlockResistance(BlocksCore.magicPlating, 0, 5F);
 		ECUtils.registerBlockResistance(BlocksCore.platingPale, 0, 10F);
 		ECUtils.registerBlockResistance(BlocksCore.invertedBlock, 0, 7F);

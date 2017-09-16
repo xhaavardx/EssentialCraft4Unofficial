@@ -2,9 +2,9 @@ package ec3.common.entity;
 
 import java.util.List;
 
+import DummyCore.Utils.MathUtils;
 import baubles.api.BaublesApi;
 import baubles.api.cap.IBaublesItemHandler;
-import DummyCore.Utils.MathUtils;
 import ec3.common.item.BaublesModifier;
 import ec3.common.item.ItemsCore;
 import ec3.common.mod.EssentialCraftCore;
@@ -15,16 +15,14 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 
 public class EntityPoisonFume extends EntityMob {
@@ -43,22 +41,26 @@ public class EntityPoisonFume extends EntityMob {
 		this.setSize(0.6F, 0.6F);
 	}
 
+	@Override
 	protected void applyEntityAttributes()
 	{
 		super.applyEntityAttributes();
 	}
 
+	@Override
 	public boolean attackEntityFrom(DamageSource p_70097_1_, float p_70097_2_)
 	{
 		return false;
 	}
 
+	@Override
 	protected void entityInit()
 	{
 		super.entityInit();
 		this.getDataManager().register(FLAG, false);
 	}
 
+	@Override
 	public int getBrightnessForRender(float p_70070_1_)
 	{
 		return 15728880;
@@ -67,6 +69,7 @@ public class EntityPoisonFume extends EntityMob {
 	/**
 	 * Gets how bright this entity is.
 	 */
+	@Override
 	public float getBrightness(float p_70013_1_)
 	{
 		return 1.0F;
@@ -76,6 +79,7 @@ public class EntityPoisonFume extends EntityMob {
 	 * Called frequently so the entity can update its state every tick as required. For example, zombies and skeletons
 	 * use this to react to sunlight and start to burn.
 	 */
+	@Override
 	@SuppressWarnings("unchecked")
 	public void onLivingUpdate()
 	{
@@ -128,6 +132,7 @@ public class EntityPoisonFume extends EntityMob {
 	/**
 	 * Basic mob attack. Default to touch of death in EntityCreature. Overridden by each mob to define their attack.
 	 */
+	@Override
 	public boolean attackEntityAsMob(Entity p_70785_1_) {
 		return false;
 	}
@@ -135,11 +140,13 @@ public class EntityPoisonFume extends EntityMob {
 	/**
 	 * Called when the mob is falling. Calculates and applies fall damage.
 	 */
+	@Override
 	public void fall(float p_70069_1_, float s) {}
 
 	/**
 	 * Returns true if the entity is on fire. Used by render to add the fire effect on rendering.
 	 */
+	@Override
 	public boolean isBurning()
 	{
 		return false;
@@ -158,11 +165,13 @@ public class EntityPoisonFume extends EntityMob {
 	/**
 	 * Checks to make sure the light is not too bright where the mob is spawning
 	 */
+	@Override
 	protected boolean isValidLightLevel()
 	{
 		return true;
 	}
 
+	@Override
 	public boolean getCanSpawnHere()
 	{
 		return this.dimension == Config.dimensionID && ECUtils.isEventActive("ec3.event.fumes");

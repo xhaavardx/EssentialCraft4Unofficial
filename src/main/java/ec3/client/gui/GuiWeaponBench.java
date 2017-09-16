@@ -1,9 +1,7 @@
 package ec3.client.gui;
 
-import org.lwjgl.opengl.GL11;
-
-import ec3.api.GunRegistry.GunType;
-import ec3.common.block.BlockWeaponMaker;
+import DummyCore.Client.GuiCommon;
+import DummyCore.Utils.MiscUtils;
 import ec3.common.tile.TileWeaponMaker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -14,8 +12,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.translation.I18n;
-import DummyCore.Client.GuiCommon;
-import DummyCore.Utils.MiscUtils;
 
 public class GuiWeaponBench extends GuiCommon {
 
@@ -24,6 +20,7 @@ public class GuiWeaponBench extends GuiCommon {
 		super(c, tile);
 	}
 
+	@Override
 	@SuppressWarnings("unchecked")
 	public void initGui()
 	{
@@ -34,7 +31,7 @@ public class GuiWeaponBench extends GuiCommon {
 	}
 
 	@Override
-	protected void actionPerformed(GuiButton par1GuiButton) 
+	protected void actionPerformed(GuiButton par1GuiButton)
 	{
 		MiscUtils.handleButtonPress(par1GuiButton.id, this.getClass(), GuiButton.class, Minecraft.getMinecraft().player, this.genericTile.getPos().getX(), this.genericTile.getPos().getY(), this.genericTile.getPos().getZ());
 	}
@@ -56,7 +53,7 @@ public class GuiWeaponBench extends GuiCommon {
 	}
 
 	@Override
-	protected void drawGuiContainerBackgroundLayer(float f1,int i1, int i2) 
+	protected void drawGuiContainerBackgroundLayer(float f1,int i1, int i2)
 	{
 		GlStateManager.color(1, 1, 1);
 		int k = (this.width - this.xSize) / 2;

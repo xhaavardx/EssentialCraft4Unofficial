@@ -22,16 +22,17 @@ import net.minecraftforge.client.model.ModelLoader;
 
 public class BlockNewMIMInventoryStorage extends BlockContainer implements IModelRegisterer {
 
-	public BlockNewMIMInventoryStorage() 
+	public BlockNewMIMInventoryStorage()
 	{
 		super(Material.ROCK);
 	}
 
+	@Override
 	public EnumBlockRenderType getRenderType(IBlockState s)
 	{
 		return EnumBlockRenderType.MODEL;
 	}
-	
+
 	@Override
 	public TileEntity createNewTileEntity(World w, int meta) {
 		return new TileNewMIMInventoryStorage();

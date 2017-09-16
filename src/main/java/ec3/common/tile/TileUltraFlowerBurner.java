@@ -6,6 +6,8 @@ import DummyCore.Utils.Coord3D;
 import DummyCore.Utils.DataStorage;
 import DummyCore.Utils.DummyData;
 import DummyCore.Utils.MathUtils;
+import ec3.api.ApiCore;
+import ec3.common.mod.EssentialCraftCore;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDoublePlant;
 import net.minecraft.block.BlockFlower;
@@ -19,25 +21,23 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.oredict.OreDictionary;
-import ec3.api.ApiCore;
-import ec3.common.mod.EssentialCraftCore;
 
 public class TileUltraFlowerBurner extends TileMRUGeneric {
-	
+
 	public Coord3D burnedFlower;
 	public int burnTime = 0, mruProduced = 0;
-	
+
 	public TileUltraFlowerBurner() {
 		super();
 		balance = -1;
 		maxMRU = (int)ApiCore.GENERATOR_MAX_MRU_GENERIC*10;
 		slot0IsBoundGem = false;
 	}
-	
+
 	public boolean canGenerateMRU() {
 		return false;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public void update() {
@@ -130,7 +130,7 @@ public class TileUltraFlowerBurner extends TileMRUGeneric {
 				else if(burnedFlower != null) {
 					--burnTime;
 					int mruGenerated = mruProduced;
-					setMRU((int)(getMRU() + mruGenerated));
+					setMRU(getMRU() + mruGenerated);
 					if(getMRU() > getMaxMRU())
 						setMRU(getMaxMRU());
 					if(burnTime <= 0) {
@@ -166,7 +166,7 @@ public class TileUltraFlowerBurner extends TileMRUGeneric {
 		for(int i = 0; i < 10; ++i)
 			EssentialCraftCore.proxy.SmokeFX(pos.getX()+0.5F + MathUtils.randomFloat(getWorld().rand)*0.1F, pos.getY()+0.6F, pos.getZ()+0.5F + MathUtils.randomFloat(getWorld().rand)*0.1F, 0, 0, 0,1);
 	}
-	
+
 	@Override
 	public void readFromNBT(NBTTagCompound i) {
 		if(i.hasKey("coord")) {
@@ -177,7 +177,7 @@ public class TileUltraFlowerBurner extends TileMRUGeneric {
 		mruProduced = i.getInteger("genMRU");
 		super.readFromNBT(i);
 	}
-	
+
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound i) {
 		if(burnedFlower != null)
@@ -186,7 +186,7 @@ public class TileUltraFlowerBurner extends TileMRUGeneric {
 		i.setInteger("genMRU", mruProduced);
 		return super.writeToNBT(i);
 	}
-	
+
 	@Override
 	public int[] getOutputSlots() {
 		return new int[0];

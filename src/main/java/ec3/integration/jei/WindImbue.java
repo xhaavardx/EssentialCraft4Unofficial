@@ -9,7 +9,6 @@ import com.google.common.collect.Lists;
 import ec3.api.WindImbueRecipe;
 import ec3.common.block.BlocksCore;
 import ec3.common.item.ItemSoulStone;
-import ec3.common.item.ItemsCore;
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.IDrawable;
 import mezz.jei.api.gui.IRecipeLayout;
@@ -25,9 +24,9 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.translation.I18n;
 
 public class WindImbue {
-	
+
 	public static final String UID = "essentialcraft:windImbue";
-	
+
 	public static List<WindImbue.Wrapper> getRecipes() {
 		ArrayList<WindImbue.Wrapper> ret = Lists.<WindImbue.Wrapper>newArrayList();
 		for(WindImbueRecipe rec : WindImbueRecipe.recipes) {
@@ -35,15 +34,15 @@ public class WindImbue {
 		}
 		return ret;
 	}
-	
+
 	public static class Wrapper extends BlankRecipeWrapper {
-		
+
 		private WindImbueRecipe rec;
-		
+
 		public Wrapper(WindImbueRecipe rec) {
 			this.rec = rec;
 		}
-		
+
 		@Override
 		public List<ItemStack> getInputs() {
 			return Lists.<ItemStack>newArrayList(rec.transforming, new ItemStack(BlocksCore.windRune));
@@ -64,7 +63,7 @@ public class WindImbue {
 		@Override
 		public void getIngredients(IIngredients paramIIngredients) {}
 	}
-	
+
 	public static class Handler implements IRecipeHandler<WindImbue.Wrapper> {
 
 		@Override
@@ -92,15 +91,15 @@ public class WindImbue {
 			return !arg0.getInputs().isEmpty() && !arg0.getOutputs().isEmpty();
 		}
 	}
-	
+
 	public static class Category extends BlankRecipeCategory<WindImbue.Wrapper> {
 
 		private final IDrawable BG;
-		
+
 		public Category(IGuiHelper gh) {
 			BG = gh.createDrawable(new ResourceLocation("essentialcraft:textures/gui/jei/wind_imbue.png"), 0, 0, 57, 60);
 		}
-		
+
 		@Override
 		public IDrawable getBackground() {
 			return BG;
@@ -121,7 +120,7 @@ public class WindImbue {
 			arg0.getItemStacks().init(0, true, 2, 0);
 			arg0.getItemStacks().init(1, true, 20, 18);
 			arg0.getItemStacks().init(2, false, 38, 0);
-			
+
 			arg0.getItemStacks().set(0, arg1.getInputs().get(0));
 			arg0.getItemStacks().set(1, arg1.getInputs().get(1));
 			arg0.getItemStacks().set(2, arg1.getOutputs().get(0));

@@ -8,16 +8,16 @@ import DummyCore.Utils.DataStorage;
 import DummyCore.Utils.DummyData;
 import DummyCore.Utils.Lightning;
 import DummyCore.Utils.MathUtils;
-import net.minecraft.block.Block;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.init.Blocks;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.SoundCategory;
-import net.minecraftforge.common.config.Configuration;
 import ec3.api.ApiCore;
 import ec3.common.block.BlocksCore;
 import ec3.common.registry.SoundRegistry;
+import net.minecraft.block.Block;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.init.Blocks;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraftforge.common.config.Configuration;
 
 public class TileMRUReactor extends TileMRUGeneric {
 

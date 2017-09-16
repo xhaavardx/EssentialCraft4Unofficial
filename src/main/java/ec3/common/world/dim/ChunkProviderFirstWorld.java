@@ -5,13 +5,11 @@ import java.util.Random;
 import ec3.common.world.WorldGenOldCatacombs;
 import ec3.common.world.structure.MapGenModernShafts;
 import ec3.common.world.structure.MapGenTown;
-import net.minecraft.block.Block;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkPrimer;
-import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.ChunkProviderOverworld;
 
 public class ChunkProviderFirstWorld extends ChunkProviderOverworld {
@@ -42,6 +40,7 @@ public class ChunkProviderFirstWorld extends ChunkProviderOverworld {
 		this.world = p_i2006_1_;
 	}
 
+	@Override
 	public void populate(int p_73153_2_, int p_73153_3_)
 	{
 		instance = this;
@@ -69,6 +68,7 @@ public class ChunkProviderFirstWorld extends ChunkProviderOverworld {
 
 	}
 
+	@Override
 	public Chunk provideChunk(int p_73154_1_, int p_73154_2_)
 	{
 		instance = this;
@@ -77,6 +77,7 @@ public class ChunkProviderFirstWorld extends ChunkProviderOverworld {
 		return super.provideChunk(p_73154_1_, p_73154_2_);
 	}
 
+	@Override
 	public void recreateStructures(Chunk chunk, int p_82695_1_, int p_82695_2_)
 	{
 		this.town.generate(this.world, p_82695_1_, p_82695_2_, new ChunkPrimer());

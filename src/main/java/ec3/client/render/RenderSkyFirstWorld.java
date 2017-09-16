@@ -4,18 +4,16 @@ import java.util.Random;
 
 import org.lwjgl.opengl.GL11;
 
-import DummyCore.Utils.TessellatorWrapper;
 import ec3.utils.common.ECUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.client.IRenderHandler;
 
@@ -147,10 +145,10 @@ public class RenderSkyFirstWorld extends IRenderHandler {
 
 			for (int j = 0; j <= 16; ++j)
 			{
-				f11 = (float)j * (float)Math.PI * 2.0F / 16F;
+				f11 = j * (float)Math.PI * 2.0F / 16F;
 				float f12 = MathHelper.sin(f11);
 				float f13 = MathHelper.cos(f11);
-				vertexbuffer.pos((double)(f12 * 120.0F), (double)(f13 * 120.0F), (double)(-f13 * 40.0F * afloat[3])).color(afloat[0], afloat[1], afloat[2], 0.0F).endVertex();
+				vertexbuffer.pos(f12 * 120.0F, f13 * 120.0F, -f13 * 40.0F * afloat[3]).color(afloat[0], afloat[1], afloat[2], 0.0F).endVertex();
 			}
 
 			tessellator.draw();
@@ -160,7 +158,7 @@ public class RenderSkyFirstWorld extends IRenderHandler {
 
 		GlStateManager.enableTexture2D();
 		GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-        GlStateManager.pushMatrix();
+		GlStateManager.pushMatrix();
 		f6 = 1.0F - world.getRainStrength(partialTicks);
 		f7 = 0.0F;
 		f8 = 0.0F;
@@ -180,15 +178,15 @@ public class RenderSkyFirstWorld extends IRenderHandler {
 				f10 = sunRnd.nextFloat()*20;
 				mc.renderEngine.bindTexture(locationSunPng);
 				for(int x = 0; x < i+5; ++x) {
-		            vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
+					vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
 					float fR = sunRnd.nextFloat();
 					float fG = sunRnd.nextFloat();
 					float fB = sunRnd.nextFloat();
 					float fA = sunRnd.nextFloat();
-					vertexbuffer.pos((double)(-f10), 100.0D, (double)(-f10)).tex(0.0D, 0.0D).color(fR, fG, fB, fA).endVertex();
-					vertexbuffer.pos((double)f10, 100.0D, (double)(-f10)).tex(1.0D, 0.0D).color(fR, fG, fB, fA).endVertex();
-					vertexbuffer.pos((double)f10, 100.0D, (double)f10).tex(1.0D, 1.0D).color(fR, fG, fB, fA).endVertex();
-					vertexbuffer.pos((double)(-f10), 100.0D, (double)f10).tex(0.0D, 1.0D).color(fR, fG, fB, fA).endVertex();
+					vertexbuffer.pos((-f10), 100.0D, (-f10)).tex(0.0D, 0.0D).color(fR, fG, fB, fA).endVertex();
+					vertexbuffer.pos(f10, 100.0D, (-f10)).tex(1.0D, 0.0D).color(fR, fG, fB, fA).endVertex();
+					vertexbuffer.pos(f10, 100.0D, f10).tex(1.0D, 1.0D).color(fR, fG, fB, fA).endVertex();
+					vertexbuffer.pos((-f10), 100.0D, f10).tex(0.0D, 1.0D).color(fR, fG, fB, fA).endVertex();
 					tessellator.draw();
 				}
 				GlStateManager.popMatrix();
@@ -200,24 +198,24 @@ public class RenderSkyFirstWorld extends IRenderHandler {
 				GlStateManager.rotate(-90.0F+i*30F, 0.0F+i*i, i-1.0F/i/i, 1.0F*i*i);
 				GlStateManager.rotate(world.getCelestialAngle(partialTicks) * 360.0F * i, 1.0F, 0.0F, 0.0F);
 				f10 = moonRnd.nextFloat()*30F;
-				mc.renderEngine.bindTexture(locationMoonPhasesPng);	        
+				mc.renderEngine.bindTexture(locationMoonPhasesPng);
 				for(int x = 0; x < 2*i; ++x) {
 					int k = moonRnd.nextInt(8);
 					int l = k % 4;
 					int i1 = k / 4 % 2;
-					float f14 = (float)(l + 0) / 4.0F;
-					float f15 = (float)(i1 + 0) / 2.0F;
-					float f16 = (float)(l + 1) / 4.0F;
-					float f17 = (float)(i1 + 1) / 2.0F;
-		            vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
+					float f14 = (l + 0) / 4.0F;
+					float f15 = (i1 + 0) / 2.0F;
+					float f16 = (l + 1) / 4.0F;
+					float f17 = (i1 + 1) / 2.0F;
+					vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
 					float fR = moonRnd.nextFloat();
 					float fG = moonRnd.nextFloat();
 					float fB = moonRnd.nextFloat();
 					float fA = moonRnd.nextFloat();
-					vertexbuffer.pos((double)(-f10), -100.0D, (double)f10).tex((double)f16, (double)f17).color(fR, fG, fB, fA).endVertex();
-					vertexbuffer.pos((double)f10, -100.0D, (double)f10).tex((double)f14, (double)f17).color(fR, fG, fB, fA).endVertex();
-					vertexbuffer.pos((double)f10, -100.0D, (double)(-f10)).tex((double)f14, (double)f15).color(fR, fG, fB, fA).endVertex();
-					vertexbuffer.pos((double)(-f10), -100.0D, (double)(-f10)).tex((double)f16, (double)f15).color(fR, fG, fB, fA).endVertex();
+					vertexbuffer.pos((-f10), -100.0D, f10).tex(f16, f17).color(fR, fG, fB, fA).endVertex();
+					vertexbuffer.pos(f10, -100.0D, f10).tex(f14, f17).color(fR, fG, fB, fA).endVertex();
+					vertexbuffer.pos(f10, -100.0D, (-f10)).tex(f14, f15).color(fR, fG, fB, fA).endVertex();
+					vertexbuffer.pos((-f10), -100.0D, (-f10)).tex(f16, f15).color(fR, fG, fB, fA).endVertex();
 					tessellator.draw();
 				}
 				GlStateManager.popMatrix();
@@ -246,29 +244,29 @@ public class RenderSkyFirstWorld extends IRenderHandler {
 			GlStateManager.translate(0.0F, 12.0F, 0.0F);
 			//GL11.glCallList(this.glSkyList2);
 			GlStateManager.popMatrix();
-            float f19 = -((float)(d0 + 65.0D));
-            vertexbuffer.begin(7, DefaultVertexFormats.POSITION_COLOR);
-            vertexbuffer.pos(-1.0D, (double)f19, 1.0D).color(0, 0, 0, 255).endVertex();
-            vertexbuffer.pos(1.0D, (double)f19, 1.0D).color(0, 0, 0, 255).endVertex();
-            vertexbuffer.pos(1.0D, -1.0D, 1.0D).color(0, 0, 0, 255).endVertex();
-            vertexbuffer.pos(-1.0D, -1.0D, 1.0D).color(0, 0, 0, 255).endVertex();
-            vertexbuffer.pos(-1.0D, -1.0D, -1.0D).color(0, 0, 0, 255).endVertex();
-            vertexbuffer.pos(1.0D, -1.0D, -1.0D).color(0, 0, 0, 255).endVertex();
-            vertexbuffer.pos(1.0D, (double)f19, -1.0D).color(0, 0, 0, 255).endVertex();
-            vertexbuffer.pos(-1.0D, (double)f19, -1.0D).color(0, 0, 0, 255).endVertex();
-            vertexbuffer.pos(1.0D, -1.0D, -1.0D).color(0, 0, 0, 255).endVertex();
-            vertexbuffer.pos(1.0D, -1.0D, 1.0D).color(0, 0, 0, 255).endVertex();
-            vertexbuffer.pos(1.0D, (double)f19, 1.0D).color(0, 0, 0, 255).endVertex();
-            vertexbuffer.pos(1.0D, (double)f19, -1.0D).color(0, 0, 0, 255).endVertex();
-            vertexbuffer.pos(-1.0D, (double)f19, -1.0D).color(0, 0, 0, 255).endVertex();
-            vertexbuffer.pos(-1.0D, (double)f19, 1.0D).color(0, 0, 0, 255).endVertex();
-            vertexbuffer.pos(-1.0D, -1.0D, 1.0D).color(0, 0, 0, 255).endVertex();
-            vertexbuffer.pos(-1.0D, -1.0D, -1.0D).color(0, 0, 0, 255).endVertex();
-            vertexbuffer.pos(-1.0D, -1.0D, -1.0D).color(0, 0, 0, 255).endVertex();
-            vertexbuffer.pos(-1.0D, -1.0D, 1.0D).color(0, 0, 0, 255).endVertex();
-            vertexbuffer.pos(1.0D, -1.0D, 1.0D).color(0, 0, 0, 255).endVertex();
-            vertexbuffer.pos(1.0D, -1.0D, -1.0D).color(0, 0, 0, 255).endVertex();
-            tessellator.draw();
+			float f19 = -((float)(d0 + 65.0D));
+			vertexbuffer.begin(7, DefaultVertexFormats.POSITION_COLOR);
+			vertexbuffer.pos(-1.0D, f19, 1.0D).color(0, 0, 0, 255).endVertex();
+			vertexbuffer.pos(1.0D, f19, 1.0D).color(0, 0, 0, 255).endVertex();
+			vertexbuffer.pos(1.0D, -1.0D, 1.0D).color(0, 0, 0, 255).endVertex();
+			vertexbuffer.pos(-1.0D, -1.0D, 1.0D).color(0, 0, 0, 255).endVertex();
+			vertexbuffer.pos(-1.0D, -1.0D, -1.0D).color(0, 0, 0, 255).endVertex();
+			vertexbuffer.pos(1.0D, -1.0D, -1.0D).color(0, 0, 0, 255).endVertex();
+			vertexbuffer.pos(1.0D, f19, -1.0D).color(0, 0, 0, 255).endVertex();
+			vertexbuffer.pos(-1.0D, f19, -1.0D).color(0, 0, 0, 255).endVertex();
+			vertexbuffer.pos(1.0D, -1.0D, -1.0D).color(0, 0, 0, 255).endVertex();
+			vertexbuffer.pos(1.0D, -1.0D, 1.0D).color(0, 0, 0, 255).endVertex();
+			vertexbuffer.pos(1.0D, f19, 1.0D).color(0, 0, 0, 255).endVertex();
+			vertexbuffer.pos(1.0D, f19, -1.0D).color(0, 0, 0, 255).endVertex();
+			vertexbuffer.pos(-1.0D, f19, -1.0D).color(0, 0, 0, 255).endVertex();
+			vertexbuffer.pos(-1.0D, f19, 1.0D).color(0, 0, 0, 255).endVertex();
+			vertexbuffer.pos(-1.0D, -1.0D, 1.0D).color(0, 0, 0, 255).endVertex();
+			vertexbuffer.pos(-1.0D, -1.0D, -1.0D).color(0, 0, 0, 255).endVertex();
+			vertexbuffer.pos(-1.0D, -1.0D, -1.0D).color(0, 0, 0, 255).endVertex();
+			vertexbuffer.pos(-1.0D, -1.0D, 1.0D).color(0, 0, 0, 255).endVertex();
+			vertexbuffer.pos(1.0D, -1.0D, 1.0D).color(0, 0, 0, 255).endVertex();
+			vertexbuffer.pos(1.0D, -1.0D, -1.0D).color(0, 0, 0, 255).endVertex();
+			tessellator.draw();
 		}
 
 		if(world.provider.isSkyColored()) {

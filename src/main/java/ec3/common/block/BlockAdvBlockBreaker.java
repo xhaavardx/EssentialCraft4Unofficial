@@ -34,17 +34,20 @@ public class BlockAdvBlockBreaker extends BlockContainer implements IModelRegist
 		super(Material.ROCK);
 		setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.DOWN));
 	}
-	
+
+	@Override
 	public EnumBlockRenderType getRenderType(IBlockState s)
 	{
 		return EnumBlockRenderType.MODEL;
 	}
-	
+
+	@Override
 	public boolean canProvidePower(IBlockState s)
 	{
 		return true;
 	}
 
+	@Override
 	public void onNeighborChange(IBlockAccess w, BlockPos p, BlockPos n)  {
 		if(w instanceof World && ((World)w).isBlockIndirectlyGettingPowered(p) > 0) {
 			TileAdvancedBlockBreaker.class.cast(w.getTileEntity(p)).breakBlocks();

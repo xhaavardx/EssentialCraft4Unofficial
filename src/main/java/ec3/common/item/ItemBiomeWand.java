@@ -19,7 +19,7 @@ import net.minecraftforge.client.model.ModelLoader;
 public class ItemBiomeWand extends ItemStoresMRUInNBT implements IModelRegisterer, IItemColor {
 
 	public ItemBiomeWand() {
-		super();	
+		super();
 		this.setMaxMRU(5000);
 		this.maxStackSize = 1;
 		this.bFull3D = true;
@@ -53,6 +53,7 @@ public class ItemBiomeWand extends ItemStoresMRUInNBT implements IModelRegistere
 		stack.setTagCompound(tag);
 	}
 
+	@Override
 	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ)
 	{
 		if(!player.isSneaking())
@@ -84,6 +85,7 @@ public class ItemBiomeWand extends ItemStoresMRUInNBT implements IModelRegistere
 		return EnumActionResult.PASS;
 	}
 
+	@Override
 	public int getColorFromItemstack(ItemStack par1ItemStack, int par2)
 	{
 		if(isBiomeSaved(par1ItemStack))

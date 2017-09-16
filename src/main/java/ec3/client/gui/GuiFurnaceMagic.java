@@ -20,7 +20,7 @@ public class GuiFurnaceMagic extends GuiCommon{
 		this.elementList.add(new GuiBoundGemState(25, 40, tile, 0));
 		this.elementList.add(new GuiProgressBar_FurnaceMagic(126, 4, tile));
 	}
-	
-	
+
+
 
 }

@@ -32,7 +32,8 @@ public class ItemKnowledgeBook extends Item implements IModelRegisterer {
 		return new ActionResult(EnumActionResult.PASS, par1ItemStack);
 	}
 
-	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List<String> par3List, boolean par4) 
+	@Override
+	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List<String> par3List, boolean par4)
 	{
 		NBTTagCompound theTag = MiscUtils.getStackTag(par1ItemStack);
 		par3List.add("\u00a76" + I18n.translateToLocal("ec3.txt.book.containedKnowledge"));
@@ -43,6 +44,7 @@ public class ItemKnowledgeBook extends Item implements IModelRegisterer {
 		}
 	}
 
+	@Override
 	public void getSubItems(Item p_150895_1_, CreativeTabs p_150895_2_, List<ItemStack> p_150895_3_)
 	{
 		for(int i = 0; i < 5; ++i)

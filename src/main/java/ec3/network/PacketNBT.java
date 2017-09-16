@@ -1,22 +1,22 @@
 package ec3.network;
 
-import net.minecraft.nbt.NBTTagCompound;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 
 public class PacketNBT implements IMessage {
-	
+
 	public NBTTagCompound theTag;
 	public int packetID;
-	
+
 	public PacketNBT() {}
-	
+
 	public PacketNBT(NBTTagCompound t)
 	{
 		theTag = t;
 	}
-	
+
 	public PacketNBT setID(int i)
 	{
 		packetID = i;

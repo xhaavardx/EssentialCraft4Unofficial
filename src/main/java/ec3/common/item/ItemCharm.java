@@ -33,6 +33,7 @@ public class ItemCharm extends ItemStoresMRUInNBT implements IBauble, IModelRegi
 		setHasSubtypes(true);
 	}
 
+	@Override
 	public void onWornTick(ItemStack s, EntityLivingBase entity) {
 		if(entity instanceof EntityPlayer) {
 			EntityPlayer e = (EntityPlayer) entity;
@@ -72,6 +73,7 @@ public class ItemCharm extends ItemStoresMRUInNBT implements IBauble, IModelRegi
 		}
 	}
 
+	@Override
 	public void getSubItems(Item par1, CreativeTabs par2CreativeTabs, List<ItemStack> par3List) {
 		for(int var4 = 0; var4 < 10; ++var4) {
 			ItemStack min = new ItemStack(par1, 1, var4);
@@ -168,18 +170,23 @@ public class ItemCharm extends ItemStoresMRUInNBT implements IBauble, IModelRegi
 		return "Charm Of "+name[Math.min(par1ItemStack.getItemDamage(), name.length-1)];
 	}
 
+	@Override
 	public BaubleType getBaubleType(ItemStack itemstack) {
 		return BaubleType.AMULET;
 	}
 
+	@Override
 	public void onEquipped(ItemStack itemstack, EntityLivingBase player) {}
 
+	@Override
 	public void onUnequipped(ItemStack itemstack, EntityLivingBase player) {}
 
+	@Override
 	public boolean canEquip(ItemStack itemstack, EntityLivingBase player) {
 		return true;
 	}
 
+	@Override
 	public boolean canUnequip(ItemStack itemstack, EntityLivingBase player) {
 		return true;
 	}

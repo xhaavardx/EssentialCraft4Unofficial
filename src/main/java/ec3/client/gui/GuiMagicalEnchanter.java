@@ -20,7 +20,7 @@ public class GuiMagicalEnchanter extends GuiCommon{
 		this.elementList.add(new GuiMRUState(25, 58, (ITEHasMRU) tile, 0));
 		this.elementList.add(new GuiEnchantmentState(25, 40, tile, 0));
 	}
-	
-	
+
+
 
 }

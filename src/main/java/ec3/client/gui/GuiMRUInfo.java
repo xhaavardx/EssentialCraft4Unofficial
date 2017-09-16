@@ -18,7 +18,7 @@ public class GuiMRUInfo extends GuiCommon{
 		this.elementList.add(new GuiBalanceState(25, 40, tile));
 		this.elementList.add(new GuiResistanceState(25, 22, tile));
 	}
-	
-	
+
+
 
 }

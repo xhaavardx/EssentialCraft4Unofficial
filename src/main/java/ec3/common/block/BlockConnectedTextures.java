@@ -42,6 +42,7 @@ public class BlockConnectedTextures extends Block implements IBlockColor, IModel
 	public static final PropertyBool NORTH = PropertyBool.create("north");
 	public static final PropertyBool WEST = PropertyBool.create("west");
 
+	@Override
 	public int colorMultiplier(IBlockState state, IBlockAccess world, BlockPos pos, int tint)
 	{
 		int metadata = state.getValue(COLOR).getDyeDamage();
@@ -62,11 +63,13 @@ public class BlockConnectedTextures extends Block implements IBlockColor, IModel
 		setDefaultState(this.blockState.getBaseState().withProperty(COLOR, EnumDyeColor.WHITE).withProperty(DOWN, false).withProperty(UP, false).withProperty(SOUTH, false).withProperty(NORTH, false).withProperty(EAST, false).withProperty(WEST, false));
 	}
 
+	@Override
 	public boolean isOpaqueCube(IBlockState s)
 	{
 		return this.blockMaterial != Material.GLASS;
 	}
 
+	@Override
 	public boolean isFullCube(IBlockState s)
 	{
 		return this.blockMaterial != Material.GLASS;
@@ -94,6 +97,7 @@ public class BlockConnectedTextures extends Block implements IBlockColor, IModel
 		return this;
 	}
 
+	@Override
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, ItemStack is, EnumFacing side, float hitX, float hitY, float hitZ)
 	{
 		if(is != null && OreDictionary.getOreIDs(is).length > 0 && !(is.getItem() instanceof ItemBlock))
@@ -149,6 +153,7 @@ public class BlockConnectedTextures extends Block implements IBlockColor, IModel
 		return false;
 	}
 
+	@Override
 	public boolean recolorBlock(World world, BlockPos pos, EnumFacing side, EnumDyeColor color)
 	{
 		int meta = this.getMetaFromState(world.getBlockState(pos));
@@ -194,6 +199,7 @@ public class BlockConnectedTextures extends Block implements IBlockColor, IModel
 		return new BlockStateContainer(this, COLOR, DOWN, UP, SOUTH, EAST, NORTH, WEST);
 	}
 
+	@Override
 	public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
 		return state.
 				withProperty(DOWN, worldIn.getBlockState(pos.down()).getBlock() == this).
@@ -204,6 +210,7 @@ public class BlockConnectedTextures extends Block implements IBlockColor, IModel
 				withProperty(WEST,  worldIn.getBlockState(pos.west()).getBlock() == this);
 	}
 
+	@Override
 	public IBlockState withRotation(IBlockState state, Rotation rot)
 	{
 		switch(rot)
@@ -219,6 +226,7 @@ public class BlockConnectedTextures extends Block implements IBlockColor, IModel
 		}
 	}
 
+	@Override
 	public IBlockState withMirror(IBlockState state, Mirror mirrorIn)
 	{
 		switch (mirrorIn)

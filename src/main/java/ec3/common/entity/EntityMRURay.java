@@ -3,13 +3,12 @@ package ec3.common.entity;
 import java.util.ArrayList;
 import java.util.List;
 
-import ec3.common.item.ItemsCore;
-import ec3.utils.common.ECUtils;
-import ec3.utils.common.ShadeUtils;
 import DummyCore.Utils.DataStorage;
 import DummyCore.Utils.DummyData;
 import DummyCore.Utils.MathUtils;
-import net.minecraft.block.Block;
+import ec3.common.item.ItemsCore;
+import ec3.utils.common.ECUtils;
+import ec3.utils.common.ShadeUtils;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -19,56 +18,56 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 public class EntityMRURay extends Entity {
-	
+
 	public static final DataParameter<String> DATA = EntityDataManager.<String>createKey(EntityMRURay.class, DataSerializers.STRING);
 	public float balance;
 	public float damage;
 	public EntityLivingBase shootingEntity;
 	public double pX,pY,pZ;
 	List<EntityLivingBase> hitEntities = new ArrayList<EntityLivingBase>();
-	
+
 	public EntityMRURay(World w)
 	{
 		super(w);
 	}
-	
-    public void onEntityUpdate()
-    {
-    	if(this.ticksExisted >= 60)
-    	{
-    		this.setDead();
-    	}
-    	
-    	if(!this.getEntityWorld().isRemote)
-    	{
-    		this.getDataManager().set(DATA, "||x:"+pX+"||y:"+pY+"||z:"+pZ+"||b:"+(double)balance);
-    	}
-    	
-    	if(this.getEntityWorld().isRemote)
-    	{
-    		String dataStr = this.getDataManager().get(DATA);
-    		if(dataStr != null && !dataStr.isEmpty())
-    		{
-    			DummyData[] posData = DataStorage.parseData(dataStr);
-    			pX = Double.parseDouble(posData[0].fieldValue);
-    			pY = Double.parseDouble(posData[1].fieldValue);
-    			pZ = Double.parseDouble(posData[2].fieldValue);
-    			balance = (float) Double.parseDouble(posData[3].fieldValue);
-    		}
-    	}
-    	
-    }
-	
+
+	@Override
+	public void onEntityUpdate()
+	{
+		if(this.ticksExisted >= 60)
+		{
+			this.setDead();
+		}
+
+		if(!this.getEntityWorld().isRemote)
+		{
+			this.getDataManager().set(DATA, "||x:"+pX+"||y:"+pY+"||z:"+pZ+"||b:"+(double)balance);
+		}
+
+		if(this.getEntityWorld().isRemote)
+		{
+			String dataStr = this.getDataManager().get(DATA);
+			if(dataStr != null && !dataStr.isEmpty())
+			{
+				DummyData[] posData = DataStorage.parseData(dataStr);
+				pX = Double.parseDouble(posData[0].fieldValue);
+				pY = Double.parseDouble(posData[1].fieldValue);
+				pZ = Double.parseDouble(posData[2].fieldValue);
+				balance = (float) Double.parseDouble(posData[3].fieldValue);
+			}
+		}
+
+	}
+
 	public EntityMRURay(World w, EntityLivingBase base)
 	{
 		super(w);
@@ -82,10 +81,10 @@ public class EntityMRURay extends Entity {
 		this.posY = base.posY+this.shootingEntity.getEyeHeight();
 		this.posZ = base.posZ;
 	}
-	
+
 	public EntityMRURay(World w, EntityLivingBase base, float damage, float offset, float balance)
 	{
-		
+
 		super(w);
 		this.posX = base.posX;
 		this.posY = base.posY+base.getEyeHeight();
@@ -108,7 +107,7 @@ public class EntityMRURay extends Entity {
 			this.shoot(rY,rP);
 		}
 	}
-	
+
 	public DamageSource causeMRUDamage(final EntityLivingBase attacker, EntityLivingBase attacked)
 	{
 		if(attacked instanceof EntityPlayer)
@@ -133,24 +132,25 @@ public class EntityMRURay extends Entity {
 		}
 		return new DamageSource("mru")
 		{
-			
-		    public Entity getEntity()
-		    {
-		        return attacker;
-		    }
+
+			@Override
+			public Entity getEntity()
+			{
+				return attacker;
+			}
 		}
 		.setProjectile();
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public void shoot(float f, float f1)
 	{
 		Vec3d vec = this.shootingEntity.getLookVec();
 		for(int i = 0; i < 128; ++i)
 		{
-			float vX = (float) ((vec.xCoord*(float)i/2F)+this.posX);
-			float vY = (float) ((vec.yCoord*(float)i/2F)+this.posY);
-			float vZ = (float) ((vec.zCoord*(float)i/2F)+this.posZ);
+			float vX = (float) ((vec.xCoord*i/2F)+this.posX);
+			float vY = (float) ((vec.yCoord*i/2F)+this.posY);
+			float vZ = (float) ((vec.zCoord*i/2F)+this.posZ);
 			int bVX = MathHelper.floor(vX);
 			int bVY = MathHelper.floor(vY);
 			int bVZ = MathHelper.floor(vZ);
@@ -184,7 +184,7 @@ public class EntityMRURay extends Entity {
 	}
 
 	@Override
-	protected void readEntityFromNBT(NBTTagCompound tag) 
+	protected void readEntityFromNBT(NBTTagCompound tag)
 	{
 		pX = tag.getDouble("pX");
 		pY = tag.getDouble("pY");
@@ -193,14 +193,14 @@ public class EntityMRURay extends Entity {
 	}
 
 	@Override
-	protected void writeEntityToNBT(NBTTagCompound tag) 
+	protected void writeEntityToNBT(NBTTagCompound tag)
 	{
 		tag.setDouble("pX", pX);
 		tag.setDouble("pY", pY);
 		tag.setDouble("pZ", pZ);
 		tag.setFloat("balance", balance);
 	}
-	
+
 	@Override
 	public ItemStack getPickedResult(RayTraceResult target) {
 		return new ItemStack(ItemsCore.entityEgg,1,EntitiesCore.registeredEntities.indexOf(this.getClass()));

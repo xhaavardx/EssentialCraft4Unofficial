@@ -14,7 +14,7 @@ public class GuiRightClicker extends GuiCommon{
 		this.elementList.add(new GuiMRUStorage(7, 4, (ITEHasMRU) tile));
 		this.elementList.add(new GuiMRUState(25, 58, (ITEHasMRU) tile, 0));
 	}
-	
-	
+
+
 
 }

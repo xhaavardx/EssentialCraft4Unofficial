@@ -10,11 +10,11 @@ import net.minecraft.util.ResourceLocation;
 
 public class GuiMRUStorage extends GuiElement{
 	private ResourceLocation rec = new ResourceLocation("essentialcraft","textures/gui/mruStorage.png");
-	
+
 	public int x;
 	public int y;
 	public ITEHasMRU tile;
-	
+
 	public GuiMRUStorage(int i, int j, ITEHasMRU t)
 	{
 		x = i;

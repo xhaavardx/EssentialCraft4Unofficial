@@ -59,7 +59,7 @@ public class ModMRUReinforced extends ModifierTrait {
 		String loc = String.format("modifier.%s.extra", new Object[] { getIdentifier() });
 		if(I18n.canTranslate(loc)) {
 			float chance = getReinforcedChance(modifierTag);
-			String chanceStr = Util.dfPercent.format((double)chance);
+			String chanceStr = Util.dfPercent.format(chance);
 
 			return ImmutableList.of(Util.translateFormatted(loc, new Object[] { chanceStr }));
 		}
@@ -70,9 +70,9 @@ public class ModMRUReinforced extends ModifierTrait {
 
 	private float getReinforcedChance(NBTTagCompound modifierTag) {
 		IntegerNBT data = ModifierNBT.readInteger(modifierTag);
-		return (float)data.level * 0.2F;
+		return data.level * 0.2F;
 	}
-	
+
 	public static void register() {
 		TinkerRegistry.registerModifier(ModMRUReinforced.INSTANCE);
 	}

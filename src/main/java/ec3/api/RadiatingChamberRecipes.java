@@ -6,9 +6,9 @@ import java.util.Hashtable;
 import java.util.List;
 
 import DummyCore.Utils.Notifier;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
-import net.minecraft.item.ItemStack;
 
 public class RadiatingChamberRecipes {
 
@@ -138,7 +138,7 @@ public class RadiatingChamberRecipes {
 			return false;
 		}
 	}
-	
+
 	public static boolean removeRecipe(RadiatingChamberRecipe rec) {
 		try {
 			ItemStack[] req = new ItemStack[rec.recipeItems.length];
@@ -166,7 +166,7 @@ public class RadiatingChamberRecipes {
 			return false;
 		}
 	}
-	
+
 	public static boolean removeRecipeCP(ItemStack[] craftingPair) {
 		try {
 			for(RadiatingChamberRecipe removedRecipe : getRecipeByCP(craftingPair)) {
@@ -180,7 +180,7 @@ public class RadiatingChamberRecipes {
 			return false;
 		}
 	}
-	
+
 	public static boolean removeRecipeCP(ItemStack[] craftingPair, float balance) {
 		try {
 			RadiatingChamberRecipe removedRecipe = getRecipeByCPAndBalance(craftingPair, balance);
@@ -192,7 +192,7 @@ public class RadiatingChamberRecipes {
 			return false;
 		}
 	}
-	
+
 	public static boolean removeRecipeIS(ItemStack result) {
 		try {
 			RadiatingChamberRecipe removedRecipe = getRecipeByResult(result);

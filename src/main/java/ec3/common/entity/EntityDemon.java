@@ -2,10 +2,9 @@ package ec3.common.entity;
 
 import java.util.List;
 
-import javax.annotation.Nullable;
-
 import com.google.common.base.Optional;
 
+import DummyCore.Utils.MathUtils;
 import ec3.api.DemonTrade;
 import ec3.common.block.BlockDemonicPentacle;
 import ec3.common.item.ItemsCore;
@@ -13,7 +12,6 @@ import ec3.common.mod.EssentialCraftCore;
 import ec3.common.registry.SoundRegistry;
 import ec3.common.tile.TileDemonicPentacle;
 import ec3.utils.cfg.Config;
-import DummyCore.Utils.MathUtils;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.item.EntityItem;
@@ -27,30 +25,31 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
 
 public class EntityDemon extends EntityLiving implements IInventory {
-	
+
 	public ItemStack inventory;
 	public ItemStack desiredItem;
 	public static final DataParameter<Optional<ItemStack>> DESIRED = EntityDataManager.<Optional<ItemStack>>createKey(EntityDemon.class, DataSerializers.OPTIONAL_ITEM_STACK);
-	
-    protected boolean canDespawn()
-    {
-        return false;
-    }
-	
-	public EntityDemon(World w) 
+
+	@Override
+	protected boolean canDespawn()
+	{
+		return false;
+	}
+
+	public EntityDemon(World w)
 	{
 		super(w);
 		if(w.rand.nextBoolean()) {
@@ -60,60 +59,63 @@ public class EntityDemon extends EntityLiving implements IInventory {
 			desiredItem = DemonTrade.trades.get(DemonTrade.allMobs.size() + w.rand.nextInt(DemonTrade.trades.size() - DemonTrade.allMobs.size())).desiredItem;
 		}
 	}
-	
-    protected SoundEvent getAmbientSound()
-    {
-        return this.getEntityWorld().rand.nextBoolean() ? SoundRegistry.entityDemonSay : SoundRegistry.entityDemonSummon;
-    }
-    
-    protected SoundEvent getHurtSound()
-    {
-        return SoundRegistry.entityDemonDepart;
-    }
-	
-    public boolean attackEntityFrom(DamageSource p_70097_1_, float p_70097_2_)
-    {
-    	this.playSound(getHurtSound(), 1, 1);
-    	this.setDead();
-        for (int i = 0; i < 400; ++i)
-        {
-            double d2 = this.rand.nextGaussian() * 0.02D;
-            double d0 = this.rand.nextGaussian() * 0.02D;
-            double d1 = this.rand.nextGaussian() * 0.02D;
-            this.getEntityWorld().spawnParticle(EnumParticleTypes.EXPLOSION_NORMAL, this.posX + (double)(this.rand.nextFloat() * this.width * 2.0F) - (double)this.width, this.posY + (double)(this.rand.nextFloat() * this.height), this.posZ + (double)(this.rand.nextFloat() * this.width * 2.0F) - (double)this.width, d2, d0, d1);
-        }
-        return false;
-    }
-	
+
+	@Override
+	protected SoundEvent getAmbientSound()
+	{
+		return this.getEntityWorld().rand.nextBoolean() ? SoundRegistry.entityDemonSay : SoundRegistry.entityDemonSummon;
+	}
+
+	@Override
+	protected SoundEvent getHurtSound()
+	{
+		return SoundRegistry.entityDemonDepart;
+	}
+
+	@Override
+	public boolean attackEntityFrom(DamageSource p_70097_1_, float p_70097_2_)
+	{
+		this.playSound(getHurtSound(), 1, 1);
+		this.setDead();
+		for (int i = 0; i < 400; ++i)
+		{
+			double d2 = this.rand.nextGaussian() * 0.02D;
+			double d0 = this.rand.nextGaussian() * 0.02D;
+			double d1 = this.rand.nextGaussian() * 0.02D;
+			this.getEntityWorld().spawnParticle(EnumParticleTypes.EXPLOSION_NORMAL, this.posX + this.rand.nextFloat() * this.width * 2.0F - this.width, this.posY + this.rand.nextFloat() * this.height, this.posZ + this.rand.nextFloat() * this.width * 2.0F - this.width, d2, d0, d1);
+		}
+		return false;
+	}
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public void onUpdate()
 	{
 		if(!this.getEntityWorld().isRemote)
 			this.getDataManager().set(DESIRED, Optional.fromNullable(desiredItem));
-		
+
 		super.onUpdate();
-		
+
 		if(this.getStackInSlot(0) != null && this.desiredItem != null)
 		{
 			if((this.desiredItem.getItemDamage() != OreDictionary.WILDCARD_VALUE && this.getStackInSlot(0).isItemEqual(desiredItem) && this.getStackInSlot(0).stackSize >= this.desiredItem.stackSize) || (this.desiredItem.getItemDamage() == OreDictionary.WILDCARD_VALUE && this.getStackInSlot(0).getItem() == this.desiredItem.getItem() && this.getStackInSlot(0).stackSize >= this.desiredItem.stackSize))
 			{
 				this.setDead();
-		        for (int i = 0; i < 400; ++i)
-		        {
-		            double d2 = this.rand.nextGaussian() * 0.02D;
-		            double d0 = this.rand.nextGaussian() * 0.02D;
-		            double d1 = this.rand.nextGaussian() * 0.02D;
-		            this.getEntityWorld().spawnParticle(EnumParticleTypes.EXPLOSION_NORMAL, this.posX + (double)(this.rand.nextFloat() * this.width * 2.0F) - (double)this.width, this.posY + (double)(this.rand.nextFloat() * this.height), this.posZ + (double)(this.rand.nextFloat() * this.width * 2.0F) - (double)this.width, d2, d0, d1);
-		        }
-		        this.getEntityWorld().playSound(this.posX,this.posY,this.posZ,SoundRegistry.entityDemonDoom,SoundCategory.HOSTILE, this.getSoundVolume(), this.getSoundPitch(),false);
-		        ItemStack result = new ItemStack(ItemsCore.genericItem,3+this.getEntityWorld().rand.nextInt(6),52);
-		        EntityItem itm = new EntityItem(this.getEntityWorld(),this.posX,this.posY,this.posZ,result);
-		        if(!this.getEntityWorld().isRemote)
-		        	this.getEntityWorld().spawnEntity(itm);
+				for (int i = 0; i < 400; ++i)
+				{
+					double d2 = this.rand.nextGaussian() * 0.02D;
+					double d0 = this.rand.nextGaussian() * 0.02D;
+					double d1 = this.rand.nextGaussian() * 0.02D;
+					this.getEntityWorld().spawnParticle(EnumParticleTypes.EXPLOSION_NORMAL, this.posX + this.rand.nextFloat() * this.width * 2.0F - this.width, this.posY + this.rand.nextFloat() * this.height, this.posZ + this.rand.nextFloat() * this.width * 2.0F - this.width, d2, d0, d1);
+				}
+				this.getEntityWorld().playSound(this.posX,this.posY,this.posZ,SoundRegistry.entityDemonDoom,SoundCategory.HOSTILE, this.getSoundVolume(), this.getSoundPitch(),false);
+				ItemStack result = new ItemStack(ItemsCore.genericItem,3+this.getEntityWorld().rand.nextInt(6),52);
+				EntityItem itm = new EntityItem(this.getEntityWorld(),this.posX,this.posY,this.posZ,result);
+				if(!this.getEntityWorld().isRemote)
+					this.getEntityWorld().spawnEntity(itm);
 			}
 		}
-		
+
 		if(this.getEntityWorld().isRaining() && this.getEntityWorld().canBlockSeeSky(new BlockPos(MathHelper.floor(posX), MathHelper.floor(posY+1), MathHelper.floor(posZ))))
 		{
 			for(int i = 0; i < 20; ++i)
@@ -154,17 +156,17 @@ public class EntityDemon extends EntityLiving implements IInventory {
 			this.desiredItem = this.getDataManager().get(DESIRED).orNull();
 		//EssentialCraftCore.proxy.SmokeFX(posX,posY+1.5D+MathUtils.randomDouble(getRNG()),posZ,MathUtils.randomDouble(getRNG())/18,-0.09D+MathUtils.randomDouble(getRNG())/18,MathUtils.randomDouble(getRNG())/18,3,1,0.6D-this.getEntityWorld().rand.nextDouble()/3D,0.2D);
 	}
-	
+
 
 	@Override
-	protected void entityInit() 
+	protected void entityInit()
 	{
 		super.entityInit();
 		this.dataManager.register(DESIRED, Optional.fromNullable(new ItemStack(Items.APPLE,1,0)));
 	}
 
 	@Override
-    public Iterable<ItemStack> getHeldEquipment()
+	public Iterable<ItemStack> getHeldEquipment()
 	{
 		return null;
 	}
@@ -199,25 +201,25 @@ public class EntityDemon extends EntityLiving implements IInventory {
 	}
 
 	@Override
-	public void setInventorySlotContents(int slot, ItemStack stk) 
+	public void setInventorySlotContents(int slot, ItemStack stk)
 	{
 		this.inventory = stk;
 	}
 
 	@Override
-	public String getName() 
+	public String getName()
 	{
 		return "demon";
 	}
 
 	@Override
-	public boolean hasCustomName() 
+	public boolean hasCustomName()
 	{
 		return false;
 	}
 
 	@Override
-	public int getInventoryStackLimit() 
+	public int getInventoryStackLimit()
 	{
 		return 64;
 	}
@@ -236,47 +238,49 @@ public class EntityDemon extends EntityLiving implements IInventory {
 
 	@Override
 	public void closeInventory(EntityPlayer p) {}
-	
-    public boolean processInteract(EntityPlayer p, EnumHand hand, ItemStack stack)
-    {
-    	this.playSound(SoundRegistry.entityDemonTrade, this.getSoundVolume(), this.getSoundPitch());
-    	p.openGui(EssentialCraftCore.core, Config.guiID[1], this.getEntityWorld(), MathHelper.floor(posX), MathHelper.floor(posY), MathHelper.floor(posZ));
-    	return true;
-    }
-	
-	@Override
-    public void writeEntityToNBT(NBTTagCompound tag)
-    {
-        super.writeEntityToNBT(tag);
-        if(this.desiredItem != null)
-        {
-        	NBTTagCompound itemTag = new NBTTagCompound();
-        	this.desiredItem.writeToNBT(itemTag);
-        	tag.setTag("desired", itemTag);
-        }
-        else
-        	tag.removeTag("desired");
-        if(this.inventory != null)
-        {
-        	NBTTagCompound itemTag = new NBTTagCompound();
-        	this.inventory.writeToNBT(itemTag);
-        	tag.setTag("inventory", itemTag);
-        }
-        else
-        	tag.removeTag("inventory");
-    }
-	
-    public void readEntityFromNBT(NBTTagCompound tag)
-    {
-        super.readEntityFromNBT(tag);
-        if(tag.hasKey("desired"))
-        	this.desiredItem = ItemStack.loadItemStackFromNBT(tag.getCompoundTag("desired"));
-        if(tag.hasKey("inventory"))
-        	this.inventory = ItemStack.loadItemStackFromNBT(tag.getCompoundTag("inventory"));
-    }
 
 	@Override
-	public boolean isItemValidForSlot(int slot, ItemStack stk) 
+	public boolean processInteract(EntityPlayer p, EnumHand hand, ItemStack stack)
+	{
+		this.playSound(SoundRegistry.entityDemonTrade, this.getSoundVolume(), this.getSoundPitch());
+		p.openGui(EssentialCraftCore.core, Config.guiID[1], this.getEntityWorld(), MathHelper.floor(posX), MathHelper.floor(posY), MathHelper.floor(posZ));
+		return true;
+	}
+
+	@Override
+	public void writeEntityToNBT(NBTTagCompound tag)
+	{
+		super.writeEntityToNBT(tag);
+		if(this.desiredItem != null)
+		{
+			NBTTagCompound itemTag = new NBTTagCompound();
+			this.desiredItem.writeToNBT(itemTag);
+			tag.setTag("desired", itemTag);
+		}
+		else
+			tag.removeTag("desired");
+		if(this.inventory != null)
+		{
+			NBTTagCompound itemTag = new NBTTagCompound();
+			this.inventory.writeToNBT(itemTag);
+			tag.setTag("inventory", itemTag);
+		}
+		else
+			tag.removeTag("inventory");
+	}
+
+	@Override
+	public void readEntityFromNBT(NBTTagCompound tag)
+	{
+		super.readEntityFromNBT(tag);
+		if(tag.hasKey("desired"))
+			this.desiredItem = ItemStack.loadItemStackFromNBT(tag.getCompoundTag("desired"));
+		if(tag.hasKey("inventory"))
+			this.inventory = ItemStack.loadItemStackFromNBT(tag.getCompoundTag("inventory"));
+	}
+
+	@Override
+	public boolean isItemValidForSlot(int slot, ItemStack stk)
 	{
 		return true;
 	}
@@ -305,7 +309,7 @@ public class EntityDemon extends EntityLiving implements IInventory {
 	public void clear() {
 		inventory = null;
 	}
-	
+
 	@Override
 	public ItemStack getPickedResult(RayTraceResult target) {
 		return new ItemStack(ItemsCore.entityEgg,1,EntitiesCore.registeredEntities.indexOf(this.getClass()));

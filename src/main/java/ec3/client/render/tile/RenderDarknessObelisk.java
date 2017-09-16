@@ -1,19 +1,16 @@
 package ec3.client.render.tile;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import DummyCore.Client.AdvancedModelLoader;
+import DummyCore.Client.IModelCustom;
+import ec3.common.tile.TileDarknessObelisk;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
-
-import org.lwjgl.opengl.GL11;
-
-import DummyCore.Client.AdvancedModelLoader;
-import DummyCore.Client.IModelCustom;
-import ec3.common.tile.TileDarknessObelisk;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class RenderDarknessObelisk extends TileEntitySpecialRenderer<TileDarknessObelisk> {

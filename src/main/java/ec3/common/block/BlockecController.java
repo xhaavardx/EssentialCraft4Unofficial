@@ -28,6 +28,7 @@ public class BlockecController extends BlockContainer implements IModelRegistere
 		return new TileecController();
 	}
 
+	@Override
 	public boolean onBlockActivated(World par1World, BlockPos par2, IBlockState par3, EntityPlayer par4EntityPlayer, EnumHand par5, ItemStack par6, EnumFacing par7, float par8, float par9, float par10) {
 		TileecController tile = (TileecController)par1World.getTileEntity(par2);
 		if(!par1World.isRemote)
@@ -35,6 +36,7 @@ public class BlockecController extends BlockContainer implements IModelRegistere
 		return true;
 	}
 
+	@Override
 	public EnumBlockRenderType getRenderType(IBlockState s) {
 		return EnumBlockRenderType.MODEL;
 	}

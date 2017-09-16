@@ -35,6 +35,7 @@ public class BlockEC3Chest extends BlockContainer implements IModelRegisterer {
 		super(Material.ROCK);
 	}
 
+	@Override
 	public boolean isOpaqueCube(IBlockState s)
 	{
 		return false;
@@ -45,6 +46,7 @@ public class BlockEC3Chest extends BlockContainer implements IModelRegisterer {
 		return new ItemStack(this,1,state.getValue(TYPE).getIndex());
 	}
 
+	@Override
 	public void getSubBlocks(Item p_149666_1_, CreativeTabs p_149666_2_, List<ItemStack> p_149666_3_)
 	{
 		p_149666_3_.add(new ItemStack(p_149666_1_, 1, 0));
@@ -92,6 +94,7 @@ public class BlockEC3Chest extends BlockContainer implements IModelRegisterer {
 		return false;
 	}
 
+	@Override
 	public int damageDropped(IBlockState s)
 	{
 		return s.getValue(TYPE).getIndex();
@@ -131,10 +134,12 @@ public class BlockEC3Chest extends BlockContainer implements IModelRegisterer {
 			name = s;
 		}
 
+		@Override
 		public String getName() {
 			return name;
 		}
 
+		@Override
 		public String toString() {
 			return name;
 		}

@@ -24,16 +24,18 @@ import net.minecraft.world.World;
 
 public class ItemWindAxe extends ItemAxe_Mod {
 
-	public ItemWindAxe(ToolMaterial m) 
+	public ItemWindAxe(ToolMaterial m)
 	{
 		super(m);
 	}
 
+	@Override
 	public EnumActionResult onItemUse(ItemStack p_77648_1_, EntityPlayer p_77648_2_, World p_77648_3_, BlockPos p_77648_4_, EnumHand p_77648_6_, EnumFacing p_77648_7_, float p_77648_8_, float p_77648_9_, float p_77648_10_)
 	{
 		return ItemsCore.wind_elemental_hoe.onItemUse(p_77648_1_, p_77648_2_, p_77648_3_, p_77648_4_, p_77648_6_, p_77648_7_, p_77648_8_, p_77648_9_, p_77648_10_);
 	}
 
+	@Override
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public boolean hitEntity(ItemStack weapon, EntityLivingBase attacked, EntityLivingBase attacker)
 	{
@@ -72,7 +74,7 @@ public class ItemWindAxe extends ItemAxe_Mod {
 
 						if(toolTag.hasKey("tag"))
 						{
-							genericTag = (NBTTagCompound) toolTag.getCompoundTag("tag").copy();
+							genericTag = toolTag.getCompoundTag("tag").copy();
 							toolTag.getCompoundTag("tag").removeTag("pickaxe");
 							toolTag.getCompoundTag("tag").removeTag("axe");
 							toolTag.getCompoundTag("tag").removeTag("shovel");
@@ -112,17 +114,17 @@ public class ItemWindAxe extends ItemAxe_Mod {
 
 						if(genericTag.hasKey(clazz))
 						{
-							NBTTagCompound loadFrom = (NBTTagCompound) genericTag.getCompoundTag(clazz).copy();
+							NBTTagCompound loadFrom = genericTag.getCompoundTag(clazz).copy();
 							genericTag.removeTag(clazz);
 							efficent = ItemStack.loadItemStackFromNBT(loadFrom);
 							loadFrom = null;
-						}else 
+						}else
 						{
 							if(clazz.equalsIgnoreCase("pickaxe"))
 								efficent = new ItemStack(ItemsCore.wind_elemental_pick,1,currentTool.getItemDamage());
 							if(clazz.equalsIgnoreCase("shovel"))
 								efficent = new ItemStack(ItemsCore.wind_elemental_shovel,1,currentTool.getItemDamage());
-							if(clazz.equalsIgnoreCase("hoe")) 
+							if(clazz.equalsIgnoreCase("hoe"))
 								efficent = new ItemStack(ItemsCore.wind_elemental_hoe,1,currentTool.getItemDamage());
 							if(clazz.equalsIgnoreCase("sword"))
 								efficent = new ItemStack(ItemsCore.wind_elemental_sword,1,currentTool.getItemDamage());

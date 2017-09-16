@@ -19,17 +19,18 @@ public class TileNewMIM extends TileMRUGeneric {
 	public ArrayList<TileNewMIMCraftingManager> managers = new ArrayList<TileNewMIMCraftingManager>();
 	int tickTime;
 	boolean exporting;
-	
+
 	public TileNewMIM() {
 		setSlotsNum(55);
 		setMaxMRU(5000);
 	}
-	
+
 	@Override
 	public int[] getOutputSlots() {
 		return new int[0];
 	}
-	
+
+	@Override
 	public void update() {
 		super.update();
 		ECUtils.manage(this, 0);
@@ -70,7 +71,7 @@ public class TileNewMIM extends TileMRUGeneric {
 			--tickTime;
 		}
 	}
-	
+
 	public void manageScreens() {
 		screens.clear();
 		for(int i = 7; i < 11; ++i) {
@@ -87,7 +88,7 @@ public class TileNewMIM extends TileMRUGeneric {
 			}
 		}
 	}
-	
+
 	public void manageCrafters() {
 		managers.clear();
 		for(int i = 11; i < 17; ++i) {
@@ -104,7 +105,7 @@ public class TileNewMIM extends TileMRUGeneric {
 			}
 		}
 	}
-	
+
 	/**
 	 * Tries to insert the given ItemStack to all available inventories.
 	 * @param is - the itemstack to insert. Can be null, false will then be returned
@@ -113,7 +114,7 @@ public class TileNewMIM extends TileMRUGeneric {
 	public boolean addItemStackToSystem(ItemStack is) {
 		if(is == null)
 			return false;
-		
+
 		for(int i = 1; i < 7; ++i) {
 			ItemStack gem = getStackInSlot(i);
 			if(gem != null && gem.getItem() instanceof ItemBoundGem && gem.getTagCompound() != null && gem.getTagCompound().hasKey("pos") && gem.getTagCompound().getInteger("dim") == getWorld().provider.getDimension()) {
@@ -131,27 +132,27 @@ public class TileNewMIM extends TileMRUGeneric {
 		}
 		return false;
 	}
-	
+
 	public ArrayList<CraftingPattern> getAllCrafts() {
 		return crafts;
 	}
-	
+
 	public ArrayList<CraftingPattern> getCraftsByName(String namePart) {
 		ArrayList<CraftingPattern> retLst = new ArrayList<CraftingPattern>();
-		
+
 		for(int i = 0; i < crafts.size(); ++i) {
 			ItemStack stk = crafts.get(i).result;
 			if(stk.getDisplayName().toLowerCase().contains(namePart.toLowerCase()))
 				retLst.add(crafts.get(i));
 		}
-		
+
 		return retLst;
 	}
-	
+
 	public int craftFromTheSystem(ItemStack is, int times) {
 		if(is == null || times < 1)
 			return 0;
-		
+
 		for(int i = 11; i < 17; ++i) {
 			ItemStack gem = getStackInSlot(i);
 			if(gem != null && gem.getItem() instanceof ItemBoundGem && gem.getTagCompound() != null && gem.getTagCompound().hasKey("pos") && gem.getTagCompound().getInteger("dim") == getWorld().provider.getDimension()) {
@@ -162,24 +163,24 @@ public class TileNewMIM extends TileMRUGeneric {
 						TileNewMIMCraftingManager cm = TileNewMIMCraftingManager.class.cast(t);
 						int crafted = cm.craft(is, times);
 						times -= crafted;
-						
+
 						if(times <= 0)
 							break;
 					}
 				}
 			}
 		}
-		
+
 		return times;
 	}
-	
+
 	public int retrieveItemStackFromSystem(ItemStack is, boolean oreDict,boolean doRetrieve) {
 		if(is == null)
 			return 0;
-		
+
 		int left = is.stackSize;
 		int oldSize = is.stackSize;
-		
+
 		for(int i = 1; i < 7; ++i) {
 			ItemStack gem = getStackInSlot(i);
 			if(gem != null && gem.getItem() instanceof ItemBoundGem && gem.getTagCompound() != null && gem.getTagCompound().hasKey("pos") && gem.getTagCompound().getInteger("dim") == getWorld().provider.getDimension()) {
@@ -202,36 +203,36 @@ public class TileNewMIM extends TileMRUGeneric {
 				}
 			}
 		}
-		
+
 		return left;
 	}
-	
+
 	public boolean isParent(TileNewMIMScreen screen) {
 		return screens.contains(screen);
 	}
-	
+
 	public boolean isParent(TileNewMIMCraftingManager manager) {
 		return managers.contains(manager);
 	}
-	
+
 	public ArrayList<ItemStack> getItemsByName(String namePart) {
 		ArrayList<ItemStack> retLst = new ArrayList<ItemStack>();
-		
+
 		for(int i = 0; i < current.size(); ++i) {
 			ItemStack stk = current.get(i);
 			if(stk.getDisplayName().toLowerCase().contains(namePart.toLowerCase()))
 				retLst.add(stk);
 		}
-		
+
 		return retLst;
 	}
-	
+
 	public ArrayList<ItemStack> getAllItems() {
 		ArrayList<ItemStack> retLst = new ArrayList<ItemStack>();
 		retLst.addAll(current);
 		return retLst;
 	}
-	
+
 	public void openAllStorages(EntityPlayer p) {
 		for(int i = 1; i < 7; ++i) {
 			ItemStack gem = getStackInSlot(i);
@@ -246,7 +247,7 @@ public class TileNewMIM extends TileMRUGeneric {
 			}
 		}
 	}
-	
+
 	public void closeAllStorages(EntityPlayer p) {
 		for(int i = 1; i < 7; ++i) {
 			ItemStack gem = getStackInSlot(i);
@@ -260,13 +261,13 @@ public class TileNewMIM extends TileMRUGeneric {
 			}
 		}
 	}
-	
+
 	public void rebuildAllItems() {
 		current.clear();
 		Hashtable<String,Integer> allItems = new Hashtable<String,Integer>();
 		Hashtable<String,ItemStack> foundByID = new Hashtable<String,ItemStack>();
 		ArrayList<String> ids = new ArrayList<String>();
-		
+
 		for(int i = 1; i < 7; ++i) {
 			ItemStack gem = getStackInSlot(i);
 			if(gem != null && gem.getItem() instanceof ItemBoundGem && gem.getTagCompound() != null && gem.getTagCompound().hasKey("pos") && gem.getTagCompound().getInteger("dim") == getWorld().provider.getDimension()) {
@@ -296,22 +297,22 @@ public class TileNewMIM extends TileMRUGeneric {
 				}
 			}
 		}
-		
+
 		for(int i = 0; i < ids.size(); ++i) {
 			ItemStack cID = foundByID.get(ids.get(i)).copy();
 			cID.stackSize = allItems.get(ids.get(i));
 			current.add(cID);
 		}
-		
+
 		allItems.clear();
 		foundByID.clear();
 		ids.clear();
-		
+
 		allItems = null;
 		foundByID = null;
 		ids = null;
 	}
-	
+
 	public void rebuildAllCrafts() {
 		crafts.clear();
 		for(int i = 11; i < 17; ++i) {

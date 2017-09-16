@@ -17,10 +17,12 @@ public class ItemDrop extends Item implements IModelRegisterer {
 		setHasSubtypes(true);
 	}
 
+	@Override
 	public String getUnlocalizedName(ItemStack p_77667_1_) {
 		return getUnlocalizedName()+dropNames[Math.min(p_77667_1_.getItemDamage(), dropNames.length-1)];
 	}
 
+	@Override
 	public void getSubItems(Item p_150895_1_, CreativeTabs p_150895_2_, List<ItemStack> p_150895_3_) {
 		for(int i = 0; i < 5; ++i) {
 			p_150895_3_.add(new ItemStack(p_150895_1_, 1, i));

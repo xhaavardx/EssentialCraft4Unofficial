@@ -29,6 +29,7 @@ public class ItemBaublesWearable extends Item implements IBauble, IModelRegister
 
 	public static String[] baubleType = new String[]{"amulet","belt","ring"};
 
+	@Override
 	public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World w, EntityPlayer p, EnumHand h)
 	{
 		NBTTagCompound bTag = MiscUtils.getStackTag(stack);
@@ -52,7 +53,8 @@ public class ItemBaublesWearable extends Item implements IBauble, IModelRegister
 		stk.setTagCompound(bTag);
 	}
 
-	public void addInformation(ItemStack stack, EntityPlayer p_77624_2_, List<String> p_77624_3_, boolean p_77624_4_) 
+	@Override
+	public void addInformation(ItemStack stack, EntityPlayer p_77624_2_, List<String> p_77624_3_, boolean p_77624_4_)
 	{
 		NBTTagCompound bTag = MiscUtils.getStackTag(stack);
 		if(bTag.hasKey("type"))
@@ -81,21 +83,23 @@ public class ItemBaublesWearable extends Item implements IBauble, IModelRegister
 				return BaubleType.BELT;
 			case 2:
 				return BaubleType.RING;
-			//case 3:
-			//	return BaubleType.TRINKET;
-			//case 4:
-			//	return BaubleType.HEAD;
-			//case 5:
-			//	return BaubleType.BODY;
-			//case 6:
-			//	return BaubleType.CHARM;
+				//case 3:
+				//	return BaubleType.TRINKET;
+				//case 4:
+				//	return BaubleType.HEAD;
+				//case 5:
+				//	return BaubleType.BODY;
+				//case 6:
+				//	return BaubleType.CHARM;
 			}
 		}
 		return BaubleType.TRINKET;
 	}
 
+	@Override
 	public void onEquipped(ItemStack itemstack, EntityLivingBase player) {}
 
+	@Override
 	public void onUnequipped(ItemStack itemstack, EntityLivingBase player) {}
 
 	@Override
@@ -142,14 +146,14 @@ public class ItemBaublesWearable extends Item implements IBauble, IModelRegister
 					return new ModelResourceLocation("essentialcraft:item/baublesBelt", "bottom=" + bottomInt + "," + "top=" + topInt);
 				case 2:
 					return new ModelResourceLocation("essentialcraft:item/baublesRing", "bottom=" + bottomInt + "," + "top=" + topInt);
-				//case 3:
-				//	return new ModelResourceLocation("essentialcraft:item/baublesTrinket", "bottom=" + bottomInt + "," + "top=" + topInt);
-				//case 4:
-				//	return new ModelResourceLocation("essentialcraft:item/baublesHead", "bottom=" + bottomInt + "," + "top=" + topInt);
-				//case 5:
-				//	return new ModelResourceLocation("essentialcraft:item/baublesBody", "bottom=" + bottomInt + "," + "top=" + topInt);
-				//case 6:
-				//	return new ModelResourceLocation("essentialcraft:item/baublesCharm", "bottom=" + bottomInt + "," + "top=" + topInt);
+					//case 3:
+					//	return new ModelResourceLocation("essentialcraft:item/baublesTrinket", "bottom=" + bottomInt + "," + "top=" + topInt);
+					//case 4:
+					//	return new ModelResourceLocation("essentialcraft:item/baublesHead", "bottom=" + bottomInt + "," + "top=" + topInt);
+					//case 5:
+					//	return new ModelResourceLocation("essentialcraft:item/baublesBody", "bottom=" + bottomInt + "," + "top=" + topInt);
+					//case 6:
+					//	return new ModelResourceLocation("essentialcraft:item/baublesCharm", "bottom=" + bottomInt + "," + "top=" + topInt);
 				}
 			}
 			return new ModelResourceLocation("essentialcraft:item/baublesAmulet", "bottom=0,top=0");

@@ -32,11 +32,13 @@ public class ItemSpawnEGGEC3 extends ItemMonsterPlacer implements IItemColor, IM
 		setHasSubtypes(true);
 	}
 
+	@Override
 	public int getColorFromItemstack(ItemStack p_82790_1_, int p_82790_2_)
 	{
 		return 0xffffff;
 	}
 
+	@Override
 	public EnumActionResult onItemUse(ItemStack p_77648_1_, EntityPlayer p_77648_2_, World p_77648_3_, BlockPos p_77648_4_, EnumHand hand, EnumFacing p_77648_7_, float p_77648_8_, float p_77648_9_, float p_77648_10_)
 	{
 		if(p_77648_3_.isRemote) {
@@ -51,7 +53,7 @@ public class ItemSpawnEGGEC3 extends ItemMonsterPlacer implements IItemColor, IM
 				d0 = block.getCollisionBoundingBox(p_77648_3_.getBlockState(p_77648_4_.down()), p_77648_3_, p_77648_4_.down()).maxY - 1;
 			}
 
-			Entity entity = spawnCreature(p_77648_3_, p_77648_1_.getItemDamage(), (double)p_77648_4_.getX() + 0.5D, (double)p_77648_4_.getY()+ d0, (double)p_77648_4_.getZ() + 0.5D);
+			Entity entity = spawnCreature(p_77648_3_, p_77648_1_.getItemDamage(), p_77648_4_.getX() + 0.5D, p_77648_4_.getY()+ d0, p_77648_4_.getZ() + 0.5D);
 
 			if(entity != null) {
 				if(entity instanceof EntityLivingBase && p_77648_1_.hasDisplayName()) {
@@ -67,6 +69,7 @@ public class ItemSpawnEGGEC3 extends ItemMonsterPlacer implements IItemColor, IM
 		}
 	}
 
+	@Override
 	public String getItemStackDisplayName(ItemStack p_77653_1_)
 	{
 		String s = ("" + I18n.translateToLocal(this.getUnlocalizedName() + ".name")).trim();
@@ -80,6 +83,7 @@ public class ItemSpawnEGGEC3 extends ItemMonsterPlacer implements IItemColor, IM
 		return s;
 	}
 
+	@Override
 	public void getSubItems(Item i, CreativeTabs t, List<ItemStack> l)
 	{
 		for(int j = 0; j < EntitiesCore.registeredEntities.size(); ++j)

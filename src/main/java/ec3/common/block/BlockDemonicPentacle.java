@@ -32,16 +32,19 @@ public class BlockDemonicPentacle extends BlockContainer implements IModelRegist
 		super(Material.ROCK);
 	}
 
+	@Override
 	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, World worldIn, BlockPos pos)
 	{
 		return BLOCK_AABB;
 	}
 
+	@Override
 	public AxisAlignedBB getSelectedBoundingBox(IBlockState state, World worldIn, BlockPos pos)
 	{
 		return BLOCK_AABB.offset(pos);
 	}
 
+	@Override
 	public boolean isOpaqueCube(IBlockState s)
 	{
 		return false;
@@ -53,11 +56,13 @@ public class BlockDemonicPentacle extends BlockContainer implements IModelRegist
 		return BlockRenderLayer.SOLID;
 	}
 
+	@Override
 	public boolean isFullCube(IBlockState s)
 	{
 		return false;
 	}
 
+	@Override
 	public EnumBlockRenderType getRenderType(IBlockState s)
 	{
 		return EnumBlockRenderType.MODEL;

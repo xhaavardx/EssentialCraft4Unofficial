@@ -2,15 +2,15 @@ package ec3.common.tile;
 
 import java.util.UUID;
 
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ITickable;
 import ec3.api.EnumStructureType;
 import ec3.api.IStructurePiece;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ITickable;
 
 public class TileecBalancer extends TileEntity implements IStructurePiece, ITickable {
 	public TileecController controller;
 	public UUID uuid = UUID.randomUUID();
-	
+
 	@Override
 	public EnumStructureType getStructure() {
 		return EnumStructureType.MRUCUEnrichmentChamber;
@@ -26,7 +26,7 @@ public class TileecBalancer extends TileEntity implements IStructurePiece, ITick
 		if(tile instanceof TileecController && structure == getStructure())
 			controller = (TileecController)tile;
 	}
-	
+
 	@Override
 	public void update() {
 		if(controller != null && controller.getMRUCU() != null)

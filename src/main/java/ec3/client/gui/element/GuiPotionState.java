@@ -13,7 +13,7 @@ import net.minecraft.util.ResourceLocation;
 
 public class GuiPotionState extends GuiTextElement{
 	public TilePotionSpreader tile;
-	
+
 	public GuiPotionState(int i, int j, TileEntity t)
 	{
 		super(i,j);
@@ -47,9 +47,9 @@ public class GuiPotionState extends GuiTextElement{
 			float f = 0F;
 			float f1 = 0F;
 			float f2 = 0F;
-	        f += (float)(j >> 16 & 255) / 255.0F;
-	        f1 += (float)(j >> 8 & 255) / 255.0F;
-	        f2 += (float)(j >> 0 & 255) / 255.0F;
+			f += (j >> 16 & 255) / 255.0F;
+			f1 += (j >> 8 & 255) / 255.0F;
+			f2 += (j >> 0 & 255) / 255.0F;
 			GlStateManager.color(f, f1, f2);
 			int scale = MathUtils.pixelatedTextureSize(8-tile.potionUseTime/2, 8, 16);
 			int scaledPos = scale - 4;
@@ -74,7 +74,7 @@ public class GuiPotionState extends GuiTextElement{
 
 	@Override
 	public void drawText(int posX, int posY) {
-		
+
 	}
 
 }

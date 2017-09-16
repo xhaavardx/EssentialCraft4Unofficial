@@ -13,11 +13,13 @@ public class ItemBlockRDNS extends ItemBlock{
 		this.setMaxDamage(0);
 	}
 
+	@Override
 	public int getMetadata(int par1)
 	{
 		return par1;
 	}
 
+	@Override
 	public String getUnlocalizedName(ItemStack p_77667_1_)
 	{
 		return super.getUnlocalizedName(p_77667_1_)+"."+BlockRedstoneDeviceNotSided.names[p_77667_1_.getItemDamage()];

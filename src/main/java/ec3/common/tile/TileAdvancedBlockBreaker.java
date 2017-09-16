@@ -17,19 +17,19 @@ public class TileAdvancedBlockBreaker extends TileMRUGeneric {
 		setMaxMRU(0);
 		setSlotsNum(1);
 	}
-	
+
 	public EnumFacing getRotation() {
 		int metadata = getWorld().getBlockState(pos).getValue(BlockAdvBlockBreaker.FACING).getIndex();
 		if(metadata > 5)
 			metadata %= 6;
 		return EnumFacing.getFront(metadata);
 	}
-	
+
 	@Override
 	public int[] getOutputSlots() {
 		return new int[] {0};
 	}
-	
+
 	public void breakBlocks() {
 		for(int i = 1; i < 13; ++i) {
 			BlockPos p = new BlockPos(pos.getX() + getRotation().getFrontOffsetX()*i, pos.getY() + getRotation().getFrontOffsetY()*i, pos.getZ() + getRotation().getFrontOffsetZ()*i);

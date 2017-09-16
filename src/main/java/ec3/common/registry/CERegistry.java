@@ -1,6 +1,9 @@
 package ec3.common.registry;
 
-import static ec3.api.EnumCorruptionEffect.*;
+import static ec3.api.EnumCorruptionEffect.BODY;
+import static ec3.api.EnumCorruptionEffect.MATRIX;
+import static ec3.api.EnumCorruptionEffect.MIND;
+
 import ec3.api.EnumCorruptionEffect;
 import ec3.utils.common.CorruptionEffectEC3NBTBased;
 

@@ -41,16 +41,17 @@ public class ItemComputerArmor extends ItemArmor implements /*IRepairable, IVisD
 		mat = material;
 	}
 
-	@Override 
+	@Override
 	public String getArmorTexture(ItemStack itemstack, Entity entity, EntityEquipmentSlot slot, String type)
-	{ 
+	{
 		switch(slot)
-		{ 
+		{
 		case LEGS: return "essentialcraft:textures/special/armor/computer_layer_2.png"; //2 should be the slot for legs
-		default: return "essentialcraft:textures/special/armor/computer_layer_1.png"; 
+		default: return "essentialcraft:textures/special/armor/computer_layer_1.png";
 		}
 	}
 
+	@Override
 	public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack)
 	{
 		Multimap<String, AttributeModifier> mods = HashMultimap.<String, AttributeModifier>create();
@@ -63,6 +64,7 @@ public class ItemComputerArmor extends ItemArmor implements /*IRepairable, IVisD
 		return mods;
 	}
 
+	@Override
 	public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean par4)
 	{
 		super.addInformation(stack, player, list, par4);
@@ -151,7 +153,7 @@ public class ItemComputerArmor extends ItemArmor implements /*IRepairable, IVisD
 	}*/
 
 	@Override
-	public ArmorProperties getProperties(EntityLivingBase player,ItemStack armor, DamageSource source, double damage, int slot) 
+	public ArmorProperties getProperties(EntityLivingBase player,ItemStack armor, DamageSource source, double damage, int slot)
 	{
 		if(armor.getItem() == ItemsCore.computer_chestplate && player instanceof EntityPlayer)
 		{

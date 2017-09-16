@@ -20,7 +20,7 @@ public class TileDemonicPentacle extends TileEntity implements ITickable {
 	public int sCheckTick = 0;
 	public int energy;
 	public int energyCheck = 0;
-	
+
 	public boolean consumeEnderstarEnergy(int consumed) {
 		int[][] coords = new int[][]{
 			{2, 1, 2}, {2, 1, -2}, {-2, 1, 2}, {-2, 1, -2},
@@ -38,20 +38,20 @@ public class TileDemonicPentacle extends TileEntity implements ITickable {
 				TileMithrilineCrystal tmc = TileMithrilineCrystal.class.cast(tile);
 				if(tmc.energy>TileMithrilineCrystal.maxEnergy)
 					tmc.energy = TileMithrilineCrystal.maxEnergy;
-					aconsumed += tmc.energy;
+				aconsumed += tmc.energy;
 				if(aconsumed * consumeModifier >= consumed)
 					break;
 			}
 		}
 		if(aconsumed*consumeModifier < consumed)
 			return false;
-		
+
 		aconsumed = 0;
 		for(int i = 0; i < tierCheck; ++i) {
 			TileEntity tile = getWorld().getTileEntity(pos.add(coords[i][0],coords[i][1],coords[i][2]));
 			if(tile instanceof TileMithrilineCrystal) {
 				TileMithrilineCrystal tmc = TileMithrilineCrystal.class.cast(tile);
-				
+
 				aconsumed += tmc.energy;
 				tmc.energy = 0;
 				if(aconsumed * consumeModifier >= consumed) {
@@ -64,30 +64,30 @@ public class TileDemonicPentacle extends TileEntity implements ITickable {
 		}
 		return false;
 	}
-	
+
 	public int getEnderstarEnergy() {
 		if(tier == -1)
 			return 0;
-		
+
 		int[][] coords = new int[][] {
 			{2, 1, 2}, {2, 1, -2}, {-2, 1, 2}, {-2, 1, -2},
 			{3, 0, 2}, {3, 0, -2}, {-3, 0, 2}, {-3, 0, -2},
 			{2, 0, 3}, {2, 0, -3}, {-2, 0, 3}, {-2, 0, -3},
 			{3, 1, 0}, {-3, 1, 0}, {0, 1, 3}, {0, 1, -3}
 		};
-		
+
 		int energy = 0;
-		
+
 		for(int i = 0; i < coords.length; ++i) {
 			TileEntity tile = getWorld().getTileEntity(pos.add(coords[i][0],coords[i][1],coords[i][2]));
 			if(tile instanceof TileMithrilineCrystal) {
 				energy += MathHelper.floor(TileMithrilineCrystal.class.cast(tile).energy);
 			}
 		}
-		
+
 		return energy;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public void update() {
@@ -109,14 +109,14 @@ public class TileDemonicPentacle extends TileEntity implements ITickable {
 		}
 		else
 			--energyCheck;
-		
+
 		if(sCheckTick == 0) {
 			checkStructureAndTier();
 			sCheckTick = 200;
 		}
 		else
 			--sCheckTick;
-		
+
 		float movement = getWorld().getWorldTime() % 60;
 		if(movement > 30)
 			movement = 30 - movement + 30F;
@@ -141,15 +141,15 @@ public class TileDemonicPentacle extends TileEntity implements ITickable {
 			}
 		}
 	}
-	
+
 	public void checkStructureAndTier() {
 		World w = getWorld();
 		BlockPos cp = pos.down();
 		tier = -1;
-		
+
 		if(
 				w.getBlockState(cp).getBlock() == BlocksCore.voidStone &&
-				w.getBlockState(cp.add(2, 0, 0)).getBlock() == BlocksCore.voidStone &&	
+				w.getBlockState(cp.add(2, 0, 0)).getBlock() == BlocksCore.voidStone &&
 				w.getBlockState(cp.add(-2, 0, 0)).getBlock() == BlocksCore.voidStone &&
 				w.getBlockState(cp.add(0, 0, -2)).getBlock() == BlocksCore.voidStone &&
 				w.getBlockState(cp.add(0, 0, 2)).getBlock() == BlocksCore.voidStone &&
@@ -174,7 +174,7 @@ public class TileDemonicPentacle extends TileEntity implements ITickable {
 				w.getBlockState(cp.add(0, 0, 1)).getBlock() == BlocksCore.platingPale &&
 				w.getBlockState(cp.add(0, 0, -1)).getBlock() == BlocksCore.platingPale &&
 				w.getBlockState(cp.add(2, 0, 1)).getBlock() == BlocksCore.platingPale &&
-				w.getBlockState(cp.add(2, 0, -1)).getBlock() == BlocksCore.platingPale &&	
+				w.getBlockState(cp.add(2, 0, -1)).getBlock() == BlocksCore.platingPale &&
 				w.getBlockState(cp.add(-2, 0, 1)).getBlock() == BlocksCore.platingPale &&
 				w.getBlockState(cp.add(-2, 0, -1)).getBlock() == BlocksCore.platingPale &&
 				w.getBlockState(cp.add(1, 0, 2)).getBlock() == BlocksCore.platingPale &&
@@ -221,7 +221,7 @@ public class TileDemonicPentacle extends TileEntity implements ITickable {
 				w.getBlockState(cp.add(-3, 2, 0)).getValue(BlockMithrilineCrystal.TYPE).getIndex() == 2 &&
 				w.getBlockState(cp.add(0, 2, 3)).getValue(BlockMithrilineCrystal.TYPE).getIndex() == 2 &&
 				w.getBlockState(cp.add(0, 2, -3)).getValue(BlockMithrilineCrystal.TYPE).getIndex() == 2
-		)
+				)
 			tier = 0;
 	}
 }

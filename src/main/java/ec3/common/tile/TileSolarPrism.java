@@ -2,20 +2,19 @@ package ec3.common.tile;
 
 import DummyCore.Utils.DataStorage;
 import DummyCore.Utils.DummyData;
-import net.minecraft.init.Blocks;
+import ec3.common.entity.EntitySolarBeam;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.config.Configuration;
-import ec3.common.entity.EntitySolarBeam;
 
 public class TileSolarPrism extends TileEntity implements ITickable {
-	
+
 	public static float solarBeamChance = 0.025F;
 	public static boolean requiresUnabstructedSky = true;
 	public static boolean requiresMidday = true;
 	public static boolean ignoreRain = false;
-	
+
 	@Override
 	public void update() {
 		if(!getWorld().isRemote) {
@@ -45,7 +44,7 @@ public class TileSolarPrism extends TileEntity implements ITickable {
 			}
 		}
 	}
-	
+
 	public static void setupConfig(Configuration cfg) {
 		try {
 			cfg.load();
@@ -56,17 +55,17 @@ public class TileSolarPrism extends TileEntity implements ITickable {
 					"Is rain ignored:false"
 			}, "");
 			String dataString = "";
-			
+
 			for(int i = 0; i < cfgArrayString.length; ++i)
 				dataString += "||" + cfgArrayString[i];
-			
+
 			DummyData[] data = DataStorage.parseData(dataString);
-			
+
 			solarBeamChance = Float.parseFloat(data[0].fieldValue);
 			requiresUnabstructedSky = Boolean.parseBoolean(data[1].fieldValue);
 			requiresMidday = Boolean.parseBoolean(data[2].fieldValue);
 			ignoreRain = Boolean.parseBoolean(data[3].fieldValue);
-			
+
 			cfg.save();
 		}
 		catch(Exception e) {

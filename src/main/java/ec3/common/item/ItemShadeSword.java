@@ -39,13 +39,15 @@ public class ItemShadeSword extends ItemSword_Mod {
 		}
 	}
 
+	@Override
 	public boolean onEntityItemUpdate(EntityItem entityItem)
 	{
 		toggleActivity(entityItem.getEntityItem(),false);
 		return super.onEntityItemUpdate(entityItem);
 	}
 
-	public void onUpdate(ItemStack sword, World w, Entity e, int slotNum, boolean held) 
+	@Override
+	public void onUpdate(ItemStack sword, World w, Entity e, int slotNum, boolean held)
 	{
 		if(e instanceof IShadeCreature)
 			toggleActivity(sword,true);
@@ -75,6 +77,7 @@ public class ItemShadeSword extends ItemSword_Mod {
 		return true;
 	}
 
+	@Override
 	public boolean hitEntity(ItemStack weapon, EntityLivingBase attacked, EntityLivingBase attacker)
 	{
 		if(attacker instanceof IShadeCreature)

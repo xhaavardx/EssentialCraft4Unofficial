@@ -26,11 +26,13 @@ public class BlockUltraFlowerBurner extends BlockContainer implements IModelRegi
 		super(Material.ROCK);
 	}
 
+	@Override
 	public boolean isOpaqueCube(IBlockState s)
 	{
 		return false;
 	}
 
+	@Override
 	public boolean isFullCube(IBlockState s)
 	{
 		return false;
@@ -42,6 +44,7 @@ public class BlockUltraFlowerBurner extends BlockContainer implements IModelRegi
 		return BlockRenderLayer.SOLID;
 	}
 
+	@Override
 	public EnumBlockRenderType getRenderType(IBlockState s)
 	{
 		return EnumBlockRenderType.MODEL;

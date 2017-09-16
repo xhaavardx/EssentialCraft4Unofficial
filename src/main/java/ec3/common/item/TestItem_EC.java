@@ -16,6 +16,7 @@ import net.minecraftforge.fml.common.Loader;
 
 public class TestItem_EC extends Item implements IModelRegisterer {
 
+	@Override
 	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
 	{
 		if(!worldIn.isRemote)

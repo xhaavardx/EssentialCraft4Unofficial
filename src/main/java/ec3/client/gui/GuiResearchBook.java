@@ -5,8 +5,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
-import javax.swing.Icon;
-
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
@@ -88,6 +86,7 @@ public class GuiResearchBook extends GuiScreen {
 		super();
 	}
 
+	@Override
 	public void updateScreen()  {
 		++ticksOpened;
 		--ticksBeforePressing;
@@ -111,7 +110,7 @@ public class GuiResearchBook extends GuiScreen {
 						if(button.enabled)
 							this.actionPerformed(button);
 					}
-			}	
+			}
 			numberString = "";
 
 		}
@@ -123,7 +122,7 @@ public class GuiResearchBook extends GuiScreen {
 			super.keyTyped(typed, keyID);
 			if(keyID == 14 && currentCategory != null) {
 				if(this.buttonList.size() > 0) {
-					GuiButton button = (GuiButton) this.buttonList.get(0);
+					GuiButton button = this.buttonList.get(0);
 					if(button.enabled)
 						this.actionPerformed(button);
 				}
@@ -139,7 +138,7 @@ public class GuiResearchBook extends GuiScreen {
 				int press = keyID == 205 ? 2 : 1;
 				if(this.buttonList.size() > press)
 				{
-					GuiButton button = (GuiButton) this.buttonList.get(press);
+					GuiButton button = this.buttonList.get(press);
 					if(button.enabled)
 						this.actionPerformed(button);
 				}
@@ -148,6 +147,7 @@ public class GuiResearchBook extends GuiScreen {
 		catch(Exception e) {}
 	}
 
+	@Override
 	public void initGui()  {
 		isLeftMouseKeyPressed = Mouse.isButtonDown(0);
 		isRightMouseKeyPressed = Mouse.isButtonDown(1);
@@ -166,6 +166,7 @@ public class GuiResearchBook extends GuiScreen {
 		ticksBeforePressing = 1;
 	}
 
+	@Override
 	public void drawBackground(int p_146278_1_) {
 		int k = (this.width - 256) / 2;
 		int l = (this.height - 168) / 2;
@@ -200,14 +201,14 @@ public class GuiResearchBook extends GuiScreen {
 		if(currentDiscovery != null) {
 			if(dWheel < 0) {
 				if(this.buttonList.size() > 1) {
-					GuiButton button = (GuiButton) this.buttonList.get(2);
+					GuiButton button = this.buttonList.get(2);
 					if(button.enabled)
 						this.actionPerformed(button);
 				}
 			}
 			if(dWheel > 0) {
 				if(this.buttonList.size() > 1) {
-					GuiButton button = (GuiButton) this.buttonList.get(1);
+					GuiButton button = this.buttonList.get(1);
 					if(button.enabled)
 						this.actionPerformed(button);
 				}
@@ -216,7 +217,7 @@ public class GuiResearchBook extends GuiScreen {
 		else if(currentCategory != null) {
 			if(dWheel < 0) {
 				if(this.buttonList.size() > 1) {
-					GuiButton button = (GuiButton) this.buttonList.get(2);
+					GuiButton button = this.buttonList.get(2);
 					if(button.enabled)
 						this.actionPerformed(button);
 				}
@@ -224,7 +225,7 @@ public class GuiResearchBook extends GuiScreen {
 			if(dWheel > 0) {
 				if(this.buttonList.size() > 1)
 				{
-					GuiButton button = (GuiButton) this.buttonList.get(1);
+					GuiButton button = this.buttonList.get(1);
 					if(button.enabled)
 						this.actionPerformed(button);
 				}
@@ -269,7 +270,7 @@ public class GuiResearchBook extends GuiScreen {
 			RenderHelper.disableStandardItemLighting();
 			RenderHelper.enableGUIStandardItemLighting();
 			GlStateManager.translate(0, 0, 100);
-			GlStateManager.color(1/(float)(5F-(float)pressDelay), 1/(float)(5F-(float)pressDelay), 1/(float)(5F-(float)pressDelay));
+			GlStateManager.color(1/(5F-pressDelay), 1/(5F-pressDelay), 1/(5F-pressDelay));
 			this.drawCenteredString(fontRendererObj, numberString, k+128, l+172, 0xffffff);
 			GlStateManager.color(1, 1, 1);
 			GlStateManager.translate(0, 0, -100);
@@ -369,7 +370,7 @@ public class GuiResearchBook extends GuiScreen {
 		int pagesMax = currentDiscovery.pages.size();
 		for (int ik = 0; ik < this.buttonList.size(); ++ik) {
 			GlStateManager.color(1, 1, 1);
-			GuiButton btn  = (GuiButton) this.buttonList.get(ik);
+			GuiButton btn  = this.buttonList.get(ik);
 			boolean hover = mouseX >= btn.xPosition && mouseZ >= btn.yPosition && mouseX < btn.xPosition + btn.width && mouseZ < btn.yPosition + btn.height;
 			int id = btn.id;
 			if(id == 0) {
@@ -407,7 +408,7 @@ public class GuiResearchBook extends GuiScreen {
 		//Text Draw
 		for(int ik = 0; ik < this.buttonList.size(); ++ik) {
 			GlStateManager.color(1, 1, 1);
-			GuiButton btn  = (GuiButton) this.buttonList.get(ik);
+			GuiButton btn  = this.buttonList.get(ik);
 			boolean hover = mouseX >= btn.xPosition && mouseZ >= btn.yPosition && mouseX < btn.xPosition + btn.width && mouseZ < btn.yPosition + btn.height;
 			int id = btn.id;
 			if(id == 0) {
@@ -610,7 +611,7 @@ public class GuiResearchBook extends GuiScreen {
 		GlStateManager.color(1, 1, 1);
 		DrawUtils.bindTexture("essentialcraft", "textures/gui/mruStorage.png");
 		DrawUtils.drawTexturedModalRect(k+7, l+20, 0, 0, 18, 72,1);
-		int percentageScaled = MathUtils.pixelatedTextureSize((int) (toDraw.mruRequired), 5000, 72);
+		int percentageScaled = MathUtils.pixelatedTextureSize((toDraw.mruRequired), 5000, 72);
 		TextureAtlasSprite icon = (TextureAtlasSprite)EssentialCraftCore.proxy.getClientIcon("mru");
 		DrawUtils.drawTexture(k+8, l-1+(74-percentageScaled)+20, icon, 16, percentageScaled-2, 2);
 
@@ -636,7 +637,7 @@ public class GuiResearchBook extends GuiScreen {
 
 		if(toDraw.requiredItems[0]!=null)
 			this.drawIS(toDraw.requiredItems[0].getISToDraw(System.currentTimeMillis()/50), k+26+18, l+25+18, mouseX, mouseZ, 1);
-		if(toDraw.requiredItems[1]!=null) 
+		if(toDraw.requiredItems[1]!=null)
 			this.drawIS(toDraw.requiredItems[1].getISToDraw(System.currentTimeMillis()/50), k+26, l+25, mouseX, mouseZ, 1);
 		if(toDraw.requiredItems[2]!=null)
 			this.drawIS(toDraw.requiredItems[2].getISToDraw(System.currentTimeMillis()/50), k+26+36, l+25, mouseX, mouseZ, 1);
@@ -712,7 +713,7 @@ public class GuiResearchBook extends GuiScreen {
 		{
 			this.fontRendererObj.drawString(I18n.translateToLocal("ec3.txt.structure"), k+8, l+12, 0x222222);
 			l += 5;
-			StructureRecipe recipe = (StructureRecipe) toDraw;
+			StructureRecipe recipe = toDraw;
 			int highestStructureBlk = 0;
 			for(StructureBlock blk : recipe.structure)
 			{
@@ -751,7 +752,7 @@ public class GuiResearchBook extends GuiScreen {
 	public int drawShapedOreRecipe(int mouseX, int mouseZ, int k, int l, ShapedOreRecipe toDraw)
 	{
 		this.fontRendererObj.drawString(I18n.translateToLocal("ec3.txt.shapedRecipe"), k+8, l+12, 0x222222);
-		ShapedOreRecipe recipe = (ShapedOreRecipe) toDraw;
+		ShapedOreRecipe recipe = toDraw;
 		for(int i = 0; i < 9; ++i)
 		{
 			drawSlotInRecipe(k,l+6,(i%3)*18,(i/3)*18);
@@ -842,7 +843,7 @@ public class GuiResearchBook extends GuiScreen {
 	{
 		this.fontRendererObj.drawString(I18n.translateToLocal("ec3.txt.shapelessRecipe"), k+8, l+12, 0x222222);
 		l += 5;
-		ArrayList<Object> input = ((ShapelessOreRecipe)toDraw).getInput();
+		ArrayList<Object> input = toDraw.getInput();
 		for(int i = 0; i < input.size(); ++i)
 		{
 			drawSlotInRecipe(k,l,(i%3)*18,(i/3)*18);
@@ -1002,7 +1003,7 @@ public class GuiResearchBook extends GuiScreen {
 		for (int ik = 0; ik < this.buttonList.size(); ++ik)
 		{
 			GlStateManager.color(1, 1, 1);
-			GuiButton btn  = (GuiButton) this.buttonList.get(ik);
+			GuiButton btn  = this.buttonList.get(ik);
 			boolean hover = mouseX >= btn.xPosition && mouseZ >= btn.yPosition && mouseX < btn.xPosition + btn.width && mouseZ < btn.yPosition + btn.height;
 			int id = btn.id;
 			if(id == 0)
@@ -1055,7 +1056,7 @@ public class GuiResearchBook extends GuiScreen {
 				if(!hover)
 					this.drawTexturedModalRect(btn.xPosition, btn.yPosition, 0, 222, 20, 20);
 				else
-					this.drawTexturedModalRect(btn.xPosition, btn.yPosition, 28, 222, 20, 20); 
+					this.drawTexturedModalRect(btn.xPosition, btn.yPosition, 28, 222, 20, 20);
 				GlStateManager.color(1, 1, 1);
 				if(disc.displayStack != null)
 				{
@@ -1108,7 +1109,7 @@ public class GuiResearchBook extends GuiScreen {
 		for (int ik = 0; ik < this.buttonList.size(); ++ik)
 		{
 			GlStateManager.color(1, 1, 1);
-			GuiButton btn  = (GuiButton) this.buttonList.get(ik);
+			GuiButton btn  = this.buttonList.get(ik);
 			boolean hover = mouseX >= btn.xPosition && mouseZ >= btn.yPosition && mouseX < btn.xPosition + btn.width && mouseZ < btn.yPosition + btn.height;
 			int id = btn.id;
 			if(id == 0)
@@ -1165,7 +1166,7 @@ public class GuiResearchBook extends GuiScreen {
 		RenderHelper.enableGUIStandardItemLighting();
 		for (int ik = 0; ik < this.buttonList.size(); ++ik)
 		{
-			GuiButton btn  = (GuiButton) this.buttonList.get(ik);
+			GuiButton btn  = this.buttonList.get(ik);
 			boolean hover = mouseX >= btn.xPosition && mouseZ >= btn.yPosition && mouseX < btn.xPosition + btn.width && mouseZ < btn.yPosition + btn.height;
 			CategoryEntry cat = ApiCore.categories.get(ik);
 			int reqTier = cat.reqTier;
@@ -1175,7 +1176,7 @@ public class GuiResearchBook extends GuiScreen {
 				if(!hover)
 					this.drawTexturedModalRect(btn.xPosition, btn.yPosition, 0, 222, 20, 20);
 				else
-					this.drawTexturedModalRect(btn.xPosition, btn.yPosition, 28, 222, 20, 20); 
+					this.drawTexturedModalRect(btn.xPosition, btn.yPosition, 28, 222, 20, 20);
 				if(cat.displayStack != null)
 				{
 					GlStateManager.pushMatrix();
@@ -1203,7 +1204,7 @@ public class GuiResearchBook extends GuiScreen {
 		//Text Overlay
 		for (int ik = 0; ik < this.buttonList.size(); ++ik)
 		{
-			GuiButton btn  = (GuiButton) this.buttonList.get(ik);
+			GuiButton btn  = this.buttonList.get(ik);
 			boolean hover = mouseX >= btn.xPosition && mouseZ >= btn.yPosition && mouseX < btn.xPosition + btn.width && mouseZ < btn.yPosition + btn.height;
 			CategoryEntry cat = ApiCore.categories.get(ik);
 			int reqTier = cat.reqTier;
@@ -1366,7 +1367,8 @@ public class GuiResearchBook extends GuiScreen {
 		catch(Exception e) {}
 	}
 
-	protected void actionPerformed(GuiButton b) 
+	@Override
+	protected void actionPerformed(GuiButton b)
 	{
 		if(ticksBeforePressing > 0)
 			return;
@@ -1429,6 +1431,7 @@ public class GuiResearchBook extends GuiScreen {
 		}
 	}
 
+	@Override
 	@SuppressWarnings("unchecked")
 	protected void renderToolTip(ItemStack p_146285_1_, int p_146285_2_, int p_146285_3_)
 	{
@@ -1438,11 +1441,11 @@ public class GuiResearchBook extends GuiScreen {
 		{
 			if (k == 0)
 			{
-				list.set(k, p_146285_1_.getRarity().rarityColor + (String)list.get(k));
+				list.set(k, p_146285_1_.getRarity().rarityColor + list.get(k));
 			}
 			else
 			{
-				list.set(k, TextFormatting.GRAY + (String)list.get(k));
+				list.set(k, TextFormatting.GRAY + list.get(k));
 			}
 		}
 
@@ -1452,9 +1455,10 @@ public class GuiResearchBook extends GuiScreen {
 
 	protected void addHoveringText(List<String> p_146283_1_, int p_146283_2_, int p_146283_3_) {
 		hoveringText.add(new Object[]{p_146283_1_,p_146283_2_,p_146283_3_,fontRendererObj});
-		//drawHoveringText(p_146283_1_, p_146283_2_, p_146283_3_, fontRendererObj);   
+		//drawHoveringText(p_146283_1_, p_146283_2_, p_146283_3_, fontRendererObj);
 	}
 
+	@Override
 	protected void drawHoveringText(List<String> p_146283_1_, int p_146283_2_, int p_146283_3_, FontRenderer font) {
 		GlStateManager.disableLighting();
 		if(!p_146283_1_.isEmpty()) {
@@ -1466,7 +1470,7 @@ public class GuiResearchBook extends GuiScreen {
 			Iterator<String> iterator = p_146283_1_.iterator();
 
 			while(iterator.hasNext()) {
-				String s = (String)iterator.next();
+				String s = iterator.next();
 				int l = font.getStringWidth(s);
 
 				if(l > k) {
@@ -1504,18 +1508,18 @@ public class GuiResearchBook extends GuiScreen {
 			this.drawGradientRect(j2 + k + 2, k2 - 3 + 1, j2 + k + 3, k2 + i1 + 3 - 1, k1, l1);
 			this.drawGradientRect(j2 - 3, k2 - 3, j2 + k + 3, k2 - 3 + 1, k1, k1);
 			this.drawGradientRect(j2 - 3, k2 + i1 + 2, j2 + k + 3, k2 + i1 + 3, l1, l1);
-	
+
 			for(int i2 = 0; i2 < p_146283_1_.size(); ++i2) {
-				String s1 = (String)p_146283_1_.get(i2);
+				String s1 = p_146283_1_.get(i2);
 				font.drawStringWithShadow(s1, j2, k2, -1);
-	
+
 				if(i2 == 0) {
 					k2 += 2;
 				}
-	
+
 				k2 += 10;
 			}
-	
+
 			this.zLevel = 0.0F;
 			itemRender.zLevel = 0.0F;
 			GlStateManager.enableLighting();
@@ -1527,6 +1531,7 @@ public class GuiResearchBook extends GuiScreen {
 		GlStateManager.color(1, 1, 1);
 	}
 
+	@Override
 	public boolean doesGuiPauseGame()
 	{
 		return false;

@@ -66,15 +66,15 @@ public class TileDarknessObelisk extends TileMRUGeneric {
 							EntityLiving entityliving;
 
 							try {
-								entityliving = (EntityLiving)spawnlistentry.entityClass.getConstructor(new Class[] {World.class}).newInstance(new Object[] {wrld});
-								entityliving.setLocationAndAngles((double)rndOffsetX+0.5F, (double)rndOffsetY, (double)rndOffsetZ+0.5D, wrld.rand.nextFloat()*360.0F, 0.0F);
-								Result canSpawn = ForgeEventFactory.canEntitySpawn(entityliving, wrld, (float)rndOffsetX+0.5F, (float)rndOffsetY, (float)rndOffsetZ+0.5F);
+								entityliving = spawnlistentry.entityClass.getConstructor(new Class[] {World.class}).newInstance(new Object[] {wrld});
+								entityliving.setLocationAndAngles((double)rndOffsetX+0.5F, rndOffsetY, rndOffsetZ+0.5D, wrld.rand.nextFloat()*360.0F, 0.0F);
+								Result canSpawn = ForgeEventFactory.canEntitySpawn(entityliving, wrld, rndOffsetX+0.5F, rndOffsetY, rndOffsetZ+0.5F);
 								if (canSpawn == Result.ALLOW || (canSpawn == Result.DEFAULT && entityliving.getCanSpawnHere())) {
 									wrld.spawnEntity(entityliving);
 									setMRU(getMRU() - mruUsage);
 									if(generatesCorruption)
 										ECUtils.increaseCorruptionAt(getWorld(), pos.getX(), pos.getY(), pos.getZ(), getWorld().rand.nextInt(genCorruption));
-									if(!ForgeEventFactory.doSpecialSpawn(entityliving, wrld, (float)rndOffsetX+0.5F, (float)rndOffsetY, (float)rndOffsetZ+0.5F)) {
+									if(!ForgeEventFactory.doSpecialSpawn(entityliving, wrld, rndOffsetX+0.5F, rndOffsetY, rndOffsetZ+0.5F)) {
 										ientitylivingdata = entityliving.onInitialSpawn(getWorld().getDifficultyForLocation(rndPos), ientitylivingdata);
 									}
 								}
@@ -115,14 +115,14 @@ public class TileDarknessObelisk extends TileMRUGeneric {
 								if(generatesCorruption)
 									ECUtils.increaseCorruptionAt(getWorld(), pos.getX(), pos.getY(), pos.getZ(), getWorld().rand.nextInt(genCorruption));
 							}
-						}		
+						}
 					}
 				}
 			}
 		}
 		ECUtils.manage(this, 0);
 		super.update();
-		
+
 		//The following code is to make the secret record acquirable
 		List<EntityPlayer> playerlist = getWorld().getEntitiesWithinAABB(EntityPlayer.class, new AxisAlignedBB(pos).expandXyz(8));
 		if(!playerlist.isEmpty()) {

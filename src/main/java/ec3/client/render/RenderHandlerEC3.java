@@ -46,7 +46,6 @@ import ec3.common.registry.PotionRegistry;
 import ec3.common.registry.SoundRegistry;
 import ec3.common.tile.TileWindRune;
 import ec3.proxy.ClientProxy;
-import ec3.utils.common.ECUtils;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISound;
@@ -64,7 +63,6 @@ import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntityBeaconRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
@@ -244,7 +242,7 @@ public class RenderHandlerEC3 {
 	public static IInventory getInventoryFromContainer(GuiContainer gc)
 	{
 		for(int i = 0; i < gc.inventorySlots.inventorySlots.size(); ++i) {
-			Slot slt = (Slot)gc.inventorySlots.inventorySlots.get(i);
+			Slot slt = gc.inventorySlots.inventorySlots.get(i);
 			if(slt != null)
 				return slt.inventory;
 		}
@@ -286,9 +284,9 @@ public class RenderHandlerEC3 {
 		if(is != null) {
 			if(is.getItem() instanceof ItemOrbitalRemote) {
 				float f = 1;
-				double d0 = p.prevPosX + (p.posX - p.prevPosX) * (double)f;
-				double d1 = p.prevPosY + (p.posY - p.prevPosY) * (double)f + (double)p.getEyeHeight();
-				double d2 = p.prevPosZ + (p.posZ - p.prevPosZ) * (double)f;
+				double d0 = p.prevPosX + (p.posX - p.prevPosX) * f;
+				double d1 = p.prevPosY + (p.posY - p.prevPosY) * f + p.getEyeHeight();
+				double d2 = p.prevPosZ + (p.posZ - p.prevPosZ) * f;
 
 				Vec3d lookVec = new Vec3d(d0, d1, d2);
 				float f1 = p.prevRotationPitch + (p.rotationPitch - p.prevRotationPitch);
@@ -300,7 +298,7 @@ public class RenderHandlerEC3 {
 				float f7 = f4 * f5;
 				float f8 = f3 * f5;
 				double d3 = 32.0D;
-				Vec3d distanced = lookVec.addVector((double)f7 * d3, (double)f6 * d3, (double)f8 * d3);
+				Vec3d distanced = lookVec.addVector(f7 * d3, f6 * d3, f8 * d3);
 				RayTraceResult mop = p.getEntityWorld().rayTraceBlocks(lookVec, distanced, true, false, false);
 
 				if(mop != null && mop.typeOfHit == Type.BLOCK) {
@@ -346,7 +344,7 @@ public class RenderHandlerEC3 {
 			GlStateManager.enableBlend();
 			GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
-			GL11.glColor4d(1, 0, 1, (double)ItemInventoryGem.clickTicks/100D);
+			GL11.glColor4d(1, 0, 1, ItemInventoryGem.clickTicks/100D);
 			GlStateManager.glLineWidth(3);
 			GlStateManager.translate(-doubleX, -doubleY, -doubleZ);
 
@@ -461,11 +459,11 @@ public class RenderHandlerEC3 {
 				GlStateManager.glEnd();
 
 
-				if (depth) 
+				if (depth)
 				{
 					GlStateManager.enableDepth();
 				}
-				if (texture) 
+				if (texture)
 				{
 					GlStateManager.enableTexture2D();
 				}
@@ -531,11 +529,11 @@ public class RenderHandlerEC3 {
 					GlStateManager.glEnd();
 
 
-					if (depth) 
+					if (depth)
 					{
 						GlStateManager.enableDepth();
 					}
-					if (texture) 
+					if (texture)
 					{
 						GlStateManager.enableTexture2D();
 					}
@@ -599,11 +597,11 @@ public class RenderHandlerEC3 {
 					GlStateManager.glEnd();
 
 
-					if (depth) 
+					if (depth)
 					{
 						GlStateManager.enableDepth();
 					}
-					if (texture) 
+					if (texture)
 					{
 						GlStateManager.enableTexture2D();
 					}
@@ -669,7 +667,7 @@ public class RenderHandlerEC3 {
 						}
 
 						for(int i = 0; i < gc.inventorySlots.inventorySlots.size(); ++i) {
-							Slot slt = (Slot)gc.inventorySlots.inventorySlots.get(i);
+							Slot slt = gc.inventorySlots.inventorySlots.get(i);
 							if((slt.inventory instanceof TileEntity) || (slt.inventory instanceof InventoryBasic)) {
 
 								GlStateManager.pushMatrix();
@@ -712,11 +710,7 @@ public class RenderHandlerEC3 {
 			if(ItemInventoryGem.clickTicks == 0)
 				ItemInventoryGem.currentlyClicked = null;
 		}
-		for(int i = 0; i < ClientProxy.playingMusic.size(); ++i) {
-			ISound snd = ClientProxy.playingMusic.get(i).getRight();
-			if(!Minecraft.getMinecraft().getSoundHandler().isSoundPlaying(snd))
-				ClientProxy.playingMusic.remove(i);
-		}
+		ClientProxy.playingMusic.removeIf(pair->!Minecraft.getMinecraft().getSoundHandler().isSoundPlaying(pair.getRight()));
 		if(event.player.getEntityWorld().isRemote && event.phase == Phase.START)
 			if(event.player instanceof EntityPlayerSP) {
 				EntityPlayerSP player = (EntityPlayerSP)event.player;
@@ -800,10 +794,10 @@ public class RenderHandlerEC3 {
 					player.motionZ *= 1.2D;
 
 					double d8, d9, d2, d4;
-					d2 = Math.cos((double)player.rotationYaw * Math.PI / 180.0D);
-					d4 = Math.sin((double)player.rotationYaw * Math.PI / 180.0D);
-					double d5 = (double)(player.getEntityWorld().rand.nextFloat() * 2.0F - 1.0F);
-					double d6 = (double)(player.getEntityWorld().rand.nextInt(2) * 2 - 1) * 0.7D;
+					d2 = Math.cos(player.rotationYaw * Math.PI / 180.0D);
+					d4 = Math.sin(player.rotationYaw * Math.PI / 180.0D);
+					double d5 = player.getEntityWorld().rand.nextFloat() * 2.0F - 1.0F;
+					double d6 = (player.getEntityWorld().rand.nextInt(2) * 2 - 1) * 0.7D;
 
 					d8 = player.posX - d2 * d5 * 0.8D + d4 * d6;
 					d9 = player.posZ - d4 * d5 * 0.8D - d2 * d6;
@@ -843,7 +837,7 @@ public class RenderHandlerEC3 {
 					GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 					GlStateManager.disableAlpha();
 
-					GlStateManager.glBegin(GL11.GL_TRIANGLE_FAN); 
+					GlStateManager.glBegin(GL11.GL_TRIANGLE_FAN);
 
 					float renderTime = Minecraft.getMinecraft().player.ticksExisted % 40;
 					if(renderTime > 20)
@@ -862,7 +856,7 @@ public class RenderHandlerEC3 {
 
 					GlStateManager.color(1, 1, 1);
 
-					GlStateManager.glEnd(); 
+					GlStateManager.glEnd();
 
 					GlStateManager.disableBlend();
 					GlStateManager.enableAlpha();
@@ -904,7 +898,7 @@ public class RenderHandlerEC3 {
 					GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 					GlStateManager.disableAlpha();
 
-					GlStateManager.glBegin(GL11.GL_TRIANGLE_FAN); 
+					GlStateManager.glBegin(GL11.GL_TRIANGLE_FAN);
 
 					float renderTime = Minecraft.getMinecraft().player.ticksExisted % 40;
 					if(renderTime > 20)
@@ -928,7 +922,7 @@ public class RenderHandlerEC3 {
 
 					GlStateManager.color(1, 1, 1);
 
-					GlStateManager.glEnd(); 
+					GlStateManager.glEnd();
 
 					GlStateManager.disableBlend();
 					GlStateManager.enableAlpha();
@@ -1016,16 +1010,16 @@ public class RenderHandlerEC3 {
 					GlStateManager.color(1.0F, 1.0F, 1.0F, 0.3F);
 					TextureAtlasSprite iicon = TextureUtils.fromBlock(BlocksCore.lightCorruption[0], 7);
 					mc.getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-					float f1 = (float)iicon.getMinU();
-					float f2 = (float)iicon.getMinV();
-					float f3 = (float)iicon.getMaxU();
-					float f4 = (float)iicon.getMaxV();
+					float f1 = iicon.getMinU();
+					float f2 = iicon.getMinV();
+					float f3 = iicon.getMaxU();
+					float f4 = iicon.getMaxV();
 					TessellatorWrapper tessellator = TessellatorWrapper.getInstance();
 					tessellator.startDrawingQuads();
-					tessellator.addVertexWithUV(0.0D, (double)l, -90.0D, (double)f1, (double)f4);
-					tessellator.addVertexWithUV((double)k, (double)l, -90.0D, (double)f3, (double)f4);
-					tessellator.addVertexWithUV((double)k, 0.0D, -90.0D, (double)f3, (double)f2);
-					tessellator.addVertexWithUV(0.0D, 0.0D, -90.0D, (double)f1, (double)f2);
+					tessellator.addVertexWithUV(0.0D, l, -90.0D, f1, f4);
+					tessellator.addVertexWithUV(k, l, -90.0D, f3, f4);
+					tessellator.addVertexWithUV(k, 0.0D, -90.0D, f3, f2);
+					tessellator.addVertexWithUV(0.0D, 0.0D, -90.0D, f1, f2);
 					tessellator.draw();
 					GlStateManager.depthMask(true);
 					GlStateManager.enableDepth();
@@ -1040,16 +1034,16 @@ public class RenderHandlerEC3 {
 					GlStateManager.color(1.0F, 1.0F, 1.0F, 0.3F);
 					TextureAtlasSprite iicon = TextureUtils.fromBlock(BlocksCore.lightCorruption[1], 7);
 					mc.getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-					float f1 = (float)iicon.getMinU();
-					float f2 = (float)iicon.getMinV();
-					float f3 = (float)iicon.getMaxU();
-					float f4 = (float)iicon.getMaxV();
+					float f1 = iicon.getMinU();
+					float f2 = iicon.getMinV();
+					float f3 = iicon.getMaxU();
+					float f4 = iicon.getMaxV();
 					TessellatorWrapper tessellator = TessellatorWrapper.getInstance();
 					tessellator.startDrawingQuads();
-					tessellator.addVertexWithUV(0.0D, (double)l, -90.0D, (double)f1, (double)f4);
-					tessellator.addVertexWithUV((double)k, (double)l, -90.0D, (double)f3, (double)f4);
-					tessellator.addVertexWithUV((double)k, 0.0D, -90.0D, (double)f3, (double)f2);
-					tessellator.addVertexWithUV(0.0D, 0.0D, -90.0D, (double)f1, (double)f2);
+					tessellator.addVertexWithUV(0.0D, l, -90.0D, f1, f4);
+					tessellator.addVertexWithUV(k, l, -90.0D, f3, f4);
+					tessellator.addVertexWithUV(k, 0.0D, -90.0D, f3, f2);
+					tessellator.addVertexWithUV(0.0D, 0.0D, -90.0D, f1, f2);
 					tessellator.draw();
 					GlStateManager.depthMask(true);
 					GlStateManager.enableDepth();
@@ -1123,7 +1117,7 @@ public class RenderHandlerEC3 {
 			}
 		}
 	}
-	
+
 	ResourceLocation loc = new ResourceLocation("essentialcraft","textures/hud/sniper_scope.png");
 
 	@SideOnly(Side.CLIENT)
@@ -1149,8 +1143,8 @@ public class RenderHandlerEC3 {
 
 					TessellatorWrapper tessellator = TessellatorWrapper.getInstance();
 					tessellator.startDrawingQuads();
-					tessellator.addVertexWithUV(scaledresolution.getScaledWidth()/2-scaledresolution.getScaledWidth()/4, (double)l, -90.0D, 0.0D, 1.0D);
-					tessellator.addVertexWithUV((double)k+scaledresolution.getScaledWidth()/2-scaledresolution.getScaledWidth()/4, (double)l, -90.0D, 1.0D, 1.0D);
+					tessellator.addVertexWithUV(scaledresolution.getScaledWidth()/2-scaledresolution.getScaledWidth()/4, l, -90.0D, 0.0D, 1.0D);
+					tessellator.addVertexWithUV((double)k+scaledresolution.getScaledWidth()/2-scaledresolution.getScaledWidth()/4, l, -90.0D, 1.0D, 1.0D);
 					tessellator.addVertexWithUV((double)k+scaledresolution.getScaledWidth()/2-scaledresolution.getScaledWidth()/4, 0.0D, -90.0D, 1.0D, 0.0D);
 					tessellator.addVertexWithUV(scaledresolution.getScaledWidth()/2-scaledresolution.getScaledWidth()/4, 0.0D, -90.0D, 0.0D, 0.0D);
 					tessellator.draw();
@@ -1159,14 +1153,14 @@ public class RenderHandlerEC3 {
 					GlStateManager.color(0, 0, 0);
 
 					tessellator.startDrawingQuads();
-					tessellator.addVertexWithUV(0, (double)l, -90.0D, 0.0D, 1.0D);
-					tessellator.addVertexWithUV(scaledresolution.getScaledWidth()/2-scaledresolution.getScaledWidth()/4, (double)l, -90.0D, 1.0D, 1.0D);
+					tessellator.addVertexWithUV(0, l, -90.0D, 0.0D, 1.0D);
+					tessellator.addVertexWithUV(scaledresolution.getScaledWidth()/2-scaledresolution.getScaledWidth()/4, l, -90.0D, 1.0D, 1.0D);
 					tessellator.addVertexWithUV(scaledresolution.getScaledWidth()/2-scaledresolution.getScaledWidth()/4, 0.0D, -90.0D, 1.0D, 0.0D);
 					tessellator.addVertexWithUV(0, 0.0D, -90.0D, 0.0D, 0.0D);
 					tessellator.draw();
 					tessellator.startDrawingQuads();
-					tessellator.addVertexWithUV((double)k+scaledresolution.getScaledWidth()/2-scaledresolution.getScaledWidth()/4, (double)l, -90.0D, 0.0D, 1.0D);
-					tessellator.addVertexWithUV(scaledresolution.getScaledWidth(), (double)l, -90.0D, 1.0D, 1.0D);
+					tessellator.addVertexWithUV((double)k+scaledresolution.getScaledWidth()/2-scaledresolution.getScaledWidth()/4, l, -90.0D, 0.0D, 1.0D);
+					tessellator.addVertexWithUV(scaledresolution.getScaledWidth(), l, -90.0D, 1.0D, 1.0D);
 					tessellator.addVertexWithUV(scaledresolution.getScaledWidth(), 0.0D, -90.0D, 1.0D, 0.0D);
 					tessellator.addVertexWithUV((double)k+scaledresolution.getScaledWidth()/2-scaledresolution.getScaledWidth()/4, 0.0D, -90.0D, 0.0D, 0.0D);
 					tessellator.draw();
@@ -1190,9 +1184,9 @@ public class RenderHandlerEC3 {
 		mc.getTextureManager().bindTexture(image);
 		TessellatorWrapper tessellator = TessellatorWrapper.getInstance();
 		tessellator.startDrawingQuads();
-		tessellator.addVertexWithUV(0.0D, (double)scaledResY, -90.0D, 0.0D, 1.0D);
-		tessellator.addVertexWithUV((double)scaledResX, (double)scaledResY, -90.0D, 1.0D, 1.0D);
-		tessellator.addVertexWithUV((double)scaledResX, 0.0D, -90.0D, 1.0D, 0.0D);
+		tessellator.addVertexWithUV(0.0D, scaledResY, -90.0D, 0.0D, 1.0D);
+		tessellator.addVertexWithUV(scaledResX, scaledResY, -90.0D, 1.0D, 1.0D);
+		tessellator.addVertexWithUV(scaledResX, 0.0D, -90.0D, 1.0D, 0.0D);
 		tessellator.addVertexWithUV(0.0D, 0.0D, -90.0D, 0.0D, 0.0D);
 		tessellator.draw();
 		GlStateManager.depthMask(true);

@@ -46,7 +46,8 @@ public class ItemPlayerList extends Item implements IModelRegisterer {
 		return new ActionResult(EnumActionResult.PASS,par1ItemStack);
 	}
 
-	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List<String> par3List, boolean par4) 
+	@Override
+	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List<String> par3List, boolean par4)
 	{
 		if(par1ItemStack.getTagCompound() != null)
 		{

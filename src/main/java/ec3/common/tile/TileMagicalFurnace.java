@@ -3,14 +3,14 @@ package ec3.common.tile;
 import java.util.ArrayList;
 import java.util.List;
 
+import DummyCore.Utils.DataStorage;
+import DummyCore.Utils.DummyData;
+import DummyCore.Utils.MathUtils;
 import ec3.api.ApiCore;
 import ec3.common.block.BlocksCore;
 import ec3.common.item.ItemsCore;
 import ec3.common.mod.EssentialCraftCore;
 import ec3.utils.common.ECUtils;
-import DummyCore.Utils.DataStorage;
-import DummyCore.Utils.DummyData;
-import DummyCore.Utils.MathUtils;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
@@ -27,25 +27,25 @@ public class TileMagicalFurnace extends TileMRUGeneric {
 	public static int smeltingTime = 20;
 	public static float chanceToDoubleOutput = 0.3F;
 	public static float chanceToDoubleSlags = 0.1F;
-	
+
 	public TileMagicalFurnace() {
 		super();
 		setSlotsNum(1);
 	}
-		
+
 	@Override
 	public void readFromNBT(NBTTagCompound par1NBTTagCompound) {
 		super.readFromNBT(par1NBTTagCompound);
 		progressLevel = par1NBTTagCompound.getInteger("progress");
 	}
-	
+
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound par1NBTTagCompound) {
 		super.writeToNBT(par1NBTTagCompound);
 		par1NBTTagCompound.setInteger("progress", progressLevel);
 		return par1NBTTagCompound;
 	}
-	
+
 	@Override
 	public void update() {
 		maxMRU = (int)cfgMaxMRU;
@@ -55,7 +55,7 @@ public class TileMagicalFurnace extends TileMRUGeneric {
 		if(getWorld().isBlockIndirectlyGettingPowered(pos) == 0)
 			smelt();
 	}
-    
+
 	public boolean isStructureCorrect() {
 		boolean flag = true;
 		for(int x = -2; x <= 2; ++x) {
@@ -65,7 +65,7 @@ public class TileMagicalFurnace extends TileMRUGeneric {
 					return false;
 			}
 		}
-		flag = 
+		flag =
 				getWorld().getBlockState(pos.add(2, 0, 2)).getBlock() == BlocksCore.voidStone &&
 				getWorld().getBlockState(pos.add(-2, 0, 2)).getBlock() == BlocksCore.voidStone &&
 				getWorld().getBlockState(pos.add(2, 0, -2)).getBlock() == BlocksCore.voidStone &&
@@ -76,7 +76,7 @@ public class TileMagicalFurnace extends TileMRUGeneric {
 				getWorld().getBlockState(pos.add(-2, 1, -2)).getBlock() == BlocksCore.heatGenerator;
 		return flag;
 	}
-	
+
 	public void smelt() {
 		ItemStack smeltingStack = getSmeltingStack();
 		EntityItem smeltingItem = getSmeltingItem();
@@ -131,7 +131,7 @@ public class TileMagicalFurnace extends TileMRUGeneric {
 		else
 			progressLevel = 0;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public EntityItem getSmeltingItem() {
 		EntityItem ret = null;
@@ -145,7 +145,7 @@ public class TileMagicalFurnace extends TileMRUGeneric {
 		}
 		return ret;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public ItemStack getSmeltingStack() {
 		ItemStack ret = null;
@@ -162,7 +162,7 @@ public class TileMagicalFurnace extends TileMRUGeneric {
 		}
 		return ret;
 	}
-	
+
 	public void spawnParticles() {
 		if(isStructureCorrect()) {
 			/*for(int i = 0; i < 100; ++i) */ {
@@ -170,7 +170,7 @@ public class TileMagicalFurnace extends TileMRUGeneric {
 			}
 		}
 	}
-	
+
 	public static void setupConfig(Configuration cfg) {
 		try {
 			cfg.load();
@@ -182,25 +182,25 @@ public class TileMagicalFurnace extends TileMRUGeneric {
 					"Chance to double slags outcome:0.1"
 			}, "");
 			String dataString = "";
-			
+
 			for(int i = 0; i < cfgArrayString.length; ++i)
 				dataString += "||" + cfgArrayString[i];
-			
+
 			DummyData[] data = DataStorage.parseData(dataString);
-			
+
 			mruUsage = Integer.parseInt(data[1].fieldValue);
 			smeltingTime = Integer.parseInt(data[2].fieldValue);
 			cfgMaxMRU = Float.parseFloat(data[0].fieldValue);
 			chanceToDoubleOutput = Float.parseFloat(data[3].fieldValue);
 			chanceToDoubleSlags = Float.parseFloat(data[4].fieldValue);
-			
+
 			cfg.save();
 		}
 		catch(Exception e) {
 			return;
 		}
 	}
-	
+
 	@Override
 	public int[] getOutputSlots() {
 		return new int[0];

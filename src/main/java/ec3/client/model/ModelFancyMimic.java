@@ -27,28 +27,28 @@ import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.property.IExtendedBlockState;
 
 public class ModelFancyMimic implements IBakedModel {
-	
+
 	private final String type;
-	
+
 	public ModelFancyMimic(String type) {
 		this.type = type;
 	}
-	
+
 	@Override
 	public List<BakedQuad> getQuads(IBlockState state, EnumFacing side, long rand) {
 		if(!(state.getBlock() instanceof BlockFancyMimic))
 			return Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelShapes().getModelManager().getMissingModel().getQuads(state, side, rand);
-		
+
 		ImmutableList.Builder<BakedQuad> ret = ImmutableList.<BakedQuad>builder();
 		BlockRenderLayer layer = MinecraftForgeClient.getRenderLayer();
 		IBlockState heldState = ((IExtendedBlockState)state).getValue(BlockMimic.STATE);
 		IBlockAccess heldWorld = ((IExtendedBlockState)state).getValue(BlockMimic.WORLD);
 		BlockPos heldPos = ((IExtendedBlockState)state).getValue(BlockMimic.POS);
-		
+
 		if(heldWorld == null || heldPos == null) {
 			return ret.build();
 		}
-		
+
 		Minecraft mc = Minecraft.getMinecraft();
 		if(heldState == null && layer == BlockRenderLayer.SOLID) {
 			ModelResourceLocation path = new ModelResourceLocation("essentialcraft:mimic", "inventory");
@@ -70,7 +70,7 @@ public class ModelFancyMimic implements IBakedModel {
 			ModelResourceLocation path = new ModelResourceLocation("essentialcraft:fancyBlock/mimic", "type=" + type);
 			ret.addAll(mc.getBlockRendererDispatcher().getBlockModelShapes().getModelManager().getModel(path).getQuads(state, side, rand));
 		}
-		
+
 		return ret.build();
 	}
 
@@ -103,7 +103,7 @@ public class ModelFancyMimic implements IBakedModel {
 	public ItemOverrideList getOverrides() {
 		return ItemOverrideList.NONE;
 	}
-	
+
 	private static class FakeBlockAccess implements IBlockAccess {
 
 		private final IBlockAccess compose;

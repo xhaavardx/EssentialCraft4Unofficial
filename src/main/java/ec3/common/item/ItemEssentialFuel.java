@@ -23,6 +23,7 @@ public class ItemEssentialFuel extends Item implements IModelRegisterer {
 		setHasSubtypes(true);
 	}
 
+	@Override
 	public void getSubItems(Item par1, CreativeTabs par2CreativeTabs, List<ItemStack> par3List) {
 		for(int var4 = 0; var4 < 4; ++var4) {
 			ItemStack min = new ItemStack(par1, 1, var4);
@@ -30,10 +31,12 @@ public class ItemEssentialFuel extends Item implements IModelRegisterer {
 		}
 	}
 
+	@Override
 	public String getUnlocalizedName(ItemStack p_77667_1_) {
 		return getUnlocalizedName()+name[Math.min(p_77667_1_.getItemDamage(), name.length-1)];
 	}
 
+	@Override
 	public EnumRarity getRarity(ItemStack par1ItemStack) {
 		return EnumRarity.RARE;
 	}

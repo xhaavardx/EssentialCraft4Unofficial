@@ -92,7 +92,7 @@ public class ItemGun extends ItemStoresMRUInNBT implements IModelRegisterer {
 	}
 
 	@Override
-	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List<String> par3List, boolean par4) 
+	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List<String> par3List, boolean par4)
 	{
 		if(MiscUtils.getStackTag(par1ItemStack).hasKey("stats") && Keyboard.isKeyDown(Keyboard.KEY_LSHIFT))
 		{
@@ -113,6 +113,7 @@ public class ItemGun extends ItemStoresMRUInNBT implements IModelRegisterer {
 		super.addInformation(par1ItemStack, par2EntityPlayer, par3List, par4);
 	}
 
+	@Override
 	public ActionResult<ItemStack> onItemRightClick(ItemStack gun, World w, EntityPlayer p, EnumHand h)
 	{
 		if(!gun.getTagCompound().hasKey("base") && !w.isRemote)
@@ -239,7 +240,7 @@ public class ItemGun extends ItemStoresMRUInNBT implements IModelRegisterer {
 		float shots = 0;
 		float zoom = 0;
 		float balance = 0;
-		GunType gt = 
+		GunType gt =
 				iGun.gunType.equalsIgnoreCase("pistol") ? GunType.PISTOL :
 					iGun.gunType.equalsIgnoreCase("rifle") ? GunType.RIFLE :
 						iGun.gunType.equalsIgnoreCase("sniper") ? GunType.SNIPER :
@@ -288,15 +289,15 @@ public class ItemGun extends ItemStoresMRUInNBT implements IModelRegisterer {
 				if(d.fieldName.equalsIgnoreCase("damage"))
 					damage += Float.parseFloat(d.fieldValue)/3;
 				if(d.fieldName.equalsIgnoreCase("reload"))
-					reload += Float.parseFloat(d.fieldValue);  
+					reload += Float.parseFloat(d.fieldValue);
 				if(d.fieldName.equalsIgnoreCase("knockback"))
-					knockback += Float.parseFloat(d.fieldValue)/3;  
+					knockback += Float.parseFloat(d.fieldValue)/3;
 				if(d.fieldName.equalsIgnoreCase("spread"))
-					spread += Float.parseFloat(d.fieldValue)/3;  
+					spread += Float.parseFloat(d.fieldValue)/3;
 				if(d.fieldName.equalsIgnoreCase("speed"))
-					speed += Float.parseFloat(d.fieldValue);  
+					speed += Float.parseFloat(d.fieldValue);
 				if(d.fieldName.equalsIgnoreCase("shots"))
-					shots += Float.parseFloat(d.fieldValue);  
+					shots += Float.parseFloat(d.fieldValue);
 			}
 		}
 
@@ -309,15 +310,15 @@ public class ItemGun extends ItemStoresMRUInNBT implements IModelRegisterer {
 				if(d.fieldName.equalsIgnoreCase("damage"))
 					damage += Float.parseFloat(d.fieldValue)/3;
 				if(d.fieldName.equalsIgnoreCase("reload"))
-					reload += Float.parseFloat(d.fieldValue)/3;  
+					reload += Float.parseFloat(d.fieldValue)/3;
 				if(d.fieldName.equalsIgnoreCase("knockback"))
-					knockback += Float.parseFloat(d.fieldValue);  
+					knockback += Float.parseFloat(d.fieldValue);
 				if(d.fieldName.equalsIgnoreCase("spread"))
-					spread += Float.parseFloat(d.fieldValue)/3;  
+					spread += Float.parseFloat(d.fieldValue)/3;
 				if(d.fieldName.equalsIgnoreCase("speed"))
-					speed += Float.parseFloat(d.fieldValue)/3;  
+					speed += Float.parseFloat(d.fieldValue)/3;
 				if(d.fieldName.equalsIgnoreCase("shots"))
-					shots += Float.parseFloat(d.fieldValue)/3;   
+					shots += Float.parseFloat(d.fieldValue)/3;
 			}
 		}
 
@@ -330,15 +331,15 @@ public class ItemGun extends ItemStoresMRUInNBT implements IModelRegisterer {
 				if(d.fieldName.equalsIgnoreCase("damage"))
 					damage += Float.parseFloat(d.fieldValue);
 				if(d.fieldName.equalsIgnoreCase("reload"))
-					reload += Float.parseFloat(d.fieldValue)/3;  
+					reload += Float.parseFloat(d.fieldValue)/3;
 				if(d.fieldName.equalsIgnoreCase("knockback"))
-					knockback += Float.parseFloat(d.fieldValue)/3;  
+					knockback += Float.parseFloat(d.fieldValue)/3;
 				if(d.fieldName.equalsIgnoreCase("spread"))
-					spread += Float.parseFloat(d.fieldValue);  
+					spread += Float.parseFloat(d.fieldValue);
 				if(d.fieldName.equalsIgnoreCase("speed"))
-					speed += Float.parseFloat(d.fieldValue)/3;  
+					speed += Float.parseFloat(d.fieldValue)/3;
 				if(d.fieldName.equalsIgnoreCase("shots"))
-					shots += Float.parseFloat(d.fieldValue)/3;   
+					shots += Float.parseFloat(d.fieldValue)/3;
 			}
 		}
 
@@ -374,17 +375,17 @@ public class ItemGun extends ItemStoresMRUInNBT implements IModelRegisterer {
 				if(d.fieldName.equalsIgnoreCase("damage"))
 					damage += Float.parseFloat(d.fieldValue)/3;
 				if(d.fieldName.equalsIgnoreCase("reload"))
-					reload += Float.parseFloat(d.fieldValue)/3;  
+					reload += Float.parseFloat(d.fieldValue)/3;
 				if(d.fieldName.equalsIgnoreCase("knockback"))
-					knockback += Float.parseFloat(d.fieldValue)/3;  
+					knockback += Float.parseFloat(d.fieldValue)/3;
 				if(d.fieldName.equalsIgnoreCase("spread"))
-					spread += Float.parseFloat(d.fieldValue)/3;  
+					spread += Float.parseFloat(d.fieldValue)/3;
 				if(d.fieldName.equalsIgnoreCase("speed"))
-					speed += Float.parseFloat(d.fieldValue)/3;  
+					speed += Float.parseFloat(d.fieldValue)/3;
 				if(d.fieldName.equalsIgnoreCase("shots"))
-					shots += Float.parseFloat(d.fieldValue)/3;   
+					shots += Float.parseFloat(d.fieldValue)/3;
 				if(d.fieldName.equalsIgnoreCase("scope.zoom"))
-					zoom += Float.parseFloat(d.fieldValue);   
+					zoom += Float.parseFloat(d.fieldValue);
 			}
 		}
 
@@ -427,6 +428,7 @@ public class ItemGun extends ItemStoresMRUInNBT implements IModelRegisterer {
 		gunTag.setTag("stats", stats);
 	}
 
+	@Override
 	public ItemStack onItemUseFinish(ItemStack gun, World w, EntityLivingBase p)
 	{
 		if(gun.hasTagCompound())
@@ -441,6 +443,7 @@ public class ItemGun extends ItemStoresMRUInNBT implements IModelRegisterer {
 		return gun;
 	}
 
+	@Override
 	public void onUsingTick(ItemStack stack, EntityLivingBase player, int count)
 	{
 		if(!(player instanceof EntityPlayer))
@@ -521,7 +524,7 @@ public class ItemGun extends ItemStoresMRUInNBT implements IModelRegisterer {
 				int usingTicks = 10000-count;
 				if(count >= 10000-60 && count % 5 == 0)
 				{
-					w.playSound(p.posX, p.posY, p.posZ, SoundEvents.ENTITY_MINECART_INSIDE, SoundCategory.PLAYERS, 0.1F, 0F+(float)usingTicks/30F, false);
+					w.playSound(p.posX, p.posY, p.posZ, SoundEvents.ENTITY_MINECART_INSIDE, SoundCategory.PLAYERS, 0.1F, 0F+usingTicks/30F, false);
 				}
 				if(usingTicks >= 60)
 				{
@@ -589,11 +592,13 @@ public class ItemGun extends ItemStoresMRUInNBT implements IModelRegisterer {
 		}
 	}
 
+	@Override
 	public boolean showDurabilityBar(ItemStack stack)
 	{
 		return stack.hasTagCompound() && MiscUtils.getStackTag(stack).hasKey("stats");
 	}
 
+	@Override
 	public double getDurabilityForDisplay(ItemStack stack)
 	{
 		if(stack.hasTagCompound())
@@ -610,6 +615,7 @@ public class ItemGun extends ItemStoresMRUInNBT implements IModelRegisterer {
 		return (double)stack.getItemDamage() / (double)stack.getMaxDamage();
 	}
 
+	@Override
 	public EnumAction getItemUseAction(ItemStack p_77661_1_)
 	{
 		if(p_77661_1_.hasTagCompound())
@@ -627,6 +633,7 @@ public class ItemGun extends ItemStoresMRUInNBT implements IModelRegisterer {
 		return EnumAction.BOW;
 	}
 
+	@Override
 	public int getMaxItemUseDuration(ItemStack p_77626_1_)
 	{
 		if(p_77626_1_.hasTagCompound())
@@ -688,10 +695,10 @@ public class ItemGun extends ItemStoresMRUInNBT implements IModelRegisterer {
 
 		private void draw(VertexBuffer renderer, int x, int y, int width, int height, int red, int green, int blue, int alpha) {
 			renderer.begin(7, DefaultVertexFormats.POSITION_COLOR);
-			renderer.pos((double)(x + 0), (double)(y + 0), 0.0D).color(red, green, blue, alpha).endVertex();
-			renderer.pos((double)(x + 0), (double)(y + height), 0.0D).color(red, green, blue, alpha).endVertex();
-			renderer.pos((double)(x + width), (double)(y + height), 0.0D).color(red, green, blue, alpha).endVertex();
-			renderer.pos((double)(x + width), (double)(y + 0), 0.0D).color(red, green, blue, alpha).endVertex();
+			renderer.pos(x + 0, y + 0, 0.0D).color(red, green, blue, alpha).endVertex();
+			renderer.pos(x + 0, y + height, 0.0D).color(red, green, blue, alpha).endVertex();
+			renderer.pos(x + width, y + height, 0.0D).color(red, green, blue, alpha).endVertex();
+			renderer.pos(x + width, y + 0, 0.0D).color(red, green, blue, alpha).endVertex();
 			Tessellator.getInstance().draw();
 		}
 	}

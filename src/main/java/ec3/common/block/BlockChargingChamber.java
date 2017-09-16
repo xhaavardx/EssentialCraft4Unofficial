@@ -30,17 +30,20 @@ public class BlockChargingChamber extends BlockContainer implements IModelRegist
 	public BlockChargingChamber() {
 		super(Material.ROCK);
 	}
-	
+
+	@Override
 	public EnumBlockRenderType getRenderType(IBlockState s)
 	{
 		return EnumBlockRenderType.MODEL;
 	}
-	
+
+	@Override
 	public boolean isOpaqueCube(IBlockState s)
 	{
 		return false;
 	}
 
+	@Override
 	public boolean isFullCube(IBlockState s)
 	{
 		return false;

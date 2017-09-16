@@ -12,7 +12,7 @@ public class RadiatingChamberRecipe implements IRecipe{
 	public int mruRequired;
 	public float upperBalanceLine,lowerBalanceLine;
 	public float costModifier;
-	
+
 	public RadiatingChamberRecipe(ItemStack[] ingred, ItemStack res, int mruReq, float[] balancePoints)
 	{
 		recipeItems = ingred;
@@ -22,7 +22,7 @@ public class RadiatingChamberRecipe implements IRecipe{
 		lowerBalanceLine = balancePoints[1];
 		costModifier = 1.0F;
 	}
-	
+
 	public RadiatingChamberRecipe(ItemStack[] ingred, ItemStack res, int mruReq, float[] balancePoints, int size)
 	{
 		recipeItems = ingred;
@@ -33,7 +33,7 @@ public class RadiatingChamberRecipe implements IRecipe{
 		costModifier = 1.0F;
 		result.stackSize = size;
 	}
-	
+
 	public RadiatingChamberRecipe(ItemStack[] ingred, ItemStack res, int mruReq, float[] balancePoints, float modifier)
 	{
 		recipeItems = ingred;
@@ -43,7 +43,7 @@ public class RadiatingChamberRecipe implements IRecipe{
 		lowerBalanceLine = balancePoints[1];
 		costModifier = modifier;
 	}
-	
+
 	public RadiatingChamberRecipe(ItemStack[] ingred, ItemStack res, int mruReq, float[] balancePoints, float modifier, int size)
 	{
 		recipeItems = ingred;
@@ -54,7 +54,7 @@ public class RadiatingChamberRecipe implements IRecipe{
 		costModifier = modifier;
 		result.stackSize = size;
 	}
-	
+
 	public RadiatingChamberRecipe(RadiatingChamberRecipe recipeByResult) {
 		recipeItems = recipeByResult.recipeItems;
 		result = recipeByResult.result;
@@ -96,7 +96,8 @@ public class RadiatingChamberRecipe implements IRecipe{
 	public ItemStack getRecipeOutput() {
 		return result;
 	}
-	
+
+	@Override
 	public String toString()
 	{
 		String retStr = super.toString();

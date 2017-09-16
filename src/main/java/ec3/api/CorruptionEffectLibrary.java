@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CorruptionEffectLibrary {
-	
+
 	public static final List<ICorruptionEffect> allPossibleEffects = new ArrayList<ICorruptionEffect>();
 
 	public static void addEffect(ICorruptionEffect effect)
@@ -12,11 +12,11 @@ public class CorruptionEffectLibrary {
 		if(effect != null)
 			allPossibleEffects.add(effect);
 	}
-	
+
 	public static ArrayList<ICorruptionEffect> findSuitableEffects(int maxCost)
 	{
 		ArrayList<ICorruptionEffect> retLst = new ArrayList<ICorruptionEffect>();
-		
+
 		for(int i = 0; i < allPossibleEffects.size(); ++i)
 		{
 			ICorruptionEffect effect = allPossibleEffects.get(i);
@@ -30,7 +30,7 @@ public class CorruptionEffectLibrary {
 				}
 			}
 		}
-		
+
 		return retLst;
 	}
 }

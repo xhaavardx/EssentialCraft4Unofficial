@@ -2,21 +2,19 @@ package ec3.common.tile;
 
 import java.util.List;
 
+import DummyCore.Utils.DataStorage;
+import DummyCore.Utils.DummyData;
+import DummyCore.Utils.MiscUtils;
 import ec3.common.block.BlockCorruption_Light;
 import ec3.common.block.BlocksCore;
 import ec3.common.registry.BiomeRegistry;
 import ec3.common.registry.PotionRegistry;
 import ec3.utils.common.ECUtils;
-import DummyCore.Utils.DataStorage;
-import DummyCore.Utils.DummyData;
-import DummyCore.Utils.MiscUtils;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.INetHandlerPlayClient;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
@@ -28,9 +26,9 @@ import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.config.Configuration;
 
 public class TileCorruption extends TileEntity implements ITickable {
-	
+
 	public static boolean canChangeBiome = true, canDestroyBlocks = true;
-	
+
 	@Override
 	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
 		if(pkt.getTileEntityType() == -11) {
@@ -39,7 +37,7 @@ public class TileCorruption extends TileEntity implements ITickable {
 			MiscUtils.changeBiome(getWorld(), Biome.getBiome(biomeID), pos.getX(), pos.getZ());
 		}
 	}
-	
+
 	public void changeBiomeAtPos(int biomeID) {
 		if(canChangeBiome) {
 			MiscUtils.changeBiome(getWorld(), Biome.getBiome(biomeID), pos.getX(), pos.getZ());
@@ -49,13 +47,14 @@ public class TileCorruption extends TileEntity implements ITickable {
 			MiscUtils.sendPacketToAllAround(getWorld(), pkt, pos.getX(), pos.getY(), pos.getZ(), getWorld().provider.getDimension(), 32);
 		}
 	}
-	
+
 	public void addPotionEffectAtEntity(EntityLivingBase e, PotionEffect p) {
 		if(!e.isPotionActive(p.getPotion())) {
 			e.addPotionEffect(p);
 		}
 	}
-	
+
+	@Override
 	@SuppressWarnings("unchecked")
 	public void update() {
 		try {
@@ -108,7 +107,7 @@ public class TileCorruption extends TileEntity implements ITickable {
 			return;
 		}
 	}
-	
+
 	public static void setupConfig(Configuration cfg) {
 		try {
 			cfg.load();
@@ -117,10 +116,10 @@ public class TileCorruption extends TileEntity implements ITickable {
 					"Destroy Blocks if grown:true"
 			}, "Settings of the given Device.");
 			String dataString = "";
-			
+
 			for(int i = 0; i < cfgArrayString.length; ++i)
 				dataString += "||" + cfgArrayString[i];
-			
+
 			DummyData[] data = DataStorage.parseData(dataString);
 			canChangeBiome = Boolean.parseBoolean(data[0].fieldValue);
 			canDestroyBlocks = Boolean.parseBoolean(data[1].fieldValue);

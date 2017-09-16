@@ -3,21 +3,17 @@ package ec3.client.render.tile;
 import DummyCore.Client.AdvancedModelLoader;
 import DummyCore.Client.IModelCustom;
 import DummyCore.Utils.DrawUtils;
-import DummyCore.Utils.MiscUtils;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import ec3.common.tile.TileMagicalMirror;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
-
-import org.lwjgl.opengl.GL11;
-
-import ec3.common.tile.TileMagicalMirror;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class RenderMagicalMirror extends TileEntitySpecialRenderer
@@ -54,7 +50,7 @@ public class RenderMagicalMirror extends TileEntitySpecialRenderer
 			double d0 = tile.inventoryPos.x - (tile.getPos().getX()+0.5F);
 			double d1 = tile.inventoryPos.y - (tile.getPos().getY()+0.5F+yIndex);
 			double d2 = tile.inventoryPos.z - (tile.getPos().getZ()+0.5F);
-			double d3 = (double)MathHelper.sqrt(d0 * d0 + d2 * d2);
+			double d3 = MathHelper.sqrt(d0 * d0 + d2 * d2);
 			float f = -(float)(Math.atan2(d2, d0) * 180.0D / Math.PI)-90;
 			float f1 = -(float)(-(Math.atan2(d1, d3) * 180.0D / Math.PI));
 
@@ -90,7 +86,7 @@ public class RenderMagicalMirror extends TileEntitySpecialRenderer
 		{
 			if(tile.transferTime < 20)
 			{
-				DrawUtils.renderItemStack_Full(tile.transferingStack, tile.getPos().getX(), tile.getPos().getY(), tile.getPos().getZ(), p_76986_2_, p_76986_4_, p_76986_6_, tile.getWorld().getWorldTime()%360, 0, 1, 1, 1, 0.5F, -0.3F+((float)tile.transferTime/20F), 0.5F, false);
+				DrawUtils.renderItemStack_Full(tile.transferingStack, tile.getPos().getX(), tile.getPos().getY(), tile.getPos().getZ(), p_76986_2_, p_76986_4_, p_76986_6_, tile.getWorld().getWorldTime()%360, 0, 1, 1, 1, 0.5F, -0.3F+(tile.transferTime/20F), 0.5F, false);
 			}else
 			{
 				Vec3d vec = new Vec3d(tile.inventoryPos.x - (tile.getPos().getX()+0.5F), tile.inventoryPos.y - (tile.getPos().getY()+0.5F), tile.inventoryPos.z - (tile.getPos().getZ()+0.5F));
@@ -111,7 +107,7 @@ public class RenderMagicalMirror extends TileEntitySpecialRenderer
 	@Override
 	public void renderTileEntityAt(TileEntity p_147500_1_, double p_147500_2_, double p_147500_4_, double p_147500_6_, float p_147500_8_, int destroyStage) {
 		if(p_147500_1_.getBlockMetadata() == 0)
-			this.doRender((TileEntity) p_147500_1_, p_147500_2_, p_147500_4_, p_147500_6_, p_147500_8_, 0);
+			this.doRender(p_147500_1_, p_147500_2_, p_147500_4_, p_147500_6_, p_147500_8_, 0);
 	}
 
 	@Override

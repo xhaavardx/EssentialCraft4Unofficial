@@ -2,9 +2,9 @@ package ec3.common.entity;
 
 import java.util.List;
 
+import DummyCore.Utils.MathUtils;
 import ec3.common.item.ItemsCore;
 import ec3.utils.common.ECUtils;
-import DummyCore.Utils.MathUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -20,11 +20,11 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
@@ -54,7 +54,7 @@ public class EntityOrbitalStrike extends Entity {
 	public double damage = 1;
 
 	@Override
-	protected void entityInit() 
+	protected void entityInit()
 	{
 		this.getDataManager().register(DATA, "||null:null");
 	}
@@ -102,6 +102,7 @@ public class EntityOrbitalStrike extends Entity {
 
 				elb.attackEntityFrom(new DamageSource("orbitalStrike"){
 
+					@Override
 					public Entity getEntity()
 					{
 						return attacker;
@@ -136,11 +137,11 @@ public class EntityOrbitalStrike extends Entity {
 									if(!this.getEntityWorld().isRemote)
 										this.getEntityWorld().setBlockState(new BlockPos(x, y, z), Blocks.AIR.getDefaultState(),2);
 
-									getEntityWorld().playSound((double)((float)x + 0.5F), (double)((float)y + 0.5F), (double)((float)z + 0.5F), SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 0.5F, 2.6F + (getEntityWorld().rand.nextFloat() - getEntityWorld().rand.nextFloat()) * 0.8F, false);
+									getEntityWorld().playSound(x + 0.5F, y + 0.5F, z + 0.5F, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 0.5F, 2.6F + (getEntityWorld().rand.nextFloat() - getEntityWorld().rand.nextFloat()) * 0.8F, false);
 
 									for (int l = 0; l < 8; ++l)
 									{
-										getEntityWorld().spawnParticle(EnumParticleTypes.SMOKE_LARGE, (double)x + Math.random(), (double)y + Math.random(), (double)z + Math.random(), 0.0D, 0.0D, 0.0D);
+										getEntityWorld().spawnParticle(EnumParticleTypes.SMOKE_LARGE, x + Math.random(), y + Math.random(), z + Math.random(), 0.0D, 0.0D, 0.0D);
 									}
 
 									continue;
@@ -169,7 +170,7 @@ public class EntityOrbitalStrike extends Entity {
 								is = null;
 								result = null;
 							}
-						}	
+						}
 					}
 				}
 		}
@@ -185,7 +186,7 @@ public class EntityOrbitalStrike extends Entity {
 			}
 		}
 	}
-	
+
 	@Override
 	public ItemStack getPickedResult(RayTraceResult target) {
 		return new ItemStack(ItemsCore.entityEgg,1,EntitiesCore.registeredEntities.indexOf(this.getClass()));

@@ -23,11 +23,13 @@ public class BlockMRUReactor extends BlockContainer implements IModelRegisterer 
 		super(Material.ROCK);
 	}
 
+	@Override
 	public boolean isOpaqueCube(IBlockState s)
 	{
 		return false;
 	}
 
+	@Override
 	public boolean isFullCube(IBlockState s)
 	{
 		return false;

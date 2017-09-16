@@ -13,7 +13,7 @@ import net.minecraft.util.SoundCategory;
 
 public class PotionMindfoldParadox extends Potion {
 
-	public PotionMindfoldParadox(int p_i1573_1_, boolean p_i1573_2_,int p_i1573_3_) 
+	public PotionMindfoldParadox(int p_i1573_1_, boolean p_i1573_2_,int p_i1573_3_)
 	{
 		super(p_i1573_2_, p_i1573_3_);
 		this.setIconIndex(7, 2);
@@ -26,6 +26,7 @@ public class PotionMindfoldParadox extends Potion {
 		return true;
 	}
 
+	@Override
 	public void performEffect(EntityLivingBase p_76394_1_, int p_76394_2_)
 	{
 		int duration = p_76394_1_.getActivePotionEffect(PotionRegistry.paradox).getDuration();
@@ -37,22 +38,26 @@ public class PotionMindfoldParadox extends Potion {
 		}
 	}
 
+	@Override
 	public boolean isReady(int p_76397_1_, int p_76397_2_)
 	{
 		return true;
 	}
 
+	@Override
 	public boolean hasStatusIcon()
 	{
 		return true;
 	}
 
+	@Override
 	public int getStatusIconIndex()
 	{
 		Minecraft.getMinecraft().renderEngine.bindTexture(rl);
 		return super.getStatusIconIndex();
 	}
 
+	@Override
 	public boolean shouldRenderInvText(PotionEffect effect)
 	{
 		return false;
@@ -66,8 +71,9 @@ public class PotionMindfoldParadox extends Potion {
 	 * @param effect the active PotionEffect
 	 * @param mc the Minecraft instance, for convenience
 	 */
+	@Override
 	public void renderInventoryEffect(int x, int y, PotionEffect effect, net.minecraft.client.Minecraft mc)
-	{ 
+	{
 		String s1 = I18n.format(effect.getEffectName(), new Object[0]);
 		mc.fontRendererObj.drawStringWithShadow(s1, x + 10 + 18, y + 6, 16777215);
 		mc.fontRendererObj.drawStringWithShadow(net.minecraft.util.text.translation.I18n.translateToLocal("potion.paradox.txt"), x + 10 + 18, y + 16, 16777215);

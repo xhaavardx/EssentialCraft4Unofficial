@@ -68,6 +68,7 @@ public class BlockFancy extends Block implements IColdBlock, IModelRegisterer {
 		return new ItemStack(this,1,state.getValue(TYPE).getIndex());
 	}
 
+	@Override
 	public void getSubBlocks(Item p_149666_1_, CreativeTabs p_149666_2_, List<ItemStack> p_149666_3_)
 	{
 		for(int i = 0; i < overlays.length; ++i)
@@ -102,7 +103,7 @@ public class BlockFancy extends Block implements IColdBlock, IModelRegisterer {
 			ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), i, new ModelResourceLocation("essentialcraft:" + getRegistryName().getResourcePath().replace('.', '/'), "type=" + FancyBlockType.fromIndex(i).getName()));
 		}
 	}
-	
+
 	public static enum FancyBlockType implements IStringSerializable {
 		ANCIENTTILE("ancient_tile"),
 		BIGTILE("big_tile"),
@@ -120,32 +121,34 @@ public class BlockFancy extends Block implements IColdBlock, IModelRegisterer {
 		PACKEDPLATE("packed_plate"),
 		DOUBLEPLATE("double_plate"),
 		GEM("gem");
-		
+
 		private int index;
 		private String name;
-		
+
 		private FancyBlockType(String s) {
 			index = ordinal();
 			name = s;
 		}
-		
+
+		@Override
 		public String getName() {
 			return name;
 		}
-		
+
+		@Override
 		public String toString() {
 			return name;
 		}
-		
+
 		public int getIndex() {
 			return index;
 		}
-		
+
 		public static FancyBlockType fromIndex(int i) {
 			return values()[i%16];
 		}
 	}
-	
+
 	public static class FancyBlockStateMapper extends StateMapperBase {
 		@Override
 		protected ModelResourceLocation getModelResourceLocation(IBlockState state) {

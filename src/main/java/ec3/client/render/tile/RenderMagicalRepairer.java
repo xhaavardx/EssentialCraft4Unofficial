@@ -3,19 +3,14 @@ package ec3.client.render.tile;
 import DummyCore.Client.AdvancedModelLoader;
 import DummyCore.Client.IModelCustom;
 import DummyCore.Utils.DrawUtils;
-import DummyCore.Utils.MiscUtils;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import ec3.common.tile.TileMagicalRepairer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
-
-import org.lwjgl.opengl.GL11;
-
-import ec3.common.tile.TileMagicalRepairer;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class RenderMagicalRepairer extends TileEntitySpecialRenderer<TileMagicalRepairer> {
@@ -43,7 +38,7 @@ public class RenderMagicalRepairer extends TileEntitySpecialRenderer<TileMagical
 
 		float rotation = tile.getWorld().getWorldTime() % 360;
 
-		GlStateManager.pushMatrix(); 
+		GlStateManager.pushMatrix();
 		DrawUtils.renderItemStack_Full(tile.getStackInSlot(1),tile.getPos().getX()+0.5D,tile.getPos().getY()+10D , tile.getPos().getZ()+0.5D, p_76986_2_, p_76986_4_, p_76986_6_, rotation,0F, 1, 1, 1, 0.5F, 0.65F,0.5F, false);
 		GlStateManager.popMatrix();
 		RenderHelper.enableStandardItemLighting();

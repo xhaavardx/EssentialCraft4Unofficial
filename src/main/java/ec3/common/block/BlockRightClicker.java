@@ -54,27 +54,32 @@ public class BlockRightClicker extends BlockContainer implements IModelRegistere
 		super(Material.ROCK);
 		setDefaultState(blockState.getBaseState().withProperty(TYPE, ActivatorType.NORMAL).withProperty(FACING, EnumFacing.NORTH));
 	}
-	
+
+	@Override
 	public EnumBlockRenderType getRenderType(IBlockState s)
 	{
 		return EnumBlockRenderType.MODEL;
 	}
-	
-    public boolean canRenderInLayer(IBlockState state, BlockRenderLayer layer)
-    {
-        return true;
-    }
-	
+
+	@Override
+	public boolean canRenderInLayer(IBlockState state, BlockRenderLayer layer)
+	{
+		return true;
+	}
+
+	@Override
 	public boolean isOpaqueCube(IBlockState s)
 	{
 		return false;
 	}
 
+	@Override
 	public int damageDropped(IBlockState meta)
 	{
 		return meta.getValue(TYPE).getIndex();
 	}
 
+	@Override
 	public void getSubBlocks(Item p_149666_1_, CreativeTabs p_149666_2_, List<ItemStack> p_149666_3_) {
 		p_149666_3_.add(new ItemStack(p_149666_1_, 1, 0));
 		p_149666_3_.add(new ItemStack(p_149666_1_, 1, 1));
@@ -95,7 +100,8 @@ public class BlockRightClicker extends BlockContainer implements IModelRegistere
 		return new TileRightClicker();
 	}
 
-	public void getStateForPlacementBy(World w, BlockPos p, IBlockState s, EntityLivingBase placer, ItemStack p_149689_6_)
+	@Override
+	public void onBlockPlacedBy(World w, BlockPos p, IBlockState s, EntityLivingBase placer, ItemStack p_149689_6_)
 	{
 		int l = BlockPistonBase.getFacingFromEntity(p, placer).getIndex();
 		TileEntity tile = w.getTileEntity(p);
@@ -181,10 +187,12 @@ public class BlockRightClicker extends BlockContainer implements IModelRegistere
 			name = s;
 		}
 
+		@Override
 		public String getName() {
 			return name;
 		}
 
+		@Override
 		public String toString() {
 			return name;
 		}

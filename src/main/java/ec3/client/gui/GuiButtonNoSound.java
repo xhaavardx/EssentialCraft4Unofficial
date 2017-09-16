@@ -1,8 +1,6 @@
 package ec3.client.gui;
 
-import DummyCore.Utils.MathUtils;
 import ec3.common.registry.SoundRegistry;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.gui.GuiButton;
@@ -14,8 +12,8 @@ public class GuiButtonNoSound extends GuiButton {
 	}
 
 	@Override
-    public void playPressSound(SoundHandler p_146113_1_)
-    {
+	public void playPressSound(SoundHandler p_146113_1_)
+	{
 		p_146113_1_.playSound(PositionedSoundRecord.getMasterRecord(SoundRegistry.bookPageTurn, 1.0F));
-    }
+	}
 }

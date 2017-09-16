@@ -7,7 +7,6 @@ import ec3.utils.common.ECUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
@@ -22,8 +21,8 @@ public class MRUFX extends Particle{
 	public float tickPos;
 	private static final ResourceLocation particleTextures = new ResourceLocation("textures/particle/particles.png");
 	private static final ResourceLocation ecparticleTextures = new ResourceLocation("essentialcraft","textures/special/particles.png");
-	
-	public MRUFX(World w, double x, double y,double z, double i, double j,double k) 
+
+	public MRUFX(World w, double x, double y,double z, double i, double j,double k)
 	{
 		super(w, x, y, z, i, j,k);
 		this.motionX = i;
@@ -43,7 +42,7 @@ public class MRUFX extends Particle{
 		this.setParticleTextureIndex((int)(Math.random() * 8.0D));
 	}
 
-	public MRUFX(World w, double x, double y,double z, double i, double j,double k, double cR, double cG, double cB) 
+	public MRUFX(World w, double x, double y,double z, double i, double j,double k, double cR, double cG, double cB)
 	{
 		this(w,x,y,z,i,j,k);
 		this.particleRed = (float) cR;
@@ -56,6 +55,7 @@ public class MRUFX extends Particle{
 		return true;
 	}
 
+	@Override
 	public void renderParticle(VertexBuffer var1, Entity var2, float par2, float par3, float par4, float par5, float par6, float par7)
 	{
 		TessellatorWrapper.getInstance().draw().begin(7, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
@@ -88,6 +88,7 @@ public class MRUFX extends Particle{
 			GlStateManager.disableBlend();
 	}
 
+	@Override
 	public int getBrightnessForRender(float p_70070_1_)
 	{
 		return 255;
@@ -107,6 +108,7 @@ public class MRUFX extends Particle{
 	/**
 	 * Called to update the entity's position/logic.
 	 */
+	@Override
 	public void onUpdate()
 	{
 		tickPos += 15+this.world.rand.nextFloat()*15;
@@ -118,9 +120,9 @@ public class MRUFX extends Particle{
 		this.prevPosY = this.posY;
 		this.prevPosZ = this.posZ;
 		float f = (float)this.particleAge / (float)this.particleMaxAge;
-		this.posX = (this.mruPosX + this.motionX * (double)f) + Math.sin(Math.toRadians(tickPos + this.world.getWorldTime()*10))/10;
-		this.posY = (this.mruPosY + this.motionY * (double)f) + Math.cos(Math.toRadians(tickPos + this.world.getWorldTime()*10))/10;
-		this.posZ = (this.mruPosZ + this.motionZ * (double)f) - Math.sin(Math.toRadians(tickPos + this.world.getWorldTime()*10))/10;
+		this.posX = (this.mruPosX + this.motionX * f) + Math.sin(Math.toRadians(tickPos + this.world.getWorldTime()*10))/10;
+		this.posY = (this.mruPosY + this.motionY * f) + Math.cos(Math.toRadians(tickPos + this.world.getWorldTime()*10))/10;
+		this.posZ = (this.mruPosZ + this.motionZ * f) - Math.sin(Math.toRadians(tickPos + this.world.getWorldTime()*10))/10;
 
 		if (this.particleAge++ >= this.particleMaxAge)
 		{

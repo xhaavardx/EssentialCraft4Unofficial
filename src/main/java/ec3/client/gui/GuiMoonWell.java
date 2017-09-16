@@ -22,7 +22,7 @@ public class GuiMoonWell extends GuiCommon{
 		this.elementList.add(new GuiMRUGenerated(43, 40,tile,"moonwell"));
 		this.elementList.add(new GuiBalanceState(25, 22, tile));
 	}
-	
-	
+
+
 
 }

@@ -1,18 +1,14 @@
 package ec3.common.block;
 
-import java.util.List;
-
 import DummyCore.Blocks.Properties.UnlistedPropertyObject;
 import DummyCore.Client.IModelRegisterer;
 import ec3.common.tile.TileMimic;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
@@ -29,7 +25,6 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.property.ExtendedBlockState;
 import net.minecraftforge.common.property.IExtendedBlockState;
@@ -74,6 +69,7 @@ public class BlockMimic extends BlockContainer implements IModelRegisterer {
 		return state;
 	}
 
+	@Override
 	public boolean isOpaqueCube(IBlockState s) {
 		return false;
 	}
@@ -87,16 +83,26 @@ public class BlockMimic extends BlockContainer implements IModelRegisterer {
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
 		TileEntity tile = worldIn.getTileEntity(pos);
 
-		if(worldIn.isRemote)
-			return true;
-		if(heldItem != null && heldItem.getItem() instanceof ItemBlock && tile instanceof TileMimic && !playerIn.isSneaking()) {
-			TileMimic mimic = (TileMimic)tile;
-			IBlockState changeState = ((ItemBlock)heldItem.getItem()).getBlock().getStateForPlacement(worldIn, pos, side, hitX, hitY, hitZ, heldItem.getItemDamage(), playerIn);
+		if(tile instanceof TileMimic) {
+			if(!playerIn.isSneaking()) {
+				if(heldItem != null && heldItem.getItem() instanceof ItemBlock) {
+					TileMimic mimic = (TileMimic)tile;
+					IBlockState changeState = ((ItemBlock)heldItem.getItem()).getBlock().getStateForPlacement(worldIn, pos, side, hitX, hitY, hitZ, heldItem.getItemDamage(), playerIn);
 
-			if(isValidBlock(changeState) && changeState.getBlock() != this) {
-				mimic.setState(changeState);
-				worldIn.notifyBlockUpdate(pos, state, state, 2);
-				return true;
+					if(isValidBlock(changeState) && changeState.getBlock() != this) {
+						mimic.setState(changeState);
+						worldIn.markBlockRangeForRenderUpdate(pos, pos.add(1, 1, 1));
+						return true;
+					}
+				}
+			}
+			else {
+				TileMimic mimic = (TileMimic)tile;
+				if(mimic.getState() != null) {
+					mimic.setState(null);
+					worldIn.markBlockRangeForRenderUpdate(pos, pos.add(1, 1, 1));
+					return true;
+				}
 			}
 		}
 		return false;
@@ -116,6 +122,7 @@ public class BlockMimic extends BlockContainer implements IModelRegisterer {
 		return NULL_AABB;
 	}
 
+	@Override
 	public boolean isFullCube(IBlockState state) {
 		return false;
 	}
@@ -128,7 +135,7 @@ public class BlockMimic extends BlockContainer implements IModelRegisterer {
 	public void registerModels() {
 		ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation("essentialcraft:mimic", "inventory"));
 	}
-	
+
 	private static class FakeBlockAccess implements IBlockAccess {
 
 		private final IBlockAccess compose;

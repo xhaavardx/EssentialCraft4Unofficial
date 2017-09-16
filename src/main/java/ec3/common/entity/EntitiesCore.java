@@ -3,6 +3,8 @@ package ec3.common.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import ec3.common.mod.EssentialCraftCore;
+import ec3.utils.cfg.Config;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EnumCreatureType;
@@ -11,12 +13,10 @@ import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
-import ec3.common.mod.EssentialCraftCore;
-import ec3.utils.cfg.Config;
 
 public class EntitiesCore {
-	public static final List<Class<? extends Entity>> registeredEntities = new ArrayList<Class<? extends Entity>>(); 
-	
+	public static final List<Class<? extends Entity>> registeredEntities = new ArrayList<Class<? extends Entity>>();
+
 	public static void registerEntities() {
 		registerEntity(EntityMRUPresence.class, 64, 1, true);
 		registerEntity(EntityMRUArrow.class, 64, 1, true);
@@ -32,22 +32,22 @@ public class EntitiesCore {
 		registerEntity(EntityDivider.class, 32, 1, true);
 		registerEntity(EntityArmorDestroyer.class, 32, 1, true);
 		registerEntity(EntityDividerProjectile.class, 32, 1, true);
-		
+
 		EntityRegistry.addSpawn(EntityWindMage.class, 2, 1, 6, EnumCreatureType.MONSTER, biomesToSpawn());
 		EntityRegistry.addSpawn(EntityPoisonFume.class, 100, 8, 16, EnumCreatureType.MONSTER, biomesToSpawn());
 	}
-	
+
 	public static void registerEntity(Class<? extends Entity> entityClass, int trackingRange, int tickDelay, boolean trackRotation) {
 		EntityRegistry.registerModEntity(entityClass, entityClass.getName(), nextID(), EssentialCraftCore.core, trackingRange, tickDelay, trackRotation);
 		registeredEntities.add(entityClass);
 	}
-	
+
 	public static int id = -1;
-	
+
 	private static int nextID() {
 		return ++id;
 	}
-	
+
 	public static int nextEntityID(int defaultID)
 	{
 		if(Config.autoFindEID)
@@ -59,7 +59,7 @@ public class EntitiesCore {
 		}
 		return defaultID;
 	}
-	
+
 	public static Biome[] biomesToSpawn() {
 		List<Biome> spawnLst = new ArrayList<Biome>();
 		for(Biome biome : Biome.REGISTRY)

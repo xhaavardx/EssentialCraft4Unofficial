@@ -4,6 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import DummyCore.Utils.DataStorage;
+import DummyCore.Utils.DummyData;
+import DummyCore.Utils.MathUtils;
+import DummyCore.Utils.MiscUtils;
+import DummyCore.Utils.WeightedRandomChestContent;
 import ec3.common.item.ItemBaublesWearable;
 import ec3.common.item.ItemsCore;
 import ec3.common.mod.EssentialCraftCore;
@@ -11,11 +16,6 @@ import ec3.common.registry.AchievementRegistry;
 import ec3.common.registry.SoundRegistry;
 import ec3.common.world.WorldGenOldCatacombs;
 import ec3.utils.common.ECUtils;
-import DummyCore.Utils.DataStorage;
-import DummyCore.Utils.DummyData;
-import DummyCore.Utils.MathUtils;
-import DummyCore.Utils.MiscUtils;
-import DummyCore.Utils.WeightedRandomChestContent;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -31,7 +31,6 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.PlayerList;
-import net.minecraft.stats.AchievementList;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
@@ -39,11 +38,8 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.BossInfo;
 import net.minecraft.world.BossInfoServer;
-import net.minecraft.world.Teleporter;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.FakePlayer;
-import net.minecraftforge.event.entity.player.AchievementEvent;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 
 public class EntityHologram extends EntityLiving {
 	public static final double RANGE = 24;
@@ -60,6 +56,7 @@ public class EntityHologram extends EntityLiving {
 	@Override
 	public void fall(float distance, float damageMultiplier) {}
 
+	@Override
 	protected void dropFewItems(boolean playerkill, int fortune) {
 		if(!this.getEntityWorld().isRemote) {
 			for(int i = 0; i < this.players.size(); ++i) {
@@ -129,6 +126,7 @@ public class EntityHologram extends EntityLiving {
 		super(w);
 	}
 
+	@Override
 	protected void applyEntityAttributes()
 	{
 		super.applyEntityAttributes();
@@ -138,22 +136,25 @@ public class EntityHologram extends EntityLiving {
 	}
 
 	@Override
-	protected void entityInit() 
+	protected void entityInit()
 	{
 		super.entityInit();
 		this.getDataManager().register(DATA, "||null:null");
 	}
 
+	@Override
 	protected SoundEvent getAmbientSound()
 	{
 		return null;
 	}
 
+	@Override
 	protected SoundEvent getHurtSound()
 	{
 		return null;
 	}
 
+	@Override
 	protected SoundEvent getDeathSound()
 	{
 		return SoundRegistry.entityHologramShutdown;
@@ -260,10 +261,10 @@ public class EntityHologram extends EntityLiving {
 						this.faceEntity(MiscUtils.getPlayerFromUUID(players.get(i)), 360F, 180F);
 						EntityArmorDestroyer destr = new EntityArmorDestroyer(this.getEntityWorld(),this);
 						destr.setHeadingFromThrower(this, this.rotationPitch, this.rotationYaw, 0.0F, 1.5F, 0.5F);
-						
+
 						this.rotationYaw = this.getEntityWorld().rand.nextFloat()*360;
 						this.rotationPitch = 90-this.getEntityWorld().rand.nextFloat()*180;
-						
+
 						this.getEntityWorld().spawnEntity(destr);
 					}
 				}
@@ -375,6 +376,7 @@ public class EntityHologram extends EntityLiving {
 			tag.setString("player_"+i, players.get(i));
 	}
 
+	@Override
 	public void readEntityFromNBT(NBTTagCompound tag) {
 		super.readEntityFromNBT(tag);
 		attackID = tag.getInteger("attackID");
@@ -398,6 +400,7 @@ public class EntityHologram extends EntityLiving {
 	@Override
 	protected void collideWithEntity(Entity e) {}
 
+	@Override
 	public boolean attackEntityFrom(DamageSource src, float f) {
 		if(this.attackID != -1)
 			return false;

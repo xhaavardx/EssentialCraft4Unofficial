@@ -18,7 +18,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -151,7 +150,7 @@ public class GuiMRUGenerated extends GuiTextElement{
 			if(tile instanceof TileUltraFlowerBurner)
 			{
 				TileUltraFlowerBurner furnace = (TileUltraFlowerBurner) tile;
-				Minecraft.getMinecraft().fontRendererObj.drawStringWithShadow((int)furnace.mruProduced+" MRU/t", posX+2, posY+5, 0xffffff);
+				Minecraft.getMinecraft().fontRendererObj.drawStringWithShadow(furnace.mruProduced+" MRU/t", posX+2, posY+5, 0xffffff);
 				DrawUtils.bindTexture("essentialcraft", "textures/gui/slot_common.png");
 				this.drawTexturedModalRect(posX+82, posY, 0, 0, 18, 18);
 				RenderItem renderitem = Minecraft.getMinecraft().getRenderItem();
@@ -178,7 +177,7 @@ public class GuiMRUGenerated extends GuiTextElement{
 			if(tile instanceof TileColdDistillator)
 			{
 				TileColdDistillator cold = (TileColdDistillator) tile;
-				Minecraft.getMinecraft().fontRendererObj.drawStringWithShadow((int)cold.CgetMru()+" MRU/t", posX+2, posY+5, 0xffffff);
+				Minecraft.getMinecraft().fontRendererObj.drawStringWithShadow(cold.CgetMru()+" MRU/t", posX+2, posY+5, 0xffffff);
 			}
 		}
 		if(tileValue.equals("enderGenerator"))
@@ -243,7 +242,7 @@ public class GuiMRUGenerated extends GuiTextElement{
 				heightFactor = 0F;
 			else
 			{
-				heightFactor = 1.0F - (float)((float)tile.getPos().getY()/80F);
+				heightFactor = 1.0F - tile.getPos().getY()/80F;
 				mruGenerated *= heightFactor;
 			}
 			Minecraft.getMinecraft().fontRendererObj.drawStringWithShadow((int)mruGenerated+" MRU/t", posX+2, posY+5, 0xffffff);

@@ -10,8 +10,6 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.Packet;
-import net.minecraft.network.play.INetHandlerPlayClient;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -27,19 +25,19 @@ public class TileMagicalDisplay extends TileEntity implements IInventory, ITicka
 	public ItemStack[] items = new ItemStack[1];
 	private TileStatTracker tracker;
 	private boolean requestSync = true;
-	
+
 	public TileMagicalDisplay() {
 		super();
 		tracker = new TileStatTracker(this);
 	}
-	
+
 	@Override
 	public void readFromNBT(NBTTagCompound i) {
 		super.readFromNBT(i);
 		MiscUtils.loadInventory(this, i);
 		type = i.getInteger("type");
 	}
-	
+
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound i) {
 		super.writeToNBT(i);
@@ -47,10 +45,10 @@ public class TileMagicalDisplay extends TileEntity implements IInventory, ITicka
 		i.setInteger("type", type);
 		return i;
 	}
-	
+
 	@Override
 	public void update() {
-		//Sending the sync packets to the CLIENT. 
+		//Sending the sync packets to the CLIENT.
 		if(syncTick == 0) {
 			if(tracker == null)
 				Notifier.notifyCustomMod("EssentialCraft", "[WARNING][SEVERE]TileEntity " + this + " at pos " + pos.getX() + "," + pos.getY() + "," + pos.getZ() + " tries to sync itself, but has no TileTracker attached to it! SEND THIS MESSAGE TO THE DEVELOPER OF THE MOD!");
@@ -60,7 +58,7 @@ public class TileMagicalDisplay extends TileEntity implements IInventory, ITicka
 		}
 		else
 			--syncTick;
-		
+
 		if(requestSync && getWorld().isRemote) {
 			requestSync = false;
 			ECUtils.requestScheduledTileSync(this, EssentialCraftCore.proxy.getClientPlayer());
@@ -68,33 +66,33 @@ public class TileMagicalDisplay extends TileEntity implements IInventory, ITicka
 	}
 
 	@Override
-    public SPacketUpdateTileEntity getUpdatePacket() {
-        NBTTagCompound nbttagcompound = new NBTTagCompound();
-        writeToNBT(nbttagcompound);
-        return new SPacketUpdateTileEntity(pos, -10, nbttagcompound);
-    }
-	
+	public SPacketUpdateTileEntity getUpdatePacket() {
+		NBTTagCompound nbttagcompound = new NBTTagCompound();
+		writeToNBT(nbttagcompound);
+		return new SPacketUpdateTileEntity(pos, -10, nbttagcompound);
+	}
+
 	@Override
-    public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
+	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
 		if(pkt.getTileEntityType() == -10)
 			readFromNBT(pkt.getNbtCompound());
-    }
-	
+	}
+
 	@Override
 	public int getSizeInventory() {
 		return items.length;
 	}
-	
+
 	@Override
 	public ItemStack getStackInSlot(int par1) {
 		return items[par1];
 	}
-	
+
 	@Override
 	public ItemStack decrStackSize(int par1, int par2) {
 		if(items[par1] != null) {
 			ItemStack itemstack;
-			
+
 			if(items[par1].stackSize <= par2) {
 				itemstack = items[par1];
 				items[par1] = null;
@@ -102,11 +100,11 @@ public class TileMagicalDisplay extends TileEntity implements IInventory, ITicka
 			}
 			else {
 				itemstack = items[par1].splitStack(par2);
-				
+
 				if(items[par1].stackSize == 0) {
 					items[par1] = null;
 				}
-				
+
 				return itemstack;
 			}
 		}
@@ -114,7 +112,7 @@ public class TileMagicalDisplay extends TileEntity implements IInventory, ITicka
 			return null;
 		}
 	}
-	
+
 	@Override
 	public ItemStack removeStackFromSlot(int par1) {
 		if(items[par1] != null) {
@@ -126,40 +124,40 @@ public class TileMagicalDisplay extends TileEntity implements IInventory, ITicka
 			return null;
 		}
 	}
-	
+
 	@Override
 	public void setInventorySlotContents(int par1, ItemStack par2ItemStack)
 	{
 		items[par1] = par2ItemStack;
-		
+
 		if (par2ItemStack != null && par2ItemStack.stackSize > getInventoryStackLimit()) {
 			par2ItemStack.stackSize = getInventoryStackLimit();
 		}
 	}
-	
+
 	@Override
 	public String getName() {
 		return "ec3.container.display";
 	}
-	
+
 	@Override
 	public boolean hasCustomName() {
 		return false;
 	}
-	
+
 	@Override
 	public int getInventoryStackLimit() {
 		return 64;
 	}
-	
+
 	@Override
 	public boolean isUsableByPlayer(EntityPlayer player) {
 		return getWorld().getTileEntity(pos) == this && player.dimension == getWorld().provider.getDimension();
 	}
-	
+
 	@Override
 	public void openInventory(EntityPlayer p) {}
-	
+
 	@Override
 	public void closeInventory(EntityPlayer p) {}
 
@@ -167,11 +165,11 @@ public class TileMagicalDisplay extends TileEntity implements IInventory, ITicka
 	public boolean isItemValidForSlot(int p_94041_1_, ItemStack p_94041_2_) {
 		return true;
 	}
-	
+
 	@Override
 	public void clear() {
-	    for(int i = 0; i < getSizeInventory(); i++)
-	        setInventorySlotContents(i, null);
+		for(int i = 0; i < getSizeInventory(); i++)
+			setInventorySlotContents(i, null);
 	}
 
 	@Override
@@ -186,7 +184,7 @@ public class TileMagicalDisplay extends TileEntity implements IInventory, ITicka
 	public int getFieldCount() {
 		return 0;
 	}
-	
+
 	public IItemHandler itemHandler = new InvWrapper(this);
 
 	@Override

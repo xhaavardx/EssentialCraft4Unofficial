@@ -20,7 +20,7 @@ public class GuiMagicianTable extends GuiCommon{
 		this.elementList.add(new GuiBalanceState(88, 22, tile));
 		this.elementList.add(new GuiBoundGemState(88, 40, tile, 0));
 	}
-	
-	
+
+
 
 }

@@ -10,21 +10,21 @@ buildscript {
 apply plugin: 'net.minecraftforge.gradle.forge'
 
 repositories {
-  maven {
-    name 'blamejared'
-    url = "http://maven.blamejared.com"
-  }
-  maven {
-    name "progwml6"
-    url = "http://dvs1.progwml6.com/files/maven"
-  }
-  maven {
-    name "tehnut"
-    url = "http://tehnut.info/maven"
-  }
+    maven {
+        url = "http://maven.blamejared.com"
+    }
+    maven {
+        url = "http://dvs1.progwml6.com/files/maven"
+    }
+    maven {
+        url = "http://tehnut.info/maven"
+    }
+    maven {
+        url = "http://chickenbones.net/maven/"
+    }
 }
 
-version = "4.7.1102.14"
+version = "4.7.1102.15"
 group= "ec3"
 archivesBaseName = "EssentialCraftUnofficial"
 
@@ -41,20 +41,28 @@ minecraft {
 }
 
 dependencies {
-  compile project(':DummyCoreUnofficial')
+    compile project(':DummyCoreUnofficial')
 
-  compile "MineTweaker3:MineTweaker3-API:3.0.24.81"
-  deobfCompile "MineTweaker3:MineTweaker3-MC1102-Main:1.10.2-3.0.24.82"
-  deobfCompile "com.blamejared:MTLib:1.0.2.10"
-  deobfCompile "mezz.jei:jei_1.10.2:3.14.7.417:api"
-  runtime "mezz.jei:jei_1.10.2:3.14.7.417"
-  deobfCompile "slimeknights.mantle:Mantle:1.10.2-1.1.5.205"
-  deobfCompile "slimeknights:TConstruct:1.10.2-2.6.3.501"
-  deobfCompile "mcp.mobius.waila:Hwyla:1.8.12-B26_1.10.2"
-  deobfCompile "com.wayoftime.bloodmagic:BloodMagic:1.10.2-2.1.9-78"
-  runtime "info.amerifrance.guideapi:Guide-API:1.10.2-2.0.3-46"
+    deobfCompile "MineTweaker3:MineTweaker3-MC1102-Main:1.10.2-3.0.24.82"
+    deobfCompile "com.blamejared:MTLib:1.0.2.10"
+    deobfCompile "mezz.jei:jei_1.10.2:3.14.7.417"
+    deobfCompile "slimeknights.mantle:Mantle:1.10.2-1.1.5.205"
+    deobfCompile "slimeknights:TConstruct:1.10.2-2.6.3.501"
+    deobfCompile "mcp.mobius.waila:Hwyla:1.8.12-B26_1.10.2"
+    deobfCompile "com.wayoftime.bloodmagic:BloodMagic:1.10.2-2.1.9-78"
+    deobfCompile "info.amerifrance.guideapi:Guide-API:1.10.2-2.0.3-46"
+    deobfCompile "codechicken:CodeChickenLib:1.10.2-2.5.9.308:universal"
 }
 
 processResources
 {
+}
+
+task deobfJar(type: Jar) {
+    from sourceSets.main.output
+    classifier = 'deobf'
+}
+
+artifacts {
+    archives deobfJar
 }

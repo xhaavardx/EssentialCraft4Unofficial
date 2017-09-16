@@ -1,44 +1,38 @@
 package ec3.common.tile;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.relauncher.Side;
-import ec3.api.ApiCore;
-import ec3.utils.common.ECUtils;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraftforge.common.config.Configuration;
 import DummyCore.Utils.Coord3D;
 import DummyCore.Utils.DataStorage;
 import DummyCore.Utils.DummyData;
 import DummyCore.Utils.MathUtils;
-import DummyCore.Utils.UnformedItemStack;
+import ec3.api.ApiCore;
+import ec3.utils.common.ECUtils;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.relauncher.Side;
 
 public class TileMagicalMirror extends TileMRUGeneric {
-	
+
 	public Coord3D inventoryPos;
 	public int transferTime = 0;
-	
+
 	public static float cfgMaxMRU = ApiCore.DEVICE_MAX_MRU_GENERIC;
 	public static float cfgMaxDistance = 8;
 	public ItemStack transferingStack;
-	
+
 	public boolean pulsing;
-	
+
 	public TileMagicalMirror() {
 		super();
 		setMaxMRU(cfgMaxMRU);
 	}
-	
+
 	@Override
 	public void update() {
 		if(getWorld().isRemote) {
@@ -47,7 +41,7 @@ public class TileMagicalMirror extends TileMRUGeneric {
 		}
 		super.update();
 		if(inventoryPos != null) {
-			
+
 		}
 		TileEntity tile = getWorld().getTileEntity(pos.down());
 		if(tile != null && tile instanceof IInventory)
@@ -84,7 +78,7 @@ public class TileMagicalMirror extends TileMRUGeneric {
 											sY -= 1;
 										}
 										if(getWorld().getWorldTime()%5 == 0)
-										ECUtils.spawnItemFX(sX, sY, sZ, dX, dY, dZ);
+											ECUtils.spawnItemFX(sX, sY, sZ, dX, dY, dZ);
 										if(transferTime >= 60) {
 											ItemStack set = is.copy();
 											set.stackSize = 1;
@@ -106,7 +100,7 @@ public class TileMagicalMirror extends TileMRUGeneric {
 			}
 		}
 	}
-	
+
 	@Override
 	public void readFromNBT(NBTTagCompound i) {
 		if(i.hasKey("coord")) {
@@ -129,7 +123,7 @@ public class TileMagicalMirror extends TileMRUGeneric {
 		}
 		super.readFromNBT(i);
 	}
-	
+
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound i) {
 		if(inventoryPos != null)
@@ -143,7 +137,7 @@ public class TileMagicalMirror extends TileMRUGeneric {
 		}
 		return super.writeToNBT(i);
 	}
-	
+
 	public static void setupConfig(Configuration cfg) {
 		try {
 			cfg.load();
@@ -152,28 +146,28 @@ public class TileMagicalMirror extends TileMRUGeneric {
 					"Max range of item transfering:8.0"
 			}, "");
 			String dataString = "";
-			
+
 			for(int i = 0; i < cfgArrayString.length; ++i)
 				dataString += "||" + cfgArrayString[i];
-			
+
 			DummyData[] data = DataStorage.parseData(dataString);
-			
+
 			cfgMaxMRU = Float.parseFloat(data[0].fieldValue);
 			cfgMaxDistance = Float.parseFloat(data[1].fieldValue);
-			
+
 			cfg.save();
 		}
 		catch(Exception e) {
 			return;
 		}
 	}
-	
+
 	@Override
 	public AxisAlignedBB getRenderBoundingBox() {
 		AxisAlignedBB bb = INFINITE_EXTENT_AABB;
 		return bb;
 	}
-	
+
 	@Override
 	public int[] getOutputSlots() {
 		return new int[0];

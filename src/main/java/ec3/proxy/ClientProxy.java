@@ -271,6 +271,7 @@ public class ClientProxy extends CommonProxy {
 
 	public static final List<Pair<String, ISound>> playingMusic = new ArrayList<Pair<String, ISound>>();
 
+	@Override
 	public void firstMovement(FMLPreInitializationEvent event) {
 		super.firstMovement(event);
 		OBJLoader.INSTANCE.addDomain("essentialcraft");
@@ -311,7 +312,7 @@ public class ClientProxy extends CommonProxy {
 
 	@Override
 	public void startSound(String soundID, String soundName)
-	{	
+	{
 		if(!listHasKey(soundID))
 		{
 			PositionedSoundRecord s = PositionedSoundRecord.getMusicRecord(SoundEvent.REGISTRY.getObject(new ResourceLocation(soundName)));
@@ -323,7 +324,7 @@ public class ClientProxy extends CommonProxy {
 
 	@Override
 	public void startRecord(String soundID, String soundName, BlockPos pos)
-	{	
+	{
 		if(!listHasKey(soundID))
 		{
 			PositionedSoundRecord s = PositionedSoundRecord.getRecordSoundRecord(SoundEvent.REGISTRY.getObject(new ResourceLocation(soundName)), pos.getX()+0.5F, pos.getY()+0.5F, pos.getZ()+0.5F);
@@ -336,7 +337,7 @@ public class ClientProxy extends CommonProxy {
 	ResourceLocation villagerSkin = new ResourceLocation("essentialcraft","textures/entities/magician.png");
 	@SuppressWarnings("unchecked")
 	@Override
-	public Object getClientGuiElement(int ID, EntityPlayer player, World world,int x, int y, int z) 
+	public Object getClientGuiElement(int ID, EntityPlayer player, World world,int x, int y, int z)
 	{
 		if(ID == Config.guiID[0])
 		{
@@ -707,13 +708,13 @@ public class ClientProxy extends CommonProxy {
 		switch (id) {
 		case 0:
 			return chest;
-		case 1: 
+		case 1:
 			return legs;
 		case 2:
 			return chest1;
-		default: break; 
-		} 
-		return chest; 
+		default: break;
+		}
+		return chest;
 	}
 
 	@Override
@@ -799,6 +800,7 @@ public class ClientProxy extends CommonProxy {
 		player.rotationYawHead = player.rotationYaw;
 	}
 
+	@Override
 	public void handleSoundPlay(DummyData[] packetData)
 	{
 		double sX = Double.parseDouble(packetData[1].fieldValue);
@@ -811,6 +813,7 @@ public class ClientProxy extends CommonProxy {
 		player.getEntityWorld().playSound(sX, sY, sZ, SoundEvent.REGISTRY.getObject(new ResourceLocation(sound)), SoundCategory.MASTER, volume, pitch, false);
 	}
 
+	@Override
 	public void registerTexture(ResourceLocation rl) {
 		ECEventHandler.textures.add(rl);
 	}

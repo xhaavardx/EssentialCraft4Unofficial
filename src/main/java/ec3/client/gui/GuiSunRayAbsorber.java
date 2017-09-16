@@ -18,7 +18,7 @@ public class GuiSunRayAbsorber extends GuiCommon{
 		this.elementList.add(new GuiBalanceState(25, 22, tile));
 		this.elementList.add(new GuiMRUGenerated(25, 40,tile,"sunray"));
 	}
-	
-	
+
+
 
 }

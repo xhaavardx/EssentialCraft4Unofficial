@@ -29,19 +29,20 @@ public class ItemGenericArmor extends ItemArmor implements IItemColor, IModelReg
 		super(material, renderIndex, type);
 	}
 
-	@Override 
+	@Override
 	public String getArmorTexture(ItemStack itemstack, Entity entity, EntityEquipmentSlot slot, String type)
 	{
 		if(type != null && type.equalsIgnoreCase("overlay")) {
 			return "essentialcraft:textures/blocks/null.png";
 		}
 		switch(slot)
-		{ 
+		{
 		case LEGS: return "essentialcraft:textures/special/armor/wind_layer_2.png"; //2 should be the slot for legs
-		default: return "essentialcraft:textures/special/armor/wind_layer_1.png"; 
+		default: return "essentialcraft:textures/special/armor/wind_layer_1.png";
 		}
 	}
 
+	@Override
 	public int getColorFromItemstack(ItemStack stack, int renderPass)
 	{
 		int j = this.getColor(stack);
@@ -54,11 +55,13 @@ public class ItemGenericArmor extends ItemArmor implements IItemColor, IModelReg
 		return j;
 	}
 
+	@Override
 	public boolean hasColor(ItemStack stk)
 	{
 		return (!stk.hasTagCompound() ? false : (!stk.getTagCompound().hasKey("display", 10) ? false : stk.getTagCompound().getCompoundTag("display").hasKey("color", 3)));
 	}
 
+	@Override
 	public int getColor(ItemStack p_82814_1_)
 	{
 		NBTTagCompound nbttagcompound = p_82814_1_.getTagCompound();
@@ -73,6 +76,7 @@ public class ItemGenericArmor extends ItemArmor implements IItemColor, IModelReg
 		}
 	}
 
+	@Override
 	public void removeColor(ItemStack stk)
 	{
 		NBTTagCompound nbttagcompound = stk.getTagCompound();
@@ -109,6 +113,7 @@ public class ItemGenericArmor extends ItemArmor implements IItemColor, IModelReg
 		nbttagcompound1.setInteger("color", newColor);
 	}
 
+	@Override
 	public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot equipmentSlot, ItemStack s)
 	{
 		Multimap<String, AttributeModifier> mods = HashMultimap.<String, AttributeModifier>create();

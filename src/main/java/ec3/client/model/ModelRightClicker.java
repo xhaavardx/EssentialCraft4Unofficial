@@ -2,12 +2,9 @@ package ec3.client.model;
 
 import java.util.List;
 
-import javax.annotation.Nonnull;
-
 import com.google.common.collect.ImmutableList;
 
 import ec3.common.block.BlockRightClicker;
-import ec3.common.block.BlocksCore;
 import ec3.common.tile.TileRightClicker;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;

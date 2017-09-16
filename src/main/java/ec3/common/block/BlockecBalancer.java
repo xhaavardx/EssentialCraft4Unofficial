@@ -40,6 +40,7 @@ public class BlockecBalancer extends BlockContainer implements IModelRegisterer 
 		return BlockRenderLayer.SOLID;
 	}
 
+	@Override
 	public EnumBlockRenderType getRenderType(IBlockState s) {
 		return EnumBlockRenderType.MODEL;
 	}

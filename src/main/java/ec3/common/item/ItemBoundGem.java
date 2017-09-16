@@ -108,7 +108,8 @@ public class ItemBoundGem extends Item implements IModelRegisterer {
 		return new ActionResult(EnumActionResult.PASS,par1ItemStack);
 	}
 
-	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List<String> par3List, boolean par4) 
+	@Override
+	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List<String> par3List, boolean par4)
 	{
 		if(par1ItemStack.getTagCompound() != null)
 		{
@@ -126,6 +127,7 @@ public class ItemBoundGem extends Item implements IModelRegisterer {
 		return MiscUtils.getStackTag(stack).getIntArray("pos");
 	}
 
+	@Override
 	public EnumRarity getRarity(ItemStack par1ItemStack)
 	{
 		return par1ItemStack.getTagCompound() != null ? EnumRarity.EPIC : EnumRarity.COMMON;
@@ -156,7 +158,7 @@ public class ItemBoundGem extends Item implements IModelRegisterer {
 
 	public static class MeshDefinitionBoundGem implements ItemMeshDefinition {
 		public static final MeshDefinitionBoundGem INSTANCE = new MeshDefinitionBoundGem();
-		
+
 		@Override
 		public ModelResourceLocation getModelLocation(ItemStack stack) {
 			return new ModelResourceLocation("essentialcraft:item/bound_gem", "active=" + Boolean.toString(stack.hasTagCompound()));

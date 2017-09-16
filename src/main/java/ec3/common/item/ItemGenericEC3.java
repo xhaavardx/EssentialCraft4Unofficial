@@ -114,6 +114,7 @@ public class ItemGenericEC3 extends Item implements IModelRegisterer {
 		setHasSubtypes(true);
 	}
 
+	@Override
 	public ItemStack onItemUseFinish(ItemStack p_77654_1_, World p_77654_2_, EntityLivingBase base) {
 		if(base instanceof EntityPlayer) {
 			if(!((EntityPlayer)base).capabilities.isCreativeMode)
@@ -137,10 +138,12 @@ public class ItemGenericEC3 extends Item implements IModelRegisterer {
 		return p_77654_1_.stackSize <= 0 ? new ItemStack(Items.GLASS_BOTTLE) : p_77654_1_;
 	}
 
+	@Override
 	public int getMaxItemUseDuration(ItemStack p_77626_1_) {
 		return 32;
 	}
 
+	@Override
 	public EnumAction getItemUseAction(ItemStack p_77661_1_) {
 		if(p_77661_1_.getItemDamage() == 6)
 			return EnumAction.DRINK;
@@ -156,16 +159,19 @@ public class ItemGenericEC3 extends Item implements IModelRegisterer {
 		return null;
 	}
 
+	@Override
 	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
 		if(itemStackIn.getItemDamage() == 6)
 			playerIn.setActiveHand(hand);
 		return new ActionResult(EnumActionResult.PASS, itemStackIn);
 	}
 
+	@Override
 	public String getUnlocalizedName(ItemStack p_77667_1_) {
 		return getUnlocalizedName()+names[Math.min(p_77667_1_.getItemDamage(), names.length-1)];
 	}
 
+	@Override
 	public void getSubItems(Item p_150895_1_, CreativeTabs p_150895_2_, List<ItemStack> p_150895_3_) {
 		for(int i = 0; i < names.length-1; ++i) {
 			p_150895_3_.add(new ItemStack(p_150895_1_,1,i));

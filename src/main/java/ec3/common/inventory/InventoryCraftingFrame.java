@@ -11,11 +11,11 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.text.ITextComponent;
 
 public class InventoryCraftingFrame implements IInventory {
-	
+
 	public ItemStack[] inventory = new ItemStack[10];
 	public UUID randomUUID;
 	public ItemStack filterStack;
-	
+
 	public InventoryCraftingFrame(ItemStack filter) {
 		if(!filter.hasTagCompound()) {
 			NBTTagCompound theTag = MiscUtils.getStackTag(filter);
@@ -25,7 +25,7 @@ public class InventoryCraftingFrame implements IInventory {
 		readFromNBTTagCompound(MiscUtils.getStackTag(filter));
 		filterStack = filter;
 	}
-	
+
 	@Override
 	public int getSizeInventory() {
 		return inventory.length;
@@ -50,74 +50,74 @@ public class InventoryCraftingFrame implements IInventory {
 		markDirty();
 		return returnStack;
 	}
-	
+
 	@Override
 	public void setInventorySlotContents(int slot, ItemStack stack) {
 		inventory[slot] = stack;
 	}
-	
+
 	@Override
 	public String getName() {
 		return "ec3.inventory.craftingFrame";
 	}
-	
+
 	@Override
 	public boolean hasCustomName() {
 		return false;
 	}
-	
+
 	@Override
 	public int getInventoryStackLimit() {
 		return 64;
 	}
-	
+
 	@Override
 	public void markDirty() {}
-	
+
 	@Override
 	public boolean isUsableByPlayer(EntityPlayer p_70300_1_) {
 		return true;
 	}
-	
+
 	@Override
 	public void openInventory(EntityPlayer p) {}
-	
+
 	@Override
 	public void closeInventory(EntityPlayer p) {}
-	
+
 	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack stack) {
 		return true;
 	}
-	
+
 	public void readFromNBTTagCompound(NBTTagCompound tag) {
 		NBTTagCompound inventoryTag = ((NBTTagCompound)tag.getTag("inventory"));
 		if(inventoryTag == null)
 			return;
-		
+
 		if(randomUUID == null) {
 			randomUUID = UUID.fromString(tag.getString("uniqueID"));
 			//Not actually sure if this can happen, but it is Java, so the more null checks, the better!
 			if(randomUUID == null)
 				randomUUID = UUID.randomUUID();
 		}
-		
+
 		NBTTagList actualInventory = inventoryTag.getTagList("items", 10);
 		for(int i = 0; i < actualInventory.tagCount() && i < inventory.length; i++) {
-			NBTTagCompound indexTag = (NBTTagCompound) actualInventory.getCompoundTagAt(i);
+			NBTTagCompound indexTag = actualInventory.getCompoundTagAt(i);
 			int index = indexTag.getInteger("index");
 			try {
 				inventory[index] = ItemStack.loadItemStackFromNBT(indexTag);
-			} 
+			}
 			catch(Exception e) {
 				inventory[index] = null;
 			}
 		}
 	}
-	
+
 	public NBTTagCompound writeToNBT(NBTTagCompound tag) {
 		NBTTagList items = new NBTTagList();
-		
+
 		for(int i = 0; i < inventory.length; i++) {
 			if(inventory[i] != null) {
 				NBTTagCompound indexTag = new NBTTagCompound();
@@ -163,7 +163,7 @@ public class InventoryCraftingFrame implements IInventory {
 
 	@Override
 	public void clear() {
-	    for(int i = 0; i < getSizeInventory(); i++)
-	        setInventorySlotContents(i, null);
+		for(int i = 0; i < getSizeInventory(); i++)
+			setInventorySlotContents(i, null);
 	}
 }

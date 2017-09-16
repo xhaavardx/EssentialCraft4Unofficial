@@ -2,15 +2,15 @@ package ec3.common.tile;
 
 import java.util.List;
 
+import DummyCore.Utils.DataStorage;
+import DummyCore.Utils.DummyData;
+import DummyCore.Utils.MathUtils;
 import ec3.common.block.BlocksCore;
 import ec3.common.item.ItemElementalFocus;
 import ec3.common.item.ItemElementalSword;
 import ec3.common.item.ItemEmber;
 import ec3.common.item.ItemsCore;
 import ec3.common.mod.EssentialCraftCore;
-import DummyCore.Utils.DataStorage;
-import DummyCore.Utils.DummyData;
-import DummyCore.Utils.MathUtils;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
@@ -24,28 +24,28 @@ import net.minecraftforge.common.config.Configuration;
 
 public class TileEmberForge extends TileMRUGeneric {
 	public int progressLevel, soundArray;
-	
+
 	public static boolean nightRequired = true;
 	public static int timeRequired = 500;
-	
+
 	public TileEmberForge() {
 		super();
 		setSlotsNum(0);
 	}
-	
+
 	@Override
 	public void readFromNBT(NBTTagCompound par1NBTTagCompound) {
 		super.readFromNBT(par1NBTTagCompound);
 		progressLevel = par1NBTTagCompound.getInteger("progress");
 	}
-	
+
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound par1NBTTagCompound) {
 		super.writeToNBT(par1NBTTagCompound);
 		par1NBTTagCompound.setInteger("progress", progressLevel);
 		return par1NBTTagCompound;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public void update() {
@@ -60,23 +60,23 @@ public class TileEmberForge extends TileMRUGeneric {
 			List<EntityItem> l_0 = getWorld().getEntitiesWithinAABB(EntityItem.class, new AxisAlignedBB(pos.getX()+2, pos.getY(), pos.getZ(), pos.getX()+3, pos.getY()+2, pos.getZ()+1));
 			EntityItem ember_0 = null;
 			if(!l_0.isEmpty() && l_0.get(0).getEntityItem().getItem() instanceof ItemEmber)
-				ember_0 = l_0.get(0); 
+				ember_0 = l_0.get(0);
 			List<EntityItem> l_1 = getWorld().getEntitiesWithinAABB(EntityItem.class, new AxisAlignedBB(pos.getX()-2, pos.getY(), pos.getZ(), pos.getX()-1, pos.getY()+2, pos.getZ()+1));
 			EntityItem ember_1 = null;
 			if(!l_1.isEmpty() && l_1.get(0).getEntityItem().getItem() instanceof ItemEmber)
-				ember_1 = l_1.get(0); 
+				ember_1 = l_1.get(0);
 			List<EntityItem> l_2 = getWorld().getEntitiesWithinAABB(EntityItem.class, new AxisAlignedBB(pos.getX(), pos.getY(), pos.getZ()+2, pos.getX()+1, pos.getY()+2, pos.getZ()+3));
 			EntityItem ember_2 = null;
 			if(!l_2.isEmpty() && l_2.get(0).getEntityItem().getItem() instanceof ItemEmber)
-				ember_2 = l_2.get(0); 
+				ember_2 = l_2.get(0);
 			List<EntityItem> l_3 = getWorld().getEntitiesWithinAABB(EntityItem.class, new AxisAlignedBB(pos.getX(), pos.getY(), pos.getZ()-2, pos.getX()+1, pos.getY()+2, pos.getZ()-1));
 			EntityItem ember_3 = null;
 			if(!l_3.isEmpty() && l_3.get(0).getEntityItem().getItem() instanceof ItemEmber)
-				ember_3 = l_3.get(0); 
+				ember_3 = l_3.get(0);
 			List<EntityItem> l_4 = getWorld().getEntitiesWithinAABB(EntityItem.class, new AxisAlignedBB(pos.getX()+2, pos.getY()+2, pos.getZ()+2, pos.getX()+3, pos.getY()+4, pos.getZ()+3));
 			EntityItem focus_0 = null;
 			if(!l_4.isEmpty() && l_4.get(0).getEntityItem().getItem() instanceof ItemElementalFocus)
-				focus_0 = l_4.get(0); 
+				focus_0 = l_4.get(0);
 			List<EntityItem> l_41 = getWorld().getEntitiesWithinAABB(EntityItem.class, new AxisAlignedBB(pos.getX()-2, pos.getY()+2, pos.getZ()+2, pos.getX()-1, pos.getY()+4, pos.getZ()+3));
 			EntityItem focus_1 = null;
 			if(!l_41.isEmpty() && l_41.get(0).getEntityItem().getItem() instanceof ItemElementalFocus)
@@ -84,11 +84,11 @@ public class TileEmberForge extends TileMRUGeneric {
 			List<EntityItem> l_411 = getWorld().getEntitiesWithinAABB(EntityItem.class, new AxisAlignedBB(pos.getX()+2, pos.getY()+2, pos.getZ()-2, pos.getX()+3, pos.getY()+4, pos.getZ()-1));
 			EntityItem focus_2 = null;
 			if(!l_411.isEmpty() && l_411.get(0).getEntityItem().getItem() instanceof ItemElementalFocus)
-				focus_2 = l_411.get(0); 
+				focus_2 = l_411.get(0);
 			List<EntityItem> l_4111 = getWorld().getEntitiesWithinAABB(EntityItem.class, new AxisAlignedBB(pos.getX()-2, pos.getY()+2, pos.getZ()-2, pos.getX()-1, pos.getY()+4, pos.getZ()-1));
 			EntityItem focus_3 = null;
 			if(!l_4111.isEmpty() && l_4111.get(0).getEntityItem().getItem() instanceof ItemElementalFocus)
-				focus_3 = l_4111.get(0); 
+				focus_3 = l_4111.get(0);
 			--soundArray;
 			if(ember_0 != null && ember_1 != null && ember_2 != null && ember_3 != null && focus_0 != null && focus_1 != null && focus_2 != null && focus_3 != null && (!getWorld().isDaytime() || !nightRequired)) {
 				if(soundArray <= 0) {
@@ -172,18 +172,18 @@ public class TileEmberForge extends TileMRUGeneric {
 				ember_0.motionY = 0;
 				ember_0.motionZ = 0;
 				for(int i = 0; i < 10; ++i)
-					getWorld().spawnParticle(EnumParticleTypes.REDSTONE, pos.getX()+0.5+(float)i/5, pos.getY()+0.9+(float)i/12.5, pos.getZ()+0.5, 1, 0, 0);
+					getWorld().spawnParticle(EnumParticleTypes.REDSTONE, pos.getX()+0.5+(float)i/5, pos.getY()+0.9+i/12.5, pos.getZ()+0.5, 1, 0, 0);
 				getWorld().spawnParticle(EnumParticleTypes.FLAME, pos.getX()+2.5, pos.getY()+2, pos.getZ()+0.5, 0, 0, 0);
 				if(!flag)
 					getWorld().playSound(null, ember_0.getPosition(), SoundEvents.BLOCK_FIRE_AMBIENT, SoundCategory.BLOCKS, 0.2F, 2.0F);
-    		}
+			}
 			if(ember_1!= null) {
 				ember_1.setPosition(pos.getX()-1.5, pos.getY()+1.5, pos.getZ()+0.5);
 				ember_1.motionX = 0;
 				ember_1.motionY = 0;
 				ember_1.motionZ = 0;
 				for(int i = 0; i < 10; ++i)
-					getWorld().spawnParticle(EnumParticleTypes.REDSTONE, pos.getX()+0.5-(float)i/5, pos.getY()+0.9+(float)i/12.5, pos.getZ()+0.5, 1, 0, 0);
+					getWorld().spawnParticle(EnumParticleTypes.REDSTONE, pos.getX()+0.5-(float)i/5, pos.getY()+0.9+i/12.5, pos.getZ()+0.5, 1, 0, 0);
 				getWorld().spawnParticle(EnumParticleTypes.FLAME, pos.getX()-1.5, pos.getY()+2, pos.getZ()+0.5, 0, 0, 0);
 				if(!flag)
 					getWorld().playSound(null, ember_1.getPosition(), SoundEvents.BLOCK_FIRE_AMBIENT, SoundCategory.BLOCKS, 0.2F, 2.0F);
@@ -194,7 +194,7 @@ public class TileEmberForge extends TileMRUGeneric {
 				ember_2.motionY = 0;
 				ember_2.motionZ = 0;
 				for(int i = 0; i < 10; ++i)
-					getWorld().spawnParticle(EnumParticleTypes.REDSTONE, pos.getX()+0.5, pos.getY()+0.9+(float)i/12.5, pos.getZ()+0.5+(float)i/5, 1, 0, 0);
+					getWorld().spawnParticle(EnumParticleTypes.REDSTONE, pos.getX()+0.5, pos.getY()+0.9+i/12.5, pos.getZ()+0.5+(float)i/5, 1, 0, 0);
 				getWorld().spawnParticle(EnumParticleTypes.FLAME, pos.getX()+0.5, pos.getY()+2, pos.getZ()+2.5, 0, 0, 0);
 				if(!flag)
 					getWorld().playSound(null, ember_2.getPosition(), SoundEvents.BLOCK_FIRE_AMBIENT, SoundCategory.BLOCKS, 0.2F, 2.0F);
@@ -205,14 +205,14 @@ public class TileEmberForge extends TileMRUGeneric {
 				ember_3.motionY = 0;
 				ember_3.motionZ = 0;
 				for(int i = 0; i < 10; ++i)
-					getWorld().spawnParticle(EnumParticleTypes.REDSTONE, pos.getX()+0.5, pos.getY()+0.9+(float)i/12.5, pos.getZ()+0.5-(float)i/5, 1, 0, 0);
+					getWorld().spawnParticle(EnumParticleTypes.REDSTONE, pos.getX()+0.5, pos.getY()+0.9+i/12.5, pos.getZ()+0.5-(float)i/5, 1, 0, 0);
 				getWorld().spawnParticle(EnumParticleTypes.FLAME, pos.getX()+0.5, pos.getY()+2, pos.getZ()-1.5, 0, 0, 0);
 				if(!flag)
 					getWorld().playSound(null, ember_3.getPosition(), SoundEvents.BLOCK_FIRE_AMBIENT, SoundCategory.BLOCKS, 0.2F, 2.0F);
-				}
+			}
 		}
 	}
-	
+
 	public boolean isStructureCorrect() {
 		boolean flag = true;
 		for(int x = -2; x <= 2; ++x) {
@@ -237,7 +237,7 @@ public class TileEmberForge extends TileMRUGeneric {
 				getWorld().getBlockState(pos.add(2, 1, -2)).getBlock() != Blocks.AIR;
 		return flag;
 	}
-	
+
 	public void spawnParticles() {
 		if(isStructureCorrect()) {
 			/*for(int i = 0; i < 100; ++i)*/ {
@@ -245,7 +245,7 @@ public class TileEmberForge extends TileMRUGeneric {
 			}
 		}
 	}
-	
+
 	public static void setupConfig(Configuration cfg) {
 		try {
 			cfg.load();
@@ -254,22 +254,22 @@ public class TileEmberForge extends TileMRUGeneric {
 					"Required time to craft a sword:500"
 			}, "");
 			String dataString = "";
-			
+
 			for(int i = 0; i < cfgArrayString.length; ++i)
 				dataString += "||" + cfgArrayString[i];
-			
+
 			DummyData[] data = DataStorage.parseData(dataString);
-			
+
 			timeRequired = Integer.parseInt(data[1].fieldValue);
 			nightRequired = Boolean.parseBoolean(data[0].fieldValue);
-			
+
 			cfg.save();
 		}
 		catch(Exception e) {
 			return;
 		}
 	}
-	
+
 	@Override
 	public int[] getOutputSlots() {
 		return new int[0];

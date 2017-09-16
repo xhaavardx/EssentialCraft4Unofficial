@@ -24,6 +24,7 @@ public class BlockMRUSpreader extends Block implements IModelRegisterer {
 		this.setLightLevel(1.0F);
 	}
 
+	@Override
 	public void randomDisplayTick(IBlockState s, World p_149734_1_, BlockPos p_149734_2_, Random p_149734_5_) {
 		for(int i = 0; i < 5; ++i) {
 			Vec3d rotateVec = new Vec3d(1, 1, 1);
@@ -35,11 +36,13 @@ public class BlockMRUSpreader extends Block implements IModelRegisterer {
 		}
 	}
 
+	@Override
 	public boolean isOpaqueCube(IBlockState s)
 	{
 		return false;
 	}
 
+	@Override
 	public boolean isFullCube(IBlockState s)
 	{
 		return false;
@@ -51,6 +54,7 @@ public class BlockMRUSpreader extends Block implements IModelRegisterer {
 		return BlockRenderLayer.SOLID;
 	}
 
+	@Override
 	public EnumBlockRenderType getRenderType(IBlockState s)
 	{
 		return EnumBlockRenderType.MODEL;

@@ -9,7 +9,7 @@ import net.minecraftforge.client.model.ModelLoader;
 
 public class BlockNewMIMImporter_Persistant extends BlockNewMIMImporter {
 
-	public BlockNewMIMImporter_Persistant() 
+	public BlockNewMIMImporter_Persistant()
 	{
 		super();
 	}

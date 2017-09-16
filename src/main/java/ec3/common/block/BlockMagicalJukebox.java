@@ -37,6 +37,7 @@ public class BlockMagicalJukebox extends BlockContainer implements IModelRegiste
 		super(p_i45394_1_);
 	}
 
+	@Override
 	public boolean isOpaqueCube(IBlockState s)
 	{
 		return false;
@@ -48,6 +49,7 @@ public class BlockMagicalJukebox extends BlockContainer implements IModelRegiste
 		return BlockRenderLayer.SOLID;
 	}
 
+	@Override
 	public boolean isFullCube(IBlockState s)
 	{
 		return false;

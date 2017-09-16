@@ -19,11 +19,12 @@ import net.minecraft.nbt.NBTTagCompound;
 
 public class ItemWindHoe extends ItemHoe_Mod {
 
-	public ItemWindHoe(ToolMaterial m) 
+	public ItemWindHoe(ToolMaterial m)
 	{
 		super(m);
 	}
 
+	@Override
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public boolean hitEntity(ItemStack weapon, EntityLivingBase attacked, EntityLivingBase attacker)
 	{
@@ -62,7 +63,7 @@ public class ItemWindHoe extends ItemHoe_Mod {
 
 						if(toolTag.hasKey("tag"))
 						{
-							genericTag = (NBTTagCompound) toolTag.getCompoundTag("tag").copy();
+							genericTag = toolTag.getCompoundTag("tag").copy();
 							toolTag.getCompoundTag("tag").removeTag("pickaxe");
 							toolTag.getCompoundTag("tag").removeTag("axe");
 							toolTag.getCompoundTag("tag").removeTag("shovel");
@@ -102,17 +103,17 @@ public class ItemWindHoe extends ItemHoe_Mod {
 
 						if(genericTag.hasKey(clazz))
 						{
-							NBTTagCompound loadFrom = (NBTTagCompound) genericTag.getCompoundTag(clazz).copy();
+							NBTTagCompound loadFrom = genericTag.getCompoundTag(clazz).copy();
 							genericTag.removeTag(clazz);
 							efficent = ItemStack.loadItemStackFromNBT(loadFrom);
 							loadFrom = null;
-						}else 
+						}else
 						{
 							if(clazz.equalsIgnoreCase("pickaxe"))
 								efficent = new ItemStack(ItemsCore.wind_elemental_pick,1,currentTool.getItemDamage());
 							if(clazz.equalsIgnoreCase("shovel"))
 								efficent = new ItemStack(ItemsCore.wind_elemental_shovel,1,currentTool.getItemDamage());
-							if(clazz.equalsIgnoreCase("hoe")) 
+							if(clazz.equalsIgnoreCase("hoe"))
 								efficent = new ItemStack(ItemsCore.wind_elemental_hoe,1,currentTool.getItemDamage());
 							if(clazz.equalsIgnoreCase("sword"))
 								efficent = new ItemStack(ItemsCore.wind_elemental_sword,1,currentTool.getItemDamage());

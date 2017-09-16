@@ -1,21 +1,16 @@
 package ec3.client.render.tile;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import ec3.common.tile.TileMagicalEnchanter;
 import net.minecraft.client.model.ModelBook;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.ResourceLocation;
-
-import org.lwjgl.opengl.GL11;
-
-import DummyCore.Client.AdvancedModelLoader;
-import DummyCore.Client.IModelCustom;
-import ec3.common.tile.TileMagicalEnchanter;
+import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class RenderMagicalEnchanter extends TileEntitySpecialRenderer
@@ -40,7 +35,7 @@ public class RenderMagicalEnchanter extends TileEntitySpecialRenderer
 
 		GlStateManager.pushMatrix();
 		GlStateManager.translate((float)p_76986_2_ + 0.5F, (float)p_76986_4_ + 0.6F, (float)p_76986_6_ + 0.5F);
-		float f1 = (float)p_147500_1_.field_145926_a + p_76986_8_;
+		float f1 = p_147500_1_.field_145926_a + p_76986_8_;
 		GlStateManager.translate(0.0F, 0.1F + MathHelper.sin(f1 * 0.1F) * 0.01F, 0.0F);
 		float f2;
 
@@ -60,8 +55,8 @@ public class RenderMagicalEnchanter extends TileEntitySpecialRenderer
 		this.bindTexture(bookTextures);
 		float f4 = p_147500_1_.field_145931_j + (p_147500_1_.field_145933_i - p_147500_1_.field_145931_j) * p_76986_8_ + 0.25F;
 		float f5 = p_147500_1_.field_145931_j + (p_147500_1_.field_145933_i - p_147500_1_.field_145931_j) * p_76986_8_ + 0.75F;
-		f4 = (f4 - (float)MathHelper.fastFloor((double)f4)) * 1.6F - 0.3F;
-		f5 = (f5 - (float)MathHelper.fastFloor((double)f5)) * 1.6F - 0.3F;
+		f4 = (f4 - MathHelper.fastFloor(f4)) * 1.6F - 0.3F;
+		f5 = (f5 - MathHelper.fastFloor(f5)) * 1.6F - 0.3F;
 
 		if (f4 < 0.0F)
 		{
@@ -101,6 +96,6 @@ public class RenderMagicalEnchanter extends TileEntitySpecialRenderer
 	@Override
 	public void renderTileEntityAt(TileEntity p_147500_1_, double p_76986_2_, double p_76986_4_, double p_76986_6_, float p_76986_8_, int destroyStage) {
 		if(p_147500_1_.getBlockMetadata() == 0)
-			this.doRender((TileEntity) p_147500_1_, p_76986_2_, p_76986_4_, p_76986_6_, p_76986_8_, 0);
+			this.doRender(p_147500_1_, p_76986_2_, p_76986_4_, p_76986_6_, p_76986_8_, 0);
 	}
 }

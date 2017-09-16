@@ -20,7 +20,7 @@ import net.minecraftforge.client.model.ModelLoader;
 public class ItemMagicLantern extends ItemStoresMRUInNBT implements IModelRegisterer {
 
 	public ItemMagicLantern() {
-		super();	
+		super();
 		this.setMaxMRU(5000);
 		this.maxStackSize = 1;
 		this.bFull3D = true;
@@ -48,6 +48,7 @@ public class ItemMagicLantern extends ItemStoresMRUInNBT implements IModelRegist
 	}
 
 
+	@Override
 	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing dir, float hitX, float hitY, float hitZ)
 	{
 		Block b = world.getBlockState(pos.offset(dir)).getBlock();

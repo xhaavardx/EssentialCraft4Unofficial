@@ -21,36 +21,39 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 public class ItemMRUMover extends Item implements IModelRegisterer {
-	
+
 	public String textureName;
-    
-    public int getMaxItemUseDuration(ItemStack par1ItemStack)
-    {
-        return 72000;
-    }
-    
-    @Override
+
+	@Override
+	public int getMaxItemUseDuration(ItemStack par1ItemStack)
+	{
+		return 72000;
+	}
+
+	@Override
 	public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
 		return !oldStack.getItem().equals(newStack.getItem()) || MiscUtils.getStackTag(oldStack).getBoolean("active") != MiscUtils.getStackTag(newStack).getBoolean("active");
 	}
 
+	@Override
 	public EnumAction getItemUseAction(ItemStack par1ItemStack)
-    {
-        return EnumAction.BOW;
-    }
-    
-    public void onUsingTick(ItemStack stack, EntityLivingBase player, int count)
-    {
-    	NBTTagCompound tag = MiscUtils.getStackTag(stack);
-    	tag.setBoolean("active", true);
-    	Vec3d mainLookVec = player.getLookVec();
-    	for(int i = 0; i < 20; ++i)
+	{
+		return EnumAction.BOW;
+	}
+
+	@Override
+	public void onUsingTick(ItemStack stack, EntityLivingBase player, int count)
+	{
+		NBTTagCompound tag = MiscUtils.getStackTag(stack);
+		tag.setBoolean("active", true);
+		Vec3d mainLookVec = player.getLookVec();
+		for(int i = 0; i < 20; ++i)
 		{
 			Vec3d additionalVec = mainLookVec.addVector(mainLookVec.xCoord*i, mainLookVec.yCoord*i, mainLookVec.zCoord*i);
 			List<EntityMRUPresence> entityList = player.getEntityWorld().getEntitiesWithinAABB(EntityMRUPresence.class, new AxisAlignedBB(player.posX+additionalVec.xCoord-1, player.posY+additionalVec.yCoord-2, player.posZ+additionalVec.zCoord-1, player.posX+additionalVec.xCoord+1, player.posY+additionalVec.yCoord+2, player.posZ+additionalVec.zCoord+1));
 			if(!entityList.isEmpty())
 			{
-				EntityMRUPresence presence = (EntityMRUPresence)entityList.get(player.getEntityWorld().rand.nextInt(entityList.size()));
+				EntityMRUPresence presence = entityList.get(player.getEntityWorld().rand.nextInt(entityList.size()));
 				player.getEntityWorld().spawnParticle(EnumParticleTypes.PORTAL, player.posX, player.posY, player.posZ, presence.posX-player.posX, presence.posY-player.posY-1, presence.posZ-player.posZ);
 				float moveX = 0;
 				float moveY = 0;
@@ -67,33 +70,35 @@ public class ItemMRUMover extends Item implements IModelRegisterer {
 					if(count % 20 == 0)
 						stack.damageItem(1, player);
 				}
-					
+
 				break;
 			}
 		}
-    }
-    
-    
-    
-    public ActionResult<ItemStack> onItemRightClick(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer, EnumHand hand)
-    {
-        par3EntityPlayer.setActiveHand(hand);
-        return new ActionResult(EnumActionResult.PASS, par1ItemStack);
-    }
-    
-    public ItemStack onItemUseFinish(ItemStack stack, World worldIn, EntityLivingBase entityLiving)
-    {
-    	NBTTagCompound tag = MiscUtils.getStackTag(stack);
-    	tag.setBoolean("active", false);
-        return stack;
-    }
-    
-    @Override
-	public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityLivingBase entityLiving, int timeLeft) {
-    	NBTTagCompound tag = MiscUtils.getStackTag(stack);
-    	tag.setBoolean("active", false);
 	}
-	
+
+
+
+	@Override
+	public ActionResult<ItemStack> onItemRightClick(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer, EnumHand hand)
+	{
+		par3EntityPlayer.setActiveHand(hand);
+		return new ActionResult(EnumActionResult.PASS, par1ItemStack);
+	}
+
+	@Override
+	public ItemStack onItemUseFinish(ItemStack stack, World worldIn, EntityLivingBase entityLiving)
+	{
+		NBTTagCompound tag = MiscUtils.getStackTag(stack);
+		tag.setBoolean("active", false);
+		return stack;
+	}
+
+	@Override
+	public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityLivingBase entityLiving, int timeLeft) {
+		NBTTagCompound tag = MiscUtils.getStackTag(stack);
+		tag.setBoolean("active", false);
+	}
+
 	public ItemMRUMover setTextureName(String name) {
 		textureName = name;
 		return this;

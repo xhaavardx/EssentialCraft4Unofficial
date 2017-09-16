@@ -21,7 +21,7 @@ import net.minecraftforge.client.model.ModelLoader;
 public class ItemSpawnerCollector extends ItemStoresMRUInNBT implements IModelRegisterer {
 
 	public ItemSpawnerCollector() {
-		super();	
+		super();
 		this.setMaxMRU(5000);
 		this.maxStackSize = 1;
 		this.bFull3D = true;

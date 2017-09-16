@@ -20,7 +20,6 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.management.PlayerList;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -76,7 +75,7 @@ public class TileMagicalTeleporter extends TileMRUGeneric {
 				else if(x != 0 || z != 0) {
 					flag = getWorld().getBlockState(pos.add(x, 0, z)).getBlock() == BlocksCore.voidStone;
 					if(!flag)
-						return false;	
+						return false;
 				}
 			}
 		}

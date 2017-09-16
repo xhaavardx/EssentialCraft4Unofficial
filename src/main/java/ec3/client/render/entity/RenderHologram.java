@@ -1,26 +1,21 @@
 package ec3.client.render.entity;
 
+import org.lwjgl.opengl.GL11;
+
 import DummyCore.Utils.DrawUtils;
-import DummyCore.Utils.MiscUtils;
-import net.minecraftforge.fml.client.registry.IRenderFactory;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import ec3.common.entity.EntityHologram;
+import ec3.common.item.ItemsCore;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderBiped;
 import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-
-import org.lwjgl.opengl.GL11;
-
-import ec3.common.entity.EntityHologram;
-import ec3.common.item.ItemsCore;
+import net.minecraftforge.fml.client.registry.IRenderFactory;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class RenderHologram extends RenderBiped<EntityHologram>
@@ -40,6 +35,7 @@ public class RenderHologram extends RenderBiped<EntityHologram>
 		this.model = (ModelBiped)super.mainModel;
 	}
 
+	@Override
 	protected void preRenderCallback(EntityHologram p_77041_1_, float p_77041_2_)  {
 		float s = 1.0F;
 		GlStateManager.scale(s, s, s);
@@ -51,10 +47,12 @@ public class RenderHologram extends RenderBiped<EntityHologram>
 		GlStateManager.color(1, 1, 1, 0.2F);
 	}
 
+	@Override
 	protected ResourceLocation getEntityTexture(EntityHologram p_110775_1_) {
 		return textures;
 	}
 
+	@Override
 	public void doRender(EntityHologram p_76986_1_, double p_76986_2_, double p_76986_4_, double p_76986_6_, float p_76986_8_, float p_76986_9_) {
 		super.doRender(p_76986_1_, p_76986_2_, p_76986_4_, p_76986_6_, p_76986_8_, p_76986_9_);
 

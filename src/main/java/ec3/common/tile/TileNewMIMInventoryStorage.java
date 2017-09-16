@@ -29,38 +29,38 @@ public class TileNewMIMInventoryStorage extends TileMRUGeneric {
 	public ArrayList<ItemStack> items = new ArrayList<ItemStack>();
 	ArrayList<EntityPlayerMP> plrs = new ArrayList<EntityPlayerMP>();
 	boolean requireSync = false;
-	
+
 	public TileNewMIMInventoryStorage() {
 		setMaxMRU(0);
 		setSlotsNum(54);
 		slot0IsBoundGem = false;
 	}
-	
+
 	@Override
 	public int[] getOutputSlots() {
 		return new int[0];
 	}
-	
+
 	@Override
 	public boolean isItemValidForSlot(int p_94041_1_, ItemStack p_94041_2_) {
 		return p_94041_2_.getItem() == ItemsCore.inventoryGem;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @return A full list of all Inventories available for the device. Will only return valid tiles of existing blocks
 	 */
 	public ArrayList<IInventory> getInventories() {
 		ArrayList<IInventory> retLst = new ArrayList<IInventory>();
-		
+
 		for(Pair<Integer[],IInventory> p : counted) {
 			if(getWorld().isBlockLoaded(new BlockPos(p.getLeft()[0], p.getLeft()[1], p.getLeft()[2])) && getWorld().getTileEntity(new BlockPos(p.getLeft()[0], p.getLeft()[1], p.getLeft()[2])) instanceof IInventory)
 				retLst.add(p.getRight());
 		}
-		
+
 		return retLst;
 	}
-	
+
 	/**
 	 * Decreases the stack sizes in possible inventories, until either the stacksize was satisfied, or there are no more stacks of that type in inventories. Also calls a full rebuild on inventories and stacks. Has a null check for inventories. Returns a stk.stackSize if the desired stack was not found.
 	 * @param stk the stack to pull. Stacksize unbound.
@@ -79,70 +79,70 @@ public class TileNewMIMInventoryStorage extends TileMRUGeneric {
 		}
 		if(stk.stackSize == 0)
 			stk.stackSize = 1;
-		
+
 		int ret = stk.stackSize;
 		if(index != -1) {
 			fG:
 				for(int i = 0; i < countedT.size(); ++i) {
 					if(countedT.get(i) == null)
 						continue;
-					
+
 					for(int j = 0; j < countedT.get(i).getSizeInventory(); ++j) {
 						ItemStack s = countedT.get(i).getStackInSlot(j);
 						if(s != null && s.isItemEqual(stk) && ItemStack.areItemStackTagsEqual(stk, s) || (oreDict && ECUtils.oreDictionaryCompare(stk, s))) {
-						if(ret >= s.stackSize) {
-							ret -= s.stackSize;
-							
-							if(actuallyRetrieve)
-								countedT.get(i).setInventorySlotContents(j, null);
-							
-							if(ret < 1)
+							if(ret >= s.stackSize) {
+								ret -= s.stackSize;
+
+								if(actuallyRetrieve)
+									countedT.get(i).setInventorySlotContents(j, null);
+
+								if(ret < 1)
+									break fG;
+
+								continue;
+							}
+							else {
+								if(actuallyRetrieve)
+									countedT.get(i).decrStackSize(j, ret);
+
+								ret = 0;
 								break fG;
-								
-							continue;
-						}
-						else {
-							if(actuallyRetrieve)
-								countedT.get(i).decrStackSize(j, ret);
-							
-							ret = 0;
-							break fG;
+							}
 						}
 					}
 				}
-			}
 		}
-		
+
 		updateTime = 0;
 		requireSync = true;
 		return ret;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @return A list of all items there are.
 	 */
 	public ArrayList<ItemStack> getAllItems() {
 		return items;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @param namePart - a name part to search the items. Not case-sensitive!
 	 * @return A list of items matching the name.
 	 */
 	public ArrayList<ItemStack> getItemsByName(String namePart) {
 		ArrayList<ItemStack> retLst = new ArrayList<ItemStack>();
-		
+
 		for(int i = 0; i < items.size(); ++i) {
 			ItemStack stk = items.get(i);
 			if(stk.getDisplayName().contains(namePart.toLowerCase()))
 				retLst.add(stk);
 		}
-		
+
 		return retLst;
 	}
-	
+
 	/**
 	 * Tries to add a given ItemStack to all linked inventories. Will not try to increase sizes first - sadly optimization is more important here.
 	 * @param is - the itemstack to insert. Can be null, will return false then.
@@ -151,17 +151,17 @@ public class TileNewMIMInventoryStorage extends TileMRUGeneric {
 	public boolean insertItemStack(ItemStack is) {
 		if(is == null)
 			return false;
-		
+
 		for(int i = 0; i < counted.size(); ++i) {
 			Integer[] coords = counted.get(i).getLeft();
 			IInventory inv = counted.get(i).getRight();
-			
+
 			if(!getWorld().isBlockLoaded(new BlockPos(coords[0], coords[1], coords[2])))
 				continue;
-			
+
 			if(inv == null)
 				continue;
-			
+
 			for(int j = 0; j < inv.getSizeInventory(); ++j) {
 				ItemStack stk = inv.getStackInSlot(j);
 				if(stk != null) {
@@ -189,10 +189,10 @@ public class TileNewMIMInventoryStorage extends TileMRUGeneric {
 				}
 			}
 		}
-		
+
 		return false;
 	}
-	
+
 	/**
 	 * Re-calculates all the items there are. I wish there would be a better way to do this. Especially, if I didn't have to do this every tick, since it is pretty resource-intensive. However, if I do not do this every tick then dupes are possible.
 	 */
@@ -202,12 +202,12 @@ public class TileNewMIMInventoryStorage extends TileMRUGeneric {
 		ArrayList<String> ids = new ArrayList<String>();
 		ArrayList<ItemStack> oldCopy = new ArrayList<ItemStack>();
 		oldCopy.addAll(items);
-		
+
 		items.clear();
 		for(int i = 0; i < countedT.size(); ++i) {
 			if(countedT.get(i) == null)
 				continue;
-			
+
 			for(int j = 0; j < countedT.get(i).getSizeInventory(); ++j) {
 				ItemStack stk = countedT.get(i).getStackInSlot(j);
 				if(stk != null && stk.stackSize > 0) {
@@ -226,21 +226,21 @@ public class TileNewMIMInventoryStorage extends TileMRUGeneric {
 				}
 			}
 		}
-		
+
 		for(int i = 0; i < ids.size(); ++i) {
 			ItemStack cID = foundByID.get(ids.get(i)).copy();
 			cID.stackSize = found.get(ids.get(i));
 			items.add(cID);
 		}
-		
+
 		found.clear();
 		foundByID.clear();
 		ids.clear();
-		
+
 		found = null;
 		foundByID = null;
 		ids = null;
-		
+
 		if(items.size() == oldCopy.size()) {
 			for(int i = 0; i < oldCopy.size(); ++i) {
 				if((items.get(i) == null && oldCopy.get(i) == null) || (items.get(i).isItemEqual(oldCopy.get(i)) && ItemStack.areItemStackTagsEqual(items.get(i), oldCopy.get(i)) && items.get(i).stackSize == oldCopy.get(i).stackSize))
@@ -248,14 +248,14 @@ public class TileNewMIMInventoryStorage extends TileMRUGeneric {
 				else
 					requireSync = true;
 			}
-			
+
 		}
 		else
 			requireSync = true;
-		
+
 		packets(false);
 	}
-	
+
 	/**
 	 * Re-create the list of all inventories there are.
 	 */
@@ -287,31 +287,34 @@ public class TileNewMIMInventoryStorage extends TileMRUGeneric {
 			}
 		}
 	}
-	
+
+	@Override
 	public void openInventory(EntityPlayer p)  {
 		if(!getWorld().isRemote) {
 			plrs.add((EntityPlayerMP)p);
 			requireSync = true;
 		}
 	}
-	
+
+	@Override
 	public void closeInventory(EntityPlayer p)  {
 		if(!getWorld().isRemote)
-			plrs.remove(plrs.indexOf((EntityPlayerMP) p));
+			plrs.remove(plrs.indexOf(p));
 	}
-	
+
+	@Override
 	public void update() {
 		super.update();
-		
+
 		if(updateTime <= 0)
 			rebuildInventories();
 		else
 			--updateTime;
-		
+
 		if(!getWorld().isRemote)
 			rebuildItems();
 	}
-	
+
 	/**
 	 * I wish there would be a better way of doing this, however, vanilla won't sync items in inventories unless they are not opened.
 	 */
@@ -321,11 +324,11 @@ public class TileNewMIMInventoryStorage extends TileMRUGeneric {
 			if(player == null || player.isDead || player.dimension != getWorld().provider.getDimension())
 				plrs.remove(i);
 		}
-		
-		
+
+
 		if(!requireSync && !force)
 			return;
-		
+
 		if(!plrs.isEmpty()) {
 			NBTTagCompound sentTag = new NBTTagCompound();
 			NBTTagList lst = new NBTTagList();
@@ -339,20 +342,20 @@ public class TileNewMIMInventoryStorage extends TileMRUGeneric {
 			sentTag.setInteger("x", pos.getX());
 			sentTag.setInteger("y", pos.getY());
 			sentTag.setInteger("z", pos.getZ());
-			
+
 			PacketNBT packet = new PacketNBT(sentTag).setID(3);
-			
+
 			for(int i = 0; i < plrs.size(); ++i) {
 				EssentialCraftCore.network.sendTo(packet, plrs.get(i));
 			}
 		}
 		requireSync = false;
 	}
-	
-    @Override
-    public void setInventorySlotContents(int par1, ItemStack par2ItemStack) {
-    	super.setInventorySlotContents(par1, par2ItemStack);
-    	updateTime = 0;
-    	requireSync = true;
-    }
+
+	@Override
+	public void setInventorySlotContents(int par1, ItemStack par2ItemStack) {
+		super.setInventorySlotContents(par1, par2ItemStack);
+		updateTime = 0;
+		requireSync = true;
+	}
 }

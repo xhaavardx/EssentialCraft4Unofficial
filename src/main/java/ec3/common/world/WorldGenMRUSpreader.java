@@ -10,26 +10,26 @@ import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 
 public class WorldGenMRUSpreader extends WorldGenerator{
-	
-	
+
+
 	public WorldGenMRUSpreader()
 	{
 	}
 	public static final WeightedRandomChestContent[] generatedItems = new WeightedRandomChestContent[] {
-		new WeightedRandomChestContent(ItemsCore.titanite, 0, 8, 64, 20),
-		new WeightedRandomChestContent(ItemsCore.twinkling_titanite, 0, 2, 16, 10),
-		new WeightedRandomChestContent(ItemsCore.genericItem, 5, 1, 64, 15),
-		new WeightedRandomChestContent(ItemsCore.genericItem, 6, 1, 64, 15),
-		new WeightedRandomChestContent(ItemsCore.genericItem, 7, 1, 64, 15),
-		new WeightedRandomChestContent(ItemsCore.genericItem, 8, 1, 64, 15), 
-		new WeightedRandomChestContent(ItemsCore.genericItem, 9, 1, 64, 15),
-		new WeightedRandomChestContent(ItemsCore.genericItem, 10, 1, 64, 15),
-		new WeightedRandomChestContent(ItemsCore.genericItem, 11, 1, 64, 15),
-		new WeightedRandomChestContent(ItemsCore.genericItem, 20, 1, 12, 10),
-		new WeightedRandomChestContent(ItemsCore.genericItem, 3, 1, 64, 15),
-		new WeightedRandomChestContent(ItemsCore.genericItem, 35, 1, 1, 6),
-		new WeightedRandomChestContent(ItemsCore.genericItem, 36, 1, 1, 6),
-		new WeightedRandomChestContent(ItemsCore.genericItem, 37, 1, 1, 6)
+			new WeightedRandomChestContent(ItemsCore.titanite, 0, 8, 64, 20),
+			new WeightedRandomChestContent(ItemsCore.twinkling_titanite, 0, 2, 16, 10),
+			new WeightedRandomChestContent(ItemsCore.genericItem, 5, 1, 64, 15),
+			new WeightedRandomChestContent(ItemsCore.genericItem, 6, 1, 64, 15),
+			new WeightedRandomChestContent(ItemsCore.genericItem, 7, 1, 64, 15),
+			new WeightedRandomChestContent(ItemsCore.genericItem, 8, 1, 64, 15),
+			new WeightedRandomChestContent(ItemsCore.genericItem, 9, 1, 64, 15),
+			new WeightedRandomChestContent(ItemsCore.genericItem, 10, 1, 64, 15),
+			new WeightedRandomChestContent(ItemsCore.genericItem, 11, 1, 64, 15),
+			new WeightedRandomChestContent(ItemsCore.genericItem, 20, 1, 12, 10),
+			new WeightedRandomChestContent(ItemsCore.genericItem, 3, 1, 64, 15),
+			new WeightedRandomChestContent(ItemsCore.genericItem, 35, 1, 1, 6),
+			new WeightedRandomChestContent(ItemsCore.genericItem, 36, 1, 1, 6),
+			new WeightedRandomChestContent(ItemsCore.genericItem, 37, 1, 1, 6)
 	};
 
 	@Override

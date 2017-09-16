@@ -3,14 +3,12 @@ package ec3.common.block;
 import java.util.List;
 
 import ec3.common.block.BlockFancy.FancyBlockType;
-import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -19,7 +17,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.property.ExtendedBlockState;
@@ -30,7 +27,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class BlockFancyMimic extends BlockMimic {
 
 	public static final PropertyEnum<FancyBlockType> TYPE = PropertyEnum.<FancyBlockType>create("type", FancyBlockType.class);
-	
+
 	public BlockFancyMimic() {
 		super();
 		setDefaultState(blockState.getBaseState().withProperty(TYPE, FancyBlockType.ANCIENTTILE));
@@ -77,7 +74,7 @@ public class BlockFancyMimic extends BlockMimic {
 		}
 		ModelLoader.setCustomStateMapper(this, new FancyMimicStateMapper());
 	}
-	
+
 	public static class FancyMimicStateMapper extends StateMapperBase {
 		@Override
 		protected ModelResourceLocation getModelResourceLocation(IBlockState state) {

@@ -1,12 +1,13 @@
 package ec3.common.registry;
 
 import static ec3.utils.cfg.Config.allowPaleItemsInOtherRecipes;
+
+import ec3.common.block.BlocksCore;
+import ec3.common.item.ItemsCore;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
-import ec3.common.block.BlocksCore;
-import ec3.common.item.ItemsCore;
 
 public class OreDictionaryRegistry {
 
@@ -44,33 +45,33 @@ public class OreDictionaryRegistry {
 		OreDictionary.registerOre("chest", new ItemStack(BlocksCore.chest,1,OreDictionary.WILDCARD_VALUE));
 		OreDictionary.registerOre("blockChest", new ItemStack(BlocksCore.chest,1,OreDictionary.WILDCARD_VALUE));
 
-		OreDictionary.registerOre("blockShardElemental", new ItemStack(BlocksCore.compressed,1,4));
-		OreDictionary.registerOre("blockShardFire", new ItemStack(BlocksCore.compressed,1,0));
-		OreDictionary.registerOre("blockShardWater", new ItemStack(BlocksCore.compressed,1,1));
-		OreDictionary.registerOre("blockShardEarth", new ItemStack(BlocksCore.compressed,1,2));
-		OreDictionary.registerOre("blockShardWater", new ItemStack(BlocksCore.compressed,1,3));
+		OreDictionary.registerOre("blockElemental", new ItemStack(BlocksCore.compressed,1,4));
+		OreDictionary.registerOre("blockFireElemental", new ItemStack(BlocksCore.compressed,1,0));
+		OreDictionary.registerOre("blockWaterElemental", new ItemStack(BlocksCore.compressed,1,1));
+		OreDictionary.registerOre("blockEarthElemental", new ItemStack(BlocksCore.compressed,1,2));
+		OreDictionary.registerOre("blockAirElemental", new ItemStack(BlocksCore.compressed,1,3));
 
-		OreDictionary.registerOre("oreShardFire", new ItemStack(BlocksCore.oreDrops,1,1));
-		OreDictionary.registerOre("oreShardWater", new ItemStack(BlocksCore.oreDrops,1,2));
-		OreDictionary.registerOre("oreShardEarth", new ItemStack(BlocksCore.oreDrops,1,3));
-		OreDictionary.registerOre("oreShardAir", new ItemStack(BlocksCore.oreDrops,1,4));
-		OreDictionary.registerOre("oreShardElemental", new ItemStack(BlocksCore.oreDrops,1,0));
-		OreDictionary.registerOre("oreShardFire", new ItemStack(BlocksCore.oreDrops,1,6));
-		OreDictionary.registerOre("oreShardWater", new ItemStack(BlocksCore.oreDrops,1,7));
-		OreDictionary.registerOre("oreShardEarth", new ItemStack(BlocksCore.oreDrops,1,8));
-		OreDictionary.registerOre("oreShardAir", new ItemStack(BlocksCore.oreDrops,1,9));
-		OreDictionary.registerOre("oreShardElemental", new ItemStack(BlocksCore.oreDrops,1,5));
-		OreDictionary.registerOre("oreShardFire", new ItemStack(BlocksCore.oreDrops,1,11));
-		OreDictionary.registerOre("oreShardWater", new ItemStack(BlocksCore.oreDrops,1,12));
-		OreDictionary.registerOre("oreShardEarth", new ItemStack(BlocksCore.oreDrops,1,13));
-		OreDictionary.registerOre("oreShardAir", new ItemStack(BlocksCore.oreDrops,1,14));
-		OreDictionary.registerOre("oreShardElemental", new ItemStack(BlocksCore.oreDrops,1,10));
+		OreDictionary.registerOre("oreFireElemental", new ItemStack(BlocksCore.oreDrops,1,1));
+		OreDictionary.registerOre("oreWaterElemental", new ItemStack(BlocksCore.oreDrops,1,2));
+		OreDictionary.registerOre("oreEarthElemental", new ItemStack(BlocksCore.oreDrops,1,3));
+		OreDictionary.registerOre("oreAirElemental", new ItemStack(BlocksCore.oreDrops,1,4));
+		OreDictionary.registerOre("oreElemental", new ItemStack(BlocksCore.oreDrops,1,0));
+		OreDictionary.registerOre("oreFireElemental", new ItemStack(BlocksCore.oreDrops,1,6));
+		OreDictionary.registerOre("oreWaterElemental", new ItemStack(BlocksCore.oreDrops,1,7));
+		OreDictionary.registerOre("oreEarthElemental", new ItemStack(BlocksCore.oreDrops,1,8));
+		OreDictionary.registerOre("oreAirElemental", new ItemStack(BlocksCore.oreDrops,1,9));
+		OreDictionary.registerOre("oreElemental", new ItemStack(BlocksCore.oreDrops,1,5));
+		OreDictionary.registerOre("oreFireElemental", new ItemStack(BlocksCore.oreDrops,1,11));
+		OreDictionary.registerOre("oreWaterElemental", new ItemStack(BlocksCore.oreDrops,1,12));
+		OreDictionary.registerOre("oreEarthElemental", new ItemStack(BlocksCore.oreDrops,1,13));
+		OreDictionary.registerOre("oreAirElemental", new ItemStack(BlocksCore.oreDrops,1,14));
+		OreDictionary.registerOre("oreElemental", new ItemStack(BlocksCore.oreDrops,1,10));
 
-		OreDictionary.registerOre("shardFire", new ItemStack(ItemsCore.drops,1,0));
-		OreDictionary.registerOre("shardWater", new ItemStack(ItemsCore.drops,1,1));
-		OreDictionary.registerOre("shardEarth", new ItemStack(ItemsCore.drops,1,2));
-		OreDictionary.registerOre("shardAir", new ItemStack(ItemsCore.drops,1,3));
-		OreDictionary.registerOre("shardElemental", new ItemStack(ItemsCore.drops,1,4));
+		OreDictionary.registerOre("gemFireElemental", new ItemStack(ItemsCore.drops,1,0));
+		OreDictionary.registerOre("gemWaterElemental", new ItemStack(ItemsCore.drops,1,1));
+		OreDictionary.registerOre("gemEarthElemental", new ItemStack(ItemsCore.drops,1,2));
+		OreDictionary.registerOre("gemAirElemental", new ItemStack(ItemsCore.drops,1,3));
+		OreDictionary.registerOre("gemElemental", new ItemStack(ItemsCore.drops,1,4));
 		OreDictionary.registerOre("gemCoal", new ItemStack(Items.COAL,1,0));
 		OreDictionary.registerOre("gemNetherStar", new ItemStack(Items.NETHER_STAR,1,0));
 		OreDictionary.registerOre("obsidian", new ItemStack(Blocks.OBSIDIAN,1,0));
@@ -78,8 +79,7 @@ public class OreDictionaryRegistry {
 		OreDictionary.registerOre("itemFeather", new ItemStack(Items.FEATHER,1,0));
 		OreDictionary.registerOre("itemBook", new ItemStack(Items.BOOK,1,0));
 
-		if(allowPaleItemsInOtherRecipes)
-		{
+		if(allowPaleItemsInOtherRecipes) {
 			OreDictionary.registerOre("gemEnderPearl",new ItemStack(ItemsCore.genericItem,1,38));
 			OreDictionary.registerOre("enderPearl",new ItemStack(ItemsCore.genericItem,1,38));
 			OreDictionary.registerOre("itemEnderPearl",new ItemStack(ItemsCore.genericItem,1,38));
@@ -139,8 +139,7 @@ public class OreDictionaryRegistry {
 
 		OreDictionary.registerOre("gemPale",new ItemStack(ItemsCore.genericItem,1,40));
 
-		if(allowPaleItemsInOtherRecipes)
-		{
+		if(allowPaleItemsInOtherRecipes) {
 			OreDictionary.registerOre("gemDiamond",new ItemStack(ItemsCore.genericItem,1,40));
 			OreDictionary.registerOre("gemEmerald",new ItemStack(ItemsCore.genericItem,1,40));
 			OreDictionary.registerOre("gemRuby",new ItemStack(ItemsCore.genericItem,1,40));
@@ -182,9 +181,9 @@ public class OreDictionaryRegistry {
 		OreDictionary.registerOre("record", new ItemStack(ItemsCore.record_robocalypse,1,0));
 		OreDictionary.registerOre("record", new ItemStack(ItemsCore.record_secret,1,0));
 
-		OreDictionary.registerOre("oreDustMithriline", new ItemStack(BlocksCore.oreMithriline,1,0));
-		OreDictionary.registerOre("oreDustMithriline", new ItemStack(BlocksCore.oreMithriline,1,1));
-		OreDictionary.registerOre("oreDustMithriline", new ItemStack(BlocksCore.oreMithriline,1,2));
-		OreDictionary.registerOre("blockDustMithriline", new ItemStack(BlocksCore.compressed,1,5));
+		OreDictionary.registerOre("oreMithriline", new ItemStack(BlocksCore.oreMithriline,1,0));
+		OreDictionary.registerOre("oreMithriline", new ItemStack(BlocksCore.oreMithriline,1,1));
+		OreDictionary.registerOre("oreMithriline", new ItemStack(BlocksCore.oreMithriline,1,2));
+		OreDictionary.registerOre("blockMithriline", new ItemStack(BlocksCore.compressed,1,5));
 	}
 }

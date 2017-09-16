@@ -11,20 +11,20 @@ public class TileNewMIMCraftingManager extends TileMRUGeneric {
 	public TileNewMIM parent;
 	int tickTime;
 	public ArrayList<CraftingPattern> allCrafts = new ArrayList<CraftingPattern>();
-	
+
 	public static class CraftingPattern {
 		public ItemStack result;
 		public ItemStack[] input;
 		public boolean isOreDict;
 		public ItemStack crafter;
-		
+
 		public CraftingPattern(ItemStack par1, ItemStack par2, ItemStack[] par3, boolean par4) {
 			result = par1;
 			crafter = par2;
 			input = par3;
 			isOreDict = par4;
 		}
-		
+
 		public CraftingPattern(ItemStack crafting) {
 			if(crafting != null && crafting.getItem() instanceof ItemCraftingFrame && crafting.hasTagCompound()) {
 				InventoryCraftingFrame frame = new InventoryCraftingFrame(crafting);
@@ -37,36 +37,37 @@ public class TileNewMIMCraftingManager extends TileMRUGeneric {
 				}
 			}
 		}
-		
+
 		public boolean isValidRecipe() {
 			return result != null && crafter != null && input.length == 9 && (input[0] != null || input[1] != null || input[2] != null || input[3] != null || input[4] != null || input[5] != null || input[6] != null || input[7] != null || input[8] != null);
 		}
-		
+
 		public boolean isResultTheSame(ItemStack is) {
 			if(is == null || !isValidRecipe())
 				return false;
-			
+
 			return is.isItemEqual(result) && ItemStack.areItemStackTagsEqual(is, result);
 		}
 	}
-	
-    @Override
-    public void setInventorySlotContents(int par1, ItemStack par2ItemStack) {
-    	super.setInventorySlotContents(par1, par2ItemStack);
-    	syncTick = 0;
-    }
-	
+
+	@Override
+	public void setInventorySlotContents(int par1, ItemStack par2ItemStack) {
+		super.setInventorySlotContents(par1, par2ItemStack);
+		syncTick = 0;
+	}
+
 	public TileNewMIMCraftingManager() {
 		setSlotsNum(54);
 		slot0IsBoundGem = false;
 	}
-	
+
+	@Override
 	public void update() {
 		if(syncTick == 60)
 			rebuildRecipes();
-		
+
 		super.update();
-		
+
 		if(tickTime == 0) {
 			tickTime = 20;
 			if(parent != null)
@@ -76,12 +77,12 @@ public class TileNewMIMCraftingManager extends TileMRUGeneric {
 		else
 			--tickTime;
 	}
-	
+
 	@Override
 	public int[] getOutputSlots() {
 		return new int[0];
 	}
-	
+
 	public void rebuildRecipes() {
 		allCrafts.clear();
 		for(int i = 0; i < getSizeInventory(); ++i) {
@@ -97,42 +98,42 @@ public class TileNewMIMCraftingManager extends TileMRUGeneric {
 			}
 		}
 	}
-	
+
 	public ItemStack findCraftingFrameByRecipe(ItemStack result) {
 		for(int i = 0; i < allCrafts.size(); ++i) {
 			if(allCrafts.get(i).isResultTheSame(result))
 				return allCrafts.get(i).crafter;
 		}
-		
+
 		return null;
 	}
-	
+
 	public ItemStack[] findCraftingComponentsByRecipe(ItemStack result) {
 		for(int i = 0; i < allCrafts.size(); ++i) {
 			if(allCrafts.get(i).isResultTheSame(result))
 				return allCrafts.get(i).input;
 		}
-		
+
 		return null;
 	}
-	
+
 	public ItemStack findResultByCraftingFrame(ItemStack frame) {
 		for(int i = 0; i < allCrafts.size(); ++i) {
 			if(ItemStack.areItemStacksEqual(allCrafts.get(i).crafter, frame) && ItemStack.areItemStackTagsEqual(allCrafts.get(i).crafter, frame))
 				return allCrafts.get(i).result;
 		}
-		
+
 		return null;
 	}
-	
+
 	public int craft(ItemStack result, int times) {
 		ItemStack stk = findCraftingFrameByRecipe(result);
-		
+
 		if(stk == null)
 			return 0;
-		
+
 		int crafted = 0;
-		
+
 		for(int i = 0; i < times; ++i) {
 			ItemStack[] required = findCraftingComponentsByRecipe(result);
 			if(canCraft(required,stk)) {
@@ -142,32 +143,32 @@ public class TileNewMIMCraftingManager extends TileMRUGeneric {
 				}
 			}
 		}
-		
+
 		return crafted;
 	}
-	
+
 	public boolean canCraft(ItemStack[] components, ItemStack crafter) {
 		if(crafter == null)
 			return false;
-		
+
 		if(!crafter.hasTagCompound())
 			return false;
-		
+
 		for(int i = 0; i < components.length; ++i) {
 			if(parent.retrieveItemStackFromSystem(components[i], !crafter.getTagCompound().getBoolean("ignoreOreDict"), false) > 0)
 				return false;
 		}
-		
+
 		return true;
 	}
-	
+
 	public boolean craft(ItemStack[] components, ItemStack crafter) {
 		if(crafter == null)
 			return false;
-		
+
 		if(!crafter.hasTagCompound())
 			return false;
-		
+
 		for(int i = 0; i < components.length; ++i) {
 			if(parent.retrieveItemStackFromSystem(components[i], !crafter.getTagCompound().getBoolean("ignoreOreDict"), true) > 0) {
 				for(int j = 0; j < i; ++j) {
@@ -176,30 +177,30 @@ public class TileNewMIMCraftingManager extends TileMRUGeneric {
 				return false;
 			}
 		}
-		
+
 		return true;
 	}
-	
+
 	public ArrayList<CraftingPattern> getAllRecipes() {
 		return allCrafts;
 	}
-	
+
 	public ArrayList<ItemStack> getAllResults() {
 		ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
-		
+
 		for(int i = 0; i < allCrafts.size(); ++i) {
 			CraftingPattern par = allCrafts.get(i);
 			if(par.isValidRecipe())
 				ret.add(par.result);
 		}
-		
+
 		return ret;
 	}
-	
+
 	public boolean hasRecipe(ItemStack is) {
 		if(is == null)
 			return false;
-		
+
 		for(int i = 0; i < getSizeInventory(); ++i) {
 			if(getStackInSlot(i) != null && getStackInSlot(i).getItem() instanceof ItemCraftingFrame) {
 				InventoryCraftingFrame inv = new InventoryCraftingFrame(getStackInSlot(i));
@@ -209,7 +210,7 @@ public class TileNewMIMCraftingManager extends TileMRUGeneric {
 				}
 			}
 		}
-		
+
 		return false;
 	}
 }

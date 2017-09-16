@@ -1,5 +1,9 @@
 package ec3.common.item;
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
+
+import ec3.api.DemonTrade;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
@@ -8,11 +12,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
-
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Multimap;
-
-import ec3.api.DemonTrade;
 
 public class ItemSoulScriber extends ItemSword_Mod {
 
@@ -30,6 +29,7 @@ public class ItemSoulScriber extends ItemSword_Mod {
 		return mp;
 	}
 
+	@Override
 	public boolean hitEntity(ItemStack weapon, EntityLivingBase attacked, EntityLivingBase attacker)
 	{
 		if(MathHelper.floor(attacked.getHealth()) <= 2)

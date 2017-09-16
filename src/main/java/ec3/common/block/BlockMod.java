@@ -27,6 +27,7 @@ public class BlockMod extends Block implements IModelRegisterer {
 		return BlockRenderLayer.TRANSLUCENT;
 	}
 
+	@Override
 	public Block setSoundType(SoundType s) {
 		return super.setSoundType(s);
 	}

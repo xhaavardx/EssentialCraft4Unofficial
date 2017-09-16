@@ -21,7 +21,7 @@ public class BlockColdStone extends Block implements IColdBlock, IModelRegistere
 	}
 
 	@Override
-	public float getColdModifier(IBlockAccess w, BlockPos pos) 
+	public float getColdModifier(IBlockAccess w, BlockPos pos)
 	{
 		return 0.5F;
 	}

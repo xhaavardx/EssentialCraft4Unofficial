@@ -22,38 +22,34 @@ import net.minecraftforge.oredict.OreDictionary;
 public class ItemMagmaticWand extends ItemStoresMRUInNBT implements IModelRegisterer {
 
 	public ItemMagmaticWand() {
-		super();	
+		super();
 		this.setMaxMRU(5000);
 		this.maxStackSize = 1;
 		this.bFull3D = true;
 	}
 
-	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ)
-	{
+	@Override
+	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
 		ItemStack ore = new ItemStack(world.getBlockState(pos).getBlock(),1,world.getBlockState(pos).getBlock().getMetaFromState(world.getBlockState(pos)));
-		if(ore != null && !world.isRemote)
-		{
+		if(ore != null && !world.isRemote) {
 			int[] oreIds = OreDictionary.getOreIDs(ore);
 
 			String oreName = "Unknown";
 			if(oreIds.length > 0)
 				oreName = OreDictionary.getOreName(oreIds[0]);
 			int metadata = -1;
-			for(int i = 0; i < OreSmeltingRecipe.RECIPES.size(); ++i)
-			{
+			for(int i = 0; i < OreSmeltingRecipe.RECIPES.size(); ++i) {
 				OreSmeltingRecipe oreColor = OreSmeltingRecipe.RECIPES.get(i);
-				if(oreName.equalsIgnoreCase(oreColor.oreName))
-				{
+				if(oreName.equalsIgnoreCase(oreColor.oreName)) {
 					metadata = i;
 					break;
 				}
 			}
-			if(!player.getEntityWorld().isRemote && metadata != -1 && (ECUtils.tryToDecreaseMRUInStorage(player, -500) || this.setMRU(stack, -500)))
-			{
+			if(!player.getEntityWorld().isRemote && metadata != -1 && (ECUtils.tryToDecreaseMRUInStorage(player, -500) || this.setMRU(stack, -500))) {
 				int suggestedStackSize = OreSmeltingRecipe.RECIPES.get(metadata).dropAmount;
 				if(world.rand.nextFloat() <= 0.33F)
 					suggestedStackSize = OreSmeltingRecipe.RECIPES.get(metadata).dropAmount*2;
-				ItemStack sugStk = new ItemStack(ItemsCore.magicalAlloy,suggestedStackSize,metadata);
+				ItemStack sugStk = OreSmeltingRecipe.getAlloyStack(OreSmeltingRecipe.RECIPES.get(metadata), suggestedStackSize);
 
 				GameType type = GameType.SURVIVAL;
 				if(player.capabilities.isCreativeMode)
@@ -62,8 +58,7 @@ public class ItemMagmaticWand extends ItemStoresMRUInNBT implements IModelRegist
 					type = GameType.ADVENTURE;
 
 				int be = ForgeHooks.onBlockBreakEvent(player.getEntityWorld(), type, (EntityPlayerMP)player, pos);
-				if(be != -1)
-				{
+				if(be != -1) {
 					world.setBlockToAir(pos);
 					EntityItem drop = new EntityItem(world, pos.getX(), pos.getY(), pos.getZ(), sugStk);
 					drop.motionX = MathUtils.randomDouble(world.rand)/10;

@@ -28,6 +28,7 @@ public class BlockCompressedDrops extends Block implements IModelRegisterer {
 		setDefaultState(blockState.getBaseState().withProperty(TYPE, EnumDropType.ELEMENTAL));
 	}
 
+	@Override
 	public void getSubBlocks(Item p_149666_1_, CreativeTabs p_149666_2_, List<ItemStack> p_149666_3_) {
 		for(int i = 0; i < 6; ++i)
 			p_149666_3_.add(new ItemStack(p_149666_1_, 1, i));

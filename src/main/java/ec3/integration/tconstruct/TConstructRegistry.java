@@ -3,7 +3,6 @@ package ec3.integration.tconstruct;
 import org.apache.logging.log4j.LogManager;
 
 import net.minecraftforge.fml.common.Loader;
-import slimeknights.tconstruct.library.TinkerRegistry;
 
 public class TConstructRegistry {
 	public static void register() {

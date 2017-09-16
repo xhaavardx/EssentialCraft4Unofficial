@@ -41,7 +41,7 @@ import net.minecraftforge.common.ForgeHooks;
 public class ItemMagicalBuilder extends ItemStoresMRUInNBT implements IModelRegisterer {
 
 	@Override
-	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List<String> par3List, boolean par4) 
+	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List<String> par3List, boolean par4)
 	{
 		switch(par1ItemStack.getItemDamage())
 		{
@@ -102,6 +102,7 @@ public class ItemMagicalBuilder extends ItemStoresMRUInNBT implements IModelRegi
 		}
 	}
 
+	@Override
 	public ActionResult<ItemStack> onItemRightClick(ItemStack is, World w, EntityPlayer p, EnumHand hand)
 	{
 		RayTraceResult mop = this.rayTrace(w, p, p.capabilities.isCreativeMode);
@@ -512,7 +513,7 @@ public class ItemMagicalBuilder extends ItemStoresMRUInNBT implements IModelRegi
 
 	public static class ItemOverlayMagicalBuilder implements IItemOverlayElement {
 		public static final ItemOverlayMagicalBuilder INSTANCE = new ItemOverlayMagicalBuilder();
-		
+
 		@Override
 		public void renderItemOverlayIntoGUI(FontRenderer fr, ItemStack item, int x, int y, String text) {
 			GlStateManager.disableDepth();

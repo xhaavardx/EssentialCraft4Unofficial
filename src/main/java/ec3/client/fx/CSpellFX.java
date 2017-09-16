@@ -1,6 +1,5 @@
 package ec3.client.fx;
 
-import DummyCore.Utils.TessellatorWrapper;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.entity.Entity;
@@ -11,7 +10,7 @@ public class CSpellFX extends Particle{
 	private double mruPosX;
 	private double mruPosY;
 	private double mruPosZ;
-	public CSpellFX(World w, double x, double y,double z, double i, double j,double k) 
+	public CSpellFX(World w, double x, double y,double z, double i, double j,double k)
 	{
 		super(w, x, y, z, i, j,k);
 		this.motionX = i;
@@ -30,6 +29,7 @@ public class CSpellFX extends Particle{
 		this.setParticleTextureIndex((int)(Math.random() * 8.0D));
 	}
 
+	@Override
 	public void renderParticle(VertexBuffer var1, Entity var2, float par2, float par3, float par4, float par5, float par6, float par7)
 	{
 		this.particleScale = 1F;
@@ -44,6 +44,7 @@ public class CSpellFX extends Particle{
 		super.renderParticle(var1, var2, par2, par3, par4, par5, par6, par7);
 	}
 
+	@Override
 	public int getBrightnessForRender(float p_70070_1_)
 	{
 		int i = super.getBrightnessForRender(p_70070_1_);
@@ -65,7 +66,7 @@ public class CSpellFX extends Particle{
 	/**
 	 * Gets how bright this entity is.
 	 */
-	 public float getBrightness(float p_70013_1_)
+	public float getBrightness(float p_70013_1_)
 	{
 		float f1 = super.getBrightnessForRender(p_70013_1_);
 		float f2 = (float)this.particleAge / (float)this.particleMaxAge;
@@ -73,31 +74,32 @@ public class CSpellFX extends Particle{
 		return f1 * (1.0F - f2) + f2;
 	}
 
-	 /**
-	  * Called to update the entity's position/logic.
-	  */
-	 public void onUpdate()
-	 {
-		 this.setParticleTextureIndex(7 - this.particleAge * 8 / this.particleMaxAge);
-		 this.prevPosX = this.posX;
-		 this.prevPosY = this.posY;
-		 this.prevPosZ = this.posZ;
-		 float f = (float)this.particleAge / (float)this.particleMaxAge;
-		 this.posX = this.mruPosX + this.motionX * (double)f;
-		 this.posY = this.mruPosY + this.motionY * (double)f;
-		 this.posZ = this.mruPosZ + this.motionZ * (double)f;
+	/**
+	 * Called to update the entity's position/logic.
+	 */
+	@Override
+	public void onUpdate()
+	{
+		this.setParticleTextureIndex(7 - this.particleAge * 8 / this.particleMaxAge);
+		this.prevPosX = this.posX;
+		this.prevPosY = this.posY;
+		this.prevPosZ = this.posZ;
+		float f = (float)this.particleAge / (float)this.particleMaxAge;
+		this.posX = this.mruPosX + this.motionX * f;
+		this.posY = this.mruPosY + this.motionY * f;
+		this.posZ = this.mruPosZ + this.motionZ * f;
 
-		 if (this.particleAge++ >= this.particleMaxAge)
-		 {
-			 this.setExpired();
-			 for(int t = 0; t < 10; ++t)
-			 {
-				 //this.getEntityWorld().spawnParticle("smoke", posX, posY, posZ, MathUtils.randomFloat(rand)/6, MathUtils.randomFloat(rand)/6, MathUtils.randomFloat(rand)/6);
-				 //if(this.getEntityWorld().rand.nextFloat() < 0.01F)
-				 //this.getEntityWorld().spawnParticle("explode", posX, posY, posZ, MathUtils.randomFloat(rand)/6, MathUtils.randomFloat(rand)/6, MathUtils.randomFloat(rand)/6);
-			 }
-		 }
-		 // if(this.getEntityWorld().rand.nextFloat() < 0.01F)
-		 //this.getEntityWorld().spawnParticle("redstone", posX, posY, posZ, -1, 0, 0);
-	 }
+		if (this.particleAge++ >= this.particleMaxAge)
+		{
+			this.setExpired();
+			for(int t = 0; t < 10; ++t)
+			{
+				//this.getEntityWorld().spawnParticle("smoke", posX, posY, posZ, MathUtils.randomFloat(rand)/6, MathUtils.randomFloat(rand)/6, MathUtils.randomFloat(rand)/6);
+				//if(this.getEntityWorld().rand.nextFloat() < 0.01F)
+				//this.getEntityWorld().spawnParticle("explode", posX, posY, posZ, MathUtils.randomFloat(rand)/6, MathUtils.randomFloat(rand)/6, MathUtils.randomFloat(rand)/6);
+			}
+		}
+		// if(this.getEntityWorld().rand.nextFloat() < 0.01F)
+		//this.getEntityWorld().spawnParticle("redstone", posX, posY, posZ, -1, 0, 0);
+	}
 }

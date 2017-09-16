@@ -63,17 +63,20 @@ public class BlockRedstoneDeviceNotSided extends BlockContainer implements IMode
 		super(Material.ROCK);
 	}
 
+	@Override
 	public EnumBlockRenderType getRenderType(IBlockState s)
 	{
 		return EnumBlockRenderType.MODEL;
 	}
 
+	@Override
 	public void getSubBlocks(Item p_149666_1_, CreativeTabs p_149666_2_, List<ItemStack> p_149666_3_)
 	{
 		for(int i = 0; i < names.length; ++i)
 			p_149666_3_.add(new ItemStack(p_149666_1_, 1, i));
 	}
 
+	@Override
 	public int damageDropped(IBlockState meta)
 	{
 		return meta.getValue(TYPE).getIndex();
@@ -190,8 +193,9 @@ public class BlockRedstoneDeviceNotSided extends BlockContainer implements IMode
 		return true;
 	}
 
+	@Override
 	@SuppressWarnings("unchecked")
-	public void neighborChanged(IBlockState s, World w, BlockPos p, Block n) 
+	public void neighborChanged(IBlockState s, World w, BlockPos p, Block n)
 	{
 		if(s.getValue(TYPE).getIndex() == 0)
 		{
@@ -329,10 +333,12 @@ public class BlockRedstoneDeviceNotSided extends BlockContainer implements IMode
 			name = s;
 		}
 
+		@Override
 		public String getName() {
 			return name;
 		}
 
+		@Override
 		public String toString() {
 			return name;
 		}

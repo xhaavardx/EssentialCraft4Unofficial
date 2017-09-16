@@ -5,20 +5,8 @@ import java.util.HashMap;
 
 import com.google.common.collect.Maps;
 
-import net.minecraft.block.Block;
-import net.minecraft.entity.monster.EntityEnderman;
-import net.minecraft.entity.passive.EntityVillager;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.CraftingManager;
-import net.minecraftforge.oredict.OreDictionary;
-import net.minecraftforge.oredict.ShapedOreRecipe;
-import net.minecraftforge.oredict.ShapelessOreRecipe;
 import DummyCore.Utils.MiscUtils;
 import DummyCore.Utils.UnformedItemStack;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import ec3.api.DemonTrade;
 import ec3.api.MagicianTableRecipes;
 import ec3.api.MithrilineFurnaceRecipes;
@@ -28,15 +16,25 @@ import ec3.common.block.BlocksCore;
 import ec3.common.entity.EntityWindMage;
 import ec3.common.item.ItemsCore;
 import ec3.utils.common.RecipeArmorDyesHandler;
+import net.minecraft.block.Block;
+import net.minecraft.entity.monster.EntityEnderman;
+import net.minecraft.entity.passive.EntityVillager;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.CraftingManager;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.oredict.ShapedOreRecipe;
+import net.minecraftforge.oredict.ShapelessOreRecipe;
 
 public class RecipeRegistry {
 	public boolean hasGregTech = false;
 	private Class<?> GT_Class;
 	public static HashMap<Block,ItemStack> fancyBlockRecipes = Maps.<Block,ItemStack>newHashMap();
 
-	@SuppressWarnings("unchecked")
 	public static void main() {
-		registerDictionary();
 		registerRecipes();
 		registerMagicianTable();
 		registerRadiatingChamber();
@@ -46,22 +44,18 @@ public class RecipeRegistry {
 		CraftingManager.getInstance().getRecipeList().add(new RecipeArmorDyesHandler());
 	}
 
-	private static void registerDictionary() {
-		OreDictionaryRegistry.register();
-	}
-
 	private static void registerRecipes() {
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(ItemsCore.drops,4,4), new Object[]{
-				"shardFire","shardWater","shardEarth","shardAir"
+				"gemFireElemental","gemWaterElemental","gemEarthElemental","gemAirElemental"
 		}));
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(ItemsCore.mruMover1,1,0), new Object[]{
-				"shardElemental","stickWood"
+				"gemElemental","stickWood"
 		}));
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(ItemsCore.magicalChisel,1,0), new Object[]{
-				"shardElemental","shardElemental","shardElemental","shardElemental","stickWood"
+				"gemElemental","gemElemental","gemElemental","gemElemental","stickWood"
 		}));
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(ItemsCore.bound_gem,1,0), new Object[]{
-				"shardElemental","gemQuartz"
+				"gemElemental","gemQuartz"
 		}));
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(ItemsCore.genericItem,1,33), new Object[]{
 				"ingotThaumium","ingotThaumium","ingotThaumium","ingotThaumium","ingotThaumium","ingotThaumium","ingotThaumium","ingotThaumium",new ItemStack(ItemsCore.genericItem,1,23)
@@ -137,7 +131,7 @@ public class RecipeRegistry {
 				"ISI",
 				'I',"ingotIron",
 				'S',"stone",
-				'E',"shardElemental"
+				'E',"gemElemental"
 		}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ItemsCore.mruMover_t2,1,0), new Object[]{
 				" SI",
@@ -153,7 +147,7 @@ public class RecipeRegistry {
 				"ISI",
 				'I',"ingotIron",
 				'S',"gemDiamond",
-				'E',"shardElemental"
+				'E',"gemElemental"
 		}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ItemsCore.genericItem,1,21), new Object[]{
 				"I I",
@@ -161,7 +155,7 @@ public class RecipeRegistry {
 				"I I",
 				'I',"ingotIron",
 				'S',"gemDiamond",
-				'E',"shardElemental"
+				'E',"gemElemental"
 		}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ItemsCore.genericItem,1,22), new Object[]{
 				"ISI",
@@ -169,7 +163,7 @@ public class RecipeRegistry {
 				"ISI",
 				'I',"ingotIron",
 				'S',"gemEmerald",
-				'E',"shardElemental"
+				'E',"gemElemental"
 		}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ItemsCore.genericItem,1,22), new Object[]{
 				"I I",
@@ -177,14 +171,14 @@ public class RecipeRegistry {
 				"I I",
 				'I',"ingotIron",
 				'S',"gemEmerald",
-				'E',"shardElemental"
+				'E',"gemElemental"
 		}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ItemsCore.genericItem,1,23), new Object[]{
 				"ISI",
 				"SES",
 				"ISI",
 				'I',"ingotIron",
-				'S',"shardElemental",
+				'S',"gemElemental",
 				'E',"ec3:gemEnderPearl"
 		}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ItemsCore.genericItem,3,24), new Object[]{
@@ -198,7 +192,7 @@ public class RecipeRegistry {
 				"ISI",
 				"ISI",
 				"ISI",
-				'I',"shardFire",
+				'I',"gemFireElemental",
 				'S',Items.IRON_INGOT
 		}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ItemsCore.genericItem,4,26), new Object[]{
@@ -206,7 +200,7 @@ public class RecipeRegistry {
 				"SIS",
 				"ISI",
 				'I',"ingotIron",
-				'S',"shardElemental"
+				'S',"gemElemental"
 		}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ItemsCore.genericItem,1,27), new Object[]{
 				"I I",
@@ -222,7 +216,7 @@ public class RecipeRegistry {
 				'G',"ec3:ingotGold",
 				'E',"gemEmerald",
 				'P',"ec3:gemEnderPearl",
-				'S',"shardElemental"
+				'S',"gemElemental"
 		}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ItemsCore.genericItem,8,29), new Object[]{
 				"GGG",
@@ -231,7 +225,7 @@ public class RecipeRegistry {
 				'G',"ec3:ingotGold",
 				'E',"ec3:gemEnderPearl",
 				'P',"ec3:gemEnderPearl",
-				'S',"shardElemental"
+				'S',"gemElemental"
 		}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ItemsCore.genericItem,1,30), new Object[]{
 				" I ",
@@ -344,9 +338,9 @@ public class RecipeRegistry {
 				"plateMagic","plateRedstone","plateMagic",
 		});
 		addRecipe(new ItemStack(ItemsCore.genericItem,1,53),new Object[]{
-				"plateDemonic","shardElemental","plateDemonic",
-				"shardElemental","resonatingCrystal","shardElemental",
-				"plateDemonic","shardElemental","plateDemonic",
+				"plateDemonic","gemElemental","plateDemonic",
+				"gemElemental","resonatingCrystal","gemElemental",
+				"plateDemonic","gemElemental","plateDemonic",
 		});
 		addRecipe(new ItemStack(BlocksCore.ecHoldingChamber,1,0),new Object[]{
 				"frameMagic","mruCatcher","frameMagic",
@@ -429,7 +423,7 @@ public class RecipeRegistry {
 		});
 		addRecipe(new ItemStack(BlocksCore.magicalJukebox,1,0),new Object[]{
 				"plateMagic","mruCatcher","worldInteractor",
-				"elementalCore",new ItemStack(Blocks.JUKEBOX,1,0),"shardElemental",
+				"elementalCore",new ItemStack(Blocks.JUKEBOX,1,0),"gemElemental",
 				"plateRedstone","screenMagic","plateRedstone",
 		});
 		addRecipe(new ItemStack(BlocksCore.crystalFormer,1,0),new Object[]{
@@ -925,35 +919,35 @@ public class RecipeRegistry {
 				"DD ",
 				" S ",
 				" S ",
-				'D',"blockShardElemental",
+				'D',"blockElemental",
 				'S',"stickWood"
 		}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ItemsCore.weak_elemental_axe,1,0), new Object[]{
 				"DD ",
 				"DS ",
 				" S ",
-				'D',"blockShardElemental",
+				'D',"blockElemental",
 				'S',"stickWood"
 		}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ItemsCore.weak_elemental_pick,1,0), new Object[]{
 				"DDD",
 				" S ",
 				" S ",
-				'D',"blockShardElemental",
+				'D',"blockElemental",
 				'S',"stickWood"
 		}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ItemsCore.weak_elemental_shovel,1,0), new Object[]{
 				" D ",
 				" S ",
 				" S ",
-				'D',"blockShardElemental",
+				'D',"blockElemental",
 				'S',"stickWood"
 		}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ItemsCore.weak_elemental_sword,1,0), new Object[]{
 				" D ",
 				" D ",
 				" S ",
-				'D',"blockShardElemental",
+				'D',"blockElemental",
 				'S',"stickWood"
 		}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ItemsCore.wind_helmet,1,0), new Object[]{
@@ -1075,7 +1069,7 @@ public class RecipeRegistry {
 		}));
 
 		GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(ItemsCore.inventoryGem,1,0),new Object[]{
-				"shardElemental",gen(12)
+				"gemElemental",gen(12)
 		}));
 
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ItemsCore.filter,1,2), new Object[]{
@@ -1516,9 +1510,9 @@ public class RecipeRegistry {
 		MiscUtils.getStackTag(book_t1).setInteger("tier", 1);
 
 		addRecipe(book_t1,new Object[]{
-				"elementalCore","shardElemental","elementalCore",
-				"shardElemental",book,"shardElemental",
-				"elementalCore","shardElemental","elementalCore",
+				"elementalCore","gemElemental","elementalCore",
+				"gemElemental",book,"gemElemental",
+				"elementalCore","gemElemental","elementalCore",
 		});
 
 		ItemStack book_t2 = new ItemStack(ItemsCore.research_book);
@@ -1537,29 +1531,29 @@ public class RecipeRegistry {
 		registerCharmsCraft();
 
 		addRecipe(new ItemStack(BlocksCore.crystalLamp,1,0), new Object[] {
-				"cobblestone","shardFire","cobblestone",
-				"shardFire",Blocks.TORCH,"shardFire",
-				"cobblestone","shardFire","cobblestone",
+				"cobblestone","gemFireElemental","cobblestone",
+				"gemFireElemental",Blocks.TORCH,"gemFireElemental",
+				"cobblestone","gemFireElemental","cobblestone",
 		});
 		addRecipe(new ItemStack(BlocksCore.crystalLamp,1,1), new Object[] {
-				"cobblestone","shardWater","cobblestone",
-				"shardWater",Blocks.TORCH,"shardWater",
-				"cobblestone","shardWater","cobblestone",
+				"cobblestone","gemWaterElemental","cobblestone",
+				"gemWaterElemental",Blocks.TORCH,"gemWaterElemental",
+				"cobblestone","gemWaterElemental","cobblestone",
 		});
 		addRecipe(new ItemStack(BlocksCore.crystalLamp,1,2), new Object[] {
-				"cobblestone","shardEarth","cobblestone",
-				"shardEarth",Blocks.TORCH,"shardEarth",
-				"cobblestone","shardEarth","cobblestone",
+				"cobblestone","gemEarthElemental","cobblestone",
+				"gemEarthElemental",Blocks.TORCH,"gemEarthElemental",
+				"cobblestone","gemEarthElemental","cobblestone",
 		});
 		addRecipe(new ItemStack(BlocksCore.crystalLamp,1,3), new Object[] {
-				"cobblestone","shardAir","cobblestone",
-				"shardAir",Blocks.TORCH,"shardAir",
-				"cobblestone","shardAir","cobblestone",
+				"cobblestone","gemAirElemental","cobblestone",
+				"gemAirElemental",Blocks.TORCH,"gemAirElemental",
+				"cobblestone","gemAirElemental","cobblestone",
 		});
 		addRecipe(new ItemStack(BlocksCore.crystalLamp,1,4), new Object[] {
-				"cobblestone","shardElemental","cobblestone",
-				"shardElemental",Blocks.TORCH,"shardElemental",
-				"cobblestone","shardElemental","cobblestone",
+				"cobblestone","gemElemental","cobblestone",
+				"gemElemental",Blocks.TORCH,"gemElemental",
+				"cobblestone","gemElemental","cobblestone",
 		});
 		addRecipe(new ItemStack(BlocksCore.crystalLamp,1,5), new Object[] {
 				"cobblestone","dustMithriline","cobblestone",
@@ -1884,16 +1878,16 @@ public class RecipeRegistry {
 				" E ","ECE"," E ", 'E', new ItemStack(ItemsCore.essence,1,14),'C',Items.WHEAT_SEEDS
 		}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ItemsCore.elementalFuel,1,3), new Object[]{
-				" E ","ECE"," E ", 'E', new ItemStack(ItemsCore.essence,1,3)
+				" E ","E E"," E ", 'E', new ItemStack(ItemsCore.essence,1,3)
 		}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ItemsCore.elementalFuel,4,3), new Object[]{
-				" E ","ECE"," E ", 'E', new ItemStack(ItemsCore.essence,1,7)
+				" E ","E E"," E ", 'E', new ItemStack(ItemsCore.essence,1,7)
 		}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ItemsCore.elementalFuel,8,3), new Object[]{
-				" E ","ECE"," E ", 'E', new ItemStack(ItemsCore.essence,1,11)
+				" E ","E E"," E ", 'E', new ItemStack(ItemsCore.essence,1,11)
 		}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ItemsCore.elementalFuel,16,3), new Object[]{
-				" E ","ECE"," E ", 'E', new ItemStack(ItemsCore.essence,1,15)
+				" E ","E E"," E ", 'E', new ItemStack(ItemsCore.essence,1,15)
 		}));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ItemsCore.fFocus,1,0), new Object[]{
 				"GIG","IEI","GIG", 'E', new ItemStack(ItemsCore.elementalFuel,1,0),'G',Items.GOLD_INGOT,'I',Items.IRON_INGOT

@@ -31,11 +31,13 @@ public class BlockCorruptionCleaner extends BlockContainer implements IModelRegi
 		super(Material.ROCK);
 	}
 
+	@Override
 	public EnumBlockRenderType getRenderType(IBlockState s)
 	{
 		return EnumBlockRenderType.MODEL;
 	}
 
+	@Override
 	public boolean isOpaqueCube(IBlockState s)
 	{
 		return false;
@@ -47,6 +49,7 @@ public class BlockCorruptionCleaner extends BlockContainer implements IModelRegi
 		return BlockRenderLayer.TRANSLUCENT;
 	}
 
+	@Override
 	public boolean isFullCube(IBlockState s)
 	{
 		return false;

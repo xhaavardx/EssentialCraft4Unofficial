@@ -70,7 +70,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemHoe;
@@ -417,7 +416,7 @@ public class ECEventHandler {
 				ApiCore.getPlayerData(event.getPlayer()).modifyUBMRU(ApiCore.getPlayerData(event.getPlayer()).getPlayerUBMRU() + xp*1000);
 				event.setExpToDrop(0);
 			}
-		}	
+		}
 	}
 
 
@@ -518,7 +517,7 @@ public class ECEventHandler {
 						}else
 						{
 							event.getEntityLiving().getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).applyModifier(new AttributeModifier(SharedMonsterAttributes.MAX_HEALTH.getName(), -event.getAmount(), 0));
-						}	
+						}
 					}
 				}
 			}
@@ -773,7 +772,7 @@ public class ECEventHandler {
 					if(toolTag.hasKey("tag"))
 					{
 						//copy the generic tag
-						genericTag = (NBTTagCompound) toolTag.getCompoundTag("tag").copy();
+						genericTag = toolTag.getCompoundTag("tag").copy();
 
 						//Nullify all other tools data if any
 						toolTag.getCompoundTag("tag").removeTag("pickaxe");
@@ -835,7 +834,7 @@ public class ECEventHandler {
 					if(genericTag.hasKey(clazz))
 					{
 						//Preparing the generic NBT
-						NBTTagCompound loadFrom = (NBTTagCompound) genericTag.getCompoundTag(clazz).copy();
+						NBTTagCompound loadFrom = genericTag.getCompoundTag(clazz).copy();
 						//And removing that tool from NBT = we do not want NBT duplicates.
 						genericTag.removeTag(clazz);
 						//Loading our tool from the NBT
@@ -1000,7 +999,7 @@ public class ECEventHandler {
 			}
 		}
 	}
-	
+
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	public void onAimZoom(FOVUpdateEvent event)

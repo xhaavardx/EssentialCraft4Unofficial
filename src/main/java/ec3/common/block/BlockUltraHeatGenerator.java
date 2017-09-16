@@ -27,11 +27,13 @@ public class BlockUltraHeatGenerator extends BlockContainer implements IModelReg
 		super(Material.ROCK);
 	}
 
+	@Override
 	public boolean isOpaqueCube(IBlockState s)
 	{
 		return false;
 	}
 
+	@Override
 	public boolean isFullCube(IBlockState s)
 	{
 		return false;
@@ -43,6 +45,7 @@ public class BlockUltraHeatGenerator extends BlockContainer implements IModelReg
 		return BlockRenderLayer.SOLID;
 	}
 
+	@Override
 	public EnumBlockRenderType getRenderType(IBlockState s)
 	{
 		return EnumBlockRenderType.MODEL;

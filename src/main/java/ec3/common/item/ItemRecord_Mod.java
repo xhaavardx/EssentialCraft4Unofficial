@@ -7,17 +7,17 @@ import net.minecraft.util.SoundEvent;
 import net.minecraftforge.client.model.ModelLoader;
 
 public class ItemRecord_Mod extends ItemRecord implements IModelRegisterer {
-	
+
 	public String textureName = "";
-	
+
 	protected ItemRecord_Mod(String p_i45350_1_, SoundEvent sound) {
 		super(p_i45350_1_, sound);
 	}
-    
-    public ItemRecord_Mod setTextureName(String name) {
-    	textureName = name;
-    	return this;
-    }
+
+	public ItemRecord_Mod setTextureName(String name) {
+		textureName = name;
+		return this;
+	}
 
 	@Override
 	public void registerModels() {

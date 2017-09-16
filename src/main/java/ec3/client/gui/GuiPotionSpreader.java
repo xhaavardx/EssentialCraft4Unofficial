@@ -20,7 +20,7 @@ public class GuiPotionSpreader extends GuiCommon{
 		this.elementList.add(new GuiMRUState(25, 58, (ITEHasMRU) tile, 0));
 		this.elementList.add(new GuiPotionState(97, 22, tile));
 	}
-	
-	
+
+
 
 }

@@ -11,11 +11,11 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.text.ITextComponent;
 
 public class InventoryMagicFilter implements IInventory {
-	
+
 	public ItemStack[] inventory = new ItemStack[9];
 	public UUID randomUUID;
 	public ItemStack filterStack;
-	
+
 	public InventoryMagicFilter(ItemStack filter) {
 		if(!filter.hasTagCompound()) {
 			NBTTagCompound theTag = MiscUtils.getStackTag(filter);
@@ -25,17 +25,17 @@ public class InventoryMagicFilter implements IInventory {
 		readFromNBTTagCompound(MiscUtils.getStackTag(filter));
 		filterStack = filter;
 	}
-	
+
 	@Override
 	public int getSizeInventory() {
 		return inventory.length;
 	}
-	
+
 	@Override
 	public ItemStack getStackInSlot(int slot) {
 		return inventory[slot];
 	}
-	
+
 	@Override
 	public ItemStack decrStackSize(int slot, int amount) {
 		if(inventory[slot] == null)
@@ -50,34 +50,34 @@ public class InventoryMagicFilter implements IInventory {
 		markDirty();
 		return returnStack;
 	}
-	
+
 	@Override
 	public ItemStack removeStackFromSlot(int slot) {
 		ItemStack returnStack = getStackInSlot(slot);
 		setInventorySlotContents(slot, null);
 		return returnStack;
 	}
-	
+
 	@Override
 	public void setInventorySlotContents(int slot, ItemStack stack) {
 		inventory[slot] = stack;
 	}
-	
+
 	@Override
 	public String getName() {
 		return "ec3.inventory.filter";
 	}
-	
+
 	@Override
 	public boolean hasCustomName() {
 		return false;
 	}
-	
+
 	@Override
 	public int getInventoryStackLimit() {
 		return 64;
 	}
-	
+
 	@Override
 	public void markDirty() {
 		for(int i = 0; i < inventory.length; i++) {
@@ -86,51 +86,51 @@ public class InventoryMagicFilter implements IInventory {
 				setInventorySlotContents(i, null);
 		}
 	}
-	
+
 	@Override
 	public boolean isUsableByPlayer(EntityPlayer p_70300_1_) {
 		return true;
 	}
-	
+
 	@Override
 	public void openInventory(EntityPlayer e) {}
-	
+
 	@Override
 	public void closeInventory(EntityPlayer e) {}
-	
+
 	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack stack) {
 		return true;
 	}
-	
+
 	public void readFromNBTTagCompound(NBTTagCompound tag) {
 		NBTTagCompound inventoryTag = ((NBTTagCompound)tag.getTag("inventory"));
 		if(inventoryTag == null)
 			return;
-		
+
 		if(randomUUID == null) {
 			randomUUID = UUID.fromString(tag.getString("uniqueID"));
 			//Not actually sure if this can happen, but it is Java, so the more null checks, the better!
 			if(randomUUID == null)
 				randomUUID = UUID.randomUUID();
 		}
-		
+
 		NBTTagList actualInventory = inventoryTag.getTagList("items", 10);
 		for(int i = 0; i < actualInventory.tagCount() && i < inventory.length; i++) {
-			NBTTagCompound indexTag = (NBTTagCompound) actualInventory.getCompoundTagAt(i);
+			NBTTagCompound indexTag = actualInventory.getCompoundTagAt(i);
 			int index = indexTag.getInteger("index");
 			try {
 				inventory[index] = ItemStack.loadItemStackFromNBT(indexTag);
-			} 
+			}
 			catch(Exception e) {
 				inventory[index] = null;
 			}
 		}
 	}
-	
+
 	public NBTTagCompound writeToNBT(NBTTagCompound tag) {
 		NBTTagList items = new NBTTagList();
-		
+
 		for(int i = 0; i < inventory.length; i++) {
 			if(inventory[i] != null && inventory[i].stackSize > 0) {
 				NBTTagCompound indexTag = new NBTTagCompound();
@@ -168,7 +168,7 @@ public class InventoryMagicFilter implements IInventory {
 
 	@Override
 	public void clear() {
-	    for(int i = 0; i < getSizeInventory(); i++)
-	        setInventorySlotContents(i, null);
+		for(int i = 0; i < getSizeInventory(); i++)
+			setInventorySlotContents(i, null);
 	}
 }

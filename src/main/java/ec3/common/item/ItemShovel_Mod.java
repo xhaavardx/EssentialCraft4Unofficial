@@ -8,11 +8,11 @@ import net.minecraftforge.client.model.ModelLoader;
 public class ItemShovel_Mod extends ItemSpade implements IModelRegisterer {
 
 	public String textureName = "";
-	
+
 	public ItemShovel_Mod(ToolMaterial p_i45347_1_) {
 		super(p_i45347_1_);
 	}
-	
+
 	public ItemShovel_Mod setTextureName(String name) {
 		textureName = name;
 		return this;

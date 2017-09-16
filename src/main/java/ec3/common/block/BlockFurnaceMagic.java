@@ -32,7 +32,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 
 public class BlockFurnaceMagic extends BlockContainer implements IModelRegisterer {
-	
+
 	public static String[] names = new String[]{"fortified","magic","pale","void"};
 	public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
 	public static final PropertyEnum<FurnaceType> TYPE = PropertyEnum.<FurnaceType>create("type", FurnaceType.class);
@@ -42,7 +42,8 @@ public class BlockFurnaceMagic extends BlockContainer implements IModelRegistere
 		super(Material.ROCK);
 		setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(TYPE, FurnaceType.FORTIFIED));
 	}
-	
+
+	@Override
 	public EnumBlockRenderType getRenderType(IBlockState s)
 	{
 		return EnumBlockRenderType.MODEL;
@@ -54,6 +55,7 @@ public class BlockFurnaceMagic extends BlockContainer implements IModelRegistere
 		super.breakBlock(par1World, par2Pos, par3State);
 	}
 
+	@Override
 	public int damageDropped(IBlockState s)
 	{
 		return s.getValue(TYPE).getIndex()*4;
@@ -64,6 +66,7 @@ public class BlockFurnaceMagic extends BlockContainer implements IModelRegistere
 		return new ItemStack(this,1,state.getValue(TYPE).getIndex()*4);
 	}
 
+	@Override
 	public void getSubBlocks(Item p_149666_1_, CreativeTabs p_149666_2_, List<ItemStack> p_149666_3_)
 	{
 		p_149666_3_.add(new ItemStack(p_149666_1_, 1, 0));
@@ -72,6 +75,7 @@ public class BlockFurnaceMagic extends BlockContainer implements IModelRegistere
 		p_149666_3_.add(new ItemStack(p_149666_1_, 1, 12));
 	}
 
+	@Override
 	public void onBlockAdded(World w, BlockPos p, IBlockState s)
 	{
 		super.onBlockAdded(w, p, s);
@@ -119,16 +123,19 @@ public class BlockFurnaceMagic extends BlockContainer implements IModelRegistere
 	}
 
 
-    public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer)
-    {
-        return this.getDefaultState().withProperty(TYPE, FurnaceType.fromIndex(meta/4)).withProperty(FACING, placer.getHorizontalFacing().getOpposite());
-    }
-	
-	public void getStateForPlacementBy(World w, BlockPos p, IBlockState s, EntityLivingBase pl, ItemStack is)
+	@Override
+	public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer)
+	{
+		return this.getDefaultState().withProperty(TYPE, FurnaceType.fromIndex(meta/4)).withProperty(FACING, placer.getHorizontalFacing().getOpposite());
+	}
+
+	@Override
+	public void onBlockPlacedBy(World w, BlockPos p, IBlockState s, EntityLivingBase pl, ItemStack is)
 	{
 		w.setBlockState(p, getDefaultState().withProperty(TYPE, FurnaceType.fromIndex(is.getItemDamage()/4)).withProperty(FACING, pl.getHorizontalFacing().getOpposite()), 2);
 	}
 
+	@Override
 	public TileEntity createNewTileEntity(World w, int meta)
 	{
 		return new TileFurnaceMagic();
@@ -187,27 +194,29 @@ public class BlockFurnaceMagic extends BlockContainer implements IModelRegistere
 		MAGIC(1, "magic"),
 		PALE(2, "pale"),
 		VOID(3, "void");
-		
+
 		private int index;
 		private String name;
-		
+
 		private FurnaceType(int i, String s) {
 			index = i;
 			name = s;
 		}
-		
+
+		@Override
 		public String getName() {
 			return name;
 		}
-		
+
+		@Override
 		public String toString() {
 			return name;
 		}
-		
+
 		public int getIndex() {
 			return index;
 		}
-		
+
 		public static FurnaceType fromIndex(int i) {
 			return values()[i%4];
 		}

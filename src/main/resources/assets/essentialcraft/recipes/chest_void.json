@@ -1,0 +1,20 @@
+{
+    "type": "forge:ore_shaped",
+    "group": "essentialcraft:chest_void",
+    "pattern": [
+        "###",
+        "# #",
+        "###"
+    ],
+    "key": {
+        "#": {
+            "type": "forge:ore_dict",
+            "ore": "stoneVoid"
+        }
+    },
+    "result": {
+        "item": "essentialcraft:chest",
+        "count": 1,
+        "data": 1
+    }
+}

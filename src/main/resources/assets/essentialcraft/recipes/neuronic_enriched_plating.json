@@ -1,0 +1,28 @@
+{
+    "type": "forge:ore_shaped",
+    "group": "essentialcraft:neuronic_enriched_plating",
+    "pattern": [
+        "#C#",
+        "@#@",
+        "#C#"
+    ],
+    "key": {
+        "#": {
+            "type": "forge:ore_dict",
+            "ore": "plateDemonic"
+        },
+        "@": {
+            "item": "essentialcraft:genitem",
+            "data": 0
+        },
+        "C": {
+            "type": "forge:ore_dict",
+            "ore": "gemWind"
+        }
+    },
+    "result": {
+        "item": "essentialcraft:genitem",
+        "count": 2,
+        "data": 59
+    }
+}

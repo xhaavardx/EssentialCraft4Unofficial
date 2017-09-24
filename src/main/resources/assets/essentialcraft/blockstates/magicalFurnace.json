@@ -4,7 +4,7 @@
         "model": "minecraft:cube_top",
         "textures": {
             "top": "essentialcraft:blocks/magic_furnace_top",
-            "side": "essentialcraft:blocks/fortifiedStone"
+            "side": "essentialcraft:blocks/fortifiedstone"
         }
     },
     "variants": {

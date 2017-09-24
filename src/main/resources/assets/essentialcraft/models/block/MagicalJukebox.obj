@@ -1,6 +1,6 @@
 # Blender v2.78 (sub 0) OBJ File: ''
 # www.blender.org
-mtllib MagicalJukebox.mtl
+mtllib magicaljukebox.mtl
 o pCube1
 v 0.000000 -0.000000 1.000000
 v 0.062500 -0.000000 1.000000
@@ -8179,7 +8179,7 @@ vn 0.0000 0.0000 1.0000
 vn 0.0000 0.0000 -1.0000
 vn 1.0000 0.0000 0.0000
 vn -1.0000 0.0000 0.0000
-usemtl lambert2SG
+usemtl lambert2sg
 s off
 f 38/1/1 39/2/1 57/3/1 56/4/1
 f 100/5/2 96/6/2 98/7/2 97/8/2

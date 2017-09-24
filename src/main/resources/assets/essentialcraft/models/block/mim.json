@@ -1,10 +1,10 @@
 {
-    "__comment": "Model generated using MrCrayfish's Model Creator (http://mrcrayfish.com/modelcreator/)",
+    "__comment": "model generated using mrcrayfish's model creator (http://mrcrayfish.com/modelcreator/)",
     "parent": "minecraft:block/block",
     "textures": {
-        "0": "essentialcraft:blocks/voidStone",
-        "1": "essentialcraft:blocks/mimCube",
-        "particle": "essentialcraft:blocks/voidStone"
+        "0": "essentialcraft:blocks/voidstone",
+        "1": "essentialcraft:blocks/mimcube",
+        "particle": "essentialcraft:blocks/voidstone"
     },
     "elements": [
         {

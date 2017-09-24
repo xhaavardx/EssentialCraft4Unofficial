@@ -1,0 +1,19 @@
+{
+    "type": "forge:ore_shapeless",
+    "group": "essentialcraft:mru_mover_1",
+    "ingredients": [
+        {
+            "type": "forge:ore_dict",
+            "ore": "gemElemental"
+        },
+        {
+            "type": "forge:ore_dict",
+            "ore": "stickWood"
+        }
+    ],
+    "result": {
+        "item": "essentialcraft:mrumover1",
+        "count": 1,
+        "data": 0
+    }
+}

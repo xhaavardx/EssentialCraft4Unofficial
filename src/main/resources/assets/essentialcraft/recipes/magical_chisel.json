@@ -1,0 +1,31 @@
+{
+    "type": "forge:ore_shapeless",
+    "group": "essentialcraft:magical_chisel",
+    "ingredients": [
+        {
+            "type": "forge:ore_dict",
+            "ore": "gemElemental"
+        },
+        {
+            "type": "forge:ore_dict",
+            "ore": "gemElemental"
+        },
+        {
+            "type": "forge:ore_dict",
+            "ore": "gemElemental"
+        },
+        {
+            "type": "forge:ore_dict",
+            "ore": "gemElemental"
+        },
+        {
+            "type": "forge:ore_dict",
+            "ore": "stickWood"
+        }
+    ],
+    "result": {
+        "item": "essentialcraft:magicalchisel",
+        "count": 1,
+        "data": 0
+    }
+}

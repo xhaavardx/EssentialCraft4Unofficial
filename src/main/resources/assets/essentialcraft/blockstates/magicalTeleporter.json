@@ -4,7 +4,7 @@
         "model": "minecraft:cube_top",
         "textures": {
             "top": "essentialcraft:blocks/magic_teleporter_top",
-            "side": "essentialcraft:blocks/magicPlatingBlock"
+            "side": "essentialcraft:blocks/magicplatingblock"
         }
     },
     "variants": {

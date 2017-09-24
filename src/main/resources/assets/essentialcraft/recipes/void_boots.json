@@ -1,0 +1,40 @@
+{
+    "type": "forge:ore_shaped",
+    "group": "essentialcraft:void_boots",
+    "pattern": [
+        "NRN",
+        "CMC",
+        "PEP"
+    ],
+    "key": {
+        "N": {
+            "type": "forge:ore_dict",
+            "ore": "gemNetherStar"
+        },
+        "R": {
+            "type": "forge:ore_dict",
+            "ore": "reactorVoid"
+        },
+        "C": {
+            "type": "forge:ore_dict",
+            "ore": "coreVoid"
+        },
+        "P": {
+            "type": "forge:ore_dict",
+            "ore": "plateVoid"
+        },
+        "E": {
+            "type": "forge:ore_dict",
+            "ore": "matterOfEternity"
+        },
+        "M": {
+            "item": "essentialcraft:boots_magic",
+            "data": 0
+        }
+    },
+    "result": {
+        "item": "essentialcraft:boots_void",
+        "count": 1,
+        "data": 0
+    }
+}

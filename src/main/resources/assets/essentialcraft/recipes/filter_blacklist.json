@@ -1,0 +1,24 @@
+{
+    "type": "forge:ore_shaped",
+    "group": "essentialcraft:filter_blacklist",
+    "pattern": [
+        " P ",
+        "PGP",
+        " P "
+    ],
+    "key": {
+        "P": {
+            "type": "forge:ore_dict",
+            "ore": "plateObsidian"
+        },
+        "G": {
+            "item": "minecraft:crafting_table",
+            "data": 0
+        }
+    },
+    "result": {
+        "item": "essentialcraft:itemfilter",
+        "count": 1,
+        "data": 2
+    }
+}

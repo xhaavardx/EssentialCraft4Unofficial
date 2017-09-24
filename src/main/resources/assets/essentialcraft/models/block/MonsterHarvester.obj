@@ -1,6 +1,6 @@
 # Blender v2.78 (sub 0) OBJ File: ''
 # www.blender.org
-mtllib MonsterHarvester.mtl
+mtllib monsterharvester.mtl
 o pCube1
 v 0.000000 -0.000000 1.000000
 v 0.125000 -0.000000 1.000000
@@ -1395,7 +1395,7 @@ vn -0.8165 -0.4082 -0.4082
 vn -0.7493 -0.6556 0.0936
 vn -0.7071 -0.7071 0.0000
 vn -0.7493 -0.6556 -0.0936
-usemtl lambert2SG
+usemtl lambert2sg
 s off
 f 127/1/1 118/2/1 128/3/1 129/4/1
 f 121/5/1 140/6/1 141/7/1 142/8/1

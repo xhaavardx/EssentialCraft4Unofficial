@@ -1,0 +1,47 @@
+{
+    "type": "forge:ore_shapeless",
+    "group": "essentialcraft:compressed_elemental",
+    "ingredients": [
+        {
+            "type": "forge:ore_dict",
+            "ore": "gemElemental"
+        },
+        {
+            "type": "forge:ore_dict",
+            "ore": "gemElemental"
+        },
+        {
+            "type": "forge:ore_dict",
+            "ore": "gemElemental"
+        },
+        {
+            "type": "forge:ore_dict",
+            "ore": "gemElemental"
+        },
+        {
+            "type": "forge:ore_dict",
+            "ore": "gemElemental"
+        },
+        {
+            "type": "forge:ore_dict",
+            "ore": "gemElemental"
+        },
+        {
+            "type": "forge:ore_dict",
+            "ore": "gemElemental"
+        },
+        {
+            "type": "forge:ore_dict",
+            "ore": "gemElemental"
+        },
+        {
+            "type": "forge:ore_dict",
+            "ore": "gemElemental"
+        }
+    ],
+    "result": {
+        "item": "essentialcraft:compressed",
+        "count": 1,
+        "data": 4
+    }
+}

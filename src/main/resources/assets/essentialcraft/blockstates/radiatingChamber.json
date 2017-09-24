@@ -1,7 +1,7 @@
 {
     "forge_marker": 1,
     "defaults": {
-        "model": "essentialcraft:RadiatingChamber.obj",
+        "model": "essentialcraft:radiatingchamber.obj",
         "transform": "forge:default-block",
         "custom": { "flip-v": true }
     },

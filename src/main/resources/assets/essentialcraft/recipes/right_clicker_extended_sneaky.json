@@ -1,0 +1,19 @@
+{
+    "type": "forge:ore_shapeless",
+    "group": "essentialcraft:right_clicker_extended_sneaky",
+    "ingredients": [
+        {
+            "item": "essentialcraft:rightclicker",
+            "data": 2
+        },
+        {
+            "type": "forge:ore_dict",
+            "ore": "slimeball"
+        }
+    ],
+    "result": {
+        "item": "essentialcraft:rightclicker",
+        "count": 1,
+        "data": 3
+    }
+}

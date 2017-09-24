@@ -6,10 +6,10 @@
     "variants": {
         "type": {
             "magical": {
-                "textures": { "particle": "essentialcraft:blocks/magicPlatingBlock" }
+                "textures": { "particle": "essentialcraft:blocks/magicplatingblock" }
             },
             "void": {
-                "textures": { "particle": "essentialcraft:blocks/voidStone" }
+                "textures": { "particle": "essentialcraft:blocks/voidstone" }
             }
         }
     }

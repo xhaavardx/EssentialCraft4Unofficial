@@ -1,0 +1,28 @@
+{
+    "type": "forge:ore_shaped",
+    "group": "essentialcraft:diamond_plate",
+    "pattern": [
+        "ISI",
+        " E ",
+        "ISI"
+    ],
+    "key": {
+        "I": {
+            "type": "forge:ore_dict",
+            "ore": "ingotIron"
+        },
+        "S": {
+            "type": "forge:ore_dict",
+            "ore": "gemDiamond"
+        },
+        "E": {
+            "type": "forge:ore_dict",
+            "ore": "gemElemental"
+        }
+    },
+    "result": {
+        "item": "essentialcraft:genitem",
+        "count": 1,
+        "data": 21
+    }
+}

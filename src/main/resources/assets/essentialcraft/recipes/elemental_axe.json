@@ -1,0 +1,24 @@
+{
+    "type": "forge:ore_shaped",
+    "group": "essentialcraft:elemental_axe",
+    "pattern": [
+        "DD",
+        "DS",
+        " S"
+    ],
+    "key": {
+        "D": {
+            "type": "forge:ore_dict",
+            "ore": "gemResonant"
+        },
+        "S": {
+            "type": "forge:ore_dict",
+            "ore": "stickWood"
+        }
+    },
+    "result": {
+        "item": "essentialcraft:elemental_axe",
+        "count": 1,
+        "data": 0
+    }
+}

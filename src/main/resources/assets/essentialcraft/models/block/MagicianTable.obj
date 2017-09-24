@@ -1,6 +1,6 @@
 # Blender v2.78 (sub 0) OBJ File: ''
 # www.blender.org
-mtllib MagicianTable.mtl
+mtllib magiciantable.mtl
 o pCube1
 v 0.000000 -0.000000 1.000000
 v 0.062500 -0.000000 1.000000
@@ -3788,7 +3788,7 @@ vn 1.0000 0.0000 0.0000
 vn -1.0000 0.0000 0.0000
 vn 0.0000 1.0000 0.0000
 vn 0.0000 -1.0000 -0.0000
-usemtl lambert3SG
+usemtl lambert3sg
 s off
 f 109/1/1 110/2/1 1683/3/1 1684/4/1
 f 126/5/1 109/1/1 1684/4/1 1685/6/1

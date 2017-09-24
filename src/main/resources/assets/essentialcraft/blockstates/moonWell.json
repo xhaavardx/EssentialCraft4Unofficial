@@ -1,7 +1,7 @@
 {
     "forge_marker": 1,
     "defaults": {
-        "model": "essentialcraft:moonWell"
+        "model": "essentialcraft:moonwell"
     },
     "variants": {
         "normal": [{}],

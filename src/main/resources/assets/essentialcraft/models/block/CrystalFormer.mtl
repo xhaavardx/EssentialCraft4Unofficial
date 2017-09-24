@@ -1,7 +1,7 @@
 # Blender MTL File: 'CrystalFormer.obj'
 # Material Count: 1
 
-newmtl initialShadingGroup
+newmtl initialshadinggroup
 #Ns 96.078431
 Ka 0.000000 0.000000 0.000000
 Kd 1.000000 1.000000 1.000000
@@ -10,4 +10,4 @@ Kd 1.000000 1.000000 1.000000
 #Ni 1.000000
 d 1.000000
 #illum 2
-map_Kd essentialcraft:models/crystalFormer
+map_Kd essentialcraft:models/crystalformer

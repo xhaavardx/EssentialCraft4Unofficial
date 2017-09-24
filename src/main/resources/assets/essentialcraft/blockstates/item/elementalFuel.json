@@ -1,22 +1,21 @@
 {
     "forge_marker": 1,
     "defaults": {
-        "model": "builtin/generated",
-        "transform": "forge:default-item"
+        "model": "essentialcraft:item"
     },
     "variants": {
         "type": {
             "fiery": {
-                "textures": { "layer0": "essentialcraft:items/elemental/eFuel_Fiery" }
+                "textures": { "layer0": "essentialcraft:items/elemental/efuel_fiery" }
             },
             "watery": {
-                "textures": { "layer0": "essentialcraft:items/elemental/eFuel_Watery" }
+                "textures": { "layer0": "essentialcraft:items/elemental/efuel_watery" }
             },
             "earthen": {
-                "textures": { "layer0": "essentialcraft:items/elemental/eFuel_Earthen" }
+                "textures": { "layer0": "essentialcraft:items/elemental/efuel_earthen" }
             },
             "windy": {
-                "textures": { "layer0": "essentialcraft:items/elemental/eFuel_Windy" }
+                "textures": { "layer0": "essentialcraft:items/elemental/efuel_windy" }
             }
         }
     }

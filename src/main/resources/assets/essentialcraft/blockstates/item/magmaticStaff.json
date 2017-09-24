@@ -1,9 +1,8 @@
 {
     "forge_marker": 1,
     "defaults": {
-        "model": "builtin/generated",
-        "transform": "forge:default-tool",
-        "textures": { "layer0": "essentialcraft:items/tools/magmaticWand" }
+        "model": "essentialcraft:tool",
+        "textures": { "layer0": "essentialcraft:items/tools/magmaticwand" }
     },
     "variants": {
         "inventory": [{}]

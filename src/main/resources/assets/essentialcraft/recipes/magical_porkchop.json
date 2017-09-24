@@ -1,0 +1,36 @@
+{
+    "type": "forge:ore_shaped",
+    "group": "essentialcraft:magical_porkchop",
+    "pattern": [
+        "EPE",
+        "DMD",
+        "WDW"
+    ],
+    "key": {
+        "M": {
+            "type": "forge:ore_dict",
+            "ore": "redSoulMatter"
+        },
+        "W": {
+            "type": "forge:ore_dict",
+            "ore": "focusWater"
+        },
+        "D": {
+            "type": "forge:ore_dict",
+            "ore": "dustCrystal"
+        },
+        "E": {
+            "type": "forge:ore_dict",
+            "ore": "focusEarth"
+        },
+        "P": {
+            "item": "minecraft:porkchop",
+            "data": 0
+        }
+    },
+    "result": {
+        "item": "essentialcraft:magicalporkchop",
+        "count": 1,
+        "data": 0
+    }
+}

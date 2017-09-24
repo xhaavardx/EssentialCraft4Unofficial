@@ -1,6 +1,6 @@
-# Blender v2.78 (sub 0) OBJ File: 'ChargingChamber.obj'
+# Blender v2.78 (sub 0) OBJ File: 'chargingchamber.obj'
 # www.blender.org
-mtllib ChargingChamber.mtl
+mtllib chargingchamber.mtl
 o pCube1
 v 0.000000 -0.000000 1.000000
 v 0.125000 -0.000000 1.000000
@@ -1305,7 +1305,7 @@ vn 0.0000 0.0000 -1.0000
 vn 0.0000 -1.0000 -0.0000
 vn 1.0000 0.0000 0.0000
 vn -1.0000 0.0000 0.0000
-usemtl initialShadingGroup
+usemtl initialshadinggroup
 #s off
 f 82/1/1 83/2/1 84/3/1 85/4/1
 f 90/5/1 91/6/1 92/7/1 93/8/1

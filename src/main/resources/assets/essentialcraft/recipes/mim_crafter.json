@@ -1,0 +1,28 @@
+{
+    "type": "forge:ore_shaped",
+    "group": "essentialcraft:mim_crafter",
+    "pattern": [
+        "PPP",
+        "SCS",
+        "PPP"
+    ],
+    "key": {
+        "P": {
+            "type": "forge:ore_dict",
+            "ore": "plateMagic"
+        },
+        "C": {
+            "type": "forge:ore_dict",
+            "ore": "coreMagic"
+        },
+        "S": {
+            "type": "forge:ore_dict",
+            "ore": "workbench"
+        }
+    },
+    "result": {
+        "item": "essentialcraft:mimcrafter",
+        "count": 1,
+        "data": 0
+    }
+}

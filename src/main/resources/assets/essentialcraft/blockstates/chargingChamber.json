@@ -1,7 +1,7 @@
 {
     "forge_marker": 1,
     "defaults": {
-        "model": "essentialcraft:ChargingChamber.obj",
+        "model": "essentialcraft:chargingchamber.obj",
         "transform": "forge:default-block",
         "custom": { "flip-v": true }
     },

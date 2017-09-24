@@ -2,7 +2,7 @@
     "forge_marker": 1,
     "defaults": {
         "model": "minecraft:cube_all",
-        "textures": { "all": "essentialcraft:blocks/mrucuecController" }
+        "textures": { "all": "essentialcraft:blocks/mrucueccontroller" }
     },
     "variants": {
         "normal": [{}],

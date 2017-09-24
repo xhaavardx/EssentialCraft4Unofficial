@@ -1,0 +1,36 @@
+{
+    "type": "forge:ore_shaped",
+    "group": "essentialcraft:frozen_mace",
+    "pattern": [
+        "IWM",
+        "ISW",
+        "JII"
+    ],
+    "key": {
+        "M": {
+            "type": "forge:ore_dict",
+            "ore": "matterOfEternity"
+        },
+        "W": {
+            "type": "forge:ore_dict",
+            "ore": "focusWater"
+        },
+        "S": {
+            "item": "essentialcraft:elemental_sword",
+            "data": 0
+        },
+        "J": {
+            "item": "essentialcraft:mrumatrixprojection",
+            "data": 2
+        },
+        "I": {
+            "type": "forge:ore_dict",
+            "ore": "ingotThaumium"
+        }
+    },
+    "result": {
+        "item": "essentialcraft:frozenmace",
+        "count": 1,
+        "data": 0
+    }
+}

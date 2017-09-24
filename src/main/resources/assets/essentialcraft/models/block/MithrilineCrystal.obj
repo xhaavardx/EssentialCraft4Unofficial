@@ -1,6 +1,6 @@
 # This file uses centimeters as units for non-parametric coordinates.
 
-mtllib MithrilineCrystal.mtl
+mtllib mithrilinecrystal.mtl
 g default
 v 0.118882 0.500000 -0.038627
 v 0.101127 0.500000 -0.073473
@@ -108,7 +108,7 @@ vn 0.922660 0.242536 0.299790
 vn 0.970143 0.242536 0.000001
 s off
 g pCone1
-usemtl initialShadingGroup
+usemtl initialshadinggroup
 #f 1/1/1 20/20/2 19/19/3 18/18/4 17/17/5 16/16/6 15/15/7 14/14/8 13/13/9 12/12/10 11/11/11 10/10/12 9/9/13 8/8/14 7/7/15 6/6/16 5/5/17 4/4/18 3/3/19 2/2/20
 s 1
 f 1/21/21 2/22/22 21/42/23 21/42/23
@@ -238,7 +238,7 @@ vn -0.922660 -0.242536 0.299790
 vn -0.970143 -0.242536 0.000001
 s off
 g pCone2
-usemtl initialShadingGroup
+usemtl initialshadinggroup
 #f 22/43/42 41/62/43 40/61/44 39/60/45 38/59/46 37/58/47 36/57/48 35/56/49 34/55/50 33/54/51 32/53/52 31/52/53 30/51/54 29/50/55 28/49/56 27/48/57 26/47/58 25/46/59 24/45/60 23/44/61
 s 1
 f 22/63/62 23/64/63 42/84/64 42/84/64

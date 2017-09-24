@@ -1,0 +1,19 @@
+{
+    "type": "forge:ore_shapeless",
+    "group": "essentialcraft:inventory_gem",
+    "ingredients": [
+        {
+            "type": "forge:ore_dict",
+            "ore": "gemElemental"
+        },
+        {
+            "item": "essentialcraft:genitem",
+            "data": 12
+        }
+    ],
+    "result": {
+        "item": "essentialcraft:inventorygem",
+        "count": 1,
+        "data": 0
+    }
+}

@@ -1,6 +1,6 @@
 # Blender v2.78 (sub 0) OBJ File: ''
 # www.blender.org
-mtllib HeatGenerator.mtl
+mtllib heatgenerator.mtl
 o pCube1
 v 0.000000 -0.000000 1.000000
 v 0.062500 -0.000000 1.000000
@@ -4310,7 +4310,7 @@ vn 0.0000 -0.3162 0.9487
 vn 0.0000 -0.9445 0.3285
 vn 0.0000 -0.9445 -0.3285
 vn 0.0000 -0.3162 -0.9487
-usemtl initialShadingGroup
+usemtl initialshadinggroup
 s off
 f 1435/1/1 1436/2/1 1437/3/1 1438/4/1
 f 1439/5/2 1435/1/2 1438/4/2 1440/6/2

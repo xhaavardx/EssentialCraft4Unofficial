@@ -3,7 +3,7 @@
     "variants": {
         "normal": [{
             "model": "minecraft:block",
-            "textures": { "particle": "essentialcraft:models/enderGenerator" }
+            "textures": { "particle": "essentialcraft:models/endergenerator" }
         }],
         "inventory": [{
             "model": "builtin/entity"

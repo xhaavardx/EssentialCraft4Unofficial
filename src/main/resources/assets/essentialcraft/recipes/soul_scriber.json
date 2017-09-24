@@ -1,0 +1,28 @@
+{
+    "type": "forge:ore_shaped",
+    "group": "essentialcraft:soul_scriber",
+    "pattern": [
+        "N",
+        "Q",
+        "S"
+    ],
+    "key": {
+        "N": {
+            "type": "forge:ore_dict",
+            "ore": "netherrack"
+        },
+        "Q": {
+            "type": "forge:ore_dict",
+            "ore": "gemQuartz"
+        },
+        "S": {
+            "type": "forge:ore_dict",
+            "ore": "stickWood"
+        }
+    },
+    "result": {
+        "item": "essentialcraft:soulscriber",
+        "count": 1,
+        "data": 0
+    }
+}

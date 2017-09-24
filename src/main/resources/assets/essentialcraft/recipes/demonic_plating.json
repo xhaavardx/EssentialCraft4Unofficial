@@ -1,0 +1,27 @@
+{
+    "type": "forge:ore_shapeless",
+    "group": "essentialcraft:demonic_plating",
+    "ingredients": [
+        {
+            "type": "forge:ore_dict",
+            "ore": "plateDemonic"
+        },
+        {
+            "type": "forge:ore_dict",
+            "ore": "plateDemonic"
+        },
+        {
+            "type": "forge:ore_dict",
+            "ore": "plateDemonic"
+        },
+        {
+            "type": "forge:ore_dict",
+            "ore": "plateDemonic"
+        }
+    ],
+    "result": {
+        "item": "essentialcraft:demonicplating",
+        "count": 16,
+        "data": 0
+    }
+}

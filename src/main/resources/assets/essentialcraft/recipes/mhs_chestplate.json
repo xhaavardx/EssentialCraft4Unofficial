@@ -1,0 +1,32 @@
+{
+    "type": "forge:ore_shaped",
+    "group": "essentialcraft:mhs_chestplate",
+    "pattern": [
+        "IDI",
+        "PAP",
+        "PAP"
+    ],
+    "key": {
+        "A": {
+            "type": "forge:ore_dict",
+            "ore": "alloysMagical"
+        },
+        "I": {
+            "type": "forge:ore_dict",
+            "ore": "worldInteractor"
+        },
+        "D": {
+            "type": "forge:ore_dict",
+            "ore": "dustCrystal"
+        },
+        "P": {
+            "type": "forge:ore_dict",
+            "ore": "plateMagic"
+        }
+    },
+    "result": {
+        "item": "essentialcraft:chest_magic",
+        "count": 1,
+        "data": 0
+    }
+}

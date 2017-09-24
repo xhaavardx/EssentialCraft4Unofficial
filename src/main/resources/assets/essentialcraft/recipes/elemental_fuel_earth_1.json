@@ -1,0 +1,24 @@
+{
+    "type": "forge:ore_shaped",
+    "group": "essentialcraft:elemental_fuel_earth",
+    "pattern": [
+        " E ",
+        "ECE",
+        " E "
+    ],
+    "key": {
+        "E": {
+            "item": "essentialcraft:essence",
+            "data": 6
+        },
+        "C": {
+            "item": "minecraft:wheat_seeds",
+            "data": 0
+        }
+    },
+    "result": {
+        "item": "essentialcraft:elementalfuel",
+        "count": 4,
+        "data": 2
+    }
+}

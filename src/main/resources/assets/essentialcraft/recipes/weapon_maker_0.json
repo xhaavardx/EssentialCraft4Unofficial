@@ -1,0 +1,15 @@
+{
+    "type": "forge:ore_shapeless",
+    "group": "essentialcraft:weapon_maker_0",
+    "ingredients": [
+        {    
+            "item": "essentialcraft:weaponmaker",
+            "data": 3
+        }
+    ],
+    "result": {
+        "item": "essentialcraft:weaponmaker",
+        "count": 1,
+        "data": 0
+    }
+}

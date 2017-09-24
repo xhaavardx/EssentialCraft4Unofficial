@@ -1,6 +1,6 @@
 # Blender v2.78 (sub 0) OBJ File: ''
 # www.blender.org
-mtllib CrystalExtractor.mtl
+mtllib crystalextractor.mtl
 o pCube1
 v 0.000000 -0.000000 1.000000
 v 0.125000 -0.000000 1.000000
@@ -1507,7 +1507,7 @@ vn 0.0000 0.3315 0.9435
 vn 0.0000 -0.9435 -0.3315
 vn 0.0000 -0.9435 0.3315
 vn 0.0000 0.3315 -0.9435
-usemtl initialShadingGroup
+usemtl initialshadinggroup
 s off
 f 483/1/1 484/2/1 485/3/1 486/4/1
 f 487/5/2 488/6/2 489/7/2 490/8/2

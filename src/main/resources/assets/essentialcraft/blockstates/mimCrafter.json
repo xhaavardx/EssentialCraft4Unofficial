@@ -3,9 +3,9 @@
     "defaults": {
         "model": "minecraft:cube_bottom_top",
         "textures": {
-            "top": "essentialcraft:blocks/mimInventoryHandler_TB",
-            "bottom": "essentialcraft:blocks/mimInventoryHandler_TB",
-            "side": "essentialcraft:blocks/mimCraftingManager"
+            "top": "essentialcraft:blocks/miminventoryhandler_tb",
+            "bottom": "essentialcraft:blocks/miminventoryhandler_tb",
+            "side": "essentialcraft:blocks/mimcraftingmanager"
         }
     },
     "variants": {

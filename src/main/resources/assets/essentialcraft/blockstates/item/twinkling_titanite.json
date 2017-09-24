@@ -1,8 +1,7 @@
 {
     "forge_marker": 1,
     "defaults": {
-        "model": "builtin/generated",
-        "transform": "forge:default-item",
+        "model": "essentialcraft:tool",
         "textures": { "layer0": "essentialcraft:items/misc/twinkling_titanite" }
     },
     "variants": {

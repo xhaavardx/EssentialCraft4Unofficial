@@ -1,0 +1,19 @@
+{
+    "type": "forge:ore_shapeless",
+    "group": "essentialcraft:right_clicker_advanced",
+    "ingredients": [
+        {
+            "item": "essentialcraft:rightclicker",
+            "data": 2
+        },
+        {
+            "type": "forge:ore_dict",
+            "ore": "dustRedstone"
+        }
+    ],
+    "result": {
+        "item": "essentialcraft:rightclicker",
+        "count": 1,
+        "data": 4
+    }
+}

@@ -1,0 +1,27 @@
+{
+    "type": "forge:ore_shapeless",
+    "group": "essentialcraft:mithriline_plating",
+    "ingredients": [
+        {
+            "type": "forge:ore_dict",
+            "ore": "plateMithriline"
+        },
+        {
+            "type": "forge:ore_dict",
+            "ore": "plateMithriline"
+        },
+        {
+            "type": "forge:ore_dict",
+            "ore": "plateMithriline"
+        },
+        {
+            "type": "forge:ore_dict",
+            "ore": "plateMithriline"
+        }
+    ],
+    "result": {
+        "item": "essentialcraft:invertedplating",
+        "count": 16,
+        "data": 0
+    }
+}

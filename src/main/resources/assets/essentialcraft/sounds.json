@@ -1,96 +1,135 @@
 {
-    "records.letsbefriends": {
-    "category": "record",
-    "sounds": [
-      {
-        "name": "essentialcraft:records/lets_be_friends",
-        "stream": true
-      }
-    ]
-  },
-    "records.arstotzkan": {
-    "category": "record",
-    "sounds": [
-      {
-        "name": "essentialcraft:records/arstotzkan_anthem",
-        "stream": true
-      }
-    ]
-  },
-      "records.secret": {
-    "category": "record",
-    "sounds": [
-      {
-        "name": "essentialcraft:records/there_are_no_secrets",
-        "stream": true
-      }
-    ]
-  },
-  "records.hologram": {
-    "category": "record",
-    "sounds": [
-      {
-        "name": "essentialcraft:records/hologram_battle",
-        "stream": true
-      }
-    ]
-  },
-        "sound.pageturn": {"category": "master","sounds":[{"name": "essentialcraft:sound/page_turn","stream": false}]},
-		"sound.deepnoise": {"category": "master","sounds":[{"name": "essentialcraft:sound/deep_noise","stream": false}]},
-		"sound.tinnitus": {"category": "master","sounds":[{"name": "essentialcraft:sound/tinnitus","stream": false}]},
-		"sound.heartbeat": {"category": "master","sounds":[{"name": "essentialcraft:sound/heartbeat","stream": false}]},
-		"sound.gen_electricity": {"category": "master","sounds":[{"name": "essentialcraft:sound/gen_electricity","stream": false}]},
-		"sound.lightning_hit": {"category": "master","sounds":[{"name": "essentialcraft:sound/lightning_hit","stream": false}]},
-		"sound.mrucu_noise": {"category": "master","sounds":[{"name": "essentialcraft:sound/mrucu_noise","stream": false}]},
-		"sound.beam": {"category": "master","sounds":[{"name": "essentialcraft:sound/beam_start","stream": false}]},
-		"sound.mob.demon.summon": 
-			{"category": "hostile","sounds":[
-				"essentialcraft:sound/demon_summon_0",
-				"essentialcraft:sound/demon_summon_1",
-				"essentialcraft:sound/demon_summon_2"
-			]},
-		"sound.mob.demon.say": 
-			{"category": "hostile","sounds":[
-				"essentialcraft:sound/demon_say_0",
-				"essentialcraft:sound/demon_say_1",
-				"essentialcraft:sound/demon_say_2",
-				"essentialcraft:sound/demon_say_3"
-			]},
-		"sound.mob.demon.depart": 
-			{"category": "hostile","sounds":[
-				"essentialcraft:sound/demon_depart_0"
-			]},
-		"sound.mob.demon.doom": 
-			{"category": "hostile","sounds":[
-				"essentialcraft:sound/demon_doom"
-			]},
-		"sound.mob.demon.trade": 
-			{"category": "hostile","sounds":[
-				"essentialcraft:sound/demon_trade_0",
-				"essentialcraft:sound/demon_trade_1"
-			]},
-		"sound.mob.hologram.damage.melee": 
-			{"category": "hostile","sounds":[
-				"essentialcraft:sound/hologram_damage_melee"
-			]},
-		"sound.mob.hologram.damage.projectile": 
-			{"category": "hostile","sounds":[
-				"essentialcraft:sound/hologram_damage_projectile"
-			]},
-		"sound.mob.hologram.shutdown": 
-			{"category": "hostile","sounds":[
-				"essentialcraft:sound/hologram_shutdown"
-			]},
-		"sound.mob.hologram.stop": 
-			{"category": "hostile","sounds":[
-				"essentialcraft:sound/hologram_rest"
-			]},
-		"sound.mob.hologram.start": 
-			{"category": "hostile","sounds":[
-				"essentialcraft:sound/hologram_attack"
-			]},
-		"sound.orbital_strike": 
-			{"category": "master","sounds":[
-				"essentialcraft:sound/orbital_charge"
-			]}
+	"records.letsbefriends": {
+		"sounds": [{
+			"name": "essentialcraft:records/lets_be_friends",
+			"stream": true
+		}]
+	},
+	"records.arstotzkan": {
+		"sounds": [{
+			"name": "essentialcraft:records/arstotzkan_anthem",
+			"stream": true
+		}]
+	},
+	"records.secret": {
+		"sounds": [{
+			"name": "essentialcraft:records/there_are_no_secrets",
+			"stream": true
+		}]
+	},
+	"records.hologram": {
+		"sounds": [{
+			"name": "essentialcraft:records/hologram_battle",
+			"stream": true
+		}]
+	},
+	"sound.pageturn": {
+		"sounds": [{
+			"name": "essentialcraft:sound/page_turn",
+			"stream": false
+		}]
+	},
+	"sound.deepnoise": {
+		"sounds": [{
+			"name": "essentialcraft:sound/deep_noise",
+			"stream": false
+		}]
+	},
+	"sound.tinnitus": {
+		"sounds": [{
+			"name": "essentialcraft:sound/tinnitus",
+			"stream": false
+		}]
+	},
+	"sound.heartbeat": {
+		"sounds": [{
+			"name": "essentialcraft:sound/heartbeat",
+			"stream": false
+		}]
+	},
+	"sound.gen_electricity": {
+		"sounds": [{
+			"name": "essentialcraft:sound/gen_electricity",
+			"stream": false
+		}]
+	},
+	"sound.lightning_hit": {
+		"sounds": [{
+			"name": "essentialcraft:sound/lightning_hit",
+			"stream": false
+		}]
+	},
+	"sound.mrucu_noise": {
+		"sounds": [{
+			"name": "essentialcraft:sound/mrucu_noise",
+			"stream": false
+		}]
+	},
+	"sound.beam": {
+		"sounds": [{
+			"name": "essentialcraft:sound/beam_start",
+			"stream": false
+		}]
+	},
+	"sound.mob.demon.summon": {
+		"sounds": [
+			"essentialcraft:sound/demon_summon_0",
+			"essentialcraft:sound/demon_summon_1",
+			"essentialcraft:sound/demon_summon_2"
+		]
+	},
+	"sound.mob.demon.say": {
+		"sounds": [
+			"essentialcraft:sound/demon_say_0",
+			"essentialcraft:sound/demon_say_1",
+			"essentialcraft:sound/demon_say_2",
+			"essentialcraft:sound/demon_say_3"
+		]
+	},
+	"sound.mob.demon.depart": {
+		"sounds": [
+			"essentialcraft:sound/demon_depart_0"
+		]
+	},
+	"sound.mob.demon.doom": {
+		"sounds": [
+			"essentialcraft:sound/demon_doom"
+		]
+	},
+	"sound.mob.demon.trade": {
+		"sounds": [
+			"essentialcraft:sound/demon_trade_0",
+			"essentialcraft:sound/demon_trade_1"
+		]
+	},
+	"sound.mob.hologram.damage.melee": {
+		"sounds": [
+			"essentialcraft:sound/hologram_damage_melee"
+		]
+	},
+	"sound.mob.hologram.damage.projectile": {
+		"sounds": [
+			"essentialcraft:sound/hologram_damage_projectile"
+		]
+	},
+	"sound.mob.hologram.shutdown": {
+		"sounds": [
+			"essentialcraft:sound/hologram_shutdown"
+		]
+	},
+	"sound.mob.hologram.stop": {
+		"sounds": [
+			"essentialcraft:sound/hologram_rest"
+		]
+	},
+	"sound.mob.hologram.start": {
+		"sounds": [
+			"essentialcraft:sound/hologram_attack"
+		]
+	},
+	"sound.orbital_strike": {
+		"sounds": [
+			"essentialcraft:sound/orbital_charge"
+		]
+	}
 }

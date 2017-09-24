@@ -1,0 +1,26 @@
+{
+    "display": {
+        "icon": {
+            "item": "essentialcraft:soulstone"
+        },
+        "title": {
+            "translate": "advancements.essentialcraft.soul_stone.title"
+        },
+        "description": {
+            "translate": "advancements.essentialcraft.soul_stone.desc"
+        }
+    },
+    "parent": "essentialcraft:main/root",
+    "criteria": {
+        "soul_stone": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "essentialcraft:soulstone"
+                    }
+                ]
+            }
+        }
+    }
+}

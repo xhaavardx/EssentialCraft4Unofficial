@@ -1,0 +1,28 @@
+{
+    "type": "forge:ore_shaped",
+    "group": "essentialcraft:water_focus",
+    "pattern": [
+        "GIG",
+        "IEI",
+        "GIG"
+    ],
+    "key": {
+        "E": {
+            "item": "essentialcraft:elementalfuel",
+            "data": 1
+        },
+        "G": {
+            "type": "forge:ore_dict",
+            "ore": "essentialcraft:ingotGold"
+        },
+        "I": {
+            "type": "forge:ore_dict",
+            "ore": "ingotIron"
+        }
+    },
+    "result": {
+        "item": "essentialcraft:wfocus",
+        "count": 1,
+        "data": 0
+    }
+}

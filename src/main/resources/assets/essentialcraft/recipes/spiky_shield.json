@@ -1,0 +1,36 @@
+{
+    "type": "forge:ore_shaped",
+    "group": "essentialcraft:spiky_shield",
+    "pattern": [
+        "ENE",
+        "ASA",
+        "AMA"
+    ],
+    "key": {
+        "M": {
+            "type": "forge:ore_dict",
+            "ore": "matterOfEternity"
+        },
+        "N": {
+            "type": "forge:ore_dict",
+            "ore": "gemNetherStar"
+        },
+        "S": {
+            "item": "essentialcraft:magicalshield",
+            "data": 0
+        },
+        "E": {
+            "item": "essentialcraft:elemental_sword",
+            "data": 0
+        },
+        "A": {
+            "type": "forge:ore_dict",
+            "ore": "alloysMagical"
+        }
+    },
+    "result": {
+        "item": "essentialcraft:spikyshield",
+        "count": 1,
+        "data": 0
+    }
+}

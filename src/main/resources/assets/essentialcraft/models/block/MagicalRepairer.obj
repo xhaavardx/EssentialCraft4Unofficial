@@ -1,6 +1,6 @@
 # Blender v2.78 (sub 0) OBJ File: ''
 # www.blender.org
-mtllib MagicalRepairer.mtl
+mtllib magicalrepairer.mtl
 o pCube1
 v 0.000000 -0.000000 1.000000
 v 0.125000 -0.000000 1.000000
@@ -1076,7 +1076,7 @@ vn 0.9487 0.0000 -0.3162
 vn 0.8944 0.0000 -0.4472
 vn 0.4472 0.0000 -0.8944
 vn 0.3162 -0.0000 -0.9487
-usemtl lambert2SG
+usemtl lambert2sg
 s off
 f 300/1/1 301/2/1 302/3/1 303/4/1
 f 301/2/2 307/5/2 308/6/2 302/3/2

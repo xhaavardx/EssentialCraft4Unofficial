@@ -1,0 +1,48 @@
+{
+    "type": "forge:ore_shaped",
+    "group": "essentialcraft:magical_repairer",
+    "pattern": [
+        "FSM",
+        "XCX",
+        "PLI"
+    ],
+    "key": {
+        "F": {
+            "type": "forge:ore_dict",
+            "ore": "frameMagic"
+        },
+        "S": {
+            "type": "forge:ore_dict",
+            "ore": "screenMagic"
+        },
+        "M": {
+            "type": "forge:ore_dict",
+            "ore": "mruCatcher"
+        },
+        "X": {
+            "type": "forge:ore_dict",
+            "ore": "conversionMatrix"
+        },
+        "C": {
+            "type": "forge:ore_dict",
+            "ore": "coreMagic"
+        },
+        "P": {
+            "type": "forge:ore_dict",
+            "ore": "plateMagic"
+        },
+        "L": {
+            "type": "forge:ore_dict",
+            "ore": "mruLink"
+        },
+        "I": {
+            "type": "forge:ore_dict",
+            "ore": "worldInteractor"
+        }
+    },
+    "result": {
+        "item": "essentialcraft:magicalrepairer",
+        "count": 1,
+        "data": 0
+    }
+}

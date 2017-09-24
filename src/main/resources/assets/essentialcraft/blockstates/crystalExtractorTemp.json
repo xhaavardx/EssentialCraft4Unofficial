@@ -3,7 +3,7 @@
     "variants": {
         "normal": [{
             "model": "minecraft:block",
-            "textures": { "particle": "essentialcraft:models/crystalExtractor" }
+            "textures": { "particle": "essentialcraft:models/crystalextractor" }
         }]
     }
 }

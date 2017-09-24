@@ -2,9 +2,9 @@
     "forge_marker": 1,
     "defaults": {
         "textures": {
-            "top": "essentialcraft:blocks/fortifiedStone",
-            "side": "essentialcraft:blocks/fortifiedStone",
-            "front": "essentialcraft:blocks/metadataManager"
+            "top": "essentialcraft:blocks/fortifiedstone",
+            "side": "essentialcraft:blocks/fortifiedstone",
+            "front": "essentialcraft:blocks/metadatamanager"
         },
         "model": "minecraft:orientable",
         "uvlock": true

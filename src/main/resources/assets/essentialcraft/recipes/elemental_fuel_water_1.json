@@ -1,0 +1,24 @@
+{
+    "type": "forge:ore_shaped",
+    "group": "essentialcraft:elemental_fuel_water",
+    "pattern": [
+        " E ",
+        "ECE",
+        " E "
+    ],
+    "key": {
+        "E": {
+            "item": "essentialcraft:essence",
+            "data": 5
+        },
+        "C": {
+            "item": "minecraft:snowball",
+            "data": 0
+        }
+    },
+    "result": {
+        "item": "essentialcraft:elementalfuel",
+        "count": 4,
+        "data": 1
+    }
+}

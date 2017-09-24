@@ -1,0 +1,27 @@
+{
+    "type": "forge:ore_shapeless",
+    "group": "essentialcraft:gem_elemental",
+    "ingredients": [
+        {
+            "type": "forge:ore_dict",
+            "ore": "gemFireElemental"
+        },
+        {
+            "type": "forge:ore_dict",
+            "ore": "gemWaterElemental"
+        },
+        {
+            "type": "forge:ore_dict",
+            "ore": "gemEarthElemental"
+        },
+        {
+            "type": "forge:ore_dict",
+            "ore": "gemAirElemental"
+        }
+    ],
+    "result": {
+        "item": "essentialcraft:gem_elemental",
+        "count": 4,
+        "data": 4
+    }
+}

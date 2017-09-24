@@ -1,0 +1,28 @@
+{
+    "type": "forge:ore_shaped",
+    "group": "essentialcraft:shearing_station",
+    "pattern": [
+        "#@#",
+        "#R#",
+        "###"
+    ],
+    "key": {
+        "#": {
+            "type": "forge:ore_dict",
+            "ore": "stoneFortified"
+        },
+        "R": {
+            "type": "forge:ore_dict",
+            "ore": "dustRedstone"
+        },
+        "@": {
+            "item": "minecraft:shears",
+            "data": 0
+        }
+    },
+    "result": {
+        "item": "essentialcraft:device",
+        "count": 1,
+        "data": 5
+    }
+}

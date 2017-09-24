@@ -1,40 +1,39 @@
 {
     "forge_marker": 1,
     "defaults": {
-        "model": "builtin/generated",
-        "transform": "forge:default-item"
+        "model": "essentialcraft:item"
     },
     "variants": {
         "type": {
             "fire": {
-                "textures": { "layer0": "essentialcraft:items/tools/charmFire" }
+                "textures": { "layer0": "essentialcraft:items/tools/charmfire" }
             },
             "water": {
-                "textures": { "layer0": "essentialcraft:items/tools/charmWater" }
+                "textures": { "layer0": "essentialcraft:items/tools/charmwater" }
             },
             "earth": {
-                "textures": { "layer0": "essentialcraft:items/tools/charmEarth" }
+                "textures": { "layer0": "essentialcraft:items/tools/charmearth" }
             },
             "air": {
-                "textures": { "layer0": "essentialcraft:items/tools/charmAir" }
+                "textures": { "layer0": "essentialcraft:items/tools/charmair" }
             },
             "steam": {
-                "textures": { "layer0": "essentialcraft:items/tools/charmSteam" }
+                "textures": { "layer0": "essentialcraft:items/tools/charmsteam" }
             },
             "magma": {
-                "textures": { "layer0": "essentialcraft:items/tools/charmMagma" }
+                "textures": { "layer0": "essentialcraft:items/tools/charmmagma" }
             },
             "lightning": {
-                "textures": { "layer0": "essentialcraft:items/tools/charmLightning" }
+                "textures": { "layer0": "essentialcraft:items/tools/charmlightning" }
             },
             "life": {
-                "textures": { "layer0": "essentialcraft:items/tools/charmLife" }
+                "textures": { "layer0": "essentialcraft:items/tools/charmlife" }
             },
             "rain": {
-                "textures": { "layer0": "essentialcraft:items/tools/charmRain" }
+                "textures": { "layer0": "essentialcraft:items/tools/charmrain" }
             },
             "dust": {
-                "textures": { "layer0": "essentialcraft:items/tools/charmDust" }
+                "textures": { "layer0": "essentialcraft:items/tools/charmdust" }
             }
         }
     }

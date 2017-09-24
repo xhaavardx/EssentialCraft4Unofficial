@@ -1,0 +1,36 @@
+{
+    "type": "forge:ore_shaped",
+    "group": "essentialcraft:chaos_fork",
+    "pattern": [
+        "IFM",
+        "ISF",
+        "JII"
+    ],
+    "key": {
+        "M": {
+            "type": "forge:ore_dict",
+            "ore": "matterOfEternity"
+        },
+        "F": {
+            "type": "forge:ore_dict",
+            "ore": "focusFire"
+        },
+        "S": {
+            "item": "essentialcraft:elemental_sword",
+            "data": 0
+        },
+        "J": {
+            "item": "essentialcraft:mrumatrixprojection",
+            "data": 1
+        },
+        "I": {
+            "type": "forge:ore_dict",
+            "ore": "ingotThaumium"
+        }
+    },
+    "result": {
+        "item": "essentialcraft:chaosfork",
+        "count": 1,
+        "data": 0
+    }
+}

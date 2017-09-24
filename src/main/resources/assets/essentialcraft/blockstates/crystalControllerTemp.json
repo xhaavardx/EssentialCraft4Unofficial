@@ -4,7 +4,7 @@
     "variants": {
         "normal": [{
             "model": "minecraft:block",
-            "textures": { "particle": "essentialcraft:models/crystalController" }
+            "textures": { "particle": "essentialcraft:models/crystalcontroller" }
         }]
     }
 }

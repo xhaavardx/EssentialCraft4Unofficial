@@ -1,0 +1,48 @@
+{
+    "type": "forge:ore_shaped",
+    "group": "essentialcraft:monster_harvester",
+    "pattern": [
+        "PSM",
+        "LCX",
+        "IFI"
+    ],
+    "key": {
+        "P": {
+            "type": "forge:ore_dict",
+            "ore": "plateMagic"
+        },
+        "S": {
+            "type": "forge:ore_dict",
+            "ore": "screenMagic"
+        },
+        "M": {
+            "type": "forge:ore_dict",
+            "ore": "mruCatcher"
+        },
+        "L": {
+            "item": "essentialcraft:staffoflife",
+            "data": 0
+        },
+        "C": {
+            "type": "forge:ore_dict",
+            "ore": "coreMagic"
+        },
+        "X": {
+            "type": "forge:ore_dict",
+            "ore": "conversionMatrix"
+        },
+        "I": {
+            "type": "forge:ore_dict",
+            "ore": "worldInteractor"
+        },
+        "F": {
+            "type": "forge:ore_dict",
+            "ore": "frameMagic"
+        }
+    },
+    "result": {
+        "item": "essentialcraft:monsterharvester",
+        "count": 1,
+        "data": 0
+    }
+}

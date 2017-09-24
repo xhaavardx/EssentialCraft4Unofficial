@@ -1,0 +1,19 @@
+{
+    "type": "forge:ore_shapeless",
+    "group": "essentialcraft:right_clicker_extended",
+    "ingredients": [
+        {
+            "item": "essentialcraft:rightclicker",
+            "data": 0
+        },
+        {
+            "type": "forge:ore_dict",
+            "ore": "chestWood"
+        }
+    ],
+    "result": {
+        "item": "essentialcraft:rightclicker",
+        "count": 1,
+        "data": 2
+    }
+}

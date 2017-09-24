@@ -1,0 +1,47 @@
+{
+    "type": "forge:ore_shapeless",
+    "group": "essentialcraft:compressed_air_elemental",
+    "ingredients": [
+        {
+            "type": "forge:ore_dict",
+            "ore": "gemAirElemental"
+        },
+        {
+            "type": "forge:ore_dict",
+            "ore": "gemAirElemental"
+        },
+        {
+            "type": "forge:ore_dict",
+            "ore": "gemAirElemental"
+        },
+        {
+            "type": "forge:ore_dict",
+            "ore": "gemAirElemental"
+        },
+        {
+            "type": "forge:ore_dict",
+            "ore": "gemAirElemental"
+        },
+        {
+            "type": "forge:ore_dict",
+            "ore": "gemAirElemental"
+        },
+        {
+            "type": "forge:ore_dict",
+            "ore": "gemAirElemental"
+        },
+        {
+            "type": "forge:ore_dict",
+            "ore": "gemAirElemental"
+        },
+        {
+            "type": "forge:ore_dict",
+            "ore": "gemAirElemental"
+        }
+    ],
+    "result": {
+        "item": "essentialcraft:compressed",
+        "count": 1,
+        "data": 3
+    }
+}

@@ -1,0 +1,15 @@
+{
+    "type": "forge:ore_shapeless",
+    "group": "essentialcraft:magical_builder_1",
+    "ingredients": [
+        {    
+            "item": "essentialcraft:magicalbuilder",
+            "data": 0
+        }
+    ],
+    "result": {
+        "item": "essentialcraft:magicalbuilder",
+        "count": 1,
+        "data": 1
+    }
+}

@@ -7,13 +7,13 @@
         "type": {
             "magical": {
                 "textures": {
-                    "particle": "essentialcraft:blocks/magicPlatingBlock",
+                    "particle": "essentialcraft:blocks/magicplatingblock",
                     "chest": "essentialcraft:blocks/chests/magical"
                 }
             },
             "void": {
                 "textures": {
-                    "particle": "essentialcraft:blocks/voidStone",
+                    "particle": "essentialcraft:blocks/voidstone",
                     "chest": "essentialcraft:blocks/chests/void"
                 }
             }

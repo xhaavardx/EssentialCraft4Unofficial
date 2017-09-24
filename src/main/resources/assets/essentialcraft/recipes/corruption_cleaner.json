@@ -1,0 +1,44 @@
+{
+    "type": "forge:ore_shaped",
+    "group": "essentialcraft:corruption_cleaner",
+    "pattern": [
+        "SCF",
+        "RGE",
+        "FIF"
+    ],
+    "key": {
+        "S": {
+            "type": "forge:ore_dict",
+            "ore": "screenMagic"
+        },
+        "C": {
+            "type": "forge:ore_dict",
+            "ore": "coreMagic"
+        },
+        "F": {
+            "type": "forge:ore_dict",
+            "ore": "plateFortified"
+        },
+        "R": {
+            "type": "forge:ore_dict",
+            "ore": "plateRedstone"
+        },
+        "G": {
+            "type": "forge:ore_dict",
+            "ore": "gemResonant"
+        },
+        "E": {
+            "type": "forge:ore_dict",
+            "ore": "plateEnder"
+        },
+        "I": {
+            "type": "forge:ore_dict",
+            "ore": "worldInteractor"
+        }
+    },
+    "result": {
+        "item": "essentialcraft:corruptioncleaner",
+        "count": 1,
+        "data": 0
+    }
+}

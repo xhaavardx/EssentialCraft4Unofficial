@@ -1,9 +1,8 @@
 {
     "forge_marker": 1,
     "defaults": {
-        "model": "builtin/generated",
-        "transform": "forge:default-item",
-        "textures": { "layer0": "essentialcraft:items/elemental/eFocusEarth" }
+        "model": "essentialcraft:item",
+        "textures": { "layer0": "essentialcraft:items/elemental/efocusearth" }
     },
     "variants": {
         "inventory": [{}]

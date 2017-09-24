@@ -1,0 +1,40 @@
+{
+    "type": "forge:ore_shaped",
+    "group": "essentialcraft:charm_dust",
+    "pattern": [
+        "SGS",
+        "ERA",
+        "@G@"
+    ],
+    "key": {
+        "E": {
+            "type": "forge:ore_dict",
+            "ore": "focusEarth"
+        },
+        "A": {
+            "type": "forge:ore_dict",
+            "ore": "focusAir"
+        },
+        "S": {
+            "type": "forge:ore_dict",
+            "ore": "string"
+        },
+        "G": {
+            "type": "forge:ore_dict",
+            "ore": "ingotGoldMagical"
+        },
+        "R": {
+            "type": "forge:ore_dict",
+            "ore": "redSoulMatter"
+        },
+        "@": {
+            "type": "forge:ore_dict",
+            "ore": "waterMagic"
+        }
+    },
+    "result": {
+        "item": "essentialcraft:charm",
+        "count": 1,
+        "data": 9
+    }
+}

@@ -1,7 +1,7 @@
-newmtl initialShadingGroup
+newmtl initialshadinggroup
 illum 4
 Kd 0.00 0.00 0.00
 Ka 0.00 0.00 0.00
 Tf 1.00 1.00 1.00
-map_Kd elementalCore.png
+map_Kd elementalcore.png
 Ni 1.00

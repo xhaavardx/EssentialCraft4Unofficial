@@ -1,0 +1,24 @@
+{
+    "type": "forge:ore_shaped",
+    "group": "essentialcraft:mru_conversion_matrix",
+    "pattern": [
+        "I",
+        "S",
+        "I"
+    ],
+    "key": {
+        "I": {
+            "type": "forge:ore_dict",
+            "ore": "ingotThaumium"
+        },
+        "S": {
+            "type": "forge:ore_dict",
+            "ore": "coreMagic"
+        }
+    },
+    "result": {
+        "item": "essentialcraft:genitem",
+        "count": 1,
+        "data": 30
+    }
+}

@@ -1,6 +1,6 @@
 # Blender v2.78 (sub 0) OBJ File: ''
 # www.blender.org
-mtllib DarknessObelisk.mtl
+mtllib darknessobelisk.mtl
 o pCube1
 v 0.000000 -0.000000 1.000000
 v 0.125000 -0.000000 1.000000
@@ -2305,7 +2305,7 @@ vn -0.9833 -0.0924 -0.1569
 vn -0.9832 -0.0869 -0.1606
 vn -0.9758 -0.2030 0.0817
 vn -0.9758 -0.2030 -0.0817
-usemtl initialShadingGroup
+usemtl initialshadinggroup
 s off
 f 190/1/1 189/2/1 200/3/1 201/4/1
 f 199/5/2 198/6/2 209/7/2 210/8/2

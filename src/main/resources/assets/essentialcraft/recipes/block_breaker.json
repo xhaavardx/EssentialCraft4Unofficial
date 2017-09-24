@@ -1,0 +1,28 @@
+{
+    "type": "forge:ore_shaped",
+    "group": "essentialcraft:block_breaker",
+    "pattern": [
+        "SSS",
+        "SRP",
+        "SSS"
+    ],
+    "key": {
+        "S": {
+            "type": "forge:ore_dict",
+            "ore": "stoneFortified"
+        },
+        "R": {
+            "type": "forge:ore_dict",
+            "ore": "dustRedstone"
+        },
+        "P": {
+            "item": "essentialcraft:weak_elemental_pick",
+            "data": 0
+        }
+    },
+    "result": {
+        "item": "essentialcraft:blockbreaker",
+        "count": 1,
+        "data": 0
+    }
+}

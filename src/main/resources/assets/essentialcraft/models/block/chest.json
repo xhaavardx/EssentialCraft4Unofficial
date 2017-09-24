@@ -1,5 +1,5 @@
 {
-    "__comment": "Model generated using MrCrayfish's Model Creator (http://mrcrayfish.com/modelcreator/)",
+    "__comment": "model generated using mrcrayfish's model creator (http://mrcrayfish.com/modelcreator/)",
     "parent": "minecraft:block/block",
     "display": {
         "firstperson_righthand": {

@@ -1,4 +1,4 @@
-newmtl blinn1SG
+newmtl blinn1sg
 illum 4
 Kd 0.00 0.00 0.00
 Ka 0.00 0.00 0.00
@@ -6,10 +6,10 @@ Tf 1.00 1.00 1.00
 map_Kd mirror.png
 Ni 1.00
 Ks 0.50 0.50 0.50
-newmtl lambert2SG
+newmtl lambert2sg
 illum 4
 Kd 0.00 0.00 0.00
 Ka 0.00 0.00 0.00
 Tf 1.00 1.00 1.00
-map_Kd armTextures.png
+map_Kd armtextures.png
 Ni 1.00

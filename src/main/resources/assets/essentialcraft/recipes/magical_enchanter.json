@@ -1,0 +1,48 @@
+{
+    "type": "forge:ore_shaped",
+    "group": "essentialcraft:magicalenchanter",
+    "pattern": [
+        "SBM",
+        "ITX",
+        "PCP"
+    ],
+    "key": {
+        "S": {
+            "type": "forge:ore_dict",
+            "ore": "screenMagic"
+        },
+        "B": {
+            "item": "minecraft:enchanted_book",
+            "data": 0
+        },
+        "M": {
+            "type": "forge:ore_dict",
+            "ore": "mruCatcher"
+        },
+        "I": {
+            "type": "forge:ore_dict",
+            "ore": "worldInteractor"
+        },
+        "T": {
+            "item": "minecraft:enchanting_table",
+            "data": 0
+        },
+        "X": {
+            "type": "forge:ore_dict",
+            "ore": "conversionMatrix"
+        },
+        "P": {
+            "type": "forge:ore_dict",
+            "ore": "plateMagic"
+        },
+        "C": {
+            "type": "forge:ore_dict",
+            "ore": "coreMagic"
+        }
+    },
+    "result": {
+        "item": "essentialcraft:magicalenchanter",
+        "count": 1,
+        "data": 0
+    }
+}

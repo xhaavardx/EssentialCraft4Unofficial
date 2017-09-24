@@ -1,8 +1,7 @@
 {
     "forge_marker": 1,
     "defaults": {
-        "model": "builtin/generated",
-        "transform": "forge:default-item",
+        "model": "essentialcraft:item",
         "textures": { "layer0": "essentialcraft:items/record_holobattle" }
     },
     "variants": {

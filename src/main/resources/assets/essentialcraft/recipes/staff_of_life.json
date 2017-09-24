@@ -1,0 +1,36 @@
+{
+    "type": "forge:ore_shaped",
+    "group": "essentialcraft:staff_of_life",
+    "pattern": [
+        "HEG",
+        "EME",
+        "PEH"
+    ],
+    "key": {
+        "M": {
+            "type": "forge:ore_dict",
+            "ore": "redSoulMatter"
+        },
+        "E": {
+            "type": "forge:ore_dict",
+            "ore": "focusEarth"
+        },
+        "P": {
+            "type": "forge:ore_dict",
+            "ore": "plateMagic"
+        },
+        "G": {
+            "type": "forge:ore_dict",
+            "ore": "orbGold"
+        },
+        "H": {
+            "item": "essentialcraft:elemental_hoe",
+            "data": 0
+        }
+    },
+    "result": {
+        "item": "essentialcraft:staffoflife",
+        "count": 1,
+        "data": 0
+    }
+}

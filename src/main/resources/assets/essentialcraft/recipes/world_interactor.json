@@ -1,0 +1,47 @@
+{
+    "type": "forge:ore_shapeless",
+    "group": "essentialcraft:world_interactor",
+    "ingredients": [
+        {
+            "type": "forge:ore_dict",
+            "ore": "ingotThaumium"
+        },
+        {
+            "type": "forge:ore_dict",
+            "ore": "ingotThaumium"
+        },
+        {
+            "type": "forge:ore_dict",
+            "ore": "ingotThaumium"
+        },
+        {
+            "type": "forge:ore_dict",
+            "ore": "ingotThaumium"
+        },
+        {
+            "type": "forge:ore_dict",
+            "ore": "ingotThaumium"
+        },
+        {
+            "type": "forge:ore_dict",
+            "ore": "ingotThaumium"
+        },
+        {
+            "type": "forge:ore_dict",
+            "ore": "ingotThaumium"
+        },
+        {
+            "type": "forge:ore_dict",
+            "ore": "ingotThaumium"
+        },
+        {
+            "item": "essentialcraft:genitem",
+            "data": 23
+        }
+    ],
+    "result": {
+        "item": "essentialcraft:genitem",
+        "count": 1,
+        "data": 33
+    }
+}

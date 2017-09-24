@@ -7,22 +7,22 @@
         "type": {
             "mithriline": {
                 "textures": {
-                    "particle": "essentialcraft:blocks/invertedPlatingBlock"
+                    "particle": "essentialcraft:blocks/invertedplatingblock"
                 }
             },
             "pale": {
                 "textures": {
-                    "particle": "essentialcraft:blocks/palePlatingBlock"
+                    "particle": "essentialcraft:blocks/paleplatingblock"
                 }
             },
             "void": {
                 "textures": {
-                    "particle": "essentialcraft:blocks/voidStone"
+                    "particle": "essentialcraft:blocks/voidstone"
                 }
             },
             "demonic": {
                 "textures": {
-                    "particle": "essentialcraft:blocks/demonicPlatingBlock"
+                    "particle": "essentialcraft:blocks/demonicplatingblock"
                 }
             },
             "shade": {

@@ -1,0 +1,43 @@
+{
+    "type": "forge:ore_shaped",
+    "group": "essentialcraft:research_book_0",
+    "pattern": [
+        "CBF",
+        "MBK",
+        "YBK"
+    ],
+    "key": {
+        "C": {
+            "type": "forge:ore_dict",
+            "ore": "dyeCyan"
+        },
+        "M": {
+            "type": "forge:ore_dict",
+            "ore": "dyeMagenta"
+        },
+        "Y": {
+            "type": "forge:ore_dict",
+            "ore": "dyeYellow"
+        },
+        "K": {
+            "type": "forge:ore_dict",
+            "ore": "dyeBlack"
+        },
+        "B": {
+            "type": "forge:ore_dict",
+            "ore": "book"
+        },
+        "F": {
+            "type": "forge:ore_dict",
+            "ore": "feather"
+        }
+    },
+    "result": {
+        "item": "essentialcraft:research_book",
+        "count": 1,
+        "data": 0,
+        "nbt": {
+            "tier": 0
+        }
+    }
+}

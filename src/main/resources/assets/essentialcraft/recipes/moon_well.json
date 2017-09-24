@@ -1,0 +1,48 @@
+{
+    "type": "forge:ore_shaped",
+    "group": "essentialcraft:moon_well",
+    "pattern": [
+        "SGM",
+        "ICX",
+        "PJP"
+    ],
+    "key": {
+        "P": {
+            "type": "forge:ore_dict",
+            "ore": "plateMagic"
+        },
+        "S": {
+            "type": "forge:ore_dict",
+            "ore": "screenMagic"
+        },
+        "M": {
+            "type": "forge:ore_dict",
+            "ore": "mruCatcher"
+        },
+        "C": {
+            "type": "forge:ore_dict",
+            "ore": "coreMagic"
+        },
+        "X": {
+            "type": "forge:ore_dict",
+            "ore": "conversionMatrix"
+        },
+        "I": {
+            "type": "forge:ore_dict",
+            "ore": "worldInteractor"
+        },
+        "G": {
+            "item": "essentialcraft:elementalcrystal",
+            "data": 0
+        },
+        "J": {
+            "item": "essentialcraft:mrumatrixprojection",
+            "data": 3
+        }
+    },
+    "result": {
+        "item": "essentialcraft:moonwell",
+        "count": 1,
+        "data": 0
+    }
+}

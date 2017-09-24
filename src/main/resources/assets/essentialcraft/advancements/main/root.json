@@ -1,0 +1,29 @@
+{
+    "display": {
+        "icon": {
+            "item": "essentialcraft:research_book"
+        },
+        "title": {
+            "translate": "advancements.essentialcraft.root.title"
+        },
+        "description": {
+            "translate": "advancements.essentialcraft.root.desc"
+        },
+        "background": "essentialcraft:textures/blocks/ct/magicplating/tblr.png",
+        "show_toast": false,
+        "announce_to_chat": false
+    },
+    "criteria": {
+        "book": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "essentialcraft:research_book",
+                        "nbt": "{\"tier\":0}"
+                    }
+                ]
+            }
+        }
+    }
+}

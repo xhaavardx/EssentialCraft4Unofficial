@@ -3,7 +3,7 @@
     "variants": {
         "normal": [{
             "model": "minecraft:block",
-            "textures": { "particle": "essentialcraft:blocks/voidStone" }
+            "textures": { "particle": "essentialcraft:blocks/voidstone" }
         }],
         "inventory": [{
             "model": "essentialcraft:mim"

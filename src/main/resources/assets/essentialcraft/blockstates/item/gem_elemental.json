@@ -1,0 +1,25 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "essentialcraft:item"
+    },
+    "variants": {
+        "type": {
+            "fire": {
+                "textures": { "layer0": "essentialcraft:items/elemental/drop_fire" }
+            },
+            "water": {
+                "textures": { "layer0": "essentialcraft:items/elemental/drop_water" }
+            },
+            "earth": {
+                "textures": { "layer0": "essentialcraft:items/elemental/drop_earth" }
+            },
+            "air": {
+                "textures": { "layer0": "essentialcraft:items/elemental/drop_air" }
+            },
+            "elemental": {
+                "textures": { "layer0": "essentialcraft:items/elemental/drop_elemental" }
+            }
+        }
+    }
+}

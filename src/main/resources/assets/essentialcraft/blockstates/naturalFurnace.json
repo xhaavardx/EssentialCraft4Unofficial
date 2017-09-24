@@ -1,7 +1,7 @@
 {
     "forge_marker": 1,
     "defaults": {
-        "model": "essentialcraft:FlowerBurner.obj",
+        "model": "essentialcraft:flowerburner.obj",
         "transform": "forge:default-block",
         "custom": { "flip-v": true }
     },

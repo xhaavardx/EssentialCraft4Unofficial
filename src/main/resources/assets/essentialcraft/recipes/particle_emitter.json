@@ -1,0 +1,28 @@
+{
+    "type": "forge:ore_shaped",
+    "group": "essentialcraft:particle_emitter",
+    "pattern": [
+        "#@#",
+        "@C@",
+        "#@#"
+    ],
+    "key": {
+        "#": {
+            "type": "forge:ore_dict",
+            "ore": "plateDemonic"
+        },
+        "@": {
+            "type": "forge:ore_dict",
+            "ore": "gemResonant"
+        },
+        "C": {
+            "item": "essentialcraft:genitem",
+            "data": 68
+        }
+    },
+    "result": {
+        "item": "essentialcraft:genitem",
+        "count": 1,
+        "data": 67
+    }
+}

@@ -1,0 +1,19 @@
+{
+    "type": "forge:ore_shapeless",
+    "group": "essentialcraft:player_list",
+    "ingredients": [
+        {
+            "item": "minecraft:paper",
+            "data": 0
+        },
+        {
+            "item": "essentialcraft:bound_gem",
+            "data": 0
+        }
+    ],
+    "result": {
+        "item": "essentialcraft:playerlist",
+        "count": 1,
+        "data": 0
+    }
+}

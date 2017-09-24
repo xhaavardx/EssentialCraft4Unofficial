@@ -2,8 +2,8 @@
     "forge_marker": 1,
     "defaults": {
         "textures": {
-            "top": "essentialcraft:blocks/fortifiedStone",
-            "side": "essentialcraft:blocks/fortifiedStone"
+            "top": "essentialcraft:blocks/fortifiedstone",
+            "side": "essentialcraft:blocks/fortifiedstone"
         },
         "model": "minecraft:orientable",
         "uvlock": true
@@ -19,22 +19,22 @@
         },
         "type": {
             "normal": {
-                "textures": { "front": "essentialcraft:blocks/rightClicker" }
+                "textures": { "front": "essentialcraft:blocks/rightclicker" }
             },
             "normal_sneaky": {
-                "textures": { "front": "essentialcraft:blocks/rightClicker_sneaky" }
+                "textures": { "front": "essentialcraft:blocks/rightclicker_sneaky" }
             },
             "extended": {
-                "textures": { "front": "essentialcraft:blocks/rightClickerExtended" }
+                "textures": { "front": "essentialcraft:blocks/rightclickerextended" }
             },
             "extended_sneaky": {
-                "textures": { "front": "essentialcraft:blocks/rightClickerExtended_sneaky" }
+                "textures": { "front": "essentialcraft:blocks/rightclickerextended_sneaky" }
             },
             "advanced": {
-                "textures": { "front": "essentialcraft:blocks/rightClickerExtendedAdvanced" }
+                "textures": { "front": "essentialcraft:blocks/rightclickerextendedadvanced" }
             },
             "advanced_sneaky": {
-                "textures": { "front": "essentialcraft:blocks/rightClickerExtendedAdvanced_sneaky" }
+                "textures": { "front": "essentialcraft:blocks/rightclickerextendedadvanced_sneaky" }
             }
         }
     }

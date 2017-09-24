@@ -1,0 +1,48 @@
+{
+    "type": "forge:ore_shaped",
+    "group": "essentialcraft:cold_distillator",
+    "pattern": [
+        "SMX",
+        "TCT",
+        "PJI"
+    ],
+    "key": {
+        "S": {
+            "type": "forge:ore_dict",
+            "ore": "screenMagic"
+        },
+        "M": {
+            "type": "forge:ore_dict",
+            "ore": "mruCatcher"
+        },
+        "X": {
+            "type": "forge:ore_dict",
+            "ore": "conversionMatrix"
+        },
+        "T": {
+            "item": "essentialcraft:coldstone",
+            "data": 0
+        },
+        "C": {
+            "type": "forge:ore_dict",
+            "ore": "coreMagic"
+        },
+        "P": {
+            "type": "forge:ore_dict",
+            "ore": "plateMagic"
+        },
+        "J": {
+            "item": "essentialcraft:mrumatrixprojection",
+            "data": 2
+        },
+        "I": {
+            "type": "forge:ore_dict",
+            "ore": "worldInteractor"
+        }
+    },
+    "result": {
+        "item": "essentialcraft:colddistillator",
+        "count": 1,
+        "data": 0
+    }
+}

@@ -2,9 +2,9 @@
     "forge_marker": 1,
     "defaults": {
         "textures": {
-            "top": "essentialcraft:blocks/mimInventoryHandler_TB",
-            "side": "essentialcraft:blocks/mimInventoryHandler_TB",
-            "front": "essentialcraft:blocks/mimScreen"
+            "top": "essentialcraft:blocks/miminventoryhandler_tb",
+            "side": "essentialcraft:blocks/miminventoryhandler_tb",
+            "front": "essentialcraft:blocks/mimscreen"
         },
         "model": "minecraft:orientable",
         "uvlock": true

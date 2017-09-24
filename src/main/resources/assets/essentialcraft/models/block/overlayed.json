@@ -6,8 +6,8 @@
     "elements": [
         {
             "name": "cube_0",
-            "from": [ 0.01, 0.01, 0.01 ], 
-            "to": [ 15.99, 15.99, 15.99 ], 
+            "from": [ 0.0, 0.0, 0.0 ], 
+            "to": [ 16.0, 16.0, 16.0 ], 
             "faces": {
                 "north": { "texture": "#in", "uv": [ 0.0, 0.0, 16.0, 16.0 ], "cullface": "north" },
                 "east": { "texture": "#in", "uv": [ 0.0, 0.0, 16.0, 16.0 ], "cullface": "east" },

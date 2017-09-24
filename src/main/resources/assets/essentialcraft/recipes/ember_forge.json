@@ -1,0 +1,44 @@
+{
+    "type": "forge:ore_shaped",
+    "group": "essentialcraft:ember_forge",
+    "pattern": [
+        "SRI",
+        "PCP",
+        "VEV"
+    ],
+    "key": {
+        "R": {
+            "type": "forge:ore_dict",
+            "ore": "reactorVoid"
+        },
+        "S": {
+            "type": "forge:ore_dict",
+            "ore": "screenMagic"
+        },
+        "I": {
+            "type": "forge:ore_dict",
+            "ore": "plateEnder"
+        },
+        "C": {
+            "type": "forge:ore_dict",
+            "ore": "coreVoid"
+        },
+        "V": {
+            "type": "forge:ore_dict",
+            "ore": "plateVoid"
+        },
+        "P": {
+            "type": "forge:ore_dict",
+            "ore": "plateFortified"
+        },
+        "E": {
+            "type": "forge:ore_dict",
+            "ore": "matterOfEternity"
+        }
+    },
+    "result": {
+        "item": "essentialcraft:emberforge",
+        "count": 1,
+        "data": 0
+    }
+}

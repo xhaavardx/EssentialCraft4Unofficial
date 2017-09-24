@@ -9,7 +9,7 @@
                 "textures": { "all": "essentialcraft:blocks/replanter" }
             },
             "item_shuffler": {
-                "textures": { "all": "essentialcraft:blocks/itemShuffler" }
+                "textures": { "all": "essentialcraft:blocks/itemshuffler" }
             },
             "crafter": {
                 "textures": { "all": "essentialcraft:blocks/crafter" }
@@ -18,16 +18,16 @@
                 "textures": { "all": "essentialcraft:blocks/breeder" }
             },
             "creative_mru_storage": {
-                "textures": { "all": "essentialcraft:blocks/creativeMRUStorage" }
+                "textures": { "all": "essentialcraft:blocks/creativemrustorage" }
             },
             "shearing_station": {
-                "textures": { "all": "essentialcraft:blocks/shearingStation" }
+                "textures": { "all": "essentialcraft:blocks/shearingstation" }
             },
             "child_separator": {
-                "textures": { "all": "essentialcraft:blocks/childSeparator" }
+                "textures": { "all": "essentialcraft:blocks/childseparator" }
             },
             "adult_separator": {
-                "textures": { "all": "essentialcraft:blocks/adultSeparator" }
+                "textures": { "all": "essentialcraft:blocks/adultseparator" }
             }
         }
     }

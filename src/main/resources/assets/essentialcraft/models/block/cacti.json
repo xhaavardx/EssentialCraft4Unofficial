@@ -1,11 +1,10 @@
 {
     "parent": "block/block",
-    "ambientocclusion": false,
     "textures": {
-        "particle": "essentialcraft:blocks/firstWorld/cactus_side",
-        "bottom": "essentialcraft:blocks/firstWorld/cactus_bottom",
-        "top": "essentialcraft:blocks/firstWorld/cactus_top",
-        "side": "essentialcraft:blocks/firstWorld/cactus_side"
+        "particle": "essentialcraft:blocks/firstworld/cactus_side",
+        "bottom": "essentialcraft:blocks/firstworld/cactus_bottom",
+        "top": "essentialcraft:blocks/firstworld/cactus_top",
+        "side": "essentialcraft:blocks/firstworld/cactus_side"
     },
     "elements": [
         {   "from": [ 0, 0, 0 ],

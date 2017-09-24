@@ -1,0 +1,24 @@
+{
+    "type": "forge:ore_shaped",
+    "group": "essentialcraft:wind_elemental_hoe",
+    "pattern": [
+        "DD",
+        " S",
+        " S"
+    ],
+    "key": {
+        "D": {
+            "type": "forge:ore_dict",
+            "ore": "gemWind"
+        },
+        "S": {
+            "type": "forge:ore_dict",
+            "ore": "stickWood"
+        }
+    },
+    "result": {
+        "item": "essentialcraft:wind_elemental_hoe",
+        "count": 1,
+        "data": 0
+    }
+}

@@ -4,20 +4,20 @@
         "layer": {
             "top": {
                 "model": "minecraft:cube_all",
-                "textures": { "all": "essentialcraft:blocks/magicPlatingBlock" }
+                "textures": { "all": "essentialcraft:blocks/magicplatingblock" }
             },
             "middle": {
-                "model": "essentialcraft:reactorSupportMiddle"
+                "model": "essentialcraft:reactorsupportmiddle"
             },
             "bottom": {
-                "model": "essentialcraft:reactorSupportBottom"
+                "model": "essentialcraft:reactorsupportbottom"
             }
         },
         "north": {
             "true": {
                 "submodel": {
                     "bars0": {
-                        "model": "essentialcraft:reactorSupportBars"
+                        "model": "essentialcraft:reactorsupportbars"
                     }
                 }
             },
@@ -27,7 +27,7 @@
             "true": {
                 "submodel": {
                     "bars1": {
-                        "model": "essentialcraft:reactorSupportBars",
+                        "model": "essentialcraft:reactorsupportbars",
                         "y": 180,
                         "uvlock": true
                     }
@@ -39,7 +39,7 @@
             "true": {
                 "submodel": {
                     "bars2": {
-                        "model": "essentialcraft:reactorSupportBars",
+                        "model": "essentialcraft:reactorsupportbars",
                         "y": -90,
                         "uvlock": true
                     }
@@ -51,7 +51,7 @@
             "true": {
                 "submodel": {
                     "bars3": {
-                        "model": "essentialcraft:reactorSupportBars",
+                        "model": "essentialcraft:reactorsupportbars",
                         "y": 90,
                         "uvlock": true
                     }
@@ -60,7 +60,7 @@
             "false": {}
         },
         "inventory": [{
-            "model": "essentialcraft:reactorSupportMiddle"
+            "model": "essentialcraft:reactorsupportmiddle"
         }]
     }
 }

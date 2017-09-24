@@ -1,7 +1,7 @@
 {
     "forge_marker": 1,
     "defaults": {
-        "model": "essentialcraft:MagicianTable.obj",
+        "model": "essentialcraft:magiciantable.obj",
         "transform": "forge:default-block",
         "custom": { "flip-v": true }
     },

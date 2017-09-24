@@ -7,11 +7,11 @@
                 "textures": { "particle": "minecraft:blocks/anvil_base" }
             },
             "bottom": {
-                "model": "essentialcraft:rayTower"
+                "model": "essentialcraft:raytower"
             }
         },
         "inventory": [{
-            "model": "essentialcraft:rayTower"
+            "model": "essentialcraft:raytower"
         }]
     }
 }

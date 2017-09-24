@@ -1,6 +1,6 @@
 # Blender v2.78 (sub 0) OBJ File: ''
 # www.blender.org
-mtllib MagmaticSmeltery.mtl
+mtllib magmaticsmeltery.mtl
 o pCube1
 v 0.037500 0.200000 0.962500
 v 0.200000 0.200000 1.025000
@@ -1897,7 +1897,7 @@ vn -0.3590 0.0000 -0.9333
 vn -0.9333 0.0000 -0.3590
 vn 0.3590 0.0000 -0.9333
 vn 0.9333 0.0000 -0.3590
-usemtl lambert2SG
+usemtl lambert2sg
 s off
 f 82/1/1 92/2/1 552/3/1 551/4/1
 f 92/5/2 541/6/2 555/7/2 552/8/2

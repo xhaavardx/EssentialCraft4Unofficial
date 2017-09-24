@@ -1,0 +1,36 @@
+{
+    "type": "forge:ore_shaped",
+    "group": "essentialcraft:matrix_absorber",
+    "pattern": [
+        "SAS",
+        "HEH",
+        "SLS"
+    ],
+    "key": {
+        "S": {
+            "type": "forge:ore_dict",
+            "ore": "frameIron"
+        },
+        "A": {
+            "type": "forge:ore_dict",
+            "ore": "mruCatcher"
+        },
+        "L": {
+            "type": "forge:ore_dict",
+            "ore": "mruLink"
+        },
+        "E": {
+            "type": "forge:ore_dict",
+            "ore": "coreMagic"
+        },
+        "H": {
+            "type": "forge:ore_dict",
+            "ore": "rodHeat"
+        }
+    },
+    "result": {
+        "item": "essentialcraft:matrixabsorber",
+        "count": 1,
+        "data": 0
+    }
+}

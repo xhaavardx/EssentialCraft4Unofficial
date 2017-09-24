@@ -1,0 +1,24 @@
+{
+    "type": "forge:ore_shaped",
+    "group": "essentialcraft:elemental_fuel_fire",
+    "pattern": [
+        " E ",
+        "ECE",
+        " E "
+    ],
+    "key": {
+        "E": {
+            "item": "essentialcraft:essence",
+            "data": 0
+        },
+        "C": {
+            "type": "forge:ore_dict",
+            "ore": "gemCoal"
+        }
+    },
+    "result": {
+        "item": "essentialcraft:elementalfuel",
+        "count": 1,
+        "data": 0
+    }
+}

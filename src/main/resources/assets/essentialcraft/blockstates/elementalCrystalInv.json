@@ -1,73 +1,72 @@
 {
     "forge_marker": 1,
     "defaults": {
-        "model": "builtin/generated",
-        "transform": "forge:default-item"
+        "model": "essentialcraft:item"
     },
     "variants": {
         "size": {
             "0": {
-                "textures": { "layer0": "essentialcraft:blocks/icons/elementalCrystal0" }
+                "textures": { "layer0": "essentialcraft:blocks/icons/elementalcrystal0" }
             },
             "1": {
-                "textures": { "layer0": "essentialcraft:blocks/icons/elementalCrystal1" }
+                "textures": { "layer0": "essentialcraft:blocks/icons/elementalcrystal1" }
             },
             "2": {
-                "textures": { "layer0": "essentialcraft:blocks/icons/elementalCrystal2" }
+                "textures": { "layer0": "essentialcraft:blocks/icons/elementalcrystal2" }
             },
             "3": {
-                "textures": { "layer0": "essentialcraft:blocks/icons/elementalCrystal3" }
+                "textures": { "layer0": "essentialcraft:blocks/icons/elementalcrystal3" }
             },
             "4": {
-                "textures": { "layer0": "essentialcraft:blocks/icons/elementalCrystal4" }
+                "textures": { "layer0": "essentialcraft:blocks/icons/elementalcrystal4" }
             },
             "5": {
-                "textures": { "layer0": "essentialcraft:blocks/icons/elementalCrystal5" }
+                "textures": { "layer0": "essentialcraft:blocks/icons/elementalcrystal5" }
             },
             "6": {
-                "textures": { "layer0": "essentialcraft:blocks/icons/elementalCrystal6" }
+                "textures": { "layer0": "essentialcraft:blocks/icons/elementalcrystal6" }
             },
             "7": {
-                "textures": { "layer0": "essentialcraft:blocks/icons/elementalCrystal7" }
+                "textures": { "layer0": "essentialcraft:blocks/icons/elementalcrystal7" }
             },
             "8": {
-                "textures": { "layer0": "essentialcraft:blocks/icons/elementalCrystal8" }
+                "textures": { "layer0": "essentialcraft:blocks/icons/elementalcrystal8" }
             },
             "9": {
-                "textures": { "layer0": "essentialcraft:blocks/icons/elementalCrystal9" }
+                "textures": { "layer0": "essentialcraft:blocks/icons/elementalcrystal9" }
             },
             "10": {
-                "textures": { "layer0": "essentialcraft:blocks/icons/elementalCrystal10" }
+                "textures": { "layer0": "essentialcraft:blocks/icons/elementalcrystal10" }
             },
             "11": {
-                "textures": { "layer0": "essentialcraft:blocks/icons/elementalCrystal11" }
+                "textures": { "layer0": "essentialcraft:blocks/icons/elementalcrystal11" }
             },
             "12": {
-                "textures": { "layer0": "essentialcraft:blocks/icons/elementalCrystal12" }
+                "textures": { "layer0": "essentialcraft:blocks/icons/elementalcrystal12" }
             },
             "13": {
-                "textures": { "layer0": "essentialcraft:blocks/icons/elementalCrystal13" }
+                "textures": { "layer0": "essentialcraft:blocks/icons/elementalcrystal13" }
             },
             "14": {
-                "textures": { "layer0": "essentialcraft:blocks/icons/elementalCrystal14" }
+                "textures": { "layer0": "essentialcraft:blocks/icons/elementalcrystal14" }
             },
             "15": {
-                "textures": { "layer0": "essentialcraft:blocks/icons/elementalCrystal15" }
+                "textures": { "layer0": "essentialcraft:blocks/icons/elementalcrystal15" }
             },
             "16": {
-                "textures": { "layer0": "essentialcraft:blocks/icons/elementalCrystal16" }
+                "textures": { "layer0": "essentialcraft:blocks/icons/elementalcrystal16" }
             },
             "17": {
-                "textures": { "layer0": "essentialcraft:blocks/icons/elementalCrystal17" }
+                "textures": { "layer0": "essentialcraft:blocks/icons/elementalcrystal17" }
             },
             "18": {
-                "textures": { "layer0": "essentialcraft:blocks/icons/elementalCrystal18" }
+                "textures": { "layer0": "essentialcraft:blocks/icons/elementalcrystal18" }
             },
             "19": {
-                "textures": { "layer0": "essentialcraft:blocks/icons/elementalCrystal19" }
+                "textures": { "layer0": "essentialcraft:blocks/icons/elementalcrystal19" }
             },
             "20": {
-                "textures": { "layer0": "essentialcraft:blocks/icons/elementalCrystal20" }
+                "textures": { "layer0": "essentialcraft:blocks/icons/elementalcrystal20" }
             }
         }
     }

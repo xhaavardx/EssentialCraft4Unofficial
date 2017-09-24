@@ -1,0 +1,19 @@
+{
+    "type": "forge:ore_shaped",
+    "group": "essentialcraft:magic_fence",
+    "pattern": [
+        "DDD",
+        "DDD"
+    ],
+    "key": {
+        "D": {
+            "type": "forge:ore_dict",
+            "ore": "platingMagic"
+        }
+    },
+    "result": {
+        "item": "essentialcraft:magicfence",
+        "count": 16,
+        "data": 0
+    }
+}

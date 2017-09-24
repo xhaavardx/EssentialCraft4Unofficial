@@ -1,6 +1,6 @@
 # Blender v2.78 (sub 0) OBJ File: ''
 # www.blender.org
-mtllib CrystalController.mtl
+mtllib crystalcontroller.mtl
 o pCube1
 v 0.100000 -0.000000 0.900000
 v 0.200000 -0.000000 0.900000
@@ -1235,7 +1235,7 @@ vn 0.0000 0.4061 -0.9138
 vn 0.0000 0.4061 0.9138
 vn 0.0000 0.8944 -0.4472
 vn 0.0000 0.8944 0.4472
-usemtl initialShadingGroup
+usemtl initialshadinggroup
 s off
 f 455/1/1 451/2/1 454/3/1 456/4/1
 f 457/5/2 459/6/2 460/7/2 458/8/2

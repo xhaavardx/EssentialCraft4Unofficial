@@ -1,11 +1,11 @@
 {
     "forge_marker": 1,
     "defaults": {
-        "model": "essentialcraft:HeatGenerator.obj",
+        "model": "essentialcraft:heatgenerator.obj",
         "transform": "forge:default-block",
         "custom": { "flip-v": true },
         "textures": {
-            "#initialShadingGroup": "essentialcraft:models/ultraHeatGenerator"
+            "#initialshadinggroup": "essentialcraft:models/ultraheatgenerator"
         }
     },
     "variants": {

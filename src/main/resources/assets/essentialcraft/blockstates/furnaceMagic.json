@@ -14,29 +14,29 @@
         "type": {
             "fortified": {
                 "textures": {
-                    "top": "essentialcraft:blocks/fortifiedStone",
-                    "side": "essentialcraft:blocks/fortifiedStone",
+                    "top": "essentialcraft:blocks/fortifiedstone",
+                    "side": "essentialcraft:blocks/fortifiedstone",
                     "front": "essentialcraft:blocks/furnace_fortified"
                 }
             },
             "magic": {
                 "textures": {
-                    "top": "essentialcraft:blocks/magicPlatingBlock",
-                    "side": "essentialcraft:blocks/magicPlatingBlock",
+                    "top": "essentialcraft:blocks/magicplatingblock",
+                    "side": "essentialcraft:blocks/magicplatingblock",
                     "front": "essentialcraft:blocks/furnace_magic"
                 }
             },
             "pale": {
                 "textures": {
-                    "top": "essentialcraft:blocks/palePlatingBlock",
-                    "side": "essentialcraft:blocks/palePlatingBlock",
+                    "top": "essentialcraft:blocks/paleplatingblock",
+                    "side": "essentialcraft:blocks/paleplatingblock",
                     "front": "essentialcraft:blocks/furnace_pale"
                 }
             },
             "void": {
                 "textures": {
-                    "top": "essentialcraft:blocks/voidStone",
-                    "side": "essentialcraft:blocks/voidStone",
+                    "top": "essentialcraft:blocks/voidstone",
+                    "side": "essentialcraft:blocks/voidstone",
                     "front": "essentialcraft:blocks/furnace_void"
                 }
             }

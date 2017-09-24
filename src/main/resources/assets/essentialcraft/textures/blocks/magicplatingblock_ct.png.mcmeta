@@ -1,0 +1,11 @@
+{
+	"ctm": {
+		"ctm_version": 1,
+		"type": "ctm_full",
+		"layer": "SOLID",
+		"textures": [ "essentialcraft:blocks/magicplatingblock_ct_tex" ],
+        "extra": {
+            "connect_inside": true
+        }
+	}
+}

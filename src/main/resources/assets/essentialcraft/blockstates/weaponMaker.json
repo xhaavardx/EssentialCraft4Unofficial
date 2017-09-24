@@ -3,8 +3,8 @@
     "defaults": {
         "model": "minecraft:cube_top",
         "textures": {
-            "top": "essentialcraft:blocks/weaponBench",
-            "side": "essentialcraft:blocks/fortifiedStone"
+            "top": "essentialcraft:blocks/weaponbench",
+            "side": "essentialcraft:blocks/fortifiedstone"
         }
     },
     "variants": {

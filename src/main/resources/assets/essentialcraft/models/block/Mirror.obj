@@ -1,6 +1,6 @@
 # This file uses centimeters as units for non-parametric coordinates.
 
-mtllib Mirror.mtl
+mtllib mirror.mtl
 g default
 v -0.300000 0.512271 -0.054702
 v -0.225000 0.474771 -0.054702
@@ -557,7 +557,7 @@ vn -0.707107 -0.707107 0.000000
 vn -0.707107 -0.707107 0.000000
 s 1
 g pCube2
-usemtl lambert2SG
+usemtl lambert2sg
 f 1/1/1 2/2/2 11/11/3 10/10/4
 f 2/2/2 3/3/5 12/12/6 11/11/3
 f 3/3/5 4/4/7 13/13/8 12/12/6
@@ -713,6 +713,6 @@ vn -0.000000 0.000000 1.000000
 vn -0.000000 0.000000 1.000000
 s 1
 g pPlane1
-usemtl blinn1SG
+usemtl blinn1sg
 f 137/178/241 138/179/242 141/182/243 140/181/244
 f 138/179/242 139/180/245 142/183/246 141/182/243

@@ -4,13 +4,12 @@
         "normal": [{
             "model": "minecraft:block",
             "textures": {
-                "particle": "essentialcraft:blocks/demonicPentacle"
+                "particle": "essentialcraft:blocks/demonicpentacle"
             }
         }],
         "inventory": [{
-            "model": "builtin/generated",
-            "transform": "forge:default-item",
-            "textures": { "layer0": "essentialcraft:blocks/demonicPentacle" }
+            "model": "essentialcraft:item",
+            "textures": { "layer0": "essentialcraft:blocks/demonicpentacle" }
         }]
     }
 }

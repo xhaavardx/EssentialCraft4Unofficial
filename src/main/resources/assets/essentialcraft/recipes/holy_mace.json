@@ -1,0 +1,40 @@
+{
+    "type": "forge:ore_shaped",
+    "group": "essentialcraft:holy_mace",
+    "pattern": [
+        "MAG",
+        "ISA",
+        "EIM"
+    ],
+    "key": {
+        "M": {
+            "type": "forge:ore_dict",
+            "ore": "redSoulMatter"
+        },
+        "E": {
+            "type": "forge:ore_dict",
+            "ore": "focusEarth"
+        },
+        "A": {
+            "type": "forge:ore_dict",
+            "ore": "focusAir"
+        },
+        "I": {
+            "type": "forge:ore_dict",
+            "ore": "ingotThaumium"
+        },
+        "G": {
+            "type": "forge:ore_dict",
+            "ore": "orbGold"
+        },
+        "S": {
+            "item": "essentialcraft:elemental_sword",
+            "data": 0
+        }
+    },
+    "result": {
+        "item": "essentialcraft:holymace",
+        "count": 1,
+        "data": 0
+    }
+}

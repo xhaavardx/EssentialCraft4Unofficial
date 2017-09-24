@@ -1,0 +1,44 @@
+{
+    "type": "forge:ore_shaped",
+    "group": "essentialcraft:mru_coil",
+    "pattern": [
+        "IRS",
+        "PMP",
+        "LJL"
+    ],
+    "key": {
+        "P": {
+            "type": "forge:ore_dict",
+            "ore": "plateMagic"
+        },
+        "M": {
+            "type": "forge:ore_dict",
+            "ore": "ingotMagnet"
+        },
+        "L": {
+            "type": "forge:ore_dict",
+            "ore": "mruLink"
+        },
+        "I": {
+            "type": "forge:ore_dict",
+            "ore": "worldInteractor"
+        },
+        "R": {
+            "type": "forge:ore_dict",
+            "ore": "gemResonant"
+        },
+        "S": {
+            "type": "forge:ore_dict",
+            "ore": "screenMagic"
+        },
+        "J": {
+            "item": "essentialcraft:mrumatrixprojection",
+            "data": 3
+        }
+    },
+    "result": {
+        "item": "essentialcraft:mrucoil",
+        "count": 1,
+        "data": 0
+    }
+}

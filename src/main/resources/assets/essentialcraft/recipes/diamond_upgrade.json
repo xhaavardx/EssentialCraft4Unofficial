@@ -1,0 +1,28 @@
+{
+    "type": "forge:ore_shaped",
+    "group": "essentialcraft:diamond_upgrade",
+    "pattern": [
+        "APA",
+        "PCP",
+        "APA"
+    ],
+    "key": {
+        "A": {
+            "type": "forge:ore_dict",
+            "ore": "alloysMagical"
+        },
+        "P": {
+            "type": "forge:ore_dict",
+            "ore": "plateEnder"
+        },
+        "C": {
+            "type": "forge:ore_dict",
+            "ore": "dustCrystal"
+        }
+    },
+    "result": {
+        "item": "essentialcraft:genitem",
+        "count": 3,
+        "data": 19
+    }
+}

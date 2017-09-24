@@ -1,22 +1,21 @@
 {
     "forge_marker": 1,
     "defaults": {
-        "model": "builtin/generated",
-        "transform": "forge:default-item"
+        "model": "essentialcraft:item"
     },
     "variants": {
         "type": {
             "whitelist": {
-                "textures": { "layer0": "essentialcraft:items/itemFilter" }
+                "textures": { "layer0": "essentialcraft:items/itemfilter" }
             },
             "whitelist_advanced": {
-                "textures": { "layer0": "essentialcraft:items/itemFilterAdvanced" }
+                "textures": { "layer0": "essentialcraft:items/itemfilteradvanced" }
             },
             "blacklist": {
-                "textures": { "layer0": "essentialcraft:items/itemFilterB" }
+                "textures": { "layer0": "essentialcraft:items/itemfilterb" }
             },
             "blacklist_advanced": {
-                "textures": { "layer0": "essentialcraft:items/itemFilterAdvancedB" }
+                "textures": { "layer0": "essentialcraft:items/itemfilteradvancedb" }
             }
         }
     }

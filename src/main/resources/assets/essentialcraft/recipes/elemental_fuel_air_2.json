@@ -1,0 +1,20 @@
+{
+    "type": "forge:ore_shaped",
+    "group": "essentialcraft:elemental_fuel_air",
+    "pattern": [
+        " E ",
+        "E E",
+        " E "
+    ],
+    "key": {
+        "E": {
+            "item": "essentialcraft:essence",
+            "data": 11
+        }
+    },
+    "result": {
+        "item": "essentialcraft:elementalfuel",
+        "count": 8,
+        "data": 3
+    }
+}

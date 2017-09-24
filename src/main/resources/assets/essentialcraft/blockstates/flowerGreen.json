@@ -3,12 +3,11 @@
     "variants": {
         "normal": [{
             "model": "minecraft:cross",
-            "textures": { "cross": "essentialcraft:blocks/firstWorld/flower_green" }
+            "textures": { "cross": "essentialcraft:blocks/firstworld/flower_green" }
         }],
         "inventory": [{
-            "model": "builtin/generated",
-            "transform": "forge:default-item",
-            "textures": { "layer0": "essentialcraft:blocks/firstWorld/flower_green" }
+            "model": "essentialcraft:item",
+            "textures": { "layer0": "essentialcraft:blocks/firstworld/flower_green" }
         }]
     }
 }

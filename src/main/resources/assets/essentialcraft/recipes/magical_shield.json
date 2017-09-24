@@ -1,0 +1,36 @@
+{
+    "type": "forge:ore_shaped",
+    "group": "essentialcraft:magical_shield",
+    "pattern": [
+        "PAP",
+        "EME",
+        "DPD"
+    ],
+    "key": {
+        "M": {
+            "type": "forge:ore_dict",
+            "ore": "redSoulMatter"
+        },
+        "P": {
+            "type": "forge:ore_dict",
+            "ore": "plateObsidian"
+        },
+        "D": {
+            "type": "forge:ore_dict",
+            "ore": "dustCrystal"
+        },
+        "E": {
+            "type": "forge:ore_dict",
+            "ore": "focusEarth"
+        },
+        "A": {
+            "type": "forge:ore_dict",
+            "ore": "alloysMagical"
+        }
+    },
+    "result": {
+        "item": "essentialcraft:magicalshield",
+        "count": 1,
+        "data": 0
+    }
+}

@@ -1,0 +1,27 @@
+{
+    "type": "forge:ore_shapeless",
+    "group": "essentialcraft:magic_plating",
+    "ingredients": [
+        {
+            "type": "forge:ore_dict",
+            "ore": "plateThaumium"
+        },
+        {
+            "type": "forge:ore_dict",
+            "ore": "plateThaumium"
+        },
+        {
+            "type": "forge:ore_dict",
+            "ore": "plateThaumium"
+        },
+        {
+            "type": "forge:ore_dict",
+            "ore": "plateThaumium"
+        }
+    ],
+    "result": {
+        "item": "essentialcraft:magicplating",
+        "count": 16,
+        "data": 0
+    }
+}

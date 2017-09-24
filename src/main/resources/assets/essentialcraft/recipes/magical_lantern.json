@@ -1,0 +1,36 @@
+{
+    "type": "forge:ore_shaped",
+    "group": "essentialcraft:magical_lantern",
+    "pattern": [
+        "AFM",
+        "SPF",
+        "PSA"
+    ],
+    "key": {
+        "M": {
+            "type": "forge:ore_dict",
+            "ore": "redSoulMatter"
+        },
+        "A": {
+            "type": "forge:ore_dict",
+            "ore": "focusAir"
+        },
+        "F": {
+            "type": "forge:ore_dict",
+            "ore": "focusFire"
+        },
+        "P": {
+            "type": "forge:ore_dict",
+            "ore": "plateMagic"
+        },
+        "S": {
+            "item": "essentialcraft:magicalslag",
+            "data": 0
+        }
+    },
+    "result": {
+        "item": "essentialcraft:magicallantern",
+        "count": 1,
+        "data": 0
+    }
+}

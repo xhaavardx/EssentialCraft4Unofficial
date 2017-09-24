@@ -2,9 +2,9 @@
     "forge_marker": 1,
     "defaults": {
         "textures": {
-            "base": "essentialcraft:blocks/mimNode_Injection"
+            "base": "essentialcraft:blocks/mimnode_injection"
         },
-        "model": "essentialcraft:mimAccessor",
+        "model": "essentialcraft:mimaccessor",
         "uvlock": true
     },
     "variants": {

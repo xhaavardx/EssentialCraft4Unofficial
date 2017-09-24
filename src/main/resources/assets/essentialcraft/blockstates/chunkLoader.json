@@ -3,9 +3,9 @@
     "defaults": {
         "model": "minecraft:cube_bottom_top",
         "textures": {
-            "bottom": "essentialcraft:blocks/chunkLoader_bot",
-            "side": "essentialcraft:blocks/chunkLoader_side",
-            "top": "essentialcraft:blocks/chunkLoader_top"
+            "bottom": "essentialcraft:blocks/chunkloader_bot",
+            "side": "essentialcraft:blocks/chunkloader_side",
+            "top": "essentialcraft:blocks/chunkloader_top"
         }
     },
     "variants": {

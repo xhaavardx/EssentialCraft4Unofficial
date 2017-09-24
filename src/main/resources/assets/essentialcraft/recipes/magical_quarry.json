@@ -1,0 +1,44 @@
+{
+    "type": "forge:ore_shaped",
+    "group": "essentialcraft:magical_quarry",
+    "pattern": [
+        "PFP",
+        "SDM",
+        "ICI"
+    ],
+    "key": {
+        "F": {
+            "type": "forge:ore_dict",
+            "ore": "frameMagic"
+        },
+        "S": {
+            "type": "forge:ore_dict",
+            "ore": "screenMagic"
+        },
+        "M": {
+            "type": "forge:ore_dict",
+            "ore": "mruCatcher"
+        },
+        "D": {
+            "item": "essentialcraft:magicaldigger",
+            "data": 0
+        },
+        "C": {
+            "type": "forge:ore_dict",
+            "ore": "coreMagic"
+        },
+        "P": {
+            "type": "forge:ore_dict",
+            "ore": "plateFortified"
+        },
+        "I": {
+            "type": "forge:ore_dict",
+            "ore": "worldInteractor"
+        }
+    },
+    "result": {
+        "item": "essentialcraft:magicalquarry",
+        "count": 1,
+        "data": 0
+    }
+}

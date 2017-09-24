@@ -1,0 +1,44 @@
+{
+    "type": "forge:ore_shaped",
+    "group": "essentialcraft:magical_jukebox",
+    "pattern": [
+        "PMI",
+        "GJG",
+        "RSR"
+    ],
+    "key": {
+        "S": {
+            "type": "forge:ore_dict",
+            "ore": "screenMagic"
+        },
+        "M": {
+            "type": "forge:ore_dict",
+            "ore": "mruCatcher"
+        },
+        "P": {
+            "type": "forge:ore_dict",
+            "ore": "plateMagic"
+        },
+        "G": {
+            "type": "forge:ore_dict",
+            "ore": "gemElemental"
+        },
+        "J": {
+            "item": "minecraft:jukebox",
+            "data": 0
+        },
+        "I": {
+            "type": "forge:ore_dict",
+            "ore": "worldInteractor"
+        },
+        "R": {
+            "type": "forge:ore_dict",
+            "ore": "plateRedstone"
+        }
+    },
+    "result": {
+        "item": "essentialcraft:magicaljukebox",
+        "count": 1,
+        "data": 0
+    }
+}

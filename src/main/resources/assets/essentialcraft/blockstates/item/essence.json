@@ -1,22 +1,21 @@
 {
     "forge_marker": 1,
     "defaults": {
-        "model": "builtin/generated",
-        "transform": "forge:default-item"
+        "model": "essentialcraft:item"
     },
     "variants": {
         "type": {
             "fire": {
-                "textures": { "layer0": "essentialcraft:items/elemental/essenceFire" }
+                "textures": { "layer0": "essentialcraft:items/elemental/essencefire" }
             },
             "water": {
-                "textures": { "layer0": "essentialcraft:items/elemental/essenceWater" }
+                "textures": { "layer0": "essentialcraft:items/elemental/essencewater" }
             },
             "earth": {
-                "textures": { "layer0": "essentialcraft:items/elemental/essenceEarth" }
+                "textures": { "layer0": "essentialcraft:items/elemental/essenceearth" }
             },
             "air": {
-                "textures": { "layer0": "essentialcraft:items/elemental/essenceAir" }
+                "textures": { "layer0": "essentialcraft:items/elemental/essenceair" }
             }
         }
     }

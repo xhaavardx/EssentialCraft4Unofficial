@@ -3,7 +3,7 @@
     "defaults": {
         "model": "minecraft:fence_post",
         "textures": {
-            "texture": "essentialcraft:blocks/magicPlatingBlock"
+            "texture": "essentialcraft:blocks/magicplatingblock"
         }
     },
     "variants": {

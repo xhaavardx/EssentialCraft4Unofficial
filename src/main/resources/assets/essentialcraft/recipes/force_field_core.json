@@ -1,0 +1,28 @@
+{
+    "type": "forge:ore_shaped",
+    "group": "essentialcraft:forcefield_core",
+    "pattern": [
+        "#@#",
+        "@C@",
+        "#@#"
+    ],
+    "key": {
+        "#": {
+            "type": "forge:ore_dict",
+            "ore": "platePale"
+        },
+        "@": {
+            "type": "forge:ore_dict",
+            "ore": "coreDemonic"
+        },
+        "C": {
+            "type": "forge:ore_dict",
+            "ore": "reactorVoid"
+        }
+    },
+    "result": {
+        "item": "essentialcraft:genitem",
+        "count": 1,
+        "data": 65
+    }
+}

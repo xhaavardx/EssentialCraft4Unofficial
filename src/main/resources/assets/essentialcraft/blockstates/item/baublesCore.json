@@ -1,106 +1,105 @@
 {
     "forge_marker": 1,
     "defaults": {
-        "model": "builtin/generated",
-        "transform": "forge:default-item"
+        "model": "essentialcraft:item"
     },
     "variants": {
         "type": {
             "portablemd": {
-                "textures": { "layer0": "essentialcraft:items/baubleModifiers/portableMD" }
+                "textures": { "layer0": "essentialcraft:items/baublemodifiers/portablemd" }
             },
             "ringofstability": {
-                "textures": { "layer0": "essentialcraft:items/baubleModifiers/ringOfStability" }
+                "textures": { "layer0": "essentialcraft:items/baublemodifiers/ringofstability" }
             },
             "ringofexperience": {
-                "textures": { "layer0": "essentialcraft:items/baubleModifiers/ringOfExperience" }
+                "textures": { "layer0": "essentialcraft:items/baublemodifiers/ringofexperience" }
             },
             "ringofresistance": {
-                "textures": { "layer0": "essentialcraft:items/baubleModifiers/ringOfStability" }
+                "textures": { "layer0": "essentialcraft:items/baublemodifiers/ringofstability" }
             },
             "lifependant": {
-                "textures": { "layer0": "essentialcraft:items/baubleModifiers/lifePendant" }
+                "textures": { "layer0": "essentialcraft:items/baublemodifiers/lifependant" }
             },
             "windcatcher": {
-                "textures": { "layer0": "essentialcraft:items/baubleModifiers/windCatcher" }
+                "textures": { "layer0": "essentialcraft:items/baublemodifiers/windcatcher" }
             },
             "windmagestalisman": {
-                "textures": { "layer0": "essentialcraft:items/baubleModifiers/windMagesTalisman" }
+                "textures": { "layer0": "essentialcraft:items/baublemodifiers/windmagestalisman" }
             },
             "doctorsbelt": {
-                "textures": { "layer0": "essentialcraft:items/baubleModifiers/doctorsBelt" }
+                "textures": { "layer0": "essentialcraft:items/baublemodifiers/doctorsbelt" }
             },
             "alpharing": {
-                "textures": { "layer0": "essentialcraft:items/baubleModifiers/alphaRing" }
+                "textures": { "layer0": "essentialcraft:items/baublemodifiers/alpharing" }
             },
             "betaring": {
-                "textures": { "layer0": "essentialcraft:items/baubleModifiers/betaRing" }
+                "textures": { "layer0": "essentialcraft:items/baublemodifiers/betaring" }
             },
             "gammaring": {
-                "textures": { "layer0": "essentialcraft:items/baubleModifiers/gammaRing" }
+                "textures": { "layer0": "essentialcraft:items/baublemodifiers/gammaring" }
             },
             "deltaring": {
-                "textures": { "layer0": "essentialcraft:items/baubleModifiers/deltaRing" }
+                "textures": { "layer0": "essentialcraft:items/baublemodifiers/deltaring" }
             },
             "epsilonbelt": {
-                "textures": { "layer0": "essentialcraft:items/baubleModifiers/epsilonBelt" }
+                "textures": { "layer0": "essentialcraft:items/baublemodifiers/epsilonbelt" }
             },
             "dzetaamulet": {
-                "textures": { "layer0": "essentialcraft:items/baubleModifiers/dzetaAmulet" }
+                "textures": { "layer0": "essentialcraft:items/baublemodifiers/dzetaamulet" }
             },
             "etaamulet": {
-                "textures": { "layer0": "essentialcraft:items/baubleModifiers/etaAmulet" }
+                "textures": { "layer0": "essentialcraft:items/baublemodifiers/etaamulet" }
             },
             "thetabelt": {
-                "textures": { "layer0": "essentialcraft:items/baubleModifiers/thetaBelt" }
+                "textures": { "layer0": "essentialcraft:items/baublemodifiers/thetabelt" }
             },
             "iotaring": {
-                "textures": { "layer0": "essentialcraft:items/baubleModifiers/iotaRing" }
+                "textures": { "layer0": "essentialcraft:items/baublemodifiers/iotaring" }
             },
             "kapparing": {
-                "textures": { "layer0": "essentialcraft:items/baubleModifiers/kappaRing" }
+                "textures": { "layer0": "essentialcraft:items/baublemodifiers/kapparing" }
             },
             "lambdaring": {
-                "textures": { "layer0": "essentialcraft:items/baubleModifiers/lambdaRing" }
+                "textures": { "layer0": "essentialcraft:items/baublemodifiers/lambdaring" }
             },
             "muring": {
-                "textures": { "layer0": "essentialcraft:items/baubleModifiers/muRing" }
+                "textures": { "layer0": "essentialcraft:items/baublemodifiers/muring" }
             },
             "nuamulet": {
-                "textures": { "layer0": "essentialcraft:items/baubleModifiers/nuAmulet" }
+                "textures": { "layer0": "essentialcraft:items/baublemodifiers/nuamulet" }
             },
             "xibelt": {
-                "textures": { "layer0": "essentialcraft:items/baubleModifiers/xiBelt" }
+                "textures": { "layer0": "essentialcraft:items/baublemodifiers/xibelt" }
             },
             "omicronamulet": {
-                "textures": { "layer0": "essentialcraft:items/baubleModifiers/omicronAmulet" }
+                "textures": { "layer0": "essentialcraft:items/baublemodifiers/omicronamulet" }
             },
             "pibelt": {
-                "textures": { "layer0": "essentialcraft:items/baubleModifiers/piBelt" }
+                "textures": { "layer0": "essentialcraft:items/baublemodifiers/pibelt" }
             },
             "rhoring": {
-                "textures": { "layer0": "essentialcraft:items/baubleModifiers/rhoRing" }
+                "textures": { "layer0": "essentialcraft:items/baublemodifiers/rhoring" }
             },
             "sigmaring": {
-                "textures": { "layer0": "essentialcraft:items/baubleModifiers/sigmaRing" }
+                "textures": { "layer0": "essentialcraft:items/baublemodifiers/sigmaring" }
             },
             "tauring": {
-                "textures": { "layer0": "essentialcraft:items/baubleModifiers/tauRing" }
+                "textures": { "layer0": "essentialcraft:items/baublemodifiers/tauring" }
             },
             "upsilonring": {
-                "textures": { "layer0": "essentialcraft:items/baubleModifiers/upsilonRing" }
+                "textures": { "layer0": "essentialcraft:items/baublemodifiers/upsilonring" }
             },
             "phiring": {
-                "textures": { "layer0": "essentialcraft:items/baubleModifiers/phiRing" }
+                "textures": { "layer0": "essentialcraft:items/baublemodifiers/phiring" }
             },
             "chiring": {
-                "textures": { "layer0": "essentialcraft:items/baubleModifiers/chiRing" }
+                "textures": { "layer0": "essentialcraft:items/baublemodifiers/chiring" }
             },
             "psiring": {
-                "textures": { "layer0": "essentialcraft:items/baubleModifiers/psiRing" }
+                "textures": { "layer0": "essentialcraft:items/baublemodifiers/psiring" }
             },
             "omegaring": {
-                "textures": { "layer0": "essentialcraft:items/baubleModifiers/omegaRing" }
+                "textures": { "layer0": "essentialcraft:items/baublemodifiers/omegaring" }
             }
         }
     }

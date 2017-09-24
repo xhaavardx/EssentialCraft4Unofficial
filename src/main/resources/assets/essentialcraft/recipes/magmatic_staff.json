@@ -1,0 +1,36 @@
+{
+    "type": "forge:ore_shaped",
+    "group": "essentialcraft:magmatic_staff",
+    "pattern": [
+        "FFS",
+        "DMF",
+        "PDF"
+    ],
+    "key": {
+        "M": {
+            "type": "forge:ore_dict",
+            "ore": "matterOfEternity"
+        },
+        "F": {
+            "type": "forge:ore_dict",
+            "ore": "focusFire"
+        },
+        "P": {
+            "type": "forge:ore_dict",
+            "ore": "plateMagic"
+        },
+        "D": {
+            "type": "forge:ore_dict",
+            "ore": "dustCrystal"
+        },
+        "S": {
+            "item": "essentialcraft:magmaticsmeltery",
+            "data": 0
+        }
+    },
+    "result": {
+        "item": "essentialcraft:magmaticstaff",
+        "count": 1,
+        "data": 0
+    }
+}

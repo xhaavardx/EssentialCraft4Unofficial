@@ -1,0 +1,24 @@
+{
+    "type": "forge:ore_shaped",
+    "group": "essentialcraft:weak_elemental_hoe",
+    "pattern": [
+        "DD",
+        " S",
+        " S"
+    ],
+    "key": {
+        "D": {
+            "type": "forge:ore_dict",
+            "ore": "blockElemental"
+        },
+        "S": {
+            "type": "forge:ore_dict",
+            "ore": "stickWood"
+        }
+    },
+    "result": {
+        "item": "essentialcraft:weak_elemental_hoe",
+        "count": 1,
+        "data": 0
+    }
+}

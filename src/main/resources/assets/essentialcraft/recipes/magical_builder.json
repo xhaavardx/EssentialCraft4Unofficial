@@ -1,0 +1,40 @@
+{
+    "type": "forge:ore_shaped",
+    "group": "essentialcraft:magical_builder_0",
+    "pattern": [
+        "RVC",
+        "FDV",
+        "MFR"
+    ],
+    "key": {
+        "R": {
+            "type": "forge:ore_dict",
+            "ore": "rightClicker"
+        },
+        "V": {
+            "type": "forge:ore_dict",
+            "ore": "plateVoid"
+        },
+        "C": {
+            "type": "forge:ore_dict",
+            "ore": "coreVoid"
+        },
+        "F": {
+            "item": "essentialcraft:itemfilter",
+            "data": 0
+        },
+        "D": {
+            "item": "essentialcraft:magicaldigger",
+            "data": 0
+        },
+        "M": {
+            "type": "forge:ore_dict",
+            "ore": "plateMagic"
+        }
+    },
+    "result": {
+        "item": "essentialcraft:magicalbuilder",
+        "count": 1,
+        "data": 0
+    }
+}

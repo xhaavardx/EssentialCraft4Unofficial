@@ -1,0 +1,44 @@
+{
+    "type": "forge:ore_shaped",
+    "group": "essentialcraft:biome_wand",
+    "pattern": [
+        "MFA",
+        "PIW",
+        "EPM"
+    ],
+    "key": {
+        "M": {
+            "type": "forge:ore_dict",
+            "ore": "redSoulMatter"
+        },
+        "F": {
+            "type": "forge:ore_dict",
+            "ore": "focusFire"
+        },
+        "W": {
+            "type": "forge:ore_dict",
+            "ore": "focusWater"
+        },
+        "E": {
+            "type": "forge:ore_dict",
+            "ore": "focusEarth"
+        },
+        "A": {
+            "type": "forge:ore_dict",
+            "ore": "focusAir"
+        },
+        "P": {
+            "type": "forge:ore_dict",
+            "ore": "plateEmerald"
+        },
+        "I": {
+            "type": "forge:ore_dict",
+            "ore": "ingotThaumium"
+        }
+    },
+    "result": {
+        "item": "essentialcraft:biomewand",
+        "count": 1,
+        "data": 0
+    }
+}

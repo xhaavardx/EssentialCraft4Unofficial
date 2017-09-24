@@ -1,42 +1,41 @@
 {
     "forge_marker": 1,
     "defaults": {
-        "model": "builtin/generated",
-        "transform": "forge:default-tool"
+        "model": "essentialcraft:tool"
     },
     "variants": {
         "bottom": {
             "normal": {
-                "textures": { "layer0": "essentialcraft:items/tools/elementalSword" }
+                "textures": { "layer0": "essentialcraft:items/tools/elementalsword" }
             },
             "fire": {
-                "textures": { "layer0": "essentialcraft:items/modular/pa_Fire" }
+                "textures": { "layer0": "essentialcraft:items/modular/pa_fire" }
             },
             "water": {
-                "textures": { "layer0": "essentialcraft:items/modular/pa_Water" }
+                "textures": { "layer0": "essentialcraft:items/modular/pa_water" }
             },
             "earth": {
-                "textures": { "layer0": "essentialcraft:items/modular/pa_Earth" }
+                "textures": { "layer0": "essentialcraft:items/modular/pa_earth" }
             },
             "air": {
-                "textures": { "layer0": "essentialcraft:items/modular/pa_Air" }
+                "textures": { "layer0": "essentialcraft:items/modular/pa_air" }
             }
         },
         "top": {
             "normal": {
-                "textures": { "layer1": "essentialcraft:items/tools/elementalSword" }
+                "textures": { "layer1": "essentialcraft:items/tools/elementalsword" }
             },
             "fire": {
-                "textures": { "layer1": "essentialcraft:items/modular/sa_Fire" }
+                "textures": { "layer1": "essentialcraft:items/modular/sa_fire" }
             },
             "water": {
-                "textures": { "layer1": "essentialcraft:items/modular/sa_Water" }
+                "textures": { "layer1": "essentialcraft:items/modular/sa_water" }
             },
             "earth": {
-                "textures": { "layer1": "essentialcraft:items/modular/sa_Earth" }
+                "textures": { "layer1": "essentialcraft:items/modular/sa_earth" }
             },
             "air": {
-                "textures": { "layer1": "essentialcraft:items/modular/sa_Air" }
+                "textures": { "layer1": "essentialcraft:items/modular/sa_air" }
             }
         }
     }

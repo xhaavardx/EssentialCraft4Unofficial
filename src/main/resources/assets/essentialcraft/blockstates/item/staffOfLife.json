@@ -1,9 +1,8 @@
 {
     "forge_marker": 1,
     "defaults": {
-        "model": "builtin/generated",
-        "transform": "forge:default-tool",
-        "textures": { "layer0": "essentialcraft:items/tools/staffOfLife" }
+        "model": "essentialcraft:tool",
+        "textures": { "layer0": "essentialcraft:items/tools/staffoflife" }
     },
     "variants": {
         "inventory": [{}]

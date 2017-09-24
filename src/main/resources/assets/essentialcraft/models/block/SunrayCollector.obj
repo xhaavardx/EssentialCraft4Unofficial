@@ -1,6 +1,6 @@
 # Blender v2.78 (sub 0) OBJ File: 'SunrayCollector.obj'
 # www.blender.org
-mtllib SunrayCollector.mtl
+mtllib sunraycollector.mtl
 o pCube1
 v 0.000000 -0.000000 1.000000
 v 0.062500 -0.000000 1.000000
@@ -3893,7 +3893,7 @@ vn -0.5145 -0.0000 0.8575
 vn -0.5145 0.0000 -0.8575
 vn -0.8575 0.0000 0.5145
 vn 0.8575 0.0000 0.5145
-usemtl initialShadingGroup
+usemtl initialshadinggroup
 s off
 f 277/1/1 278/2/1 279/3/1 280/4/1
 f 299/5/2 300/6/2 301/7/2 302/8/2

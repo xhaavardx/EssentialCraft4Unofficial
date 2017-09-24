@@ -3,9 +3,9 @@
     "defaults": {
         "model": "minecraft:cube_bottom_top",
         "textures": {
-            "bottom": "essentialcraft:blocks/dimTranciever_bot",
-            "side": "essentialcraft:blocks/dimTranciever_side",
-            "top": "essentialcraft:blocks/dimTranciever_top"
+            "bottom": "essentialcraft:blocks/dimtranciever_bot",
+            "side": "essentialcraft:blocks/dimtranciever_side",
+            "top": "essentialcraft:blocks/dimtranciever_top"
         }
     },
     "variants": {

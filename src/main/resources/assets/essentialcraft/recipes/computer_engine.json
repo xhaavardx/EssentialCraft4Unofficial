@@ -1,0 +1,40 @@
+{
+    "type": "forge:ore_shaped",
+    "group": "essentialcraft:computer_engine",
+    "pattern": [
+        "#+#",
+        "/C*",
+        "#-#"
+    ],
+    "key": {
+        "#": {
+            "item": "essentialcraft:genitem",
+            "data": 59
+        },
+        "C": {
+            "item": "essentialcraft:genitem",
+            "data": 69
+        },
+        "+": {
+            "item": "essentialcraft:genitem",
+            "data": 70
+        },
+        "-": {
+            "item": "essentialcraft:genitem",
+            "data": 73
+        },
+        "*": {
+            "item": "essentialcraft:genitem",
+            "data": 72
+        },
+        "/": {
+            "item": "essentialcraft:genitem",
+            "data": 71
+        }
+    },
+    "result": {
+        "item": "essentialcraft:genitem",
+        "count": 1,
+        "data": 56
+    }
+}

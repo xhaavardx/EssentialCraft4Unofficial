@@ -3,7 +3,7 @@
     "variants": {
         "normal": [{
             "model": "minecraft:block",
-            "textures": { "particle": "essentialcraft:models/magicalRepairer" }
+            "textures": { "particle": "essentialcraft:models/magicalrepairer" }
         }]
     }
 }

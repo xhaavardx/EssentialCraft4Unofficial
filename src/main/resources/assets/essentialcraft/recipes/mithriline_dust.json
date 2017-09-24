@@ -1,0 +1,15 @@
+{
+    "type": "forge:ore_shapeless",
+    "group": "essentialcraft:mithriline_dust",
+    "ingredients": [
+        {
+            "type": "forge:ore_dict",
+            "ore": "blockMithriline"
+        }
+    ],
+    "result": {
+        "item": "essentialcraft:genitem",
+        "count": 9,
+        "data": 51
+    }
+}

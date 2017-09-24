@@ -1,12 +1,11 @@
 {
-    "__comment": "Model generated using MrCrayfish's Model Creator (http://mrcrayfish.com/modelcreator/)",
+    "__comment": "model generated using mrcrayfish's model creator (http://mrcrayfish.com/modelcreator/)",
     "parent": "minecraft:block/block",
-    "ambientocclusion": false,
     "textures": {
-        "0": "essentialcraft:blocks/fortifiedStone",
+        "0": "essentialcraft:blocks/fortifiedstone",
         "1": "minecraft:blocks/diamond_block",
-        "2": "essentialcraft:blocks/transparentGlass",
-        "particle": "essentialcraft:blocks/fortifiedStone"
+        "2": "essentialcraft:blocks/transparentglass",
+        "particle": "essentialcraft:blocks/fortifiedstone"
     },
     "elements": [
         {

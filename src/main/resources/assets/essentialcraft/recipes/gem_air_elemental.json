@@ -1,0 +1,15 @@
+{
+    "type": "forge:ore_shapeless",
+    "group": "essentialcraft:gem_air_elemental",
+    "ingredients": [
+        {
+            "type": "forge:ore_dict",
+            "ore": "blockAirElemental"
+        }
+    ],
+    "result": {
+        "item": "essentialcraft:gem_elemental",
+        "count": 9,
+        "data": 3
+    }
+}

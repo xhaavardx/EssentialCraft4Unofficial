@@ -1,10 +1,9 @@
 {
-    "__comment": "Model generated using MrCrayfish's Model Creator (http://mrcrayfish.com/modelcreator/)",
+    "__comment": "model generated using mrcrayfish's model creator (http://mrcrayfish.com/modelcreator/)",
     "parent": "minecraft:block/block",
-    "ambientocclusion": false,
     "textures": {
-        "0": "essentialcraft:models/solarPrism",
-        "particle": "essentialcraft:blocks/magicPlatingBlock"
+        "0": "essentialcraft:models/solarprism",
+        "particle": "essentialcraft:blocks/magicplatingblock"
     },
     "elements": [
         {

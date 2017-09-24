@@ -1,0 +1,28 @@
+{
+    "type": "forge:ore_shaped",
+    "group": "essentialcraft:crystal_lamp_mithriline",
+    "pattern": [
+        "MPM",
+        "PEP",
+        "MPM"
+    ],
+    "key": {
+        "M": {
+            "type": "forge:ore_dict",
+            "ore": "cobblestone"
+        },
+        "E": {
+            "type": "forge:ore_dict",
+            "ore": "torch"
+        },
+        "P": {
+            "type": "forge:ore_dict",
+            "ore": "dustMithriline"
+        }
+    },
+    "result": {
+        "item": "essentialcraft:crystallamp",
+        "count": 1,
+        "data": 5
+    }
+}

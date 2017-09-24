@@ -1,0 +1,40 @@
+{
+    "type": "forge:ore_shaped",
+    "group": "essentialcraft:ray_tower",
+    "pattern": [
+        "WXW",
+        "PMP",
+        "FSF"
+    ],
+    "key": {
+        "W": {
+            "type": "forge:ore_dict",
+            "ore": "waterMagic"
+        },
+        "X": {
+            "type": "forge:ore_dict",
+            "ore": "conversionMatrix"
+        },
+        "P": {
+            "type": "forge:ore_dict",
+            "ore": "plateFortified"
+        },
+        "M": {
+            "type": "forge:ore_dict",
+            "ore": "mruCatcher"
+        },
+        "F": {
+            "type": "forge:ore_dict",
+            "ore": "mruCatcher"
+        },
+        "S": {
+            "type": "forge:ore_dict",
+            "ore": "stoneFortified"
+        }
+    },
+    "result": {
+        "item": "essentialcraft:raytower",
+        "count": 1,
+        "data": 0
+    }
+}

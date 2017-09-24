@@ -3,7 +3,7 @@
     "defaults": {
         "model": "minecraft:fence_post",
         "textures": {
-            "texture": "essentialcraft:blocks/voidStone"
+            "texture": "essentialcraft:blocks/voidstone"
         }
     },
     "variants": {

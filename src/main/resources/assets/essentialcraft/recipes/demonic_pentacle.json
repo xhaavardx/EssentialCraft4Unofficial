@@ -1,0 +1,28 @@
+{
+    "type": "forge:ore_shaped",
+    "group": "essentialcraft:demonic_pentacle",
+    "pattern": [
+        "FVF",
+        "VCV",
+        "FVF"
+    ],
+    "key": {
+        "F": {
+            "type": "forge:ore_dict",
+            "ore": "focusFire"
+        },
+        "V": {
+            "type": "forge:ore_dict",
+            "ore": "plateVoid"
+        },
+        "C": {
+            "type": "forge:ore_dict",
+            "ore": "core_void"
+        }
+    },
+    "result": {
+        "item": "essentialcraft:demonicpentacle",
+        "count": 1,
+        "data": 0
+    }
+}

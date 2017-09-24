@@ -1,9 +1,8 @@
 {
-    "__comment": "Model generated using MrCrayfish's Model Creator (http://mrcrayfish.com/modelcreator/)",
+    "__comment": "model generated using mrcrayfish's model creator (http://mrcrayfish.com/modelcreator/)",
     "parent": "minecraft:block/block",
-    "ambientocclusion": false,
     "textures": {
-        "0": "essentialcraft:blocks/transparentGlass",
+        "0": "essentialcraft:blocks/transparentglass",
         "1": "minecraft:blocks/anvil_base",
         "particle": "minecraft:blocks/anvil_base"
     },

@@ -1,0 +1,28 @@
+{
+    "type": "forge:ore_shaped",
+    "group": "essentialcraft:wind_rune",
+    "pattern": [
+        "MPM",
+        "PEP",
+        "MPM"
+    ],
+    "key": {
+        "M": {
+            "type": "forge:ore_dict",
+            "ore": "platingMithriline"
+        },
+        "E": {
+            "type": "forge:ore_dict",
+            "ore": "coreMagic"
+        },
+        "P": {
+            "type": "forge:ore_dict",
+            "ore": "plateMithriline"
+        }
+    },
+    "result": {
+        "item": "essentialcraft:windrune",
+        "count": 1,
+        "data": 0
+    }
+}

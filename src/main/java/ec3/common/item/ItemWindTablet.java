@@ -9,23 +9,28 @@ import ec3.utils.common.ECUtils;
 import ec3.utils.common.WindRelations;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockPortal;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemWindTablet extends ItemStoresMRUInNBT implements IModelRegisterer {
 
 	//24
-	public static String[] windMessages = new String[] {
+	public static String[] windMessages = {
 			"A wind blow rotates around you...",//0
 			"The wind howls...",//1
 			"The wind ruffles your hair...",//2
@@ -58,139 +63,114 @@ public class ItemWindTablet extends ItemStoresMRUInNBT implements IModelRegister
 		this.maxStackSize = 1;
 	}
 
-	/**
-	 * Called whenever this item is equipped and the right mouse button is pressed. Args: itemStack, world, entityPlayer, enumHand
-	 */
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack is, World world, EntityPlayer player, EnumHand hand)
-	{
-		if((ECUtils.tryToDecreaseMRUInStorage(player, -500) || this.setMRU(is, -500)))
-		{
+	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+		if(ECUtils.tryToDecreaseMRUInStorage(player, -500) || this.setMRU(stack, -500)) {
 			int currentWindRev = WindRelations.getPlayerWindRelations(player);
 			int maxWindRev = 3500;
 			String windName = "Owethanna Else Hugaida";
 			int revPos = MathUtils.pixelatedTextureSize(currentWindRev, maxWindRev, windName.length());
-			if(!world.isRemote && revPos >= 22)
-			{
-				if(player.capabilities.isCreativeMode)
-					player.capabilities.isCreativeMode = false;
-				Block b = world.getBlockState(new BlockPos(MathHelper.floor(player.posX), MathHelper.floor(player.posY), MathHelper.floor(player.posZ))).getBlock();
+			if(revPos >= 22) {
+				if(!worldIn.isRemote) {
+					Block b = worldIn.getBlockState(pos).getBlock();
 
-				if(b instanceof BlockPortal)
-				{
-					int x = MathHelper.floor(player.posX);
-					int y = MathHelper.floor(player.posY);
-					int z = MathHelper.floor(player.posZ);
-					int i = 0;
-					BlockPos pos = new BlockPos(x,y,z);
-
-					while(world.getBlockState(pos.add(i, 0, 0)).getBlock() instanceof BlockPortal)
-					{
-						int j = 0;
-						while(world.getBlockState(pos.add(i, j, 0)).getBlock() instanceof BlockPortal)
-						{
-							int k = 0;
-							while(world.getBlockState(pos.add(i, j, k)).getBlock() instanceof BlockPortal)
-							{
-								int metadata = world.getBlockState(pos.add(i, j, k)).getBlock().getMetaFromState(world.getBlockState(pos.add(i, j, k)));
-								world.setBlockState(pos.add(i, j, k), BlocksCore.portal.getStateFromMeta(metadata), 2);
-								++k;
+					if(b == Blocks.PORTAL) {
+						int i = 0;
+						while(worldIn.getBlockState(pos.add(i, 0, 0)).getBlock() == Blocks.PORTAL) {
+							int j = 0;
+							while(worldIn.getBlockState(pos.add(i, j, 0)).getBlock() == Blocks.PORTAL) {
+								int k = 0;
+								while(worldIn.getBlockState(pos.add(i, j, k)).getBlock() == Blocks.PORTAL) {
+									int metadata = worldIn.getBlockState(pos.add(i, j, k)).getBlock().getMetaFromState(worldIn.getBlockState(pos.add(i, j, k)));
+									worldIn.setBlockState(pos.add(i, j, k), BlocksCore.portal.getStateFromMeta(metadata), 2);
+									++k;
+								}
+								k = 1;
+								while(worldIn.getBlockState(pos.add(i, j, -k)).getBlock() == Blocks.PORTAL) {
+									int metadata = worldIn.getBlockState(pos.add(i, j, -k)).getBlock().getMetaFromState(worldIn.getBlockState(pos.add(i, j, -k)));
+									worldIn.setBlockState(pos.add(i, j, -k), BlocksCore.portal.getStateFromMeta(metadata), 2);
+									++k;
+								}
+								++j;
 							}
-							k = 0;
-							while(world.getBlockState(pos.add(i, j, -k)).getBlock() instanceof BlockPortal)
-							{
-								int metadata = world.getBlockState(pos.add(i, j, -k)).getBlock().getMetaFromState(world.getBlockState(pos.add(i, j, k)));
-								world.setBlockState(pos.add(i, j, -k), BlocksCore.portal.getStateFromMeta(metadata), 2);
-								++k;
+							j = 1;
+							while(worldIn.getBlockState(pos.add(i, -j, 0)).getBlock() == Blocks.PORTAL) {
+								int k = 0;
+								while(worldIn.getBlockState(pos.add(i, -j, k)).getBlock() == Blocks.PORTAL) {
+									int metadata = worldIn.getBlockState(pos.add(i, -j, k)).getBlock().getMetaFromState(worldIn.getBlockState(pos.add(i, -j, k)));
+									worldIn.setBlockState(pos.add(i, -j, k), BlocksCore.portal.getStateFromMeta(metadata), 2);
+									++k;
+								}
+								k = 1;
+								while(worldIn.getBlockState(pos.add(i, -j, -k)).getBlock() == Blocks.PORTAL) {
+									int metadata = worldIn.getBlockState(pos.add(i, -j, -k)).getBlock().getMetaFromState(worldIn.getBlockState(pos.add(i, -j, -k)));
+									worldIn.setBlockState(pos.add(i, -j, -k), BlocksCore.portal.getStateFromMeta(metadata), 2);
+									++k;
+								}
+								++j;
 							}
-							++j;
+							++i;
 						}
-						j = 0;
-						while(world.getBlockState(pos.add(i, -j, 0)).getBlock() instanceof BlockPortal)
-						{
-							int k = 0;
-							while(world.getBlockState(pos.add(i, -j, k)).getBlock() instanceof BlockPortal)
-							{
-								int metadata = world.getBlockState(pos.add(i, -j, k)).getBlock().getMetaFromState(world.getBlockState(pos.add(i, j, k)));
-								world.setBlockState(pos.add(i, -j, k), BlocksCore.portal.getStateFromMeta(metadata), 2);
-								++k;
+						i = 1;
+						while(worldIn.getBlockState(pos.add(-i, 0, 0)).getBlock() == Blocks.PORTAL) {
+							int j = 0;
+							while(worldIn.getBlockState(pos.add(-i, j, 0)).getBlock() == Blocks.PORTAL) {
+								int k = 0;
+								while(worldIn.getBlockState(pos.add(-i, j, k)).getBlock() == Blocks.PORTAL) {
+									int metadata = worldIn.getBlockState(pos.add(-i, j, k)).getBlock().getMetaFromState(worldIn.getBlockState(pos.add(-i, j, k)));
+									worldIn.setBlockState(pos.add(-i, j, k), BlocksCore.portal.getStateFromMeta(metadata), 2);
+									++k;
+								}
+								k = 1;
+								while(worldIn.getBlockState(pos.add(-i, j, -k)).getBlock() == Blocks.PORTAL) {
+									int metadata = worldIn.getBlockState(pos.add(-i, j, -k)).getBlock().getMetaFromState(worldIn.getBlockState(pos.add(-i, j, -k)));
+									worldIn.setBlockState(pos.add(-i, j, -k), BlocksCore.portal.getStateFromMeta(metadata), 2);
+									++k;
+								}
+								++j;
 							}
-							k = 0;
-							while(world.getBlockState(pos.add(i, -j, -k)).getBlock() instanceof BlockPortal)
-							{
-								int metadata = world.getBlockState(pos.add(i, -j, -k)).getBlock().getMetaFromState(world.getBlockState(pos.add(i, j, k)));
-								world.setBlockState(pos.add(i, -j, -k), BlocksCore.portal.getStateFromMeta(metadata), 2);
-								++k;
+							j = 1;
+							while(worldIn.getBlockState(pos.add(-i, -j, 0)).getBlock() == Blocks.PORTAL) {
+								int k = 0;
+								while(worldIn.getBlockState(pos.add(-i, -j, k)).getBlock() == Blocks.PORTAL) {
+									int metadata = worldIn.getBlockState(pos.add(-i, -j, k)).getBlock().getMetaFromState(worldIn.getBlockState(pos.add(-i, -j, k)));
+									worldIn.setBlockState(pos.add(-i, -j, k), BlocksCore.portal.getStateFromMeta(metadata), 2);
+									++k;
+								}
+								k = 1;
+								while(worldIn.getBlockState(pos.add(-i, -j, -k)).getBlock() == Blocks.PORTAL) {
+									int metadata = worldIn.getBlockState(pos.add(-i, -j, -k)).getBlock().getMetaFromState(worldIn.getBlockState(pos.add(-i, -j, -k)));
+									worldIn.setBlockState(pos.add(-i, -j, -k), BlocksCore.portal.getStateFromMeta(metadata), 2);
+									++k;
+								}
+								++j;
 							}
-							++j;
+							++i;
 						}
-						++i;
 					}
-					i = 0;
-					while(world.getBlockState(pos.add(-i, 0, 0)).getBlock() instanceof BlockPortal)
-					{
-						int j = 0;
-						while(world.getBlockState(pos.add(-i, j, 0)).getBlock() instanceof BlockPortal)
-						{
-							int k = 0;
-							while(world.getBlockState(pos.add(-i, j, k)).getBlock() instanceof BlockPortal)
-							{
-								int metadata = world.getBlockState(pos.add(-i, j, k)).getBlock().getMetaFromState(world.getBlockState(pos.add(i, j, k)));
-								world.setBlockState(pos.add(-i, j, k), BlocksCore.portal.getStateFromMeta(metadata), 2);
-								++k;
-							}
-							k = 0;
-							while(world.getBlockState(pos.add(-i, j, -k)).getBlock() instanceof BlockPortal)
-							{
-								int metadata = world.getBlockState(pos.add(-i, j, -k)).getBlock().getMetaFromState(world.getBlockState(pos.add(i, j, k)));
-								world.setBlockState(pos.add(-i, j, -k), BlocksCore.portal.getStateFromMeta(metadata), 2);
-								++k;
-							}
-							++j;
-						}
-						j = 0;
-						while(world.getBlockState(pos.add(-i, -j, 0)).getBlock() instanceof BlockPortal)
-						{
-							int k = 0;
-							while(world.getBlockState(pos.add(-i, -j, k)).getBlock() instanceof BlockPortal)
-							{
-								int metadata = world.getBlockState(pos.add(-i, -j, k)).getBlock().getMetaFromState(world.getBlockState(pos.add(i, j, k)));
-								world.setBlockState(pos.add(-i, -j, k), BlocksCore.portal.getStateFromMeta(metadata), 2);
-								++k;
-							}
-							k = 0;
-							while(world.getBlockState(pos.add(-i, -j, -k)).getBlock() instanceof BlockPortal)
-							{
-								int metadata = world.getBlockState(pos.add(-i, -j, -k)).getBlock().getMetaFromState(world.getBlockState(pos.add(i, j, k)));
-								world.setBlockState(pos.add(-i, -j, -k), BlocksCore.portal.getStateFromMeta(metadata), 2);
-								++k;
-							}
-							++j;
-						}
-						++i;
-					}
+					worldIn.playSound(player, player.posX, player.posY, player.posZ, SoundEvents.BLOCK_PORTAL_TRIGGER, SoundCategory.BLOCKS, 10, 0.01F);
 				}
-				world.playSound(player, player.posX, player.posY, player.posZ, SoundEvents.BLOCK_PORTAL_TRIGGER, SoundCategory.BLOCKS, 10, 0.01F);
+				return EnumActionResult.SUCCESS;
 			}
 		}
-		return new ActionResult(EnumActionResult.PASS,is);
+		return super.onItemUse(stack, player, worldIn, pos, hand, facing, hitX, hitY, hitZ);
 	}
 
+	@SideOnly(Side.CLIENT)
 	@Override
-	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List<String> par3List, boolean par4)
-	{
+	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List<String> par3List, boolean par4) {
 		super.addInformation(par1ItemStack, par2EntityPlayer, par3List, par4);
 		int currentWindRev = WindRelations.getPlayerWindRelations(par2EntityPlayer);
 		int maxWindRev = 3500;
 		String windName = "Owethanna Else Hugaida";
 		String hidden = "??????????????????????";
 		int revPos = MathUtils.pixelatedTextureSize(currentWindRev, maxWindRev, windName.length());
-		par3List.add("Wind name:");
+		par3List.add("Wind Name:");
 		par3List.add(windName.substring(0, revPos)+hidden.substring(revPos));
 	}
 
 	@Override
 	public void registerModels() {
-		ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation("essentialcraft:item/windTablet", "inventory"));
+		ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation("essentialcraft:item/windtablet", "inventory"));
 	}
 }

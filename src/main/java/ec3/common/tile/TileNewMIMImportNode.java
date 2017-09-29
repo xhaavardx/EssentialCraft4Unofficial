@@ -4,13 +4,15 @@ import ec3.common.inventory.InventoryMagicFilter;
 import ec3.common.item.ItemFilter;
 import ec3.common.item.ItemsCore;
 import ec3.utils.common.ECUtils;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
 
 public class TileNewMIMImportNode extends TileMRUGeneric {
+	final Capability<IItemHandler> ITEM_HANDLER_CAPABILITY = CapabilityItemHandler.ITEM_HANDLER_CAPABILITY;
 
 	public TileNewMIMImportNode() {
 		setMaxMRU(0);
@@ -34,74 +36,51 @@ public class TileNewMIMImportNode extends TileMRUGeneric {
 		return new int[0];
 	}
 
-	public ISidedInventory getConnectedInventory() {
+	public IItemHandler getConnectedInventory() {
 		EnumFacing side = getRotation();
 		if(getWorld().getTileEntity(pos.offset(side)) != null) {
 			TileEntity tile = getWorld().getTileEntity(pos.offset(side));
-			if(tile instanceof ISidedInventory)
-				return (ISidedInventory)tile;
+			if(tile.hasCapability(ITEM_HANDLER_CAPABILITY, side.getOpposite()))
+				return tile.getCapability(ITEM_HANDLER_CAPABILITY, side.getOpposite());
 		}
 
 		return null;
 	}
 
-	public IInventory getConnectedInventoryInefficent() {
+	public IItemHandler getConnectedInventoryNonSided() {
 		EnumFacing side = getRotation();
 		if(getWorld().getTileEntity(pos.offset(side)) != null) {
 			TileEntity tile = getWorld().getTileEntity(pos.offset(side));
-			if(tile instanceof IInventory)
-				return (IInventory)tile;
+			if(tile.hasCapability(ITEM_HANDLER_CAPABILITY, null))
+				return tile.getCapability(ITEM_HANDLER_CAPABILITY, null);
 		}
 
 		return null;
-	}
-
-	public int[] getAccessibleSlots() {
-		return getConnectedInventory().getSlotsForFace(getRotation().getOpposite());
 	}
 
 	public void importAllPossibleItems(TileNewMIM parent) {
 		if(getWorld().isBlockIndirectlyGettingPowered(pos) > 0)
 			return;
 
-		ISidedInventory inv = getConnectedInventory();
-		if(inv != null) {
-			int[] slots = getAccessibleSlots();
-
-			if(slots.length <= 0)
-				return;
-
-			for(int j = 0; j < slots.length; ++j) {
-				ItemStack stk = inv.getStackInSlot(slots[j]);
-				if(stk != null) {
-					if(getStackInSlot(0) == null || !(getStackInSlot(0).getItem() instanceof ItemFilter)) {
-						if(parent.addItemStackToSystem(stk))
-							inv.setInventorySlotContents(slots[j], null);
-					}
-					else if(ECUtils.canFilterAcceptItem(new InventoryMagicFilter(getStackInSlot(0)), stk, getStackInSlot(0))) {
-						if(parent.addItemStackToSystem(stk))
-							inv.setInventorySlotContents(slots[j], null);
-					}
-				}
-			}
+		IItemHandler inv = getConnectedInventory();
+		if(inv == null) {
+			IItemHandler iinv = getConnectedInventoryNonSided();
 		}
-		else {
-			IInventory iinv = getConnectedInventoryInefficent();
+		int slots = inv.getSlots();
 
-			if(iinv.getSizeInventory() <= 0)
-				return;
+		if(slots <= 0)
+			return;
 
-			for(int j = 0; j < iinv.getSizeInventory(); ++j) {
-				ItemStack stk = iinv.getStackInSlot(j);
-				if(stk != null) {
-					if(getStackInSlot(0) == null || !(getStackInSlot(0).getItem() instanceof ItemFilter)) {
-						if(parent.addItemStackToSystem(stk))
-							iinv.setInventorySlotContents(j, null);
-					}
-					else if(ECUtils.canFilterAcceptItem(new InventoryMagicFilter(getStackInSlot(0)), stk, getStackInSlot(0))) {
-						if(parent.addItemStackToSystem(stk))
-							iinv.setInventorySlotContents(j, null);
-					}
+		for(int j = 0; j < slots; ++j) {
+			ItemStack stk = inv.getStackInSlot(j);
+			if(stk != null) {
+				if(getStackInSlot(0) == null || !(getStackInSlot(0).getItem() instanceof ItemFilter)) {
+					if(parent.addItemStackToSystem(stk.copy()))
+						inv.extractItem(j, stk.stackSize, false);
+				}
+				else if(ECUtils.canFilterAcceptItem(new InventoryMagicFilter(getStackInSlot(0)), stk, getStackInSlot(0))) {
+					if(parent.addItemStackToSystem(stk.copy()))
+						inv.extractItem(j, stk.stackSize, false);
 				}
 			}
 		}

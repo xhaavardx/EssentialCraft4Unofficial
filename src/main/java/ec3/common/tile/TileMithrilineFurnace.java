@@ -128,7 +128,7 @@ public class TileMithrilineFurnace extends TileEntity implements ISidedInventory
 				MithrilineFurnaceRecipe rec = MithrilineFurnaceRecipes.findRecipeByComponent(getStackInSlot(0));
 				if(rec != null && getStackInSlot(0).stackSize >= rec.requiredRecipeSize) {
 					reqProgress = rec.enderStarPulsesRequired;
-					if(getStackInSlot(1) == null || (getStackInSlot(1).isItemEqual(rec.result) && getStackInSlot(1).stackSize+rec.result.stackSize <= getStackInSlot(1).getMaxStackSize())) {
+					if(getStackInSlot(1) == null || getStackInSlot(1).isItemEqual(rec.result) && getStackInSlot(1).stackSize+rec.result.stackSize <= getStackInSlot(1).getMaxStackSize()) {
 						if(energy >= reqProgress) {
 							progress = reqProgress;
 							energy -= reqProgress;

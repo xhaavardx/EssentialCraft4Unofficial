@@ -153,7 +153,7 @@ public class TileUltraFlowerBurner extends TileMRUGeneric {
 			}
 			if(burnedFlower != null && burnTime > 0) {
 				EssentialCraftCore.proxy.FlameFX(burnedFlower.x+0.5F + MathUtils.randomFloat(getWorld().rand)*0.3F, burnedFlower.y+0.1F + getWorld().rand.nextFloat()/2, burnedFlower.z+0.5F + MathUtils.randomFloat(getWorld().rand)*0.3F, 0, 0, 0, 1, 1, 1, 1);
-				EssentialCraftCore.proxy.FlameFX(burnedFlower.x+0.5F + MathUtils.randomFloat(getWorld().rand)*0.3F, burnedFlower.y+0.1F + getWorld().rand.nextFloat()/2, burnedFlower.z+0.5F + MathUtils.randomFloat(getWorld().rand)*0.3F, ((pos.getX()-0.5D)-burnedFlower.x+0.5F + MathUtils.randomFloat(getWorld().rand)*0.3F)/20, (pos.getY()-burnedFlower.y+0.5F + MathUtils.randomFloat(getWorld().rand)*0.3F)/20, ((pos.getZ()-0.5D)-burnedFlower.z+0.5F + MathUtils.randomFloat(getWorld().rand)*0.3F)/20, 1, 1, 1, 1);
+				EssentialCraftCore.proxy.FlameFX(burnedFlower.x+0.5F + MathUtils.randomFloat(getWorld().rand)*0.3F, burnedFlower.y+0.1F + getWorld().rand.nextFloat()/2, burnedFlower.z+0.5F + MathUtils.randomFloat(getWorld().rand)*0.3F, (pos.getX()-0.5D-burnedFlower.x+0.5F + MathUtils.randomFloat(getWorld().rand)*0.3F)/20, (pos.getY()-burnedFlower.y+0.5F + MathUtils.randomFloat(getWorld().rand)*0.3F)/20, (pos.getZ()-0.5D-burnedFlower.z+0.5F + MathUtils.randomFloat(getWorld().rand)*0.3F)/20, 1, 1, 1, 1);
 				--burnTime;
 				if(burnTime <= 0) {
 					for(int t = 0; t < 600; ++t)

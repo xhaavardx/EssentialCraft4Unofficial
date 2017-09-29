@@ -7,6 +7,7 @@ import DummyCore.Core.Core;
 import ec3.common.block.BlocksCore;
 import ec3.common.entity.EntitiesCore;
 import ec3.common.item.ItemsCore;
+import ec3.common.registry.AchievementRegistry;
 import ec3.common.registry.BiomeRegistry;
 import ec3.common.registry.CERegistry;
 import ec3.common.registry.CoreRegistry;
@@ -64,7 +65,7 @@ public class EssentialCraftCore {
 	@SidedProxy(clientSide = "ec3.proxy.ClientProxy", serverSide = "ec3.proxy.CommonProxy", modId = EssentialCraftCore.modid)
 	public static CommonProxy proxy;
 	public static Config cfg = new Config();
-	public static final String version = "4.7.1102.15";
+	public static final String version = "4.7.1102.16";
 	public static final String modid = "essentialcraft";
 	public static ModMetadata metadata;
 	public static SimpleNetworkWrapper network;
@@ -124,6 +125,7 @@ public class EssentialCraftCore {
 	@EventHandler
 	public void secondMovement(FMLInitializationEvent event) {
 		RecipeRegistry.main();
+		AchievementRegistry.register();
 
 		StructureRegistry.register();
 		proxy.registerTileEntitySpecialRenderer();

@@ -59,7 +59,7 @@ public class TileMatrixAbsorber extends TileMRUGeneric {
 										}
 										setMRU((int)(getMRU() + mruGenerated));
 										for(int o = 0; o < 10; ++o) {
-											getWorld().spawnParticle(EnumParticleTypes.REDSTONE, pos.getX()+0.25D+getWorld().rand.nextDouble()/2.2D, pos.getY()+0.25D+((float)o/20), pos.getZ()+0.25D+getWorld().rand.nextDouble()/2.2D, 1.0D, 0.0D, 1.0D);
+											getWorld().spawnParticle(EnumParticleTypes.REDSTONE, pos.getX()+0.25D+getWorld().rand.nextDouble()/2.2D, pos.getY()+0.25D+(float)o/20, pos.getZ()+0.25D+getWorld().rand.nextDouble()/2.2D, 1.0D, 0.0D, 1.0D);
 										}
 										t = true;
 									}

@@ -58,7 +58,7 @@ public class TileUltraHeatGenerator extends TileMRUGeneric {
 						else if(b[i] == Blocks.FIRE)
 							mruFactor*=0.7F;
 						else if(b[i] instanceof IHotBlock)
-							mruFactor*=(((IHotBlock)b[i]).getHeatModifier(getWorld(), pos.add(ox[i], 0, oz[i])));
+							mruFactor*=((IHotBlock)b[i]).getHeatModifier(getWorld(), pos.add(ox[i], 0, oz[i]));
 						else
 							mruFactor*=0.5F;
 
@@ -77,7 +77,7 @@ public class TileUltraHeatGenerator extends TileMRUGeneric {
 						scaledHeatFactor = 1F;
 						--currentBurnTime;
 					}
-					heat += (mruFactor*scaledHeatFactor);
+					heat += mruFactor*scaledHeatFactor;
 					if(heat < 1000)
 						mruGenerated = heat/100;
 					else if(heat > 10000)

@@ -60,7 +60,7 @@ public class TileCrystalExtractor extends TileMRUGeneric {
 		int[] essenceChance = new int[] {37500, 50000, 75000, 150000};
 		int[] getChance = new int[16];
 		for(int i = 0; i < 16; ++i) {
-			getChance[i] = (int)((s*baseChance[i%4])/essenceChance[i/4]);
+			getChance[i] = (int)(s*baseChance[i%4]/essenceChance[i/4]);
 		}
 		if(!getWorld().isRemote) {
 			for(int i = 1; i < 13; ++i) {
@@ -102,7 +102,7 @@ public class TileCrystalExtractor extends TileMRUGeneric {
 			TileElementalCrystal t = getCrystal();
 			if(t != null)
 				for(int o = 0; o < 10; ++o) {
-					getWorld().spawnParticle(EnumParticleTypes.PORTAL, pos.getX() + getWorld().rand.nextDouble(), t.getPos().getY() + getWorld().rand.nextDouble(), pos.getZ() + getWorld().rand.nextDouble(), (t.getPos().getX()-pos.getX()), 0.0D, (t.getPos().getZ()-pos.getZ()));
+					getWorld().spawnParticle(EnumParticleTypes.PORTAL, pos.getX() + getWorld().rand.nextDouble(), t.getPos().getY() + getWorld().rand.nextDouble(), pos.getZ() + getWorld().rand.nextDouble(), t.getPos().getX()-pos.getX(), 0.0D, t.getPos().getZ()-pos.getZ());
 				}
 		}
 	}

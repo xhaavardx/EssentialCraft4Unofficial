@@ -18,7 +18,7 @@ public class TileSolarPrism extends TileEntity implements ITickable {
 	@Override
 	public void update() {
 		if(!getWorld().isRemote) {
-			if(getWorld().rand.nextFloat() <= solarBeamChance && (getWorld().canBlockSeeSky(pos) || !requiresUnabstructedSky) && ((getWorld().getWorldTime() % 24000 >= 5000 && getWorld().getWorldTime() % 24000 <= 7000) || !requiresMidday) && (!getWorld().isRaining() || ignoreRain)) {
+			if(getWorld().rand.nextFloat() <= solarBeamChance && (getWorld().canBlockSeeSky(pos) || !requiresUnabstructedSky) && (getWorld().getWorldTime() % 24000 >= 5000 && getWorld().getWorldTime() % 24000 <= 7000 || !requiresMidday) && (!getWorld().isRaining() || ignoreRain)) {
 				int y = pos.getY()-1;
 				BlockPos.MutableBlockPos p = new BlockPos.MutableBlockPos(pos.down());
 				while(y > 0 && getWorld().isAirBlock(p)) {

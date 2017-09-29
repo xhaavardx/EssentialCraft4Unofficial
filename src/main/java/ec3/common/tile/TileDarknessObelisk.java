@@ -69,7 +69,7 @@ public class TileDarknessObelisk extends TileMRUGeneric {
 								entityliving = spawnlistentry.entityClass.getConstructor(new Class[] {World.class}).newInstance(new Object[] {wrld});
 								entityliving.setLocationAndAngles((double)rndOffsetX+0.5F, rndOffsetY, rndOffsetZ+0.5D, wrld.rand.nextFloat()*360.0F, 0.0F);
 								Result canSpawn = ForgeEventFactory.canEntitySpawn(entityliving, wrld, rndOffsetX+0.5F, rndOffsetY, rndOffsetZ+0.5F);
-								if (canSpawn == Result.ALLOW || (canSpawn == Result.DEFAULT && entityliving.getCanSpawnHere())) {
+								if (canSpawn == Result.ALLOW || canSpawn == Result.DEFAULT && entityliving.getCanSpawnHere()) {
 									wrld.spawnEntity(entityliving);
 									setMRU(getMRU() - mruUsage);
 									if(generatesCorruption)

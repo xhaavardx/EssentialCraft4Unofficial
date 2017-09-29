@@ -226,7 +226,7 @@ public class TileMagicalQuarry extends TileMRUGeneric {
 	}
 
 	public boolean shouldInstaMine(Block b) {
-		return (b instanceof BlockLiquid && ignoreLiquids) || (b instanceof IFluidBlock && ignoreLiquids) || b == null || b == Blocks.AIR;
+		return b instanceof BlockLiquid && ignoreLiquids || b instanceof IFluidBlock && ignoreLiquids || b == null || b == Blocks.AIR;
 	}
 
 	public int determineFortune() {
@@ -270,7 +270,7 @@ public class TileMagicalQuarry extends TileMRUGeneric {
 			}
 			else {
 				float required = b.getBlockHardness(getWorld().getBlockState(mining),getWorld(), mining)*blockHardnessModifier;
-				if(setMRU((int)(getMRU() - (mruUsage/4*getEfficency()))))
+				if(setMRU((int)(getMRU() - mruUsage/4*getEfficency())))
 					progressLevel += getEfficency();
 				if(progressLevel >= required) {
 					FakePlayer quarryFakePlayer = new FakePlayer((WorldServer)getWorld(), quarryFakePlayerProfile);
@@ -303,7 +303,7 @@ public class TileMagicalQuarry extends TileMRUGeneric {
 		int r = 2;
 		while(++r <= pos.getY()-2) {
 			Block b = getWorld().getBlockState(pos.down(r)).getBlock();
-			if((b != null && b.getBlockHardness(getWorld().getBlockState(pos.down(r)),getWorld(),pos.down(r)) >= 0 && b != Blocks.AIR && !(b instanceof BlockLiquid && ignoreLiquids) && !(b instanceof IFluidBlock && ignoreLiquids) && canMineBlock(b)) && canMineBlock(b))
+			if(b != null && b.getBlockHardness(getWorld().getBlockState(pos.down(r)),getWorld(),pos.down(r)) >= 0 && b != Blocks.AIR && !(b instanceof BlockLiquid && ignoreLiquids) && !(b instanceof IFluidBlock && ignoreLiquids) && canMineBlock(b) && canMineBlock(b))
 				return false;
 		}
 		return true;

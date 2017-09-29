@@ -33,7 +33,7 @@ public class TileAnimalSeparator extends TileMRUGeneric {
 		List<EntityAgeable> tp = getWorld().getEntitiesWithinAABB(EntityAgeable.class, toTeleport);
 		List<EntityAgeable> ntp = getWorld().getEntitiesWithinAABB(EntityAgeable.class, noTeleport);
 		for(EntityAgeable e : tp) {
-			if(!e.isDead && !(e instanceof IMob) && ((b && e.isChild()) || (!b && !e.isChild())) && getMRU() >= 100 && !ntp.contains(e) && setMRU(getMRU() - 100)) {
+			if(!e.isDead && !(e instanceof IMob) && (b && e.isChild() || !b && !e.isChild()) && getMRU() >= 100 && !ntp.contains(e) && setMRU(getMRU() - 100)) {
 				e.setPositionAndRotation(pos.getX()+0.5D, pos.getY()+1.5D, pos.getZ()+0.5D, 0, 0);
 			}
 		}

@@ -14,21 +14,24 @@ import ec3.utils.common.ECUtils;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
 
 public class TileNewMIMInventoryStorage extends TileMRUGeneric {
 
 	public int updateTime = 0;
-	ArrayList<Pair<Integer[],IInventory>> counted = new ArrayList<Pair<Integer[],IInventory>>();
-	ArrayList<IInventory> countedT = new ArrayList<IInventory>();
+	ArrayList<Pair<BlockPos,IItemHandler>> counted = new ArrayList<Pair<BlockPos,IItemHandler>>();
+	ArrayList<IItemHandler> countedT = new ArrayList<IItemHandler>();
 	public ArrayList<ItemStack> items = new ArrayList<ItemStack>();
 	ArrayList<EntityPlayerMP> plrs = new ArrayList<EntityPlayerMP>();
 	boolean requireSync = false;
+	final Capability<IItemHandler> ITEM_HANDLER_CAPABILITY = CapabilityItemHandler.ITEM_HANDLER_CAPABILITY;
 
 	public TileNewMIMInventoryStorage() {
 		setMaxMRU(0);
@@ -50,11 +53,11 @@ public class TileNewMIMInventoryStorage extends TileMRUGeneric {
 	 *
 	 * @return A full list of all Inventories available for the device. Will only return valid tiles of existing blocks
 	 */
-	public ArrayList<IInventory> getInventories() {
-		ArrayList<IInventory> retLst = new ArrayList<IInventory>();
+	public ArrayList<IItemHandler> getInventories() {
+		ArrayList<IItemHandler> retLst = new ArrayList<IItemHandler>();
 
-		for(Pair<Integer[],IInventory> p : counted) {
-			if(getWorld().isBlockLoaded(new BlockPos(p.getLeft()[0], p.getLeft()[1], p.getLeft()[2])) && getWorld().getTileEntity(new BlockPos(p.getLeft()[0], p.getLeft()[1], p.getLeft()[2])) instanceof IInventory)
+		for(Pair<BlockPos,IItemHandler> p : counted) {
+			if(getWorld().isBlockLoaded(new BlockPos(p.getLeft())) && getWorld().getTileEntity(new BlockPos(p.getLeft())).hasCapability(ITEM_HANDLER_CAPABILITY, null))
 				retLst.add(p.getRight());
 		}
 
@@ -71,7 +74,7 @@ public class TileNewMIMInventoryStorage extends TileMRUGeneric {
 		for(int i = 0; i < items.size(); ++i) {
 			ItemStack is = items.get(i);
 			if(is != null) {
-				if((is.isItemEqual(stk) && ItemStack.areItemStackTagsEqual(stk, is)) || (oreDict && ECUtils.oreDictionaryCompare(stk, is))) {
+				if(is.isItemEqual(stk) && ItemStack.areItemStackTagsEqual(stk, is) || oreDict && ECUtils.oreDictionaryCompare(stk, is)) {
 					index = i;
 					break;
 				}
@@ -82,35 +85,35 @@ public class TileNewMIMInventoryStorage extends TileMRUGeneric {
 
 		int ret = stk.stackSize;
 		if(index != -1) {
-			fG:
-				for(int i = 0; i < countedT.size(); ++i) {
-					if(countedT.get(i) == null)
-						continue;
+			fG:for(int i = 0; i < countedT.size(); ++i) {
+				if(countedT.get(i) == null)
+					continue;
 
-					for(int j = 0; j < countedT.get(i).getSizeInventory(); ++j) {
-						ItemStack s = countedT.get(i).getStackInSlot(j);
-						if(s != null && s.isItemEqual(stk) && ItemStack.areItemStackTagsEqual(stk, s) || (oreDict && ECUtils.oreDictionaryCompare(stk, s))) {
-							if(ret >= s.stackSize) {
-								ret -= s.stackSize;
+				for(int j = 0; j < countedT.get(i).getSlots(); ++j) {
+					ItemStack s = countedT.get(i).getStackInSlot(j).copy();
+					if(s != null && s.isItemEqual(stk) && ItemStack.areItemStackTagsEqual(stk, s) || oreDict && ECUtils.oreDictionaryCompare(stk, s)) {
+						if(ret >= s.stackSize) {
+							if(actuallyRetrieve)
+								countedT.get(i).extractItem(j, ret, false);
 
-								if(actuallyRetrieve)
-									countedT.get(i).setInventorySlotContents(j, null);
+							ret -= s.stackSize;
 
-								if(ret < 1)
-									break fG;
-
-								continue;
-							}
-							else {
-								if(actuallyRetrieve)
-									countedT.get(i).decrStackSize(j, ret);
-
-								ret = 0;
+							if(ret < 1)
 								break fG;
+
+							continue;
+						}
+						else {
+							if(actuallyRetrieve) {
+								countedT.get(i).extractItem(j, ret, false);
 							}
+
+							ret = 0;
+							break fG;
 						}
 					}
 				}
+			}
 		}
 
 		updateTime = 0;
@@ -153,38 +156,36 @@ public class TileNewMIMInventoryStorage extends TileMRUGeneric {
 			return false;
 
 		for(int i = 0; i < counted.size(); ++i) {
-			Integer[] coords = counted.get(i).getLeft();
-			IInventory inv = counted.get(i).getRight();
+			BlockPos coords = counted.get(i).getLeft();
+			IItemHandler inv = counted.get(i).getRight();
 
-			if(!getWorld().isBlockLoaded(new BlockPos(coords[0], coords[1], coords[2])))
+			if(!getWorld().isBlockLoaded(new BlockPos(coords)))
 				continue;
 
 			if(inv == null)
 				continue;
 
-			for(int j = 0; j < inv.getSizeInventory(); ++j) {
+			for(int j = 0; j < inv.getSlots(); ++j) {
 				ItemStack stk = inv.getStackInSlot(j);
 				if(stk != null) {
 					if(stk.isItemEqual(is) && ItemStack.areItemStackTagsEqual(stk, is)) {
 						if(stk.stackSize < stk.getMaxStackSize()) {
 							if(stk.stackSize+is.stackSize <= stk.getMaxStackSize()) {
-								stk.stackSize += is.stackSize;
+								inv.insertItem(j, is.copy(), false);
 								return true;
 							}
 							else {
-								int diff = stk.getMaxStackSize() - stk.stackSize;
-								stk.stackSize = stk.getMaxStackSize();
-								is.stackSize -= diff;
+								is = inv.insertItem(j, is.copy(), false).copy();
 								continue;
 							}
 						}
 					}
 				}
 			}
-			for(int j = 0; j < inv.getSizeInventory(); ++j) {
+			for(int j = 0; j < inv.getSlots(); ++j) {
 				ItemStack stk = inv.getStackInSlot(j);
-				if(stk == null && inv.isItemValidForSlot(j, is)) {
-					inv.setInventorySlotContents(j, is.copy());
+				if(stk == null && inv.insertItem(j, is, true) == null) {
+					inv.insertItem(j, is.copy(), false);
 					return true;
 				}
 			}
@@ -208,7 +209,7 @@ public class TileNewMIMInventoryStorage extends TileMRUGeneric {
 			if(countedT.get(i) == null)
 				continue;
 
-			for(int j = 0; j < countedT.get(i).getSizeInventory(); ++j) {
+			for(int j = 0; j < countedT.get(i).getSlots(); ++j) {
 				ItemStack stk = countedT.get(i).getStackInSlot(j);
 				if(stk != null && stk.stackSize > 0) {
 					String id = stk.getItem().getRegistryName().toString() + "@" + stk.getItemDamage();
@@ -237,13 +238,9 @@ public class TileNewMIMInventoryStorage extends TileMRUGeneric {
 		foundByID.clear();
 		ids.clear();
 
-		found = null;
-		foundByID = null;
-		ids = null;
-
 		if(items.size() == oldCopy.size()) {
 			for(int i = 0; i < oldCopy.size(); ++i) {
-				if((items.get(i) == null && oldCopy.get(i) == null) || (items.get(i).isItemEqual(oldCopy.get(i)) && ItemStack.areItemStackTagsEqual(items.get(i), oldCopy.get(i)) && items.get(i).stackSize == oldCopy.get(i).stackSize))
+				if(items.get(i) == null && oldCopy.get(i) == null || items.get(i).isItemEqual(oldCopy.get(i)) && ItemStack.areItemStackTagsEqual(items.get(i), oldCopy.get(i)) && items.get(i).stackSize == oldCopy.get(i).stackSize)
 					continue;
 				else
 					requireSync = true;
@@ -265,7 +262,7 @@ public class TileNewMIMInventoryStorage extends TileMRUGeneric {
 		countedT.clear();
 		for(int i = 0; i < 6*9; ++i) {
 			ItemStack stk = getStackInSlot(i);
-			if(stk != null && stk.getItem() instanceof ItemInventoryGem && stk.hasTagCompound()) {
+			if(stk.getItem() instanceof ItemInventoryGem && stk.hasTagCompound()) {
 				int[] coords = ItemInventoryGem.getCoords(stk);
 				if(coords != null && coords.length > 0) {
 					int x = coords[0];
@@ -275,11 +272,10 @@ public class TileNewMIMInventoryStorage extends TileMRUGeneric {
 					if(dim == getWorld().provider.getDimension()) {
 						if(getWorld().isBlockLoaded(new BlockPos(x, y, z)) && getWorld().getBlockState(new BlockPos(x, y, z)).getBlock() instanceof ITileEntityProvider) {
 							TileEntity tile = getWorld().getTileEntity(new BlockPos(x, y, z));
-							if(tile instanceof IInventory) {
-								if(!(tile instanceof TileNewMIMInventoryStorage) && !countedT.contains(tile)) {
-									countedT.add((IInventory) tile);
-									counted.add(Pair.<Integer[],IInventory>of(new Integer[]{x,y,z},(IInventory)tile));
-								}
+							if(tile.hasCapability(ITEM_HANDLER_CAPABILITY, null)) {
+								IItemHandler handler = tile.getCapability(ITEM_HANDLER_CAPABILITY, null);
+								countedT.add(handler);
+								counted.add(Pair.<BlockPos, IItemHandler>of(new BlockPos(x, y, z), handler));
 							}
 						}
 					}

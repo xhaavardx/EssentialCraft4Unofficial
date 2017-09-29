@@ -77,27 +77,27 @@ public class TileMagicalEnchanter extends TileMRUGeneric {
 		}
 
 		while (field_145928_o >= (float)Math.PI) {
-			field_145928_o -= ((float)Math.PI * 2F);
+			field_145928_o -= (float)Math.PI * 2F;
 		}
 
 		while (field_145928_o < -(float)Math.PI) {
-			field_145928_o += ((float)Math.PI * 2F);
+			field_145928_o += (float)Math.PI * 2F;
 		}
 
 		while (field_145924_q >= (float)Math.PI) {
-			field_145924_q -= ((float)Math.PI * 2F);
+			field_145924_q -= (float)Math.PI * 2F;
 		}
 
 		while (field_145924_q < -(float)Math.PI) {
-			field_145924_q += ((float)Math.PI * 2F);
+			field_145924_q += (float)Math.PI * 2F;
 		}
 
 		float f2;
 
-		for (f2 = field_145924_q - field_145928_o; f2 >= (float)Math.PI; f2 -= ((float)Math.PI * 2F)) {}
+		for (f2 = field_145924_q - field_145928_o; f2 >= (float)Math.PI; f2 -= (float)Math.PI * 2F) {}
 
 		while(f2 < -(float)Math.PI) {
-			f2 += ((float)Math.PI * 2F);
+			f2 += (float)Math.PI * 2F;
 		}
 
 		field_145928_o += f2 * 0.4F;

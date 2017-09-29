@@ -304,7 +304,7 @@ public class TileecController extends TileEntity implements ITEHasMRU, ITickable
 				minY = checkInt0;
 		}
 		//Checking for the cuboid shape//
-		if((minX == 0 && maxX == 0) || (minY == 0 && maxY == 0) || (minZ == 0 && maxZ == 0))
+		if(minX == 0 && maxX == 0 || minY == 0 && maxY == 0 || minZ == 0 && maxZ == 0)
 			return false;
 		else {
 			lowerCoord = new Coord3D(pos.getX()+minX, pos.getY()+minY, pos.getZ()+minZ);

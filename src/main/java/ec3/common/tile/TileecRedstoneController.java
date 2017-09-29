@@ -53,7 +53,7 @@ public class TileecRedstoneController extends TileEntity implements IStructurePi
 	}
 
 	public boolean outputRedstone() {
-		if(controller != null && controller.getMRUCU() != null && ((float)controller.getMRU()/(float)controller.getMaxMRU())*10 >= setting)
+		if(controller != null && controller.getMRUCU() != null && (float)controller.getMRU()/(float)controller.getMaxMRU()*10 >= setting)
 			return true;
 
 		return false;

@@ -59,7 +59,7 @@ public class TileMagicalMirror extends TileMRUGeneric {
 								ItemStack is = assembler.getStackInSlot(w);
 								for(int i = 0; i < inv.getSizeInventory(); ++i) {
 									ItemStack is1 = inv.getStackInSlot(i);
-									if(is1 == null || (is1.isItemEqual(is) && is1.stackSize + 1 < is1.getMaxStackSize() + 1)) {
+									if(is1 == null || is1.isItemEqual(is) && is1.stackSize + 1 < is1.getMaxStackSize() + 1) {
 										pulsing = true;
 										syncTick = 0;
 										if(!getWorld().isRemote && transferTime <= 60)

@@ -67,7 +67,7 @@ public class TileMagicalTeleporter extends TileMRUGeneric {
 		boolean flag = true;
 		for(int x = -2; x <= 2; ++x) {
 			for(int z = -2; z <= 2; ++z) {
-				if(((x == 2 || x == -2) && z == 0) || ((z == 2 || z == -2) && x == 0)) {
+				if((x == 2 || x == -2) && z == 0 || (z == 2 || z == -2) && x == 0) {
 					flag = getWorld().getBlockState(pos.add(x, 0, z)).getBlock() == BlocksCore.magicPlating;
 					if(!flag)
 						return false;
@@ -103,7 +103,7 @@ public class TileMagicalTeleporter extends TileMRUGeneric {
 		if(hasRequiredItemToTeleport() && hasPlayer() && getMRU() >= getTPCost() && isStructureCorrect()) {
 			EntityPlayer player = getPlayer();
 			++progressLevel;
-			getWorld().playSound(player, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_MINECART_RIDING, SoundCategory.BLOCKS, 0.1F, 0.8F + ((float)progressLevel/teleportTime));
+			getWorld().playSound(player, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_MINECART_RIDING, SoundCategory.BLOCKS, 0.1F, 0.8F + (float)progressLevel/teleportTime);
 			if(progressLevel >= teleportTime) {
 				if(generatesCorruption)
 					ECUtils.increaseCorruptionAt(getWorld(), pos.getX(), pos.getY(), pos.getZ(), getWorld().rand.nextInt(genCorruption));
@@ -180,7 +180,7 @@ public class TileMagicalTeleporter extends TileMRUGeneric {
 	public void spawnParticles() {
 		if(hasPlayer()) {
 			EntityPlayer p = getPlayer();
-			for(int i = 0; i < (progressLevel/5); ++i) {
+			for(int i = 0; i < progressLevel/5; ++i) {
 				getWorld().spawnParticle(EnumParticleTypes.REDSTONE, p.posX+MathUtils.randomFloat(getWorld().rand)/2, p.posY+MathUtils.randomFloat(getWorld().rand)*2-1, p.posZ+MathUtils.randomFloat(getWorld().rand)/2, 0, 0, 1);
 				getWorld().spawnParticle(EnumParticleTypes.REDSTONE, pos.getX()+0.5+MathUtils.randomFloat(getWorld().rand)*2, pos.getY()+3,pos.getZ()+0.5+MathUtils.randomFloat(getWorld().rand)*2, 0, 0, 1);
 				getWorld().spawnParticle(EnumParticleTypes.REDSTONE, pos.getX()+0.5+2, pos.getY()+2+MathUtils.randomFloat(getWorld().rand),pos.getZ()+0.5+MathUtils.randomFloat(getWorld().rand)*2, 0, 0, 1);

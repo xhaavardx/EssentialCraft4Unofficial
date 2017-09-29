@@ -63,7 +63,7 @@ public class TileMRUReactor extends TileMRUGeneric {
 									break Cycle;
 								}
 							}
-							else if((dx == 1 && dz == 0) || (dx == -1 && dz == 0)) {
+							else if(dx == 1 && dz == 0 || dx == -1 && dz == 0) {
 								if(b_c != BlocksCore.reactorSupport) {
 									isStructureCorrect = false;
 									break Cycle;
@@ -75,7 +75,7 @@ public class TileMRUReactor extends TileMRUGeneric {
 							}
 						}
 						if(dy == 1) {
-							if((dx == 1 && dz == 0) || (dx == -1 && dz == 0)) {
+							if(dx == 1 && dz == 0 || dx == -1 && dz == 0) {
 								if(b_c != BlocksCore.reactorSupport) {
 									isStructureCorrect = false;
 									break Cycle;
@@ -109,7 +109,7 @@ public class TileMRUReactor extends TileMRUGeneric {
 										break Cycle;
 									}
 								}
-								else if((dx == 0 && dz == 1) || (dx == 0 && dz == -1)) {
+								else if(dx == 0 && dz == 1 || dx == 0 && dz == -1) {
 									if(b_c != BlocksCore.reactorSupport) {
 										isStructureCorrect = false;
 										break Cycle;
@@ -122,7 +122,7 @@ public class TileMRUReactor extends TileMRUGeneric {
 							}
 							if(dy == 1) {
 								{
-									if((dx == 0 && dz == 1) || (dx == 0 && dz == -1)) {
+									if(dx == 0 && dz == 1 || dx == 0 && dz == -1) {
 										if(b_c != BlocksCore.reactorSupport) {
 											isStructureCorrect = false;
 											break Cycle;

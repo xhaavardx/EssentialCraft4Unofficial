@@ -52,7 +52,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 		modid = EssentialCraftCore.MODID,
 		name = "EssentialCraftIVUnofficial",
 		version = EssentialCraftCore.VERSION,
-		dependencies = "required-after:dummycore@[2.3,);required-after:baubles",
+		dependencies = "required-after:dummycore@[2.4,);required-after:baubles",
 		guiFactory = "essentialcraft.client.gui.ModConfigGuiHandler"
 		)
 public class EssentialCraftCore {
@@ -63,7 +63,7 @@ public class EssentialCraftCore {
 	@SidedProxy(clientSide = "essentialcraft.proxy.ClientProxy", serverSide = "essentialcraft.proxy.CommonProxy", modId = EssentialCraftCore.MODID)
 	public static CommonProxy proxy;
 	public static Config cfg = new Config();
-	public static final String VERSION = "4.8.112.0";
+	public static final String VERSION = "4.8.112.1";
 	public static final String MODID = "essentialcraft";
 	public static ModMetadata metadata;
 	public static SimpleNetworkWrapper network;

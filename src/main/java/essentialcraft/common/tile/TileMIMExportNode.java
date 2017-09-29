@@ -79,58 +79,21 @@ public class TileMIMExportNode extends TileMRUGeneric {
 				if(inv.insertItem(j, itemsToExport.get(i), true).getCount() < itemsToExport.get(i).getCount()) {
 					if(inv.getStackInSlot(j).isEmpty() || inv.getStackInSlot(j).isItemEqual(itemsToExport.get(i)) && ItemStack.areItemStackTagsEqual(inv.getStackInSlot(j), itemsToExport.get(i))) {
 						if(getStackInSlot(0).isEmpty() || !(getStackInSlot(0).getItem() instanceof ItemFilter)) {
-							if(inv.getStackInSlot(j).isEmpty()) {
-								ItemStack copied = itemsToExport.get(i).copy();
-								if(copied.getCount() >= inv.getSlotLimit(j))
-									copied.setCount(inv.getSlotLimit(j));
-
-								if(parent.retrieveItemStackFromSystem(copied, false, true) == 0)
-									inv.insertItem(j, copied, false);
-
-							}
-							else {
-								ItemStack copied = itemsToExport.get(i).copy();
-								if(copied.getCount() >= inv.getSlotLimit(j))
-									copied.setCount(inv.getSlotLimit(j));
-
-								if(inv.getStackInSlot(j).getCount() + copied.getCount() <= inv.getSlotLimit(j) && inv.getStackInSlot(j).getCount() + copied.getCount() <= copied.getMaxStackSize()) {
-									if(parent.retrieveItemStackFromSystem(copied, false, true) == 0)
-										inv.insertItem(j, copied, false);
-								}
-								else {
-									int reduceBy = copied.getCount() - inv.getStackInSlot(j).getCount();
-									if(reduceBy > 0) {
-										copied.setCount(reduceBy);
-										if(parent.retrieveItemStackFromSystem(copied, false, true) == 0)
-											inv.insertItem(j, copied, false);
-									}
-								}
-							}
+							ItemStack copied = itemsToExport.get(i).copy();
+							int original = copied.getCount();
+							int remaining = inv.insertItem(j, copied, true).getCount();
+							copied.setCount(original-remaining);
+							if(parent.retrieveItemStackFromSystem(copied, false, true) == 0)
+								inv.insertItem(j, copied, false);
 						}
 						else {
 							ItemStack copied = itemsToExport.get(i).copy();
 							if(ECUtils.canFilterAcceptItem(new InventoryMagicFilter(getStackInSlot(0)), copied, getStackInSlot(0))) {
-								if(copied.getCount() >= inv.getSlotLimit(j))
-									copied.setCount(inv.getSlotLimit(j));
-
-								if(inv.getStackInSlot(j).isEmpty()) {
-									if(parent.retrieveItemStackFromSystem(copied, false, true) == 0)
-										inv.insertItem(j, copied, false);
-
-								}
-								else if(inv.getStackInSlot(j).getCount() + copied.getCount() <= inv.getSlotLimit(j) && inv.getStackInSlot(j).getCount() + copied.getCount() <= copied.getMaxStackSize())
-								{
-									if(parent.retrieveItemStackFromSystem(copied, false, true) == 0)
-										inv.insertItem(j, copied, false);
-								}
-								else {
-									int reduceBy = copied.getCount() - inv.getStackInSlot(j).getCount();
-									if(reduceBy > 0) {
-										copied.setCount(reduceBy);
-										if(parent.retrieveItemStackFromSystem(copied, false, true) == 0)
-											inv.insertItem(j, copied, false);
-									}
-								}
+								int original = copied.getCount();
+								int remaining = inv.insertItem(j, copied, true).getCount();
+								copied.setCount(original-remaining);
+								if(parent.retrieveItemStackFromSystem(copied, false, true) == 0)
+									inv.insertItem(j, copied, false);
 							}
 						}
 					}

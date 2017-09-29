@@ -17,6 +17,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 
 /**
  *
@@ -218,6 +219,8 @@ public class ApiCore {
 	}
 
 	public static void registerTexture(ResourceLocation rl) {
+		if(FMLCommonHandler.instance().getEffectiveSide().isServer())
+			return;
 		try {
 			Class<?> coreClass = Class.forName("essentialcraft.common.mod.EssentialCraftCore");
 			Class<?> proxyClass = Class.forName("essentialcraft.proxy.CommonProxy");

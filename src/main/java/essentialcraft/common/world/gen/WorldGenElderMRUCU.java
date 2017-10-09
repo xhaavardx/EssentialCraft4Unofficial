@@ -26,9 +26,9 @@ public class WorldGenElderMRUCU extends WorldGenerator {
 	{
 		for(int i = 0; i < Config.eMRUCUGenAttempts; ++i)
 		{
-			int rndX = chunkX*16 + random.nextInt(16);
+			int rndX = chunkX*16 + random.nextInt(16) + 8;
 			int rndY = random.nextInt(128);
-			int rndZ = chunkZ*16 + random.nextInt(16);
+			int rndZ = chunkZ*16 + random.nextInt(16) + 8;
 			new WorldGenElderMRUCU(random.nextInt(4)).generate(world, random, new BlockPos(rndX, rndY, rndZ));
 		}
 	}

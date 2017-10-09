@@ -21,16 +21,6 @@ public class Config implements IDummyConfig {
 		guiID[1] = config.get("gui","Demon GUI ID", 7322).getInt();
 	}
 
-	//Mobs
-	public void loadMobs() {
-		autoFindEID = config.getBoolean("autoFindEntityIDs", "entities", false, "Enable if you can't set the entity ID's on your own.");
-		mobID[0] = EntitiesCore.nextEntityID(config.get("entities","MRUPresenceID", 71).getInt());
-		mobID[1] = EntitiesCore.nextEntityID(config.get("entities","MRUArrowID", 72).getInt());
-		mobID[2] = EntitiesCore.nextEntityID(config.get("entities","SolarBeamID", 73).getInt());
-		mobID[3] = EntitiesCore.nextEntityID(config.get("entities","WindMageID", 74).getInt());
-		mobID[4] = EntitiesCore.nextEntityID(config.get("entities","PosionFumeID", 75).getInt());
-	}
-
 	public void loadMisc() {
 		biomeID[0] = config.get("biomes", "ChaosCorruptionID", 91).getInt();
 		biomeID[1] = config.get("biomes", "FrozenCorruptionID", 92).getInt();
@@ -76,7 +66,6 @@ public class Config implements IDummyConfig {
 	public static boolean renderAdvancedBlockFX;
 	public static int magicianID;
 	public static boolean enablePersonalityShatter = true;
-	public static boolean autoFindEID = false;
 	public static Configuration config;
 
 	public static String[] data_addedOresNames;
@@ -95,7 +84,6 @@ public class Config implements IDummyConfig {
 		Config.config = config;
 		config.load();
 		this.loadGUIs();
-		this.loadMobs();
 		this.loadMisc();
 		this.loadTiles();
 		config.save();

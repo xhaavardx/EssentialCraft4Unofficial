@@ -3,6 +3,9 @@ package essentialcraft.common.entity;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.stream.StreamSupport;
+
+import com.google.common.collect.Streams;
 
 import essentialcraft.common.mod.EssentialCraftCore;
 import essentialcraft.utils.cfg.Config;
@@ -53,36 +56,13 @@ public class EntitiesCore {
 		return ++id;
 	}
 
-	public static int nextEntityID(int defaultID)
-	{
-		if(Config.autoFindEID)
-			return defaultID;
-		for(int i = defaultID; i < 512; ++i)
-		{
-			if(EntityList.getClassFromID(i) == null)
-				return i;
-		}
-		return defaultID;
-	}
-
 	public static Biome[] biomesToSpawn() {
-		List<Biome> spawnLst = new ArrayList<Biome>();
-		for(Biome biome : Biome.REGISTRY)
-		{
-			if(biome != null &&
-					biome != Biomes.HELL &&
-					biome != Biomes.SKY &&
-					biome.getSpawnableList(EnumCreatureType.MONSTER) != null &&
-					!biome.getSpawnableList(EnumCreatureType.MONSTER).isEmpty() &&
-					!BiomeDictionary.hasType(biome, Type.END)  &&
-					!BiomeDictionary.hasType(biome, Type.NETHER)) {
-				spawnLst.add(biome);
-			}
-		}
-		Biome[] biomesArray = new Biome[spawnLst.size()];
-		for(int i = 0; i < spawnLst.size(); ++i) {
-			biomesArray[i] = spawnLst.get(i);
-		}
-		return biomesArray;
+		return StreamSupport.<Biome>stream(Biome.REGISTRY.spliterator(), false).filter(biome->biome != null &&
+				biome != Biomes.HELL &&
+				biome != Biomes.SKY &&
+				biome.getSpawnableList(EnumCreatureType.MONSTER) != null &&
+				!biome.getSpawnableList(EnumCreatureType.MONSTER).isEmpty() &&
+				!BiomeDictionary.hasType(biome, Type.END) &&
+				!BiomeDictionary.hasType(biome, Type.NETHER)).<Biome>toArray(size->new Biome[size]);
 	}
 }

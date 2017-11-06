@@ -94,6 +94,7 @@ public class ItemInventoryGem extends Item implements IItemColor, IModelRegister
 		return super.onItemRightClick(par2World, par3EntityPlayer, hand);
 	}
 
+	@SideOnly(Side.CLIENT)
 	@Override
 	public void addInformation(ItemStack par1ItemStack, World par2EntityPlayer, List<String> par3List, ITooltipFlag par4)
 	{

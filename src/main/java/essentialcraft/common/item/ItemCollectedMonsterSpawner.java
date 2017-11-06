@@ -22,6 +22,8 @@ import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemCollectedMonsterSpawner extends Item implements IModelRegisterer {
 
@@ -49,6 +51,7 @@ public class ItemCollectedMonsterSpawner extends Item implements IModelRegistere
 		return EnumActionResult.PASS;
 	}
 
+	@SideOnly(Side.CLIENT)
 	@Override
 	public void addInformation(ItemStack stk, World player, List<String> lst, ITooltipFlag flag) {
 		NBTTagCompound tag = MiscUtils.getStackTag(stk);

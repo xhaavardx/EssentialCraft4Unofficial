@@ -51,6 +51,7 @@ public class ItemBaublesResistance extends Item implements IBauble, IModelRegist
 		stk.setTagCompound(bTag);
 	}
 
+	@SideOnly(Side.CLIENT)
 	@Override
 	public void addInformation(ItemStack stack, World p_77624_2_, List<String> p_77624_3_, ITooltipFlag p_77624_4_)
 	{

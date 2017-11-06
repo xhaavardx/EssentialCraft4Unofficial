@@ -13,7 +13,6 @@ import mcp.mobius.waila.api.IWailaDataAccessor;
 import mcp.mobius.waila.api.IWailaDataProvider;
 import mcp.mobius.waila.api.IWailaRegistrar;
 import net.minecraft.block.Block;
-import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemBlock;
@@ -76,7 +75,7 @@ public class WailaDataProvider implements IWailaDataProvider {
 							ItemStack tryBoundGem = tInv.getStackInSlot(0);
 							if(tryBoundGem.getItem() instanceof ItemBoundGem) {
 								ItemBoundGem itm = (ItemBoundGem)tryBoundGem.getItem();
-								itm.addInformation(tryBoundGem, accessor.getWorld(), currenttip, ITooltipFlag.TooltipFlags.NORMAL);
+								itm.addInfo(tryBoundGem, accessor.getWorld(), currenttip);
 							}
 						}
 					}

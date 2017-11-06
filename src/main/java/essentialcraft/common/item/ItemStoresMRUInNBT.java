@@ -12,6 +12,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemStoresMRUInNBT extends Item implements IMRUHandlerItem {
 	int maxMRU = 5000;
@@ -45,6 +47,7 @@ public class ItemStoresMRUInNBT extends Item implements IMRUHandlerItem {
 		ECUtils.initMRUTag(itemStack, maxMRU);
 	}
 
+	@SideOnly(Side.CLIENT)
 	@Override
 	public void addInformation(ItemStack par1ItemStack, World par2EntityPlayer, List<String> par3List, ITooltipFlag par4)
 	{

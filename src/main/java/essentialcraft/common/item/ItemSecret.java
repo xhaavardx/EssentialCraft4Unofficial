@@ -25,6 +25,8 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biome.TempCategory;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemSecret extends Item implements IModelRegisterer {
 	public static String[] dropNames = {"410_ticket", "d6", "ironwood_branch", "mysterious_stick", "smoothandsilkystone", "strange_figure", "strange_symbol", "the_true_unknown"};
@@ -34,6 +36,7 @@ public class ItemSecret extends Item implements IModelRegisterer {
 		setHasSubtypes(true);
 	}
 
+	@SideOnly(Side.CLIENT)
 	@Override
 	public void addInformation(ItemStack par1ItemStack, World par2World, List<String> par3List, ITooltipFlag par4) {
 		super.addInformation(par1ItemStack, par2World, par3List, par4);

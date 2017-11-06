@@ -233,6 +233,7 @@ public class ItemElementalSword extends ItemSword implements IMRUHandlerItem, IM
 		return multimap;
 	}
 
+	@SideOnly(Side.CLIENT)
 	@Override
 	public void addInformation(ItemStack par1ItemStack, World par2EntityPlayer, List<String> par3List, ITooltipFlag par4)
 	{

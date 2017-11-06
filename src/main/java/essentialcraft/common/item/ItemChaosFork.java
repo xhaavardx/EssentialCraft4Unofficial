@@ -29,6 +29,8 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemChaosFork extends ItemSword implements IMRUHandlerItem, IModelRegisterer {
 
@@ -68,6 +70,7 @@ public class ItemChaosFork extends ItemSword implements IMRUHandlerItem, IModelR
 		return true;
 	}
 
+	@SideOnly(Side.CLIENT)
 	@Override
 	public void addInformation(ItemStack par1ItemStack, World par2EntityPlayer, List<String> par3List, ITooltipFlag par4)
 	{

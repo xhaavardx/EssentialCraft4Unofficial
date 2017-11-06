@@ -20,6 +20,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemMRUStorageNBTTag extends Item implements IMRUHandlerItem, IBauble, IItemColor, IModelRegisterer {
 	public int[] maxMRU = new int[6];
@@ -50,6 +52,7 @@ public class ItemMRUStorageNBTTag extends Item implements IMRUHandlerItem, IBaub
 		ECUtils.initMRUTag(itemStack, maxMRU[itemStack.getItemDamage()]);
 	}
 
+	@SideOnly(Side.CLIENT)
 	@Override
 	public void addInformation(ItemStack par1ItemStack, World par2EntityPlayer, List<String> par3List, ITooltipFlag par4) {
 		par3List.add(ECUtils.getStackTag(par1ItemStack).getInteger("mru") + "/" + ECUtils.getStackTag(par1ItemStack).getInteger("maxMRU") + " MRU");

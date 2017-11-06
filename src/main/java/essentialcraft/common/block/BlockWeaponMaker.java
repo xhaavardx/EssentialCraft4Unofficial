@@ -103,6 +103,7 @@ public class BlockWeaponMaker extends BlockContainer implements IModelRegisterer
 		}
 	}
 
+	@SideOnly(Side.CLIENT)
 	@Override
 	public void addInformation(ItemStack par1ItemStack, World par2EntityPlayer, List<String> par3List, ITooltipFlag par4)
 	{

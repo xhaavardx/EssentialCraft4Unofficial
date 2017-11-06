@@ -24,6 +24,8 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemMRUMatrixProjection extends Item implements IModelRegisterer {
 
@@ -60,6 +62,7 @@ public class ItemMRUMatrixProjection extends Item implements IModelRegisterer {
 		return super.onItemRightClick(par2World, par3EntityPlayer, hand);
 	}
 
+	@SideOnly(Side.CLIENT)
 	@Override
 	public void addInformation(ItemStack par1ItemStack, World par2EntityPlayer, List<String> par3List, ITooltipFlag par4)
 	{

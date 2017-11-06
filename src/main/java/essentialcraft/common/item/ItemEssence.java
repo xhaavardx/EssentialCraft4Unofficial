@@ -13,6 +13,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemEssence extends Item implements IModelRegisterer {
 	public static String[] dropNames = {"Fire", "Water", "Earth", "Air"};
@@ -36,6 +38,7 @@ public class ItemEssence extends Item implements IModelRegisterer {
 			}
 	}
 
+	@SideOnly(Side.CLIENT)
 	@Override
 	public void addInformation(ItemStack par1ItemStack, World par2EntityPlayer, List<String> par3List, ITooltipFlag par4) {
 		int t = par1ItemStack.getItemDamage()/4;

@@ -39,6 +39,8 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemBaublesSpecial extends Item implements IBauble, IUBMRUGainModifyHandler, IMRUHandlerItem, IWindResistHandler, IWindModifyHandler, IModelRegisterer {
 
@@ -238,6 +240,7 @@ public class ItemBaublesSpecial extends Item implements IBauble, IUBMRUGainModif
 		return original;
 	}
 
+	@SideOnly(Side.CLIENT)
 	@Override
 	public void addInformation(ItemStack stack, World world, List<String> list, ITooltipFlag par4) {
 		super.addInformation(stack, world, list, par4);

@@ -14,6 +14,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemMagicalAlloy extends Item implements IItemColor, IModelRegisterer {
 
@@ -33,6 +35,7 @@ public class ItemMagicalAlloy extends Item implements IItemColor, IModelRegister
 			}
 	}
 
+	@SideOnly(Side.CLIENT)
 	@Override
 	public void addInformation(ItemStack p_77624_1_, World p_77624_2_, List<String> p_77624_3_, ITooltipFlag p_77624_4_) {
 		p_77624_3_.add(OreSmeltingRecipe.getLocalizedOreName(p_77624_1_));

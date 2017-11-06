@@ -24,6 +24,8 @@ import net.minecraft.item.ItemSword;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemHolyMace extends ItemSword implements IMRUHandlerItem, IModelRegisterer /*ItemStoresMRUInNBT*/ {
 
@@ -63,6 +65,7 @@ public class ItemHolyMace extends ItemSword implements IMRUHandlerItem, IModelRe
 		return true;
 	}
 
+	@SideOnly(Side.CLIENT)
 	@Override
 	public void addInformation(ItemStack par1ItemStack, World par2EntityPlayer, List<String> par3List, ITooltipFlag par4)
 	{

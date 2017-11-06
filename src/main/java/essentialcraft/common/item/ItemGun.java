@@ -45,6 +45,8 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemGun extends ItemStoresMRUInNBT implements IModelRegisterer {
 	Random rnd = new Random();
@@ -91,6 +93,7 @@ public class ItemGun extends ItemStoresMRUInNBT implements IModelRegisterer {
 		super.onUpdate(itemStack, world, entity, indexInInventory, isCurrentItem);
 	}
 
+	@SideOnly(Side.CLIENT)
 	@Override
 	public void addInformation(ItemStack par1ItemStack, World par2EntityPlayer, List<String> par3List, ITooltipFlag par4)
 	{

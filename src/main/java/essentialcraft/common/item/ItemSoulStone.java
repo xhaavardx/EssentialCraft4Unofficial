@@ -133,6 +133,7 @@ public class ItemSoulStone extends Item implements IItemColor, IModelRegisterer 
 		}
 	}
 
+	@SideOnly(Side.CLIENT)
 	public void addBloodMagicDescription(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List<String> par3List, ITooltipFlag par4)
 	{
 		if(par1ItemStack.getItemDamage() == 1)

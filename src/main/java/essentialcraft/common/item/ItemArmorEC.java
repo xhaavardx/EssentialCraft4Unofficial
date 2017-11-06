@@ -65,6 +65,7 @@ public class ItemArmorEC extends ItemArmor implements /*IRepairable, IVisDiscoun
 		return this;
 	}
 
+	@SideOnly(Side.CLIENT)
 	@Override
 	public void addInformation(ItemStack stack, World world, List<String> list, ITooltipFlag par4)
 	{

@@ -24,6 +24,8 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class PlayerTracker {
 
@@ -31,6 +33,7 @@ public class PlayerTracker {
 	public void onPlayerLogOn(PlayerEvent event) {
 	}
 
+	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	public void onDescrAdded(ItemTooltipEvent event) {
 		ItemStack stk = event.getItemStack();

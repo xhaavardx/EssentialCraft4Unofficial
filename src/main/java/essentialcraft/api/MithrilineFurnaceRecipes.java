@@ -72,22 +72,10 @@ public class MithrilineFurnaceRecipes {
 	}
 
 	public static MithrilineFurnaceRecipe findRecipeByComponent(ItemStack is) {
-		for(int i = 0; i < RECIPES.size(); ++i) {
-			MithrilineFurnaceRecipe recipe = RECIPES.get(i);
-			if(recipe != null && recipe.smelted.itemStackMatches(is))
-				return recipe;
-		}
-
-		return null;
+		return RECIPES.stream().filter(recipe->recipe.smelted.itemStackMatches(is)).findAny().orElse(null);
 	}
 
 	public static MithrilineFurnaceRecipe findRecipeByResult(ItemStack is) {
-		for(int i = 0; i < RECIPES.size(); ++i) {
-			MithrilineFurnaceRecipe recipe = RECIPES.get(i);
-			if(recipe != null && recipe.result.isItemEqual(is))
-				return recipe;
-		}
-
-		return null;
+		return RECIPES.stream().filter(recipe->recipe.result.isItemEqual(is)).findAny().orElse(null);
 	}
 }

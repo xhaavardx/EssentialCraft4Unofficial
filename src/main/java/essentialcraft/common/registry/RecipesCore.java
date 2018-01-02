@@ -17,7 +17,9 @@ import essentialcraft.utils.common.RecipeArmorDyes;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.init.PotionTypes;
 import net.minecraft.item.ItemStack;
+import net.minecraft.potion.PotionUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.oredict.OreDictionary;
@@ -61,7 +63,7 @@ public class RecipesCore {
 		MagicianTableRecipes.addRecipe(new Object[]{"plateFortified","plateEnder",new ItemStack(ItemsCore.genericItem,1,79),new ItemStack(ItemsCore.genericItem,1,79),"plateEnder"},new ItemStack(ItemsCore.genericItem,1,0), 10000);
 		MagicianTableRecipes.addRecipe(new Object[]{"essentialcraft:gemEnderPearl","ingotGoldMagical","ingotGoldMagical","ingotGoldMagical","ingotGoldMagical"},new ItemStack(ItemsCore.genericItem,1,4), 5000);
 		MagicianTableRecipes.addRecipe(new Object[]{"ingotIron"},new ItemStack(ItemsCore.genericItem,1,5), 50);
-		MagicianTableRecipes.addRecipe(new Object[]{new ItemStack(Items.POTIONITEM)},new ItemStack(ItemsCore.genericItem,1,6), 250);
+		MagicianTableRecipes.addRecipe(new Object[]{PotionUtils.addPotionToItemStack(new ItemStack(Items.POTIONITEM), PotionTypes.WATER)},new ItemStack(ItemsCore.genericItem,1,6), 250);
 		MagicianTableRecipes.addRecipe(new Object[]{"stoneFortified"},new ItemStack(ItemsCore.genericItem,1,7), 10);
 		MagicianTableRecipes.addRecipe(new Object[]{"plateFortified","essentialcraft:gemEnderPearl","essentialcraft:gemEnderPearl","essentialcraft:gemEnderPearl","essentialcraft:gemEnderPearl"},new ItemStack(ItemsCore.genericItem,1,8), 1000);
 		MagicianTableRecipes.addRecipe(new Object[]{"plateFortified","blockGlass","blockGlass","blockGlass","blockGlass"},new ItemStack(ItemsCore.genericItem,1,9), 1000);

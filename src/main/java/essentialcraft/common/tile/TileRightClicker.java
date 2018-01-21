@@ -4,8 +4,10 @@ import java.lang.ref.WeakReference;
 import java.util.List;
 
 import DummyCore.Utils.MathUtils;
+import essentialcraft.api.ApiCore;
 import essentialcraft.api.IMRUHandlerItem;
 import essentialcraft.common.block.BlockRightClicker;
+import essentialcraft.common.capabilities.mru.CapabilityMRUHandler;
 import essentialcraft.utils.common.ECUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -50,27 +52,22 @@ public class TileRightClicker extends TileMRUGeneric {
 	public void finishClick(int slot, boolean setupAll) {
 		int cycle = setupAll ? 9 : 1;
 		for(int i = 0; i < cycle; ++i) {
-
 			if(!fakePlayer.getHeldItemMainhand().isEmpty()) {
 				ItemStack setted = fakePlayer.inventory.getCurrentItem().copy();
-				if(setted.getItem() instanceof IMRUHandlerItem) {
-					IMRUHandlerItem iReq = (IMRUHandlerItem) setted.getItem();
-					int current = iReq.getMRU(setted);
-					int thM = getMRU();
-					int thMM = getMaxMRU();
+				if(setted.hasCapability(CapabilityMRUHandler.MRU_HANDLER_ITEM_CAPABILITY, null)) {
+					IMRUHandlerItem iReq = setted.getCapability(CapabilityMRUHandler.MRU_HANDLER_ITEM_CAPABILITY, null);
+					int current = iReq.getMRU();
+					int thM = mruStorage.getMRU();
+					int thMM = mruStorage.getMaxMRU();
 					if(thM < thMM) {
 						int diff = thM - thMM;
 						if(diff <= current) {
-							iReq.increaseMRU(setted, -diff);
-							setMRU(getMRU() + diff);
-							if(getMRU() < 0)
-								setMRU(0);
+							iReq.extractMRU(diff, true);
+							mruStorage.addMRU(diff, true);
 						}
 						else {
-							iReq.increaseMRU(setted, -current);
-							setMRU(getMRU()+current);
-							if(getMRU() < 0)
-								setMRU(0);
+							iReq.extractMRU(current, true);
+							mruStorage.addMRU(current, true);
 						}
 					}
 				}
@@ -105,22 +102,20 @@ public class TileRightClicker extends TileMRUGeneric {
 
 		if(!getStackInSlot(slot).isEmpty()) {
 			ItemStack setted = getStackInSlot(slot).copy();
-			if(setted.isEmpty() && setted.getItem() instanceof IMRUHandlerItem) {
-				IMRUHandlerItem iReq = (IMRUHandlerItem)setted.getItem();
-				int current = iReq.getMRU(setted);
-				int max = iReq.getMaxMRU(setted);
-				int thM = getMRU();
+			if(setted.hasCapability(CapabilityMRUHandler.MRU_HANDLER_ITEM_CAPABILITY, null)) {
+				IMRUHandlerItem iReq = setted.getCapability(CapabilityMRUHandler.MRU_HANDLER_ITEM_CAPABILITY, null);
+				int current = iReq.getMRU();
+				int max = iReq.getMaxMRU();
+				int thM = mruStorage.getMRU();
 				if(current < max) {
 					int diff = current - max;
 					if(diff <= thM) {
-						iReq.increaseMRU(setted, diff);
-						setMRU(getMRU()-diff);
-						if(getMRU() < 0)
-							setMRU(0);
+						iReq.addMRU(diff, true);
+						mruStorage.extractMRU(diff, true);
 					}
 					else {
-						iReq.increaseMRU(setted, thM);
-						setMRU(0);
+						iReq.addMRU(thM, true);
+						mruStorage.extractMRU(thM, true);
 					}
 				}
 			}
@@ -218,7 +213,7 @@ public class TileRightClicker extends TileMRUGeneric {
 	public TileRightClicker() {
 		super();
 		setSlotsNum(11);
-		setMaxMRU(5000);
+		mruStorage.setMaxMRU(ApiCore.DEVICE_MAX_MRU_GENERIC);
 	}
 
 	@Override
@@ -245,7 +240,7 @@ public class TileRightClicker extends TileMRUGeneric {
 			firstTick = false;
 		}
 
-		ECUtils.manage(this, 0);
+		mruStorage.update(getPos(), getWorld(), getStackInSlot(0));
 
 		if(getWorld().isBlockIndirectlyGettingPowered(pos) > 0 && !wasPowered && canAct()) {
 			if(getBlockMetadata() <= 1) {

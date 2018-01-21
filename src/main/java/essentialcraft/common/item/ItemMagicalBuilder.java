@@ -40,7 +40,7 @@ import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemMagicalBuilder extends ItemStoresMRUInNBT implements IModelRegisterer {
+public class ItemMagicalBuilder extends ItemMRUGeneric implements IModelRegisterer {
 
 	@SideOnly(Side.CLIENT)
 	@Override
@@ -93,16 +93,12 @@ public class ItemMagicalBuilder extends ItemStoresMRUInNBT implements IModelRegi
 		if(this.isInCreativeTab(par2CreativeTabs))
 			for(int i = 0; i < 5; ++i)
 			{
-				for (int var4 = 0; var4 < 1; ++var4)
-				{
-					ItemStack min = new ItemStack(this, 1, i);
-					ECUtils.initMRUTag(min, maxMRU);
-					ItemStack max = new ItemStack(this, 1, i);
-					ECUtils.initMRUTag(max, maxMRU);
-					ECUtils.getStackTag(max).setInteger("mru", ECUtils.getStackTag(max).getInteger("maxMRU"));
-					par3List.add(min);
-					par3List.add(max);
-				}
+				ItemStack min = new ItemStack(this, 1, i);
+				ItemStack max = new ItemStack(this, 1, i);
+				min.getCapability(MRU_HANDLER_ITEM_CAPABILITY, null).setMRU(0);
+				max.getCapability(MRU_HANDLER_ITEM_CAPABILITY, null).setMRU(maxMRU);
+				par3List.add(min);
+				par3List.add(max);
 			}
 	}
 
@@ -345,7 +341,7 @@ public class ItemMagicalBuilder extends ItemStoresMRUInNBT implements IModelRegi
 								if(!e.canPlayerEdit(dp, EnumFacing.DOWN, settedTo))
 									continue;
 
-								if(!(ECUtils.tryToDecreaseMRUInStorage(e, -25) || this.increaseMRU(is, -25)))
+								if(!ECUtils.playerUseMRU(e, is, 25))
 									return itemsSet;
 
 								slotNum = this.decreasePlayerStackInSlot(e, settedTo, slotNum);
@@ -368,7 +364,7 @@ public class ItemMagicalBuilder extends ItemStoresMRUInNBT implements IModelRegi
 							if(!e.canPlayerEdit(dp, EnumFacing.DOWN, settedTo))
 								continue;
 
-							if(!(ECUtils.tryToDecreaseMRUInStorage(e, -250) || this.increaseMRU(is, -250)))
+							if(!ECUtils.playerUseMRU(e, is, 250))
 								return itemsSet;
 
 							if(e.getEntityWorld().getBlockState(dp).getBlockHardness(e.getEntityWorld(), dp) >= 0 && !e.getEntityWorld().isRemote)
@@ -398,7 +394,7 @@ public class ItemMagicalBuilder extends ItemStoresMRUInNBT implements IModelRegi
 								ItemStack worldStack = new ItemStack(e.getEntityWorld().getBlockState(dp).getBlock(),1,e.getEntityWorld().getBlockState(dp).getBlock().getMetaFromState(e.getEntityWorld().getBlockState(dp)));
 								if(!worldStack.isEmpty() && setTo.isItemEqual(worldStack))
 								{
-									if(!(ECUtils.tryToDecreaseMRUInStorage(e, -250) || this.increaseMRU(is, -250)))
+									if(!ECUtils.playerUseMRU(e, is, 250))
 										return itemsSet;
 
 									GameType type = GameType.SURVIVAL;
@@ -427,7 +423,7 @@ public class ItemMagicalBuilder extends ItemStoresMRUInNBT implements IModelRegi
 								ItemStack worldStack = new ItemStack(e.getEntityWorld().getBlockState(dp).getBlock(),1,e.getEntityWorld().getBlockState(dp).getBlock().getMetaFromState(e.getEntityWorld().getBlockState(dp)));
 								if(!worldStack.isEmpty() && !setTo.isItemEqual(worldStack))
 								{
-									if(!(ECUtils.tryToDecreaseMRUInStorage(e, -250) || this.increaseMRU(is, -250)))
+									if(!ECUtils.playerUseMRU(e, is, 250))
 										return itemsSet;
 
 									GameType type = GameType.SURVIVAL;
@@ -453,7 +449,7 @@ public class ItemMagicalBuilder extends ItemStoresMRUInNBT implements IModelRegi
 
 							if(e.getEntityWorld().isAirBlock(dp))
 							{
-								if(!(ECUtils.tryToDecreaseMRUInStorage(e, -25) || this.increaseMRU(is, -25)))
+								if(!ECUtils.playerUseMRU(e, is, 25))
 									return itemsSet;
 
 								slotNum = this.decreasePlayerStackInSlot(e, setTo, slotNum);
@@ -469,32 +465,29 @@ public class ItemMagicalBuilder extends ItemStoresMRUInNBT implements IModelRegi
 
 								if(slotNum == -1)
 									return itemsSet;
-							}else
+							}else if(e.getEntityWorld().getBlockState(dp).getBlockHardness(e.getEntityWorld(), dp) >= 0 && !e.getEntityWorld().isRemote)
 							{
-								if(e.getEntityWorld().getBlockState(dp).getBlockHardness(e.getEntityWorld(), dp) >= 0 && !e.getEntityWorld().isRemote)
+								slotNum = this.decreasePlayerStackInSlot(e, setTo, slotNum);
+
+								if(!ECUtils.playerUseMRU(e, is, 300))
+									return itemsSet;
+
+								GameType type = GameType.SURVIVAL;
+								if(e.capabilities.isCreativeMode)
+									type = GameType.CREATIVE;
+								if(!e.capabilities.allowEdit)
+									type = GameType.ADVENTURE;
+
+								int be = ForgeHooks.onBlockBreakEvent(e.getEntityWorld(), type, (EntityPlayerMP)e, dp);
+								if(be != -1)
 								{
-									slotNum = this.decreasePlayerStackInSlot(e, setTo, slotNum);
-
-									if(!(ECUtils.tryToDecreaseMRUInStorage(e, -300) || this.increaseMRU(is, -300)))
-										return itemsSet;
-
-									GameType type = GameType.SURVIVAL;
-									if(e.capabilities.isCreativeMode)
-										type = GameType.CREATIVE;
-									if(!e.capabilities.allowEdit)
-										type = GameType.ADVENTURE;
-
-									int be = ForgeHooks.onBlockBreakEvent(e.getEntityWorld(), type, (EntityPlayerMP)e, dp);
-									if(be != -1)
-									{
-										e.getEntityWorld().getBlockState(dp).getBlock().dropBlockAsItem(e.getEntityWorld(), dp, e.getEntityWorld().getBlockState(dp), 0);
-										e.getEntityWorld().setBlockState(dp, Block.getBlockFromItem(setTo.getItem()).getStateFromMeta(setTo.getItemDamage()), 3);
-										++itemsSet;
-									}
-
-									if(slotNum == -1)
-										return itemsSet;
+									e.getEntityWorld().getBlockState(dp).getBlock().dropBlockAsItem(e.getEntityWorld(), dp, e.getEntityWorld().getBlockState(dp), 0);
+									e.getEntityWorld().setBlockState(dp, Block.getBlockFromItem(setTo.getItem()).getStateFromMeta(setTo.getItemDamage()), 3);
+									++itemsSet;
 								}
+
+								if(slotNum == -1)
+									return itemsSet;
 							}
 						}
 					}

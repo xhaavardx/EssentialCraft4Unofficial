@@ -16,7 +16,11 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 
-public class ItemOrbitalRemote extends ItemStoresMRUInNBT implements IModelRegisterer {
+public class ItemOrbitalRemote extends ItemMRUGeneric implements IModelRegisterer {
+
+	public ItemOrbitalRemote() {
+		this.setMaxMRU(20000);
+	}
 
 	@Override
 	public void onUpdate(ItemStack itemStack, World world, Entity entity, int indexInInventory, boolean isCurrentItem)
@@ -48,7 +52,7 @@ public class ItemOrbitalRemote extends ItemStoresMRUInNBT implements IModelRegis
 		RayTraceResult mop = p.getEntityWorld().rayTraceBlocks(lookVec, distanced, true, false, false);
 		if(mop != null && mop.typeOfHit == Type.BLOCK)
 		{
-			if(ECUtils.tryToDecreaseMRUInStorage(p, -10000) || this.increaseMRU(stk, -10000))
+			if(ECUtils.playerUseMRU(p, stk, 10000))
 			{
 				EntityOrbitalStrike eos = new EntityOrbitalStrike(w,mop.getBlockPos().getX()+0.5D,mop.getBlockPos().getY()+1,mop.getBlockPos().getZ()+0.5D,128,3,p);
 

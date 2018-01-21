@@ -1,7 +1,9 @@
 package essentialcraft.common.tile;
 
 import java.util.List;
+import java.util.function.BiPredicate;
 
+import DummyCore.Utils.BiPredicates;
 import DummyCore.Utils.DataStorage;
 import DummyCore.Utils.DummyData;
 import DummyCore.Utils.DummyPortalGenerator;
@@ -14,6 +16,7 @@ import essentialcraft.common.block.BlocksCore;
 import essentialcraft.common.item.ItemBoundGem;
 import essentialcraft.common.mod.EssentialCraftCore;
 import essentialcraft.utils.common.ECUtils;
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.SoundEvents;
@@ -23,12 +26,14 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.config.Configuration;
 
 public class TileMagicalTeleporter extends TileMRUGeneric {
 	public int progressLevel;
-	public static float cfgMaxMRU = ApiCore.DEVICE_MAX_MRU_GENERIC*10;
+	public static int cfgMaxMRU = ApiCore.DEVICE_MAX_MRU_GENERIC*10;
 	public static boolean generatesCorruption = false;
 	public static int genCorruption = 5;
 	public static int mruUsage = 500;
@@ -37,6 +42,7 @@ public class TileMagicalTeleporter extends TileMRUGeneric {
 
 	public TileMagicalTeleporter() {
 		super();
+		mruStorage.setMaxMRU(cfgMaxMRU);
 		setSlotsNum(2);
 	}
 
@@ -55,77 +61,81 @@ public class TileMagicalTeleporter extends TileMRUGeneric {
 
 	@Override
 	public void update()  {
-		maxMRU = (int)cfgMaxMRU;
 		super.update();
+		mruStorage.update(getPos(), getWorld(), getStackInSlot(0));
 		spawnParticles();
 		if(getWorld().isBlockIndirectlyGettingPowered(pos) == 0)
 			tryTeleport();
-		ECUtils.manage(this, 0);
 	}
 
-	public boolean isStructureCorrect() {
-		boolean flag = true;
-		for(int x = -2; x <= 2; ++x) {
-			for(int z = -2; z <= 2; ++z) {
-				if((x == 2 || x == -2) && z == 0 || (z == 2 || z == -2) && x == 0) {
-					flag = getWorld().getBlockState(pos.add(x, 0, z)).getBlock() == BlocksCore.magicPlating;
-					if(!flag)
-						return false;
-				}
-				else if(x != 0 || z != 0) {
-					flag = getWorld().getBlockState(pos.add(x, 0, z)).getBlock() == BlocksCore.voidStone;
-					if(!flag)
-						return false;
-				}
-			}
-		}
-		flag =
-				getWorld().getBlockState(pos.add(1, 1, 2)).getBlock() == BlocksCore.voidStone &&
-				getWorld().getBlockState(pos.add(1, 2, 2)).getBlock() == BlocksCore.voidStone &&
-				getWorld().getBlockState(pos.add(2, 1, 1)).getBlock() == BlocksCore.voidStone &&
-				getWorld().getBlockState(pos.add(2, 2, 1)).getBlock() == BlocksCore.voidStone &&
-				getWorld().getBlockState(pos.add(-2, 1, 1)).getBlock() == BlocksCore.voidStone &&
-				getWorld().getBlockState(pos.add(-2, 2, 1)).getBlock() == BlocksCore.voidStone &&
-				getWorld().getBlockState(pos.add(-1, 1, 2)).getBlock() == BlocksCore.voidStone &&
-				getWorld().getBlockState(pos.add(-1, 2, 2)).getBlock() == BlocksCore.voidStone &&
-				getWorld().getBlockState(pos.add(2, 1, -1)).getBlock() == BlocksCore.voidStone &&
-				getWorld().getBlockState(pos.add(2, 2, -1)).getBlock() == BlocksCore.voidStone &&
-				getWorld().getBlockState(pos.add(1, 1, -2)).getBlock() == BlocksCore.voidStone &&
-				getWorld().getBlockState(pos.add(1, 2, -2)).getBlock() == BlocksCore.voidStone &&
-				getWorld().getBlockState(pos.add(-1, 1, -2)).getBlock() == BlocksCore.voidStone &&
-				getWorld().getBlockState(pos.add(-1, 2, -2)).getBlock() == BlocksCore.voidStone &&
-				getWorld().getBlockState(pos.add(-2, 1, -1)).getBlock() == BlocksCore.voidStone &&
-				getWorld().getBlockState(pos.add(-2, 2, -1)).getBlock() == BlocksCore.voidStone;
-		return flag;
+	protected static boolean testBlock(IBlockAccess world, BlockPos pos, Block block) {
+		return world.getBlockState(pos).getBlock() == block;
 	}
+
+	protected static BiPredicate<IBlockAccess, BlockPos> structureChecker = BiPredicates.<IBlockAccess, BlockPos>and(
+			(world, pos)->{
+				boolean flag = true;
+				for(int x = -2; x <= 2; ++x) {
+					for(int z = -2; z <= 2; ++z) {
+						if((x == 2 || x == -2) && z == 0 || (z == 2 || z == -2) && x == 0) {
+							if(!testBlock(world, pos.add(x, 0, z), BlocksCore.magicPlating)) {
+								return false;
+							}
+						}
+						else if(x != 0 || z != 0) {
+							if(!testBlock(world, pos.add(x, 0, z), BlocksCore.voidStone)) {
+								return false;
+							}
+						}
+					}
+				}
+				return true;
+			}, (world, pos)->
+			testBlock(world, pos.add( 1, 1, 2), BlocksCore.voidStone) &&
+			testBlock(world, pos.add( 1, 2, 2), BlocksCore.voidStone) &&
+			testBlock(world, pos.add( 2, 1, 1), BlocksCore.voidStone) &&
+			testBlock(world, pos.add( 2, 2, 1), BlocksCore.voidStone) &&
+			testBlock(world, pos.add(-2, 1, 1), BlocksCore.voidStone) &&
+			testBlock(world, pos.add(-2, 2, 1), BlocksCore.voidStone) &&
+			testBlock(world, pos.add(-1, 1, 2), BlocksCore.voidStone) &&
+			testBlock(world, pos.add(-1, 2, 2), BlocksCore.voidStone) &&
+			testBlock(world, pos.add( 2, 1,-1), BlocksCore.voidStone) &&
+			testBlock(world, pos.add( 2, 2,-1), BlocksCore.voidStone) &&
+			testBlock(world, pos.add( 1, 1,-2), BlocksCore.voidStone) &&
+			testBlock(world, pos.add( 1, 2,-2), BlocksCore.voidStone) &&
+			testBlock(world, pos.add(-1, 1,-2), BlocksCore.voidStone) &&
+			testBlock(world, pos.add(-1, 2,-2), BlocksCore.voidStone) &&
+			testBlock(world, pos.add(-2, 1,-1), BlocksCore.voidStone) &&
+			testBlock(world, pos.add(-2, 2,-1), BlocksCore.voidStone)
+			);
 
 	public void tryTeleport() {
-		if(hasRequiredItemToTeleport() && hasPlayer() && getMRU() >= getTPCost() && isStructureCorrect()) {
+		if(hasRequiredItemToTeleport() && hasPlayer() && mruStorage.getMRU() >= getTPCost() && structureChecker.test(getWorld(), getPos())) {
 			EntityPlayer player = getPlayer();
 			++progressLevel;
-			getWorld().playSound(player, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_MINECART_RIDING, SoundCategory.BLOCKS, 0.1F, 0.8F + (float)progressLevel/teleportTime);
+			getWorld().playSound(player.posX, player.posY, player.posZ, SoundEvents.ENTITY_MINECART_RIDING, SoundCategory.BLOCKS, 0.1F, 0.8F + (float)progressLevel/teleportTime, false);
 			if(progressLevel >= teleportTime) {
+				mruStorage.extractMRU(getTPCost(), true);
 				if(generatesCorruption)
-					ECUtils.increaseCorruptionAt(getWorld(), pos.getX(), pos.getY(), pos.getZ(), getWorld().rand.nextInt(genCorruption));
+					ECUtils.increaseCorruptionAt(getWorld(), pos, getWorld().rand.nextInt(genCorruption));
 				int[] tpCoords = getCoordsToTP();
-				if(!getWorld().isRemote) {
-					setMRU(getMRU()-getTPCost());
-					for(int i = 0; i < 20; ++i) {
-						getWorld().playSound(player, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_FIREWORK_LARGE_BLAST_FAR, SoundCategory.BLOCKS, 1.0F, 0.5F+MathUtils.randomFloat(getWorld().rand));
-					}
-					int currentPlayerDim = player.dimension;
-					int newDim = getDimensionToTP();
-					if(currentPlayerDim != newDim && !player.world.isRemote && allowDimensionalTeleportation) {
-						MinecraftServer mcServer = getWorld().getMinecraftServer();
-						EntityPlayerMP p_72356_1_ = (EntityPlayerMP)player;
-						WorldServer transferTo = mcServer.getWorld(newDim);
-						DummyTeleporter teleporter = new DummyTeleporter(transferTo, tpCoords[0]+0.5, tpCoords[1]+1.5, tpCoords[2]+0.5,DummyPortalGenerator.TELEPORT_ONLY, false);
-						DummyPortalHandler.transferPlayerToDimension(p_72356_1_, newDim, teleporter);
-					}
-					player.setPositionAndUpdate(tpCoords[0]+0.5, tpCoords[1]+1.5, tpCoords[2]+0.5);
-					for(int i = 0; i < 20; ++i) {
-						player.world.playSound(player, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_FIREWORK_LARGE_BLAST, SoundCategory.BLOCKS, 1.0F, 0.5F + MathUtils.randomFloat(getWorld().rand));
-					}
+				for(int i = 0; i < 20; ++i) {
+					getWorld().playSound(player, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_FIREWORK_LARGE_BLAST_FAR, SoundCategory.BLOCKS, 1.0F, 0.5F+MathUtils.randomFloat(getWorld().rand));
+				}
+				int currentPlayerDim = player.dimension;
+				int newDim = getDimensionToTP();
+				if(currentPlayerDim != newDim && allowDimensionalTeleportation && !player.world.isRemote) {
+					MinecraftServer mcServer = getWorld().getMinecraftServer();
+					EntityPlayerMP p_72356_1_ = (EntityPlayerMP)player;
+					WorldServer transferTo = mcServer.getWorld(newDim);
+					DummyTeleporter teleporter = new DummyTeleporter(transferTo, tpCoords[0]+0.5, tpCoords[1]+1.5, tpCoords[2]+0.5,DummyPortalGenerator.TELEPORT_ONLY, false);
+					DummyPortalHandler.transferPlayerToDimension(p_72356_1_, newDim, teleporter);
+				}
+				if(!player.world.isRemote) {
+					player.setPositionAndUpdate(tpCoords[0]+0.5D, tpCoords[1]+1D, tpCoords[2]+0.5D);
+				}
+				for(int i = 0; i < 20; ++i) {
+					player.world.playSound(player, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_FIREWORK_LARGE_BLAST, SoundCategory.BLOCKS, 1.0F, 0.5F+MathUtils.randomFloat(getWorld().rand));
 				}
 				progressLevel = 0;
 			}
@@ -137,15 +147,17 @@ public class TileMagicalTeleporter extends TileMRUGeneric {
 	public int getTPCost() {
 		int[] tpCoords = getCoordsToTP();
 		int dim = getDimensionToTP();
+		if(getWorld().provider.getDimension() != dim) {
+			return cfgMaxMRU;
+		}
 		int diffX = (int)MathUtils.getDifference(pos.getX(), tpCoords[0]);
 		int diffY = (int)MathUtils.getDifference(pos.getY(), tpCoords[1]);
 		int diffZ = (int)MathUtils.getDifference(pos.getZ(), tpCoords[2]);
-		float mainDiff = (diffX+diffY+diffZ)/3;
+		double mainDiff = (diffX+diffY+diffZ)/3D;
 		int ret = (int)(mruUsage * mainDiff);
-		if(ret > cfgMaxMRU)
-			ret = (int)cfgMaxMRU;
-		if(getWorld().provider.getDimension() != dim)
-			ret = (int)cfgMaxMRU;
+		if(ret > cfgMaxMRU) {
+			ret = cfgMaxMRU;
+		}
 		return ret;
 	}
 
@@ -178,21 +190,22 @@ public class TileMagicalTeleporter extends TileMRUGeneric {
 	}
 
 	public void spawnParticles() {
-		if(hasPlayer()) {
-			EntityPlayer p = getPlayer();
-			for(int i = 0; i < progressLevel/5; ++i) {
-				getWorld().spawnParticle(EnumParticleTypes.REDSTONE, p.posX+MathUtils.randomFloat(getWorld().rand)/2, p.posY+MathUtils.randomFloat(getWorld().rand)*2-1, p.posZ+MathUtils.randomFloat(getWorld().rand)/2, 0, 0, 1);
-				getWorld().spawnParticle(EnumParticleTypes.REDSTONE, pos.getX()+0.5+MathUtils.randomFloat(getWorld().rand)*2, pos.getY()+3,pos.getZ()+0.5+MathUtils.randomFloat(getWorld().rand)*2, 0, 0, 1);
-				getWorld().spawnParticle(EnumParticleTypes.REDSTONE, pos.getX()+0.5+2, pos.getY()+2+MathUtils.randomFloat(getWorld().rand),pos.getZ()+0.5+MathUtils.randomFloat(getWorld().rand)*2, 0, 0, 1);
-				getWorld().spawnParticle(EnumParticleTypes.REDSTONE, pos.getX()+0.5-2, pos.getY()+2+MathUtils.randomFloat(getWorld().rand),pos.getZ()+0.5+MathUtils.randomFloat(getWorld().rand)*2, 0, 0, 1);
-				getWorld().spawnParticle(EnumParticleTypes.REDSTONE, pos.getX()+0.5+MathUtils.randomFloat(getWorld().rand)*2, pos.getY()+2+MathUtils.randomFloat(getWorld().rand),pos.getZ()+0.5-2, 0, 0, 1);
-				getWorld().spawnParticle(EnumParticleTypes.REDSTONE, pos.getX()+0.5+MathUtils.randomFloat(getWorld().rand)*2, pos.getY()+2+MathUtils.randomFloat(getWorld().rand),pos.getZ()+0.5+2, 0, 0, 1);
+		if(world.isRemote) {
+			if(hasPlayer()) {
+				EntityPlayer p = getPlayer();
+				for(int i = 0; i < progressLevel/5; ++i) {
+					getWorld().spawnParticle(EnumParticleTypes.REDSTONE, p.posX+MathUtils.randomFloat(getWorld().rand)/2, p.posY+MathUtils.randomFloat(getWorld().rand)*2-1, p.posZ+MathUtils.randomFloat(getWorld().rand)/2, 0, 0, 1);
+					getWorld().spawnParticle(EnumParticleTypes.REDSTONE, pos.getX()+0.5+MathUtils.randomFloat(getWorld().rand)*2, pos.getY()+3,pos.getZ()+0.5+MathUtils.randomFloat(getWorld().rand)*2, 0, 0, 1);
+					getWorld().spawnParticle(EnumParticleTypes.REDSTONE, pos.getX()+0.5+2, pos.getY()+2+MathUtils.randomFloat(getWorld().rand),pos.getZ()+0.5+MathUtils.randomFloat(getWorld().rand)*2, 0, 0, 1);
+					getWorld().spawnParticle(EnumParticleTypes.REDSTONE, pos.getX()+0.5-2, pos.getY()+2+MathUtils.randomFloat(getWorld().rand),pos.getZ()+0.5+MathUtils.randomFloat(getWorld().rand)*2, 0, 0, 1);
+					getWorld().spawnParticle(EnumParticleTypes.REDSTONE, pos.getX()+0.5+MathUtils.randomFloat(getWorld().rand)*2, pos.getY()+2+MathUtils.randomFloat(getWorld().rand),pos.getZ()+0.5-2, 0, 0, 1);
+					getWorld().spawnParticle(EnumParticleTypes.REDSTONE, pos.getX()+0.5+MathUtils.randomFloat(getWorld().rand)*2, pos.getY()+2+MathUtils.randomFloat(getWorld().rand),pos.getZ()+0.5+2, 0, 0, 1);
+				}
 			}
-			for(int i = 0; i < 4; ++i) {}
-		}
-		if(isStructureCorrect()) {
-			/*for(int i = 0; i < 100; ++i)*/ {
-				EssentialCraftCore.proxy.spawnParticle("cSpellFX", pos.getX()+0.5F+MathUtils.randomFloat(getWorld().rand)*3, pos.getY()+1, pos.getZ()+0.5F+MathUtils.randomFloat(getWorld().rand)*3, 0,2, 0);
+			if(structureChecker.test(getWorld(), getPos())) {
+				/*for(int i = 0; i < 100; ++i)*/ {
+					EssentialCraftCore.proxy.spawnParticle("cSpellFX", pos.getX()+0.5F+MathUtils.randomFloat(getWorld().rand)*3, pos.getY()+1, pos.getZ()+0.5F+MathUtils.randomFloat(getWorld().rand)*3, 0,2, 0);
+				}
 			}
 		}
 	}
@@ -216,7 +229,7 @@ public class TileMagicalTeleporter extends TileMRUGeneric {
 			DummyData[] data = DataStorage.parseData(dataString);
 
 			mruUsage = Integer.parseInt(data[1].fieldValue);
-			cfgMaxMRU = Float.parseFloat(data[0].fieldValue);
+			cfgMaxMRU = Integer.parseInt(data[0].fieldValue);
 			generatesCorruption = Boolean.parseBoolean(data[2].fieldValue);
 			genCorruption = Integer.parseInt(data[3].fieldValue);
 			teleportTime = Integer.parseInt(data[4].fieldValue);

@@ -154,7 +154,7 @@ public class CommonProxy implements IGuiHandler {
 			}
 			if(tile instanceof TileMRUCUECStateChecker)
 			{
-				return new ContainerMRUInfo(player.inventory, tile);
+				return new ContainerMRUInfo(player.inventory);
 			}
 			if(tile instanceof TileMoonWell)
 			{

@@ -2,10 +2,10 @@ package essentialcraft.utils.common;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import essentialcraft.api.ICorruptionEffect;
 import essentialcraft.api.IPlayerData;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 
 public class PlayerGenericData implements IPlayerData {
@@ -13,10 +13,10 @@ public class PlayerGenericData implements IPlayerData {
 	private int damage,radiation,wind,ubmru,matrixid;
 	private boolean windbound;
 	private final List<ICorruptionEffect> effects = new ArrayList<ICorruptionEffect>();
-	EntityPlayer player;
+	UUID playerUUID;
 
-	public PlayerGenericData(EntityPlayer p) {
-		player = p;
+	public PlayerGenericData(UUID playerUUID) {
+		this.playerUUID = playerUUID;
 	}
 
 	@Override
@@ -118,7 +118,7 @@ public class PlayerGenericData implements IPlayerData {
 	}
 
 	@Override
-	public EntityPlayer carrier() {
-		return player;
+	public UUID carrierUUID() {
+		return playerUUID;
 	}
 }

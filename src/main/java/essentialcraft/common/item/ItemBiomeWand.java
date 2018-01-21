@@ -16,11 +16,10 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.client.model.ModelLoader;
 
-public class ItemBiomeWand extends ItemStoresMRUInNBT implements IModelRegisterer, IItemColor {
+public class ItemBiomeWand extends ItemMRUGeneric implements IModelRegisterer, IItemColor {
 
 	public ItemBiomeWand() {
 		super();
-		this.setMaxMRU(5000);
 		this.maxStackSize = 1;
 		this.bFull3D = true;
 	}
@@ -61,7 +60,7 @@ public class ItemBiomeWand extends ItemStoresMRUInNBT implements IModelRegistere
 		{
 			if(isBiomeSaved(stack))
 			{
-				if(ECUtils.tryToDecreaseMRUInStorage(player, -100) || this.increaseMRU(stack, -100))
+				if(ECUtils.playerUseMRU(player, stack, 100))
 				{
 					for(int x = pos.getX()-1; x <= pos.getX()+1; ++x)
 					{

@@ -6,12 +6,12 @@ import DummyCore.Utils.MathUtils;
 import DummyCore.Utils.MiscUtils;
 import DummyCore.Utils.Notifier;
 import DummyCore.Utils.TileStatTracker;
-import essentialcraft.api.IMRUHandlerRequires;
+import essentialcraft.common.capabilities.mru.CapabilityMRUHandler;
+import essentialcraft.common.capabilities.mru.MRUTileStorage;
 import essentialcraft.common.item.ItemBoundGem;
 import essentialcraft.common.mod.EssentialCraftCore;
 import essentialcraft.utils.common.ECUtils;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -25,22 +25,21 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.SidedInvWrapper;
 
-public abstract class TileMRUGeneric extends TileEntity implements IMRUHandlerRequires, IInventory, ISidedInventory, ITickable {
+public abstract class TileMRUGeneric extends TileEntity implements ISidedInventory, ITickable {
 
 	public TileMRUGeneric() {
 		super();
 		tracker = new TileStatTracker(this);
+		mruStorage = new MRUTileStorage();
 	}
 
 	public int syncTick = 10;
-	int mru;
-	int maxMRU = 100;
-	float balance;
 	public int innerRotation;
 	private ItemStack[] items = {ItemStack.EMPTY};
 	private TileStatTracker tracker;
 	public boolean slot0IsBoundGem = true;
 	public boolean requestSync = true;
+	protected MRUTileStorage mruStorage;
 
 	public abstract int[] getOutputSlots();
 
@@ -52,14 +51,14 @@ public abstract class TileMRUGeneric extends TileEntity implements IMRUHandlerRe
 	@Override
 	public void readFromNBT(NBTTagCompound i) {
 		super.readFromNBT(i);
-		ECUtils.loadMRUState(this, i);
+		mruStorage.readFromNBT(i);
 		MiscUtils.loadInventory(this, i);
 	}
 
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound i) {
 		super.writeToNBT(i);
-		ECUtils.saveMRUState(this, i);
+		mruStorage.writeToNBT(i);
 		MiscUtils.saveInventory(this, i);
 		return i;
 	}
@@ -74,7 +73,7 @@ public abstract class TileMRUGeneric extends TileEntity implements IMRUHandlerRe
 			else if(!getWorld().isRemote && tracker.tileNeedsSyncing()) {
 				MiscUtils.sendPacketToAllAround(getWorld(), getUpdatePacket(), pos.getX(), pos.getY(), pos.getZ(), getWorld().provider.getDimension(), 32);
 			}
-			syncTick = 60;
+			syncTick = 20;
 		}
 		else
 			--syncTick;
@@ -96,39 +95,6 @@ public abstract class TileMRUGeneric extends TileEntity implements IMRUHandlerRe
 	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
 		if(pkt.getTileEntityType() == -10)
 			readFromNBT(pkt.getNbtCompound());
-	}
-
-	@Override
-	public int getMRU() {
-		return mru;
-	}
-
-	@Override
-	public int getMaxMRU() {
-		return maxMRU;
-	}
-
-	@Override
-	public boolean setMRU(int i) {
-		mru = i;
-		return true;
-	}
-
-	@Override
-	public float getBalance() {
-		return balance;
-	}
-
-	@Override
-	public boolean setBalance(float f) {
-		balance = f;
-		return true;
-	}
-
-	@Override
-	public boolean setMaxMRU(float f) {
-		maxMRU = (int)f;
-		return true;
 	}
 
 	@Override
@@ -264,12 +230,16 @@ public abstract class TileMRUGeneric extends TileEntity implements IMRUHandlerRe
 
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
+		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ||
+				capability == CapabilityMRUHandler.MRU_HANDLER_CAPABILITY ||
+				super.hasCapability(capability, facing);
 	}
 
 	@Override
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ? (T)itemHandler : super.getCapability(capability, facing);
+		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ? (T)itemHandler :
+			capability == CapabilityMRUHandler.MRU_HANDLER_CAPABILITY ? (T)mruStorage :
+				super.getCapability(capability, facing);
 	}
 
 	@Override

@@ -1,7 +1,10 @@
 package essentialcraft.client.gui.element;
 
+import essentialcraft.api.IMRUDisplay;
 import essentialcraft.api.IMRUHandler;
+import essentialcraft.common.capabilities.mru.CapabilityMRUHandler;
 import net.minecraft.client.Minecraft;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 
 public class GuiMRUState extends GuiTextElement {
@@ -12,6 +15,19 @@ public class GuiMRUState extends GuiTextElement {
 	public GuiMRUState(int i, int j, IMRUHandler t, int mruToSearch) {
 		super(i,j);
 		tile = t;
+	}
+
+	public GuiMRUState(int i, int j, TileEntity t, int mruToSearch) {
+		super(i,j);
+		if(t.hasCapability(CapabilityMRUHandler.MRU_HANDLER_CAPABILITY, null)) {
+			tile = t.getCapability(CapabilityMRUHandler.MRU_HANDLER_CAPABILITY, null);
+		}
+		else if(t instanceof IMRUDisplay) {
+			tile = ((IMRUDisplay)t).getMRUHandler();
+		}
+		else {
+			throw new IllegalArgumentException("Tile does not handle MRU");
+		}
 	}
 
 	@Override

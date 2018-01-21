@@ -6,7 +6,7 @@ package essentialcraft.api;
  * @Description use this interface to interact with MRUCUs.
  * Not yet a capability.
  */
-public interface IMRUHandlerEntity {
+public interface IMRUHandlerEntity extends IMRUHandler {
 
 	/**
 	 * A method to know can the MRUPressence increase it's MRU by it's own.
@@ -32,30 +32,4 @@ public interface IMRUHandlerEntity {
 	 * @param b : boolean - true if you want it to stay, false if you want it to dissapear
 	 */
 	public void setAlwaysStay(boolean b);
-
-
-	/**
-	 * The MRU balance. The basics of the corruption mechanics. Should return 1.0F if the MRUPressence is not corrupted, and anything else if it is.
-	 * @return 1.0F if not corrupted, anything from 0.0F to 2.0F if it is.
-	 */
-	public float getBalance();
-
-	/**
-	 * You can change the balance using this. Do not put numbers lower than 0.1F and greater than 1.9F.
-	 * @param f : float - the more difference it has to 1.0F the faster the MRU amount will increase. The more the amount is, the faster the MRUPressence will spin.
-	 */
-	public void setBalance(float f);
-
-	/**
-	 * The mru amount currently stored in the MRUPressence. The higher the number is, the more corruption will be affected.
-	 * @return integer of the MRU amount.
-	 */
-	public int getMRU();
-
-	/**
-	 * Set your mru amount here. If the MRUPressence is corrupted, and MRU is higher than 50000 it will automatically release all corruption in the world and become pure.
-	 * @param i : integer. Do not put values lower than 0.
-	 */
-	public void setMRU(int i);
-
 }

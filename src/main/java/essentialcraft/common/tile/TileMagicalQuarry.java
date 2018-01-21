@@ -44,11 +44,11 @@ public class TileMagicalQuarry extends TileMRUGeneric {
 	public int miningZ;
 	public boolean flag;
 
-	public static float cfgMaxMRU = ApiCore.DEVICE_MAX_MRU_GENERIC;
+	public static int cfgMaxMRU = ApiCore.DEVICE_MAX_MRU_GENERIC;
 	public static boolean generatesCorruption = true;
 	public static int genCorruption = 2;
 	public static boolean ignoreLiquids = true;
-	public static float mruUsage = 8;
+	public static int mruUsage = 8;
 	public static float efficencyPerUpgrade = 0.5F;
 	public static float blockHardnessModifier = 9F;
 
@@ -73,7 +73,7 @@ public class TileMagicalQuarry extends TileMRUGeneric {
 
 	public TileMagicalQuarry() {
 		super();
-		maxMRU = (int)cfgMaxMRU;
+		mruStorage.setMaxMRU(cfgMaxMRU);
 		setSlotsNum(5);
 	}
 
@@ -86,12 +86,11 @@ public class TileMagicalQuarry extends TileMRUGeneric {
 		if(syncTick == 10)
 			syncTick = 0;
 		super.update();
+		mruStorage.update(getPos(), getWorld(), getStackInSlot(0));
 		if(getWorld().isBlockIndirectlyGettingPowered(pos) == 0)
 			mine();
 		if(!getWorld().isRemote)
 			collectItems();
-
-		ECUtils.manage(this, 0);
 	}
 
 	@Override
@@ -270,8 +269,10 @@ public class TileMagicalQuarry extends TileMRUGeneric {
 			}
 			else {
 				float required = b.getBlockHardness(getWorld().getBlockState(mining),getWorld(), mining)*blockHardnessModifier;
-				if(setMRU((int)(getMRU() - mruUsage/4*getEfficency())))
+				if(mruStorage.getMRU() >= (int)(mruUsage/4*getEfficency())) {
+					mruStorage.extractMRU((int)(mruUsage/4*getEfficency()), true);
 					progressLevel += getEfficency();
+				}
 				if(progressLevel >= required) {
 					FakePlayer quarryFakePlayer = new FakePlayer((WorldServer)getWorld(), quarryFakePlayerProfile);
 
@@ -290,7 +291,7 @@ public class TileMagicalQuarry extends TileMRUGeneric {
 
 					getWorld().setBlockToAir(mining);
 					if(generatesCorruption)
-						ECUtils.increaseCorruptionAt(getWorld(), pos.getX(), pos.getY(), pos.getZ(), getWorld().rand.nextInt(genCorruption));
+						ECUtils.increaseCorruptionAt(getWorld(), pos, getWorld().rand.nextInt(genCorruption));
 
 					quarryFakePlayer = null;
 				}
@@ -332,7 +333,7 @@ public class TileMagicalQuarry extends TileMRUGeneric {
 	}
 
 	public boolean canWork() {
-		return getEfficency() > 0 && getMRU()>mruUsage;
+		return getEfficency() > 0 && mruStorage.getMRU()>=mruUsage;
 	}
 
 	public void mine() {
@@ -476,7 +477,7 @@ public class TileMagicalQuarry extends TileMRUGeneric {
 
 			DummyData[] data = DataStorage.parseData(dataString);
 
-			cfgMaxMRU = Float.parseFloat(data[0].fieldValue);
+			cfgMaxMRU = Integer.parseInt(data[0].fieldValue);
 			mruUsage = Integer.parseInt(data[1].fieldValue);
 			ignoreLiquids = Boolean.parseBoolean(data[2].fieldValue);
 			generatesCorruption = Boolean.parseBoolean(data[3].fieldValue);

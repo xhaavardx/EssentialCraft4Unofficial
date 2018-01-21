@@ -18,11 +18,11 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 
-public class ItemSpawnerCollector extends ItemStoresMRUInNBT implements IModelRegisterer {
+public class ItemSpawnerCollector extends ItemMRUGeneric implements IModelRegisterer {
 
 	public ItemSpawnerCollector() {
 		super();
-		this.setMaxMRU(5000);
+		this.setMaxMRU(10000);
 		this.maxStackSize = 1;
 		this.bFull3D = true;
 	}
@@ -36,7 +36,7 @@ public class ItemSpawnerCollector extends ItemStoresMRUInNBT implements IModelRe
 			if(world.getTileEntity(pos) == null || !(world.getTileEntity(pos) instanceof TileEntityMobSpawner))
 				return EnumActionResult.PASS;
 
-			if(ECUtils.tryToDecreaseMRUInStorage(player, -5000) || this.increaseMRU(player.getHeldItem(hand), -5000))
+			if(ECUtils.playerUseMRU(player, player.getHeldItem(hand), 5000))
 			{
 				TileEntityMobSpawner t = (TileEntityMobSpawner)world.getTileEntity(pos);
 				NBTTagCompound mobTag = new NBTTagCompound();

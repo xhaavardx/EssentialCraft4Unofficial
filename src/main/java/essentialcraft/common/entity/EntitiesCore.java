@@ -5,12 +5,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.stream.StreamSupport;
 
-import com.google.common.collect.Streams;
-
 import essentialcraft.common.mod.EssentialCraftCore;
-import essentialcraft.utils.cfg.Config;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.init.Biomes;
 import net.minecraft.util.ResourceLocation;

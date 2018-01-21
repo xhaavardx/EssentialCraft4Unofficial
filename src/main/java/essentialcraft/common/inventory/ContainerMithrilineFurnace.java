@@ -2,7 +2,6 @@ package essentialcraft.common.inventory;
 
 import DummyCore.Utils.ContainerInventory;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.SlotFurnaceOutput;
 import net.minecraft.tileentity.TileEntity;
 
 public class ContainerMithrilineFurnace extends ContainerInventory {
@@ -14,7 +13,7 @@ public class ContainerMithrilineFurnace extends ContainerInventory {
 	@Override
 	public void setupSlots() {
 		addSlotToContainer(new SlotGeneric(inv, 0, 80, 64));
-		addSlotToContainer(new SlotFurnaceOutput(player, inv, 1, 80, 21));
+		addSlotToContainer(new SlotGeneric(inv, 1, 80, 21));
 		this.setupPlayerInventory();
 	}
 }

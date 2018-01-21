@@ -9,7 +9,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
-import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
@@ -25,12 +24,6 @@ public class BlockBlockBreaker extends Block implements IModelRegisterer {
 	public BlockBlockBreaker() {
 		super(Material.ROCK);
 		setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.DOWN));
-	}
-
-	@Override
-	public EnumBlockRenderType getRenderType(IBlockState s)
-	{
-		return EnumBlockRenderType.MODEL;
 	}
 
 	@Override

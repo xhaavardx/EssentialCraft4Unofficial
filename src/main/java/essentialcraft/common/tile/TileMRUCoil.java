@@ -12,8 +12,8 @@ import DummyCore.Utils.MathUtils;
 import DummyCore.Utils.MiscUtils;
 import essentialcraft.api.ApiCore;
 import essentialcraft.api.EnumStructureType;
-import essentialcraft.api.IMRUHandlerEntity;
 import essentialcraft.common.block.BlocksCore;
+import essentialcraft.common.capabilities.mru.CapabilityMRUHandler;
 import essentialcraft.common.item.ItemPlayerList;
 import essentialcraft.common.item.ItemsCore;
 import essentialcraft.common.registry.SoundRegistry;
@@ -43,7 +43,7 @@ public class TileMRUCoil extends TileMRUGeneric {
 
 	public boolean isStructureCorrect;
 
-	public static float cfgMaxMRU = ApiCore.DEVICE_MAX_MRU_GENERIC*10;
+	public static int cfgMaxMRU = ApiCore.DEVICE_MAX_MRU_GENERIC*10;
 	public static boolean generatesCorruption = false;
 	public static int genCorruption = 50;
 	public static int mruUsage = 200;
@@ -54,12 +54,12 @@ public class TileMRUCoil extends TileMRUGeneric {
 
 	public TileMRUCoil() {
 		super();
-		maxMRU = (int)cfgMaxMRU;
+		mruStorage.setMaxMRU(cfgMaxMRU);
 		setSlotsNum(2);
 	}
 
 	public boolean isStructureCorrect() {
-		return isStructureCorrect && getMRU() > mruUsage;
+		return isStructureCorrect && mruStorage.getMRU() >= mruUsage;
 	}
 
 	public void initStructure() {
@@ -136,6 +136,8 @@ public class TileMRUCoil extends TileMRUGeneric {
 
 	@Override
 	public void update() {
+		super.update();
+		mruStorage.update(getPos(), getWorld(), getStackInSlot(0));
 		if(getWorld().isBlockIndirectlyGettingPowered(pos) == 0) {
 			if(getWorld().isRemote) {
 				if(isStructureCorrect()) {
@@ -188,7 +190,7 @@ public class TileMRUCoil extends TileMRUGeneric {
 							else {
 								if(!(b instanceof IMob) && !hurtPassive)
 									continue Ford;
-								if(b instanceof IMRUHandlerEntity)
+								if(b.hasCapability(CapabilityMRUHandler.MRU_HANDLER_CAPABILITY, null))
 									continue Ford;
 								attack(b);
 								break Ford;
@@ -203,20 +205,17 @@ public class TileMRUCoil extends TileMRUGeneric {
 			else
 				--ticksBeforeStructureCheck;
 		}
-		super.update();
-		ECUtils.manage(this, 0);
 	}
 
 	public void attack(EntityLivingBase b) {
-		if(getMRU() > mruUsage && !b.isDead && b.hurtTime <= 0 && b.hurtResistantTime <= 0) {
+		if(mruStorage.getMRU() >= mruUsage && !b.isDead && b.hurtTime <= 0 && b.hurtResistantTime <= 0) {
 			if(generatesCorruption)
-				ECUtils.increaseCorruptionAt(getWorld(), pos.getX(), pos.getY(), pos.getZ(), getWorld().rand.nextInt(genCorruption));
+				ECUtils.increaseCorruptionAt(getWorld(), pos, getWorld().rand.nextInt(genCorruption));
 			b.attackEntityFrom(DamageSource.MAGIC, damage);
 			if(getWorld().isRemote && monsterLightning == null)
 				getWorld().playSound(pos.getX()+0.5F,pos.getY()+0.5F,pos.getZ()+0.5F, SoundRegistry.machineLightningHit, SoundCategory.BLOCKS, 2F, 2F, false);
 			monsterLightning = new Lightning(getWorld().rand, new Coord3D(0.5F,0.8F,0.5F), new Coord3D(b.posX-pos.getX()+0.5D, b.posY-pos.getY()+0.8D, b.posZ-pos.getZ()+0.5D), 0.1F, 1F, 0.0F, 0.7F);
-			if(!getWorld().isRemote)
-				setMRU(getMRU() - mruUsage);
+			mruStorage.extractMRU(mruUsage, true);
 		}
 	}
 
@@ -247,7 +246,7 @@ public class TileMRUCoil extends TileMRUGeneric {
 			DummyData[] data = DataStorage.parseData(dataString);
 
 			mruUsage = Integer.parseInt(data[1].fieldValue);
-			cfgMaxMRU = Float.parseFloat(data[0].fieldValue);
+			cfgMaxMRU = Integer.parseInt(data[0].fieldValue);
 			generatesCorruption = Boolean.parseBoolean(data[2].fieldValue);
 			genCorruption = Integer.parseInt(data[3].fieldValue);
 			hurtPlayers = Boolean.parseBoolean(data[4].fieldValue);

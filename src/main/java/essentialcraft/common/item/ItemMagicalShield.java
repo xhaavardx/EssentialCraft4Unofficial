@@ -12,11 +12,10 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 
-public class ItemMagicalShield extends ItemStoresMRUInNBT implements IModelRegisterer {
+public class ItemMagicalShield extends ItemMRUGeneric implements IModelRegisterer {
 
 	public ItemMagicalShield() {
 		super();
-		this.setMaxMRU(5000);
 		this.maxStackSize = 1;
 		this.bFull3D = true;
 	}
@@ -51,7 +50,7 @@ public class ItemMagicalShield extends ItemStoresMRUInNBT implements IModelRegis
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World p_77659_2_, EntityPlayer p_77659_3_, EnumHand hand)
 	{
-		if(ECUtils.tryToDecreaseMRUInStorage(p_77659_3_, -50*40) || this.increaseMRU(p_77659_3_.getHeldItem(hand), -50*40))
+		if(ECUtils.playerUseMRU(p_77659_3_, p_77659_3_.getHeldItem(hand), 2000))
 		{
 			p_77659_3_.setActiveHand(hand);
 		}

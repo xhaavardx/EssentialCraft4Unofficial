@@ -7,13 +7,14 @@ import net.minecraftforge.common.config.Configuration;
 
 public class TileMoonWell extends TileMRUGeneric {
 
-	public static float cfgMaxMRU = ApiCore.GENERATOR_MAX_MRU_GENERIC;
+	public static int cfgMaxMRU = ApiCore.GENERATOR_MAX_MRU_GENERIC;
 	public static float cfgBalance = 1F;
 	public static float mruGenerated = 60;
 
 	public TileMoonWell() {
 		super();
-		maxMRU = (int)cfgMaxMRU;
+		mruStorage.setMaxMRU(cfgMaxMRU);
+		mruStorage.setBalance(cfgBalance);
 		slot0IsBoundGem = false;
 	}
 
@@ -26,7 +27,6 @@ public class TileMoonWell extends TileMRUGeneric {
 	@Override
 	public void update() {
 		super.update();
-		balance = cfgBalance;
 		if(getWorld().isBlockIndirectlyGettingPowered(pos) == 0) {
 			int moonPhase = getWorld().provider.getMoonPhase(getWorld().getWorldTime());
 			float moonFactor = 1.0F;
@@ -73,10 +73,8 @@ public class TileMoonWell extends TileMRUGeneric {
 				heightFactor = 1.0F - pos.getY()/80F;
 				mruGenerated *= heightFactor;
 			}
-			if(mruGenerated > 0 && canGenerateMRU() && !getWorld().isRemote) {
-				setMRU((int)(getMRU() + mruGenerated));
-				if(getMRU() > getMaxMRU())
-					setMRU(getMaxMRU());
+			if(mruGenerated > 0 && canGenerateMRU()) {
+				mruStorage.addMRU((int)mruGenerated, true);
 			}
 		}
 	}
@@ -96,7 +94,7 @@ public class TileMoonWell extends TileMRUGeneric {
 
 			DummyData[] data = DataStorage.parseData(dataString);
 
-			cfgMaxMRU = Float.parseFloat(data[0].fieldValue);
+			cfgMaxMRU = Integer.parseInt(data[0].fieldValue);
 			cfgBalance = Float.parseFloat(data[1].fieldValue);
 			mruGenerated = Float.parseFloat(data[2].fieldValue);
 

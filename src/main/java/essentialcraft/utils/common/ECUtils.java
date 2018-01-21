@@ -8,6 +8,7 @@ import java.util.Map.Entry;
 import java.util.UUID;
 
 import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Lists;
 import com.mojang.authlib.GameProfile;
 
 import DummyCore.Utils.Coord3D;
@@ -23,7 +24,6 @@ import baubles.api.cap.IBaublesItemHandler;
 import essentialcraft.api.ApiCore;
 import essentialcraft.api.EnumStructureType;
 import essentialcraft.api.IMRUHandler;
-import essentialcraft.api.IMRUHandlerEntity;
 import essentialcraft.api.IMRUHandlerItem;
 import essentialcraft.api.IMRUResistHandler;
 import essentialcraft.api.IMRUVisibilityHandler;
@@ -35,17 +35,16 @@ import essentialcraft.api.RadiatingChamberRecipe;
 import essentialcraft.api.RadiatingChamberRecipes;
 import essentialcraft.api.ShapedFurnaceRecipe;
 import essentialcraft.api.WorldEventRegistry;
+import essentialcraft.common.capabilities.mru.CapabilityMRUHandler;
 import essentialcraft.common.entity.EntityMRUPresence;
 import essentialcraft.common.inventory.InventoryMagicFilter;
 import essentialcraft.common.item.ItemBaublesResistance;
-import essentialcraft.common.item.ItemBoundGem;
 import essentialcraft.common.item.ItemFilter;
 import essentialcraft.common.mod.EssentialCraftCore;
 import essentialcraft.common.registry.PotionRegistry;
-import essentialcraft.common.tile.TileMRUReactor;
-import essentialcraft.common.tile.TileRayTower;
 import essentialcraft.network.PacketNBT;
 import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -94,7 +93,7 @@ public class ECUtils {
 
 	public static PlayerGenericData getData(EntityPlayer e)
 	{
-		return playerDataExists(e) ? PLAYER_DATA_MAP.get(MiscUtils.getUUIDFromPlayer(e)) : createPlayerData(e);
+		return getData(MiscUtils.getUUIDFromPlayer(e));
 	}
 
 	/**
@@ -102,7 +101,7 @@ public class ECUtils {
 	 */
 	public static PlayerGenericData getData(UUID uuid)
 	{
-		return playerDataExists(uuid) ? PLAYER_DATA_MAP.get(uuid) : null;
+		return playerDataExists(uuid) ? PLAYER_DATA_MAP.get(uuid) : createPlayerData(uuid);
 	}
 
 	/**
@@ -118,20 +117,23 @@ public class ECUtils {
 		return PLAYER_DATA_MAP.containsKey(MiscUtils.getUUIDFromPlayer(e));
 	}
 
-	public static boolean playerDataExists(String username) {
+	public static boolean playerDataExists(String uuid) {
 		try {
-			return PLAYER_DATA_MAP.containsKey(UUID.fromString(username));
+			return PLAYER_DATA_MAP.containsKey(UUID.fromString(uuid));
 		}
 		catch(IllegalArgumentException e) {
 			return false;
 		}
 	}
 
-	public static PlayerGenericData createPlayerData(EntityPlayer e)
-	{
-		if(e != null) {
-			PlayerGenericData dat = new PlayerGenericData(e);
-			PLAYER_DATA_MAP.put(MiscUtils.getUUIDFromPlayer(e), dat);
+	public static PlayerGenericData createPlayerData(EntityPlayer e) {
+		return createPlayerData(MiscUtils.getUUIDFromPlayer(e));
+	}
+
+	public static PlayerGenericData createPlayerData(UUID uuid) {
+		if(uuid != null) {
+			PlayerGenericData dat = new PlayerGenericData(uuid);
+			PLAYER_DATA_MAP.put(uuid, dat);
 			return dat;
 		}
 		else
@@ -164,15 +166,17 @@ public class ECUtils {
 		DummyPacketHandler.sendToAllAround(pkt, new TargetPoint(dim, x, y, z, radius));
 	}
 
-	public static void readOrCreatePlayerData(EntityPlayer e, NBTTagCompound tag)
-	{
-		if(e != null && tag != null) {
-			if(!PLAYER_DATA_MAP.containsKey(e.getName()))
-			{
-				PlayerGenericData dat = new PlayerGenericData(e);
-				PLAYER_DATA_MAP.put(MiscUtils.getUUIDFromPlayer(e), dat);
+	public static void readOrCreatePlayerData(EntityPlayer e, NBTTagCompound tag) {
+		readOrCreatePlayerData(MiscUtils.getUUIDFromPlayer(e), tag);
+	}
+
+	public static void readOrCreatePlayerData(UUID uuid, NBTTagCompound tag) {
+		if(uuid != null && tag != null) {
+			if(!PLAYER_DATA_MAP.containsKey(uuid)) {
+				PlayerGenericData dat = new PlayerGenericData(uuid);
+				PLAYER_DATA_MAP.put(uuid, dat);
 			}
-			PLAYER_DATA_MAP.get(MiscUtils.getUUIDFromPlayer(e)).readFromNBTTagCompound(tag);
+			PLAYER_DATA_MAP.get(uuid).readFromNBTTagCompound(tag);
 		}
 	}
 
@@ -201,26 +205,6 @@ public class ECUtils {
 			itemStack.setTagCompound(ret);
 		}
 		return ret;
-	}
-
-	public static void initMRUTag(ItemStack stack, int maxMRU)
-	{
-		if(maxMRU == 0)
-		{
-			try
-			{
-				Class<? extends Item> itemClz = stack.getItem().getClass();
-				Field f = itemClz.getField("maxMRU");
-				f.setInt(stack.getItem(), 5000);
-				maxMRU = 5000;
-			}catch(Exception e)
-			{
-				//Silent error tracking
-			}
-		}
-		getStackTag(stack).setInteger("maxMRU", maxMRU);
-		if(!getStackTag(stack).hasKey("mru"))
-			getStackTag(stack).setInteger("mru", 0);
 	}
 
 	public static void registerBlockResistance(Block blk, int meta, float resistance)
@@ -273,111 +257,108 @@ public class ECUtils {
 		return false;
 	}
 
+	public static boolean playerUseMRU(EntityPlayer player, ItemStack stack, int amount) {
+		if(ECUtils.tryToDecreaseMRUInStorage(player, amount)) {
+			return true;
+		}
+		IMRUHandlerItem mruHandler = stack.getCapability(CapabilityMRUHandler.MRU_HANDLER_ITEM_CAPABILITY, null);
+		if(mruHandler.getMRU() >= amount) {
+			mruHandler.extractMRU(amount, true);
+			return true;
+		}
+		return false;
+	}
+
 	public static boolean tryToDecreaseMRUInStorage(EntityPlayer player, int amount) {
 		if(player.capabilities.isCreativeMode) {
 			return true;
 		}
+		if(amount < 0) {
+			amount = -amount;
+		}
+		ArrayList<IMRUHandlerItem> list = Lists.<IMRUHandlerItem>newArrayList();
 		IBaublesItemHandler handler = BaublesApi.getBaublesHandler(player);
 		for(int i = 0; i < handler.getSlots(); ++i) {
 			ItemStack stk = handler.getStackInSlot(i);
-			if(stk.getItem() instanceof IMRUHandlerItem && ((IMRUHandlerItem)stk.getItem()).isStorage(stk)) {
-				if(((IMRUHandlerItem)stk.getItem()).increaseMRU(stk, amount)) {
-					return true;
+			if(stk.hasCapability(CapabilityMRUHandler.MRU_HANDLER_ITEM_CAPABILITY, null)) {
+				IMRUHandlerItem mruHandler = stk.getCapability(CapabilityMRUHandler.MRU_HANDLER_ITEM_CAPABILITY, null);
+				if(mruHandler.getStorage()) {
+					list.add(mruHandler);
 				}
 			}
 		}
 		InventoryPlayer inv = player.inventory;
-		for(int i = 0; i < inv.mainInventory.size(); ++i) {
-			ItemStack stk = inv.mainInventory.get(i);
-			if(stk.getItem() instanceof IMRUHandlerItem && ((IMRUHandlerItem)stk.getItem()).isStorage(stk)) {
-				if(((IMRUHandlerItem)stk.getItem()).increaseMRU(stk, amount)) {
-					return true;
+		for(ItemStack stk : inv.armorInventory) {
+			if(stk.hasCapability(CapabilityMRUHandler.MRU_HANDLER_ITEM_CAPABILITY, null)) {
+				IMRUHandlerItem mruHandler = stk.getCapability(CapabilityMRUHandler.MRU_HANDLER_ITEM_CAPABILITY, null);
+				if(mruHandler.getStorage()) {
+					list.add(mruHandler);
+				}
+			}
+		}
+		for(ItemStack stk : inv.mainInventory) {
+			if(stk.hasCapability(CapabilityMRUHandler.MRU_HANDLER_ITEM_CAPABILITY, null)) {
+				IMRUHandlerItem mruHandler = stk.getCapability(CapabilityMRUHandler.MRU_HANDLER_ITEM_CAPABILITY, null);
+				if(mruHandler.getStorage()) {
+					list.add(mruHandler);
+				}
+			}
+		}
+		for(ItemStack stk : inv.offHandInventory) {
+			if(stk.hasCapability(CapabilityMRUHandler.MRU_HANDLER_ITEM_CAPABILITY, null)) {
+				IMRUHandlerItem mruHandler = stk.getCapability(CapabilityMRUHandler.MRU_HANDLER_ITEM_CAPABILITY, null);
+				if(mruHandler.getStorage()) {
+					list.add(mruHandler);
 				}
 			}
 		}
 
+		int current = 0;
+		for(int i = 0; i < list.size(); ++i) {
+			IMRUHandlerItem mruHandler = list.get(i);
+			current += mruHandler.getMRU();
+			if(current >= amount) {
+				int remaining = amount;
+				for(int j = 0; j <= i; ++j) {
+					remaining -= list.get(j).extractMRU(remaining, true);
+					if(remaining <= 0) {
+						break;
+					}
+				}
+				list.clear();
+				return true;
+			}
+		}
+
+		list.clear();
 		return false;
 	}
 
-
-	public static void saveMRUState(IMRUHandler tile, NBTTagCompound saveTag)
-	{
-		saveTag.setFloat("mru", tile.getMRU());
-		saveTag.setFloat("maxMRU", tile.getMaxMRU());
-		saveTag.setFloat("balance", tile.getBalance());
-	}
-
-	public static void loadMRUState(IMRUHandler tile, NBTTagCompound loadTag)
-	{
-		tile.setBalance(loadTag.getFloat("balance"));
-		tile.setMRU((int) loadTag.getFloat("mru"));
-		tile.setMaxMRU(loadTag.getFloat("maxMRU"));
-	}
-
-	public static void createMRUCUAt(World w, Coord3D c, int MRU, float balance, boolean flag, boolean canAlwaysStay)
-	{
+	public static void createMRUCUAt(World w, Coord3D c, int MRU, float balance, boolean flag, boolean canAlwaysStay) {
 		EntityMRUPresence mru = new EntityMRUPresence(w);
 		mru.setPositionAndRotation(c.x, c.y, c.z, 0, 0);
-		if(!w.isRemote)
-		{
-			mru.setMRU(MRU);
-			mru.setBalance(balance);
-			mru.setFlag(flag);
-			mru.setAlwaysStay(canAlwaysStay);
+		if(!w.isRemote) {
+			mru.mruStorage.setMRU(MRU);
+			mru.mruStorage.setBalance(balance);
+			mru.mruStorage.setFlag(flag);
+			mru.mruStorage.setAlwaysStay(canAlwaysStay);
 			w.spawnEntity(mru);
 		}
 	}
 
-	public static void mruIn(TileEntity tile, int slotNum) {
-		if(tile instanceof IInventory && tile instanceof IMRUHandler && !tile.getWorld().isRemote) {
-			IInventory inv = (IInventory) tile;
-			IMRUHandler mrut = (IMRUHandler) tile;
-
-			if(inv.getStackInSlot(slotNum).getItem() instanceof ItemBoundGem && inv.getStackInSlot(slotNum).getTagCompound() != null) {
-				ItemStack s = inv.getStackInSlot(slotNum);
-				int[] o = ItemBoundGem.getCoords(s);
-				if(MathUtils.getDifference(tile.getPos().getX(), o[0]) <= 16 && MathUtils.getDifference(tile.getPos().getY(), o[1]) <= 16 && MathUtils.getDifference(tile.getPos().getZ(), o[2]) <= 16) {
-					BlockPos o1 = new BlockPos(o[0],o[1],o[2]);
-					if(tile.getWorld().getTileEntity(o1) != null && tile.getWorld().getTileEntity(o1) instanceof IMRUHandler) {
-						IMRUHandler t = (IMRUHandler) tile.getWorld().getTileEntity(o1);
-						if(t != tile && t != null) {
-							if(mrut.getMRU() < mrut.getMaxMRU()) {
-								int mru = t.getMRU();
-								if(mru > mrut.getMaxMRU() - mrut.getMRU()) {
-									if(t.setMRU(mru-(mrut.getMaxMRU() - mrut.getMRU()))) {
-										mrut.setMRU(mrut.getMaxMRU());
-									}
-								}
-								else {
-									if(t.setMRU(0)) {
-										mrut.setMRU(mrut.getMRU()+mru);
-									}
-								}
-								mrut.setBalance((mrut.getBalance()+t.getBalance())/2);
-							}
-						}
-					}
-				}
-			}
-			if(mrut.getMRU() < 0)
-				mrut.setMRU(0);
-		}
-	}
-
-	public static boolean increaseCorruptionAt(World w, float x, float y, float z, int amount)
-	{
-		Coord3D c = new Coord3D(x,y,z);
+	public static boolean increaseCorruptionAt(World w, BlockPos p, int amount) {
 		try {
-			EntityMRUPresence mru = (EntityMRUPresence)getClosestMRUCU(w, c, 32);
-			if(mru != null) {
+			IMRUHandler mruStorage = getClosestMRUCU(w, p, 32);
+			if(mruStorage != null) {
 				if(!w.isRemote) {
-					mru.setMRU(mru.getMRU()+amount);
+					mruStorage.addMRU(amount, true);
 				}
 			}
 			else {
+				Coord3D c = new Coord3D(p.getX()+0.5D, p.getY()+0.5D, p.getZ()+0.5D);
 				createMRUCUAt(w, c, amount, 1.0F+MathUtils.randomFloat(w.rand), true, false);
 			}
-			List<EntityPlayer> players = w.getEntitiesWithinAABB(EntityPlayer.class, new AxisAlignedBB(x, y, z, x+1, y+1, z+1).expand(6D, 3D, 6D));
+			List<EntityPlayer> players = w.getEntitiesWithinAABB(EntityPlayer.class, new AxisAlignedBB(p).expand(6D, 3D, 6D));
 			for(EntityPlayer player : players) {
 				if(!w.isRemote)
 					calculateAndAddMRUCorruptionPE(player);
@@ -422,78 +403,15 @@ public class ECUtils {
 		}
 	}
 
-	public static IMRUHandlerEntity getClosestMRUCU(World w, DummyCore.Utils.Coord3D c, int radius)
-	{
+	public static Entity getClosestMRUCUEntity(World w, BlockPos c, int radius) {
+		return ApiCore.getClosestMRUCUEntity(w, c, radius);
+	}
+
+	public static IMRUHandler getClosestMRUCU(World w, BlockPos c, int radius) {
 		return ApiCore.getClosestMRUCU(w, c, radius);
 	}
 
-	public static void spawnMRUParticles(TileEntity tile, int slotNum) {
-		IInventory inv = (IInventory) tile;
-		if(tile.getWorld().isRemote) {
-			if(inv.getStackInSlot(slotNum).getItem() instanceof ItemBoundGem && inv.getStackInSlot(slotNum).getTagCompound() != null) {
-				ItemStack s = inv.getStackInSlot(slotNum);
-				int[] o = ItemBoundGem.getCoords(s);
-				if(MathUtils.getDifference(tile.getPos().getX(), o[0]) <= 16 && MathUtils.getDifference(tile.getPos().getY(), o[1]) <= 16 && MathUtils.getDifference(tile.getPos().getZ(), o[2]) <= 16) {
-					BlockPos o1 = new BlockPos(o[0],o[1],o[2]);
-					if(tile.getWorld().getTileEntity(o1) != null && tile.getWorld().getTileEntity(o1) instanceof IMRUHandler) {
-						float balance = ((IMRUHandler)tile.getWorld().getTileEntity(o1)).getBalance();
-						float colorRRender = 0.0F;
-						float colorGRender = 1.0F;
-						float colorBRender = 1.0F;
-
-						float colorRNormal = 0.0F;
-						float colorGNormal = 1.0F;
-						float colorBNormal = 1.0F;
-
-						float colorRChaos = 1.0F;
-						float colorGChaos = 0.0F;
-						float colorBChaos = 0.0F;
-
-						float colorRFrozen = 0.0F;
-						float colorGFrozen = 0.0F;
-						float colorBFrozen = 1.0F;
-						if(balance!=1.0F) {
-							if(balance<1.0F) {
-								float diff = balance;
-								if(diff < 0.01F)
-									diff = 0.0F;
-								colorRRender = colorRNormal*diff + colorRFrozen*(1.0F-diff);
-								colorGRender = colorGNormal*diff + colorGFrozen*(1.0F-diff);
-								colorBRender = colorBNormal*diff + colorBFrozen*(1.0F-diff);
-							}
-							if(balance>1.0F) {
-								float diff = 2.0F-balance;
-								if(diff < 0.01F)
-									diff = 0.0F;
-								colorRRender = colorRNormal*diff + colorRChaos*(1.0F-diff);
-								colorGRender = colorGNormal*diff + colorGChaos*(1.0F-diff);
-								colorBRender = colorBNormal*diff + colorBChaos*(1.0F-diff);
-							}
-						}
-						if(tile instanceof TileRayTower) {
-							if(tile.getWorld().getTileEntity(o1) instanceof TileRayTower)
-								EssentialCraftCore.proxy.MRUFX((float) (o[0]+0.5D), (float) (o[1]+1.85D), (float) (o[2]+0.5D), tile.getPos().getX()-o[0], tile.getPos().getY()-o[1]+0.25D, tile.getPos().getZ()-o[2],colorRRender,colorGRender,colorBRender);
-							else if(tile.getWorld().getTileEntity(o1) instanceof TileMRUReactor)
-								EssentialCraftCore.proxy.MRUFX((float) (o[0]+0.5D), (float) (o[1]+1.1D), (float) (o[2]+0.5D), tile.getPos().getX()-o[0], tile.getPos().getY()-o[1]+0.8D, tile.getPos().getZ()-o[2],colorRRender,colorGRender,colorBRender);
-							else
-								EssentialCraftCore.proxy.MRUFX((float) (o[0]+0.5D), (float) (o[1]+0.5D), (float) (o[2]+0.5D), tile.getPos().getX()-o[0], tile.getPos().getY()-o[1]+1.5D, tile.getPos().getZ()-o[2],colorRRender,colorGRender,colorBRender);
-						}
-						else {
-							if(tile.getWorld().getTileEntity(o1) instanceof TileRayTower)
-								EssentialCraftCore.proxy.MRUFX((float) (o[0]+0.5D), (float) (o[1]+1.85D), (float) (o[2]+0.5D), tile.getPos().getX()-o[0], tile.getPos().getY()-o[1]-1.5D, tile.getPos().getZ()-o[2],colorRRender,colorGRender,colorBRender);
-							else if(tile.getWorld().getTileEntity(o1) instanceof TileMRUReactor)
-								EssentialCraftCore.proxy.MRUFX((float) (o[0]+0.5D), (float) (o[1]+1.1D), (float) (o[2]+0.5D), tile.getPos().getX()-o[0], tile.getPos().getY()-o[1]-0.6D, tile.getPos().getZ()-o[2],colorRRender,colorGRender,colorBRender);
-							else
-								EssentialCraftCore.proxy.MRUFX((float) (o[0]+0.5D), (float) (o[1]+0.5D), (float) (o[2]+0.5D), tile.getPos().getX()-o[0], tile.getPos().getY()-o[1], tile.getPos().getZ()-o[2],colorRRender,colorGRender,colorBRender);
-						}
-					}
-				}
-			}
-		}
-	}
-
-	public static float getGenResistance(int index, EntityPlayer p)
-	{
+	public static float getGenResistance(int index, EntityPlayer p) {
 		float resistance = 0F;
 		for(ItemStack armorStk : p.inventory.armorInventory) {
 			Item itm = armorStk.getItem();
@@ -711,6 +629,9 @@ public class ECUtils {
 
 
 	public static boolean oreDictionaryCompare(ItemStack stk, ItemStack stk1) {
+		if(stk.isEmpty() || stk1.isEmpty())
+			return false;
+
 		if(OreDictionary.getOreIDs(stk) == null && OreDictionary.getOreIDs(stk1) == null || OreDictionary.getOreIDs(stk).length == 0 && OreDictionary.getOreIDs(stk1).length == 0)
 			return true;
 
@@ -873,29 +794,6 @@ public class ECUtils {
 		else {
 			addScheduledAction(new ServerToClientSyncAction(requester, tile));
 		}
-	}
-
-	public static void balanceIn(TileEntity tile, int slotNum) {
-		if(tile instanceof IInventory && tile instanceof IMRUHandler) {
-			IInventory inv = (IInventory) tile;
-			IMRUHandler mrut = (IMRUHandler) tile;
-			if(inv.getStackInSlot(slotNum).getItem() instanceof ItemBoundGem && inv.getStackInSlot(slotNum).getTagCompound() != null) {
-				ItemStack s = inv.getStackInSlot(slotNum);
-				int[] o = ItemBoundGem.getCoords(s);
-				if(MathUtils.getDifference(tile.getPos().getX(), o[0]) <= 16 && MathUtils.getDifference(tile.getPos().getY(), o[1]) <= 16 && MathUtils.getDifference(tile.getPos().getZ(), o[2]) <= 16) {
-					BlockPos o1 = new BlockPos(o[0],o[1],o[2]);
-					if(tile.getWorld().getTileEntity(o1) != null && tile.getWorld().getTileEntity(o1) instanceof IMRUHandler) {
-						mrut.setBalance(((IMRUHandler) tile.getWorld().getTileEntity(o1)).getBalance());
-					}
-				}
-			}
-		}
-	}
-
-	public static void manage(TileEntity tile, int slotNum) {
-		mruIn(tile, 0);
-		spawnMRUParticles(tile, 0);
-		balanceIn(tile, 0);
 	}
 
 	public static GameProfile EC3FakePlayerProfile = new GameProfile(UUID.fromString("5cd89d0b-e9ba-0000-89f4-b5dbb05963da"), "[EC3]");

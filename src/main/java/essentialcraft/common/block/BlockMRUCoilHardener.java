@@ -3,24 +3,20 @@ package essentialcraft.common.block;
 import DummyCore.Client.IModelRegisterer;
 import essentialcraft.common.tile.TileMRUCoilHardener;
 import net.minecraft.block.BlockContainer;
+import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 
 public class BlockMRUCoilHardener extends BlockContainer implements IModelRegisterer {
 
-	protected BlockMRUCoilHardener(Material p_i45386_1_) {
-		super(p_i45386_1_);
-	}
-
 	public BlockMRUCoilHardener() {
-		super(Material.ROCK);
+		super(Material.ROCK, MapColor.PURPLE);
 	}
 
 	@Override
@@ -33,12 +29,6 @@ public class BlockMRUCoilHardener extends BlockContainer implements IModelRegist
 	public boolean isFullCube(IBlockState s)
 	{
 		return false;
-	}
-
-	@Override
-	public BlockRenderLayer getBlockLayer()
-	{
-		return BlockRenderLayer.SOLID;
 	}
 
 	@Override

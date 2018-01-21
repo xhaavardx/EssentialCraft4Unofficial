@@ -4,22 +4,22 @@ import java.util.List;
 
 import DummyCore.Client.IModelRegisterer;
 import DummyCore.Utils.Coord3D;
-import DummyCore.Utils.MiscUtils;
 import essentialcraft.api.IMRUHandlerItem;
+import essentialcraft.common.capabilities.mru.CapabilityMRUHandler;
+import essentialcraft.common.capabilities.mru.MRUItemStorage;
 import essentialcraft.utils.common.ECUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemPickaxe;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
@@ -30,43 +30,25 @@ import net.minecraft.world.GameType;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.ForgeHooks;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemMagicalDigger extends ItemPickaxe implements IMRUHandlerItem, IModelRegisterer {
+public class ItemMagicalDigger extends ItemPickaxe implements IModelRegisterer {
 
 	public ItemMagicalDigger() {
 		super(ItemsCore.elemental);
-		this.setMaxMRU(5000);
 		this.maxStackSize = 1;
 		this.bFull3D = false;
 		this.setMaxDamage(0);
 	}
 
-	int maxMRU = 5000;
-
-	public Item setMaxMRU(int max)
-	{
-		maxMRU = max;
-		return this;
-	}
+	public static Capability<IMRUHandlerItem> MRU_HANDLER_ITEM_CAPABILITY = CapabilityMRUHandler.MRU_HANDLER_ITEM_CAPABILITY;
+	public int maxMRU = 5000;
 
 	@Override
-	public boolean increaseMRU(ItemStack stack, int amount) {
-		if(MiscUtils.getStackTag(stack).getInteger("mru")+amount >= 0 && MiscUtils.getStackTag(stack).getInteger("mru")+amount<=MiscUtils.getStackTag(stack).getInteger("maxMRU"))
-		{
-			MiscUtils.getStackTag(stack).setInteger("mru", MiscUtils.getStackTag(stack).getInteger("mru")+amount);
-			return true;
-		}
-		return false;
-	}
-
-	@Override
-	public int getMRU(ItemStack stack) {
-		return MiscUtils.getStackTag(stack).getInteger("mru");
-	}
-
-	public boolean isItemTool(ItemStack p_77616_1_)
+	public boolean isEnchantable(ItemStack p_77616_1_)
 	{
 		return true;
 	}
@@ -76,34 +58,20 @@ public class ItemMagicalDigger extends ItemPickaxe implements IMRUHandlerItem, I
 	public void addInformation(ItemStack par1ItemStack, World par2EntityPlayer, List<String> par3List, ITooltipFlag par4)
 	{
 		super.addInformation(par1ItemStack, par2EntityPlayer, par3List, par4);
-		par3List.add(ECUtils.getStackTag(par1ItemStack).getInteger("mru") + "/" + ECUtils.getStackTag(par1ItemStack).getInteger("maxMRU") + " MRU");
-	}
-
-	@Override
-	public void onUpdate(ItemStack itemStack, World world, Entity entity, int indexInInventory, boolean isCurrentItem)
-	{
-		ECUtils.initMRUTag(itemStack, maxMRU);
+		par3List.add(par1ItemStack.getCapability(MRU_HANDLER_ITEM_CAPABILITY, null).getMRU() + "/" + par1ItemStack.getCapability(MRU_HANDLER_ITEM_CAPABILITY, null).getMaxMRU() + " MRU");
 	}
 
 	@Override
 	public void getSubItems(CreativeTabs par2CreativeTabs, NonNullList<ItemStack> par3List)
 	{
-		if(this.isInCreativeTab(par2CreativeTabs))
-			for (int var4 = 0; var4 < 1; ++var4)
-			{
-				ItemStack min = new ItemStack(this, 1, 0);
-				ECUtils.initMRUTag(min, maxMRU);
-				ItemStack max = new ItemStack(this, 1, 0);
-				ECUtils.initMRUTag(max, maxMRU);
-				ECUtils.getStackTag(max).setInteger("mru", ECUtils.getStackTag(max).getInteger("maxMRU"));
-				par3List.add(min);
-				par3List.add(max);
-			}
-	}
-
-	@Override
-	public int getMaxMRU(ItemStack stack) {
-		return this.maxMRU;
+		if(this.isInCreativeTab(par2CreativeTabs)) {
+			ItemStack min = new ItemStack(this, 1, 0);
+			ItemStack max = new ItemStack(this, 1, 0);
+			min.getCapability(MRU_HANDLER_ITEM_CAPABILITY, null).setMRU(0);
+			max.getCapability(MRU_HANDLER_ITEM_CAPABILITY, null).setMRU(maxMRU);
+			par3List.add(min);
+			par3List.add(max);
+		}
 	}
 
 	@Override
@@ -123,7 +91,7 @@ public class ItemMagicalDigger extends ItemPickaxe implements IMRUHandlerItem, I
 	@Override
 	public float getStrVsBlock(ItemStack par1ItemStack, IBlockState par2Block)
 	{
-		if(this.getMRU(par1ItemStack) > 9)
+		if(par1ItemStack.getCapability(MRU_HANDLER_ITEM_CAPABILITY, null).getMRU() >= 9)
 		{
 			return 32.0F;
 		}
@@ -132,7 +100,7 @@ public class ItemMagicalDigger extends ItemPickaxe implements IMRUHandlerItem, I
 
 	public boolean canBreak(ItemStack s)
 	{
-		return this.getMRU(s)>9;
+		return s.getCapability(MRU_HANDLER_ITEM_CAPABILITY, null).getMRU()>=9;
 	}
 
 	@Override
@@ -160,7 +128,7 @@ public class ItemMagicalDigger extends ItemPickaxe implements IMRUHandlerItem, I
 					Block b = e.getEntityWorld().getBlockState(new BlockPos((int)c.x+x,(int)c.y+y,(int)c.z+z)).getBlock();
 					if(b != null && b == id)
 					{
-						if(!e.getEntityWorld().isRemote &&(ECUtils.tryToDecreaseMRUInStorage(e, -9) || this.increaseMRU(s, -9)))
+						if(ECUtils.playerUseMRU(e, s, 9) && !e.getEntityWorld().isRemote)
 						{
 							this.breakBlock(e, c00rd, s);
 						}
@@ -201,12 +169,12 @@ public class ItemMagicalDigger extends ItemPickaxe implements IMRUHandlerItem, I
 	}
 
 	@Override
-	public void registerModels() {
-		ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation("essentialcraft:item/magicaldigger", "inventory"));
+	public ICapabilityProvider initCapabilities(ItemStack stack, NBTTagCompound nbt) {
+		return new MRUItemStorage(stack, maxMRU);
 	}
 
 	@Override
-	public boolean isStorage(ItemStack stack) {
-		return false;
+	public void registerModels() {
+		ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation("essentialcraft:item/magicaldigger", "inventory"));
 	}
 }

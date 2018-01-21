@@ -26,10 +26,10 @@ public class ItemEssentialFuel extends Item implements IModelRegisterer {
 	@Override
 	public void getSubItems(CreativeTabs par2CreativeTabs, NonNullList<ItemStack> par3List) {
 		if(this.isInCreativeTab(par2CreativeTabs))
-		for(int var4 = 0; var4 < 4; ++var4) {
-			ItemStack min = new ItemStack(this, 1, var4);
-			par3List.add(min);
-		}
+			for(int var4 = 0; var4 < 4; ++var4) {
+				ItemStack min = new ItemStack(this, 1, var4);
+				par3List.add(min);
+			}
 	}
 
 	@Override

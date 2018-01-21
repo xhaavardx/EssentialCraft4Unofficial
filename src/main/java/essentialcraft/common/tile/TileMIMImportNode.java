@@ -15,7 +15,7 @@ public class TileMIMImportNode extends TileMRUGeneric {
 	final Capability<IItemHandler> ITEM_HANDLER_CAPABILITY = CapabilityItemHandler.ITEM_HANDLER_CAPABILITY;
 
 	public TileMIMImportNode() {
-		setMaxMRU(0);
+		mruStorage.setMaxMRU(0);
 		setSlotsNum(1);
 		slot0IsBoundGem = false;
 	}

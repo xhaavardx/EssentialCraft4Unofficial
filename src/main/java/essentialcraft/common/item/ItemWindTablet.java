@@ -25,7 +25,7 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemWindTablet extends ItemStoresMRUInNBT implements IModelRegisterer {
+public class ItemWindTablet extends ItemMRUGeneric implements IModelRegisterer {
 
 	//24
 	public static String[] windMessages = {
@@ -57,13 +57,12 @@ public class ItemWindTablet extends ItemStoresMRUInNBT implements IModelRegister
 
 	public ItemWindTablet() {
 		super();
-		this.setMaxMRU(5000);
 		this.maxStackSize = 1;
 	}
 
 	@Override
 	public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-		if(ECUtils.tryToDecreaseMRUInStorage(player, -500) || this.increaseMRU(player.getHeldItem(hand), -500)) {
+		if(ECUtils.playerUseMRU(player, player.getHeldItem(hand), 500)) {
 			int currentWindRev = WindRelations.getPlayerWindRelations(player);
 			int maxWindRev = 3500;
 			String windName = "Owethanna Else Hugaida";

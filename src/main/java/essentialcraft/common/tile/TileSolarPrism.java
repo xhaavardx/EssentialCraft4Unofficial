@@ -17,6 +17,21 @@ public class TileSolarPrism extends TileEntity implements ITickable {
 
 	@Override
 	public void update() {
+		if(getWorld().isAirBlock(pos.east(2)) || getWorld().isAirBlock(pos.west(2)) || getWorld().isAirBlock(pos.north(2)) || getWorld().isAirBlock(pos.south(2))) {
+			getWorld().getBlockState(pos).getBlock().dropBlockAsItem(getWorld(), pos, getWorld().getBlockState(pos), 0);
+			getWorld().setBlockToAir(pos);
+			return;
+		}
+		if(!getWorld().isAirBlock(pos.east()) || !getWorld().isAirBlock(pos.west()) || !getWorld().isAirBlock(pos.north()) || !getWorld().isAirBlock(pos.south())) {
+			getWorld().getBlockState(pos).getBlock().dropBlockAsItem(getWorld(), pos, getWorld().getBlockState(pos), 0);
+			getWorld().setBlockToAir(pos);
+			return;
+		}
+		if(!getWorld().isAirBlock(pos.add(1, 0, 1)) || !getWorld().isAirBlock(pos.add(1, 0, -1)) || !getWorld().isAirBlock(pos.add(-1, 0, -1)) || !getWorld().isAirBlock(pos.add(-1, 0, 1))) {
+			getWorld().getBlockState(pos).getBlock().dropBlockAsItem(getWorld(), pos, getWorld().getBlockState(pos), 0);
+			getWorld().setBlockToAir(pos);
+			return;
+		}
 		if(!getWorld().isRemote) {
 			if(getWorld().rand.nextFloat() <= solarBeamChance && (getWorld().canBlockSeeSky(pos) || !requiresUnabstructedSky) && (getWorld().getWorldTime() % 24000 >= 5000 && getWorld().getWorldTime() % 24000 <= 7000 || !requiresMidday) && (!getWorld().isRaining() || ignoreRain)) {
 				int y = pos.getY()-1;
@@ -29,18 +44,6 @@ public class TileSolarPrism extends TileEntity implements ITickable {
 						getWorld().spawnEntity(beam);
 					}
 				}
-			}
-			if(getWorld().isAirBlock(pos.east(2)) || getWorld().isAirBlock(pos.west(2)) || getWorld().isAirBlock(pos.north(2)) || getWorld().isAirBlock(pos.south(2))) {
-				getWorld().getBlockState(pos).getBlock().dropBlockAsItem(getWorld(), pos, getWorld().getBlockState(pos), 0);
-				getWorld().setBlockToAir(pos);
-			}
-			if(!getWorld().isAirBlock(pos.east()) || !getWorld().isAirBlock(pos.west()) || !getWorld().isAirBlock(pos.north()) || !getWorld().isAirBlock(pos.south())) {
-				getWorld().getBlockState(pos).getBlock().dropBlockAsItem(getWorld(), pos, getWorld().getBlockState(pos), 0);
-				getWorld().setBlockToAir(pos);
-			}
-			if(!getWorld().isAirBlock(pos.add(1, 0, 1)) || !getWorld().isAirBlock(pos.add(1, 0, -1)) || !getWorld().isAirBlock(pos.add(-1, 0, -1)) || !getWorld().isAirBlock(pos.add(-1, 0, 1))) {
-				getWorld().getBlockState(pos).getBlock().dropBlockAsItem(getWorld(), pos, getWorld().getBlockState(pos), 0);
-				getWorld().setBlockToAir(pos);
 			}
 		}
 	}

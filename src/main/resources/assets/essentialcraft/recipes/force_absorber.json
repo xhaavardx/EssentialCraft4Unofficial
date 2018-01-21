@@ -13,7 +13,7 @@
         },
         "@": {
             "type": "forge:ore_dict",
-            "ore": "gemMithriline"
+            "ore": "gemMithrilineCrystal"
         },
         "C": {
             "type": "forge:ore_dict",

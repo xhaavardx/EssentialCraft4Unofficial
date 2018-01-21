@@ -14,10 +14,10 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 
 public class TileMIMExportNode extends TileMRUGeneric {
-	final Capability<IItemHandler> ITEM_HANDLER_CAPABILITY = CapabilityItemHandler.ITEM_HANDLER_CAPABILITY;
+	static Capability<IItemHandler> ITEM_HANDLER_CAPABILITY = CapabilityItemHandler.ITEM_HANDLER_CAPABILITY;
 
 	public TileMIMExportNode() {
-		setMaxMRU(0);
+		mruStorage.setMaxMRU(0);
 		setSlotsNum(1);
 		slot0IsBoundGem = false;
 	}

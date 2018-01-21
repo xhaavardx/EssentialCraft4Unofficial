@@ -9,7 +9,7 @@
     "key": {
         "#": {
             "type": "forge:ore_dict",
-            "ore": "plateMithriline"
+            "ore": "plateMithrilineMetal"
         },
         "@": {
             "item": "essentialcraft:genitem",

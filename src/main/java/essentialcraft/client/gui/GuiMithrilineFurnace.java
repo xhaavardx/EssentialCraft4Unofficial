@@ -1,17 +1,16 @@
 package essentialcraft.client.gui;
 
 import DummyCore.Client.GuiCommon;
-import essentialcraft.client.gui.element.GuiEnderPulseStorage;
+import essentialcraft.client.gui.element.GuiESPEStorage;
+import essentialcraft.client.gui.element.GuiProgressBar_MithrilineFurnace;
+import essentialcraft.common.tile.TileMithrilineFurnace;
 import net.minecraft.inventory.Container;
-import net.minecraft.tileentity.TileEntity;
 
 public class GuiMithrilineFurnace extends GuiCommon{
 
-	public GuiMithrilineFurnace(Container c, TileEntity tile) {
+	public GuiMithrilineFurnace(Container c, TileMithrilineFurnace tile) {
 		super(c,tile);
-		this.elementList.add(new GuiEnderPulseStorage(4, 64, tile));
+		this.elementList.add(new GuiESPEStorage(4, 64, tile));
+		this.elementList.add(new GuiProgressBar_MithrilineFurnace(81, 62, tile));
 	}
-
-
-
 }

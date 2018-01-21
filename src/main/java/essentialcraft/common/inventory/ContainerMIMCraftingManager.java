@@ -18,7 +18,7 @@ public class ContainerMIMCraftingManager extends ContainerInventory {
 
 	@Override
 	public void setupSlots() {
-		pInvOffsetZ = 50;
+		pInvOffsetZ = 56;
 		chestInventoryRows = 6;
 		chestInventoryColumns = 9;
 

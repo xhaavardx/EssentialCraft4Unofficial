@@ -1,10 +1,12 @@
 package essentialcraft.common.item;
 
+import java.lang.reflect.Method;
 import java.util.List;
 
 import DummyCore.Client.IItemColor;
 import DummyCore.Client.IModelRegisterer;
 import DummyCore.Utils.MiscUtils;
+import essentialcraft.api.IPlayerData;
 import essentialcraft.common.mod.EssentialCraftCore;
 import essentialcraft.network.PacketNBT;
 import essentialcraft.utils.common.ECUtils;
@@ -64,68 +66,60 @@ public class ItemSoulStone extends Item implements IItemColor, IModelRegisterer 
 	@Override
 	public void addInformation(ItemStack par1ItemStack, World par2EntityPlayer, List<String> par3List, ITooltipFlag par4)
 	{
-		if(par1ItemStack.getTagCompound() != null)
-		{
+		if(par1ItemStack.getTagCompound() != null) {
 			String username = par1ItemStack.getTagCompound().getString("playerName");
 			EntityPlayer player = Minecraft.getMinecraft().player;
-			if(player != null)
-			{
-				if(ECUtils.playerDataExists(username))
-				{
-					int currentEnergy = ECUtils.getData(player).getPlayerUBMRU();
-					int att = ECUtils.getData(player).getMatrixTypeID();
+			if(player != null) {
+				if(ECUtils.playerDataExists(username)) {
+					IPlayerData data = ECUtils.getData(player);
+					int currentEnergy = data.getPlayerUBMRU();
+					int att = data.getMatrixTypeID();
 					par3List.add(TextFormatting.DARK_GRAY+"Tracking MRU Matrix of "+TextFormatting.GOLD+MiscUtils.getUsernameFromUUID(username));
 					par3List.add(TextFormatting.DARK_GRAY+"Detected "+TextFormatting.GREEN+currentEnergy+TextFormatting.DARK_GRAY+" UBMRU Energy");
 
 					String at = "Neutral";
-					switch(att)
-					{
-					case 0:
-					{
+					switch(att) {
+					case 0: {
 						at = TextFormatting.GREEN+"Neutral";
 						break;
 					}
-					case 1:
-					{
+					case 1: {
 						at = TextFormatting.RED+"Chaos";
 						break;
 					}
-					case 2:
-					{
+					case 2: {
 						at = TextFormatting.BLUE+"Frozen";
 						break;
 					}
-					case 3:
-					{
+					case 3: {
 						at = TextFormatting.LIGHT_PURPLE+"Magic";
 						break;
 					}
-					case 4:
-					{
+					case 4: {
 						at = TextFormatting.GRAY+"Shade";
 						break;
 					}
-					default:
-					{
+					default: {
 						at = TextFormatting.GREEN+"Unknown";
 						break;
 					}
 					}
-					par3List.add(TextFormatting.DARK_GRAY+"MRU Matrix twists with "+at+TextFormatting.DARK_GRAY+" energies.");
+					par3List.add(TextFormatting.DARK_GRAY+"MRU Matrix twists with "+at+TextFormatting.DARK_GRAY+" Energies");
+					if(data.isWindbound()) {
+						par3List.add(TextFormatting.DARK_GRAY+"The player is "+TextFormatting.GREEN+"Windbound"+TextFormatting.DARK_GRAY);
+					}
 				}
-			}else
-			{
-				par3List.add(TextFormatting.DARK_GRAY+"The MRU Matrix of the owner is too pale to track...");
-				if(clientTimer == 0)
-				{
+			}
+			else {
+				par3List.add(TextFormatting.DARK_GRAY+"The MRU Matrix of the owner is too weak to track...");
+				if(clientTimer == 0) {
 					NBTTagCompound sTag = new NBTTagCompound();
 					sTag.setString("syncplayer", username);
 					sTag.setString("sender", MiscUtils.getUUIDFromPlayer(player).toString());
 					EssentialCraftCore.network.sendToServer(new PacketNBT(sTag).setID(1));
 					clientTimer = 100;
-
-				}else
-				{
+				}
+				else {
 					--clientTimer;
 				}
 			}
@@ -134,36 +128,37 @@ public class ItemSoulStone extends Item implements IItemColor, IModelRegisterer 
 	}
 
 	@SideOnly(Side.CLIENT)
-	public void addBloodMagicDescription(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List<String> par3List, ITooltipFlag par4)
-	{
-		if(par1ItemStack.getItemDamage() == 1)
-		{
-			String username = par1ItemStack.getTagCompound().getString("playerName");
+	public void addBloodMagicDescription(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List<String> par3List, ITooltipFlag par4) {
+		if(Loader.isModLoaded("bloodmagic")) {
+			if(par1ItemStack.getItemDamage() == 1) {
+				String username = par1ItemStack.getTagCompound().getString("playerName");
 
-			try
-			{
-				if(Loader.isModLoaded("BloodMagic")) {
-					//int currentEssence = WayofTime.bloodmagic.api.util.helper.NetworkHelper.getSoulNetwork(par2EntityPlayer).getCurrentEssence();
-					//par3List.add(TextFormatting.DARK_GRAY+"Detected "+TextFormatting.DARK_RED+currentEssence+TextFormatting.DARK_GRAY+" Life Essence.");
+				try {
+					Class<?> classNetworkHelper = Class.forName("WayofTime.bloodmagic.api.util.helper.NetworkHelper");
+					Method getSoulNetwork = classNetworkHelper.getMethod("getSoulNetwork", EntityPlayer.class);
+					Class<?> classSoulNetwork = Class.forName("WayofTime.bloodmagic.api.saving.SoulNetwork");
+					Method getCurrentEssence = classSoulNetwork.getMethod("getCurrentEssence");
+
+					int currentEssence = (Integer)getCurrentEssence.invoke(getSoulNetwork.invoke(null, par2EntityPlayer));
+					par3List.add(TextFormatting.DARK_GRAY+"Detected "+TextFormatting.DARK_RED+currentEssence+TextFormatting.DARK_GRAY+" Life Essence.");
 				}
-			}catch(Exception e)
-			{
+				catch(Exception e) {
+					e.printStackTrace();
+					par3List.add(TextFormatting.DARK_GRAY+"The owner's life network is pure and untouched...");
+				}
+			}
+			else if(par1ItemStack.getTagCompound() != null) {
 				par3List.add(TextFormatting.DARK_GRAY+"The owner's life network is pure and untouched...");
 			}
-		}else if(par1ItemStack.getTagCompound() != null)
-		{
-			par3List.add(TextFormatting.DARK_GRAY+"The owner's life network is pure and untouched...");
 		}
 	}
 
 	@Override
-	public int getColorFromItemstack(ItemStack p_82790_1_, int p_82790_2_)
-	{
-		if(p_82790_1_.getItemDamage() == 1)
-		{
-			return 0xff0000;
+	public int getColorFromItemstack(ItemStack p_82790_1_, int p_82790_2_) {
+		if(p_82790_1_.getItemDamage() == 1) {
+			return 0xFF0000;
 		}
-		return 16777215;
+		return 0xFFFFFF;
 	}
 
 	@Override

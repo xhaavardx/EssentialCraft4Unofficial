@@ -54,6 +54,7 @@ public class ItemCollectedMonsterSpawner extends Item implements IModelRegistere
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void addInformation(ItemStack stk, World player, List<String> lst, ITooltipFlag flag) {
+		super.addInformation(stk, player, lst, flag);
 		NBTTagCompound tag = MiscUtils.getStackTag(stk);
 		if(tag.hasKey("monsterSpawner")) {
 			NBTTagCompound spawnerTag = tag.getCompoundTag("monsterSpawner");

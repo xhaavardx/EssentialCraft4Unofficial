@@ -1,7 +1,7 @@
 package essentialcraft.client.gui.element;
 
 import DummyCore.Utils.MathUtils;
-import essentialcraft.api.IMRUHandler;
+import essentialcraft.common.capabilities.mru.CapabilityMRUHandler;
 import essentialcraft.common.item.ItemBoundGem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.inventory.IInventory;
@@ -52,17 +52,21 @@ public class GuiBoundGemState extends GuiTextElement{
 		}
 		else {
 			int o[] = ItemBoundGem.getCoords(inventory.getStackInSlot(slotNum));
-			if(this.tile.getWorld().getTileEntity(new BlockPos(o[0], o[1], o[2])) == null) {
+			BlockPos pos = new BlockPos(o[0], o[1], o[2]);
+			if(this.tile.getWorld().getTileEntity(pos) == null) {
 				Minecraft.getMinecraft().fontRenderer.drawString("No Tile At Pos!", posX+5, posY+5, 0xff0000, true);
 			}
-			else if(!(this.tile.getWorld().getTileEntity(new BlockPos(o[0], o[1], o[2])) instanceof IMRUHandler)) {
+			else if(!this.tile.getWorld().getTileEntity(pos).hasCapability(CapabilityMRUHandler.MRU_HANDLER_CAPABILITY, null)) {
 				Minecraft.getMinecraft().fontRenderer.drawString("Not Magical!", posX+12, posY+5, 0xff0000, true);
 			}
-			else if(!(MathUtils.getDifference(tile.getPos().getX(), o[0]) <= 16 && MathUtils.getDifference(tile.getPos().getY(), o[1]) <= 16 && MathUtils.getDifference(tile.getPos().getZ(), o[2]) <= 16)) {
+			else if(MathUtils.getDifference(tile.getPos().getX(), o[0]) > 16 || MathUtils.getDifference(tile.getPos().getY(), o[1]) > 16 || MathUtils.getDifference(tile.getPos().getZ(), o[2]) > 16) {
 				Minecraft.getMinecraft().fontRenderer.drawString("Not In Range!", posX+8, posY+5, 0xff0000, true);
 			}
-			else if(((IMRUHandler)tile.getWorld().getTileEntity(new BlockPos(o[0], o[1], o[2]))).getMRU() <= 0) {
-				Minecraft.getMinecraft().fontRenderer.drawString("No MRU In Tile!", posX+6, posY+5, 0xff0000, true);
+			else if(tile.getPos().equals(pos)) {
+				Minecraft.getMinecraft().fontRenderer.drawString("Bound To Self!", posX+5, posY+5, 0xff0000, true);
+			}
+			else if(tile.getWorld().getTileEntity(pos).getCapability(CapabilityMRUHandler.MRU_HANDLER_CAPABILITY, null).getMRU() <= 0) {
+				Minecraft.getMinecraft().fontRenderer.drawString("No MRU In Tile!", posX+6, posY+5, 0xffff00, true);
 			}
 			else {
 				Minecraft.getMinecraft().fontRenderer.drawString("Working", posX+22, posY+5, 0x00ff00, true);

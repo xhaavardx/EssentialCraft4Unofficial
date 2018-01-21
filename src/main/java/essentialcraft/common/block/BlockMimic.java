@@ -4,6 +4,7 @@ import DummyCore.Client.IModelRegisterer;
 import DummyCore.Utils.UnlistedPropertyObject;
 import essentialcraft.common.tile.TileMimic;
 import net.minecraft.block.BlockContainer;
+import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockStateContainer;
@@ -110,12 +111,31 @@ public class BlockMimic extends BlockContainer implements IModelRegisterer {
 	}
 
 	@Override
-	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-		TileEntity te = source.getTileEntity(pos);
-		if(te instanceof TileMimic && ((TileMimic)te).getState() != null) {
-			return ((TileMimic)te).getState().getBoundingBox(new FakeBlockAccess(source), pos);
+	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
+		try {
+			TileEntity te = worldIn.getTileEntity(pos);
+			if(te instanceof TileMimic && ((TileMimic)te).getState() != null) {
+				return ((TileMimic)te).getState().getBoundingBox(new FakeBlockAccess(worldIn), pos);
+			}
 		}
-		return super.getBoundingBox(state, source, pos);
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		return super.getBoundingBox(state, worldIn, pos);
+	}
+
+	@Override
+	public MapColor getMapColor(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
+		try {
+			TileEntity te = worldIn.getTileEntity(pos);
+			if(te instanceof TileMimic && ((TileMimic)te).getState() != null) {
+				return ((TileMimic)te).getState().getMapColor(new FakeBlockAccess(worldIn), pos);
+			}
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+		return super.getMapColor(state, worldIn, pos);
 	}
 
 	@Override

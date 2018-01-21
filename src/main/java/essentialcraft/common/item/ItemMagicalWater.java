@@ -12,11 +12,10 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 
-public class ItemMagicalWater extends ItemStoresMRUInNBT implements IModelRegisterer {
+public class ItemMagicalWater extends ItemMRUGeneric implements IModelRegisterer {
 
 	public ItemMagicalWater() {
 		super();
-		this.setMaxMRU(5000);
 		this.maxStackSize = 1;
 		this.bFull3D = true;
 	}
@@ -24,7 +23,7 @@ public class ItemMagicalWater extends ItemStoresMRUInNBT implements IModelRegist
 	@Override
 	public ItemStack onItemUseFinish(ItemStack p_77654_1_, World p_77654_2_, EntityLivingBase p_77654_3_)
 	{
-		if(p_77654_3_ instanceof EntityPlayer && (ECUtils.tryToDecreaseMRUInStorage((EntityPlayer)p_77654_3_, -500) || this.increaseMRU(p_77654_1_, -500)))
+		if(p_77654_3_ instanceof EntityPlayer && ECUtils.playerUseMRU((EntityPlayer)p_77654_3_, p_77654_1_, 500))
 		{
 			p_77654_3_.clearActivePotions();
 		}

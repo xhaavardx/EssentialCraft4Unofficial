@@ -21,16 +21,16 @@ import baubles.api.BaublesApi;
 import baubles.api.cap.IBaublesItemHandler;
 import essentialcraft.api.ApiCore;
 import essentialcraft.api.GunRegistry;
-import essentialcraft.api.IUBMRUGainModifyHandler;
-import essentialcraft.api.IWorldEvent;
-import essentialcraft.api.WorldEventRegistry;
 import essentialcraft.api.GunRegistry.GunMaterial;
 import essentialcraft.api.GunRegistry.GunType;
 import essentialcraft.api.GunRegistry.ScopeMaterial;
+import essentialcraft.api.IUBMRUGainModifyHandler;
+import essentialcraft.api.IWorldEvent;
+import essentialcraft.api.WorldEventRegistry;
 import essentialcraft.client.gui.GuiResearchBook;
+import essentialcraft.common.capabilities.mru.CapabilityMRUHandler;
 import essentialcraft.common.item.ItemBaublesSpecial;
 import essentialcraft.common.item.ItemGun;
-import essentialcraft.common.item.ItemMagicalWings;
 import essentialcraft.common.item.ItemShadeSword;
 import essentialcraft.common.item.ItemWindAxe;
 import essentialcraft.common.item.ItemWindHoe;
@@ -1225,8 +1225,10 @@ public class ECEventHandler {
 					player.setPosition(sX, sY, sZ);
 					ItemStack wings = BaublesApi.getBaublesHandler(player).getStackInSlot(3);
 					if(!wings.isEmpty()) {
-						ItemMagicalWings w = (ItemMagicalWings) wings.getItem();
-						if(ECUtils.tryToDecreaseMRUInStorage(player, -1) || w.increaseMRU(wings, -1)){}
+						if(ECUtils.tryToDecreaseMRUInStorage(player, 1)){}
+						else if(wings.getCapability(CapabilityMRUHandler.MRU_HANDLER_ITEM_CAPABILITY, null).getMRU() > 0) {
+							wings.getCapability(CapabilityMRUHandler.MRU_HANDLER_ITEM_CAPABILITY, null).extractMRU(1, true);
+						}
 					}
 				}
 				if(modData.fieldName.equalsIgnoreCase("mod") && modData.fieldValue.equalsIgnoreCase("essentialcraft.player.position")) {

@@ -19,11 +19,10 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.oredict.OreDictionary;
 
-public class ItemMagmaticWand extends ItemStoresMRUInNBT implements IModelRegisterer {
+public class ItemMagmaticWand extends ItemMRUGeneric implements IModelRegisterer {
 
 	public ItemMagmaticWand() {
 		super();
-		this.setMaxMRU(5000);
 		this.maxStackSize = 1;
 		this.bFull3D = true;
 	}
@@ -31,7 +30,7 @@ public class ItemMagmaticWand extends ItemStoresMRUInNBT implements IModelRegist
 	@Override
 	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
 		ItemStack ore = new ItemStack(world.getBlockState(pos).getBlock(),1,world.getBlockState(pos).getBlock().getMetaFromState(world.getBlockState(pos)));
-		if(!ore.isEmpty() && !world.isRemote) {
+		if(!ore.isEmpty()) {
 			int[] oreIds = OreDictionary.getOreIDs(ore);
 
 			String oreName = "Unknown";
@@ -45,7 +44,7 @@ public class ItemMagmaticWand extends ItemStoresMRUInNBT implements IModelRegist
 					break;
 				}
 			}
-			if(!player.getEntityWorld().isRemote && metadata != -1 && (ECUtils.tryToDecreaseMRUInStorage(player, -500) || this.increaseMRU(player.getHeldItem(hand), -500))) {
+			if(metadata != -1 && ECUtils.playerUseMRU(player, player.getHeldItem(hand), 500) && !player.getEntityWorld().isRemote) {
 				int suggestedStackSize = OreSmeltingRecipe.RECIPES.get(metadata).dropAmount;
 				if(world.rand.nextFloat() <= 0.33F)
 					suggestedStackSize = OreSmeltingRecipe.RECIPES.get(metadata).dropAmount*2;
@@ -58,7 +57,7 @@ public class ItemMagmaticWand extends ItemStoresMRUInNBT implements IModelRegist
 					type = GameType.ADVENTURE;
 
 				int be = ForgeHooks.onBlockBreakEvent(player.getEntityWorld(), type, (EntityPlayerMP)player, pos);
-				if(be != -1) {
+				if(be != -1 && !world.isRemote) {
 					world.setBlockToAir(pos);
 					EntityItem drop = new EntityItem(world, pos.getX(), pos.getY(), pos.getZ(), sugStk);
 					drop.motionX = MathUtils.randomDouble(world.rand)/10;

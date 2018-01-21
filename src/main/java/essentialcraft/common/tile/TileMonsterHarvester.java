@@ -20,7 +20,7 @@ public class TileMonsterHarvester extends TileMRUGeneric {
 	public static float rad = 12F;
 	public float rotation = 0F;
 	public int destrTick;
-	public static float cfgMaxMRU = ApiCore.DEVICE_MAX_MRU_GENERIC;
+	public static int cfgMaxMRU = ApiCore.DEVICE_MAX_MRU_GENERIC;
 	public static boolean generatesCorruption = false;
 	public static int genCorruption = 10;
 	public static int mruUsage = 100;
@@ -30,14 +30,14 @@ public class TileMonsterHarvester extends TileMRUGeneric {
 
 	public TileMonsterHarvester() {
 		super();
-		maxMRU = (int)cfgMaxMRU;
+		mruStorage.setMaxMRU(cfgMaxMRU);
 		setSlotsNum(6);
 	}
 
 	@Override
 	public void update() {
 		super.update();
-		ECUtils.manage(this, 0);
+		mruStorage.update(getPos(), getWorld(), getStackInSlot(0));
 		if(getWorld().isBlockIndirectlyGettingPowered(pos) == 0) {
 			++destrTick;
 			if(destrTick >= mobDestructionTimer) {
@@ -47,32 +47,34 @@ public class TileMonsterHarvester extends TileMRUGeneric {
 					for(int i = 0; i < lst.size(); ++i) {
 						EntityLivingBase e = lst.get(i);
 						if(!(e instanceof EntityPlayer)) {
-							if(getMRU() > mruUsage) {
+							if(mruStorage.getMRU() >= mruUsage) {
 								if(!e.isNonBoss() && !allowBossDuplication)
 									return;
+								mruStorage.extractMRU(mruUsage, true);
 
-								EntityLivingBase copy = (EntityLivingBase)MiscUtils.cloneEntity(e);
-								getWorld().spawnEntity(copy);
-								if(clearCopyInventory) {
-									copy.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, ItemStack.EMPTY);
-									copy.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, ItemStack.EMPTY);
-									copy.setItemStackToSlot(EntityEquipmentSlot.HEAD, ItemStack.EMPTY);
-									copy.setItemStackToSlot(EntityEquipmentSlot.CHEST, ItemStack.EMPTY);
-									copy.setItemStackToSlot(EntityEquipmentSlot.LEGS, ItemStack.EMPTY);
-									copy.setItemStackToSlot(EntityEquipmentSlot.FEET, ItemStack.EMPTY);
+								if(!world.isRemote) {
+									EntityLivingBase copy = (EntityLivingBase)MiscUtils.cloneEntity(e);
+									getWorld().spawnEntity(copy);
+									if(clearCopyInventory) {
+										copy.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, ItemStack.EMPTY);
+										copy.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, ItemStack.EMPTY);
+										copy.setItemStackToSlot(EntityEquipmentSlot.HEAD, ItemStack.EMPTY);
+										copy.setItemStackToSlot(EntityEquipmentSlot.CHEST, ItemStack.EMPTY);
+										copy.setItemStackToSlot(EntityEquipmentSlot.LEGS, ItemStack.EMPTY);
+										copy.setItemStackToSlot(EntityEquipmentSlot.FEET, ItemStack.EMPTY);
+									}
+									FakePlayer player = new FakePlayer((WorldServer)e.world, ECUtils.EC3FakePlayerProfile);
+									ItemStack stk = getStackInSlot(2);
+									if(!stk.isEmpty())
+										player.inventory.setInventorySlotContents(player.inventory.currentItem, stk.copy());
+									copy.setHealth(0.01F);
+									player.attackTargetEntityWithCurrentItem(copy);
+									player.setDead();
+									if(copy.getHealth() > 0)
+										copy.setDead();
+									if(generatesCorruption)
+										ECUtils.increaseCorruptionAt(getWorld(), pos, getWorld().rand.nextInt(genCorruption));
 								}
-								FakePlayer player = new FakePlayer((WorldServer)e.world, ECUtils.EC3FakePlayerProfile);
-								ItemStack stk = getStackInSlot(2);
-								if(!stk.isEmpty())
-									player.inventory.setInventorySlotContents(player.inventory.currentItem, stk.copy());
-								copy.setHealth(0.1F);
-								player.attackTargetEntityWithCurrentItem(copy);
-								player.setDead();
-								setMRU(getMRU() - mruUsage);
-								if(copy.getHealth() > 0)
-									copy.setDead();
-								if(generatesCorruption)
-									ECUtils.increaseCorruptionAt(getWorld(), pos.getX(), pos.getY(), pos.getZ(), getWorld().rand.nextInt(genCorruption));
 							}
 						}
 					}
@@ -102,7 +104,7 @@ public class TileMonsterHarvester extends TileMRUGeneric {
 			DummyData[] data = DataStorage.parseData(dataString);
 
 			mruUsage = Integer.parseInt(data[1].fieldValue);
-			cfgMaxMRU = Float.parseFloat(data[0].fieldValue);
+			cfgMaxMRU = Integer.parseInt(data[0].fieldValue);
 			generatesCorruption = Boolean.parseBoolean(data[2].fieldValue);
 			genCorruption = Integer.parseInt(data[3].fieldValue);
 			rad = Float.parseFloat(data[4].fieldValue);

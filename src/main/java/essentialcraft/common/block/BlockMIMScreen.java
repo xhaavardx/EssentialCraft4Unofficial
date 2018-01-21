@@ -5,6 +5,7 @@ import essentialcraft.common.mod.EssentialCraftCore;
 import essentialcraft.common.tile.TileMIMScreen;
 import essentialcraft.utils.cfg.Config;
 import net.minecraft.block.BlockContainer;
+import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
@@ -28,7 +29,7 @@ public class BlockMIMScreen extends BlockContainer implements IModelRegisterer {
 	public static final PropertyDirection FACING = PropertyDirection.create("facing");
 
 	public BlockMIMScreen() {
-		super(Material.ROCK);
+		super(Material.ROCK, MapColor.PURPLE);
 		setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.DOWN));
 	}
 
@@ -56,18 +57,14 @@ public class BlockMIMScreen extends BlockContainer implements IModelRegisterer {
 
 	@Override
 	public boolean onBlockActivated(World par1World, BlockPos par2, IBlockState par3, EntityPlayer par4EntityPlayer, EnumHand par5, EnumFacing par7, float par8, float par9, float par10) {
-		if(par1World.isRemote) {
+		if(par4EntityPlayer.isSneaking()) {
+			return false;
+		}
+		if(!par1World.isRemote) {
+			par4EntityPlayer.openGui(EssentialCraftCore.core, Config.guiID[0], par1World, par2.getX(), par2.getY(), par2.getZ());
 			return true;
 		}
-		else {
-			if(!par4EntityPlayer.isSneaking()) {
-				par4EntityPlayer.openGui(EssentialCraftCore.core, Config.guiID[0], par1World, par2.getX(), par2.getY(), par2.getZ());
-				return true;
-			}
-			else {
-				return false;
-			}
-		}
+		return true;
 	}
 
 	@Override

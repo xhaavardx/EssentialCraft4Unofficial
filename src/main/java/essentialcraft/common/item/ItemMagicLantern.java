@@ -17,11 +17,10 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 
-public class ItemMagicLantern extends ItemStoresMRUInNBT implements IModelRegisterer {
+public class ItemMagicLantern extends ItemMRUGeneric implements IModelRegisterer {
 
 	public ItemMagicLantern() {
 		super();
-		this.setMaxMRU(5000);
 		this.maxStackSize = 1;
 		this.bFull3D = true;
 	}
@@ -54,7 +53,7 @@ public class ItemMagicLantern extends ItemStoresMRUInNBT implements IModelRegist
 		Block b = world.getBlockState(pos.offset(dir)).getBlock();
 		if(b == Blocks.AIR)
 		{
-			if(player.inventory.hasItemStack(new ItemStack(ItemsCore.magicalSlag)) && (ECUtils.tryToDecreaseMRUInStorage(player, -100) || this.increaseMRU(player.getHeldItem(hand), -100)))
+			if(player.inventory.hasItemStack(new ItemStack(ItemsCore.magicalSlag)) && ECUtils.playerUseMRU(player, player.getHeldItem(hand), 100))
 			{
 				int slotID = -1;
 				for(int i = 0; i < player.inventory.getSizeInventory(); ++i)

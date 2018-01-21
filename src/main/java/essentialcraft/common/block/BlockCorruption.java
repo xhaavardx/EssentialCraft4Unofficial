@@ -38,8 +38,8 @@ public class BlockCorruption extends BlockContainer implements IModelRegisterer 
 	public static final PropertyBool WEST = PropertyBool.create("west");
 	public String textureName;
 
-	protected BlockCorruption(Material p_i45394_1_) {
-		super(p_i45394_1_);
+	protected BlockCorruption() {
+		super(Material.CIRCUITS);
 		setDefaultState(this.blockState.getBaseState().withProperty(LEVEL, 0).withProperty(DOWN, false).withProperty(UP, false).withProperty(SOUTH, false).withProperty(NORTH, false).withProperty(EAST, false).withProperty(WEST, false));
 	}
 

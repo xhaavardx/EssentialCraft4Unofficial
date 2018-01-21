@@ -30,6 +30,7 @@ public class ItemBlockFancy extends ItemBlock {
 	@Override
 	public void addInformation(ItemStack par1ItemStack, World par2EntityPlayer, List<String> par3List, ITooltipFlag par4)
 	{
+		super.addInformation(par1ItemStack, par2EntityPlayer, par3List, par4);
 		par3List.add(I18n.translateToLocal("essentialcraft.desc.fancy."+BlockFancy.overlays[par1ItemStack.getItemDamage()]));
 	}
 }

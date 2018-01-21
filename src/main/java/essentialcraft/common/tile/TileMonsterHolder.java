@@ -7,7 +7,6 @@ import DummyCore.Utils.DataStorage;
 import DummyCore.Utils.DummyData;
 import DummyCore.Utils.DummyDistance;
 import essentialcraft.api.ApiCore;
-import essentialcraft.utils.common.ECUtils;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -16,21 +15,21 @@ import net.minecraftforge.common.config.Configuration;
 
 public class TileMonsterHolder extends TileMRUGeneric {
 	public static float rad = 12F;
-	public static float cfgMaxMRU = ApiCore.DEVICE_MAX_MRU_GENERIC;
+	public static int cfgMaxMRU = ApiCore.DEVICE_MAX_MRU_GENERIC;
 	public static boolean generatesCorruption = false;
 	public static int genCorruption = 1;
 	public static int mruUsage = 1;
 
 	public TileMonsterHolder() {
 		super();
-		maxMRU = (int) cfgMaxMRU;
+		mruStorage.setMaxMRU(cfgMaxMRU);
 		setSlotsNum(1);
 	}
 
 	@Override
 	public void update() {
 		super.update();
-		ECUtils.manage(this, 0);
+		mruStorage.update(getPos(), getWorld(), getStackInSlot(0));
 		if(getWorld().isBlockIndirectlyGettingPowered(pos) == 0) {
 			List<EntityLivingBase> lst = getWorld().getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(pos.getX()-32, pos.getY()-32, pos.getZ()-32, pos.getX()+33, pos.getY()+33, pos.getZ()+33));
 			if(!lst.isEmpty()) {
@@ -38,7 +37,8 @@ public class TileMonsterHolder extends TileMRUGeneric {
 				{
 					EntityLivingBase e = lst.get(i);
 					if(!(e instanceof EntityPlayer)) {
-						if(getMRU() > mruUsage) {
+						if(mruStorage.getMRU() >= mruUsage) {
+							mruStorage.extractMRU(mruUsage, true);
 							Coord3D tilePos = new Coord3D(pos.getX()+0.5D,pos.getY()+0.5D,pos.getZ()+0.5D);
 							Coord3D mobPosition = new Coord3D(e.posX,e.posY,e.posZ);
 							DummyDistance dist = new DummyDistance(tilePos,mobPosition);
@@ -46,8 +46,6 @@ public class TileMonsterHolder extends TileMRUGeneric {
 								Vec3d posVector = new Vec3d(tilePos.x-mobPosition.x,tilePos.y-mobPosition.y ,tilePos.z-mobPosition.z);
 								e.setPositionAndRotation(tilePos.x-posVector.x/1.1D, tilePos.y-posVector.y/1.1D, tilePos.z-posVector.z/1.1D, e.rotationYaw, e.rotationPitch);
 							}
-							if(!getWorld().isRemote)
-								setMRU(getMRU() - mruUsage);
 						}
 					}
 				}
@@ -79,7 +77,7 @@ public class TileMonsterHolder extends TileMRUGeneric {
 			DummyData[] data = DataStorage.parseData(dataString);
 
 			mruUsage = Integer.parseInt(data[1].fieldValue);
-			cfgMaxMRU = Float.parseFloat(data[0].fieldValue);
+			cfgMaxMRU = Integer.parseInt(data[0].fieldValue);
 			generatesCorruption = Boolean.parseBoolean(data[2].fieldValue);
 			genCorruption = Integer.parseInt(data[3].fieldValue);
 			rad = Float.parseFloat(data[4].fieldValue);

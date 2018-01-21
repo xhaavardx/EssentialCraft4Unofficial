@@ -1,18 +1,34 @@
 package essentialcraft.client.gui.element;
 
+import essentialcraft.api.IMRUDisplay;
 import essentialcraft.api.IMRUHandler;
+import essentialcraft.common.capabilities.mru.CapabilityMRUHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 
 public class GuiBalanceState extends GuiTextElement{
 
-	public TileEntity tile;
+	public IMRUHandler tile;
+
+	public GuiBalanceState(int i, int j, IMRUHandler t)
+	{
+		super(i,j);
+		tile = t;
+	}
 
 	public GuiBalanceState(int i, int j, TileEntity t)
 	{
 		super(i,j);
-		tile = t;
+		if(t.hasCapability(CapabilityMRUHandler.MRU_HANDLER_CAPABILITY, null)) {
+			tile = t.getCapability(CapabilityMRUHandler.MRU_HANDLER_CAPABILITY, null);
+		}
+		else if(t instanceof IMRUDisplay) {
+			tile = ((IMRUDisplay)t).getMRUHandler();
+		}
+		else {
+			throw new IllegalArgumentException("Tile does not handle MRU");
+		}
 	}
 
 	@Override
@@ -37,8 +53,8 @@ public class GuiBalanceState extends GuiTextElement{
 
 	@Override
 	public void drawText(int posX, int posY) {
-		float balance = ((IMRUHandler)tile).getBalance();
-		String str = Float.toString( ((IMRUHandler)tile).getBalance());
+		float balance = tile.getBalance();
+		String str = Float.toString(tile.getBalance());
 		if(str.length() > 6)
 			str = str.substring(0, 6);
 

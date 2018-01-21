@@ -21,8 +21,8 @@ public class ItemTestEC extends Item implements IModelRegisterer {
 		if(!worldIn.isRemote)
 		{
 			new WorldGenMRUTower().generate(worldIn, worldIn.rand, pos);
-			worldIn.markBlockRangeForRenderUpdate(pos.getX()-32, Math.max(Loader.isModLoaded("cubicchunks") ? Integer.MIN_VALUE : 0, pos.getY()-32), pos.getZ()-32, pos.getX()+32, Math.min(Loader.isModLoaded("cubicchunks") ? Integer.MAX_VALUE : 255, pos.getY()+32), pos.getZ()+32);
 		}
+		worldIn.markBlockRangeForRenderUpdate(pos.getX()-32, Math.max(Loader.isModLoaded("cubicchunks") ? Integer.MIN_VALUE : 0, pos.getY()-32), pos.getZ()-32, pos.getX()+32, Math.min(Loader.isModLoaded("cubicchunks") ? Integer.MAX_VALUE : 255, pos.getY()+32), pos.getZ()+32);
 		return EnumActionResult.PASS;
 	}
 

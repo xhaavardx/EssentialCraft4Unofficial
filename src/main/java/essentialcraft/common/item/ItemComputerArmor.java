@@ -8,8 +8,9 @@ import com.google.common.collect.Multimap;
 
 import DummyCore.Client.IModelRegisterer;
 import DummyCore.Utils.DCASMCheck;
-import DummyCore.Utils.MiscUtils;
 import essentialcraft.api.IMRUHandlerItem;
+import essentialcraft.common.capabilities.mru.CapabilityMRUHandler;
+import essentialcraft.common.capabilities.mru.MRUItemStorage;
 import essentialcraft.utils.common.ECUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -23,6 +24,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.TextFormatting;
@@ -30,30 +32,33 @@ import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.ISpecialArmor;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @DCASMCheck
 //@ExistenceCheck(classPath = {"thaumcraft.api.IRepairable","thaumcraft.api.IVisDiscountGear","thaumcraft.api.nodes.IRevealer","thaumcraft.api.IGoggles"})
-public class ItemComputerArmor extends ItemArmor implements /*IRepairable, IVisDiscountGear, IRevealer, IGoggles, */ISpecialArmor, IMRUHandlerItem, IModelRegisterer {
+public class ItemComputerArmor extends ItemArmor implements /*IRepairable, IVisDiscountGear, IRevealer, IGoggles, */ISpecialArmor, IModelRegisterer {
+
+	public static Capability<IMRUHandlerItem> MRU_HANDLER_ITEM_CAPABILITY = CapabilityMRUHandler.MRU_HANDLER_ITEM_CAPABILITY;
+	public int maxMRU = 1000000;
+
 	public ItemComputerArmor(ArmorMaterial material, int texture, int armorType) {
 		super(material, texture, EntityEquipmentSlot.values()[5-armorType]);
 		mat = material;
 	}
 
 	@Override
-	public String getArmorTexture(ItemStack itemstack, Entity entity, EntityEquipmentSlot slot, String type)
-	{
-		switch(slot)
-		{
+	public String getArmorTexture(ItemStack itemstack, Entity entity, EntityEquipmentSlot slot, String type) {
+		switch(slot) {
 		case LEGS: return "essentialcraft:textures/special/armor/computer_layer_2.png"; //2 should be the slot for legs
 		default: return "essentialcraft:textures/special/armor/computer_layer_1.png";
 		}
 	}
 
 	@Override
-	public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack)
-	{
+	public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack) {
 		Multimap<String, AttributeModifier> mods = HashMultimap.<String, AttributeModifier>create();
 
 		if(this == ItemsCore.computer_chestplate && slot == EntityEquipmentSlot.CHEST)
@@ -66,33 +71,27 @@ public class ItemComputerArmor extends ItemArmor implements /*IRepairable, IVisD
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void addInformation(ItemStack stack, World player, List<String> list, ITooltipFlag par4)
-	{
+	public void addInformation(ItemStack stack, World player, List<String> list, ITooltipFlag par4) {
 		super.addInformation(stack, player, list, par4);
 		/*if(EssentialCraftCore.clazzExists("thaumcraft.api.IVisDiscountGear"))
 	    	list.add((new StringBuilder()).append(TextFormatting.DARK_PURPLE).append(I18n.translateToLocal("tc.visdiscount")).append(": ").append(getVisDiscount(stack, player, null)).append("%").toString());*/
 
-		list.add(this.getMRU(stack) + "/" + this.getMaxMRU(stack) + " MRU");
+		list.add(stack.getCapability(MRU_HANDLER_ITEM_CAPABILITY, null).getMRU() + "/" + stack.getCapability(MRU_HANDLER_ITEM_CAPABILITY, null).getMaxMRU() + " MRU");
 
-		switch(this.armorType)
-		{
-		case HEAD:
-		{
+		switch(this.armorType) {
+		case HEAD: {
 			list.add(TextFormatting.DARK_PURPLE+I18n.translateToLocal("essentialcraft.txt.computer_helmet.props"));
 			break;
 		}
-		case CHEST:
-		{
+		case CHEST: {
 			list.add(TextFormatting.DARK_PURPLE+I18n.translateToLocal("essentialcraft.txt.computer_chestplate.props"));
 			break;
 		}
-		case LEGS:
-		{
+		case LEGS: {
 			list.add(TextFormatting.DARK_PURPLE+I18n.translateToLocal("essentialcraft.txt.computer_legs.props"));
 			break;
 		}
-		case FEET:
-		{
+		case FEET: {
 			list.add(TextFormatting.DARK_PURPLE+I18n.translateToLocal("essentialcraft.txt.computer_boots.props"));
 			break;
 		}
@@ -107,8 +106,7 @@ public class ItemComputerArmor extends ItemArmor implements /*IRepairable, IVisD
 		list.add(TextFormatting.ITALIC+I18n.translateToLocal("essentialcraft.txt.fullset.computer.props_2"));
 	}
 
-	public static boolean hasFullset(EntityPlayer p)
-	{
+	public static boolean hasFullset(EntityPlayer p) {
 		if(p == null)
 			return false;
 
@@ -120,19 +118,15 @@ public class ItemComputerArmor extends ItemArmor implements /*IRepairable, IVisD
 	}
 
 	@Override
-	public void getSubItems(CreativeTabs par2CreativeTabs, NonNullList<ItemStack> par3List)
-	{
-		if(this.isInCreativeTab(par2CreativeTabs))
-			for (int var4 = 0; var4 < 1; ++var4)
-			{
-				ItemStack min = new ItemStack(this, 1, 0);
-				ECUtils.initMRUTag(min, 1000000);
-				ItemStack max = new ItemStack(this, 1, 0);
-				ECUtils.initMRUTag(max, 1000000);
-				ECUtils.getStackTag(max).setInteger("mru", 1000000);
-				par3List.add(min);
-				par3List.add(max);
-			}
+	public void getSubItems(CreativeTabs par2CreativeTabs, NonNullList<ItemStack> par3List) {
+		if(this.isInCreativeTab(par2CreativeTabs)) {
+			ItemStack min = new ItemStack(this, 1, 0);
+			ItemStack max = new ItemStack(this, 1, 0);
+			min.getCapability(MRU_HANDLER_ITEM_CAPABILITY, null).setMRU(0);
+			max.getCapability(MRU_HANDLER_ITEM_CAPABILITY, null).setMRU(maxMRU);
+			par3List.add(min);
+			par3List.add(max);
+		}
 	}
 
 	/*public boolean showIngamePopups(ItemStack itemstack, EntityLivingBase player) {
@@ -155,24 +149,19 @@ public class ItemComputerArmor extends ItemArmor implements /*IRepairable, IVisD
 	}*/
 
 	@Override
-	public ArmorProperties getProperties(EntityLivingBase player,ItemStack armor, DamageSource source, double damage, int slot)
-	{
-		if(armor.getItem() == ItemsCore.computer_chestplate && player instanceof EntityPlayer)
-		{
+	public ArmorProperties getProperties(EntityLivingBase player,ItemStack armor, DamageSource source, double damage, int slot) {
+		if(armor.getItem() == ItemsCore.computer_chestplate && player instanceof EntityPlayer) {
 			boolean hasFullSet = true;
 			EntityPlayer p = (EntityPlayer) player;
 
-			for(int i = 0; i < 4; ++i)
-			{
-				if(!(p.inventory.armorInventory.get(i).getItem() instanceof ItemComputerArmor))
-				{
+			for(int i = 0; i < 4; ++i) {
+				if(!(p.inventory.armorInventory.get(i).getItem() instanceof ItemComputerArmor)) {
 					hasFullSet = false;
 					break;
 				}
 			}
 
-			if(source.getTrueSource() != null && hasFullSet)
-			{
+			if(source.getTrueSource() != null && hasFullSet) {
 				float newDamage = (float) (damage/2);
 				if(newDamage<0.5D)
 					newDamage = 0;
@@ -181,12 +170,12 @@ public class ItemComputerArmor extends ItemArmor implements /*IRepairable, IVisD
 				source.getTrueSource().attackEntityFrom(DamageSource.causeThornsDamage(player), newDamage);
 			}
 		}
-		int mru = getMRU(armor);
-		if(mru > 0)
-		{
+		int mru = armor.getCapability(MRU_HANDLER_ITEM_CAPABILITY, null).getMRU();
+		if(mru > 0) {
 			ItemArmor aarmor = (ItemArmor)armor.getItem();
 			return new ArmorProperties(0, aarmor.damageReduceAmount/10D, Integer.MAX_VALUE);
-		}else
+		}
+		else
 			return new ArmorProperties(0,0,1);
 	}
 
@@ -198,35 +187,12 @@ public class ItemComputerArmor extends ItemArmor implements /*IRepairable, IVisD
 	public ArmorMaterial mat;
 
 	@Override
-	public void damageArmor(EntityLivingBase entity, ItemStack stack,
-			DamageSource source, int damage, int slot) {
-
-		if(entity instanceof EntityPlayer)
-		{
+	public void damageArmor(EntityLivingBase entity, ItemStack stack, DamageSource source, int damage, int slot) {
+		if(entity instanceof EntityPlayer) {
 			EntityPlayer p = (EntityPlayer) entity;
-			if(ECUtils.tryToDecreaseMRUInStorage(p, -damage*250) || this.increaseMRU(stack, -damage*250)) {}
+			if(ECUtils.playerUseMRU(p, stack, damage*250)) {}
 			else {}
 		}
-	}
-
-	@Override
-	public boolean increaseMRU(ItemStack stack, int amount) {
-		if(getMRU(stack)+amount >= 0 && getMRU(stack)+amount<=getMaxMRU(stack))
-		{
-			MiscUtils.getStackTag(stack).setInteger("mru", MiscUtils.getStackTag(stack).getInteger("mru")+amount);
-			return true;
-		}
-		return false;
-	}
-
-	@Override
-	public int getMRU(ItemStack stack) {
-		return MiscUtils.getStackTag(stack).getInteger("mru");
-	}
-
-	@Override
-	public int getMaxMRU(ItemStack stack) {
-		return 1000000;
 	}
 
 	public String textureName = "";
@@ -237,12 +203,12 @@ public class ItemComputerArmor extends ItemArmor implements /*IRepairable, IVisD
 	}
 
 	@Override
-	public void registerModels() {
-		ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation("essentialcraft:item/" + getRegistryName().getResourcePath(), "inventory"));
+	public ICapabilityProvider initCapabilities(ItemStack stack, NBTTagCompound nbt) {
+		return new MRUItemStorage(stack, maxMRU);
 	}
 
 	@Override
-	public boolean isStorage(ItemStack stack) {
-		return false;
+	public void registerModels() {
+		ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation("essentialcraft:item/" + getRegistryName().getResourcePath(), "inventory"));
 	}
 }

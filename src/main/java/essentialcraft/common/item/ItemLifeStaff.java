@@ -20,11 +20,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 
-public class ItemLifeStaff extends ItemStoresMRUInNBT implements IModelRegisterer {
+public class ItemLifeStaff extends ItemMRUGeneric implements IModelRegisterer {
 
 	public ItemLifeStaff() {
 		super();
-		this.setMaxMRU(5000);
 		this.maxStackSize = 1;
 		this.bFull3D = true;
 	}
@@ -33,7 +32,7 @@ public class ItemLifeStaff extends ItemStoresMRUInNBT implements IModelRegistere
 	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ)
 	{
 		ItemStack stack = player.getHeldItem(hand);
-		if(ECUtils.tryToDecreaseMRUInStorage(player, -100) || this.increaseMRU(stack, -100))
+		if(ECUtils.playerUseMRU(player, stack, 100))
 		{
 			if(ItemDye.applyBonemeal(new ItemStack(stack.getItem(),stack.getItemDamage(),stack.getCount()+1), world, pos, player, hand))
 			{
@@ -41,12 +40,12 @@ public class ItemLifeStaff extends ItemStoresMRUInNBT implements IModelRegistere
 				{
 					for(int pz = -5; pz <= 5; ++pz)
 					{
-						if(this.getMRU(stack) > 10)
-
+						if(stack.getCapability(MRU_HANDLER_ITEM_CAPABILITY, null).getMRU() >= 100) {
 							if(ItemDye.applyBonemeal(new ItemStack(stack.getItem(),stack.getItemDamage(),stack.getCount()+1), world, pos.add(px, 0, pz), player, hand))
 							{
-								if(!ECUtils.tryToDecreaseMRUInStorage(player, -100))this.increaseMRU(stack, -100);
+								ECUtils.playerUseMRU(player, stack, 100);
 							}
+						}
 					}
 				}
 			}
@@ -60,7 +59,7 @@ public class ItemLifeStaff extends ItemStoresMRUInNBT implements IModelRegistere
 		if(entity instanceof EntityZombieVillager)
 		{
 			EntityZombieVillager e = (EntityZombieVillager)entity;
-			if((ECUtils.tryToDecreaseMRUInStorage(player, -500) || this.increaseMRU(stack, -500)) && !e.getEntityWorld().isRemote)
+			if(ECUtils.playerUseMRU(player, stack, 500) && !e.getEntityWorld().isRemote)
 			{
 				EntityVillager entityvillager = new EntityVillager(e.getEntityWorld());
 				entityvillager.copyLocationAndAnglesFrom(e);
@@ -80,7 +79,7 @@ public class ItemLifeStaff extends ItemStoresMRUInNBT implements IModelRegistere
 		if(entity instanceof EntityAgeable)
 		{
 			EntityAgeable e = (EntityAgeable) entity;
-			if(e.isChild() && !e.getEntityWorld().isRemote && (ECUtils.tryToDecreaseMRUInStorage(player, -100) || this.increaseMRU(stack, -100)))
+			if(e.isChild() && ECUtils.playerUseMRU(player, stack, 100) && !e.getEntityWorld().isRemote)
 			{
 				e.setGrowingAge(0);
 			}

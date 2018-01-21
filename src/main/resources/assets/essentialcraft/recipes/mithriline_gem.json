@@ -9,7 +9,7 @@
     "key": {
         "I": {
             "type": "forge:ore_dict",
-            "ore": "ingotMithriline"
+            "ore": "ingotMithrilineMetal"
         },
         "S": {
             "type": "forge:ore_dict",

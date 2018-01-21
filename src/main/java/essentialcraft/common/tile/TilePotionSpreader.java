@@ -17,15 +17,16 @@ import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.potion.PotionUtils;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.common.config.Configuration;
 
 public class TilePotionSpreader extends TileMRUGeneric {
-	public int potionID = -1;
+	public ResourceLocation potionID = null;
 	public int potionDuration = -1;
 	public int potionAmplifier = -1;
 	public int potionUseTime = -1;
-	public static float cfgMaxMRU = ApiCore.DEVICE_MAX_MRU_GENERIC;
+	public static int cfgMaxMRU = ApiCore.DEVICE_MAX_MRU_GENERIC;
 	public static boolean generatesCorruption = false;
 	public static int genCorruption = 5;
 	public static int mruUsage = 250;
@@ -33,23 +34,23 @@ public class TilePotionSpreader extends TileMRUGeneric {
 
 	public TilePotionSpreader() {
 		super();
-		maxMRU = (int)cfgMaxMRU;
+		mruStorage.setMaxMRU(cfgMaxMRU);
 		setSlotsNum(9);
 	}
 
 	@Override
 	public void update() {
 		super.update();
-		ECUtils.manage(this, 0);
+		mruStorage.update(getPos(), getWorld(), getStackInSlot(0));
 		if(getWorld().isBlockIndirectlyGettingPowered(pos) == 0) {
-			if(potionID == -1)
+			if(potionID == null)
 				for(int i = 1; i < 9; ++i) {
 					ItemStack stk = getStackInSlot(i);
 					if(!stk.isEmpty() && stk.getItem() instanceof ItemPotion) {
 						List<PotionEffect> lst = PotionUtils.getEffectsFromStack(stk);
 						if(!lst.isEmpty()) {
 							PotionEffect effect = lst.get(0);
-							potionID = Potion.getIdFromPotion(effect.getPotion());
+							potionID = effect.getPotion().getRegistryName();
 							potionAmplifier = effect.getAmplifier();
 							potionDuration = effect.getDuration();
 							potionUseTime = potionGenUseTime;
@@ -59,7 +60,7 @@ public class TilePotionSpreader extends TileMRUGeneric {
 					}
 				}
 			else {
-				Potion actualPotion = Potion.getPotionById(potionID);
+				Potion actualPotion = Potion.REGISTRY.getObject(potionID);
 				List<EntityLivingBase> lst = getWorld().getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(pos.getX()-8, pos.getY()-8, pos.getZ()-8, pos.getX()+9, pos.getY()+9, pos.getZ()+9));
 				if(!lst.isEmpty() && !getWorld().isRemote) {
 					boolean haveUsedPotion = false;
@@ -78,8 +79,8 @@ public class TilePotionSpreader extends TileMRUGeneric {
 						else {
 							shouldUsePotion = !base.isPotionActive(actualPotion);
 						}
-						if(shouldUsePotion && getMRU() >= mruUsage) {
-							setMRU(getMRU()-mruUsage);
+						if(shouldUsePotion && mruStorage.getMRU() >= mruUsage) {
+							mruStorage.extractMRU(mruUsage, true);
 							haveUsedPotion = true;
 							base.addPotionEffect(effect);
 							int j = actualPotion.getLiquidColor();
@@ -93,17 +94,17 @@ public class TilePotionSpreader extends TileMRUGeneric {
 								MiscUtils.spawnParticlesOnServer("spell_mob", (float)(base.posX + MathUtils.randomFloat(getWorld().rand)), (float)(base.posY+1 + MathUtils.randomFloat(getWorld().rand)), (float)(base.posZ + MathUtils.randomFloat(getWorld().rand)), f, f1, f2);
 						}
 						if(generatesCorruption)
-							ECUtils.increaseCorruptionAt(getWorld(), pos.getX(), pos.getY(), pos.getZ(), getWorld().rand.nextInt(genCorruption));
+							ECUtils.increaseCorruptionAt(getWorld(), pos, getWorld().rand.nextInt(genCorruption));
 					}
 					if(haveUsedPotion)
 						--potionUseTime;
 				}
 				if(potionUseTime <= 0) {
-					potionID = -1;
+					potionID = null;
 					potionAmplifier = -1;
 					potionDuration = -1;
 				}
-				if(potionID != -1) {
+				if(potionID != null) {
 					int j = actualPotion.getLiquidColor();
 					float f = 0F;
 					float f1 = 0F;
@@ -119,7 +120,7 @@ public class TilePotionSpreader extends TileMRUGeneric {
 
 	@Override
 	public void readFromNBT(NBTTagCompound i) {
-		potionID = i.getInteger("potionID");
+		potionID = new ResourceLocation(i.getString("potionID"));
 		potionDuration = i.getInteger("potionDuration");
 		potionAmplifier = i.getInteger("potionAmplifier");
 		potionUseTime = i.getInteger("potionUseTime");
@@ -128,7 +129,7 @@ public class TilePotionSpreader extends TileMRUGeneric {
 
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound i) {
-		i.setInteger("potionID", potionID);
+		i.setString("potionID", potionID.toString());
 		i.setInteger("potionDuration", potionDuration);
 		i.setInteger("potionAmplifier", potionAmplifier);
 		i.setInteger("potionUseTime", potionUseTime);
@@ -153,7 +154,7 @@ public class TilePotionSpreader extends TileMRUGeneric {
 			DummyData[] data = DataStorage.parseData(dataString);
 
 			mruUsage = Integer.parseInt(data[1].fieldValue);
-			cfgMaxMRU = Float.parseFloat(data[0].fieldValue);
+			cfgMaxMRU = Integer.parseInt(data[0].fieldValue);
 			generatesCorruption = Boolean.parseBoolean(data[2].fieldValue);
 			genCorruption = Integer.parseInt(data[3].fieldValue);
 			potionGenUseTime = Integer.parseInt(data[4].fieldValue);

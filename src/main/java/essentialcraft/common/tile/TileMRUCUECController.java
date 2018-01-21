@@ -5,14 +5,16 @@ import java.util.Collection;
 import java.util.List;
 
 import DummyCore.Utils.BlockPosition;
-import DummyCore.Utils.Coord3D;
 import DummyCore.Utils.DataStorage;
 import DummyCore.Utils.DummyData;
 import DummyCore.Utils.MiscUtils;
 import essentialcraft.api.EnumStructureType;
+import essentialcraft.api.IMRUDisplay;
 import essentialcraft.api.IMRUHandler;
 import essentialcraft.api.IMRUHandlerEntity;
 import essentialcraft.api.IStructurePiece;
+import essentialcraft.common.capabilities.mru.CapabilityMRUHandler;
+import essentialcraft.common.capabilities.mru.MRUTileStorage;
 import essentialcraft.utils.common.ECUtils;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
@@ -25,25 +27,22 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.config.Configuration;
 
-public class TileMRUCUECController extends TileEntity implements IMRUHandler, ITickable {
+public class TileMRUCUECController extends TileEntity implements IMRUDisplay, ITickable {
 
 	//============================Variables================================//
 	public int syncTick;
 	public int structureCheckTick;
-	public int mru;
-	public int maxMRU = 60000;
+	public MRUTileStorage mruStorage = new MRUTileStorage();
 	public float resistance;
-	public Coord3D upperCoord;
-	public Coord3D lowerCoord;
+	public BlockPos upperCoord;
+	public BlockPos lowerCoord;
 
 	public boolean isCorrect;
 
-	public float balance;
-
 	public List<BlockPosition> blocksInStructure = new ArrayList<BlockPosition>();
 
-	public static float cfgMaxMRU = 60000;
-	public static float cfgMRUPerStorage = 100000;
+	public static int cfgMaxMRU = 60000;
+	public static int cfgMRUPerStorage = 100000;
 	//===========================Functions=================================//
 
 	@Override
@@ -68,13 +67,9 @@ public class TileMRUCUECController extends TileEntity implements IMRUHandler, IT
 
 	public IMRUHandlerEntity getMRUCU() {
 		if(isCorrect) {
-			List<Entity> eList = getWorld().getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(lowerCoord.x, lowerCoord.y, lowerCoord.z, upperCoord.x, upperCoord.y, upperCoord.z), e->e instanceof IMRUHandlerEntity);
-			List<IMRUHandlerEntity> pList = new ArrayList<IMRUHandlerEntity>();
-			for(Entity e : eList) {
-				pList.add((IMRUHandlerEntity)e);
-			}
-			if(pList != null && !pList.isEmpty())
-				return pList.get(0);
+			List<Entity> eList = getWorld().getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(lowerCoord, upperCoord), e->e.hasCapability(CapabilityMRUHandler.MRU_HANDLER_ENTITY_CAPABILITY, null));
+			if(eList != null && !eList.isEmpty())
+				return eList.get(0).getCapability(CapabilityMRUHandler.MRU_HANDLER_ENTITY_CAPABILITY, null);
 		}
 		return null;
 	}
@@ -96,13 +91,13 @@ public class TileMRUCUECController extends TileEntity implements IMRUHandler, IT
 	@Override
 	public void readFromNBT(NBTTagCompound i) {
 		super.readFromNBT(i);
-		ECUtils.loadMRUState(this, i);
+		mruStorage.readFromNBT(i);
 	}
 
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound i) {
 		super.writeToNBT(i);
-		ECUtils.saveMRUState(this, i);
+		mruStorage.writeToNBT(i);
 		return i;
 	}
 
@@ -112,7 +107,7 @@ public class TileMRUCUECController extends TileEntity implements IMRUHandler, IT
 	 */
 	public boolean checkStructure() {
 		resistance = 0F;
-		maxMRU = (int)cfgMaxMRU;
+		mruStorage.setMaxMRU(cfgMaxMRU);
 		blocksInStructure.clear(); //Clearing the list of blocks to reinitialize it
 		//Base variables setup//
 		int minX = 0;
@@ -302,8 +297,8 @@ public class TileMRUCUECController extends TileEntity implements IMRUHandler, IT
 		if(minX == 0 && maxX == 0 || minY == 0 && maxY == 0 || minZ == 0 && maxZ == 0)
 			return false;
 		else {
-			lowerCoord = new Coord3D(pos.getX()+minX, pos.getY()+minY, pos.getZ()+minZ);
-			upperCoord = new Coord3D(pos.getX()+maxX, pos.getY()+maxY, pos.getZ()+maxZ);
+			lowerCoord = pos.add(minX, minY, minZ);
+			upperCoord = pos.add(maxX, maxY, maxZ);
 			for(int x = minX; x <= maxX; ++x) {
 				for(int y = minY; y <= maxY; ++y) {
 					for(int z = minZ; z <= maxZ; ++z) {
@@ -323,7 +318,7 @@ public class TileMRUCUECController extends TileEntity implements IMRUHandler, IT
 									IStructurePiece piece = (IStructurePiece) getWorld().getTileEntity(cp);
 									piece.setStructureController(this, EnumStructureType.MRUCUEC);
 									if(getWorld().getTileEntity(cp) instanceof TileMRUCUECHoldingChamber)
-										maxMRU += cfgMRUPerStorage;
+										mruStorage.setMaxMRU(mruStorage.getMaxMRU()+cfgMRUPerStorage);
 								}
 							}
 							else
@@ -333,45 +328,6 @@ public class TileMRUCUECController extends TileEntity implements IMRUHandler, IT
 				}
 			}
 		}
-		return true;
-	}
-
-	@Override
-	public int getMRU() {
-		IMRUHandlerEntity pressence = getMRUCU();
-		if(pressence != null)
-			return mru;
-		return 0;
-	}
-
-	@Override
-	public int getMaxMRU() {
-		return maxMRU;
-	}
-
-	@Override
-	public boolean setMRU(int i) {
-		mru = i;
-		return true;
-	}
-
-	@Override
-	public float getBalance() {
-		IMRUHandlerEntity pressence = getMRUCU();
-		if(pressence != null)
-			return pressence.getBalance();
-		return balance;
-	}
-
-	@Override
-	public boolean setBalance(float f) {
-		balance = f;
-		return true;
-	}
-
-	@Override
-	public boolean setMaxMRU(float f) {
-		maxMRU = (int)f;
 		return true;
 	}
 
@@ -389,13 +345,18 @@ public class TileMRUCUECController extends TileEntity implements IMRUHandler, IT
 
 			DummyData[] data = DataStorage.parseData(dataString);
 
-			cfgMaxMRU = Float.parseFloat(data[0].fieldValue);
-			cfgMRUPerStorage = Float.parseFloat(data[1].fieldValue);
+			cfgMaxMRU = Integer.parseInt(data[0].fieldValue);
+			cfgMRUPerStorage = Integer.parseInt(data[1].fieldValue);
 
 			cfg.save();
 		}
 		catch(Exception e) {
 			return;
 		}
+	}
+
+	@Override
+	public IMRUHandler getMRUHandler() {
+		return mruStorage;
 	}
 }

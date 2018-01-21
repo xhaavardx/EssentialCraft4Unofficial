@@ -71,7 +71,7 @@ public class TileMIMCraftingManager extends TileMRUGeneric {
 
 	@Override
 	public void update() {
-		if(syncTick == 60)
+		if(syncTick == 20)
 			rebuildRecipes();
 
 		super.update();
@@ -142,12 +142,12 @@ public class TileMIMCraftingManager extends TileMRUGeneric {
 
 		int crafted = 0;
 
-		for(int i = 0; i < times; ++i) {
+		for(int i = 0; i < (times+result.getCount()-1)/result.getCount(); ++i) {
 			ItemStack[] required = findCraftingComponentsByRecipe(result);
 			if(canCraft(required,stk)) {
 				if(craft(required,stk)) {
 					parent.addItemStackToSystem(result.copy());
-					++crafted;
+					crafted+=result.getCount();
 				}
 			}
 		}

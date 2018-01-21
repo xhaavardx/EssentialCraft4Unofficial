@@ -2,10 +2,11 @@ package essentialcraft.common.tile;
 
 import DummyCore.Utils.MiscUtils;
 import essentialcraft.api.EnumStructureType;
-import essentialcraft.api.IMRUHandlerRequires;
+import essentialcraft.api.IMRUHandler;
 import essentialcraft.api.IStructurePiece;
+import essentialcraft.api.IWorldUpdatable;
+import essentialcraft.common.capabilities.mru.CapabilityMRUHandler;
 import essentialcraft.common.item.ItemsCore;
-import essentialcraft.utils.common.ECUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -15,15 +16,18 @@ import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
 
-public class TileMRUCUECAcceptor extends TileEntity implements IMRUHandlerRequires, IStructurePiece, IInventory, ITickable {
+public class TileMRUCUECAcceptor extends TileEntity implements IStructurePiece, IInventory, ITickable {
 	public TileMRUCUECController controller;
 	public int syncTick;
 	public ItemStack[] items = {ItemStack.EMPTY};
+	public ControllerMRUStorageInputOnlyWrapper mruStorageWrapper = new ControllerMRUStorageInputOnlyWrapper();
 
 	@Override
 	public void readFromNBT(NBTTagCompound i) {
@@ -36,31 +40,6 @@ public class TileMRUCUECAcceptor extends TileEntity implements IMRUHandlerRequir
 		super.writeToNBT(i);
 		MiscUtils.saveInventory(this, i);
 		return i;
-	}
-
-	@Override
-	public int getMRU() {
-		return controller != null ? controller.getMRU() : 0;
-	}
-
-	@Override
-	public int getMaxMRU() {
-		return controller != null ? controller.getMaxMRU() : 0;
-	}
-
-	@Override
-	public boolean setMRU(int i) {
-		return controller != null && i >= getMRU() ? controller.setMRU(i) : false;
-	}
-
-	@Override
-	public float getBalance() {
-		return controller != null ? controller.getBalance() : 1;
-	}
-
-	@Override
-	public boolean setBalance(float f) {
-		return controller != null ? controller.setBalance(f) : false;
 	}
 
 	@Override
@@ -81,9 +60,9 @@ public class TileMRUCUECAcceptor extends TileEntity implements IMRUHandlerRequir
 
 	@Override
 	public void update() {
-		if(structureController() != null)
-			ECUtils.mruIn(this, 0);
-		ECUtils.spawnMRUParticles(this,0);
+		if(controller != null) {
+			mruStorageWrapper.update(getPos(), getWorld(), getStackInSlot(0));
+		}
 		if(syncTick == 0) {
 			if(!getWorld().isRemote)
 				MiscUtils.sendPacketToAllAround(getWorld(), getUpdatePacket(), pos.getX(), pos.getY(), pos.getZ(), getWorld().provider.getDimension(), 16);
@@ -191,11 +170,6 @@ public class TileMRUCUECAcceptor extends TileEntity implements IMRUHandlerRequir
 	}
 
 	@Override
-	public boolean setMaxMRU(float f) {
-		return controller != null ? controller.setMaxMRU(f) : false;
-	}
-
-	@Override
 	public int getField(int id) {
 		return 0;
 	}
@@ -218,12 +192,16 @@ public class TileMRUCUECAcceptor extends TileEntity implements IMRUHandlerRequir
 
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
+		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ||
+				capability == CapabilityMRUHandler.MRU_HANDLER_CAPABILITY ||
+				super.hasCapability(capability, facing);
 	}
 
 	@Override
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ? (T)itemHandler : super.getCapability(capability, facing);
+		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ? (T)itemHandler :
+			capability == CapabilityMRUHandler.MRU_HANDLER_CAPABILITY ? (T)mruStorageWrapper :
+				super.getCapability(capability, facing);
 	}
 
 	@Override
@@ -233,5 +211,103 @@ public class TileMRUCUECAcceptor extends TileEntity implements IMRUHandlerRequir
 			ret &= stk.isEmpty();
 		}
 		return ret;
+	}
+
+	public class ControllerMRUStorageInputOnlyWrapper implements IMRUHandler, IWorldUpdatable<ItemStack> {
+
+		@Override
+		public int getMaxMRU() {
+			if(controller != null) {
+				return controller.mruStorage.getMaxMRU();
+			}
+			return 0;
+		}
+
+		@Override
+		public void setMaxMRU(int amount) {
+			if(controller != null) {
+				controller.mruStorage.setMaxMRU(amount);
+			}
+		}
+
+		@Override
+		public int getMRU() {
+			if(controller != null) {
+				return controller.mruStorage.getMRU();
+			}
+			return 0;
+		}
+
+		@Override
+		public void setMRU(int amount) {
+			if(controller != null) {
+				controller.mruStorage.setMRU(amount);
+			}
+		}
+
+		@Override
+		public int addMRU(int amount, boolean doAdd) {
+			if(controller != null) {
+				return controller.mruStorage.addMRU(amount, doAdd);
+			}
+			return amount;
+		}
+
+		@Override
+		public int extractMRU(int amount, boolean doExtract) {
+			return 0;
+		}
+
+		@Override
+		public float getBalance() {
+			if(controller != null) {
+				controller.mruStorage.getBalance();
+			}
+			return 1F;
+		}
+
+		@Override
+		public void setBalance(float balance) {
+			if(controller != null) {
+				controller.mruStorage.setBalance(balance);
+			}
+		}
+
+		@Override
+		public boolean getShade() {
+			if(controller != null) {
+				return controller.mruStorage.getShade();
+			}
+			return false;
+		}
+
+		@Override
+		public void setShade(boolean shade) {
+			if(controller != null) {
+				controller.mruStorage.setShade(shade);
+			}
+		}
+
+		@Override
+		public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
+			if(controller != null) {
+				controller.mruStorage.writeToNBT(nbt);
+			}
+			return nbt;
+		}
+
+		@Override
+		public void readFromNBT(NBTTagCompound nbt) {
+			if(controller != null) {
+				controller.mruStorage.readFromNBT(nbt);
+			}
+		}
+
+		@Override
+		public void update(BlockPos pos, World world, ItemStack boundGem) {
+			if(controller != null) {
+				controller.mruStorage.update(pos, world, boundGem);
+			}
+		}
 	}
 }

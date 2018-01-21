@@ -9,8 +9,7 @@ import essentialcraft.utils.common.CorruptionEffectECNBTBased;
 
 public class CERegistry {
 
-	public static void register()
-	{
+	public static void register() {
 		effect(BODY,6000);
 		effect(BODY,6000);
 		effect(BODY,6000);
@@ -38,15 +37,13 @@ public class CERegistry {
 		effect(MATRIX,4000);
 	}
 
-	public static CorruptionEffectECNBTBased effect(EnumCorruptionEffect effect, int cost)
-	{
+	public static CorruptionEffectECNBTBased effect(EnumCorruptionEffect effect, int cost) {
 		return new CorruptionEffectECNBTBased().setMeta(gMeta()).setType(effect).setCost(cost).done();
 	}
 
 	public static int meta = -1;
 
-	public static int gMeta()
-	{
+	public static int gMeta() {
 		return ++meta;
 	}
 }

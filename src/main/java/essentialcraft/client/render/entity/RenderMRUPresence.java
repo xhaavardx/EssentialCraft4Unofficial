@@ -24,7 +24,7 @@ public class RenderMRUPresence extends Render<EntityMRUPresence> {
 
 	public void doActualRender(EntityMRUPresence par1Entity, double par2, double par4, double par6, float par8, float par9) {
 		float var4 = par1Entity.renderIndex;
-		float stability = par1Entity.getBalance();
+		float stability = par1Entity.mruStorage.getBalance();
 		float colorRRender = 0.0F;
 		float colorGRender = 1.0F;
 		float colorBRender = 1.0F;
@@ -41,7 +41,7 @@ public class RenderMRUPresence extends Render<EntityMRUPresence> {
 		float colorGFrozen = 0.0F;
 		float colorBFrozen = 1.0F;
 
-		int mru = par1Entity.getMRU();
+		int mru = par1Entity.mruStorage.getMRU();
 		if(stability!=1.0F)
 		{
 			if(stability<1.0F)
@@ -77,7 +77,7 @@ public class RenderMRUPresence extends Render<EntityMRUPresence> {
 
 		Minecraft.getMinecraft().renderEngine.bindTexture(RenderHandlerEC.whitebox);
 		GlStateManager.scale(0.0000075F*mru, 0.0000075F*mru, 0.0000075F*mru);
-		for(int var7 = 0; (float)var7 < par1Entity.getMRU()/50; ++var7) {
+		for(int var7 = 0; (float)var7 < par1Entity.mruStorage.getMRU()/50; ++var7) {
 			//GlStateManager.rotate(var6.nextFloat() * 360.0F, 1.0F, 0.0F, 0.0F);
 			//GlStateManager.rotate(var6.nextFloat() * 360.0F, 0.0F, 1.0F, 0.0F);
 			//GlStateManager.rotate(var6.nextFloat() * 360.0F, 0.0F, 0.0F, 1.0F);

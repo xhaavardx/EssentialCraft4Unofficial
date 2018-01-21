@@ -13,6 +13,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.config.Configuration;
 
@@ -20,19 +21,19 @@ public class TileMagicalEnchanter extends TileMRUGeneric {
 
 	List<EnchantmentData> enchants;
 	public int progressLevel = -1;
-	public int field_145926_a;
-	public float field_145933_i;
-	public float field_145931_j;
-	public float field_145932_k;
-	public float field_145929_l;
-	public float field_145930_m;
-	public float field_145927_n;
-	public float field_145928_o;
-	public float field_145925_p;
-	public float field_145924_q;
-	private static Random field_145923_r = new Random();
+	public int tickCount;
+	public float pageFlip;
+	public float pageFlipPrev;
+	public float flipT;
+	public float flipA;
+	public float bookSpread;
+	public float bookSpreadPrev;
+	public float bookRotation;
+	public float bookRotationPrev;
+	public float tRot;
+	private static final Random rand = new Random();
 
-	public static float cfgMaxMRU = ApiCore.DEVICE_MAX_MRU_GENERIC;
+	public static int cfgMaxMRU = ApiCore.DEVICE_MAX_MRU_GENERIC;
 	public static boolean generatesCorruption = false;
 	public static int genCorruption = 2;
 	public static int mruUsage = 100;
@@ -40,87 +41,80 @@ public class TileMagicalEnchanter extends TileMRUGeneric {
 
 	public TileMagicalEnchanter() {
 		super();
-		maxMRU = (int)cfgMaxMRU;
+		mruStorage.setMaxMRU(cfgMaxMRU);
 		setSlotsNum(3);
 	}
 
 	@Override
 	public void update() {
 		super.update();
-		ECUtils.manage(this, 0);
+		mruStorage.update(getPos(), getWorld(), getStackInSlot(0));
 
 		if(getWorld().isBlockIndirectlyGettingPowered(pos) == 0)
 			tryEnchant();
 
-		field_145927_n = field_145930_m;
-		field_145925_p = field_145928_o;
-		EntityPlayer entityplayer = getWorld().getClosestPlayer(pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, 3.0D, false);
+		this.bookSpreadPrev = this.bookSpread;
+		this.bookRotationPrev = this.bookRotation;
+		EntityPlayer entityplayer = this.world.getClosestPlayer(this.pos.getX() + 0.5D, this.pos.getY() + 0.5D, this.pos.getZ() + 0.5D, 3.0D, false);
 
 		if(entityplayer != null) {
-			double d0 = entityplayer.posX - (pos.getX() + 0.5F);
-			double d1 = entityplayer.posZ - (pos.getZ() + 0.5F);
-			field_145924_q = (float)Math.atan2(d1, d0);
-			field_145930_m += 0.1F;
+			double d0 = entityplayer.posX - (this.pos.getX() + 0.5D);
+			double d1 = entityplayer.posZ - (this.pos.getZ() + 0.5D);
+			this.tRot = (float)MathHelper.atan2(d1, d0);
+			this.bookSpread += 0.1F;
 
-			if(field_145930_m < 0.5F || field_145923_r.nextInt(40) == 0) {
-				float f1 = field_145932_k;
+			if(this.bookSpread < 0.5F || rand.nextInt(40) == 0) {
+				float f1 = this.flipT;
 
-				do {
-					field_145932_k += field_145923_r.nextInt(4) - field_145923_r.nextInt(4);
+				while(true) {
+					this.flipT += rand.nextInt(4) - rand.nextInt(4);
+
+					if(f1 != this.flipT) {
+						break;
+					}
 				}
-				while(f1 == field_145932_k);
 			}
 		}
 		else {
-			field_145924_q += 0.02F;
-			field_145930_m -= 0.1F;
+			this.tRot += 0.02F;
+			this.bookSpread -= 0.1F;
 		}
 
-		while (field_145928_o >= (float)Math.PI) {
-			field_145928_o -= (float)Math.PI * 2F;
+		while(this.bookRotation >= Math.PI) {
+			this.bookRotation -= Math.PI * 2F;
 		}
 
-		while (field_145928_o < -(float)Math.PI) {
-			field_145928_o += (float)Math.PI * 2F;
+		while(this.bookRotation < -Math.PI) {
+			this.bookRotation += Math.PI * 2F;
 		}
 
-		while (field_145924_q >= (float)Math.PI) {
-			field_145924_q -= (float)Math.PI * 2F;
+		while(this.tRot >= Math.PI) {
+			this.tRot -= Math.PI * 2F;
 		}
 
-		while (field_145924_q < -(float)Math.PI) {
-			field_145924_q += (float)Math.PI * 2F;
+		while(this.tRot < -Math.PI) {
+			this.tRot += Math.PI * 2F;
 		}
 
 		float f2;
 
-		for (f2 = field_145924_q - field_145928_o; f2 >= (float)Math.PI; f2 -= (float)Math.PI * 2F) {}
-
-		while(f2 < -(float)Math.PI) {
-			f2 += (float)Math.PI * 2F;
+		for(f2 = this.tRot - this.bookRotation; f2 >= Math.PI; f2 -= Math.PI * 2F) {
+			;
 		}
 
-		field_145928_o += f2 * 0.4F;
+		while(f2 < -Math.PI) {
+			f2 += Math.PI * 2F;
+		}
 
-		if(field_145930_m < 0.0F)
-			field_145930_m = 0.0F;
-
-		if(field_145930_m > 1.0F)
-			field_145930_m = 1.0F;
-
-		++field_145926_a;
-		field_145931_j = field_145933_i;
-		float f = (field_145932_k - field_145933_i) * 0.4F;
+		this.bookRotation += f2 * 0.4F;
+		this.bookSpread = MathHelper.clamp(this.bookSpread, 0.0F, 1.0F);
+		++this.tickCount;
+		this.pageFlipPrev = this.pageFlip;
+		float f = (this.flipT - this.pageFlip) * 0.4F;
 		float f3 = 0.2F;
-
-		if(f < -f3)
-			f = -f3;
-
-		if(f > f3)
-			f = f3;
-
-		field_145929_l += (f - field_145929_l) * 0.9F;
-		field_145933_i += field_145929_l;
+		f = MathHelper.clamp(f, -0.2F, 0.2F);
+		this.flipA += (f - this.flipA) * 0.9F;
+		this.pageFlip += this.flipA;
 	}
 
 	@Override
@@ -136,15 +130,14 @@ public class TileMagicalEnchanter extends TileMRUGeneric {
 	}
 
 	public void tryEnchant() {
-		if(canItemBeEnchanted() && !getWorld().isRemote) {
-			if(setMRU(getMRU() - mruUsage)) {
-				if(generatesCorruption)
-					ECUtils.increaseCorruptionAt(getWorld(), pos.getX(), pos.getY(), pos.getZ(), getWorld().rand.nextInt(genCorruption));
-				++progressLevel;
-				if(progressLevel >= getRequiredTimeToAct()) {
-					enchant();
-					progressLevel = -1;
-				}
+		if(canItemBeEnchanted() && mruStorage.getMRU() >= mruUsage) {
+			mruStorage.extractMRU(mruUsage, true);
+			if(generatesCorruption)
+				ECUtils.increaseCorruptionAt(getWorld(), pos, getWorld().rand.nextInt(genCorruption));
+			++progressLevel;
+			if(progressLevel >= getRequiredTimeToAct()) {
+				enchant();
+				progressLevel = -1;
 			}
 		}
 		if(!canItemBeEnchanted()) {
@@ -204,7 +197,7 @@ public class TileMagicalEnchanter extends TileMRUGeneric {
 	public boolean canItemBeEnchanted() {
 		try {
 			ItemStack s = getStackInSlot(1);
-			if(!s.isEmpty() && getMaxPower() > 0 && getMRU() > mruUsage && getStackInSlot(2).isEmpty()) {
+			if(!s.isEmpty() && getMaxPower() > 0 && mruStorage.getMRU() > mruUsage && getStackInSlot(2).isEmpty()) {
 				if(s.isItemEnchantable() && getEnchantmentsForStack(s) != null && !getEnchantmentsForStack(s).isEmpty()) {
 					return true;
 				}
@@ -235,7 +228,7 @@ public class TileMagicalEnchanter extends TileMRUGeneric {
 
 			mruUsage = Integer.parseInt(data[1].fieldValue);
 			maxEnchantmentLevel = Integer.parseInt(data[2].fieldValue);
-			cfgMaxMRU = Float.parseFloat(data[0].fieldValue);
+			cfgMaxMRU = Integer.parseInt(data[0].fieldValue);
 			generatesCorruption = Boolean.parseBoolean(data[3].fieldValue);
 			genCorruption = Integer.parseInt(data[4].fieldValue);
 

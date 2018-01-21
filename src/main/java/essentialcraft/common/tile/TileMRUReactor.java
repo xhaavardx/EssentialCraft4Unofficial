@@ -25,17 +25,17 @@ public class TileMRUReactor extends TileMRUGeneric {
 
 	public boolean isStructureCorrect, cycle;
 
-	public static float cfgMaxMRU = ApiCore.GENERATOR_MAX_MRU_GENERIC;
+	public static int cfgMaxMRU = ApiCore.GENERATOR_MAX_MRU_GENERIC;
 	public static float cfgBalance = -1F;
-	public static float mruGenerated = 50;
+	public static int mruGenerated = 50;
 	public static boolean damage = true;
 
 	public List<Lightning> lightnings = new ArrayList<Lightning>();
 
 	public TileMRUReactor() {
 		super();
-		balance = 0;
-		maxMRU = (int)cfgMaxMRU;
+		mruStorage.setBalance(0F);
+		mruStorage.setMaxMRU(cfgMaxMRU);
 		slot0IsBoundGem = false;
 	}
 
@@ -141,10 +141,6 @@ public class TileMRUReactor extends TileMRUGeneric {
 		getWorld().markBlockRangeForRenderUpdate(pos.getX()-1, pos.getY(), pos.getZ()-1, pos.getX()+1, pos.getY(), pos.getZ()+1);
 	}
 
-	public boolean canGenerateMRU() {
-		return false;
-	}
-
 	@Override
 	public void update() {
 		if(ticksBeforeStructureCheck <= 0) {
@@ -162,21 +158,22 @@ public class TileMRUReactor extends TileMRUGeneric {
 					e.attackEntityFrom(DamageSource.MAGIC, 5);
 				}
 			}
-			setMRU((int) (getMRU()+mruGenerated));
-			if(getMRU() > getMaxMRU())
-				setMRU(getMaxMRU());
-			if(cycle) {
-				setBalance(getBalance() + 0.01F);
-				if(getBalance() > 2.0F)
-					cycle = false;
+			mruStorage.addMRU(mruGenerated, true);
+			if(cfgBalance == -1F) {
+				if(cycle) {
+					mruStorage.setBalance(Math.round((mruStorage.getBalance() + 0.01F)*100)/100F);
+					if(mruStorage.getBalance() > 1.99F)
+						cycle = false;
+				}
+				else {
+					mruStorage.setBalance(Math.round((mruStorage.getBalance() - 0.01F)*100)/100F);
+					if(mruStorage.getBalance() < 0.01F)
+						cycle = true;
+				}
 			}
 			else {
-				setBalance(getBalance() - 0.01F);
-				if(getBalance() < 0.01F)
-					cycle = true;
+				mruStorage.setBalance(cfgBalance);
 			}
-			if(cfgBalance != -1)
-				setBalance(cfgBalance);
 			if(getWorld().isRemote) {
 				if(getWorld().rand.nextFloat() < 0.05F)
 					getWorld().playSound(pos.getX()+0.5F,pos.getY()+1.0F,pos.getZ()+0.5F, SoundRegistry.machineGenElectricity, SoundCategory.BLOCKS, 1F, 1F, true);
@@ -198,7 +195,7 @@ public class TileMRUReactor extends TileMRUGeneric {
 			cfg.load();
 			String[] cfgArrayString = cfg.getStringList("MRUReactorSettings", "tileentities", new String[]{
 					"Max MRU:" + ApiCore.GENERATOR_MAX_MRU_GENERIC,
-					"Default balance(-1 is random):-1.0",
+					"Default balance(-1 is cyclic):-1.0",
 					"MRU generated per tick:50",
 					"Damage Entities around:true"
 			}, "");
@@ -209,9 +206,9 @@ public class TileMRUReactor extends TileMRUGeneric {
 
 			DummyData[] data = DataStorage.parseData(dataString);
 
-			cfgMaxMRU = Float.parseFloat(data[0].fieldValue);
+			cfgMaxMRU = Integer.parseInt(data[0].fieldValue);
 			cfgBalance = Float.parseFloat(data[1].fieldValue);
-			mruGenerated = Float.parseFloat(data[2].fieldValue);
+			mruGenerated = Integer.parseInt(data[2].fieldValue);
 			damage = Boolean.parseBoolean(data[3].fieldValue);
 
 			cfg.save();

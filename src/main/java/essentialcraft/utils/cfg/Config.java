@@ -2,7 +2,6 @@ package essentialcraft.utils.cfg;
 
 import DummyCore.Utils.IDummyConfig;
 import essentialcraft.api.OreSmeltingRecipe;
-import essentialcraft.common.entity.EntitiesCore;
 import essentialcraft.common.registry.TileRegistry;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.config.Configuration;

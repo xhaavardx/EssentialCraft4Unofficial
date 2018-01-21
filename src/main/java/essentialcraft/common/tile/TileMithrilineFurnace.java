@@ -1,16 +1,18 @@
 package essentialcraft.common.tile;
 
-import DummyCore.Utils.Coord3D;
 import DummyCore.Utils.DataStorage;
 import DummyCore.Utils.DummyData;
 import DummyCore.Utils.MathUtils;
 import DummyCore.Utils.MiscUtils;
 import DummyCore.Utils.Notifier;
 import DummyCore.Utils.TileStatTracker;
+import essentialcraft.api.IESPEHandler;
 import essentialcraft.api.MithrilineFurnaceRecipe;
 import essentialcraft.api.MithrilineFurnaceRecipes;
 import essentialcraft.common.block.BlockMithrilineCrystal;
 import essentialcraft.common.block.BlocksCore;
+import essentialcraft.common.capabilities.espe.CapabilityESPEHandler;
+import essentialcraft.common.capabilities.espe.ESPEStorage;
 import essentialcraft.common.mod.EssentialCraftCore;
 import essentialcraft.utils.common.ECUtils;
 import net.minecraft.block.Block;
@@ -24,7 +26,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ITickable;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3i;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -33,14 +35,20 @@ import net.minecraftforge.items.wrapper.SidedInvWrapper;
 
 public class TileMithrilineFurnace extends TileEntity implements ISidedInventory, ITickable {
 
-	public static float maxEnergy = 10000F;
-	public float energy;
-	public float progress;
-	public float reqProgress;
+	public static double maxEnergy = 10000D;
+	public double progress;
+	public double reqProgress;
 	private TileStatTracker tracker;
 	public int syncTick = 10;
 	public ItemStack[] items = {ItemStack.EMPTY, ItemStack.EMPTY};
 	public boolean requestSync = true;
+	protected ESPEStorage espeStorage = new ESPEStorage(maxEnergy, 0);
+	protected static Vec3i[] possiblePowerSources = {
+			new Vec3i(0, 1, 0),
+			new Vec3i(1, 0, 1), new Vec3i(-1, 0, 1), new Vec3i(1, 0, -1), new Vec3i(-1, 0, -1),
+			new Vec3i(2, 1, 0), new Vec3i(-2, 1, 0), new Vec3i(0, 1, 2), new Vec3i(0, 1, -2),
+			new Vec3i(2, 2, 2), new Vec3i(-2, 2, 2), new Vec3i(2, 2, -2), new Vec3i(-2, 2, -2)
+	};
 
 	public TileMithrilineFurnace() {
 		super();
@@ -51,16 +59,16 @@ public class TileMithrilineFurnace extends TileEntity implements ISidedInventory
 	public void readFromNBT(NBTTagCompound i) {
 		super.readFromNBT(i);
 		MiscUtils.loadInventory(this, i);
-		energy = i.getFloat("energy");
-		progress = i.getFloat("progress");
+		espeStorage.readFromNBT(i);
+		progress = i.getDouble("progress");
 	}
 
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound i) {
 		super.writeToNBT(i);
 		MiscUtils.saveInventory(this, i);
-		i.setFloat("energy", energy);
-		i.setFloat("progress", progress);
+		espeStorage.writeToNBT(i);
+		i.setDouble("progress", progress);
 		return i;
 	}
 
@@ -84,43 +92,29 @@ public class TileMithrilineFurnace extends TileEntity implements ISidedInventory
 		}
 
 		if(correct) {
-			Coord3D[] possiblePowerSources = {
-					new Coord3D(0, 1, 0),
-					new Coord3D(1, 0, 1), new Coord3D(-1, 0, 1), new Coord3D(1, 0, -1), new Coord3D(-1, 0, -1),
-					new Coord3D(2, 1, 0), new Coord3D(-2, 1, 0), new Coord3D(0, 1, 2), new Coord3D(0, 1, -2),
-					new Coord3D(2, 2, 2), new Coord3D(-2, 2, 2), new Coord3D(2, 2, -2), new Coord3D(-2, 2, -2)
-
-			};
-			if(energy < maxEnergy)
+			if(espeStorage.getESPE() < maxEnergy)
 				for(int i = 0; i < possiblePowerSources.length; ++i) {
-					Coord3D c = possiblePowerSources[i];
-					int dX = MathHelper.floor(c.x);
-					int dY = MathHelper.floor(c.y);
-					int dZ = MathHelper.floor(c.z);
-					Block b = getWorld().getBlockState(pos.add(dX, dY, dZ)).getBlock();
+					Vec3i c = possiblePowerSources[i];
+					Block b = getWorld().getBlockState(pos.add(c)).getBlock();
 					if(b instanceof BlockMithrilineCrystal) {
-						TileEntity c_tile = getWorld().getTileEntity(pos.add(dX, dY, dZ));
-						if(c_tile != null && c_tile instanceof TileMithrilineCrystal) {
-							TileMithrilineCrystal crystal = (TileMithrilineCrystal) c_tile;
-							float c_energy = crystal.energy;
-							float movement = getWorld().getWorldTime() % 60;
-							if(movement > 30)
-								movement = 60F - movement;
+						TileEntity c_tile = getWorld().getTileEntity(pos.add(c));
+						if(c_tile != null && c_tile.hasCapability(CapabilityESPEHandler.ESPE_HANDLER_CAPABILITY, null)) {
+							IESPEHandler otherStorage = c_tile.getCapability(CapabilityESPEHandler.ESPE_HANDLER_CAPABILITY, null);
+							double req = espeStorage.getMaxESPE() - espeStorage.getESPE();
+							double extracted = otherStorage.extractESPE(req, true);
+							espeStorage.addESPE(extracted, true);
 
-							if(energy + c_energy <= maxEnergy) {
-								energy += c_energy;
-								crystal.energy = 0;
+							if(getWorld().isRemote && c_tile instanceof TileMithrilineCrystal) {
+								int movement = (int)(getWorld().getWorldTime() % 60);
+								if(movement > 30)
+									movement = 60 - movement;
+								getWorld().spawnParticle(EnumParticleTypes.REDSTONE, pos.getX()+c.getX()+0.5F, pos.getY()+c.getY()+movement/30D, pos.getZ()+c.getZ()+0.5F, -1, 1, 0);
+								getWorld().spawnParticle(EnumParticleTypes.REDSTONE, pos.getX()+c.getX()+0.5F, pos.getY()+c.getY()+2+movement/30D, pos.getZ()+c.getZ()+0.5F, -1, 1, 0);
 							}
-							else {
-								float energyReq = maxEnergy - energy;
-								if(c_energy >= energyReq) {
-									energy = maxEnergy;
-									crystal.energy -= energyReq;
-								}
-							}
-							getWorld().spawnParticle(EnumParticleTypes.REDSTONE, pos.getX()+dX+0.5F, pos.getY()+dY+movement/30, pos.getZ()+dZ+0.5F, -1, 1, 0);
-							getWorld().spawnParticle(EnumParticleTypes.REDSTONE, pos.getX()+dX+0.5F, pos.getY()+dY+2+movement/30, pos.getZ()+dZ+0.5F, -1, 1, 0);
 						}
+					}
+					if(espeStorage.getESPE() >= maxEnergy) {
+						break;
 					}
 				}
 
@@ -129,14 +123,8 @@ public class TileMithrilineFurnace extends TileEntity implements ISidedInventory
 				if(rec != null && getStackInSlot(0).getCount() >= rec.requiredRecipeSize) {
 					reqProgress = rec.enderStarPulsesRequired;
 					if(getStackInSlot(1).isEmpty() || getStackInSlot(1).isItemEqual(rec.result) && getStackInSlot(1).getCount()+rec.result.getCount() <= getStackInSlot(1).getMaxStackSize()) {
-						if(energy >= reqProgress) {
-							progress = reqProgress;
-							energy -= reqProgress;
-						}
-						else {
-							progress += energy;
-							energy = 0;
-						}
+						double req = reqProgress - progress;
+						progress += espeStorage.extractESPE(req, true);
 						if(progress >= reqProgress) {
 							decrStackSize(0, rec.requiredRecipeSize);
 							if(getStackInSlot(1).isEmpty())
@@ -158,8 +146,10 @@ public class TileMithrilineFurnace extends TileEntity implements ISidedInventory
 				reqProgress = 0;
 			}
 
-			for(int i = 0; i < 10; ++i)
-				EssentialCraftCore.proxy.FlameFX(pos.getX()+0.5F + MathUtils.randomFloat(getWorld().rand)*0.4F, pos.getY()+0.2F + MathUtils.randomFloat(getWorld().rand)*0.6F, pos.getZ()+0.5F + MathUtils.randomFloat(getWorld().rand)*0.4F, 0, 0.01F, 0, 0D, 1D, 0F, 1F);
+			if(getWorld().isRemote) {
+				for(int i = 0; i < 10; ++i)
+					EssentialCraftCore.proxy.FlameFX(pos.getX()+0.5F + MathUtils.randomFloat(getWorld().rand)*0.4F, pos.getY()+0.2F + MathUtils.randomFloat(getWorld().rand)*0.6F, pos.getZ()+0.5F + MathUtils.randomFloat(getWorld().rand)*0.4F, 0, 0.01F, 0, 0D, 1D, 0F, 1F);
+			}
 		}
 	}
 
@@ -353,12 +343,14 @@ public class TileMithrilineFurnace extends TileEntity implements ISidedInventory
 
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
+		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || capability == CapabilityESPEHandler.ESPE_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
 	}
 
 	@Override
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ? (T)itemHandler : super.getCapability(capability, facing);
+		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ? (T)itemHandler :
+			capability == CapabilityESPEHandler.ESPE_HANDLER_CAPABILITY ? (T)espeStorage :
+				super.getCapability(capability, facing);
 	}
 
 	@Override

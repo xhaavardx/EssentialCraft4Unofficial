@@ -1,11 +1,14 @@
 package essentialcraft.common.tile;
 
 import java.util.List;
+import java.util.function.BiPredicate;
 
-import essentialcraft.common.block.BlockMithrilineCrystal;
+import essentialcraft.api.IESPEHandler;
 import essentialcraft.common.block.BlocksCore;
+import essentialcraft.common.capabilities.espe.CapabilityESPEHandler;
 import essentialcraft.common.entity.EntityDemon;
 import essentialcraft.common.mod.EssentialCraftCore;
+import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumParticleTypes;
@@ -13,6 +16,8 @@ import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3i;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 public class TileDemonicPentacle extends TileEntity implements ITickable {
@@ -20,44 +25,38 @@ public class TileDemonicPentacle extends TileEntity implements ITickable {
 	public int sCheckTick = 0;
 	public int energy;
 	public int energyCheck = 0;
+	protected static Vec3i[] coords = {
+			new Vec3i(2, 1, 2), new Vec3i(2, 1, -2), new Vec3i(-2, 1, 2), new Vec3i(-2, 1, -2),
+			new Vec3i(3, 0, 2), new Vec3i(3, 0, -2), new Vec3i(-3, 0, 2), new Vec3i(-3, 0, -2),
+			new Vec3i(2, 0, 3), new Vec3i(2, 0, -3), new Vec3i(-2, 0, 3), new Vec3i(-2, 0, -3),
+			new Vec3i(3, 1, 0), new Vec3i(-3, 1, 0), new Vec3i(0, 1, 3), new Vec3i(0, 1, -3)
+	};
 
 	public boolean consumeEnderstarEnergy(int consumed) {
-		int[][] coords = {
-				{2, 1, 2}, {2, 1, -2}, {-2, 1, 2}, {-2, 1, -2},
-				{3, 0, 2}, {3, 0, -2}, {-3, 0, 2}, {-3, 0, -2},
-				{2, 0, 3}, {2, 0, -3}, {-2, 0, 3}, {-2, 0, -3},
-				{3, 1, 0}, {-3, 1, 0}, {0, 1, 3}, {0, 1, -3}
-		};
-		int tierCheck = coords.length;
-
 		double aconsumed = 0;
-		double consumeModifier = 1D;
-		for(int i = 0; i < tierCheck; ++i) {
-			TileEntity tile = getWorld().getTileEntity(pos.add(coords[i][0],coords[i][1],coords[i][2]));
-			if(tile instanceof TileMithrilineCrystal) {
-				TileMithrilineCrystal tmc = (TileMithrilineCrystal)tile;
-				if(tmc.energy>TileMithrilineCrystal.maxEnergy)
-					tmc.energy = TileMithrilineCrystal.maxEnergy;
-				aconsumed += tmc.energy;
-				if(aconsumed * consumeModifier >= consumed)
+		for(int i = 0; i < coords.length; ++i) {
+			TileEntity tile = getWorld().getTileEntity(pos.add(coords[i]));
+			if(tile.hasCapability(CapabilityESPEHandler.ESPE_HANDLER_CAPABILITY, null)) {
+				IESPEHandler handler = tile.getCapability(CapabilityESPEHandler.ESPE_HANDLER_CAPABILITY, null);
+				double req = consumed - aconsumed;
+				aconsumed += handler.extractESPE(req, false);
+				if(aconsumed >= consumed) {
 					break;
+				}
 			}
 		}
-		if(aconsumed*consumeModifier < consumed)
+		if(aconsumed < consumed) {
 			return false;
+		}
 
 		aconsumed = 0;
-		for(int i = 0; i < tierCheck; ++i) {
-			TileEntity tile = getWorld().getTileEntity(pos.add(coords[i][0],coords[i][1],coords[i][2]));
-			if(tile instanceof TileMithrilineCrystal) {
-				TileMithrilineCrystal tmc = (TileMithrilineCrystal)tile;
-
-				aconsumed += tmc.energy;
-				tmc.energy = 0;
-				if(aconsumed * consumeModifier >= consumed) {
-					double diff = aconsumed * consumeModifier - consumed;
-					if(diff > 0)
-						tmc.energy += MathHelper.floor(diff);
+		for(int i = 0; i < coords.length; ++i) {
+			TileEntity tile = getWorld().getTileEntity(pos.add(coords[i]));
+			if(tile.hasCapability(CapabilityESPEHandler.ESPE_HANDLER_CAPABILITY, null)) {
+				IESPEHandler handler = tile.getCapability(CapabilityESPEHandler.ESPE_HANDLER_CAPABILITY, null);
+				double req = consumed - aconsumed;
+				aconsumed += handler.extractESPE(req, true);
+				if(aconsumed >= consumed) {
 					return true;
 				}
 			}
@@ -69,23 +68,17 @@ public class TileDemonicPentacle extends TileEntity implements ITickable {
 		if(tier == -1)
 			return 0;
 
-		int[][] coords =  {
-				{2, 1, 2}, {2, 1, -2}, {-2, 1, 2}, {-2, 1, -2},
-				{3, 0, 2}, {3, 0, -2}, {-3, 0, 2}, {-3, 0, -2},
-				{2, 0, 3}, {2, 0, -3}, {-2, 0, 3}, {-2, 0, -3},
-				{3, 1, 0}, {-3, 1, 0}, {0, 1, 3}, {0, 1, -3}
-		};
-
-		int energy = 0;
+		double energy = 0;
 
 		for(int i = 0; i < coords.length; ++i) {
-			TileEntity tile = getWorld().getTileEntity(pos.add(coords[i][0],coords[i][1],coords[i][2]));
-			if(tile instanceof TileMithrilineCrystal) {
-				energy += MathHelper.floor(((TileMithrilineCrystal)tile).energy);
+			TileEntity tile = getWorld().getTileEntity(pos.add(coords[i]));
+			if(tile.hasCapability(CapabilityESPEHandler.ESPE_HANDLER_CAPABILITY, null)) {
+				IESPEHandler handler = tile.getCapability(CapabilityESPEHandler.ESPE_HANDLER_CAPABILITY, null);
+				energy += handler.getESPE();
 			}
 		}
 
-		return energy;
+		return MathHelper.floor(energy);
 	}
 
 	@Override
@@ -93,7 +86,7 @@ public class TileDemonicPentacle extends TileEntity implements ITickable {
 		List<EntityDemon> demons = getWorld().getEntitiesWithinAABB(EntityDemon.class, new AxisAlignedBB(pos));
 		if(!demons.isEmpty()) {
 			for(int i = 0; i < 4; ++i) {
-				double time = (getWorld().getWorldTime()+9*i)%36 * 10;
+				int time = (int)((getWorld().getWorldTime()+9*i)%36) * 10;
 				double timeSin = Math.sin(Math.toRadians(time)) * 1.1D;
 				double timeCos = Math.cos(Math.toRadians(time)) * 1.1D;
 				double x = pos.getX() + 0.5D + timeSin;
@@ -116,111 +109,107 @@ public class TileDemonicPentacle extends TileEntity implements ITickable {
 		else
 			--sCheckTick;
 
-		float movement = getWorld().getWorldTime() % 60;
-		if(movement > 30)
-			movement = 30 - movement + 30F;
-		int[][] coords = {
-				{2, 1, 2}, {2, 1, -2}, {-2, 1, 2}, {-2, 1, -2},
-				{3, 0, 2}, {3, 0, -2}, {-3, 0, 2}, {-3, 0, -2},
-				{2, 0, 3}, {2, 0, -3}, {-2, 0, 3}, {-2, 0, -3},
-				{3, 1, 0}, {-3, 1, 0}, {0, 1, 3}, {0, 1, -3}
-		};
-		if(tier >= 0) {
+		if(getWorld().isRemote && tier >= 0) {
+			int movement = (int)(getWorld().getWorldTime() % 60);
+			if(movement > 30)
+				movement = 60 - movement;
 			for(int i = 0; i < 4; ++i) {
-				getWorld().spawnParticle(EnumParticleTypes.REDSTONE, pos.getX()+coords[i][0]+0.5D, pos.getY()+coords[i][1]+movement/30, pos.getZ()+coords[i][2]+0.5D, -1, 1, 0);
-				getWorld().spawnParticle(EnumParticleTypes.REDSTONE, pos.getX()+coords[i][0]+0.5D, pos.getY()+coords[i][1]+2+movement/30, pos.getZ()+coords[i][2]+0.5D, -1, 1, 0);
+				if(getWorld().getTileEntity(pos.add(coords[i])) instanceof TileMithrilineCrystal) {
+					getWorld().spawnParticle(EnumParticleTypes.REDSTONE, pos.getX()+coords[i].getX()+0.5D, pos.getY()+coords[i].getY()+movement/30D, pos.getZ()+coords[i].getZ()+0.5D, -1, 1, 0);
+					getWorld().spawnParticle(EnumParticleTypes.REDSTONE, pos.getX()+coords[i].getX()+0.5D, pos.getY()+coords[i].getY()+2+movement/30D, pos.getZ()+coords[i].getZ()+0.5D, -1, 1, 0);
+				}
 			}
 			for(int i = 4; i < 12; ++i) {
-				getWorld().spawnParticle(EnumParticleTypes.REDSTONE, pos.getX()+coords[i][0]+0.5D, pos.getY()+coords[i][1]+movement/30, pos.getZ()+coords[i][2]+0.5D, -1, 0, 1);
-				getWorld().spawnParticle(EnumParticleTypes.REDSTONE, pos.getX()+coords[i][0]+0.5D, pos.getY()+coords[i][1]+2+movement/30, pos.getZ()+coords[i][2]+0.5D, -1, 0, 1);
+				if(getWorld().getTileEntity(pos.add(coords[i])) instanceof TileMithrilineCrystal) {
+					getWorld().spawnParticle(EnumParticleTypes.REDSTONE, pos.getX()+coords[i].getX()+0.5D, pos.getY()+coords[i].getY()+movement/30D, pos.getZ()+coords[i].getZ()+0.5D, -1, 0, 1);
+					getWorld().spawnParticle(EnumParticleTypes.REDSTONE, pos.getX()+coords[i].getX()+0.5D, pos.getY()+coords[i].getY()+2+movement/30D, pos.getZ()+coords[i].getZ()+0.5D, -1, 0, 1);
+				}
 			}
 			for(int i = 12; i < 16; ++i) {
-				getWorld().spawnParticle(EnumParticleTypes.REDSTONE, pos.getX()+coords[i][0]+0.5D, pos.getY()+coords[i][1]+movement/30, pos.getZ()+coords[i][2]+0.5D, 0.1D, 0, 0.1D);
-				getWorld().spawnParticle(EnumParticleTypes.REDSTONE, pos.getX()+coords[i][0]+0.5D, pos.getY()+coords[i][1]+2+movement/30, pos.getZ()+coords[i][2]+0.5D, 0.1D, 0, 0.1D);
+				if(getWorld().getTileEntity(pos.add(coords[i])) instanceof TileMithrilineCrystal) {
+					getWorld().spawnParticle(EnumParticleTypes.REDSTONE, pos.getX()+coords[i].getX()+0.5D, pos.getY()+coords[i].getY()+movement/30D, pos.getZ()+coords[i].getZ()+0.5D, 0.1D, 0, 0.1D);
+					getWorld().spawnParticle(EnumParticleTypes.REDSTONE, pos.getX()+coords[i].getX()+0.5D, pos.getY()+coords[i].getY()+2+movement/30D, pos.getZ()+coords[i].getZ()+0.5D, 0.1D, 0, 0.1D);
+				}
 			}
 		}
 	}
+
+	protected static boolean testBlock(IBlockAccess world, BlockPos pos, Block block) {
+		return world.getBlockState(pos).getBlock() == block;
+	}
+
+	protected static boolean testESPEHandler(IBlockAccess world, BlockPos pos, int minTier) {
+		TileEntity tile = world.getTileEntity(pos);
+		return tile != null &&
+				tile.hasCapability(CapabilityESPEHandler.ESPE_HANDLER_CAPABILITY, null) &&
+				tile.getCapability(CapabilityESPEHandler.ESPE_HANDLER_CAPABILITY, null).getTier() >= minTier;
+	}
+
+	protected static BiPredicate<IBlockAccess, BlockPos> tier0Checker = (w, cp)->
+	testBlock(w, cp.add( 0, 0, 0), BlocksCore.voidStone) &&
+	testBlock(w, cp.add( 2, 0, 0), BlocksCore.voidStone) &&
+	testBlock(w, cp.add(-2, 0, 0), BlocksCore.voidStone) &&
+	testBlock(w, cp.add( 0, 0,-2), BlocksCore.voidStone) &&
+	testBlock(w, cp.add( 0, 0, 2), BlocksCore.voidStone) &&
+	testBlock(w, cp.add( 3, 0, 1), BlocksCore.voidStone) &&
+	testBlock(w, cp.add( 3, 0,-1), BlocksCore.voidStone) &&
+	testBlock(w, cp.add(-3, 0, 1), BlocksCore.voidStone) &&
+	testBlock(w, cp.add(-3, 0,-1), BlocksCore.voidStone) &&
+	testBlock(w, cp.add( 1, 0, 3), BlocksCore.voidStone) &&
+	testBlock(w, cp.add(-1, 0, 3), BlocksCore.voidStone) &&
+	testBlock(w, cp.add( 1, 0,-3), BlocksCore.voidStone) &&
+	testBlock(w, cp.add(-1, 0,-3), BlocksCore.voidStone) &&
+	testBlock(w, cp.add( 3, 1, 0), Blocks.GLOWSTONE) &&
+	testBlock(w, cp.add(-3, 1, 0), Blocks.GLOWSTONE) &&
+	testBlock(w, cp.add( 0, 1, 3), Blocks.GLOWSTONE) &&
+	testBlock(w, cp.add( 0, 1,-3), Blocks.GLOWSTONE) &&
+	testBlock(w, cp.add( 2, 1, 2), BlocksCore.invertedBlock) &&
+	testBlock(w, cp.add(-2, 1, 2), BlocksCore.invertedBlock) &&
+	testBlock(w, cp.add( 2, 1,-2), BlocksCore.invertedBlock) &&
+	testBlock(w, cp.add(-2, 1,-2), BlocksCore.invertedBlock) &&
+	testBlock(w, cp.add( 1, 0, 0), BlocksCore.platingPale) &&
+	testBlock(w, cp.add(-1, 0, 0), BlocksCore.platingPale) &&
+	testBlock(w, cp.add( 0, 0, 1), BlocksCore.platingPale) &&
+	testBlock(w, cp.add( 0, 0,-1), BlocksCore.platingPale) &&
+	testBlock(w, cp.add( 2, 0, 1), BlocksCore.platingPale) &&
+	testBlock(w, cp.add( 2, 0,-1), BlocksCore.platingPale) &&
+	testBlock(w, cp.add(-2, 0, 1), BlocksCore.platingPale) &&
+	testBlock(w, cp.add(-2, 0,-1), BlocksCore.platingPale) &&
+	testBlock(w, cp.add( 1, 0, 2), BlocksCore.platingPale) &&
+	testBlock(w, cp.add( 1, 0,-2), BlocksCore.platingPale) &&
+	testBlock(w, cp.add(-1, 0, 2), BlocksCore.platingPale) &&
+	testBlock(w, cp.add(-1, 0,-2), BlocksCore.platingPale) &&
+	testBlock(w, cp.add( 3, 0, 2), BlocksCore.platingPale) &&
+	testBlock(w, cp.add( 3, 0,-2), BlocksCore.platingPale) &&
+	testBlock(w, cp.add(-3, 0, 2), BlocksCore.platingPale) &&
+	testBlock(w, cp.add(-3, 0,-2), BlocksCore.platingPale) &&
+	testBlock(w, cp.add( 2, 0, 3), BlocksCore.platingPale) &&
+	testBlock(w, cp.add( 2, 0,-3), BlocksCore.platingPale) &&
+	testBlock(w, cp.add(-2, 0, 3), BlocksCore.platingPale) &&
+	testBlock(w, cp.add(-2, 0,-3), BlocksCore.platingPale) &&
+	testESPEHandler(w, cp.add( 2, 2, 2), 0) &&
+	testESPEHandler(w, cp.add(-2, 2, 2), 0) &&
+	testESPEHandler(w, cp.add( 2, 2,-2), 0) &&
+	testESPEHandler(w, cp.add(-2, 2,-2), 0) &&
+	testESPEHandler(w, cp.add( 3, 1, 2), 1) &&
+	testESPEHandler(w, cp.add( 3, 1,-2), 1) &&
+	testESPEHandler(w, cp.add(-3, 1, 2), 1) &&
+	testESPEHandler(w, cp.add(-3, 1,-2), 1) &&
+	testESPEHandler(w, cp.add( 2, 1, 3), 1) &&
+	testESPEHandler(w, cp.add( 2, 1,-3), 1) &&
+	testESPEHandler(w, cp.add(-2, 1, 3), 1) &&
+	testESPEHandler(w, cp.add(-2, 1,-3), 1) &&
+	testESPEHandler(w, cp.add( 3, 2, 0), 2) &&
+	testESPEHandler(w, cp.add(-3, 2, 0), 2) &&
+	testESPEHandler(w, cp.add( 0, 2, 3), 2) &&
+	testESPEHandler(w, cp.add( 0, 2,-3), 2);
 
 	public void checkStructureAndTier() {
 		World w = getWorld();
 		BlockPos cp = pos.down();
 		tier = -1;
 
-		if(
-				w.getBlockState(cp).getBlock() == BlocksCore.voidStone &&
-				w.getBlockState(cp.add(2, 0, 0)).getBlock() == BlocksCore.voidStone &&
-				w.getBlockState(cp.add(-2, 0, 0)).getBlock() == BlocksCore.voidStone &&
-				w.getBlockState(cp.add(0, 0, -2)).getBlock() == BlocksCore.voidStone &&
-				w.getBlockState(cp.add(0, 0, 2)).getBlock() == BlocksCore.voidStone &&
-				w.getBlockState(cp.add(3, 0, 1)).getBlock() == BlocksCore.voidStone &&
-				w.getBlockState(cp.add(3, 0, -1)).getBlock() == BlocksCore.voidStone &&
-				w.getBlockState(cp.add(-3, 0, 1)).getBlock() == BlocksCore.voidStone &&
-				w.getBlockState(cp.add(-3, 0, -1)).getBlock() == BlocksCore.voidStone &&
-				w.getBlockState(cp.add(1, 0, 3)).getBlock() == BlocksCore.voidStone &&
-				w.getBlockState(cp.add(-1, 0, 3)).getBlock() == BlocksCore.voidStone &&
-				w.getBlockState(cp.add(1, 0, -3)).getBlock() == BlocksCore.voidStone &&
-				w.getBlockState(cp.add(-1, 0, -3)).getBlock() == BlocksCore.voidStone &&
-				w.getBlockState(cp.add(3, 1, 0)).getBlock() == Blocks.GLOWSTONE &&
-				w.getBlockState(cp.add(-3, 1, 0)).getBlock() == Blocks.GLOWSTONE &&
-				w.getBlockState(cp.add(0, 1, 3)).getBlock() == Blocks.GLOWSTONE &&
-				w.getBlockState(cp.add(0, 1, -3)).getBlock() == Blocks.GLOWSTONE &&
-				w.getBlockState(cp.add(2, 1, 2)).getBlock() == BlocksCore.invertedBlock &&
-				w.getBlockState(cp.add(-2, 1, 2)).getBlock() == BlocksCore.invertedBlock &&
-				w.getBlockState(cp.add(2, 1, -2)).getBlock() == BlocksCore.invertedBlock &&
-				w.getBlockState(cp.add(-2, 1, -2)).getBlock() == BlocksCore.invertedBlock &&
-				w.getBlockState(cp.add(1, 0, 0)).getBlock() == BlocksCore.platingPale &&
-				w.getBlockState(cp.add(-1, 0, 0)).getBlock() == BlocksCore.platingPale &&
-				w.getBlockState(cp.add(0, 0, 1)).getBlock() == BlocksCore.platingPale &&
-				w.getBlockState(cp.add(0, 0, -1)).getBlock() == BlocksCore.platingPale &&
-				w.getBlockState(cp.add(2, 0, 1)).getBlock() == BlocksCore.platingPale &&
-				w.getBlockState(cp.add(2, 0, -1)).getBlock() == BlocksCore.platingPale &&
-				w.getBlockState(cp.add(-2, 0, 1)).getBlock() == BlocksCore.platingPale &&
-				w.getBlockState(cp.add(-2, 0, -1)).getBlock() == BlocksCore.platingPale &&
-				w.getBlockState(cp.add(1, 0, 2)).getBlock() == BlocksCore.platingPale &&
-				w.getBlockState(cp.add(1, 0, -2)).getBlock() == BlocksCore.platingPale &&
-				w.getBlockState(cp.add(-1, 0, 2)).getBlock() == BlocksCore.platingPale &&
-				w.getBlockState(cp.add(-1, 0, -2)).getBlock() == BlocksCore.platingPale &&
-				w.getBlockState(cp.add(3, 0, 2)).getBlock() == BlocksCore.platingPale &&
-				w.getBlockState(cp.add(3, 0, -2)).getBlock() == BlocksCore.platingPale &&
-				w.getBlockState(cp.add(-3, 0, 2)).getBlock() == BlocksCore.platingPale &&
-				w.getBlockState(cp.add(-3, 0, -2)).getBlock() == BlocksCore.platingPale &&
-				w.getBlockState(cp.add(2, 0, 3)).getBlock() == BlocksCore.platingPale &&
-				w.getBlockState(cp.add(2, 0, -3)).getBlock() == BlocksCore.platingPale &&
-				w.getBlockState(cp.add(-2, 0, 3)).getBlock() == BlocksCore.platingPale &&
-				w.getBlockState(cp.add(-2, 0, -3)).getBlock() == BlocksCore.platingPale &&
-				w.getBlockState(cp.add(3, 1, 2)).getBlock() == BlocksCore.mithrilineCrystal &&
-				w.getBlockState(cp.add(3, 1, -2)).getBlock() == BlocksCore.mithrilineCrystal &&
-				w.getBlockState(cp.add(-3, 1, 2)).getBlock() == BlocksCore.mithrilineCrystal &&
-				w.getBlockState(cp.add(-3, 1, -2)).getBlock() == BlocksCore.mithrilineCrystal &&
-				w.getBlockState(cp.add(2, 1, 3)).getBlock() == BlocksCore.mithrilineCrystal &&
-				w.getBlockState(cp.add(2, 1, -3)).getBlock() == BlocksCore.mithrilineCrystal &&
-				w.getBlockState(cp.add(-2, 1, 3)).getBlock() == BlocksCore.mithrilineCrystal &&
-				w.getBlockState(cp.add(-2, 1, -3)).getBlock() == BlocksCore.mithrilineCrystal &&
-				w.getBlockState(cp.add(3, 1, 2)).getValue(BlockMithrilineCrystal.TYPE).getIndex() == 1 &&
-				w.getBlockState(cp.add(3, 1, -2)).getValue(BlockMithrilineCrystal.TYPE).getIndex() == 1 &&
-				w.getBlockState(cp.add(-3, 1, 2)).getValue(BlockMithrilineCrystal.TYPE).getIndex() == 1 &&
-				w.getBlockState(cp.add(-3, 1, -2)).getValue(BlockMithrilineCrystal.TYPE).getIndex() == 1 &&
-				w.getBlockState(cp.add(2, 1, 3)).getValue(BlockMithrilineCrystal.TYPE).getIndex() == 1 &&
-				w.getBlockState(cp.add(2, 1, -3)).getValue(BlockMithrilineCrystal.TYPE).getIndex() == 1 &&
-				w.getBlockState(cp.add(-2, 1, 3)).getValue(BlockMithrilineCrystal.TYPE).getIndex() == 1 &&
-				w.getBlockState(cp.add(-2, 1, -3)).getValue(BlockMithrilineCrystal.TYPE).getIndex() == 1 &&
-				w.getBlockState(cp.add(2, 2, 2)).getBlock() == BlocksCore.mithrilineCrystal &&
-				w.getBlockState(cp.add(-2, 2, 2)).getBlock() == BlocksCore.mithrilineCrystal &&
-				w.getBlockState(cp.add(2, 2, -2)).getBlock() == BlocksCore.mithrilineCrystal &&
-				w.getBlockState(cp.add(-2, 2, -2)).getBlock() == BlocksCore.mithrilineCrystal &&
-				w.getBlockState(cp.add(2, 2, 2)).getValue(BlockMithrilineCrystal.TYPE).getIndex() == 0 &&
-				w.getBlockState(cp.add(-2, 2, 2)).getValue(BlockMithrilineCrystal.TYPE).getIndex() == 0 &&
-				w.getBlockState(cp.add(2, 2, -2)).getValue(BlockMithrilineCrystal.TYPE).getIndex() == 0 &&
-				w.getBlockState(cp.add(-2, 2, -2)).getValue(BlockMithrilineCrystal.TYPE).getIndex() == 0 &&
-				w.getBlockState(cp.add(3, 2, 0)).getBlock() == BlocksCore.mithrilineCrystal &&
-				w.getBlockState(cp.add(-3, 2, 0)).getBlock() == BlocksCore.mithrilineCrystal &&
-				w.getBlockState(cp.add(0, 2, 3)).getBlock() == BlocksCore.mithrilineCrystal &&
-				w.getBlockState(cp.add(0, 2, -3)).getBlock() == BlocksCore.mithrilineCrystal &&
-				w.getBlockState(cp.add(3, 2, 0)).getValue(BlockMithrilineCrystal.TYPE).getIndex() == 2 &&
-				w.getBlockState(cp.add(-3, 2, 0)).getValue(BlockMithrilineCrystal.TYPE).getIndex() == 2 &&
-				w.getBlockState(cp.add(0, 2, 3)).getValue(BlockMithrilineCrystal.TYPE).getIndex() == 2 &&
-				w.getBlockState(cp.add(0, 2, -3)).getValue(BlockMithrilineCrystal.TYPE).getIndex() == 2
-				)
+		if(tier0Checker.test(w, cp))
 			tier = 0;
 	}
 }

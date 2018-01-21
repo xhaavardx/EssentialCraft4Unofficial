@@ -8,6 +8,7 @@ import DummyCore.Utils.Coord3D;
 import DummyCore.Utils.DrawUtils;
 import DummyCore.Utils.DummyDistance;
 import DummyCore.Utils.TessellatorWrapper;
+import essentialcraft.common.capabilities.mru.CapabilityMRUHandler;
 import essentialcraft.common.tile.TileMonsterHolder;
 import essentialcraft.utils.common.PlayerTickHandler;
 import net.minecraft.client.renderer.GlStateManager;
@@ -28,7 +29,7 @@ public class RenderMonsterHolder extends TileEntitySpecialRenderer<TileMonsterHo
 	{
 		RenderHelper.disableStandardItemLighting();
 		List<EntityLivingBase> lst = tile.getWorld().getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(tile.getPos().getX()-32, tile.getPos().getY()-32, tile.getPos().getZ()-32, tile.getPos().getX()+33, tile.getPos().getY()+33, tile.getPos().getZ()+33));
-		if(!lst.isEmpty() && tile.getMRU() > lst.size())
+		if(!lst.isEmpty() && tile.getCapability(CapabilityMRUHandler.MRU_HANDLER_CAPABILITY, null).getMRU() > lst.size())
 		{
 			for(int i = 0; i < lst.size(); ++i)
 			{

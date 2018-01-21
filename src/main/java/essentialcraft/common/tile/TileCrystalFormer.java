@@ -17,7 +17,7 @@ import net.minecraftforge.oredict.OreDictionary;
 public class TileCrystalFormer extends TileMRUGeneric {
 
 	public int progressLevel;
-	public static float cfgMaxMRU = ApiCore.DEVICE_MAX_MRU_GENERIC;
+	public static int cfgMaxMRU = ApiCore.DEVICE_MAX_MRU_GENERIC;
 	public static int mruUsage = 100;
 	public static int requiredTime = 1000;
 	public static boolean generatesCorruption = true;
@@ -25,14 +25,14 @@ public class TileCrystalFormer extends TileMRUGeneric {
 
 	public TileCrystalFormer() {
 		super();
-		maxMRU = (int)cfgMaxMRU;
+		mruStorage.setMaxMRU(cfgMaxMRU);
 		setSlotsNum(8);
 	}
 
 	@Override
 	public void update() {
 		super.update();
-		ECUtils.manage(this, 0);
+		mruStorage.update(getPos(), getWorld(), getStackInSlot(0));
 
 		if(getWorld().isBlockIndirectlyGettingPowered(pos) == 0)
 			doWork();
@@ -41,16 +41,14 @@ public class TileCrystalFormer extends TileMRUGeneric {
 
 	public void doWork()  {
 		if(canWork()) {
-			if(getMRU() > mruUsage) {
-				if(!getWorld().isRemote) {
-					if(setMRU(getMRU() - mruUsage))
-						++progressLevel;
-					if(generatesCorruption)
-						ECUtils.increaseCorruptionAt(getWorld(), pos.getX(), pos.getY(), pos.getZ(), getWorld().rand.nextInt(genCorruption));
-					if(progressLevel >= requiredTime) {
-						progressLevel = 0;
-						createItem();
-					}
+			if(mruStorage.getMRU() >= mruUsage) {
+				mruStorage.extractMRU(mruUsage, true);
+				++progressLevel;
+				if(generatesCorruption)
+					ECUtils.increaseCorruptionAt(getWorld(), pos, getWorld().rand.nextInt(genCorruption));
+				if(progressLevel >= requiredTime) {
+					progressLevel = 0;
+					createItem();
 				}
 			}
 		}
@@ -105,7 +103,7 @@ public class TileCrystalFormer extends TileMRUGeneric {
 	}
 
 	public void spawnParticles() {
-		if(canWork() && getMRU() > 0) {
+		if(world.isRemote && canWork() && mruStorage.getMRU() > 0) {
 			for(int o = 0; o < 10; ++o) {
 				getWorld().spawnParticle(EnumParticleTypes.REDSTONE, pos.getX()+0.1D + getWorld().rand.nextDouble()/1.1D, pos.getY() + (float)o/10, pos.getZ()+0.1D + getWorld().rand.nextDouble()/1.1D, -1.0D, 1.0D, 1.0D);
 			}
@@ -131,7 +129,7 @@ public class TileCrystalFormer extends TileMRUGeneric {
 
 			mruUsage = Integer.parseInt(data[1].fieldValue);
 			requiredTime = Integer.parseInt(data[2].fieldValue);
-			cfgMaxMRU = Float.parseFloat(data[0].fieldValue);
+			cfgMaxMRU = Integer.parseInt(data[0].fieldValue);
 			generatesCorruption = Boolean.parseBoolean(data[3].fieldValue);
 			genCorruption = Integer.parseInt(data[4].fieldValue);
 

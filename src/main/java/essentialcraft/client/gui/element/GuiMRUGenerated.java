@@ -114,7 +114,7 @@ public class GuiMRUGenerated extends GuiTextElement{
 						mruGenerated = 80+heat/1000;
 					else
 						mruGenerated = heat/124;
-				Minecraft.getMinecraft().fontRenderer.drawStringWithShadow((int)mruGenerated+" MRU/t", posX+2, posY+5, 0xffffff);
+				Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(mruGenerated+" MRU/t", posX+2, posY+5, 0xffffff);
 				Minecraft.getMinecraft().fontRenderer.drawStringWithShadow("Heat: "+(int)furnace.heat+"C", posX+82, posY-10, 0xffffff);
 			}
 		}
@@ -123,17 +123,17 @@ public class GuiMRUGenerated extends GuiTextElement{
 			if(tile instanceof TileFlowerBurner)
 			{
 				TileFlowerBurner furnace = (TileFlowerBurner) tile;
-				Minecraft.getMinecraft().fontRenderer.drawStringWithShadow((int)TileFlowerBurner.mruGenerated+" MRU/t", posX+2, posY+5, 0xffffff);
+				Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(TileFlowerBurner.mruGenerated+" MRU/t", posX+2, posY+5, 0xffffff);
 				DrawUtils.bindTexture("essentialcraft", "textures/gui/slot_common.png");
 				this.drawTexturedModalRect(posX+82, posY, 0, 0, 18, 18);
 				RenderItem renderitem = Minecraft.getMinecraft().getRenderItem();
 				if(furnace.burnedFlower != null)
 				{
-					BlockPos pos = new BlockPos((int)furnace.burnedFlower.x,(int)furnace.burnedFlower.y, (int)furnace.burnedFlower.z);
+					BlockPos pos = new BlockPos(furnace.burnedFlower.getX(),furnace.burnedFlower.getY(), furnace.burnedFlower.getZ());
 					IBlockState b = furnace.getWorld().getBlockState(pos);
 					if(b != null && b.getBlock() != Blocks.AIR && Item.getItemFromBlock(b.getBlock()) != null)
 					{
-						renderitem.renderItemIntoGUI(b.getBlock().getPickBlock(b, new RayTraceResult(Vec3d.ZERO, EnumFacing.DOWN, pos), furnace.getWorld(), new BlockPos((int)furnace.burnedFlower.x,(int)furnace.burnedFlower.y, (int)furnace.burnedFlower.z), Minecraft.getMinecraft().player), posX+83, posY+1);
+						renderitem.renderItemIntoGUI(b.getBlock().getPickBlock(b, new RayTraceResult(Vec3d.ZERO, EnumFacing.DOWN, pos), furnace.getWorld(), furnace.burnedFlower, Minecraft.getMinecraft().player), posX+83, posY+1);
 					}
 				}
 				DrawUtils.bindTexture("minecraft", "textures/gui/container/furnace.png");
@@ -156,11 +156,11 @@ public class GuiMRUGenerated extends GuiTextElement{
 				RenderItem renderitem = Minecraft.getMinecraft().getRenderItem();
 				if(furnace.burnedFlower != null)
 				{
-					BlockPos pos = new BlockPos((int)furnace.burnedFlower.x,(int)furnace.burnedFlower.y, (int)furnace.burnedFlower.z);
+					BlockPos pos = furnace.burnedFlower;
 					IBlockState b = furnace.getWorld().getBlockState(pos);
 					if(b != null && Item.getItemFromBlock(b.getBlock()) != null)
 					{
-						renderitem.renderItemIntoGUI(b.getBlock().getPickBlock(b, new RayTraceResult(Vec3d.ZERO, EnumFacing.DOWN, pos), furnace.getWorld(), new BlockPos((int)furnace.burnedFlower.x,(int)furnace.burnedFlower.y, (int)furnace.burnedFlower.z), Minecraft.getMinecraft().player), posX+83, posY+1);
+						renderitem.renderItemIntoGUI(b.getBlock().getPickBlock(b, new RayTraceResult(Vec3d.ZERO, EnumFacing.DOWN, pos), furnace.getWorld(), furnace.burnedFlower, Minecraft.getMinecraft().player), posX+83, posY+1);
 					}
 				}
 				DrawUtils.bindTexture("minecraft", "textures/gui/container/furnace.png");
@@ -182,11 +182,11 @@ public class GuiMRUGenerated extends GuiTextElement{
 		}
 		if(tileValue.equals("enderGenerator"))
 		{
-			Minecraft.getMinecraft().fontRenderer.drawStringWithShadow((int)TileEnderGenerator.mruGenerated+" MRU/hit", posX+2, posY+5, 0xffffff);
+			Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(TileEnderGenerator.mruGenerated+" MRU/hit", posX+2, posY+5, 0xffffff);
 		}
 		if(tileValue.equals("sunray"))
 		{
-			Minecraft.getMinecraft().fontRenderer.drawStringWithShadow((int)TileSunRayAbsorber.mruGenerated+" MRU/t", posX+2, posY+5, 0xffffff);
+			Minecraft.getMinecraft().fontRenderer.drawStringWithShadow(TileSunRayAbsorber.mruGenerated+" MRU/t", posX+2, posY+5, 0xffffff);
 		}
 		if(tileValue.equals("moonwell"))
 		{

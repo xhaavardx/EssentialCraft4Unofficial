@@ -3,6 +3,7 @@ package essentialcraft.common.block;
 import DummyCore.Client.IModelRegisterer;
 import essentialcraft.common.tile.TileMRUCUECRedstoneController;
 import net.minecraft.block.BlockContainer;
+import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -21,8 +22,8 @@ import net.minecraftforge.client.model.ModelLoader;
 
 public class BlockMRUCUECRedstoneController extends BlockContainer implements IModelRegisterer {
 
-	protected BlockMRUCUECRedstoneController(Material p_i45386_1_) {
-		super(p_i45386_1_);
+	protected BlockMRUCUECRedstoneController() {
+		super(Material.ROCK, MapColor.PURPLE);
 	}
 
 	@Override

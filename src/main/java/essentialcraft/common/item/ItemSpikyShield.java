@@ -17,11 +17,10 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 
-public class ItemSpikyShield extends ItemStoresMRUInNBT implements IModelRegisterer {
+public class ItemSpikyShield extends ItemMRUGeneric implements IModelRegisterer {
 
 	public ItemSpikyShield() {
 		super();
-		this.setMaxMRU(5000);
 		this.maxStackSize = 1;
 		this.bFull3D = true;
 	}
@@ -29,7 +28,7 @@ public class ItemSpikyShield extends ItemStoresMRUInNBT implements IModelRegiste
 	@Override
 	public ItemStack onItemUseFinish(ItemStack p_77654_1_, World p_77654_2_, EntityLivingBase p_77654_3_)
 	{
-		if(p_77654_3_ instanceof EntityPlayer && (ECUtils.tryToDecreaseMRUInStorage((EntityPlayer)p_77654_3_, -100) || this.increaseMRU(p_77654_1_, -100)))
+		if(p_77654_3_ instanceof EntityPlayer && ECUtils.playerUseMRU((EntityPlayer)p_77654_3_, p_77654_1_, 100))
 		{
 			List<EntityMob> mobs = p_77654_2_.getEntitiesWithinAABB(EntityMob.class, new AxisAlignedBB(p_77654_3_.posX-5, p_77654_3_.posY-2, p_77654_3_.posZ-5, p_77654_3_.posX+5, p_77654_3_.posY+2, p_77654_3_.posZ+5));
 			if(!mobs.isEmpty())
@@ -74,7 +73,7 @@ public class ItemSpikyShield extends ItemStoresMRUInNBT implements IModelRegiste
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World p_77659_2_, EntityPlayer p_77659_3_, EnumHand hand)
 	{
-		if(ECUtils.tryToDecreaseMRUInStorage(p_77659_3_, -50*40) || this.increaseMRU(p_77659_3_.getHeldItem(hand), -50*40))
+		if(ECUtils.playerUseMRU(p_77659_3_, p_77659_3_.getHeldItem(hand), 2000));
 		{
 			p_77659_3_.setActiveHand(hand);
 		}

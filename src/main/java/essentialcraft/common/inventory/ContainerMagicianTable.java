@@ -2,7 +2,6 @@ package essentialcraft.common.inventory;
 
 import DummyCore.Utils.ContainerInventory;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.SlotFurnaceOutput;
 import net.minecraft.tileentity.TileEntity;
 
 public class ContainerMagicianTable extends ContainerInventory {
@@ -19,7 +18,7 @@ public class ContainerMagicianTable extends ContainerInventory {
 		addSlotToContainer(new SlotGeneric(inv, 3, 62, 5));
 		addSlotToContainer(new SlotGeneric(inv, 4, 26, 41));
 		addSlotToContainer(new SlotGeneric(inv, 5, 62, 41));
-		addSlotToContainer(new SlotFurnaceOutput(player, inv, 6, 89, 5));
+		addSlotToContainer(new SlotGeneric(inv, 6, 89, 5));
 		this.setupPlayerInventory();
 	}
 }

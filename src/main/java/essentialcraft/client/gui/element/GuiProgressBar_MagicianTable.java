@@ -3,27 +3,18 @@ package essentialcraft.client.gui.element;
 import DummyCore.Utils.DrawUtils;
 import DummyCore.Utils.MathUtils;
 import essentialcraft.common.tile.TileMagicianTable;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ResourceLocation;
 
 public class GuiProgressBar_MagicianTable extends GuiTextElement{
 	public TileMagicianTable tile;
 
-	public GuiProgressBar_MagicianTable(int i, int j, TileEntity table)
-	{
+	public GuiProgressBar_MagicianTable(int i, int j, TileMagicianTable table) {
 		super(i,j);
-		tile = (TileMagicianTable) table;
-	}
-
-	@Override
-	public ResourceLocation getElementTexture() {
-		// TODO Auto-generated method stub
-		return super.getElementTexture();
+		tile = table;
 	}
 
 	@Override
 	public void draw(int posX, int posY, int mouseX, int mouseY) {
-		DrawUtils.bindTexture("essentialcraft", "textures/gui/gui_magicianTable.png");
+		DrawUtils.bindTexture("essentialcraft", "textures/gui/gui_magiciantable.png");
 		int current = (int) tile.progressLevel;
 		int max = (int) tile.progressRequired;
 		int progress = MathUtils.pixelatedTextureSize(current, max, 18);
@@ -35,20 +26,5 @@ public class GuiProgressBar_MagicianTable extends GuiTextElement{
 	}
 
 	@Override
-	public int getX() {
-		// TODO Auto-generated method stub
-		return super.getX();
-	}
-
-	@Override
-	public int getY() {
-		// TODO Auto-generated method stub
-		return super.getY();
-	}
-
-	@Override
-	public void drawText(int posX, int posY) {
-
-	}
-
+	public void drawText(int posX, int posY) {}
 }

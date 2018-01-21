@@ -34,7 +34,7 @@ public class TileMIMInventoryStorage extends TileMRUGeneric {
 	final Capability<IItemHandler> ITEM_HANDLER_CAPABILITY = CapabilityItemHandler.ITEM_HANDLER_CAPABILITY;
 
 	public TileMIMInventoryStorage() {
-		setMaxMRU(0);
+		mruStorage.setMaxMRU(0);
 		setSlotsNum(54);
 		slot0IsBoundGem = false;
 	}

@@ -21,7 +21,7 @@ public class RenderCorruptionCleaner extends TileEntitySpecialRenderer<TileCorru
 		if(tile.cleared == null) {}
 		else {
 			GlStateManager.pushMatrix();
-			float[] o = {tile.cleared.x,tile.cleared.y+1.45F,tile.cleared.z};
+			float[] o = {tile.cleared.getX(),tile.cleared.getY()+1.45F,tile.cleared.getZ()};
 			GlStateManager.popMatrix();
 
 			float f21 = 0 + p_76986_9_;
@@ -54,8 +54,7 @@ public class RenderCorruptionCleaner extends TileEntitySpecialRenderer<TileCorru
 			tessellator.startDrawing(5);
 			byte b0 = 8;
 
-			for (int i = 0; i <= b0; ++i)
-			{
+			for(int i = 0; i <= b0; ++i) {
 				float f11 = MathHelper.sin(i % b0 * (float)Math.PI * 2.0F / b0) * 0.75F * 0.1F;
 				float f12 = MathHelper.cos(i % b0 * (float)Math.PI * 2.0F / b0) * 0.75F * 0.1F;
 				float f13 = i % b0 * 1.0F / b0;

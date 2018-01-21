@@ -19,7 +19,7 @@ public class TileFurnaceMagic extends TileMRUGeneric {
 
 	public int progressLevel, smeltingLevel;
 
-	public static float cfgMaxMRU = ApiCore.DEVICE_MAX_MRU_GENERIC;
+	public static int cfgMaxMRU = ApiCore.DEVICE_MAX_MRU_GENERIC;
 	public static boolean generatesCorruption = false;
 	public static int genCorruption = 2;
 	public static int mruUsage = 25;
@@ -27,7 +27,7 @@ public class TileFurnaceMagic extends TileMRUGeneric {
 
 	public TileFurnaceMagic() {
 		super();
-		maxMRU = (int)cfgMaxMRU;
+		mruStorage.setMaxMRU(cfgMaxMRU);
 		setSlotsNum(3);
 	}
 
@@ -51,7 +51,7 @@ public class TileFurnaceMagic extends TileMRUGeneric {
 		int usage = mruUsage;
 		int time = smeltingTime/(getBlockMetadata()/4 + 1);
 		super.update();
-		ECUtils.manage(this, 0);
+		mruStorage.update(getPos(), getWorld(), getStackInSlot(0));
 
 		if(getWorld().isBlockIndirectlyGettingPowered(pos) == 0) {
 			ItemStack ore = getStackInSlot(1);
@@ -71,15 +71,15 @@ public class TileFurnaceMagic extends TileMRUGeneric {
 				}
 				if(metadata != -1) {
 					if(getStackInSlot(2).isEmpty()) {
-						if(getMRU() >= usage) {
-							setMRU(getMRU() - usage);
+						if(mruStorage.getMRU() >= usage) {
+							mruStorage.extractMRU(usage, true);
 							getWorld().spawnParticle(EnumParticleTypes.FLAME, pos.getX()+0.5D+MathUtils.randomDouble(getWorld().rand)/2.2D, pos.getY(), pos.getZ()+0.5D+MathUtils.randomDouble(getWorld().rand)/2.2D, 0, -0.1D, 0);
 							++progressLevel;
 
 							if(generatesCorruption)
-								ECUtils.increaseCorruptionAt(getWorld(), pos.getX(), pos.getY(), pos.getZ(), getWorld().rand.nextInt(genCorruption));
+								ECUtils.increaseCorruptionAt(getWorld(), pos, getWorld().rand.nextInt(genCorruption));
 
-							if(progressLevel >= time && !getWorld().isRemote) {
+							if(progressLevel >= time) {
 								decrStackSize(1, 1);
 								int suggestedStackSize = OreSmeltingRecipe.RECIPES.get(metadata).dropAmount;
 								setInventorySlotContents(2, OreSmeltingRecipe.getAlloyStack(OreSmeltingRecipe.RECIPES.get(metadata), suggestedStackSize));
@@ -89,16 +89,16 @@ public class TileFurnaceMagic extends TileMRUGeneric {
 						}
 					}
 					else if(getStackInSlot(2).getItem() == ItemsCore.magicalAlloy && OreSmeltingRecipe.getIndex(getStackInSlot(2)) == metadata && getStackInSlot(2).getCount()+1 <= getStackInSlot(2).getMaxStackSize() && getStackInSlot(2).getCount() + 1 <= getInventoryStackLimit()) {
-						if(getMRU() >= usage) {
-							setMRU(getMRU() - usage);
+						if(mruStorage.getMRU() >= usage) {
+							mruStorage.extractMRU(usage, true);
 
 							getWorld().spawnParticle(EnumParticleTypes.FLAME, pos.getX()+0.5D + MathUtils.randomDouble(getWorld().rand)/2.2D, pos.getY(), pos.getZ()+0.5D + MathUtils.randomDouble(getWorld().rand)/2.2D, 0, -0.1D, 0);
 							++progressLevel;
 
 							if(generatesCorruption)
-								ECUtils.increaseCorruptionAt(getWorld(), pos.getX(), pos.getY(), pos.getZ(), getWorld().rand.nextInt(genCorruption));
+								ECUtils.increaseCorruptionAt(getWorld(), pos, getWorld().rand.nextInt(genCorruption));
 
-							if(progressLevel >= time && !getWorld().isRemote) {
+							if(progressLevel >= time) {
 								decrStackSize(1, 1);
 								int suggestedStackSize = OreSmeltingRecipe.RECIPES.get(metadata).dropAmount;
 
@@ -134,15 +134,15 @@ public class TileFurnaceMagic extends TileMRUGeneric {
 				if(oreLst != null && !oreLst.isEmpty()) {
 					ItemStack ingotStk = oreLst.get(0).copy();
 					if(getStackInSlot(2).isEmpty()) {
-						if(getMRU() >= usage) {
-							setMRU(getMRU()-usage);
+						if(mruStorage.getMRU() >= usage) {
+							mruStorage.extractMRU(usage, true);
 							getWorld().spawnParticle(EnumParticleTypes.FLAME, pos.getX()+0.5D+MathUtils.randomDouble(getWorld().rand)/2.2D, pos.getY(), pos.getZ()+0.5D+MathUtils.randomDouble(getWorld().rand)/2.2D, 0, -0.1D, 0);
 							++smeltingLevel;
 
-							if(generatesCorruption)
-								ECUtils.increaseCorruptionAt(getWorld(), pos.getX(), pos.getY(), pos.getZ(), getWorld().rand.nextInt(genCorruption));
+							if(!getWorld().isRemote && generatesCorruption)
+								ECUtils.increaseCorruptionAt(getWorld(), pos, getWorld().rand.nextInt(genCorruption));
 
-							if(smeltingLevel >= time && !getWorld().isRemote) {
+							if(smeltingLevel >= time) {
 								decrStackSize(1, 1);
 								int suggestedStackSize = 2;
 								ingotStk.setCount(suggestedStackSize);
@@ -153,13 +153,13 @@ public class TileFurnaceMagic extends TileMRUGeneric {
 						}
 					}
 					else if(getStackInSlot(2).isItemEqual(ingotStk) && getStackInSlot(2).getCount() + 2 <= getStackInSlot(2).getMaxStackSize() && getStackInSlot(2).getCount() + 2 <= getInventoryStackLimit()) {
-						if(getMRU() >= usage) {
-							setMRU(getMRU() - usage);
+						if(mruStorage.getMRU() >= usage) {
+							mruStorage.extractMRU(usage, true);
 							getWorld().spawnParticle(EnumParticleTypes.FLAME, pos.getX()+0.5D + MathUtils.randomDouble(getWorld().rand)/2.2D, pos.getY(), pos.getZ()+0.5D + MathUtils.randomDouble(getWorld().rand)/2.2D, 0, -0.1D, 0);
 							++smeltingLevel;
-							if(generatesCorruption)
-								ECUtils.increaseCorruptionAt(getWorld(), pos.getX(), pos.getY(), pos.getZ(), getWorld().rand.nextInt(genCorruption));
-							if(smeltingLevel >= time && !getWorld().isRemote) {
+							if(!getWorld().isRemote && generatesCorruption)
+								ECUtils.increaseCorruptionAt(getWorld(), pos, getWorld().rand.nextInt(genCorruption));
+							if(smeltingLevel >= time) {
 								decrStackSize(1, 1);
 								int suggestedStackSize = 2;
 								ItemStack is = getStackInSlot(2);
@@ -197,7 +197,7 @@ public class TileFurnaceMagic extends TileMRUGeneric {
 			DummyData[] data = DataStorage.parseData(dataString);
 
 			mruUsage = Integer.parseInt(data[1].fieldValue);
-			cfgMaxMRU = Float.parseFloat(data[0].fieldValue);
+			cfgMaxMRU = Integer.parseInt(data[0].fieldValue);
 			generatesCorruption = Boolean.parseBoolean(data[2].fieldValue);
 			genCorruption = Integer.parseInt(data[3].fieldValue);
 			smeltingTime = Integer.parseInt(data[4].fieldValue);

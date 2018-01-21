@@ -10,21 +10,21 @@ import net.minecraftforge.common.config.Configuration;
 
 public class TileMagicalRepairer extends TileMRUGeneric {
 
-	public static float cfgMaxMRU = ApiCore.DEVICE_MAX_MRU_GENERIC;
+	public static int cfgMaxMRU = ApiCore.DEVICE_MAX_MRU_GENERIC;
 	public static boolean generatesCorruption = true;
 	public static int genCorruption = 3;
 	public static int mruUsage = 70;
 
 	public TileMagicalRepairer() {
 		super();
-		maxMRU = (int)cfgMaxMRU;
+		mruStorage.setMaxMRU(cfgMaxMRU);
 		setSlotsNum(2);
 	}
 
 	@Override
 	public void update() {
 		super.update();
-		ECUtils.manage(this, 0);
+		mruStorage.update(getPos(), getWorld(), getStackInSlot(0));
 		if(getWorld().isBlockIndirectlyGettingPowered(pos) == 0)
 			repare();
 		spawnParticles();
@@ -33,20 +33,21 @@ public class TileMagicalRepairer extends TileMRUGeneric {
 	public void repare() {
 		ItemStack repareItem = getStackInSlot(1);
 		if(canRepare(repareItem)) {
-			if(setMRU(getMRU() - mruUsage)) {
+			if(mruStorage.getMRU() >= mruUsage) {
+				mruStorage.extractMRU(mruUsage, true);
 				repareItem.setItemDamage(repareItem.getItemDamage() - 1);
 				if(generatesCorruption)
-					ECUtils.increaseCorruptionAt(getWorld(), pos.getX(), pos.getY(), pos.getZ(), getWorld().rand.nextInt(genCorruption));
+					ECUtils.increaseCorruptionAt(getWorld(), pos, getWorld().rand.nextInt(genCorruption));
 			}
 		}
 	}
 
 	public boolean canRepare(ItemStack s) {
-		return !s.isEmpty() && s.getItemDamage() != 0 && s.getItem().isRepairable() && getMRU() >= mruUsage;
+		return !s.isEmpty() && s.getItemDamage() != 0 && s.getItem().isRepairable() && mruStorage.getMRU() >= mruUsage;
 	}
 
 	public void spawnParticles() {
-		if(canRepare(getStackInSlot(1)) && getMRU() > 0) {
+		if(world.isRemote && canRepare(getStackInSlot(1)) && mruStorage.getMRU() > 0) {
 			for(int o = 0; o < 10; ++o) {
 				getWorld().spawnParticle(EnumParticleTypes.REDSTONE, pos.getX()+0.25D + getWorld().rand.nextDouble()/2.2D, pos.getY()+0.25D+(float)o/20, pos.getZ()+0.25D + getWorld().rand.nextDouble()/2.2D, 1.0D, 0.0D, 1.0D);
 			}
@@ -70,7 +71,7 @@ public class TileMagicalRepairer extends TileMRUGeneric {
 			DummyData[] data = DataStorage.parseData(dataString);
 
 			mruUsage = Integer.parseInt(data[1].fieldValue);
-			cfgMaxMRU = Float.parseFloat(data[0].fieldValue);
+			cfgMaxMRU = Integer.parseInt(data[0].fieldValue);
 			generatesCorruption = Boolean.parseBoolean(data[2].fieldValue);
 			genCorruption = Integer.parseInt(data[3].fieldValue);
 

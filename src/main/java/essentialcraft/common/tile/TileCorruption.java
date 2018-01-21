@@ -67,13 +67,13 @@ public class TileCorruption extends TileEntity implements ITickable {
 			}
 			List<EntityPlayer> players = getWorld().getEntitiesWithinAABB(EntityPlayer.class, new AxisAlignedBB(pos));
 			for(EntityPlayer player : players) {
-				if(!getWorld().isRemote && !player.isCreative() && !player.isSpectator()) {
+				if(!player.isCreative() && !player.isSpectator()) {
 					float increasement = 5;
 					increasement *= ECUtils.getGenResistance(1, player);
 					ECUtils.calculateAndAddPE(player, potionToAdd, 2000, (int)increasement);
 				}
 			}
-			if(getWorld().rand.nextFloat() <= 0.0001F) {
+			if(!getWorld().isRemote && getWorld().rand.nextFloat() <= 0.0001F) {
 				int biomeId = 0;
 				if(blk == BlocksCore.lightCorruption[0]) {
 					biomeId = Biome.getIdForBiome(BiomeRegistry.chaosCorruption);
@@ -87,8 +87,7 @@ public class TileCorruption extends TileEntity implements ITickable {
 				if(blk == BlocksCore.lightCorruption[3]) {
 					biomeId = Biome.getIdForBiome(BiomeRegistry.magicCorruption);
 				}
-				if(!getWorld().isRemote)
-					changeBiomeAtPos(biomeId);
+				changeBiomeAtPos(biomeId);
 			}
 			int metadata = getWorld().getBlockState(pos).getValue(BlockCorruption.LEVEL);
 			if(metadata >= 7 && canDestroyBlocks) {

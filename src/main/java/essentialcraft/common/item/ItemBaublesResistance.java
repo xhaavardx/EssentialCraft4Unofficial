@@ -55,6 +55,7 @@ public class ItemBaublesResistance extends Item implements IBauble, IModelRegist
 	@Override
 	public void addInformation(ItemStack stack, World p_77624_2_, List<String> p_77624_3_, ITooltipFlag p_77624_4_)
 	{
+		super.addInformation(stack, p_77624_2_, p_77624_3_, p_77624_4_);
 		NBTTagCompound bTag = MiscUtils.getStackTag(stack);
 		if(bTag.hasKey("type")) {
 			ArrayList<Float> fltLst = new ArrayList<Float>();

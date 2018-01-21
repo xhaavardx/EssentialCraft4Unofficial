@@ -5,7 +5,6 @@ import java.util.List;
 import DummyCore.Utils.MathUtils;
 import essentialcraft.api.ApiCore;
 import essentialcraft.common.item.ItemsCore;
-import essentialcraft.utils.common.ECUtils;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.item.EntityFallingBlock;
@@ -32,14 +31,14 @@ public class TileMagicalJukebox extends TileMRUGeneric {
 
 	public TileMagicalJukebox() {
 		super();
-		maxMRU = (int)ApiCore.DEVICE_MAX_MRU_GENERIC;
+		mruStorage.setMaxMRU(ApiCore.DEVICE_MAX_MRU_GENERIC);
 		setSlotsNum(2);
 	}
 
 	@Override
 	public void update() {
 		super.update();
-		ECUtils.manage(this, 0);
+		mruStorage.update(getPos(), getWorld(), getStackInSlot(0));
 
 		if(!getStackInSlot(1).isEmpty() && getStackInSlot(1).getItem() == ItemsCore.record_secret && recordCooldownTime <= 0) {
 			recordPlayed = 1;
@@ -56,115 +55,117 @@ public class TileMagicalJukebox extends TileMRUGeneric {
 		}
 
 		if(!getStackInSlot(1).isEmpty() && getStackInSlot(1).getItem() == ItemsCore.record_secret && recordCooldownTime > 0) {
-			double randomX = MathUtils.randomDouble(getWorld().rand)*12;
-			double randomY = MathUtils.randomDouble(getWorld().rand)*12;
-			double randomZ = MathUtils.randomDouble(getWorld().rand)*12;
-			double randomColorR = getWorld().rand.nextDouble();
-			double randomColorG = getWorld().rand.nextDouble();
-			double randomColorB = getWorld().rand.nextDouble();
-			boolean randomBool = getWorld().rand.nextBoolean();
-			for(int i = 0; i < 50; ++i)
-				getWorld().spawnParticle(EnumParticleTypes.SPELL_MOB, pos.getX()+randomX, pos.getY()+randomY, pos.getZ()+randomZ, randomColorR, randomColorG, randomColorB);
-			for(int i = 0; i < 100; ++i) {
-				if(randomBool)
-					getWorld().spawnParticle(EnumParticleTypes.CRIT, pos.getX()+randomX, pos.getY()+randomY, pos.getZ()+randomZ, MathUtils.randomDouble(getWorld().rand), 1.1D+MathUtils.randomDouble(getWorld().rand), MathUtils.randomDouble(getWorld().rand));
-				else
-					getWorld().spawnParticle(EnumParticleTypes.CRIT_MAGIC, pos.getX()+randomX, pos.getY()+randomY, pos.getZ()+randomZ, MathUtils.randomDouble(getWorld().rand), 1.1D+MathUtils.randomDouble(getWorld().rand), MathUtils.randomDouble(getWorld().rand));
-			}
 			--recordCooldownTime;
+			if(world.isRemote) {
+				getWorld().spawnParticle(EnumParticleTypes.NOTE, pos.getX() + 0.5D+MathUtils.randomDouble(getWorld().rand)*3, pos.getY() + 1.2D, pos.getZ() + 0.5D+MathUtils.randomDouble(getWorld().rand)*3, MathUtils.randomDouble(getWorld().rand)*24 / 24.0D, 0.0D, 0.0D);
 
-			int achievementID = getWorld().rand.nextInt(achievementNames.length);
-			Style greenItalicAchievement = new Style().setColor(TextFormatting.GREEN);
-			TextComponentString achName = new TextComponentString(achievementNames[achievementID]+"\n");
-			achName.setStyle(greenItalicAchievement);
-			achName.appendSibling(new TextComponentString("Achievable!").setStyle(new Style().setColor(TextFormatting.WHITE)));
-			HoverEvent achievementEvent = new HoverEvent(Action.SHOW_TEXT, achName);
-			Style achievementStyle = new Style().setColor(TextFormatting.GREEN);
-			achievementStyle.setHoverEvent(achievementEvent);
-
-			TextComponentString achievementText = new TextComponentString("["+achievementNames[achievementID]+"]");
-			achievementText.setStyle(achievementStyle);
-			List<EntityPlayer> playerLst = getWorld().getEntitiesWithinAABB(EntityPlayer.class, new AxisAlignedBB(pos.getX()-6, pos.getY()-6, pos.getZ()-6, pos.getX()+7, pos.getY()+7, pos.getZ()+7));
-			if(!playerLst.isEmpty() && getWorld().getWorldTime() % 60 == 0 && !getWorld().isRemote) {
-				EntityPlayer player = playerLst.get(getWorld().rand.nextInt(playerLst.size()));
-				player.sendMessage(new TextComponentTranslation("chat.type.advancement.task", player.getDisplayName(), achievementText));
-			}
-			List<EntitySheep> sheepLst = getWorld().getEntitiesWithinAABB(EntitySheep.class, new AxisAlignedBB(pos.getX()-16, pos.getY()-16, pos.getZ()-16, pos.getX()+17, pos.getY()+17, pos.getZ()+17));
-			if(!sheepLst.isEmpty() && getWorld().getWorldTime() % 20 == 0 && !getWorld().isRemote) {
-				for(int t = 0; t < sheepLst.size(); ++t) {
-					EntitySheep sheep = sheepLst.get(t);
-					sheep.setFleeceColor(EnumDyeColor.byMetadata(getWorld().rand.nextInt(16)));
-					sheep.setCustomNameTag(monsterNames[getWorld().rand.nextInt(monsterNames.length)]);
+				double randomX = MathUtils.randomDouble(getWorld().rand)*12;
+				double randomY = MathUtils.randomDouble(getWorld().rand)*12;
+				double randomZ = MathUtils.randomDouble(getWorld().rand)*12;
+				double randomColorR = getWorld().rand.nextDouble();
+				double randomColorG = getWorld().rand.nextDouble();
+				double randomColorB = getWorld().rand.nextDouble();
+				boolean randomBool = getWorld().rand.nextBoolean();
+				for(int i = 0; i < 50; ++i)
+					getWorld().spawnParticle(EnumParticleTypes.SPELL_MOB, pos.getX()+randomX, pos.getY()+randomY, pos.getZ()+randomZ, randomColorR, randomColorG, randomColorB);
+				for(int i = 0; i < 100; ++i) {
+					if(randomBool)
+						getWorld().spawnParticle(EnumParticleTypes.CRIT, pos.getX()+randomX, pos.getY()+randomY, pos.getZ()+randomZ, MathUtils.randomDouble(getWorld().rand), 1.1D+MathUtils.randomDouble(getWorld().rand), MathUtils.randomDouble(getWorld().rand));
+					else
+						getWorld().spawnParticle(EnumParticleTypes.CRIT_MAGIC, pos.getX()+randomX, pos.getY()+randomY, pos.getZ()+randomZ, MathUtils.randomDouble(getWorld().rand), 1.1D+MathUtils.randomDouble(getWorld().rand), MathUtils.randomDouble(getWorld().rand));
 				}
 			}
-			List<EntityLiving> baseLst = getWorld().getEntitiesWithinAABB(EntityLiving.class, new AxisAlignedBB(pos.getX()-16, pos.getY()-16, pos.getZ()-16, pos.getX()+17, pos.getY()+17, pos.getZ()+17));
-			if(!baseLst.isEmpty() && getWorld().getWorldTime() % 10 == 0 && !getWorld().isRemote) {
-				for(int t = 0; t < baseLst.size(); ++t) {
-					EntityLiving sheep = baseLst.get(t);
-					sheep.setCustomNameTag(monsterNames[getWorld().rand.nextInt(monsterNames.length)]);
+			else {
+				int achievementID = getWorld().rand.nextInt(achievementNames.length);
+				Style greenItalicAchievement = new Style().setColor(TextFormatting.GREEN);
+				TextComponentString achName = new TextComponentString(achievementNames[achievementID]+"\n");
+				achName.setStyle(greenItalicAchievement);
+				achName.appendSibling(new TextComponentString("Achievable!").setStyle(new Style().setColor(TextFormatting.WHITE)));
+				HoverEvent achievementEvent = new HoverEvent(Action.SHOW_TEXT, achName);
+				Style achievementStyle = new Style().setColor(TextFormatting.GREEN);
+				achievementStyle.setHoverEvent(achievementEvent);
+
+				TextComponentString achievementText = new TextComponentString("["+achievementNames[achievementID]+"]");
+				achievementText.setStyle(achievementStyle);
+				List<EntityPlayer> playerLst = getWorld().getEntitiesWithinAABB(EntityPlayer.class, new AxisAlignedBB(pos.getX()-6, pos.getY()-6, pos.getZ()-6, pos.getX()+7, pos.getY()+7, pos.getZ()+7));
+				if(!playerLst.isEmpty() && getWorld().getWorldTime() % 60 == 0 && !getWorld().isRemote) {
+					EntityPlayer player = playerLst.get(getWorld().rand.nextInt(playerLst.size()));
+					player.sendMessage(new TextComponentTranslation("chat.type.advancement.task", player.getDisplayName(), achievementText));
 				}
-			}
+				List<EntitySheep> sheepLst = getWorld().getEntitiesWithinAABB(EntitySheep.class, new AxisAlignedBB(pos.getX()-16, pos.getY()-16, pos.getZ()-16, pos.getX()+17, pos.getY()+17, pos.getZ()+17));
+				if(!sheepLst.isEmpty() && getWorld().getWorldTime() % 20 == 0 && !getWorld().isRemote) {
+					for(int t = 0; t < sheepLst.size(); ++t) {
+						EntitySheep sheep = sheepLst.get(t);
+						sheep.setFleeceColor(EnumDyeColor.byMetadata(getWorld().rand.nextInt(16)));
+						sheep.setCustomNameTag(monsterNames[getWorld().rand.nextInt(monsterNames.length)]);
+					}
+				}
+				List<EntityLiving> baseLst = getWorld().getEntitiesWithinAABB(EntityLiving.class, new AxisAlignedBB(pos.getX()-16, pos.getY()-16, pos.getZ()-16, pos.getX()+17, pos.getY()+17, pos.getZ()+17));
+				if(!baseLst.isEmpty() && getWorld().getWorldTime() % 10 == 0 && !getWorld().isRemote) {
+					for(int t = 0; t < baseLst.size(); ++t) {
+						EntityLiving sheep = baseLst.get(t);
+						sheep.setCustomNameTag(monsterNames[getWorld().rand.nextInt(monsterNames.length)]);
+					}
+				}
 
-			int randomBlockID = getWorld().rand.nextInt(15);
+				if(getWorld().getWorldTime()%20 == 0) {
+					int randomBlockID = getWorld().rand.nextInt(15);
 
-			IBlockState fallingBlock;
+					IBlockState fallingBlock;
 
-			switch(randomBlockID) {
-			default:
-			case 0: {
-				fallingBlock = Blocks.YELLOW_FLOWER.getDefaultState();
-				break;
-			}
-			case 1:
-			case 2:
-			case 3:
-			case 4:
-			case 5:
-			case 6:
-			case 7:
-			case 8:
-			case 9: {
-				fallingBlock = Blocks.RED_FLOWER.getStateFromMeta(randomBlockID-1);
-				break;
-			}
-			case 10: {
-				fallingBlock = Blocks.RED_MUSHROOM.getDefaultState();
-				break;
-			}
-			case 11: {
-				fallingBlock = Blocks.BROWN_MUSHROOM.getDefaultState();
-				break;
-			}
-			case 12:
-			case 13: {
-				fallingBlock = Blocks.TALLGRASS.getStateFromMeta(randomBlockID-11);
-				break;
-			}
-			case 14: {
-				fallingBlock = Blocks.WATERLILY.getDefaultState();
-				break;
-			}
-			}
-
-			if(getWorld().getWorldTime()%20 == 0) {
-				EntityFallingBlock flower = new EntityFallingBlock(getWorld(), pos.getX()+(int)(MathUtils.randomDouble(getWorld().rand)*16)+0.5D, 255, pos.getZ()+(int)(MathUtils.randomDouble(getWorld().rand)*16)+0.5D, fallingBlock);
-				flower.fallTime = 3;
-				if(!getWorld().isRemote)
+					switch(randomBlockID) {
+					default:
+					case 0: {
+						fallingBlock = Blocks.YELLOW_FLOWER.getDefaultState();
+						break;
+					}
+					case 1:
+					case 2:
+					case 3:
+					case 4:
+					case 5:
+					case 6:
+					case 7:
+					case 8:
+					case 9: {
+						fallingBlock = Blocks.RED_FLOWER.getStateFromMeta(randomBlockID-1);
+						break;
+					}
+					case 10: {
+						fallingBlock = Blocks.RED_MUSHROOM.getDefaultState();
+						break;
+					}
+					case 11: {
+						fallingBlock = Blocks.BROWN_MUSHROOM.getDefaultState();
+						break;
+					}
+					case 12:
+					case 13: {
+						fallingBlock = Blocks.TALLGRASS.getStateFromMeta(randomBlockID-11);
+						break;
+					}
+					case 14: {
+						fallingBlock = Blocks.WATERLILY.getDefaultState();
+						break;
+					}
+					}
+					EntityFallingBlock flower = new EntityFallingBlock(getWorld(), pos.getX()+(int)(MathUtils.randomDouble(getWorld().rand)*16)+0.5D, 255, pos.getZ()+(int)(MathUtils.randomDouble(getWorld().rand)*16)+0.5D, fallingBlock);
+					flower.fallTime = 3;
 					getWorld().spawnEntity(flower);
+				}
 			}
-			getWorld().spawnParticle(EnumParticleTypes.NOTE, pos.getX() + 0.5D+MathUtils.randomDouble(getWorld().rand)*3, pos.getY() + 1.2D, pos.getZ() + 0.5D+MathUtils.randomDouble(getWorld().rand)*3, MathUtils.randomDouble(getWorld().rand)*24 / 24.0D, 0.0D, 0.0D);
 			return;
 		}
 
-		if(!getStackInSlot(1).isEmpty() && getStackInSlot(1).getItem() instanceof ItemRecord && recordPlayed == 0 && recordCooldownTime == 0 && getMRU() > 500) {
-			setMRU(getMRU() - 500);
+		if(!getStackInSlot(1).isEmpty() && getStackInSlot(1).getItem() instanceof ItemRecord && recordPlayed == 0 && recordCooldownTime == 0 && mruStorage.getMRU() >= 500) {
+			mruStorage.extractMRU(500, true);
 			recordPlayed = 1;
 			recordCooldownTime = 100;
 			if(!getWorld().isRemote)
 				getWorld().playEvent(null, 1010, pos, Item.getIdFromItem(getStackInSlot(1).getItem()));
 		}
 
-		if(!getStackInSlot(1).isEmpty()) {
+		if(getWorld().isRemote && !getStackInSlot(1).isEmpty()) {
 			if(getWorld().rand.nextFloat() <= 0.33F)
 				getWorld().spawnParticle(EnumParticleTypes.NOTE, pos.getX() + 0.5D, pos.getY() + 1.2D, pos.getZ() + 0.5D+MathUtils.randomDouble(getWorld().rand)/2, MathUtils.randomDouble(getWorld().rand)*24 / 24.0D, 0.0D, 0.0D);
 		}
@@ -172,8 +173,8 @@ public class TileMagicalJukebox extends TileMRUGeneric {
 		if(recordCooldownTime > 0)
 			--recordCooldownTime;
 
-		if(!getStackInSlot(1).isEmpty() && getStackInSlot(1).getItem() instanceof ItemRecord && recordPlayed == 1 && recordCooldownTime == 0 && getWorld().isBlockIndirectlyGettingPowered(pos) > 0 && getMRU() > 500) {
-			setMRU(getMRU() - 500);
+		if(!getStackInSlot(1).isEmpty() && getStackInSlot(1).getItem() instanceof ItemRecord && recordPlayed == 1 && recordCooldownTime == 0 && getWorld().isBlockIndirectlyGettingPowered(pos) > 0 && mruStorage.getMRU() >= 500) {
+			mruStorage.extractMRU(500, true);
 			recordCooldownTime = 100;
 			if(!getWorld().isRemote)
 				getWorld().playEvent(null, 1010, pos, Item.getIdFromItem(getStackInSlot(1).getItem()));

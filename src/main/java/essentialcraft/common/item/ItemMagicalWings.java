@@ -17,11 +17,10 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 
-public class ItemMagicalWings extends ItemStoresMRUInNBT implements IBauble, IModelRegisterer {
+public class ItemMagicalWings extends ItemMRUGeneric implements IBauble, IModelRegisterer {
 
 	public ItemMagicalWings() {
 		super();
-		this.setMaxMRU(5000);
 		this.maxStackSize = 1;
 		this.bFull3D = true;
 	}
@@ -34,7 +33,7 @@ public class ItemMagicalWings extends ItemStoresMRUInNBT implements IBauble, IMo
 		{
 			EntityPlayer e = (EntityPlayer)entity;
 			{
-				if((e.getHeldItemMainhand() == s || e.getHeldItemOffhand() == s) && (ECUtils.tryToDecreaseMRUInStorage(e, -1) || this.increaseMRU(s, -1)))
+				if((e.getHeldItemMainhand() == s || e.getHeldItemOffhand() == s) && ECUtils.playerUseMRU(e, s, 1))
 				{
 					if(!e.isSneaking())
 					{
@@ -48,7 +47,7 @@ public class ItemMagicalWings extends ItemStoresMRUInNBT implements IBauble, IMo
 					}
 					world.spawnParticle(EnumParticleTypes.REDSTONE, e.posX+MathUtils.randomDouble(world.rand)/2, e.posY-1+MathUtils.randomDouble(world.rand), e.posZ+MathUtils.randomDouble(world.rand)/2, 0, 1, 1);
 				}
-				if(e.motionY < -.2F && e.isSneaking() && (ECUtils.tryToDecreaseMRUInStorage(e, -1) || this.increaseMRU(s, -1)))
+				if(e.motionY < -.2F && e.isSneaking() && ECUtils.playerUseMRU(e, s, 1))
 				{
 					e.motionY = -.2F;
 					e.fallDistance = 0F;
@@ -69,13 +68,13 @@ public class ItemMagicalWings extends ItemStoresMRUInNBT implements IBauble, IMo
 		if(player instanceof EntityPlayer)
 		{
 			EntityPlayer e = (EntityPlayer) player;
-			if(e.motionY < -.2F && !e.isSneaking() && (ECUtils.tryToDecreaseMRUInStorage(e, -1) || this.increaseMRU(itemstack, -1)))
+			if(e.motionY < -.2F && !e.isSneaking() && ECUtils.playerUseMRU(e, itemstack, 1))
 			{
 				e.motionY = -.2F;
 				e.fallDistance = 0F;
 				e.getEntityWorld().spawnParticle(EnumParticleTypes.REDSTONE, e.posX+MathUtils.randomDouble(e.getEntityWorld().rand)/2, e.posY-1+MathUtils.randomDouble(e.getEntityWorld().rand), e.posZ+MathUtils.randomDouble(e.getEntityWorld().rand)/2, 0, 1, 1);
 			}
-			if(this.getMRU(itemstack) >= 1)
+			if(itemstack.getCapability(MRU_HANDLER_ITEM_CAPABILITY, null).getMRU() >= 1)
 				EssentialCraftCore.proxy.wingsAction(e, itemstack);
 			MiscUtils.applyPlayerModifier((EntityPlayer)player, SharedMonsterAttributes.MOVEMENT_SPEED, "EC300", 0.1F, false, 0, "bauble");
 		}

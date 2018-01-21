@@ -3,7 +3,6 @@ package essentialcraft.common.tile;
 import DummyCore.Utils.DataStorage;
 import DummyCore.Utils.DummyData;
 import essentialcraft.api.ApiCore;
-import essentialcraft.utils.common.ECUtils;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.config.Configuration;
 
@@ -12,12 +11,12 @@ public class TileMIMScreen extends TileMRUGeneric {
 	public TileMIM parent;
 	int tickTime;
 
-	public static float cfgMaxMRU = ApiCore.DEVICE_MAX_MRU_GENERIC;
+	public static int cfgMaxMRU = ApiCore.DEVICE_MAX_MRU_GENERIC;
 	public static int mruForIns = 500;
 	public static int mruForOut = 10;
 
 	public TileMIMScreen() {
-		setMaxMRU(cfgMaxMRU);
+		mruStorage.setMaxMRU(cfgMaxMRU);
 		setSlotsNum(2);
 	}
 
@@ -29,7 +28,7 @@ public class TileMIMScreen extends TileMRUGeneric {
 	@Override
 	public void update() {
 		super.update();
-		ECUtils.manage(this, 0);
+		mruStorage.update(getPos(), getWorld(), getStackInSlot(0));
 		if(tickTime == 0) {
 			tickTime = 20;
 			if(parent != null)
@@ -41,13 +40,12 @@ public class TileMIMScreen extends TileMRUGeneric {
 
 		if(parent != null) {
 			if(!getStackInSlot(1).isEmpty()) {
-				if(getMRU() >= mruForIns) {
-					if(setMRU(getMRU() - mruForIns)) {
-						if(parent.addItemStackToSystem(getStackInSlot(1)))
-							setInventorySlotContents(1, ItemStack.EMPTY);
+				if(mruStorage.getMRU() >= mruForIns) {
+					mruStorage.extractMRU(mruForIns, true);
+					if(parent.addItemStackToSystem(getStackInSlot(1)))
+						setInventorySlotContents(1, ItemStack.EMPTY);
 
-						syncTick = 0;
-					}
+					syncTick = 0;
 				}
 			}
 		}
@@ -70,7 +68,7 @@ public class TileMIMScreen extends TileMRUGeneric {
 
 			mruForIns = Integer.parseInt(data[1].fieldValue);
 			mruForOut = Integer.parseInt(data[2].fieldValue);
-			cfgMaxMRU = Float.parseFloat(data[0].fieldValue);
+			cfgMaxMRU = Integer.parseInt(data[0].fieldValue);
 
 			cfg.save();
 		}catch(Exception e) {

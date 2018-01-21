@@ -8,7 +8,6 @@ import java.util.Random;
 
 import DummyCore.Client.IModelRegisterer;
 import DummyCore.Utils.MathUtils;
-import DummyCore.Utils.MiscUtils;
 import baubles.api.BaubleType;
 import baubles.api.IBauble;
 import essentialcraft.api.ApiCore;
@@ -16,6 +15,8 @@ import essentialcraft.api.IMRUHandlerItem;
 import essentialcraft.api.IUBMRUGainModifyHandler;
 import essentialcraft.api.IWindModifyHandler;
 import essentialcraft.api.IWindResistHandler;
+import essentialcraft.common.capabilities.mru.CapabilityMRUHandler;
+import essentialcraft.common.capabilities.mru.MRUItemStorage;
 import essentialcraft.utils.cfg.Config;
 import essentialcraft.utils.common.RadiationManager;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -28,6 +29,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
@@ -39,10 +41,14 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemBaublesSpecial extends Item implements IBauble, IUBMRUGainModifyHandler, IMRUHandlerItem, IWindResistHandler, IWindModifyHandler, IModelRegisterer {
+public class ItemBaublesSpecial extends Item implements IBauble, IUBMRUGainModifyHandler, IWindResistHandler, IWindModifyHandler, IModelRegisterer {
+
+	public static Capability<IMRUHandlerItem> MRU_HANDLER_ITEM_CAPABILITY = CapabilityMRUHandler.MRU_HANDLER_ITEM_CAPABILITY;
 
 	public static String[] names = {
 			"portableMD",//0
@@ -116,6 +122,8 @@ public class ItemBaublesSpecial extends Item implements IBauble, IUBMRUGainModif
 			BaubleType.RING,
 	};
 
+	public int maxMRU = 5000;
+
 	public ItemBaublesSpecial() {
 		setMaxDamage(0);
 		setHasSubtypes(true);
@@ -131,8 +139,9 @@ public class ItemBaublesSpecial extends Item implements IBauble, IUBMRUGainModif
 	public void onWornTick(ItemStack itemstack, EntityLivingBase player) {
 		if(itemstack.getItemDamage() == 0 && player instanceof EntityPlayer) {
 			int ubmrucu = ApiCore.getPlayerData((EntityPlayer)player).getPlayerUBMRU();
-			if(ubmrucu >= 1 && increaseMRU(itemstack, 10)) {
+			if(ubmrucu >= 1 && itemstack.getCapability(MRU_HANDLER_ITEM_CAPABILITY, null).getMRU() < maxMRU) {
 				--ubmrucu;
+				itemstack.getCapability(MRU_HANDLER_ITEM_CAPABILITY, null).addMRU(10, true);
 				ApiCore.getPlayerData((EntityPlayer)player).modifyUBMRU(ubmrucu);
 			}
 		}
@@ -245,28 +254,9 @@ public class ItemBaublesSpecial extends Item implements IBauble, IUBMRUGainModif
 	public void addInformation(ItemStack stack, World world, List<String> list, ITooltipFlag par4) {
 		super.addInformation(stack, world, list, par4);
 		if(stack.getItemDamage() == 0)
-			list.add(getMRU(stack) + "/" + getMaxMRU(stack) + " MRU");
+			list.add(stack.getCapability(MRU_HANDLER_ITEM_CAPABILITY, null).getMRU() + "/" + stack.getCapability(MRU_HANDLER_ITEM_CAPABILITY, null).getMaxMRU() + " MRU");
 
 		list.addAll(buildHelpList(I18n.translateToLocal("essentialcraft.txt.help.baubles."+stack.getItemDamage())));
-	}
-
-	@Override
-	public boolean increaseMRU(ItemStack stack, int amount) {
-		if(getMRU(stack) + amount >= 0 && getMRU(stack) + amount <= getMaxMRU(stack)) {
-			MiscUtils.getStackTag(stack).setInteger("mru", MiscUtils.getStackTag(stack).getInteger("mru")+amount);
-			return true;
-		}
-		return false;
-	}
-
-	@Override
-	public int getMRU(ItemStack stack) {
-		return stack.getItemDamage() == 0 ? MiscUtils.getStackTag(stack).getInteger("mru") : 0;
-	}
-
-	@Override
-	public int getMaxMRU(ItemStack stack) {
-		return stack.getItemDamage() == 0 ? 5000 : 0;
 	}
 
 	@Override
@@ -334,13 +324,16 @@ public class ItemBaublesSpecial extends Item implements IBauble, IUBMRUGainModif
 	}
 
 	@Override
-	public void registerModels() {
-		for(int i = 0; i < names.length-1; i++)
-			ModelLoader.setCustomModelResourceLocation(this, i, new ModelResourceLocation("essentialcraft:item/baublescore", "type=" + names[i].toLowerCase(Locale.ENGLISH)));
+	public ICapabilityProvider initCapabilities(ItemStack stack, NBTTagCompound nbt) {
+		if(stack.getItemDamage() == 0) {
+			return new MRUItemStorage(stack, maxMRU);
+		}
+		return super.initCapabilities(stack, nbt);
 	}
 
 	@Override
-	public boolean isStorage(ItemStack stack) {
-		return stack.getItemDamage() == 0;
+	public void registerModels() {
+		for(int i = 0; i < names.length-1; i++)
+			ModelLoader.setCustomModelResourceLocation(this, i, new ModelResourceLocation("essentialcraft:item/baublescore", "type=" + names[i].toLowerCase(Locale.ENGLISH)));
 	}
 }

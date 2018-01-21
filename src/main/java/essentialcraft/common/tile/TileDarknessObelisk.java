@@ -35,7 +35,7 @@ import net.minecraftforge.fml.common.eventhandler.Event.Result;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 public class TileDarknessObelisk extends TileMRUGeneric {
-	public static float cfgMaxMRU = ApiCore.DEVICE_MAX_MRU_GENERIC;
+	public static int cfgMaxMRU = ApiCore.DEVICE_MAX_MRU_GENERIC;
 	public static boolean generatesCorruption = false;
 	public static int genCorruption = 30;
 	public static int mruUsage = 500;
@@ -49,53 +49,56 @@ public class TileDarknessObelisk extends TileMRUGeneric {
 
 	public TileDarknessObelisk() {
 		super();
-		maxMRU = (int)cfgMaxMRU;
+		mruStorage.setMaxMRU(cfgMaxMRU);
 		setSlotsNum(2);
 	}
 
 	@Override
 	public void update() {
-		if(getWorld().isBlockIndirectlyGettingPowered(pos) == 0) {
+		mruStorage.update(getPos(), getWorld(), getStackInSlot(0));
+		if(getWorld().isBlockIndirectlyGettingPowered(getPos()) == 0) {
 			if(getStackInSlot(1).isEmpty() || !(getStackInSlot(1).getItem() instanceof ItemCollectedMonsterSpawner)) {
-				Biome biome = getWorld().getBiome(pos);
+				Biome biome = getWorld().getBiome(getPos());
 				List<Biome.SpawnListEntry> l = biome.getSpawnableList(EnumCreatureType.MONSTER);
-				if(l != null && !l.isEmpty() && !getWorld().isRemote && getWorld().rand.nextFloat() < worldSpawnChance && getMRU() > mruUsage) {
-					Biome.SpawnListEntry spawnlistentry = null;
-					IEntityLivingData ientitylivingdata = null;
-					int rndOffsetX = (int)(pos.getX() + MathUtils.randomDouble(getWorld().rand) * worldSpawnerRadius);
-					int rndOffsetY = (int)(pos.getY() + MathUtils.randomDouble(getWorld().rand) * worldSpawnerRadius);
-					int rndOffsetZ = (int)(pos.getZ() + MathUtils.randomDouble(getWorld().rand) * worldSpawnerRadius);
-					BlockPos rndPos = new BlockPos(rndOffsetX, rndOffsetY, rndOffsetZ);
-					if(WorldEntitySpawner.canCreatureTypeSpawnAtLocation(EntityLiving.SpawnPlacementType.ON_GROUND, getWorld(), rndPos)) {
-						WorldServer wrld = (WorldServer)getWorld();
-						spawnlistentry = wrld.getSpawnListEntryForTypeAt(EnumCreatureType.MONSTER, rndPos);
-						if(spawnlistentry != null) {
-							EntityLiving entityliving;
+				if(l != null && !l.isEmpty() && getWorld().rand.nextFloat() < worldSpawnChance && mruStorage.getMRU() >= mruUsage) {
+					if(!getWorld().isRemote) {
+						Biome.SpawnListEntry spawnlistentry = null;
+						IEntityLivingData ientitylivingdata = null;
+						int rndOffsetX = (int)(getPos().getX() + MathUtils.randomDouble(getWorld().rand) * worldSpawnerRadius);
+						int rndOffsetY = (int)(getPos().getY() + MathUtils.randomDouble(getWorld().rand) * worldSpawnerRadius);
+						int rndOffsetZ = (int)(getPos().getZ() + MathUtils.randomDouble(getWorld().rand) * worldSpawnerRadius);
+						BlockPos rndPos = new BlockPos(rndOffsetX, rndOffsetY, rndOffsetZ);
+						if(WorldEntitySpawner.canCreatureTypeSpawnAtLocation(EntityLiving.SpawnPlacementType.ON_GROUND, getWorld(), rndPos)) {
+							WorldServer wrld = (WorldServer)getWorld();
+							spawnlistentry = wrld.getSpawnListEntryForTypeAt(EnumCreatureType.MONSTER, rndPos);
+							if(spawnlistentry != null) {
+								EntityLiving entityliving;
 
-							try {
-								entityliving = spawnlistentry.newInstance(world);
-								entityliving.setLocationAndAngles((double)rndOffsetX+0.5F, rndOffsetY, rndOffsetZ+0.5D, wrld.rand.nextFloat()*360.0F, 0.0F);
-								Result canSpawn = ForgeEventFactory.canEntitySpawn(entityliving, wrld, rndOffsetX+0.5F, rndOffsetY, rndOffsetZ+0.5F);
-								if (canSpawn == Result.ALLOW || canSpawn == Result.DEFAULT && entityliving.getCanSpawnHere()) {
-									wrld.spawnEntity(entityliving);
-									setMRU(getMRU() - mruUsage);
-									if(generatesCorruption)
-										ECUtils.increaseCorruptionAt(getWorld(), pos.getX(), pos.getY(), pos.getZ(), getWorld().rand.nextInt(genCorruption));
-									if(!ForgeEventFactory.doSpecialSpawn(entityliving, wrld, rndOffsetX+0.5F, rndOffsetY, rndOffsetZ+0.5F)) {
-										ientitylivingdata = entityliving.onInitialSpawn(getWorld().getDifficultyForLocation(rndPos), ientitylivingdata);
+								try {
+									entityliving = spawnlistentry.newInstance(world);
+									entityliving.setLocationAndAngles((double)rndOffsetX+0.5F, rndOffsetY, rndOffsetZ+0.5D, wrld.rand.nextFloat()*360.0F, 0.0F);
+									Result canSpawn = ForgeEventFactory.canEntitySpawn(entityliving, wrld, rndOffsetX+0.5F, rndOffsetY, rndOffsetZ+0.5F, false);
+									if(canSpawn == Result.ALLOW || canSpawn == Result.DEFAULT && entityliving.getCanSpawnHere()) {
+										wrld.spawnEntity(entityliving);
+										mruStorage.extractMRU(mruUsage, true);
+										if(generatesCorruption)
+											ECUtils.increaseCorruptionAt(getWorld(), getPos(), getWorld().rand.nextInt(genCorruption));
+										if(!ForgeEventFactory.doSpecialSpawn(entityliving, wrld, rndOffsetX+0.5F, rndOffsetY, rndOffsetZ+0.5F)) {
+											ientitylivingdata = entityliving.onInitialSpawn(getWorld().getDifficultyForLocation(rndPos), ientitylivingdata);
+										}
 									}
 								}
-							}
-							catch (Exception exception) {
-								exception.printStackTrace();
-								return;
+								catch (Exception exception) {
+									exception.printStackTrace();
+									return;
+								}
 							}
 						}
 					}
 				}
 			}
 			else if(getStackInSlot(1).getItem() instanceof ItemCollectedMonsterSpawner && enableMobSpawners) {
-				if(innerRotation % mobSpanwerDelay > mobSpanwerDelay && getMRU() > mruUsage) {
+				if(innerRotation % mobSpanwerDelay > mobSpanwerDelay && mruStorage.getMRU() >= mruUsage) {
 					NBTTagCompound tag = MiscUtils.getStackTag(getStackInSlot(1));
 					if(tag.hasKey("monsterSpawner")) {
 						NBTTagCompound spTag = tag.getCompoundTag("monsterSpawner");
@@ -119,9 +122,9 @@ public class TileDarknessObelisk extends TileMRUGeneric {
 
 									if(entityliving != null)
 										entityliving.spawnExplosionParticle();
-									setMRU(getMRU() - mruUsage);
+									mruStorage.extractMRU(mruUsage, true);
 									if(generatesCorruption)
-										ECUtils.increaseCorruptionAt(getWorld(), pos.getX(), pos.getY(), pos.getZ(), getWorld().rand.nextInt(genCorruption));
+										ECUtils.increaseCorruptionAt(getWorld(), getPos(), getWorld().rand.nextInt(genCorruption));
 								}
 							}
 						}
@@ -129,7 +132,6 @@ public class TileDarknessObelisk extends TileMRUGeneric {
 				}
 			}
 		}
-		ECUtils.manage(this, 0);
 		super.update();
 
 		//The following code is to make the secret record acquirable
@@ -187,7 +189,7 @@ public class TileDarknessObelisk extends TileMRUGeneric {
 
 			mruUsage = Integer.parseInt(data[1].fieldValue);
 			mobSpanwerDelay = Integer.parseInt(data[2].fieldValue);
-			cfgMaxMRU = Float.parseFloat(data[0].fieldValue);
+			cfgMaxMRU = Integer.parseInt(data[0].fieldValue);
 			generatesCorruption = Boolean.parseBoolean(data[3].fieldValue);
 			genCorruption = Integer.parseInt(data[4].fieldValue);
 			worldSpawnChance = Float.parseFloat(data[5].fieldValue);

@@ -15,6 +15,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
@@ -48,6 +49,12 @@ public class BlockFancy extends Block implements IColdBlock, IModelRegisterer {
 		if(material == Material.GLASS)
 			this.setSoundType(SoundType.GLASS);
 		setDefaultState(blockState.getBaseState().withProperty(TYPE, FancyBlockType.ANCIENTTILE));
+	}
+
+	@Override
+	public EnumBlockRenderType getRenderType(IBlockState s)
+	{
+		return EnumBlockRenderType.MODEL;
 	}
 
 	@Override

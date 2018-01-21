@@ -5,21 +5,25 @@ import java.util.Random;
 import DummyCore.Client.IModelRegisterer;
 import essentialcraft.common.mod.EssentialCraftCore;
 import net.minecraft.block.Block;
+import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
-import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 
 public class BlockMRUSpreader extends Block implements IModelRegisterer {
 
-	public BlockMRUSpreader(Material p_i45394_1_) {
-		super(p_i45394_1_);
+	public static final AxisAlignedBB BLOCK_AABB = new AxisAlignedBB(0.3D,0D,0.3D,0.7D,0.8D,0.7D);
+
+	public BlockMRUSpreader() {
+		super(Material.ROCK, MapColor.PURPLE);
 		this.setTickRandomly(true);
 		this.setLightLevel(1.0F);
 	}
@@ -48,15 +52,14 @@ public class BlockMRUSpreader extends Block implements IModelRegisterer {
 	}
 
 	@Override
-	public BlockRenderLayer getBlockLayer()
-	{
-		return BlockRenderLayer.SOLID;
-	}
-
-	@Override
 	public EnumBlockRenderType getRenderType(IBlockState s)
 	{
 		return EnumBlockRenderType.MODEL;
+	}
+
+	@Override
+	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+		return BLOCK_AABB;
 	}
 
 	@Override

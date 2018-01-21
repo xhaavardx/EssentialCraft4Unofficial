@@ -20,16 +20,18 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.translation.I18n;
 
-public class CorruptionEffectECNBTBased implements ICorruptionEffect{
+public class CorruptionEffectECNBTBased implements ICorruptionEffect {
 
 	public EnumCorruptionEffect type = EnumCorruptionEffect.BODY;
 	public int cost = 0;
 	public int meta = 0;
 
-	public static final ResourceLocation loc(String s)
-	{
+	public static final ResourceLocation loc(String s) {
 		return new ResourceLocation("essentialcraft","textures/special/corruptioneffects/"+s+".png");
 	}
 
@@ -89,40 +91,34 @@ public class CorruptionEffectECNBTBased implements ICorruptionEffect{
 
 	public CorruptionEffectECNBTBased(){}
 
-	public CorruptionEffectECNBTBased setType(EnumCorruptionEffect e)
-	{
+	public CorruptionEffectECNBTBased setType(EnumCorruptionEffect e) {
 		type = e;
 		return this;
 	}
 
-	public CorruptionEffectECNBTBased setCost(int i)
-	{
+	public CorruptionEffectECNBTBased setCost(int i) {
 		cost = i;
 		return this;
 	}
 
-	public CorruptionEffectECNBTBased setMeta(int i)
-	{
+	public CorruptionEffectECNBTBased setMeta(int i) {
 		meta = i;
 		return this;
 	}
 
-	public CorruptionEffectECNBTBased done()
-	{
+	public CorruptionEffectECNBTBased done() {
 		CorruptionEffectRegistry.addEffect(this);
 		return this;
 	}
 
 	@Override
-	public void readFromNBTTagCompound(NBTTagCompound tag,int tagID)
-	{
-		if(tagID == -1)
-		{
+	public void readFromNBTTagCompound(NBTTagCompound tag, int tagID) {
+		if(tagID == -1) {
 			type = EnumCorruptionEffect.values()[tag.getInteger("type")];
 			cost = tag.getInteger("cost");
 			meta = tag.getInteger("meta");
-		}else
-		{
+		}
+		else {
 			NBTTagCompound ttag = tag.getCompoundTag("effectTag_"+tagID);
 			type = EnumCorruptionEffect.values()[ttag.getInteger("type")];
 			cost = ttag.getInteger("cost");
@@ -131,15 +127,13 @@ public class CorruptionEffectECNBTBased implements ICorruptionEffect{
 	}
 
 	@Override
-	public NBTTagCompound writeToNBTTagCompound(NBTTagCompound tag, int tagID)
-	{
-		if(tagID == -1)
-		{
+	public NBTTagCompound writeToNBTTagCompound(NBTTagCompound tag, int tagID) {
+		if(tagID == -1) {
 			tag.setInteger("type", type.ordinal());
 			tag.setInteger("cost", cost);
 			tag.setInteger("meta", meta);
-		}else
-		{
+		}
+		else {
 			NBTTagCompound ttag = new NBTTagCompound();
 			ttag.setInteger("type", type.ordinal());
 			ttag.setInteger("cost", cost);
@@ -150,185 +144,156 @@ public class CorruptionEffectECNBTBased implements ICorruptionEffect{
 	}
 
 	@Override
-	public EnumCorruptionEffect getType()
-	{
+	public EnumCorruptionEffect getType() {
 		return type;
 	}
 
 	@Override
-	public void onPlayerTick(EntityPlayer player)
-	{
-		if(!player.getEntityWorld().isRemote)
-		{
-			switch(this.meta)
-			{
-			case 0:
-			{
-				if(player.getEntityWorld().rand.nextFloat() <= 0.001F)
-				{
+	public void onPlayerTick(EntityPlayer player) {
+		if(!player.getEntityWorld().isRemote) {
+			switch(this.meta) {
+			case 0: {
+				if(player.getEntityWorld().rand.nextFloat() <= 0.001F) {
 					message(player,"essentialcraft.effect.desc_"+meta);
 					player.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS,400,1,true,true));
 				}
 				break;
 			}
-			case 1:
-			{
-				if(player.getEntityWorld().rand.nextFloat() <= 0.001F)
-				{
+			case 1: {
+				if(player.getEntityWorld().rand.nextFloat() <= 0.001F) {
 					message(player,"essentialcraft.effect.desc_"+meta);
 					player.addPotionEffect(new PotionEffect(MobEffects.WEAKNESS,400,1,true,true));
 				}
 				break;
 			}
-			case 2:
-			{
-				if(player.getEntityWorld().rand.nextFloat() <= 0.01F && player.isSwingInProgress)
-				{
+			case 2: {
+				if(player.getEntityWorld().rand.nextFloat() <= 0.01F && player.isSwingInProgress) {
 					message(player,"essentialcraft.effect.desc_"+meta);
 					player.attackEntityFrom(DamageSource.CACTUS, 3);
 				}
 				break;
 			}
-			case 3:
-			{
-				if(player.getEntityWorld().rand.nextFloat() <= 0.001F)
-				{
+			case 3: {
+				if(player.getEntityWorld().rand.nextFloat() <= 0.001F) {
 					message(player,"essentialcraft.effect.desc_"+meta);
 					player.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS,400,1,true,true));
 				}
 				break;
 			}
-			case 4:
-			{
-				if(player.fallDistance > 0)
-				{
+			case 4: {
+				if(player.fallDistance > 0) {
 					player.fallDistance += 1;
-				}break;
+				}
+				break;
 			}
-			case 5:
-			{
-				if(player.getEntityWorld().rand.nextFloat() <= 0.001F && !player.isPotionActive(PotionRegistry.paradox))
-				{
+			case 5: {
+				if(player.getEntityWorld().rand.nextFloat() <= 0.001F && !player.isPotionActive(PotionRegistry.paradox)) {
 					message(player,"essentialcraft.effect.desc_"+meta);
 					player.addPotionEffect(new PotionEffect(PotionRegistry.paradox,2000,1,true,true));
-				}break;
+				}
+				break;
 			}
-			case 6:
-			{
-				if(player.getEntityWorld().rand.nextFloat() <= 0.0008F)
-				{
+			case 6: {
+				if(player.getEntityWorld().rand.nextFloat() <= 0.0008F) {
 					message(player,"essentialcraft.effect.desc_"+meta);
-				}break;
+				}
+				break;
 			}
-			case 7:
-			{
-				if(player.getEntityWorld().rand.nextFloat() <= 0.001F)
-				{
+			case 7: {
+				if(player.getEntityWorld().rand.nextFloat() <= 0.001F) {
 					message(player,"essentialcraft.effect.desc_"+meta);
-				}break;
+				}
+				break;
 			}
-			case 8:
-			{
-				if(player.getEntityWorld().rand.nextFloat() <= 0.00005F)
-				{
+			case 8: {
+				if(player.getEntityWorld().rand.nextFloat() <= 0.00005F) {
 					List<ItemStack> playerItems = new ArrayList<ItemStack>();
-					for(int i = 0; i < player.inventory.getSizeInventory(); ++i)
-					{
-						if(!player.inventory.getStackInSlot(i).isEmpty())
+					for(int i = 0; i < player.inventory.getSizeInventory(); ++i) {
+						if(!player.inventory.getStackInSlot(i).isEmpty()) {
 							playerItems.add(player.inventory.getStackInSlot(i).copy());
-						else
+						}
+						else {
 							playerItems.add(ItemStack.EMPTY);
+						}
 					}
 					List<ItemStack> messedItems = new ArrayList<ItemStack>();
-					while(!playerItems.isEmpty())
-					{
+					while(!playerItems.isEmpty()) {
 						int randomInt = player.getEntityWorld().rand.nextInt(playerItems.size());
 						messedItems.add(playerItems.get(randomInt));
 						playerItems.remove(randomInt);
 					}
-					for(int i = 0; i < player.inventory.getSizeInventory(); ++i)
-					{
+					for(int i = 0; i < player.inventory.getSizeInventory(); ++i) {
 						player.inventory.setInventorySlotContents(i, messedItems.get(i));
 					}
 					messedItems.clear();
 					playerItems.clear();
 					message(player,"essentialcraft.effect.desc_"+meta);
-				}break;
+				}
+				break;
 			}
-			case 9:
-			{
-				if(player.getEntityWorld().rand.nextFloat() <= 0.00007F)
-				{
+			case 9: {
+				if(player.getEntityWorld().rand.nextFloat() <= 0.00007F) {
 					message(player,"essentialcraft.effect.desc_"+meta);
 					player.inventory.dropAllItems();
-				}break;
+				}
+				break;
 			}
-			case 10:
-			{
-				if(player.getEntityWorld().rand.nextFloat() <= 0.001F)
-				{
+			case 10: {
+				if(player.getEntityWorld().rand.nextFloat() <= 0.001F) {
 					message(player,"essentialcraft.effect.desc_"+meta);
-					if(!player.inventory.getCurrentItem().isEmpty())
-					{
+					if(!player.inventory.getCurrentItem().isEmpty()) {
 						player.inventory.getCurrentItem().useItemRightClick(player.getEntityWorld(), player, EnumHand.MAIN_HAND);
 					}
-				}break;
+				}
+				break;
 			}
-			case 11:
-			{
-				if(player.getEntityWorld().rand.nextFloat() <= 0.03F && player.hurtTime > 0)
-				{
+			case 11: {
+				if(player.getEntityWorld().rand.nextFloat() <= 0.03F && player.hurtTime > 0) {
 					message(player,"essentialcraft.effect.desc_"+meta);
 					player.hurtTime = 0;
 					player.hurtResistantTime = 0;
-				}break;
+				}
+				break;
 			}
-			case 12:
-			{
-				if(player.getEntityWorld().rand.nextFloat() <= 0.003F && player.dimension == 1)
-				{
+			case 12: {
+				if(player.getEntityWorld().rand.nextFloat() <= 0.003F && player.dimension == 1) {
 					message(player,"essentialcraft.effect.desc_"+meta);
 					player.attackEntityFrom(DamageSource.DROWN, 1);
-				}break;
+				}
+				break;
 			}
-			case 13:
-			{
-				if(player.getEntityWorld().rand.nextFloat() <= 0.0006F)
-				{
+			case 13: {
+				if(player.getEntityWorld().rand.nextFloat() <= 0.0006F) {
 					message(player,"essentialcraft.effect.desc_"+meta);
 					player.getEntityWorld().createExplosion(null, player.posX, player.posY, player.posZ, 3, true);
-				}break;
+				}
+				break;
 			}
-			case 14:
-			{
-				if(player.getEntityWorld().rand.nextFloat() <= 0.001F)
-				{
+			case 14: {
+				if(player.getEntityWorld().rand.nextFloat() <= 0.001F) {
 					message(player,"essentialcraft.effect.desc_"+meta);
 					player.setFire(8);
-				}break;
+				}
+				break;
 			}
-			case 15:
-			{
-				if(player.getEntityWorld().rand.nextFloat() <= 0.0007F)
-				{
+			case 15: {
+				if(player.getEntityWorld().rand.nextFloat() <= 0.0007F) {
 					message(player,"essentialcraft.effect.desc_"+meta);
 					EntityLightningBolt bolt = new EntityLightningBolt(player.getEntityWorld(),player.posX,player.posY,player.posZ, false);
 					player.getEntityWorld().spawnEntity(bolt);
 					player.getEntityWorld().addWeatherEffect(bolt);
 					player.onStruckByLightning(bolt);
-				}break;
+				}
+				break;
 			}
-			case 16:
-			{
-				if(player.getEntityWorld().rand.nextFloat() <= 0.01F)
-				{
+			case 16: {
+				if(player.getEntityWorld().rand.nextFloat() <= 0.01F) {
 					ECUtils.getData(player).modifyOverhaulDamage(ECUtils.getData(player).getOverhaulDamage()+1);
-				}break;
+				}
+				break;
 			}
-			case 17:
-			{
-				if(player.getEntityWorld().rand.nextFloat() <= 0.01F && !player.getEntityWorld().isRaining() && !player.getEntityWorld().isDaytime() && player.getEntityWorld().isDaytime() && player.getEntityWorld().canBlockSeeSky(new BlockPos(MathHelper.floor(player.posX), MathHelper.floor(player.posY+player.eyeHeight), MathHelper.floor(player.posZ))))
-				{
+			case 17: {
+				if(player.getEntityWorld().rand.nextFloat() <= 0.01F && !player.getEntityWorld().isRaining() && !player.getEntityWorld().isDaytime() && player.getEntityWorld().isDaytime() && player.getEntityWorld().canBlockSeeSky(new BlockPos(MathHelper.floor(player.posX), MathHelper.floor(player.posY+player.eyeHeight), MathHelper.floor(player.posZ)))) {
 					int moonPhase = (int) (player.getEntityWorld().getWorldTime() / 24000L % 8L + 8L) % 8;
 					int damage = 0;
 					if(moonPhase == 0)
@@ -342,81 +307,70 @@ public class CorruptionEffectECNBTBased implements ICorruptionEffect{
 
 					message(player,"essentialcraft.effect.desc_"+meta);
 					player.attackEntityFrom(DamageSource.MAGIC, damage);
-				}break;
+				}
+				break;
 			}
-			case 18:
-			{
-				if(player.getEntityWorld().rand.nextFloat() <= 0.001F && player.isPotionActive(PotionRegistry.mruCorruption))
-				{
+			case 18: {
+				if(player.getEntityWorld().rand.nextFloat() <= 0.001F && player.isPotionActive(PotionRegistry.mruCorruption)) {
 					player.attackEntityFrom(DamageSource.MAGIC, 4);
-				}break;
+				}
+				break;
 			}
-			case 19:
-			{
-				if(player.getEntityWorld().rand.nextFloat() <= 0.003F && player.dimension == -1)
-				{
+			case 19: {
+				if(player.getEntityWorld().rand.nextFloat() <= 0.003F && player.dimension == -1) {
 					message(player,"essentialcraft.effect.desc_"+meta);
 					player.attackEntityFrom(DamageSource.DROWN, 1);
-				}break;
+				}
+				break;
 			}
-			case 20:
-			{
-				if(player.getEntityWorld().rand.nextFloat() <= 0.003F && player.dimension == 0)
-				{
+			case 20: {
+				if(player.getEntityWorld().rand.nextFloat() <= 0.003F && player.dimension == 0) {
 					message(player,"essentialcraft.effect.desc_"+meta);
 					player.attackEntityFrom(DamageSource.DROWN, 1);
-				}break;
+				}
+				break;
 			}
-			case 21:
-			{
-				if(player.getEntityWorld().rand.nextFloat() <= 0.1F && player.getEntityWorld().isRaining() && player.getEntityWorld().isDaytime() && player.getEntityWorld().canBlockSeeSky(new BlockPos(MathHelper.floor(player.posX), MathHelper.floor(player.posY+player.eyeHeight), MathHelper.floor(player.posZ))))
-				{
+			case 21: {
+				if(player.getEntityWorld().rand.nextFloat() <= 0.1F && player.getEntityWorld().isRaining() && player.getEntityWorld().isDaytime() && player.getEntityWorld().canBlockSeeSky(new BlockPos(MathHelper.floor(player.posX), MathHelper.floor(player.posY+player.eyeHeight), MathHelper.floor(player.posZ)))) {
 					//message(player,"essentialcraft.effect.desc_"+meta);
 					player.attackEntityFrom(DamageSource.WITHER, 1);
 				}break;
 			}
-			case 22:
-			{
-				if(player.getEntityWorld().rand.nextFloat() <= 0.003F && player.getEntityWorld().isDaytime() && !player.getEntityWorld().isRaining() && player.getEntityWorld().canBlockSeeSky(new BlockPos(MathHelper.floor(player.posX), MathHelper.floor(player.posY+player.eyeHeight), MathHelper.floor(player.posZ))))
-				{
+			case 22: {
+				if(player.getEntityWorld().rand.nextFloat() <= 0.003F && player.getEntityWorld().isDaytime() && !player.getEntityWorld().isRaining() && player.getEntityWorld().canBlockSeeSky(new BlockPos(MathHelper.floor(player.posX), MathHelper.floor(player.posY+player.eyeHeight), MathHelper.floor(player.posZ)))) {
 					message(player,"essentialcraft.effect.desc_"+meta);
 					player.attackEntityFrom(DamageSource.WITHER, 1);
 				}break;
 			}
-			case 23:
-			{
-				if(player.getEntityWorld().rand.nextFloat() <= 0.03F && player.isInsideOfMaterial(Material.WATER))
-				{
+			case 23: {
+				if(player.getEntityWorld().rand.nextFloat() <= 0.03F && player.isInsideOfMaterial(Material.WATER)) {
 					message(player,"essentialcraft.effect.desc_"+meta);
 					player.attackEntityFrom(DamageSource.WITHER, 3);
-				}break;
+				}
+				break;
 			}
-			case 24:
-			{
-				if(player.getEntityWorld().rand.nextFloat() <= 0.005F)
-				{
+			case 24: {
+				if(player.getEntityWorld().rand.nextFloat() <= 0.005F) {
 					message(player,"essentialcraft.effect.desc_"+meta);
 					player.attackEntityFrom(DamageSource.WITHER, 1);
-				}break;
+				}
+				break;
 			}
 			}
 		}
 	}
 
-	public static void message(EntityPlayer p, String message)
-	{
-		//p.addChatComponentMessage(new ChatComponentText(I18n.translateToLocal(message)).setChatStyle(new ChatStyle().setColor(EnumChatFormatting.DARK_RED)));
+	public static void message(EntityPlayer p, String message) {
+		p.sendMessage(new TextComponentTranslation(message).setStyle(new Style().setColor(TextFormatting.DARK_RED)));
 	}
 
 	@Override
-	public ResourceLocation getEffectIcon()
-	{
+	public ResourceLocation getEffectIcon() {
 		return meta < allLocs.length ? allLocs[meta] : null;
 	}
 
 	@Override
-	public int getStickiness()
-	{
+	public int getStickiness() {
 		return cost;
 	}
 
@@ -453,5 +407,4 @@ public class CorruptionEffectECNBTBased implements ICorruptionEffect{
 	public String getLocalizedDesc() {
 		return I18n.translateToLocal("essentialcraft.effect.desc_"+this.meta);
 	}
-
 }

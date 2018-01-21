@@ -8,7 +8,7 @@ import essentialcraft.api.GunRegistry.LenseMaterial;
 import essentialcraft.api.GunRegistry.ScopeMaterial;
 import essentialcraft.common.item.ItemGenericEC;
 import essentialcraft.common.item.ItemGun;
-import essentialcraft.common.item.ItemMRUStorageNBTTag;
+import essentialcraft.common.item.ItemMRUStorageEC;
 import essentialcraft.common.item.ItemsCore;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -337,7 +337,7 @@ public class TileWeaponMaker extends TileMRUGeneric {
 		//If output is empty
 		if(getStackInSlot(0).isEmpty()) {
 			if(!getStackInSlot(1).isEmpty() && isOreDict(getStackInSlot(1),"coreMagic")) {
-				if(!getStackInSlot(2).isEmpty() && getStackInSlot(2).getItem() instanceof ItemMRUStorageNBTTag && getStackInSlot(2).getItemDamage() >= 1) {
+				if(!getStackInSlot(2).isEmpty() && getStackInSlot(2).getItem() instanceof ItemMRUStorageEC && getStackInSlot(2).getItemDamage() >= 1) {
 					String base = getBase();
 					String handle = getHandle();
 					String scope = getScope();
@@ -369,7 +369,7 @@ public class TileWeaponMaker extends TileMRUGeneric {
 		previewStack = ItemStack.EMPTY;
 		if(getStackInSlot(0).isEmpty()) {
 			if(!getStackInSlot(1).isEmpty() && isOreDict(getStackInSlot(1), "coreMagic")) {
-				if(!getStackInSlot(2).isEmpty() && getStackInSlot(2).getItem() instanceof ItemMRUStorageNBTTag && getStackInSlot(2).getItemDamage() >= 1) {
+				if(!getStackInSlot(2).isEmpty() && getStackInSlot(2).getItem() instanceof ItemMRUStorageEC && getStackInSlot(2).getItemDamage() >= 1) {
 					if(index == 0)
 						previewStack = new ItemStack(ItemsCore.pistol);
 					if(index == 1)

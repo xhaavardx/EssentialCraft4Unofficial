@@ -2,7 +2,6 @@ package essentialcraft.common.tile;
 
 import java.util.List;
 
-import DummyCore.Utils.Coord3D;
 import DummyCore.Utils.DataStorage;
 import DummyCore.Utils.DummyData;
 import DummyCore.Utils.MathUtils;
@@ -26,26 +25,24 @@ import net.minecraftforge.oredict.OreDictionary;
 
 public class TileUltraFlowerBurner extends TileMRUGeneric {
 
-	public Coord3D burnedFlower;
+	public BlockPos burnedFlower;
 	public int burnTime = 0, mruProduced = 0;
+
+	private boolean firstTick = true;
 
 	public TileUltraFlowerBurner() {
 		super();
-		balance = -1;
-		maxMRU = (int)ApiCore.GENERATOR_MAX_MRU_GENERIC*10;
+		mruStorage.setMaxMRU(ApiCore.GENERATOR_MAX_MRU_GENERIC*10);
 		slot0IsBoundGem = false;
-	}
-
-	public boolean canGenerateMRU() {
-		return false;
 	}
 
 	@Override
 	public void update() {
-		super.update();
-		if(balance == -1) {
-			balance = getWorld().rand.nextFloat()*2;
+		if(!getWorld().isRemote && firstTick) {
+			mruStorage.setBalance(getWorld().rand.nextFloat()*2);
 		}
+		super.update();
+		firstTick = false;
 		if(getWorld().isBlockIndirectlyGettingPowered(pos) == 0) {
 			if(!getWorld().isRemote) {
 				if(getWorld().getWorldTime()%80 == 0) {
@@ -68,7 +65,7 @@ public class TileUltraFlowerBurner extends TileMRUGeneric {
 											}
 										}
 									}
-									if(name.contains("treeSapling")) {
+									if(name.contains("sapling")) {
 										int pBIDX = MathHelper.floor(sappling.posX);
 										int pBIDY = MathHelper.floor(sappling.posY);
 										int pBIDZ = MathHelper.floor(sappling.posZ);
@@ -86,7 +83,7 @@ public class TileUltraFlowerBurner extends TileMRUGeneric {
 						}
 					}
 				}
-				if(burnedFlower == null && getMRU() < getMaxMRU()) {
+				if(burnedFlower == null && mruStorage.getMRU() < mruStorage.getMaxMRU()) {
 					int offsetX = (int)(MathUtils.randomDouble(getWorld().rand)*16);
 					int offsetZ = (int)(MathUtils.randomDouble(getWorld().rand)*16);
 					y:
@@ -106,22 +103,22 @@ public class TileUltraFlowerBurner extends TileMRUGeneric {
 								}
 							}
 							if(name.toLowerCase().contains("flower") || b instanceof BlockFlower) {
-								burnedFlower = new Coord3D(pos.getX()+offsetX, pos.getY()+y, pos.getZ()+offsetZ);
+								burnedFlower = pos.add(offsetX, y, offsetZ);
 								burnTime = 600;
 								mruProduced = 60;
 							}
 							if(name.toLowerCase().contains("leaves") || b.isLeaves(getWorld().getBlockState(pos.add(offsetX, y, offsetZ)), getWorld(), pos.add(offsetX, y, offsetZ))) {
-								burnedFlower = new Coord3D(pos.getX()+offsetX, pos.getY()+y, pos.getZ()+offsetZ);
+								burnedFlower = pos.add(offsetX, y, offsetZ);
 								burnTime = 300;
 								mruProduced = 70;
 							}
 							if(name.toLowerCase().contains("tallgrass") || b instanceof BlockTallGrass || b instanceof BlockDoublePlant) {
-								burnedFlower = new Coord3D(pos.getX()+offsetX, pos.getY()+y, pos.getZ()+offsetZ);
+								burnedFlower = pos.add(offsetX, y, offsetZ);
 								burnTime = 100;
 								mruProduced = 20;
 							}
 							if(name.toLowerCase().contains("logWood") || b instanceof BlockLog) {
-								burnedFlower = new Coord3D(pos.getX()+offsetX, pos.getY()+y, pos.getZ()+offsetZ);
+								burnedFlower = pos.add(offsetX, y, offsetZ);
 								burnTime = 2400;
 								mruProduced = 100;
 							}
@@ -132,48 +129,47 @@ public class TileUltraFlowerBurner extends TileMRUGeneric {
 				else if(burnedFlower != null) {
 					--burnTime;
 					int mruGenerated = mruProduced;
-					setMRU(getMRU() + mruGenerated);
-					if(getMRU() > getMaxMRU())
-						setMRU(getMaxMRU());
+					mruStorage.addMRU(mruGenerated, true);
 					if(burnTime <= 0) {
-						BlockPos burning = new BlockPos((int)burnedFlower.x, (int)burnedFlower.y, (int)burnedFlower.z);
-						if(getWorld().getBlockState(burning).getBlock().isLeaves(getWorld().getBlockState(burning), getWorld(), burning)) {
-							Item droppedSapling = getWorld().getBlockState(burning).getBlock().getItemDropped(getWorld().getBlockState(burning), getWorld().rand, 0);
+						if(getWorld().getBlockState(burnedFlower).getBlock().isLeaves(getWorld().getBlockState(burnedFlower), getWorld(), burnedFlower)) {
+							Item droppedSapling = getWorld().getBlockState(burnedFlower).getBlock().getItemDropped(getWorld().getBlockState(burnedFlower), getWorld().rand, 0);
 							if(droppedSapling != null) {
 								if(getWorld().rand.nextFloat() < 0.05F) {
-									ItemStack saplingStk = new ItemStack(droppedSapling,1,getWorld().getBlockState(burning).getBlock().damageDropped(getWorld().getBlockState(burning)));
-									EntityItem sapling = new EntityItem(getWorld(), (int)burnedFlower.x+0.5D, (int)burnedFlower.y+0.5D, (int)burnedFlower.z+0.5D, saplingStk);
+									ItemStack saplingStk = new ItemStack(droppedSapling,1,getWorld().getBlockState(burnedFlower).getBlock().damageDropped(getWorld().getBlockState(burnedFlower)));
+									EntityItem sapling = new EntityItem(getWorld(), burnedFlower.getX()+0.5D, burnedFlower.getY()+0.5D, burnedFlower.getZ()+0.5D, saplingStk);
 									getWorld().spawnEntity(sapling);
 								}
 							}
 						}
-						getWorld().setBlockToAir(burning);
+						getWorld().setBlockToAir(burnedFlower);
 						burnedFlower = null;
 						mruProduced = 0;
 					}
 				}
 			}
-			if(burnedFlower != null && burnTime > 0) {
-				EssentialCraftCore.proxy.FlameFX(burnedFlower.x+0.5F + MathUtils.randomFloat(getWorld().rand)*0.3F, burnedFlower.y+0.1F + getWorld().rand.nextFloat()/2, burnedFlower.z+0.5F + MathUtils.randomFloat(getWorld().rand)*0.3F, 0, 0, 0, 1, 1, 1, 1);
-				EssentialCraftCore.proxy.FlameFX(burnedFlower.x+0.5F + MathUtils.randomFloat(getWorld().rand)*0.3F, burnedFlower.y+0.1F + getWorld().rand.nextFloat()/2, burnedFlower.z+0.5F + MathUtils.randomFloat(getWorld().rand)*0.3F, (pos.getX()-0.5D-burnedFlower.x+0.5F + MathUtils.randomFloat(getWorld().rand)*0.3F)/20, (pos.getY()-burnedFlower.y+0.5F + MathUtils.randomFloat(getWorld().rand)*0.3F)/20, (pos.getZ()-0.5D-burnedFlower.z+0.5F + MathUtils.randomFloat(getWorld().rand)*0.3F)/20, 1, 1, 1, 1);
+			if(world.isRemote && burnedFlower != null && burnTime > 0) {
+				EssentialCraftCore.proxy.FlameFX(burnedFlower.getX()+0.5F + MathUtils.randomFloat(getWorld().rand)*0.3F, burnedFlower.getY()+0.1F + getWorld().rand.nextFloat()/2, burnedFlower.getZ()+0.5F + MathUtils.randomFloat(getWorld().rand)*0.3F, 0, 0, 0, 1, 1, 1, 1);
+				EssentialCraftCore.proxy.FlameFX(burnedFlower.getX()+0.5F + MathUtils.randomFloat(getWorld().rand)*0.3F, burnedFlower.getY()+0.1F + getWorld().rand.nextFloat()/2, burnedFlower.getZ()+0.5F + MathUtils.randomFloat(getWorld().rand)*0.3F, (pos.getX()-0.5D-burnedFlower.getX()+0.5F + MathUtils.randomFloat(getWorld().rand)*0.3F)/20, (pos.getY()-burnedFlower.getY()+0.5F + MathUtils.randomFloat(getWorld().rand)*0.3F)/20, (pos.getZ()-0.5D-burnedFlower.getZ()+0.5F + MathUtils.randomFloat(getWorld().rand)*0.3F)/20, 1, 1, 1, 1);
 				--burnTime;
 				if(burnTime <= 0) {
 					for(int t = 0; t < 600; ++t)
-						EssentialCraftCore.proxy.SmokeFX(burnedFlower.x+0.5F + MathUtils.randomFloat(getWorld().rand)*0.3F, burnedFlower.y+0.1F + getWorld().rand.nextFloat()/2, burnedFlower.z+0.5F + MathUtils.randomFloat(getWorld().rand)*0.3F, 0, 0, 0,1);
+						EssentialCraftCore.proxy.SmokeFX(burnedFlower.getX()+0.5F + MathUtils.randomFloat(getWorld().rand)*0.3F, burnedFlower.getY()+0.1F + getWorld().rand.nextFloat()/2, burnedFlower.getZ()+0.5F + MathUtils.randomFloat(getWorld().rand)*0.3F, 0, 0, 0,1);
 				}
 			}
 		}
-		EssentialCraftCore.proxy.FlameFX(pos.getX()+0.5F + MathUtils.randomFloat(getWorld().rand)*0.4F, pos.getY()+0.1F, pos.getZ()+0.5F + MathUtils.randomFloat(getWorld().rand)*0.4F, 0, 0.01F, 0, 1D, 0.5D, 1, 1);
-		EssentialCraftCore.proxy.FlameFX(pos.getX()+0.5F + MathUtils.randomFloat(getWorld().rand)*0.2F, pos.getY()+0.2F, pos.getZ()+0.5F + MathUtils.randomFloat(getWorld().rand)*0.2F, 0, 0.01F, 0, 1D, 0.5D, 1, 1);
-		for(int i = 0; i < 10; ++i)
-			EssentialCraftCore.proxy.SmokeFX(pos.getX()+0.5F + MathUtils.randomFloat(getWorld().rand)*0.1F, pos.getY()+0.6F, pos.getZ()+0.5F + MathUtils.randomFloat(getWorld().rand)*0.1F, 0, 0, 0,1);
+		if(world.isRemote) {
+			EssentialCraftCore.proxy.FlameFX(pos.getX()+0.5F + MathUtils.randomFloat(getWorld().rand)*0.4F, pos.getY()+0.1F, pos.getZ()+0.5F + MathUtils.randomFloat(getWorld().rand)*0.4F, 0, 0.01F, 0, 1D, 0.5D, 1, 1);
+			EssentialCraftCore.proxy.FlameFX(pos.getX()+0.5F + MathUtils.randomFloat(getWorld().rand)*0.2F, pos.getY()+0.2F, pos.getZ()+0.5F + MathUtils.randomFloat(getWorld().rand)*0.2F, 0, 0.01F, 0, 1D, 0.5D, 1, 1);
+			for(int i = 0; i < 10; ++i)
+				EssentialCraftCore.proxy.SmokeFX(pos.getX()+0.5F + MathUtils.randomFloat(getWorld().rand)*0.1F, pos.getY()+0.6F, pos.getZ()+0.5F + MathUtils.randomFloat(getWorld().rand)*0.1F, 0, 0, 0,1);
+		}
 	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound i) {
 		if(i.hasKey("coord")) {
 			DummyData[] coordData = DataStorage.parseData(i.getString("coord"));
-			burnedFlower = new Coord3D(Double.parseDouble(coordData[0].fieldValue),Double.parseDouble(coordData[1].fieldValue),Double.parseDouble(coordData[2].fieldValue));
+			burnedFlower = new BlockPos(Integer.parseInt(coordData[0].fieldValue), Integer.parseInt(coordData[1].fieldValue), Integer.parseInt(coordData[2].fieldValue));
 		}
 		burnTime = i.getInteger("burn");
 		mruProduced = i.getInteger("genMRU");
@@ -182,8 +178,9 @@ public class TileUltraFlowerBurner extends TileMRUGeneric {
 
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound i) {
-		if(burnedFlower != null)
-			i.setString("coord", burnedFlower.toString());
+		if(burnedFlower != null) {
+			i.setString("coord", "||x:" + burnedFlower.getX() + "||y:" + burnedFlower.getY() + "||z:" + burnedFlower.getZ());
+		}
 		i.setInteger("burn", burnTime);
 		i.setInteger("genMRU", mruProduced);
 		return super.writeToNBT(i);

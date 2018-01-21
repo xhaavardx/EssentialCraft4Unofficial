@@ -3,6 +3,8 @@ package essentialcraft.common.block;
 import DummyCore.Client.IModelRegisterer;
 import essentialcraft.api.EnumDropType;
 import net.minecraft.block.Block;
+import net.minecraft.block.SoundType;
+import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
@@ -15,6 +17,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 
@@ -24,7 +27,13 @@ public class BlockCompressedDrops extends Block implements IModelRegisterer {
 
 	public BlockCompressedDrops() {
 		super(Material.ROCK);
+		setSoundType(SoundType.METAL);
 		setDefaultState(blockState.getBaseState().withProperty(TYPE, EnumDropType.ELEMENTAL));
+	}
+
+	@Override
+	public MapColor getMapColor(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
+		return state.getValue(TYPE).getMapColor();
 	}
 
 	@Override
@@ -34,8 +43,8 @@ public class BlockCompressedDrops extends Block implements IModelRegisterer {
 	}
 
 	@Override
-	public int damageDropped(IBlockState p_149692_1_) {
-		return p_149692_1_.getValue(TYPE).getIndex();
+	public int damageDropped(IBlockState state) {
+		return state.getValue(TYPE).getIndex();
 	}
 
 	@Override

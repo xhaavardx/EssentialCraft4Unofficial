@@ -4,7 +4,6 @@ import DummyCore.Utils.DataStorage;
 import DummyCore.Utils.DummyData;
 import essentialcraft.api.ApiCore;
 import essentialcraft.common.item.ItemsCore;
-import essentialcraft.utils.common.ECUtils;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumParticleTypes;
@@ -13,20 +12,20 @@ import net.minecraftforge.common.config.Configuration;
 public class TileCrystalExtractor extends TileMRUGeneric {
 
 	public int progressLevel;
-	public static float cfgMaxMRU = ApiCore.DEVICE_MAX_MRU_GENERIC;
+	public static int cfgMaxMRU = ApiCore.DEVICE_MAX_MRU_GENERIC;
 	public static int mruUsage = 100;
 	public static int requiredTime = 1000;
 
 	public TileCrystalExtractor() {
 		super();
-		maxMRU = (int)cfgMaxMRU;
+		mruStorage.setMaxMRU(cfgMaxMRU);
 		setSlotsNum(13);
 	}
 
 	@Override
 	public void update() {
 		super.update();
-		ECUtils.manage(this, 0);
+		mruStorage.update(getPos(), getWorld(), getStackInSlot(0));
 
 		if(getWorld().isBlockIndirectlyGettingPowered(pos) == 0)
 			doWork();
@@ -36,14 +35,12 @@ public class TileCrystalExtractor extends TileMRUGeneric {
 
 	public void doWork() {
 		if(canWork()) {
-			if(getMRU() > mruUsage) {
-				if(!getWorld().isRemote) {
-					if(setMRU(getMRU() - mruUsage))
-						++progressLevel;
-					if(progressLevel >= requiredTime) {
-						progressLevel = 0;
-						createItems();
-					}
+			if(mruStorage.getMRU() >= mruUsage) {
+				mruStorage.extractMRU(mruUsage, true);
+				++progressLevel;
+				if(progressLevel >= requiredTime) {
+					progressLevel = 0;
+					createItems();
 				}
 			}
 		}
@@ -62,17 +59,15 @@ public class TileCrystalExtractor extends TileMRUGeneric {
 		for(int i = 0; i < 16; ++i) {
 			getChance[i] = (int)(s*baseChance[i%4]/essenceChance[i/4]);
 		}
-		if(!getWorld().isRemote) {
-			for(int i = 1; i < 13; ++i) {
-				ItemStack st = new ItemStack(ItemsCore.essence,1,getWorld().rand.nextInt(16));
-				if(getWorld().rand.nextInt(100) < getChance[st.getItemDamage()]) {
-					int sts = getWorld().rand.nextInt(1 + getChance[st.getItemDamage()]/4);
-					st.setCount(sts);
-					if(st.getCount() <= 0) {
-						st.setCount(1);
-					}
-					setInventorySlotContents(i, st);
+		for(int i = 1; i < 13; ++i) {
+			ItemStack st = new ItemStack(ItemsCore.essence,1,getWorld().rand.nextInt(16));
+			if(getWorld().rand.nextInt(100) < getChance[st.getItemDamage()]) {
+				int sts = getWorld().rand.nextInt(1 + getChance[st.getItemDamage()]/4);
+				st.setCount(sts);
+				if(st.getCount() <= 0) {
+					st.setCount(1);
 				}
+				setInventorySlotContents(i, st);
 			}
 		}
 	}
@@ -98,7 +93,7 @@ public class TileCrystalExtractor extends TileMRUGeneric {
 	}
 
 	public void spawnParticles() {
-		if(canWork() && getMRU() > 0) {
+		if(world.isRemote && canWork() && mruStorage.getMRU() > 0) {
 			TileElementalCrystal t = getCrystal();
 			if(t != null)
 				for(int o = 0; o < 10; ++o) {
@@ -161,7 +156,7 @@ public class TileCrystalExtractor extends TileMRUGeneric {
 
 			mruUsage = Integer.parseInt(data[1].fieldValue);
 			requiredTime = Integer.parseInt(data[2].fieldValue);
-			cfgMaxMRU = Float.parseFloat(data[0].fieldValue);
+			cfgMaxMRU = Integer.parseInt(data[0].fieldValue);
 
 			cfg.save();
 		}

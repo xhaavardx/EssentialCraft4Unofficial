@@ -80,9 +80,10 @@ public class ItemBoundGem extends Item implements IModelRegisterer {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void addInformation(ItemStack par1ItemStack, World par2EntityPlayer, List<String> par3List, ITooltipFlag par4) {
+		super.addInformation(par1ItemStack, par2EntityPlayer, par3List, par4);
 		addInfo(par1ItemStack, par2EntityPlayer, par3List);
 	}
-	
+
 	public void addInfo(ItemStack par1ItemStack, World par2EntityPlayer, List<String> par3List)
 	{
 		if(par1ItemStack.getTagCompound() != null)

@@ -2,7 +2,6 @@ package essentialcraft.client.gui;
 
 import DummyCore.Client.GuiCommon;
 import DummyCore.Client.GuiElement;
-import essentialcraft.api.IMRUHandler;
 import essentialcraft.client.gui.element.GuiMRUStorage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
@@ -16,7 +15,7 @@ public class GuiMIM extends GuiCommon{
 	public GuiMIM(Container c, TileEntity tile) {
 		super(c,tile);
 		guiGenLocation = new ResourceLocation("essentialcraft","textures/gui/mim.png");
-		this.elementList.add(new GuiMRUStorage(4, 72, (IMRUHandler) tile));
+		this.elementList.add(new GuiMRUStorage(4, 72, tile));
 		this.xSize = 196;
 		this.ySize = 256;
 	}

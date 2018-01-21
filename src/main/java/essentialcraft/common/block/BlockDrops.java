@@ -7,6 +7,7 @@ import DummyCore.Client.IModelRegisterer;
 import essentialcraft.api.EnumDropType;
 import essentialcraft.common.item.ItemsCore;
 import net.minecraft.block.Block;
+import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
@@ -29,8 +30,8 @@ public class BlockDrops extends Block implements IModelRegisterer {
 	public static final PropertyEnum<EnumDropType> TYPE = PropertyEnum.<EnumDropType>create("type", EnumDropType.class, EnumDropType.CANBEFARMED);
 	public static final AxisAlignedBB BLOCK_AABB = new AxisAlignedBB(0,0,0,1,0.1F,1);
 
-	protected BlockDrops(Material p_i45394_1_) {
-		super(p_i45394_1_);
+	protected BlockDrops() {
+		super(Material.CLOTH, MapColor.AIR);
 		setDefaultState(blockState.getBaseState().withProperty(TYPE, EnumDropType.AIR));
 	}
 

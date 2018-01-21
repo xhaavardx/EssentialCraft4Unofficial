@@ -1,8 +1,8 @@
 package essentialcraft.api;
 
 import java.util.List;
+import java.util.UUID;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 
 public interface IPlayerData {
@@ -37,6 +37,6 @@ public interface IPlayerData {
 
 	public NBTTagCompound writeToNBTTagCompound(NBTTagCompound tag);
 
-	public EntityPlayer carrier();
+	public UUID carrierUUID();
 
 }

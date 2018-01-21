@@ -3,7 +3,6 @@ package essentialcraft.common.tile;
 import java.util.List;
 
 import essentialcraft.api.ApiCore;
-import essentialcraft.utils.common.ECUtils;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -12,7 +11,7 @@ public class TileAnimalSeparator extends TileMRUGeneric {
 
 	public TileAnimalSeparator() {
 		setSlotsNum(1);
-		setMaxMRU(ApiCore.DEVICE_MAX_MRU_GENERIC);
+		mruStorage.setMaxMRU(ApiCore.DEVICE_MAX_MRU_GENERIC);
 	}
 
 	@Override
@@ -23,7 +22,7 @@ public class TileAnimalSeparator extends TileMRUGeneric {
 	@Override
 	public void update() {
 		super.update();
-		ECUtils.manage(this, 0);
+		mruStorage.update(getPos(), getWorld(), getStackInSlot(0));
 	}
 
 	public void separate(boolean b) {
@@ -32,7 +31,8 @@ public class TileAnimalSeparator extends TileMRUGeneric {
 		List<EntityAgeable> tp = getWorld().getEntitiesWithinAABB(EntityAgeable.class, toTeleport);
 		List<EntityAgeable> ntp = getWorld().getEntitiesWithinAABB(EntityAgeable.class, noTeleport);
 		for(EntityAgeable e : tp) {
-			if(!e.isDead && !(e instanceof IMob) && (b && e.isChild() || !b && !e.isChild()) && getMRU() >= 100 && !ntp.contains(e) && setMRU(getMRU() - 100)) {
+			if(!e.isDead && !(e instanceof IMob) && (b && e.isChild() || !b && !e.isChild()) && mruStorage.getMRU() >= 100 && !ntp.contains(e) && mruStorage.extractMRU(100, false) == 100) {
+				mruStorage.extractMRU(100, true);
 				e.setPositionAndRotation(pos.getX()+0.5D, pos.getY()+1.5D, pos.getZ()+0.5D, 0, 0);
 			}
 		}

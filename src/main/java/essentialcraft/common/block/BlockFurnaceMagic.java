@@ -5,6 +5,7 @@ import essentialcraft.common.mod.EssentialCraftCore;
 import essentialcraft.common.tile.TileFurnaceMagic;
 import essentialcraft.utils.cfg.Config;
 import net.minecraft.block.BlockContainer;
+import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.properties.PropertyEnum;
@@ -28,6 +29,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 
@@ -53,6 +55,11 @@ public class BlockFurnaceMagic extends BlockContainer implements IModelRegistere
 		IInventory inv = (IInventory)par1World.getTileEntity(par2Pos);
 		InventoryHelper.dropInventoryItems(par1World, par2Pos, inv);
 		super.breakBlock(par1World, par2Pos, par3State);
+	}
+
+	@Override
+	public MapColor getMapColor(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
+		return state.getValue(TYPE).getMapColor();
 	}
 
 	@Override
@@ -143,18 +150,14 @@ public class BlockFurnaceMagic extends BlockContainer implements IModelRegistere
 
 	@Override
 	public boolean onBlockActivated(World par1World, BlockPos par2, IBlockState par3, EntityPlayer par4EntityPlayer, EnumHand par5, EnumFacing par7, float par8, float par9, float par10) {
-		if(par1World.isRemote) {
+		if(par4EntityPlayer.isSneaking()) {
+			return false;
+		}
+		if(!par1World.isRemote) {
+			par4EntityPlayer.openGui(EssentialCraftCore.core, Config.guiID[0], par1World, par2.getX(), par2.getY(), par2.getZ());
 			return true;
 		}
-		else {
-			if(!par4EntityPlayer.isSneaking()) {
-				par4EntityPlayer.openGui(EssentialCraftCore.core, Config.guiID[0], par1World, par2.getX(), par2.getY(), par2.getZ());
-				return true;
-			}
-			else {
-				return false;
-			}
-		}
+		return true;
 	}
 
 	@Override
@@ -190,17 +193,19 @@ public class BlockFurnaceMagic extends BlockContainer implements IModelRegistere
 	}
 
 	public static enum FurnaceType implements IStringSerializable {
-		FORTIFIED(0, "fortified"),
-		MAGIC(1, "magic"),
-		PALE(2, "pale"),
-		VOID(3, "void");
+		FORTIFIED(0, "fortified", MapColor.STONE),
+		MAGIC(1, "magic", MapColor.PURPLE),
+		PALE(2, "pale", MapColor.LAPIS),
+		VOID(3, "void", MapColor.BLACK);
 
-		private int index;
-		private String name;
+		private final int index;
+		private final String name;
+		private final MapColor mapColor;
 
-		private FurnaceType(int i, String s) {
-			index = i;
-			name = s;
+		private FurnaceType(int index, String name, MapColor mapColor) {
+			this.index = index;
+			this.name = name;
+			this.mapColor = mapColor;
 		}
 
 		@Override
@@ -215,6 +220,10 @@ public class BlockFurnaceMagic extends BlockContainer implements IModelRegistere
 
 		public int getIndex() {
 			return index;
+		}
+
+		public MapColor getMapColor() {
+			return mapColor;
 		}
 
 		public static FurnaceType fromIndex(int i) {

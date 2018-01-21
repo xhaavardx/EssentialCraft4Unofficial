@@ -48,7 +48,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemGun extends ItemStoresMRUInNBT implements IModelRegisterer {
+public class ItemGun extends ItemMRUGeneric implements IModelRegisterer {
 	Random rnd = new Random();
 
 	public String gunType;
@@ -173,7 +173,7 @@ public class ItemGun extends ItemStoresMRUInNBT implements IModelRegisterer {
 						p.setActiveHand(h);
 						return super.onItemRightClick(w, p, h);
 					}
-					if(ECUtils.tryToDecreaseMRUInStorage(p, (int) -stats.getFloat("damage")*10) || this.increaseMRU(gun, (int) -stats.getFloat("damage")*10))
+					if(ECUtils.playerUseMRU(p, gun, (int)(stats.getFloat("damage")*10)))
 					{
 						if(MiscUtils.getStackTag(gun).getFloat("gunDamage")+1 <= stats.getFloat("durability"))
 							MiscUtils.getStackTag(gun).setFloat("gunDamage", MiscUtils.getStackTag(gun).getFloat("gunDamage")+1);
@@ -501,7 +501,7 @@ public class ItemGun extends ItemStoresMRUInNBT implements IModelRegisterer {
 							p.stopActiveHand();
 							return;
 						}
-						if(ECUtils.tryToDecreaseMRUInStorage(p, (int) -stats.getFloat("damage")*3) || this.increaseMRU(gun, (int) -stats.getFloat("damage")*3))
+						if(ECUtils.playerUseMRU(p, gun, (int)(stats.getFloat("damage")*3)))
 						{
 							if(MiscUtils.getStackTag(gun).getFloat("gunDamage")+1 <= stats.getFloat("durability"))
 								MiscUtils.getStackTag(gun).setFloat("gunDamage", MiscUtils.getStackTag(gun).getFloat("gunDamage")+1);
@@ -572,7 +572,7 @@ public class ItemGun extends ItemStoresMRUInNBT implements IModelRegisterer {
 								p.stopActiveHand();
 								return;
 							}
-							if(ECUtils.tryToDecreaseMRUInStorage(p, (int) -stats.getFloat("damage")*2) || this.increaseMRU(gun, (int) -stats.getFloat("damage")*2))
+							if(ECUtils.playerUseMRU(p, gun, (int)(stats.getFloat("damage")*2)))
 							{
 								if(MiscUtils.getStackTag(gun).getFloat("gunDamage")+1 <= stats.getFloat("durability"))
 									MiscUtils.getStackTag(gun).setFloat("gunDamage", MiscUtils.getStackTag(gun).getFloat("gunDamage")+1);

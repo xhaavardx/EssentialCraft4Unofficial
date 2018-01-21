@@ -3,8 +3,7 @@ package essentialcraft.utils.commands;
 import java.util.Collections;
 import java.util.List;
 
-import DummyCore.Utils.Coord3D;
-import essentialcraft.common.entity.EntityMRUPresence;
+import essentialcraft.api.IMRUHandler;
 import essentialcraft.utils.common.ECUtils;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -35,11 +34,8 @@ public class CommandSetBalanceInMRUCU extends CommandBase {
 	public void execute(MinecraftServer server, ICommandSender par1ICommandSender, String[] par2ArrayOfStr) throws CommandException {
 		double var3 = parseDouble(par2ArrayOfStr[3], 0, 2);
 		BlockPos p = parseBlockPos(par1ICommandSender, par2ArrayOfStr, 0, true);
-		int x = p.getX();
-		int y = p.getY();
-		int z = p.getZ();
 		try {
-			EntityMRUPresence mru = (EntityMRUPresence)ECUtils.getClosestMRUCU(par1ICommandSender.getEntityWorld(), new Coord3D(x,y,z), 16);
+			IMRUHandler mru = ECUtils.getClosestMRUCU(par1ICommandSender.getEntityWorld(), p, 16);
 			mru.setBalance((float)var3);
 		}
 		catch(Exception e) {

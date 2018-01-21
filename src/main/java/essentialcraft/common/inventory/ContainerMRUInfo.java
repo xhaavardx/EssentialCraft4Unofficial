@@ -1,29 +1,18 @@
 package essentialcraft.common.inventory;
 
-import DummyCore.Utils.ContainerInventory;
+import DummyCore.Utils.ContainerGeneric;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 
-public class ContainerMRUInfo extends ContainerInventory {
+public class ContainerMRUInfo extends ContainerGeneric {
 
-	public ContainerMRUInfo(InventoryPlayer invPlayer, TileEntity tile) {
-		super(invPlayer, tile);
-	}
-
-	@Override
-	public boolean canInteractWith(EntityPlayer p_75145_1_) {
-		return true;
+	public ContainerMRUInfo(InventoryPlayer invPlayer) {
+		super(invPlayer);
 	}
 
 	@Override
 	public ItemStack transferStackInSlot(EntityPlayer par1EntityPlayer, int par2) {
 		return ItemStack.EMPTY;
-	}
-
-	@Override
-	public void setupSlots() {
-		this.setupPlayerInventory();
 	}
 }

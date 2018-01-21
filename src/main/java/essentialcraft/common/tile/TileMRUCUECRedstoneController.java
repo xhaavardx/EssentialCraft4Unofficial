@@ -1,7 +1,5 @@
 package essentialcraft.common.tile;
 
-import java.util.UUID;
-
 import essentialcraft.api.EnumStructureType;
 import essentialcraft.api.IStructurePiece;
 import net.minecraft.nbt.NBTTagCompound;
@@ -10,7 +8,6 @@ import net.minecraft.util.ITickable;
 
 public class TileMRUCUECRedstoneController extends TileEntity implements IStructurePiece, ITickable {
 	public TileMRUCUECController controller;
-	public UUID uuid = UUID.randomUUID();
 	public int setting;
 	public int tickTimer;
 
@@ -53,7 +50,7 @@ public class TileMRUCUECRedstoneController extends TileEntity implements IStruct
 	}
 
 	public boolean outputRedstone() {
-		if(controller != null && controller.getMRUCU() != null && (float)controller.getMRU()/(float)controller.getMaxMRU()*10 >= setting)
+		if(controller != null && controller.getMRUCU() != null && (float)controller.mruStorage.getMRU()/(float)controller.mruStorage.getMaxMRU()*10 >= setting)
 			return true;
 
 		return false;

@@ -8,13 +8,9 @@ import com.google.common.collect.Multimap;
 
 import DummyCore.Client.IModelRegisterer;
 import DummyCore.Utils.DCASMCheck;
-import DummyCore.Utils.MiscUtils;/*
-import thaumcraft.api.IGoggles;
-import thaumcraft.api.IRepairable;
-import thaumcraft.api.IVisDiscountGear;
-import thaumcraft.api.aspects.Aspect;
-import thaumcraft.api.nodes.IRevealer;*/
 import essentialcraft.api.IMRUHandlerItem;
+import essentialcraft.common.capabilities.mru.CapabilityMRUHandler;
+import essentialcraft.common.capabilities.mru.MRUItemStorage;
 import essentialcraft.common.mod.EssentialCraftCore;
 import essentialcraft.utils.common.ECUtils;
 import net.minecraft.client.model.ModelBiped;
@@ -31,23 +27,29 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.ISpecialArmor;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @DCASMCheck
 //@ExistenceCheck(classPath = {"thaumcraft.api.IRepairable","thaumcraft.api.IVisDiscountGear","thaumcraft.api.nodes.IRevealer","thaumcraft.api.IGoggles"})
-public class ItemArmorEC extends ItemArmor implements /*IRepairable, IVisDiscountGear, IRevealer, IGoggles,*/ ISpecialArmor, IMRUHandlerItem, IModelRegisterer {
+public class ItemArmorEC extends ItemArmor implements /*IRepairable, IVisDiscountGear, IRevealer, IGoggles,*/ ISpecialArmor, IModelRegisterer {
+	public static Capability<IMRUHandlerItem> MRU_HANDLER_ITEM_CAPABILITY = CapabilityMRUHandler.MRU_HANDLER_ITEM_CAPABILITY;
+
 	public String armorTexture = "";
 	public String desc = "";
 	public int aType;
 	public ArmorMaterial mat;
+	public int maxMRU = 5000;
 	public ItemArmorEC(ArmorMaterial p_i45325_1_, int p_i45325_2_, int p_i45325_3_, int it) {
 		super(p_i45325_1_, p_i45325_2_, EntityEquipmentSlot.values()[5-p_i45325_3_]);
 		aType = it;
@@ -75,7 +77,7 @@ public class ItemArmorEC extends ItemArmor implements /*IRepairable, IVisDiscoun
 			list.add(desc);
 		if(this.aType == 1)
 		{
-			list.add(this.getMRU(stack) + "/" + this.getMaxMRU(stack) + " MRU");
+			list.add(stack.getCapability(MRU_HANDLER_ITEM_CAPABILITY, null).getMRU() + "/" + stack.getCapability(MRU_HANDLER_ITEM_CAPABILITY, null).getMaxMRU() + " MRU");
 		}
 	}
 
@@ -108,21 +110,16 @@ public class ItemArmorEC extends ItemArmor implements /*IRepairable, IVisDiscoun
 	}
 
 	@Override
-	public void getSubItems(CreativeTabs par2CreativeTabs, NonNullList<ItemStack> par3List)
-	{
+	public void getSubItems(CreativeTabs par2CreativeTabs, NonNullList<ItemStack> par3List) {
 		if(this.aType != 1)
 			super.getSubItems(par2CreativeTabs, par3List);
 		else if(this.isInCreativeTab(par2CreativeTabs)) {
-			for (int var4 = 0; var4 < 1; ++var4)
-			{
-				ItemStack min = new ItemStack(this, 1, 0);
-				ECUtils.initMRUTag(min, 5000);
-				ItemStack max = new ItemStack(this, 1, 0);
-				ECUtils.initMRUTag(max, 5000);
-				ECUtils.getStackTag(max).setInteger("mru", 5000);
-				par3List.add(min);
-				par3List.add(max);
-			}
+			ItemStack min = new ItemStack(this, 1, 0);
+			ItemStack max = new ItemStack(this, 1, 0);
+			min.getCapability(MRU_HANDLER_ITEM_CAPABILITY, null).setMRU(0);
+			max.getCapability(MRU_HANDLER_ITEM_CAPABILITY, null).setMRU(maxMRU);
+			par3List.add(min);
+			par3List.add(max);
 		}
 	}
 
@@ -201,7 +198,7 @@ public class ItemArmorEC extends ItemArmor implements /*IRepairable, IVisDiscoun
 				return new ArmorProperties(0,0,armor.getMaxDamage() + 1 - armor.getItemDamage());
 		}
 		else {
-			int mru = getMRU(armor);
+			int mru = armor.getCapability(MRU_HANDLER_ITEM_CAPABILITY, null).getMRU();
 			if(mru > 0) {
 				ItemArmor aarmor = (ItemArmor)armor.getItem();
 				return new ArmorProperties(0, aarmor.damageReduceAmount / 20D, aarmor.getMaxDamage() + 1 - armor.getItemDamage());
@@ -218,35 +215,22 @@ public class ItemArmorEC extends ItemArmor implements /*IRepairable, IVisDiscoun
 
 	@Override
 	public void damageArmor(EntityLivingBase entity, ItemStack stack, DamageSource source, int damage, int slot) {
-		if(this.aType != 1) {
-			stack.damageItem(damage, entity);
+		if(this.aType == 1 && entity instanceof EntityPlayer) {
+			EntityPlayer p = (EntityPlayer) entity;
+			if(ECUtils.playerUseMRU(p, stack, damage*800)) {}
+			else {}
 		}
 		else {
-			if(entity instanceof EntityPlayer) {
-				EntityPlayer p = (EntityPlayer) entity;
-				if(ECUtils.tryToDecreaseMRUInStorage(p, -damage*800) || this.increaseMRU(stack, -damage*800)) {}
-				else {}
-			}
+			stack.damageItem(damage, entity);
 		}
 	}
 
 	@Override
-	public boolean increaseMRU(ItemStack stack, int amount) {
-		if(getMRU(stack)+amount >= 0 && getMRU(stack)+amount<=getMaxMRU(stack)) {
-			MiscUtils.getStackTag(stack).setInteger("mru", MiscUtils.getStackTag(stack).getInteger("mru")+amount);
-			return true;
+	public ICapabilityProvider initCapabilities(ItemStack stack, NBTTagCompound nbt) {
+		if(this.aType != 1) {
+			return super.initCapabilities(stack, nbt);
 		}
-		return false;
-	}
-
-	@Override
-	public int getMRU(ItemStack stack) {
-		return MiscUtils.getStackTag(stack).getInteger("mru");
-	}
-
-	@Override
-	public int getMaxMRU(ItemStack stack) {
-		return this.aType == 1 ? 5000 : 1;
+		return new MRUItemStorage(stack, maxMRU);
 	}
 
 	@Override
@@ -255,10 +239,5 @@ public class ItemArmorEC extends ItemArmor implements /*IRepairable, IVisDiscoun
 			ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation("essentialcraft:item/" + getRegistryName().getResourcePath(), "inventory"));
 		else
 			ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation("essentialcraft:armor", "inventory"));
-	}
-
-	@Override
-	public boolean isStorage(ItemStack stack) {
-		return false;
 	}
 }

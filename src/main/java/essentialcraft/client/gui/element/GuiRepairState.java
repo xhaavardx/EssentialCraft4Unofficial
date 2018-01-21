@@ -1,6 +1,6 @@
 package essentialcraft.client.gui.element;
 
-import essentialcraft.api.IMRUHandler;
+import essentialcraft.common.capabilities.mru.CapabilityMRUHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.inventory.IInventory;
@@ -34,31 +34,20 @@ public class GuiRepairState extends GuiTextElement{
 	public void drawText(int posX, int posY) {
 		FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
 		IInventory inventory = (IInventory) tile;
-		if(inventory.getStackInSlot(1).isEmpty())
-		{
+		if(inventory.getStackInSlot(1).isEmpty()) {
 			fontRenderer.drawStringWithShadow("Nothing To Fix!", posX+5, posY+6, 0xffff00);
-		}else
-		{
-			if(!inventory.getStackInSlot(1).getItem().isRepairable())
-			{
-				fontRenderer.drawStringWithShadow("Can't Fix This!", posX+5, posY+6, 0xff0000);
-			}else
-			{
-				if(inventory.getStackInSlot(1).getItemDamage() == 0)
-				{
-					fontRenderer.drawStringWithShadow("Already Fixed!", posX+5, posY+6, 0xffff00);
-				}else
-				{
-					if(((IMRUHandler) inventory).getMRU() == 0)
-					{
-						fontRenderer.drawStringWithShadow("No MRU!", posX+5, posY+6, 0xff0000);
-					}else
-					{
-						fontRenderer.drawStringWithShadow("Working...", posX+5, posY+6, 0x00ff00);
-					}
-				}
-			}
+		}
+		else if(!inventory.getStackInSlot(1).getItem().isRepairable()) {
+			fontRenderer.drawStringWithShadow("Can't Fix This!", posX+5, posY+6, 0xff0000);
+		}
+		else if(inventory.getStackInSlot(1).getItemDamage() == 0) {
+			fontRenderer.drawStringWithShadow("Already Fixed!", posX+5, posY+6, 0xffff00);
+		}
+		else if(tile.getCapability(CapabilityMRUHandler.MRU_HANDLER_CAPABILITY, null).getMRU() == 0) {
+			fontRenderer.drawStringWithShadow("No MRU!", posX+5, posY+6, 0xff0000);
+		}
+		else {
+			fontRenderer.drawStringWithShadow("Working...", posX+5, posY+6, 0x00ff00);
 		}
 	}
-
 }

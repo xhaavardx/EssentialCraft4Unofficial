@@ -3,9 +3,9 @@ package essentialcraft.common.tile;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
+import essentialcraft.api.ApiCore;
 import essentialcraft.common.item.ItemBoundGem;
 import essentialcraft.common.tile.TileMIMCraftingManager.CraftingPattern;
-import essentialcraft.utils.common.ECUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -22,7 +22,7 @@ public class TileMIM extends TileMRUGeneric {
 
 	public TileMIM() {
 		setSlotsNum(55);
-		setMaxMRU(5000);
+		mruStorage.setMaxMRU(ApiCore.DEVICE_MAX_MRU_GENERIC);
 	}
 
 	@Override
@@ -33,7 +33,7 @@ public class TileMIM extends TileMRUGeneric {
 	@Override
 	public void update() {
 		super.update();
-		ECUtils.manage(this, 0);
+		mruStorage.update(getPos(), getWorld(), getStackInSlot(0));
 		rebuildAllItems();
 		if(tickTime == 0) {
 			tickTime = 20;

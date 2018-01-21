@@ -3,16 +3,15 @@ package essentialcraft.client.gui.element;
 import DummyCore.Utils.DrawUtils;
 import DummyCore.Utils.MathUtils;
 import essentialcraft.common.tile.TileFurnaceMagic;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 
 public class GuiProgressBar_FurnaceMagic extends GuiTextElement{
 	public TileFurnaceMagic tile;
 
-	public GuiProgressBar_FurnaceMagic(int i, int j, TileEntity table)
+	public GuiProgressBar_FurnaceMagic(int i, int j, TileFurnaceMagic table)
 	{
 		super(i,j);
-		tile = (TileFurnaceMagic) table;
+		tile = table;
 	}
 
 	@Override

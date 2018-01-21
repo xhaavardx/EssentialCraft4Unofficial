@@ -1,7 +1,5 @@
 package essentialcraft.common.tile;
 
-import java.util.UUID;
-
 import essentialcraft.api.EnumStructureType;
 import essentialcraft.api.IStructurePiece;
 import net.minecraft.tileentity.TileEntity;
@@ -9,7 +7,6 @@ import net.minecraft.util.ITickable;
 
 public class TileMRUCUECBalancer extends TileEntity implements IStructurePiece, ITickable {
 	public TileMRUCUECController controller;
-	public UUID uuid = UUID.randomUUID();
 
 	@Override
 	public EnumStructureType getStructure() {

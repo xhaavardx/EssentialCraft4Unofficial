@@ -5,12 +5,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Random;
 
 import essentialcraft.common.registry.BiomeRegistry;
 import essentialcraft.utils.cfg.Config;
-
-import java.util.Random;
-
 import net.minecraft.init.Biomes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;

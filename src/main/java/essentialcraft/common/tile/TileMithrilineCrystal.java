@@ -5,42 +5,51 @@ import DummyCore.Utils.DummyData;
 import DummyCore.Utils.MiscUtils;
 import DummyCore.Utils.Notifier;
 import DummyCore.Utils.TileStatTracker;
+import essentialcraft.common.capabilities.espe.CapabilityESPEHandler;
+import essentialcraft.common.capabilities.espe.ESPEStorage;
 import essentialcraft.common.mod.EssentialCraftCore;
 import essentialcraft.utils.common.ECUtils;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.config.Configuration;
 
 public class TileMithrilineCrystal extends TileEntity implements ITickable {
 
-	public static float energyEachTick = 0.025F;
-	public static float energyEachTick_End = 0.1F;
-	public static float maxEnergy = 10000F;
+	public static double energyEachTick = 0.025D;
+	public static double energyEachTick_End = 0.1D;
+	public static double maxEnergy = 10000D;
 	public static boolean requiresUnobstructedSky = true;
-	public float energy;
 	private TileStatTracker tracker;
 	public int syncTick = 10;
 	public boolean requestSync = true;
+	protected ESPEStorage espeStorage = new ESPEStorage(maxEnergy);
 
 	public TileMithrilineCrystal() {
 		super();
 		tracker = new TileStatTracker(this);
 	}
 
+	public TileMithrilineCrystal(int tier) {
+		this();
+		espeStorage.setTier(tier);
+	}
+
 	@Override
 	public void readFromNBT(NBTTagCompound i) {
 		super.readFromNBT(i);
-		energy = i.getFloat("energy");
+		espeStorage.readFromNBT(i);
 	}
 
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound i) {
 		super.writeToNBT(i);
-		i.setFloat("energy", energy);
+		espeStorage.writeToNBT(i);
 		return i;
 	}
 
@@ -52,16 +61,15 @@ public class TileMithrilineCrystal extends TileEntity implements ITickable {
 			else if(!getWorld().isRemote && tracker.tileNeedsSyncing()) {
 				MiscUtils.sendPacketToAllAround(getWorld(), getUpdatePacket(), pos.getX(), pos.getY(), pos.getZ(), getWorld().provider.getDimension(), 32);
 			}
-			syncTick = 60;
+			syncTick = 20;
 		}
 		else
 			--syncTick;
 
 		boolean hasSky = getWorld().canBlockSeeSky(pos.up(3)) || !requiresUnobstructedSky;
 		if(hasSky) {
-			float energyGenerated = getWorld().provider != null && getWorld().provider.getDimension() == 1 ? energyEachTick_End : energyEachTick;
-			if(energy + energyGenerated <= maxEnergy)
-				energy += energyGenerated;
+			double energyGenerated = getWorld().provider != null && getWorld().provider.getDimension() == 1 ? energyEachTick_End : energyEachTick;
+			espeStorage.addESPE(energyGenerated, true);
 		}
 
 		if(requestSync && getWorld().isRemote) {
@@ -99,10 +107,10 @@ public class TileMithrilineCrystal extends TileEntity implements ITickable {
 
 			DummyData[] data = DataStorage.parseData(dataString);
 
-			energyEachTick = Float.parseFloat(data[0].fieldValue);
-			energyEachTick_End = Float.parseFloat(data[1].fieldValue);
+			energyEachTick = Double.parseDouble(data[0].fieldValue);
+			energyEachTick_End = Double.parseDouble(data[1].fieldValue);
 			requiresUnobstructedSky = Boolean.parseBoolean(data[2].fieldValue);
-			maxEnergy = Float.parseFloat(data[3].fieldValue);
+			maxEnergy = Double.parseDouble(data[3].fieldValue);
 
 			cfg.save();
 		}
@@ -115,5 +123,15 @@ public class TileMithrilineCrystal extends TileEntity implements ITickable {
 	public AxisAlignedBB getRenderBoundingBox() {
 		AxisAlignedBB bb = new AxisAlignedBB(pos, pos.add(1, 3, 1));
 		return bb;
+	}
+
+	@Override
+	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+		return capability == CapabilityESPEHandler.ESPE_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
+	}
+
+	@Override
+	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+		return capability == CapabilityESPEHandler.ESPE_HANDLER_CAPABILITY ? (T)espeStorage : super.getCapability(capability, facing);
 	}
 }

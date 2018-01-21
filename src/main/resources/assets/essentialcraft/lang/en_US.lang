@@ -65,7 +65,7 @@ tile.essentialcraft.voidFence.name=Void Fence
 tile.essentialcraft.magicFence.name=Magic Fence
 tile.essentialcraft.fFence.name=Fortified Stone Fence
 
-item.essentialcraft.testItem.name=[DEV ONLY]
+item.essentialcraft.testItem.name=Structure Test [DEV ONLY]
 item.essentialcraft.mruMover1.name=MRUCU Moving Wand
 item.essentialcraft.elemental_hoe.name=Elemental Hoe
 item.essentialcraft.record_a.name=Record
@@ -1278,9 +1278,9 @@ advancements.essentialcraft.root.desc=The world of radiated magic
 advancements.essentialcraft.soul_stone.title=Soul Seer
 advancements.essentialcraft.soul_stone.desc=Obtain a piece of Soul Stone
 advancements.essentialcraft.matrix_absorber.title=Placeholder Text
-advancements.essentialcraft.matrix_absorber.desc=Placeholder Text
+advancements.essentialcraft.matrix_absorber.desc=Create a Matrix Absorber
 advancements.essentialcraft.radiating_chamber.title=Placeholder Text
-advancements.essentialcraft.radiating_chamber.desc=Make aRradiating Chamber
+advancements.essentialcraft.radiating_chamber.desc=Make a Radiating Chamber
 advancements.essentialcraft.magician_table.title=Placeholder Text
 advancements.essentialcraft.magician_table.desc=Create a Magician Table
 advancements.essentialcraft.mrucuec.title=Placeholder Text
@@ -1311,3 +1311,5 @@ advancements.essentialcraft.the_endless_summer.title=Everlasting Song
 advancements.essentialcraft.the_endless_summer.desc=The worlds merged together...
 advancements.essentialcraft.papers_please.title=Papers, Please!
 advancements.essentialcraft.papers_please.desc=Glory to Arstotzka!
+
+item.essentialcraft.balance_setter.name=Balance Setter

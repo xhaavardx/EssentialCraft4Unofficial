@@ -15,14 +15,12 @@ import net.minecraft.util.math.BlockPos;
 public class CommandCreateMRUCU extends CommandBase
 {
 	@Override
-	public String getName()
-	{
+	public String getName() {
 		return "createmrucu";
 	}
 
 	@Override
-	public String getUsage(ICommandSender par1ICommandSender)
-	{
+	public String getUsage(ICommandSender par1ICommandSender) {
 		return "/createmrucu <x> <y> <z> <mruAmount> <balance>";
 	}
 
@@ -30,8 +28,7 @@ public class CommandCreateMRUCU extends CommandBase
 	 * Return the required permission level for this command.
 	 */
 	@Override
-	public int getRequiredPermissionLevel()
-	{
+	public int getRequiredPermissionLevel() {
 		return 3;
 	}
 
@@ -45,8 +42,8 @@ public class CommandCreateMRUCU extends CommandBase
 		int z = p.getZ();
 		EntityMRUPresence mru = new EntityMRUPresence(sender.getEntityWorld());
 		mru.setPositionAndRotation(x, y, z, 0, 0);
-		mru.setMRU(var3);
-		mru.setBalance((float)var4);
+		mru.mruStorage.setMRU(var3);
+		mru.mruStorage.setBalance((float)var4);
 		sender.getEntityWorld().spawnEntity(mru);
 	}
 

@@ -22,8 +22,7 @@ public class RenderMagicalMirror extends TileEntitySpecialRenderer<TileMagicalMi
 	public static final ResourceLocation glass = new ResourceLocation("essentialcraft:textures/models/mirror.png");
 	public static final IModelCustom model = AdvancedModelLoader.loadModel(new ResourceLocation("essentialcraft:models/block/mirror.obj"));
 
-	public void doRender(TileMagicalMirror tile, double p_76986_2_, double p_76986_4_, double p_76986_6_, float p_76986_8_, float p_76986_9_)
-	{
+	public void doRender(TileMagicalMirror tile, double p_76986_2_, double p_76986_4_, double p_76986_6_, float p_76986_8_, float p_76986_9_) {
 		RenderHelper.disableStandardItemLighting();
 		GlStateManager.pushMatrix();
 		GlStateManager.translate((float)p_76986_2_+0.5F, (float)p_76986_4_-0.25F, (float)p_76986_6_+0.5F);
@@ -34,11 +33,10 @@ public class RenderMagicalMirror extends TileEntitySpecialRenderer<TileMagicalMi
 		else
 			yIndex = 0.5F-timeIndex/240F;
 		GlStateManager.translate(0, yIndex-0.25F, 0);
-		if(tile.inventoryPos != null)
-		{
-			double d0 = tile.inventoryPos.x - (tile.getPos().getX()+0.5F);
-			double d1 = tile.inventoryPos.y - (tile.getPos().getY()+0.5F+yIndex);
-			double d2 = tile.inventoryPos.z - (tile.getPos().getZ()+0.5F);
+		if(tile.inventoryPos != null) {
+			double d0 = tile.inventoryPos.getX() - tile.getPos().getX();
+			double d1 = tile.inventoryPos.getY() - tile.getPos().getY() - yIndex;
+			double d2 = tile.inventoryPos.getZ() - tile.getPos().getZ();
 			double d3 = MathHelper.sqrt(d0 * d0 + d2 * d2);
 			float f = -(float)(Math.atan2(d2, d0) * 180.0D / Math.PI)-90;
 			float f1 = -(float)-(Math.atan2(d1, d3) * 180.0D / Math.PI);
@@ -78,7 +76,7 @@ public class RenderMagicalMirror extends TileEntitySpecialRenderer<TileMagicalMi
 				DrawUtils.renderItemStack_Full(tile.transferingStack, p_76986_2_, p_76986_4_, p_76986_6_, (tile.getWorld().getWorldTime()+p_76986_8_)%360, 0, 1, 1, 1, 0.5F, -0.3F+tile.transferTime/20F, 0.5F);
 			}else
 			{
-				Vec3d vec = new Vec3d(tile.inventoryPos.x - (tile.getPos().getX()+0.5F), tile.inventoryPos.y - (tile.getPos().getY()+0.5F), tile.inventoryPos.z - (tile.getPos().getZ()+0.5F));
+				Vec3d vec = new Vec3d(tile.inventoryPos.getX() - tile.getPos().getX(), tile.inventoryPos.getY() - tile.getPos().getY(), tile.inventoryPos.getZ() - tile.getPos().getZ());
 
 				DrawUtils.renderItemStack_Full(tile.transferingStack, p_76986_2_, p_76986_4_, p_76986_6_, (tile.getWorld().getWorldTime()+p_76986_8_)%360, 0, 1, 1, 1, 0.5F+(float)vec.x*(tile.transferTime-20F)/40, 0.5F+(float)vec.y*(tile.transferTime-20F)/40, 0.5F+(float)vec.z*(tile.transferTime-20F)/40);
 			}

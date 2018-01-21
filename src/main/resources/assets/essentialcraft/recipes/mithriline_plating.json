@@ -4,19 +4,19 @@
     "ingredients": [
         {
             "type": "forge:ore_dict",
-            "ore": "plateMithriline"
+            "ore": "plateMithrilineMetal"
         },
         {
             "type": "forge:ore_dict",
-            "ore": "plateMithriline"
+            "ore": "plateMithrilineMetal"
         },
         {
             "type": "forge:ore_dict",
-            "ore": "plateMithriline"
+            "ore": "plateMithrilineMetal"
         },
         {
             "type": "forge:ore_dict",
-            "ore": "plateMithriline"
+            "ore": "plateMithrilineMetal"
         }
     ],
     "result": {

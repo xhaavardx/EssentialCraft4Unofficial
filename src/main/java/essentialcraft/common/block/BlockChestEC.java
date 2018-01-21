@@ -5,6 +5,7 @@ import essentialcraft.common.mod.EssentialCraftCore;
 import essentialcraft.common.tile.TileMagicalChest;
 import essentialcraft.utils.cfg.Config;
 import net.minecraft.block.BlockContainer;
+import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
@@ -18,12 +19,14 @@ import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 
@@ -39,6 +42,16 @@ public class BlockChestEC extends BlockContainer implements IModelRegisterer {
 	public boolean isOpaqueCube(IBlockState s)
 	{
 		return false;
+	}
+
+	@Override
+	public EnumBlockRenderType getRenderType(IBlockState state) {
+		return EnumBlockRenderType.INVISIBLE;
+	}
+
+	@Override
+	public MapColor getMapColor(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
+		return state.getValue(TYPE).getMapColor();
 	}
 
 	@Override
@@ -75,18 +88,14 @@ public class BlockChestEC extends BlockContainer implements IModelRegisterer {
 
 	@Override
 	public boolean onBlockActivated(World par1World, BlockPos par2, IBlockState par3, EntityPlayer par4EntityPlayer, EnumHand par5, EnumFacing par7, float par8, float par9, float par10) {
-		if(par1World.isRemote) {
+		if(par4EntityPlayer.isSneaking()) {
+			return false;
+		}
+		if(!par1World.isRemote) {
+			par4EntityPlayer.openGui(EssentialCraftCore.core, Config.guiID[0], par1World, par2.getX(), par2.getY(), par2.getZ());
 			return true;
 		}
-		else {
-			if(!par4EntityPlayer.isSneaking()) {
-				par4EntityPlayer.openGui(EssentialCraftCore.core, Config.guiID[0], par1World, par2.getX(), par2.getY(), par2.getZ());
-				return true;
-			}
-			else {
-				return false;
-			}
-		}
+		return true;
 	}
 
 	@Override
@@ -124,15 +133,17 @@ public class BlockChestEC extends BlockContainer implements IModelRegisterer {
 	}
 
 	public static enum ChestType implements IStringSerializable {
-		MAGICAL(0, "magical"),
-		VOID(1, "void");
+		MAGICAL(0, "magical", MapColor.PURPLE),
+		VOID(1, "void", MapColor.BLACK);
 
-		private int index;
-		private String name;
+		private final int index;
+		private final String name;
+		private final MapColor mapColor;
 
-		private ChestType(int i, String s) {
-			index = i;
-			name = s;
+		private ChestType(int index, String name, MapColor mapColor) {
+			this.index = index;
+			this.name = name;
+			this.mapColor = mapColor;
 		}
 
 		@Override
@@ -147,6 +158,10 @@ public class BlockChestEC extends BlockContainer implements IModelRegisterer {
 
 		public int getIndex() {
 			return index;
+		}
+
+		public MapColor getMapColor() {
+			return mapColor;
 		}
 
 		public static ChestType fromIndex(int i) {

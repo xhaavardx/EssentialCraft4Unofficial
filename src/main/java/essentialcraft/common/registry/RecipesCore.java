@@ -84,7 +84,7 @@ public class RecipesCore {
 		MagicianTableRecipes.addRecipe(new Object[]{"essentialcraft:gemEnderPearl",new ItemStack(ItemsCore.genericItem,1,14),new ItemStack(ItemsCore.genericItem,1,14),new ItemStack(ItemsCore.genericItem,1,14),new ItemStack(ItemsCore.genericItem,1,14)},new ItemStack(ItemsCore.storage,1,2), 100);
 		MagicianTableRecipes.addRecipe(new Object[]{"gemDiamond",new ItemStack(ItemsCore.genericItem,1,15),new ItemStack(ItemsCore.genericItem,1,15),new ItemStack(ItemsCore.genericItem,1,15),new ItemStack(ItemsCore.genericItem,1,15)},new ItemStack(ItemsCore.storage,1,3), 250);
 		MagicianTableRecipes.addRecipe(new Object[]{"gemNetherStar",new ItemStack(ItemsCore.genericItem,1,16),new ItemStack(ItemsCore.genericItem,1,16),new ItemStack(ItemsCore.genericItem,1,16),new ItemStack(ItemsCore.genericItem,1,16)},new ItemStack(ItemsCore.storage,1,4), 500);
-		MagicianTableRecipes.addRecipe(new Object[]{"plateFortified","ingotMithriline","ingotMithriline","ingotMithriline","ingotMithriline"},new ItemStack(ItemsCore.genericItem,1,49), 400);
+		MagicianTableRecipes.addRecipe(new Object[]{"plateFortified","ingotMithrilineMetal","ingotMithrilineMetal","ingotMithrilineMetal","ingotMithrilineMetal"},new ItemStack(ItemsCore.genericItem,1,49), 400);
 		MagicianTableRecipes.addRecipe(new Object[]{"plateFortified","ingotDemonic","ingotDemonic","ingotDemonic","ingotDemonic"},new ItemStack(ItemsCore.genericItem,4,54), 2000);
 		MagicianTableRecipes.addRecipe(new Object[]{"plateFortified",Items.BLAZE_POWDER,Items.BLAZE_POWDER,Items.BLAZE_POWDER,Items.BLAZE_POWDER},new ItemStack(ItemsCore.genericItem,1,79), 500);
 		ItemStack book_t1 = new ItemStack(ItemsCore.research_book);
@@ -99,7 +99,7 @@ public class RecipesCore {
 		//MithrilineFurnaceRecipes
 		MithrilineFurnaceRecipes.addRecipe("dustMithriline", new ItemStack(ItemsCore.genericItem,1,50), 60,1);
 		MithrilineFurnaceRecipes.addRecipe("gemResonant", new ItemStack(ItemsCore.genericItem,1,48), 120,1);
-		MithrilineFurnaceRecipes.addRecipe("gemMithriline", new ItemStack(ItemsCore.genericItem,1,47), 240,1);
+		MithrilineFurnaceRecipes.addRecipe("gemMithrilineCrystal", new ItemStack(ItemsCore.genericItem,1,47), 240,1);
 		MithrilineFurnaceRecipes.addRecipe("gemFading", new ItemStack(ItemsCore.genericItem,8,46), 480,1);
 		MithrilineFurnaceRecipes.addRecipe("dustGlowstone", new ItemStack(ItemsCore.genericItem,1,51), 32,1);
 		MithrilineFurnaceRecipes.addRecipe("ingotIron", new ItemStack(Items.GOLD_INGOT), 64,8);
@@ -194,8 +194,6 @@ public class RecipesCore {
 		MithrilineFurnaceRecipes.addRecipe(new ItemStack(Items.FEATHER,1,0), new ItemStack(Items.REEDS,3,0), 64,2);
 		MithrilineFurnaceRecipes.addRecipe(new ItemStack(Items.COAL,1,0), new ItemStack(Items.COAL,1,1), 1,1);
 		MithrilineFurnaceRecipes.addRecipe(new ItemStack(Items.COAL,1,1), new ItemStack(Items.COAL,1,0), 1,1);
-		//MithrilineFurnaceRecipes.addRecipe(new ItemStack(Blocks.FIRE,1,0), new ItemStack(Blocks.COAL_BLOCK,1,0), 512,1);
-		//MithrilineFurnaceRecipes.addRecipe(new ItemStack(Blocks.COAL_BLOCK,1,0), new ItemStack(Blocks.FIRE,1,0), 512,1);
 		MithrilineFurnaceRecipes.addRecipe(new ItemStack(Blocks.ICE,1,0), new ItemStack(Blocks.GRASS,1,0), 1,1);
 		MithrilineFurnaceRecipes.addRecipe(new ItemStack(Blocks.GRASS,1,0), new ItemStack(Blocks.DIRT,1,0), 1,1);
 		MithrilineFurnaceRecipes.addRecipe(new ItemStack(Blocks.DIRT,1,0), new ItemStack(Blocks.DIRT,1,2), 1,1);
@@ -207,7 +205,7 @@ public class RecipesCore {
 		//wind recipes
 		new WindImbueRecipe(new ItemStack(ItemsCore.soulStone,1,0),new ItemStack(ItemsCore.soulStone,1,0),40000);
 		new WindImbueRecipe(new ItemStack(Items.DIAMOND,1,0),new ItemStack(ItemsCore.genericItem,1,55),10000);
-		new WindImbueRecipe(new ItemStack(Items.POTIONITEM,1,0),new ItemStack(ItemsCore.air_potion,1,0),250);
+		new WindImbueRecipe(PotionUtils.addPotionToItemStack(new ItemStack(Items.POTIONITEM), PotionTypes.WATER),new ItemStack(ItemsCore.air_potion,1,0),250);
 	}
 
 	private static void registerDemonTrades() {

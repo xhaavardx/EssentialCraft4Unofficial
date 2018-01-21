@@ -24,17 +24,14 @@ import net.minecraft.util.text.TextFormatting;
 
 public class GuiPlayerPentacle extends GuiScreen {
 
-	public static class EffectButton extends GuiButton
-	{
+	public static class EffectButton extends GuiButton {
 		public int listIndex;
 
-		public EffectButton(int id, int x, int y,int sX, int sY, String name)
-		{
+		public EffectButton(int id, int x, int y,int sX, int sY, String name) {
 			super(id,x,y,sX,sY,name);
 		}
 
-		public EffectButton(int id, int x, int y,int sX, int sY, String name, int index)
-		{
+		public EffectButton(int id, int x, int y,int sX, int sY, String name, int index) {
 			super(id,x,y,sX,sY,name);
 			listIndex = index;
 			PlayerGenericData data = ECUtils.getData(Minecraft.getMinecraft().player);
@@ -46,8 +43,7 @@ public class GuiPlayerPentacle extends GuiScreen {
 		}
 
 		@Override
-		public void drawButton(Minecraft mc, int mX, int mY, float pt)
-		{
+		public void drawButton(Minecraft mc, int mX, int mY, float pt) {
 			if(!this.enabled)
 				return;
 
@@ -64,13 +60,11 @@ public class GuiPlayerPentacle extends GuiScreen {
 				GuiPlayerPentacle gui = (GuiPlayerPentacle) Minecraft.getMinecraft().currentScreen;
 
 				ResourceLocation loc = effects.get(listIndex).getEffectIcon();
-				if(gui.pentacle.tier < effect.getType().ordinal())
-				{
+				if(gui.pentacle.tier < effect.getType().ordinal()) {
 					renderer = Minecraft.getMinecraft().standardGalacticFontRenderer;
 					loc = GuiPlayerPentacle.field_147526_d;
 				}
-				if(GuiScreen.isShiftKeyDown() && mc.player.capabilities.isCreativeMode)
-				{
+				if(GuiScreen.isShiftKeyDown() && mc.player.capabilities.isCreativeMode) {
 					renderer = Minecraft.getMinecraft().fontRenderer;
 					loc = effects.get(listIndex).getEffectIcon();
 				}
@@ -88,23 +82,20 @@ public class GuiPlayerPentacle extends GuiScreen {
 				tessellator.addVertexWithUV(p_73729_1_ + 0, p_73729_2_ + 0, this.zLevel, 0, 0);
 				tessellator.draw();
 
-				if(mX >= this.x && mX <= this.x+20)
-				{
-					if(mY >= this.y && mY <= this.y+20)
-					{
+				if(mX >= this.x && mX <= this.x+20) {
+					if(mY >= this.y && mY <= this.y+20) {
 						GlStateManager.translate(0, 0, 100);
 						String name = effect.getLocalizedName();
 						String desc = effect.getLocalizedDesc();
 						int length = name.length();
 						if(desc.length()/2 >= name.length())
 							length = desc.length()/2;
-						this.drawGradientRect(mX+5, mY+5, mX+length*6, mY+25, 0x22ffffff, 0x22ffffff);
+						this.drawGradientRect(mX+5, mY+5, mX+length*6, mY+25, 0x22FFFFFF, 0x22FFFFFF);
 
-						this.drawString(renderer, name, mX+5, mY+5, 0xffffff);
+						this.drawString(renderer, name, mX+5, mY+5, 0xFFFFFF);
 						boolean enable = effect.getStickiness() <= gui.energy;
 						String additional = "";
-						if(GuiScreen.isShiftKeyDown() && mc.player.capabilities.isCreativeMode)
-						{
+						if(GuiScreen.isShiftKeyDown() && mc.player.capabilities.isCreativeMode) {
 							enable = true;
 							additional = " [Creative]";
 						}
@@ -130,36 +121,29 @@ public class GuiPlayerPentacle extends GuiScreen {
 	private static final ResourceLocation field_147529_c = new ResourceLocation("textures/environment/end_sky.png");
 	private static final ResourceLocation field_147526_d = new ResourceLocation("textures/entity/end_portal.png");
 
-	public GuiPlayerPentacle(TileEntity tile)
-	{
+	public GuiPlayerPentacle(TileEntity tile) {
 		super();
 		pentacle = (TilePlayerPentacle) tile;
 		timeOpened = tile.getWorld().getTotalWorldTime();
 	}
 
 	@Override
-	public boolean doesGuiPauseGame()
-	{
+	public boolean doesGuiPauseGame() {
 		return false;
 	}
 
-	public GuiPlayerPentacle()
-	{
+	public GuiPlayerPentacle() {
 		super();
 	}
 
 	@Override
-	protected void actionPerformed(GuiButton p_146284_1_)
-	{
-		EffectButton eb = (EffectButton) p_146284_1_;
-		if(eb.enabled)
-		{
+	protected void actionPerformed(GuiButton button) {
+		EffectButton eb = (EffectButton) button;
+		if(eb.enabled) {
 			ArrayList<ICorruptionEffect> effects = (ArrayList<ICorruptionEffect>) ECUtils.getData(Minecraft.getMinecraft().player).getEffects();
-			if(effects.size() > p_146284_1_.id)
-			{
+			if(effects.size() > button.id) {
 				ICorruptionEffect effect = effects.get(eb.listIndex);
-				if(effect.getType().ordinal() <= this.pentacle.tier || GuiScreen.isShiftKeyDown() && Minecraft.getMinecraft().player.capabilities.isCreativeMode)
-				{
+				if(effect.getType().ordinal() <= this.pentacle.tier || GuiScreen.isShiftKeyDown() && Minecraft.getMinecraft().player.capabilities.isCreativeMode) {
 					if(GuiScreen.isShiftKeyDown() && Minecraft.getMinecraft().player.capabilities.isCreativeMode)
 						MiscUtils.handleButtonPress(eb.listIndex, getClass(), eb.getClass(), Minecraft.getMinecraft().player, this.pentacle.getPos().getX(), this.pentacle.getPos().getY(), this.pentacle.getPos().getZ(),"||isCreative:true");
 					else
@@ -171,8 +155,7 @@ public class GuiPlayerPentacle extends GuiScreen {
 	}
 
 	@Override
-	public void initGui()
-	{
+	public void initGui() {
 		int k = (this.width - this.xSize) / 2;
 		int l = (this.height - this.ySize) / 2;
 		this.buttonList.add(new EffectButton(0,k + 76,l - 40,20,20,"0",0));
@@ -193,17 +176,20 @@ public class GuiPlayerPentacle extends GuiScreen {
 	}
 
 	@Override
-	public void drawScreen(int p_73863_1_, int p_73863_2_, float p_73863_3_)
-	{
-		this.drawDefaultBackground();
-		renderTime = (int)((Minecraft.getMinecraft().world.getTotalWorldTime() - this.timeOpened) % 24000L);
+	public void drawScreen(int p_73863_1_, int p_73863_2_, float p_73863_3_) {
+		renderTime = (int)(Minecraft.getMinecraft().world.getTotalWorldTime() - this.timeOpened);
 		int k = (this.width - this.xSize) / 2;
 		int l = (this.height - this.ySize) / 2;
 
 		float opacityIndex = renderTime / 100F;
-		if(opacityIndex > 1)opacityIndex = 1;
+		if(opacityIndex > 1)
+			opacityIndex = 1;
 
 		GlStateManager.pushMatrix();
+		GlStateManager.enableBlend();
+		GlStateManager.disableAlpha();
+		GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+		GlStateManager.shadeModel(7425);
 		GlStateManager.color(0.0F, 0.2F, 0.05F, opacityIndex);
 
 		ScaledResolution res = new ScaledResolution(Minecraft.getMinecraft());
@@ -222,25 +208,20 @@ public class GuiPlayerPentacle extends GuiScreen {
 		GlStateManager.popMatrix();
 
 		TilePlayerPentacle p = this.pentacle;
-		if(p.tier == -1)
-		{
-			GlStateManager.color(0.2F, 0.2F, 0.2F,opacityIndex);
+		if(p.tier == -1) {
+			GlStateManager.color(0.2F, 0.2F, 0.2F, opacityIndex);
 		}
-		if(p.tier == 0)
-		{
-			GlStateManager.color(0F, 1F, 0F,opacityIndex);
+		if(p.tier == 0) {
+			GlStateManager.color(0F, 1F, 0F, opacityIndex);
 		}
-		if(p.tier == 1)
-		{
-			GlStateManager.color(0F, 0F, 1F,opacityIndex);
+		if(p.tier == 1) {
+			GlStateManager.color(0F, 0F, 1F, opacityIndex);
 		}
-		if(p.tier == 2)
-		{
-			GlStateManager.color(0.5F, 0F, 0.5F,opacityIndex);
+		if(p.tier == 2) {
+			GlStateManager.color(0.5F, 0F, 0.5F, opacityIndex);
 		}
-		if(p.tier == 3)
-		{
-			GlStateManager.color(1F, 0F, 0F,opacityIndex);
+		if(p.tier == 3) {
+			GlStateManager.color(1F, 0F, 0F, opacityIndex);
 		}
 
 		int uv = 256;
@@ -250,17 +231,18 @@ public class GuiPlayerPentacle extends GuiScreen {
 		this.drawTexturedModalRect(k-uv/6, l-uu/6, 0, 0, uv, uu);
 
 		GlStateManager.color(1F, 1F, 1F, 1F);
+		GlStateManager.shadeModel(7424);
+		GlStateManager.disableBlend();
+		GlStateManager.enableAlpha();
 
-		if(opacityIndex==1)
-		{
+		if(opacityIndex == 1) {
 			GuiInventory.drawEntityOnScreen((int) (k+uv/2.9F), (int) (l+uu/2.5F), 20, 0, 0, Minecraft.getMinecraft().player);
 			Minecraft.getMinecraft().renderEngine.bindTexture(RenderHandlerEC.whitebox);
 			GlStateManager.color(0.058F, 0.058F, 0.058F);
 			this.drawTexturedModalRect((int) (k+uv/2.9F) - 32, (int) (l+uu/2.5F) + 2, 0, 0, 64, 8);
 			GlStateManager.color(0.2F, 0.2F, 0.1F);
 			this.drawTexturedModalRect((int) (k+uv/2.9F) - 32, (int) (l+uu/2.5F) + 2, 0, 0, 61, 5);
-			if(ECUtils.getData(Minecraft.getMinecraft().player) != null)
-			{
+			if(ECUtils.getData(Minecraft.getMinecraft().player) != null) {
 				PlayerGenericData data = ECUtils.getData(Minecraft.getMinecraft().player);
 				int index = MathUtils.pixelatedTextureSize(data.getOverhaulDamage(), 72000, 61);
 				GlStateManager.color(0.73F, 0F, 0F);
@@ -273,7 +255,8 @@ public class GuiPlayerPentacle extends GuiScreen {
 				this.drawString(fontRenderer, displayEnergy, (int) (k+uv/2.9F) - 32, (int) (l+uu/2.5F) + 22, 0xffffff);
 			}
 		}
-		if(opacityIndex==1)
+		if(opacityIndex==1) {
 			super.drawScreen(p_73863_1_, p_73863_2_, p_73863_3_);
+		}
 	}
 }

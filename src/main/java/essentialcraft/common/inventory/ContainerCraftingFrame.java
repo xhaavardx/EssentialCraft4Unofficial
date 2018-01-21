@@ -38,24 +38,7 @@ public class ContainerCraftingFrame extends ContainerInventory {
 			InventoryCrafting crafting = new InventoryCrafting(parent, 3, 3);
 
 			for(int i = 0; i < 9; ++i) {
-				if(i == 0)
-					crafting.setInventorySlotContents(i, parent.inventory.getStackInSlot(0));
-				if(i == 1)
-					crafting.setInventorySlotContents(i, parent.inventory.getStackInSlot(3));
-				if(i == 2)
-					crafting.setInventorySlotContents(i, parent.inventory.getStackInSlot(6));
-				if(i == 3)
-					crafting.setInventorySlotContents(i, parent.inventory.getStackInSlot(1));
-				if(i == 4)
-					crafting.setInventorySlotContents(i, parent.inventory.getStackInSlot(4));
-				if(i == 5)
-					crafting.setInventorySlotContents(i, parent.inventory.getStackInSlot(7));
-				if(i == 6)
-					crafting.setInventorySlotContents(i, parent.inventory.getStackInSlot(2));
-				if(i == 7)
-					crafting.setInventorySlotContents(i, parent.inventory.getStackInSlot(5));
-				if(i == 8)
-					crafting.setInventorySlotContents(i, parent.inventory.getStackInSlot(8));
+				crafting.setInventorySlotContents(i, parent.inventory.getStackInSlot(i%3*3+i/3));
 			}
 
 			ItemStack result = CraftingManager.findMatchingResult(crafting, player.getEntityWorld());
@@ -64,7 +47,7 @@ public class ContainerCraftingFrame extends ContainerInventory {
 
 			crafting = null;
 
-			if(slotNumber == 9 && !result.isEmpty())
+			if(slotNumber == 9 && result.isEmpty())
 				inventory.setInventorySlotContents(slotNumber, ItemStack.EMPTY);
 
 			if(slotNumber != 9) {
@@ -97,24 +80,7 @@ public class ContainerCraftingFrame extends ContainerInventory {
 					InventoryCrafting crafting = new InventoryCrafting(parent, 3, 3);
 
 					for(int i = 0; i < 9; ++i) {
-						if(i == 0)
-							crafting.setInventorySlotContents(i, parent.inventory.getStackInSlot(0));
-						if(i == 1)
-							crafting.setInventorySlotContents(i, parent.inventory.getStackInSlot(3));
-						if(i == 2)
-							crafting.setInventorySlotContents(i, parent.inventory.getStackInSlot(6));
-						if(i == 3)
-							crafting.setInventorySlotContents(i, parent.inventory.getStackInSlot(1));
-						if(i == 4)
-							crafting.setInventorySlotContents(i, parent.inventory.getStackInSlot(4));
-						if(i == 5)
-							crafting.setInventorySlotContents(i, parent.inventory.getStackInSlot(7));
-						if(i == 6)
-							crafting.setInventorySlotContents(i, parent.inventory.getStackInSlot(2));
-						if(i == 7)
-							crafting.setInventorySlotContents(i, parent.inventory.getStackInSlot(5));
-						if(i == 8)
-							crafting.setInventorySlotContents(i, parent.inventory.getStackInSlot(8));
+						crafting.setInventorySlotContents(i, parent.inventory.getStackInSlot(i%3*3+i/3));
 					}
 
 					ItemStack result = CraftingManager.findMatchingResult(crafting, player.getEntityWorld());

@@ -16,7 +16,10 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
 /**
@@ -29,12 +32,12 @@ public class ApiCore {
 	/**
 	 * A usual amount of MRU all generators would have
 	 */
-	public static final float GENERATOR_MAX_MRU_GENERIC = 10000F;
+	public static final int GENERATOR_MAX_MRU_GENERIC = 10000;
 
 	/**
 	 * A usual amount of MRU all devices would have
 	 */
-	public static final float DEVICE_MAX_MRU_GENERIC = 5000F;
+	public static final int DEVICE_MAX_MRU_GENERIC = 5000;
 
 	/**
 	 * A list of all items, which allow the player to see MRUCUs and MRU particles
@@ -55,6 +58,15 @@ public class ApiCore {
 	 * A list of all discoveries bound to generic ItemStack
 	 */
 	public static final Hashtable<String, DiscoveryEntry> IS_TO_DISCOVERY_MAP = new Hashtable<String, DiscoveryEntry>();
+
+	@CapabilityInject(IMRUHandler.class)
+	public static Capability<IMRUHandler> MRU_HANDLER_CAPABILITY = null;
+
+	@CapabilityInject(IMRUHandlerItem.class)
+	public static Capability<IMRUHandlerItem> MRU_HANDLER_ITEM_CAPABILITY = null;
+
+	@CapabilityInject(IMRUHandlerEntity.class)
+	public static Capability<IMRUHandlerEntity> MRU_HANDLER_ENTITY_CAPABILITY = null;
 
 	/**
 	 * Use this to get a full information on the player - it's UBMRU, Balance and Corruption status
@@ -177,45 +189,40 @@ public class ApiCore {
 		}
 	}
 
-	public static IMRUHandlerEntity getClosestMRUCU(World w, DummyCore.Utils.Coord3D c, int radius)
-	{
-		List<Entity> l = w.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(c.x-0.5, c.y-0.5, c.z-0.5, c.x+0.5, c.y+0.5, c.z+0.5).expand(radius, radius/2, radius), e->e instanceof IMRUHandlerEntity);
-		IMRUHandlerEntity ret = null;
-		if(!l.isEmpty())
-		{
-			List<IMRUHandlerEntity> actualList = new ArrayList<IMRUHandlerEntity>();
-			for(Entity e : l) {
-				actualList.add((IMRUHandlerEntity)e);
-			}
+	public static Entity getClosestMRUCUEntity(World w, BlockPos c, int radius) {
+		List<Entity> l = w.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(c).expand(radius, radius/2, radius), e->e.hasCapability(MRU_HANDLER_ENTITY_CAPABILITY, null));
+		Entity ret = null;
+		if(!l.isEmpty()) {
 			double currentDistance = 0;
 			double dominatingDistance = 0;
 			int dominatingIndex = 0;
-			DummyCore.Utils.Coord3D main = new DummyCore.Utils.Coord3D(c.x,c.y,c.z);
-			for(int i = 0; i < actualList.size(); ++i)
-			{
-				Entity pressence = (Entity)actualList.get(i);
+			DummyCore.Utils.Coord3D main = new DummyCore.Utils.Coord3D(c.getX()+0.5D,c.getY()+0.5D,c.getZ()+0.5D);
+			for(int i = 0; i < l.size(); ++i) 	{
+				Entity pressence = l.get(i);
 				DummyCore.Utils.Coord3D current = new DummyCore.Utils.Coord3D(pressence.posX,pressence.posY,pressence.posZ);
 				DummyDistance dist = new DummyDistance(main,current);
-				if(i == 0)
-				{
+				if(i == 0) {
 					dominatingIndex = i;
 					dominatingDistance = dist.getDistance();
-				}else
-				{
+				}
+				else {
 					currentDistance = dist.getDistance();
-					if(currentDistance < dominatingDistance)
-					{
+					if(currentDistance < dominatingDistance) {
 						dominatingIndex = i;
 						dominatingDistance = dist.getDistance();
 					}
 				}
 			}
 			try {
-				ret = actualList.get(dominatingIndex);
+				ret = l.get(dominatingIndex);
 			}
 			catch(IndexOutOfBoundsException e) {}
 		}
 		return ret;
+	}
+
+	public static IMRUHandlerEntity getClosestMRUCU(World w, BlockPos c, int radius) {
+		return getClosestMRUCUEntity(w, c, radius).getCapability(MRU_HANDLER_ENTITY_CAPABILITY, null);
 	}
 
 	public static void registerTexture(ResourceLocation rl) {

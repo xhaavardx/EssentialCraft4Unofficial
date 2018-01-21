@@ -1,5 +1,8 @@
 package essentialcraft.integration.bloodmagic;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
+
 import org.apache.logging.log4j.LogManager;
 
 import essentialcraft.common.item.ItemsCore;
@@ -9,17 +12,24 @@ import net.minecraftforge.fml.common.Loader;
 public class BloodMagicRegistry {
 
 	public static void register() {
-		try {
-			if(Loader.isModLoaded("BloodMagic")) {
+		if(Loader.isModLoaded("BloodMagic")) {
+			try {
+				Class<?> classAltarRecipe = Class.forName("WayofTime.bloodmagic.api.registry.AltarRecipeRegistry$AltarRecipe");
+				Class<? extends Enum> classEnumAltarTier = (Class<? extends Enum>)Class.forName("WayofTime.bloodmagic.api.altar.EnumAltarTier");
+				Enum<? extends Enum> ONE = Enum.valueOf(classEnumAltarTier, "ONE");
+				Constructor<?> constructorAltarRecipe = classAltarRecipe.getConstructor(ItemStack.class, ItemStack.class, classEnumAltarTier, Integer.TYPE, Integer.TYPE, Integer.TYPE);
+				Class<?> classAltarRecipeRegistry = Class.forName("WayofTime.bloodmagic.api.registry.AltarRecipeRegistry");
+				Method registerRecipe = classAltarRecipeRegistry.getMethod("registerRecipe", classAltarRecipe);
+
 				ItemStack emptySoulStone = new ItemStack(ItemsCore.soulStone,1,0);
 				ItemStack filledSoulStone = new ItemStack(ItemsCore.soulStone,1,1);
-				//WayofTime.bloodmagic.api.registry.AltarRecipeRegistry.AltarRecipe recipe = new WayofTime.bloodmagic.api.registry.AltarRecipeRegistry.AltarRecipe(emptySoulStone,filledSoulStone,WayofTime.bloodmagic.api.altar.EnumAltarTier.ONE,250,2,1,false);
-				//WayofTime.bloodmagic.api.registry.AltarRecipeRegistry.registerRecipe(recipe);
-				LogManager.getLogger().trace("Successfully registered BloodMagic integration!");
+
+				registerRecipe.invoke(null, constructorAltarRecipe.newInstance(emptySoulStone, filledSoulStone, ONE, 250, 2 ,1));
+				LogManager.getLogger().trace("Successfully registered Blood Magic integration!");
 			}
-		}
-		catch(Exception e) {
-			LogManager.getLogger().error("Unable to add BloodMagic Integration.");
+			catch(Exception e) {
+				LogManager.getLogger().error("Unable to add Blood Magic Integration.", e);
+			}
 		}
 	}
 }

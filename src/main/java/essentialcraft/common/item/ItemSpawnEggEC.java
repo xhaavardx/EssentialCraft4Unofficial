@@ -3,6 +3,7 @@ package essentialcraft.common.item;
 import DummyCore.Client.IItemColor;
 import DummyCore.Client.IModelRegisterer;
 import DummyCore.Client.ModelUtils;
+import essentialcraft.common.capabilities.mru.CapabilityMRUHandler;
 import essentialcraft.common.entity.EntitiesCore;
 import essentialcraft.common.entity.EntityMRUPresence;
 import net.minecraft.block.Block;
@@ -30,15 +31,18 @@ public class ItemSpawnEggEC extends ItemMonsterPlacer implements IItemColor, IMo
 	}
 
 	@Override
-	public int getColorFromItemstack(ItemStack p_82790_1_, int p_82790_2_)
-	{
+	public int getColorFromItemstack(ItemStack p_82790_1_, int p_82790_2_) {
 		return 0xffffff;
 	}
 
 	@Override
-	public EnumActionResult onItemUseFirst(EntityPlayer p_77648_2_, World p_77648_3_, BlockPos p_77648_4_, EnumFacing p_77648_7_, float p_77648_8_, float p_77648_9_, float p_77648_10_, EnumHand hand)
-	{
+	public EnumActionResult onItemUseFirst(EntityPlayer p_77648_2_, World p_77648_3_, BlockPos p_77648_4_, EnumFacing p_77648_7_, float p_77648_8_, float p_77648_9_, float p_77648_10_, EnumHand hand) {
 		ItemStack p_77648_1_ = p_77648_2_.getHeldItem(hand);
+
+		if(!p_77648_2_.capabilities.isCreativeMode) {
+			p_77648_1_.shrink(1);
+		}
+
 		if(p_77648_3_.isRemote) {
 			return EnumActionResult.SUCCESS;
 		}
@@ -56,10 +60,6 @@ public class ItemSpawnEggEC extends ItemMonsterPlacer implements IItemColor, IMo
 			if(entity != null) {
 				if(entity instanceof EntityLivingBase && p_77648_1_.hasDisplayName()) {
 					((EntityLiving)entity).setCustomNameTag(p_77648_1_.getDisplayName());
-				}
-
-				if(!p_77648_2_.capabilities.isCreativeMode) {
-					p_77648_1_.shrink(1);
 				}
 			}
 
@@ -109,7 +109,7 @@ public class ItemSpawnEggEC extends ItemMonsterPlacer implements IItemColor, IMo
 					if(entity instanceof EntityLiving)
 						((EntityLiving)entityliving).playLivingSound();
 					if(entity instanceof EntityMRUPresence)
-						((EntityMRUPresence)entity).setMRU(500);
+						entity.getCapability(CapabilityMRUHandler.MRU_HANDLER_CAPABILITY, null).setMRU(500);
 				}
 			}
 

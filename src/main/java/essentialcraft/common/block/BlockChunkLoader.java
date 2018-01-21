@@ -27,15 +27,6 @@ public class BlockChunkLoader extends BlockContainer implements IModelRegisterer
 		super(Material.ROCK);
 	}
 
-	protected BlockChunkLoader(Material p_i45386_1_) {
-		super(p_i45386_1_);
-	}
-
-	@Override
-	public EnumBlockRenderType getRenderType(IBlockState state) {
-		return EnumBlockRenderType.MODEL;
-	}
-
 	@Override
 	public TileEntity createNewTileEntity(World p_149915_1_, int p_149915_2_) {
 		return new TileMRUChunkLoader();
@@ -49,19 +40,21 @@ public class BlockChunkLoader extends BlockContainer implements IModelRegisterer
 	}
 
 	@Override
+	public EnumBlockRenderType getRenderType(IBlockState s)
+	{
+		return EnumBlockRenderType.MODEL;
+	}
+
+	@Override
 	public boolean onBlockActivated(World par1World, BlockPos par2, IBlockState par3, EntityPlayer par4EntityPlayer, EnumHand par5, EnumFacing par7, float par8, float par9, float par10) {
-		if(par1World.isRemote) {
+		if(par4EntityPlayer.isSneaking()) {
+			return false;
+		}
+		if(!par1World.isRemote) {
+			par4EntityPlayer.openGui(EssentialCraftCore.core, Config.guiID[0], par1World, par2.getX(), par2.getY(), par2.getZ());
 			return true;
 		}
-		else {
-			if(!par4EntityPlayer.isSneaking()) {
-				par4EntityPlayer.openGui(EssentialCraftCore.core, Config.guiID[0], par1World, par2.getX(), par2.getY(), par2.getZ());
-				return true;
-			}
-			else {
-				return false;
-			}
-		}
+		return true;
 	}
 
 	@Override

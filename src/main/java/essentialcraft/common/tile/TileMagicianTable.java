@@ -17,19 +17,15 @@ public class TileMagicianTable extends TileMRUGeneric {
 	public int upgrade = -1;
 	public MagicianTableRecipe currentRecipe;
 
-	public static float cfgMaxMRU = ApiCore.DEVICE_MAX_MRU_GENERIC;
+	public static int cfgMaxMRU = ApiCore.DEVICE_MAX_MRU_GENERIC;
 	public static boolean generatesCorruption = true;
 	public static int genCorruption = 1;
 	public static float mruUsage = 1;
 
 	public TileMagicianTable() {
 		super();
-		maxMRU = (int)cfgMaxMRU;
+		mruStorage.setMaxMRU(cfgMaxMRU);
 		setSlotsNum(7);
-	}
-
-	public boolean canGenerateMRU() {
-		return false;
 	}
 
 	@Override
@@ -41,9 +37,9 @@ public class TileMagicianTable extends TileMRUGeneric {
 		if(speedFactor != 1)
 			mruConsume = speedFactor * 2 * mruUsage;
 		else
-			mruConsume = 1 * mruUsage;
+			mruConsume = mruUsage;
 		super.update();
-		ECUtils.manage(this, 0);
+		mruStorage.update(getPos(), getWorld(), getStackInSlot(0));
 		if(getWorld().isBlockIndirectlyGettingPowered(pos) == 0) {
 			ItemStack[] craftMatrix = new ItemStack[5];
 			craftMatrix[0] = getStackInSlot(1);
@@ -79,11 +75,11 @@ public class TileMagicianTable extends TileMRUGeneric {
 					return;
 				}
 				float mruReq = mruConsume;
-				if(getMRU() >= mruReq && progressLevel < progressRequired) {
+				if(mruStorage.getMRU() >= (int)mruReq && progressLevel < progressRequired) {
 					progressLevel += speedFactor;
 					if(generatesCorruption)
-						ECUtils.increaseCorruptionAt(getWorld(), pos.getX(), pos.getY(), pos.getZ(), getWorld().rand.nextInt(genCorruption));
-					setMRU((int)(getMRU() - mruReq));
+						ECUtils.increaseCorruptionAt(getWorld(), pos, getWorld().rand.nextInt(genCorruption));
+					mruStorage.extractMRU((int)mruReq, true);
 					if(progressLevel >= progressRequired) {
 						progressRequired = 0;
 						progressLevel = 0;
@@ -166,7 +162,7 @@ public class TileMagicianTable extends TileMRUGeneric {
 			DummyData[] data = DataStorage.parseData(dataString);
 
 			mruUsage = Float.parseFloat(data[1].fieldValue);
-			cfgMaxMRU = Float.parseFloat(data[0].fieldValue);
+			cfgMaxMRU = Integer.parseInt(data[0].fieldValue);
 			generatesCorruption = Boolean.parseBoolean(data[2].fieldValue);
 			genCorruption = Integer.parseInt(data[3].fieldValue);
 

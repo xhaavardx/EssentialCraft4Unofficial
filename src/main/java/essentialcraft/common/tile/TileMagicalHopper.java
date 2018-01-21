@@ -30,7 +30,7 @@ public class TileMagicalHopper extends TileMRUGeneric {
 	public TileMagicalHopper() {
 		super();
 		setSlotsNum(1);
-		setMaxMRU(0);
+		mruStorage.setMaxMRU(0);
 		slot0IsBoundGem = false;
 	}
 

@@ -10,32 +10,24 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.common.config.Configuration;
 
 public class TileSunRayAbsorber extends TileMRUGeneric {
-	public static float cfgMaxMRU = ApiCore.GENERATOR_MAX_MRU_GENERIC*10;
+	public static int cfgMaxMRU = ApiCore.GENERATOR_MAX_MRU_GENERIC*10;
 	public static float cfgBalance = 2F;
-	public static float mruGenerated = 500;
+	public static int mruGenerated = 500;
 
 	public TileSunRayAbsorber() {
 		super();
-		maxMRU = (int)cfgMaxMRU;
+		mruStorage.setBalance(cfgBalance);
+		mruStorage.setMaxMRU(cfgMaxMRU);
 		slot0IsBoundGem = false;
-	}
-
-	public boolean canGenerateMRU() {
-		return false;
 	}
 
 	@Override
 	public void update() {
 		super.update();
 		if(getWorld().isBlockIndirectlyGettingPowered(pos) == 0) {
-			balance = cfgBalance;
 			List<EntitySolarBeam> l = getWorld().getEntitiesWithinAABB(EntitySolarBeam.class, new AxisAlignedBB(pos.getX()-1, pos.getY()-1, pos.getZ()-1, pos.getX()+2, pos.getY()+2, pos.getZ()+2));
 			if(!l.isEmpty()) {
-				if(!getWorld().isRemote) {
-					setMRU((int)(getMRU() + mruGenerated));
-					if(getMRU() > getMaxMRU())
-						setMRU(getMaxMRU());
-				}
+				mruStorage.addMRU(mruGenerated, true);
 			}
 		}
 	}
@@ -55,9 +47,9 @@ public class TileSunRayAbsorber extends TileMRUGeneric {
 
 			DummyData[] data = DataStorage.parseData(dataString);
 
-			cfgMaxMRU = Float.parseFloat(data[0].fieldValue);
+			cfgMaxMRU = Integer.parseInt(data[0].fieldValue);
 			cfgBalance = Float.parseFloat(data[1].fieldValue);
-			mruGenerated = Float.parseFloat(data[2].fieldValue);
+			mruGenerated = Integer.parseInt(data[2].fieldValue);
 
 			cfg.save();
 		}

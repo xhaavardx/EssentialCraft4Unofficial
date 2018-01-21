@@ -6,7 +6,7 @@ import com.google.common.collect.Sets;
 
 import DummyCore.Utils.DummyChunkLoader;
 import DummyCore.Utils.DummyChunkLoader.IChunkLoader;
-import essentialcraft.utils.common.ECUtils;
+import essentialcraft.api.ApiCore;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.ChunkPos;
@@ -18,19 +18,19 @@ public class TileMRUChunkLoader extends TileMRUGeneric implements IChunkLoader {
 
 	public TileMRUChunkLoader() {
 		super();
-		setMaxMRU(5000F);
+		mruStorage.setMaxMRU(ApiCore.DEVICE_MAX_MRU_GENERIC);
 		setSlotsNum(1);
 	}
 
 	@Override
 	public void update() {
 		super.update();
-		ECUtils.manage(this, 0);
+		mruStorage.update(getPos(), getWorld(), getStackInSlot(0));
 
 		if(!getWorld().isRemote) {
 			loader.tick();
 			if(canOperate()) {
-				setMRU(getMRU()-5);
+				mruStorage.extractMRU(5, true);
 			}
 		}
 	}
@@ -47,7 +47,7 @@ public class TileMRUChunkLoader extends TileMRUGeneric implements IChunkLoader {
 
 	@Override
 	public boolean canOperate() {
-		return getMRU() >= 5;
+		return mruStorage.getMRU() >= 5;
 	}
 
 	@Override

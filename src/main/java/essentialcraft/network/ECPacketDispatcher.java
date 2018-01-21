@@ -1,7 +1,10 @@
 package essentialcraft.network;
 
+import java.util.UUID;
+
 import DummyCore.Utils.MiscUtils;
 import essentialcraft.client.gui.GuiMIMScreen;
+import essentialcraft.common.capabilities.mru.CapabilityMRUHandler;
 import essentialcraft.common.mod.EssentialCraftCore;
 import essentialcraft.common.tile.TileMIM;
 import essentialcraft.common.tile.TileMIMInventoryStorage;
@@ -35,20 +38,20 @@ public class ECPacketDispatcher implements IMessageHandler<PacketNBT,IMessage>{
 		switch(message.packetID) {
 		case 0: {
 			//Generic data SYNC.
-			EntityPlayer p = MiscUtils.getPlayerFromUUID(message.theTag.getString("syncplayer"));
-			ECUtils.readOrCreatePlayerData(message.theTag.hasKey("syncplayer") ? p : EssentialCraftCore.proxy.getClientPlayer(), message.theTag);
+			UUID p = message.theTag.hasKey("syncplayer") ? UUID.fromString(message.theTag.getString("syncplayer")) : null;
+			ECUtils.readOrCreatePlayerData(p != null ? p : MiscUtils.getUUIDFromPlayer(EssentialCraftCore.proxy.getClientPlayer()), message.theTag);
 			break;
 		}
 		case 1: {
 			//Server-side to client Sync request
 			EntityPlayer target = MiscUtils.getPlayerFromUUID(message.theTag.getString("syncplayer"));
-			EntityPlayer clientPlayer = MiscUtils.getPlayerFromUUID(message.theTag.getString("sender"));
+			EntityPlayer sender = MiscUtils.getPlayerFromUUID(message.theTag.getString("sender"));
 			if(target != null) {
 				NBTTagCompound theTag = new NBTTagCompound();
-				theTag.setString("syncplayer", MiscUtils.getUUIDFromPlayer(target).toString());
+				theTag.setString("syncplayer", message.theTag.getString("syncplayer"));
 				ECUtils.getData(target).writeToNBTTagCompound(theTag);
 				PacketNBT pkt = new PacketNBT(theTag).setID(0);
-				EssentialCraftCore.network.sendTo(pkt, (EntityPlayerMP)clientPlayer);
+				EssentialCraftCore.network.sendTo(pkt, (EntityPlayerMP)sender);
 			}
 			break;
 		}
@@ -105,7 +108,7 @@ public class ECPacketDispatcher implements IMessageHandler<PacketNBT,IMessage>{
 						int left64 = size % 64;
 						int times64 = size/64;
 						for(int i = 0; i < size; ++i) {
-							sc.setMRU(sc.getMRU()-TileMIMScreen.mruForOut);
+							sc.getCapability(CapabilityMRUHandler.MRU_HANDLER_CAPABILITY, null).extractMRU(TileMIMScreen.mruForOut, true);
 						}
 						for(int i = 0; i < times64; ++i) {
 							ItemStack added = retrieved.copy();

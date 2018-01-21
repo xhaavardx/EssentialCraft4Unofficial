@@ -18,108 +18,100 @@ public class TileUltraHeatGenerator extends TileMRUGeneric {
 	public int currentBurnTime, currentMaxBurnTime;
 	public float heat;
 
+	private boolean firstTick = true;
+
 	public TileUltraHeatGenerator() {
 		super();
-		balance = -1;
-		maxMRU = (int) ApiCore.GENERATOR_MAX_MRU_GENERIC*10;
+		mruStorage.setMaxMRU(ApiCore.GENERATOR_MAX_MRU_GENERIC*10);
 		slot0IsBoundGem = false;
 		setSlotsNum(2);
 	}
 
-	public boolean canGenerateMRU() {
-		return false;
-	}
-
 	@Override
 	public void update() {
-		super.update();
-		if(balance == -1) {
-			balance = getWorld().rand.nextFloat()*2;
+		if(!getWorld().isRemote && firstTick) {
+			mruStorage.setBalance(getWorld().rand.nextFloat()*2);
 		}
+		super.update();
+		firstTick = false;
 		if(getWorld().isBlockIndirectlyGettingPowered(pos) == 0) {
 			if(currentBurnTime > 0) {
-				if(!getWorld().isRemote) {
-					float mruGenerated = 20;
-					float mruFactor = 1.0F;
-					Block[] b = new Block[4];
-					b[0] = getWorld().getBlockState(pos.east(2)).getBlock();
-					b[1] = getWorld().getBlockState(pos.west(2)).getBlock();
-					b[2] = getWorld().getBlockState(pos.south(2)).getBlock();
-					b[3] = getWorld().getBlockState(pos.north(2)).getBlock();
-					int[] ox = {2, -2, 0, 0};
-					int[] oz = {0, 0, 2, -2};
-					for(int i = 0; i < 4; ++i) {
-						if(b[i] == Blocks.AIR)
-							mruFactor*=0;
-						else if(b[i] == Blocks.NETHERRACK)
-							mruFactor*=0.75F;
-						else if(b[i] == Blocks.LAVA)
-							mruFactor*=0.95F;
-						else if(b[i] == Blocks.FIRE)
-							mruFactor*=0.7F;
-						else if(b[i] instanceof IHotBlock)
-							mruFactor*=((IHotBlock)b[i]).getHeatModifier(getWorld(), pos.add(ox[i], 0, oz[i]));
-						else
-							mruFactor*=0.5F;
-
-					}
-
-					float scaledHeatFactor = 0F;
-					if(heat < 1000) {
-						scaledHeatFactor = 0.1F + heat/1000F;
-						currentBurnTime -= 2.5F/scaledHeatFactor;
-					}
-					else if(heat > 10000) {
-						scaledHeatFactor = 0.001F + 10000/heat;
-						currentBurnTime -= 1F*scaledHeatFactor;
-					}
-					else {
-						scaledHeatFactor = 1F;
-						--currentBurnTime;
-					}
-					heat += mruFactor*scaledHeatFactor;
-					if(heat < 1000)
-						mruGenerated = heat/100;
-					else if(heat > 10000)
-						mruGenerated = 80 + heat/1000;
+				float mruGenerated = 20;
+				float mruFactor = 1.0F;
+				Block[] b = new Block[4];
+				b[0] = getWorld().getBlockState(pos.east(2)).getBlock();
+				b[1] = getWorld().getBlockState(pos.west(2)).getBlock();
+				b[2] = getWorld().getBlockState(pos.south(2)).getBlock();
+				b[3] = getWorld().getBlockState(pos.north(2)).getBlock();
+				int[] ox = {2, -2, 0, 0};
+				int[] oz = {0, 0, 2, -2};
+				for(int i = 0; i < 4; ++i) {
+					if(b[i] == Blocks.AIR)
+						mruFactor*=0;
+					else if(b[i] == Blocks.NETHERRACK)
+						mruFactor*=0.75F;
+					else if(b[i] == Blocks.LAVA)
+						mruFactor*=0.95F;
+					else if(b[i] == Blocks.FIRE)
+						mruFactor*=0.7F;
+					else if(b[i] instanceof IHotBlock)
+						mruFactor*=((IHotBlock)b[i]).getHeatModifier(getWorld(), pos.add(ox[i], 0, oz[i]));
 					else
-						mruGenerated = heat/124;
-					if(mruGenerated >= 1) {
-						setMRU((int) (getMRU()+mruGenerated));
-						if(getMRU() > getMaxMRU())
-							setMRU(getMaxMRU());
-					}
+						mruFactor*=0.5F;
+
+				}
+
+				float scaledHeatFactor = 0F;
+				if(heat < 1000) {
+					scaledHeatFactor = 0.1F + heat/1000F;
+					currentBurnTime -= 2.5F/scaledHeatFactor;
+				}
+				else if(heat > 10000) {
+					scaledHeatFactor = 0.001F + 10000/heat;
+					currentBurnTime -= 1F*scaledHeatFactor;
+				}
+				else {
+					scaledHeatFactor = 1F;
+					--currentBurnTime;
+				}
+				heat += mruFactor*scaledHeatFactor;
+				if(heat < 1000)
+					mruGenerated = heat/100;
+				else if(heat > 10000)
+					mruGenerated = 80 + heat/1000;
+				else
+					mruGenerated = heat/124;
+				if(mruGenerated >= 1) {
+					mruStorage.addMRU((int)mruGenerated, true);
 				}
 			}
 
 
-			if(!getWorld().isRemote) {
-				if(!getStackInSlot(0).isEmpty()) {
-					if(currentBurnTime <= 0 && getMRU() < getMaxMRU()) {
-						currentMaxBurnTime = currentBurnTime = TileEntityFurnace.getItemBurnTime(getStackInSlot(0));
+			if(!getStackInSlot(0).isEmpty()) {
+				if(currentBurnTime <= 0 && mruStorage.getMRU() < mruStorage.getMaxMRU()) {
+					currentMaxBurnTime = currentBurnTime = TileEntityFurnace.getItemBurnTime(getStackInSlot(0));
 
-						if(currentBurnTime > 0) {
-							if(!getStackInSlot(0).isEmpty()) {
-								if(getStackInSlot(1).isEmpty() || getStackInSlot(1).getCount() < getInventoryStackLimit()) {
-									if(!getStackInSlot(1).isEmpty() && getStackInSlot(1).getItem() == ItemsCore.magicalSlag) {
-										ItemStack stk = getStackInSlot(1);
-										stk.grow(1);
-										setInventorySlotContents(1, stk);
-									}
-									if(getStackInSlot(1).isEmpty()) {
-										ItemStack stk = new ItemStack(ItemsCore.magicalSlag,1,0);
-										setInventorySlotContents(1, stk);
-									}
+					if(currentBurnTime > 0) {
+						if(!getStackInSlot(0).isEmpty()) {
+							if(getStackInSlot(1).isEmpty() || getStackInSlot(1).getCount() < getInventoryStackLimit()) {
+								if(!getStackInSlot(1).isEmpty() && getStackInSlot(1).getItem() == ItemsCore.magicalSlag) {
+									ItemStack stk = getStackInSlot(1);
+									stk.grow(1);
+									setInventorySlotContents(1, stk);
 								}
-								if(getStackInSlot(0).getCount() == 0)
-									setInventorySlotContents(0, getStackInSlot(0).getItem().getContainerItem(getStackInSlot(0)));
-								decrStackSize(0, 1);
+								if(getStackInSlot(1).isEmpty()) {
+									ItemStack stk = new ItemStack(ItemsCore.magicalSlag,1,0);
+									setInventorySlotContents(1, stk);
+								}
 							}
+							if(getStackInSlot(0).getCount() == 0)
+								setInventorySlotContents(0, getStackInSlot(0).getItem().getContainerItem(getStackInSlot(0)));
+							decrStackSize(0, 1);
 						}
 					}
 				}
 			}
-			else if(heat > 0) {
+			if(getWorld().isRemote && heat > 0) {
 				getWorld().spawnParticle(EnumParticleTypes.FLAME, pos.getX()+0.5F, pos.getY()+0.5F, pos.getZ()+0.5F, 0, 0.1f, 0);
 				for(int i = 0; i < 4; ++i) {
 					if(i == 0)

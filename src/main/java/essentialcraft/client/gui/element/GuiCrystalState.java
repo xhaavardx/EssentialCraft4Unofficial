@@ -1,5 +1,6 @@
 package essentialcraft.client.gui.element;
 
+import essentialcraft.common.capabilities.mru.CapabilityMRUHandler;
 import essentialcraft.common.tile.TileCrystalController;
 import essentialcraft.common.tile.TileElementalCrystal;
 import net.minecraft.client.Minecraft;
@@ -19,7 +20,7 @@ public class GuiCrystalState extends GuiTextElement{
 
 	@Override
 	public void draw(int posX, int posY, int mouseX, int mouseY) {
-		if(tile.getMRU() > 0)
+		if(tile.getCapability(CapabilityMRUHandler.MRU_HANDLER_CAPABILITY, null).getMRU() > 0)
 		{
 			this.drawTexturedModalRect(posX, posY, 0, 0, 17, 17);
 			//this.drawTexturedModalRect(posX+19, posY, 1, 0, 17, 17);

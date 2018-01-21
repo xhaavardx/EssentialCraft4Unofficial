@@ -6,8 +6,9 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 
 import DummyCore.Client.IModelRegisterer;
-import DummyCore.Utils.MiscUtils;
 import essentialcraft.api.IMRUHandlerItem;
+import essentialcraft.common.capabilities.mru.CapabilityMRUHandler;
+import essentialcraft.common.capabilities.mru.MRUItemStorage;
 import essentialcraft.utils.common.ECUtils;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.util.ITooltipFlag;
@@ -19,9 +20,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.EnumAction;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumHand;
@@ -29,74 +30,45 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemChaosFork extends ItemSword implements IMRUHandlerItem, IModelRegisterer {
+public class ItemChaosFork extends ItemSword implements IModelRegisterer {
 
 	public ItemChaosFork() {
 		super(ItemsCore.elemental);
-		this.setMaxMRU(5000);
 		this.maxStackSize = 1;
 		this.bFull3D = true;
 		this.setMaxDamage(0);
 	}
 
-	int maxMRU = 5000;
-
-	public Item setMaxMRU(int max)
-	{
-		maxMRU = max;
-		return this;
-	}
-
-	@Override
-	public boolean increaseMRU(ItemStack stack, int amount) {
-		if(MiscUtils.getStackTag(stack).getInteger("mru")+amount >= 0 && MiscUtils.getStackTag(stack).getInteger("mru")+amount<=MiscUtils.getStackTag(stack).getInteger("maxMRU"))
-		{
-			MiscUtils.getStackTag(stack).setInteger("mru", MiscUtils.getStackTag(stack).getInteger("mru")+amount);
-			return true;
-		}
-		return false;
-	}
-
-	@Override
-	public int getMRU(ItemStack stack) {
-		return MiscUtils.getStackTag(stack).getInteger("mru");
-	}
-
-	public boolean isItemTool(ItemStack p_77616_1_)
-	{
-		return true;
-	}
+	public static Capability<IMRUHandlerItem> MRU_HANDLER_ITEM_CAPABILITY = CapabilityMRUHandler.MRU_HANDLER_ITEM_CAPABILITY;
+	public int maxMRU = 5000;
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void addInformation(ItemStack par1ItemStack, World par2EntityPlayer, List<String> par3List, ITooltipFlag par4)
-	{
+	public void addInformation(ItemStack par1ItemStack, World par2EntityPlayer, List<String> par3List, ITooltipFlag par4) {
 		super.addInformation(par1ItemStack, par2EntityPlayer, par3List, par4);
-		par3List.add(ECUtils.getStackTag(par1ItemStack).getInteger("mru") + "/" + ECUtils.getStackTag(par1ItemStack).getInteger("maxMRU") + " MRU");
+		par3List.add(par1ItemStack.getCapability(MRU_HANDLER_ITEM_CAPABILITY, null).getMRU() + "/" + par1ItemStack.getCapability(MRU_HANDLER_ITEM_CAPABILITY, null).getMaxMRU() + " MRU");
 	}
 
 	@Override
-	public void getSubItems(CreativeTabs par2CreativeTabs, NonNullList<ItemStack> par3List)
-	{
-		if(this.isInCreativeTab(par2CreativeTabs))
-			for (int var4 = 0; var4 < 1; ++var4)
-			{
-				ItemStack min = new ItemStack(this, 1, 0);
-				ECUtils.initMRUTag(min, maxMRU);
-				ItemStack max = new ItemStack(this, 1, 0);
-				ECUtils.initMRUTag(max, maxMRU);
-				ECUtils.getStackTag(max).setInteger("mru", ECUtils.getStackTag(max).getInteger("maxMRU"));
-				par3List.add(min);
-				par3List.add(max);
-			}
+	public boolean isEnchantable(ItemStack stack) {
+		return true;
 	}
 
 	@Override
-	public int getMaxMRU(ItemStack stack) {
-		return this.maxMRU;
+	public void getSubItems(CreativeTabs par2CreativeTabs, NonNullList<ItemStack> par3List) {
+		if(this.isInCreativeTab(par2CreativeTabs)) {
+			ItemStack min = new ItemStack(this, 1, 0);
+			ItemStack max = new ItemStack(this, 1, 0);
+			min.getCapability(MRU_HANDLER_ITEM_CAPABILITY, null).setMRU(0);
+			max.getCapability(MRU_HANDLER_ITEM_CAPABILITY, null).setMRU(maxMRU);
+			par3List.add(min);
+			par3List.add(max);
+		}
 	}
 
 	@Override
@@ -125,7 +97,7 @@ public class ItemChaosFork extends ItemSword implements IMRUHandlerItem, IModelR
 			if(p_77644_3_ instanceof EntityPlayer)
 			{
 				EntityPlayer player = (EntityPlayer) p_77644_3_;
-				if(ECUtils.tryToDecreaseMRUInStorage((EntityPlayer)p_77644_3_, -250) || this.increaseMRU(p_77644_1_, -250))
+				if(ECUtils.playerUseMRU(player, p_77644_1_, 250))
 				{
 					int att = ECUtils.getData(player).getMatrixTypeID();
 					if(att == 1)
@@ -138,17 +110,13 @@ public class ItemChaosFork extends ItemSword implements IMRUHandlerItem, IModelR
 							p_77644_3_.addPotionEffect(new PotionEffect(MobEffects.STRENGTH,100,buffLevel));
 							return true;
 						}
-						else
+						else if(p_77644_2_.hurtResistantTime == 0 || p_77644_2_.hurtResistantTime >= 15)
 						{
-							if(p_77644_2_.hurtResistantTime == 0 || p_77644_2_.hurtResistantTime >= 15)
-							{
-								int buffLevel = 0;
-								p_77644_2_.addPotionEffect(new PotionEffect(MobEffects.MINING_FATIGUE,100,0));
-								p_77644_3_.addPotionEffect(new PotionEffect(MobEffects.STRENGTH,100,buffLevel));
-								return true;
-							}
+							int buffLevel = 0;
+							p_77644_2_.addPotionEffect(new PotionEffect(MobEffects.MINING_FATIGUE,100,0));
+							p_77644_3_.addPotionEffect(new PotionEffect(MobEffects.STRENGTH,100,buffLevel));
+							return true;
 						}
-
 					}
 				}
 			}
@@ -187,12 +155,12 @@ public class ItemChaosFork extends ItemSword implements IMRUHandlerItem, IModelR
 	}
 
 	@Override
-	public void registerModels() {
-		ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation("essentialcraft:item/chaosfork", "inventory"));
+	public ICapabilityProvider initCapabilities(ItemStack stack, NBTTagCompound nbt) {
+		return new MRUItemStorage(stack, maxMRU);
 	}
 
 	@Override
-	public boolean isStorage(ItemStack stack) {
-		return false;
+	public void registerModels() {
+		ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation("essentialcraft:item/chaosfork", "inventory"));
 	}
 }

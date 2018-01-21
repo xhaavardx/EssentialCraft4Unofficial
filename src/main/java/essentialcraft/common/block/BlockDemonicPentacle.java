@@ -4,13 +4,13 @@ import DummyCore.Client.IModelRegisterer;
 import essentialcraft.common.entity.EntityDemon;
 import essentialcraft.common.tile.TileDemonicPentacle;
 import net.minecraft.block.BlockContainer;
+import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -29,7 +29,7 @@ public class BlockDemonicPentacle extends BlockContainer implements IModelRegist
 	public static final AxisAlignedBB BLOCK_AABB = new AxisAlignedBB(0,0,0,1,0.625F,1);
 
 	public BlockDemonicPentacle() {
-		super(Material.ROCK);
+		super(Material.ROCK, MapColor.AIR);
 	}
 
 	@Override
@@ -51,20 +51,13 @@ public class BlockDemonicPentacle extends BlockContainer implements IModelRegist
 	}
 
 	@Override
-	public BlockRenderLayer getBlockLayer()
-	{
-		return BlockRenderLayer.SOLID;
-	}
-
-	@Override
 	public boolean isFullCube(IBlockState s)
 	{
 		return false;
 	}
 
 	@Override
-	public EnumBlockRenderType getRenderType(IBlockState s)
-	{
+	public EnumBlockRenderType getRenderType(IBlockState s) {
 		return EnumBlockRenderType.MODEL;
 	}
 

@@ -1,5 +1,7 @@
 package essentialcraft.api;
 
+import net.minecraft.nbt.NBTTagCompound;
+
 /**
  * @author Modbder
  * @Description Usage of this interface to create tile entities is not recommended, in case the 3 interfaces based on this one needs to be distinguished.
@@ -8,43 +10,47 @@ package essentialcraft.api;
 public interface IMRUHandler {
 
 	/**
-	 * this is used to get current MRU of your tile entities
+	 * @return max amount of MRU the device can store
+	 */
+	public int getMaxMRU();
+
+	public void setMaxMRU(int amount);
+
+	/**
 	 * @return current amount of MRU
 	 */
 	public int getMRU();
 
 	/**
-	 * this is used to get max MRU of your tile entities
-	 * @return max amount of MRU the device can store
+	 * Use only for internal manipulation.
 	 */
-	public int getMaxMRU();
+	public void setMRU(int amount);
 
 	/**
-	 * this is used to set current MRU of your tile entities
-	 * @param i - the amount to set.
-	 * @return true if was successful, false if not
+	 * @return the amount that was left over
 	 */
-	public boolean setMRU(int i);
+	public int addMRU(int amount, boolean doAdd);
 
 	/**
-	 * this is used to get the balance in the device.
+	 * @return the amount that was extracted
+	 */
+	public int extractMRU(int amount, boolean doExtract);
+
+	/**
 	 * @return the amount of balance there is
 	 */
 	public float getBalance();
 
 	/**
-	 * this is used to set current balance of your tile entities
-	 * @param f - the amount to set.
-	 * @return true if was successful, false if not
+	 * @param balance - the amount to set.
 	 */
-	public boolean setBalance(float f);
+	public void setBalance(float balance);
 
-	/**
-	 * this is used to set maxMRU of your tile entities
-	 * please don't use
-	 * @param f - the amount to set.
-	 * @return true if was successful, false if not
-	 */
-	@Deprecated
-	public boolean setMaxMRU(float f);
+	public boolean getShade();
+
+	public void setShade(boolean shade);
+
+	public NBTTagCompound writeToNBT(NBTTagCompound nbt);
+
+	public void readFromNBT(NBTTagCompound nbt);
 }

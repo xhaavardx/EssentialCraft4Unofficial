@@ -363,147 +363,147 @@ public class ClientProxy extends CommonProxy {
 			}
 			if(tile instanceof TileMRUCUECAcceptor)
 			{
-				return new GuiMRUAcceptor(new ContainerMRUAcceptor(player.inventory,tile), tile);
+				return new GuiMRUAcceptor(new ContainerMRUAcceptor(player.inventory, tile), tile);
 			}
 			if(tile instanceof TileMRUCUECStateChecker)
 			{
-				return new GuiMRUInfo(new ContainerMRUInfo(player.inventory,tile), tile);
+				return new GuiMRUInfo(new ContainerMRUInfo(player.inventory), tile);
 			}
 			if(tile instanceof TileMoonWell)
 			{
-				return new GuiMoonWell(new ContainerMoonWell(player.inventory, tile),tile);
+				return new GuiMoonWell(new ContainerMoonWell(player.inventory, tile), tile);
 			}
 			if(tile instanceof TileSunRayAbsorber)
 			{
-				return new GuiSunRayAbsorber(new ContainerSunRayAbsorber(player.inventory, tile),tile);
+				return new GuiSunRayAbsorber(new ContainerSunRayAbsorber(player.inventory, tile), tile);
 			}
 			if(tile instanceof TileColdDistillator)
 			{
-				return new GuiColdDistillator(new ContainerColdDistillator(player.inventory, tile),tile);
+				return new GuiColdDistillator(new ContainerColdDistillator(player.inventory, tile), tile);
 			}
 			if(tile instanceof TileFlowerBurner)
 			{
-				return new GuiFlowerBurner(new ContainerFlowerBurner(player.inventory, tile),tile);
+				return new GuiFlowerBurner(new ContainerFlowerBurner(player.inventory, tile), tile);
 			}
 			if(tile instanceof TileHeatGenerator)
 			{
-				return new GuiHeatGenerator(new ContainerHeatGenerator(player.inventory, tile),tile);
+				return new GuiHeatGenerator(new ContainerHeatGenerator(player.inventory, tile), tile);
 			}
 			if(tile instanceof TileEnderGenerator)
 			{
-				return new GuiEnderGenerator(new ContainerEnderGenerator(player.inventory, tile),tile);
+				return new GuiEnderGenerator(new ContainerEnderGenerator(player.inventory, tile), tile);
 			}
 			if(tile instanceof TileMagicianTable)
 			{
-				return new GuiMagicianTable(new ContainerMagicianTable(player.inventory, tile),tile);
+				return new GuiMagicianTable(new ContainerMagicianTable(player.inventory, tile), (TileMagicianTable)tile);
 			}
 			if(tile instanceof TileMagicalQuarry)
 			{
-				return new GuiMagicalQuarry(new ContainerMagicalQuarry(player.inventory, tile),tile);
+				return new GuiMagicalQuarry(new ContainerMagicalQuarry(player.inventory, tile), tile);
 			}
 			if(tile instanceof TileMonsterHolder)
 			{
-				return new GuiMonsterHolder(new ContainerMonsterHolder(player.inventory, tile),tile);
+				return new GuiMonsterHolder(new ContainerMonsterHolder(player.inventory, tile), tile);
 			}
 			if(tile instanceof TilePotionSpreader)
 			{
-				return new GuiPotionSpreader(new ContainerPotionSpreader(player.inventory, tile),tile);
+				return new GuiPotionSpreader(new ContainerPotionSpreader(player.inventory, tile), tile);
 			}
 			if(tile instanceof TileMagicalEnchanter)
 			{
-				return new GuiMagicalEnchanter(new ContainerMagicalEnchanter(player.inventory, tile),tile);
+				return new GuiMagicalEnchanter(new ContainerMagicalEnchanter(player.inventory, tile), (TileMagicalEnchanter)tile);
 			}
 			if(tile instanceof TileMonsterHarvester)
 			{
-				return new GuiMonsterHarvester(new ContainerMonsterHarvester(player.inventory, tile),tile);
+				return new GuiMonsterHarvester(new ContainerMonsterHarvester(player.inventory, tile), tile);
 			}
 			if(tile instanceof TileMagicalRepairer)
 			{
-				return new GuiMagicalRepairer(new ContainerMagicalRepairer(player.inventory, tile),tile);
+				return new GuiMagicalRepairer(new ContainerMagicalRepairer(player.inventory, tile), tile);
 			}
 			if(tile instanceof TileMatrixAbsorber)
 			{
-				return new GuiMatrixAbsorber(new ContainerMatrixAbsorber(player.inventory, tile),tile);
+				return new GuiMatrixAbsorber(new ContainerMatrixAbsorber(player.inventory, tile), tile);
 			}
 			if(tile instanceof TileRadiatingChamber)
 			{
-				return new GuiRadiatingChamber(new ContainerRadiatingChamber(player.inventory, tile),tile);
+				return new GuiRadiatingChamber(new ContainerRadiatingChamber(player.inventory, tile), tile);
 			}
 			if(tile instanceof TileMagmaticSmelter)
 			{
-				return new GuiMagmaticSmeltery(new ContainerMagmaticSmeltery(player.inventory, tile),tile);
+				return new GuiMagmaticSmeltery(new ContainerMagmaticSmeltery(player.inventory, tile), tile);
 			}
 			if(tile instanceof TileMagicalJukebox)
 			{
-				return new GuiMagicalJukebox(new ContainerMagicalJukebox(player.inventory, tile),tile);
+				return new GuiMagicalJukebox(new ContainerMagicalJukebox(player.inventory, tile), tile);
 			}
 			if(tile instanceof TileCrystalFormer)
 			{
-				return new GuiCrystalFormer(new ContainerCrystalFormer(player.inventory, tile),tile);
+				return new GuiCrystalFormer(new ContainerCrystalFormer(player.inventory, tile), tile);
 			}
 			if(tile instanceof TileCrystalController)
 			{
-				return new GuiCrystalController(new ContainerCrystalController(player.inventory, tile),tile);
+				return new GuiCrystalController(new ContainerCrystalController(player.inventory, tile), tile);
 			}
 			if(tile instanceof TileCrystalExtractor)
 			{
-				return new GuiCrystalExtractor(new ContainerCrystalExtractor(player.inventory, tile),tile);
+				return new GuiCrystalExtractor(new ContainerCrystalExtractor(player.inventory, tile), tile);
 			}
 			if(tile instanceof TileChargingChamber)
 			{
-				return new GuiChargingChamber(new ContainerChargingChamber(player.inventory, tile),tile);
+				return new GuiChargingChamber(new ContainerChargingChamber(player.inventory, tile), tile);
 			}
 			if(tile instanceof TileMagicalTeleporter)
 			{
-				return new GuiMagicalTeleporter(new ContainerMagicalTeleporter(player.inventory, tile),tile);
+				return new GuiMagicalTeleporter(new ContainerMagicalTeleporter(player.inventory, tile), tile);
 			}
 			if(tile instanceof TileMagicalFurnace)
 			{
-				return new GuiMagicalFurnace(new ContainerMagicalFurnace(player.inventory, tile),tile);
+				return new GuiMagicalFurnace(new ContainerMagicalFurnace(player.inventory, tile), tile);
 			}
 			if(tile instanceof TileMRUCoil)
 			{
-				return new GuiMRUCoil(new ContainerMRUCoil(player.inventory, tile),tile);
+				return new GuiMRUCoil(new ContainerMRUCoil(player.inventory, tile), tile);
 			}
 			if(tile instanceof TileCorruptionCleaner)
 			{
-				return new GuiCorruptionCleaner(new ContainerCorruptionCleaner(player.inventory, tile),tile);
+				return new GuiCorruptionCleaner(new ContainerCorruptionCleaner(player.inventory, tile), tile);
 			}
 			if(tile instanceof TileDarknessObelisk)
 			{
-				return new GuiDarknessObelisk(new ContainerDarknessObelisk(player.inventory, tile),tile);
+				return new GuiDarknessObelisk(new ContainerDarknessObelisk(player.inventory, tile), tile);
 			}
 			if(tile instanceof TileUltraHeatGenerator)
 			{
-				return new GuiUltraHeatGenerator(new ContainerUltraHeatGenerator(player.inventory, tile),tile);
+				return new GuiUltraHeatGenerator(new ContainerUltraHeatGenerator(player.inventory, tile), tile);
 			}
 			if(tile instanceof TileUltraFlowerBurner)
 			{
-				return new GuiUltraFlowerBurner(new ContainerUltraFlowerBurner(player.inventory, tile),tile);
+				return new GuiUltraFlowerBurner(new ContainerUltraFlowerBurner(player.inventory, tile), tile);
 			}
 			if(tile instanceof TileMithrilineFurnace)
 			{
-				return new GuiMithrilineFurnace(new ContainerMithrilineFurnace(player.inventory, tile),tile);
+				return new GuiMithrilineFurnace(new ContainerMithrilineFurnace(player.inventory, tile), (TileMithrilineFurnace)tile);
 			}
 			if(tile instanceof TileRightClicker)
 			{
-				return new GuiRightClicker(new ContainerRightClicker(player.inventory, tile),tile);
+				return new GuiRightClicker(new ContainerRightClicker(player.inventory, tile), tile);
 			}
 			if(tile instanceof TileRedstoneTransmitter)
 			{
-				return new GuiCommon(new ContainerRedstoneTransmitter(player.inventory, tile),tile);
+				return new GuiCommon(new ContainerRedstoneTransmitter(player.inventory, tile), tile);
 			}
 			if(tile instanceof TileMagicalHopper)
 			{
-				return new GuiCommon(new ContainerMagicalHopper(player.inventory, tile),tile);
+				return new GuiCommon(new ContainerMagicalHopper(player.inventory, tile), tile);
 			}
 			if(tile instanceof TileWeaponMaker)
 			{
-				return new GuiWeaponBench(new ContainerWeaponBench(player.inventory, tile),tile);
+				return new GuiWeaponBench(new ContainerWeaponBench(player.inventory, tile), tile);
 			}
 			if(tile instanceof TileFurnaceMagic)
 			{
-				return new GuiFurnaceMagic(new ContainerFurnaceMagic(player.inventory, tile),tile);
+				return new GuiFurnaceMagic(new ContainerFurnaceMagic(player.inventory, tile), (TileFurnaceMagic)tile);
 			}
 			if(tile instanceof TilePlayerPentacle)
 			{
@@ -511,15 +511,15 @@ public class ClientProxy extends CommonProxy {
 			}
 			if(tile instanceof TileMagicalChest)
 			{
-				return new GuiMagicalChest(player.inventory, (TileMagicalChest) tile);
+				return new GuiMagicalChest(player.inventory, (TileMagicalChest)tile);
 			}
 			if(tile instanceof TileMIMInventoryStorage)
 			{
-				return new GuiMIMInventoryStorage(player.inventory, (TileMIMInventoryStorage) tile);
+				return new GuiMIMInventoryStorage(player.inventory, (TileMIMInventoryStorage)tile);
 			}
 			if(tile instanceof TileMIM)
 			{
-				return new GuiMIM(new ContainerMIM(player.inventory, tile),tile);
+				return new GuiMIM(new ContainerMIM(player.inventory, tile), tile);
 			}
 			if(tile instanceof TileMIMScreen)
 			{
@@ -531,7 +531,7 @@ public class ClientProxy extends CommonProxy {
 			}
 			if(tile instanceof TileMIMExportNode || tile instanceof TileMIMImportNode || tile instanceof TileAdvancedBlockBreaker)
 			{
-				return new GuiCommon(new ContainerMIMSimpleNode(player.inventory, tile),tile);
+				return new GuiCommon(new ContainerMIMSimpleNode(player.inventory, tile), tile);
 			}
 			if(tile instanceof TileCrafter)
 			{
@@ -539,7 +539,7 @@ public class ClientProxy extends CommonProxy {
 			}
 			if(tile instanceof TileAnimalSeparator)
 			{
-				return new GuiRayTower(new ContainerRayTower(player.inventory, tile),tile);
+				return new GuiRayTower(new ContainerRayTower(player.inventory, tile), tile);
 			}
 			if(tile instanceof TileMRUChunkLoader)
 			{

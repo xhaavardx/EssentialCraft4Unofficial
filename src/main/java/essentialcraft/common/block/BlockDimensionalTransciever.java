@@ -26,12 +26,9 @@ public class BlockDimensionalTransciever extends BlockContainer implements IMode
 		super(Material.ROCK);
 	}
 
-	protected BlockDimensionalTransciever(Material p_i45386_1_) {
-		super(p_i45386_1_);
-	}
-
 	@Override
-	public EnumBlockRenderType getRenderType(IBlockState state) {
+	public EnumBlockRenderType getRenderType(IBlockState s)
+	{
 		return EnumBlockRenderType.MODEL;
 	}
 
@@ -49,18 +46,14 @@ public class BlockDimensionalTransciever extends BlockContainer implements IMode
 
 	@Override
 	public boolean onBlockActivated(World par1World, BlockPos par2, IBlockState par3, EntityPlayer par4EntityPlayer, EnumHand par5, EnumFacing par7, float par8, float par9, float par10) {
-		if(par1World.isRemote) {
+		if(par4EntityPlayer.isSneaking()) {
+			return false;
+		}
+		if(!par1World.isRemote) {
+			par4EntityPlayer.openGui(EssentialCraftCore.core, Config.guiID[0], par1World, par2.getX(), par2.getY(), par2.getZ());
 			return true;
 		}
-		else {
-			if(!par4EntityPlayer.isSneaking()) {
-				par4EntityPlayer.openGui(EssentialCraftCore.core, Config.guiID[0], par1World, par2.getX(), par2.getY(), par2.getZ());
-				return true;
-			}
-			else {
-				return false;
-			}
-		}
+		return true;
 	}
 
 	@Override

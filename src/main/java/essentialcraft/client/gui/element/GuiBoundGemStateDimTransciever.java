@@ -1,7 +1,7 @@
 package essentialcraft.client.gui.element;
 
 import DummyCore.Utils.MiscUtils;
-import essentialcraft.api.IMRUHandler;
+import essentialcraft.common.capabilities.mru.CapabilityMRUHandler;
 import essentialcraft.common.item.ItemBoundGem;
 import net.minecraft.client.Minecraft;
 import net.minecraft.inventory.IInventory;
@@ -54,16 +54,20 @@ public class GuiBoundGemStateDimTransciever extends GuiTextElement {
 		}
 		else {
 			int o[] = ItemBoundGem.getCoords(inventory.getStackInSlot(slotNum));
+			BlockPos pos = new BlockPos(o[0], o[1], o[2]);
 			int d = MiscUtils.getStackTag(inventory.getStackInSlot(slotNum)).getInteger("dim");
 			World w = DimensionManager.getWorld(d);
-			if(w.getTileEntity(new BlockPos(o[0], o[1], o[2])) == null) {
+			if(w.getTileEntity(pos) == null) {
 				Minecraft.getMinecraft().fontRenderer.drawString("No Tile At Pos!", posX+5, posY+5, 0xff0000, true);
 			}
-			else if(!(w.getTileEntity(new BlockPos(o[0], o[1], o[2])) instanceof IMRUHandler)) {
+			else if(!w.getTileEntity(pos).hasCapability(CapabilityMRUHandler.MRU_HANDLER_CAPABILITY, null)) {
 				Minecraft.getMinecraft().fontRenderer.drawString("Not Magical!", posX+12, posY+5, 0xff0000, true);
 			}
-			else if(((IMRUHandler)w.getTileEntity(new BlockPos(o[0], o[1], o[2]))).getMRU() <= 0) {
-				Minecraft.getMinecraft().fontRenderer.drawString("No MRU In Tile!", posX+6, posY+5, 0xff0000, true);
+			else if(tile.getWorld().equals(w) && tile.getPos().equals(pos)) {
+				Minecraft.getMinecraft().fontRenderer.drawString("Bound To Self!", posX+5, posY+5, 0xff0000, true);
+			}
+			else if(w.getTileEntity(pos).getCapability(CapabilityMRUHandler.MRU_HANDLER_CAPABILITY, null).getMRU() <= 0) {
+				Minecraft.getMinecraft().fontRenderer.drawString("No MRU In Tile!", posX+6, posY+5, 0xffff00, true);
 			}
 			else {
 				Minecraft.getMinecraft().fontRenderer.drawString("Working", posX+22, posY+5, 0x00ff00, true);

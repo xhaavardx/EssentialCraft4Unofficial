@@ -1,10 +1,10 @@
 package essentialcraft.common.tile;
 
 import DummyCore.Utils.MiscUtils;
-import essentialcraft.api.IMRUHandlerTransfers;
+import essentialcraft.common.capabilities.mru.CapabilityMRUHandler;
+import essentialcraft.common.capabilities.mru.MRUTileStorage;
 import essentialcraft.common.item.ItemBoundGem;
 import essentialcraft.common.item.ItemsCore;
-import essentialcraft.utils.common.ECUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -19,25 +19,23 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.wrapper.InvWrapper;
 
-public class TileRayTower extends TileEntity implements IInventory, IMRUHandlerTransfers, ITickable {
+public class TileRayTower extends TileEntity implements IInventory, ITickable {
 	public int syncTick;
-	int mru;
-	int maxMRU = 100;
-	float balance;
+	protected MRUTileStorage mruStorage;
 	public int innerRotation;
 	public ItemStack[] items = {ItemStack.EMPTY};
 
 	@Override
 	public void readFromNBT(NBTTagCompound i) {
 		super.readFromNBT(i);
-		ECUtils.loadMRUState(this, i);
+		mruStorage.readFromNBT(i);
 		MiscUtils.loadInventory(this, i);
 	}
 
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound i) {
 		super.writeToNBT(i);
-		ECUtils.saveMRUState(this, i);
+		mruStorage.writeToNBT(i);
 		MiscUtils.saveInventory(this, i);
 		return i;
 	}
@@ -53,7 +51,7 @@ public class TileRayTower extends TileEntity implements IInventory, IMRUHandlerT
 		}
 		else
 			--syncTick;
-		ECUtils.manage(this, 0);
+		mruStorage.update(getPos(), getWorld(), getStackInSlot(0));
 	}
 
 	@Override
@@ -67,39 +65,6 @@ public class TileRayTower extends TileEntity implements IInventory, IMRUHandlerT
 	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
 		if(pkt.getTileEntityType() == -10)
 			readFromNBT(pkt.getNbtCompound());
-	}
-
-	@Override
-	public int getMRU() {
-		return mru;
-	}
-
-	@Override
-	public int getMaxMRU() {
-		return maxMRU;
-	}
-
-	@Override
-	public boolean setMRU(int i) {
-		mru = i;
-		return true;
-	}
-
-	@Override
-	public float getBalance() {
-		return balance;
-	}
-
-	@Override
-	public boolean setBalance(float f) {
-		balance = f;
-		return true;
-	}
-
-	@Override
-	public boolean setMaxMRU(float f) {
-		maxMRU = (int)f;
-		return true;
 	}
 
 	@Override
@@ -214,12 +179,16 @@ public class TileRayTower extends TileEntity implements IInventory, IMRUHandlerT
 
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
+		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ||
+				capability == CapabilityMRUHandler.MRU_HANDLER_CAPABILITY ||
+				super.hasCapability(capability, facing);
 	}
 
 	@Override
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ? (T)itemHandler : super.getCapability(capability, facing);
+		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ? (T)itemHandler :
+			capability == CapabilityMRUHandler.MRU_HANDLER_CAPABILITY ? (T)mruStorage :
+				super.getCapability(capability, facing);
 	}
 
 	@Override

@@ -6,6 +6,7 @@ import DummyCore.Utils.EnumLayer;
 import essentialcraft.common.tile.TileMithrilineCrystal;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.SoundType;
+import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
@@ -17,7 +18,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.NonNullList;
@@ -38,8 +38,8 @@ public class BlockMithrilineCrystal extends BlockContainer implements IModelRegi
 
 	public static final AxisAlignedBB BLOCK_AABB = new AxisAlignedBB(0.25D,0D,0.25D,0.75D,1D,0.75D);
 
-	public BlockMithrilineCrystal(Material p_i45394_1_) {
-		super(p_i45394_1_);
+	public BlockMithrilineCrystal() {
+		super(Material.ROCK);
 		this.setSoundType(SoundType.GLASS);
 		setDefaultState(blockState.getBaseState().withProperty(TYPE, CrystalType.MITHRILINE).withProperty(LAYER, EnumLayer.BOTTOM));
 	}
@@ -56,9 +56,9 @@ public class BlockMithrilineCrystal extends BlockContainer implements IModelRegi
 		return new ItemStack(this, 1, state.getValue(TYPE).getIndex()*3);
 	}
 
-	public BlockMithrilineCrystal() {
-		super(Material.ROCK);
-		this.setSoundType(SoundType.GLASS);
+	@Override
+	public MapColor getMapColor(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
+		return state.getValue(TYPE).getMapColor();
 	}
 
 	@Override
@@ -124,19 +124,13 @@ public class BlockMithrilineCrystal extends BlockContainer implements IModelRegi
 	}
 
 	@Override
-	public BlockRenderLayer getBlockLayer()
-	{
-		return BlockRenderLayer.SOLID;
-	}
-
-	@Override
 	public EnumBlockRenderType getRenderType(IBlockState s) {
 		return EnumBlockRenderType.MODEL;
 	}
 
 	@Override
-	public TileEntity createNewTileEntity(World p_149915_1_, int p_149915_2_) {
-		return p_149915_2_%3 == 0 ? new TileMithrilineCrystal() : null;
+	public TileEntity createNewTileEntity(World world, int meta) {
+		return meta%3 == 0 ? new TileMithrilineCrystal(meta/3) : null;
 	}
 
 	@Override
@@ -185,18 +179,20 @@ public class BlockMithrilineCrystal extends BlockContainer implements IModelRegi
 	}
 
 	public static enum CrystalType implements IStringSerializable {
-		MITHRILINE(0,"mithriline"),
-		PALE(1,"pale"),
-		VOID(2,"void"),
-		DEMONIC(3,"demonic"),
-		SHADE(4,"shade");
+		MITHRILINE(0, "mithriline", MapColor.GREEN),
+		PALE(1, "pale", MapColor.LAPIS),
+		VOID(2, "void", MapColor.BLACK),
+		DEMONIC(3, "demonic", MapColor.RED),
+		SHADE(4, "shade", MapColor.GRAY);
 
-		private int index;
-		private String name;
+		private final int index;
+		private final String name;
+		private final MapColor mapColor;
 
-		private CrystalType(int i, String s) {
-			index = i;
-			name = s;
+		private CrystalType(int index, String name, MapColor mapColor) {
+			this.index = index;
+			this.name = name;
+			this.mapColor = mapColor;
 		}
 
 		@Override
@@ -211,6 +207,10 @@ public class BlockMithrilineCrystal extends BlockContainer implements IModelRegi
 
 		public int getIndex() {
 			return index;
+		}
+
+		public MapColor getMapColor() {
+			return mapColor;
 		}
 
 		public static CrystalType fromIndex(int i) {

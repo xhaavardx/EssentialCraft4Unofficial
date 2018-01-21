@@ -11,7 +11,6 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
@@ -30,15 +29,11 @@ public class ItemCraftingFrame extends Item implements IModelRegisterer {
 		return super.onItemRightClick(w, p, h);
 	}
 
-	protected int containerMatchesItem(Container openContainer)
-	{
-		return 0;
-	}
-
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void addInformation(ItemStack par1ItemStack, World par2EntityPlayer, List<String> par3List, ITooltipFlag par4)
 	{
+		super.addInformation(par1ItemStack, par2EntityPlayer, par3List, par4);
 		InventoryCraftingFrame inv = new InventoryCraftingFrame(par1ItemStack);
 		if(inv != null)
 		{
@@ -62,27 +57,25 @@ public class ItemCraftingFrame extends Item implements IModelRegisterer {
 	}
 
 	@Override
-	public void onUpdate(ItemStack itemStack, World world, Entity entity, int indexInInventory, boolean isCurrentItem)
-	{
-		if(world.isRemote || !isCurrentItem || !(entity instanceof EntityPlayer))
-		{
+	public void onUpdate(ItemStack itemStack, World world, Entity entity, int indexInInventory, boolean isCurrentItem) {
+		if(!isCurrentItem || !(entity instanceof EntityPlayer)) {
 			return;
 		}
 		if(((EntityPlayer)entity).openContainer == null || !(((EntityPlayer)entity).openContainer instanceof ContainerCraftingFrame))
 		{
 			return;
 		}
-		int containerType = containerMatchesItem(((EntityPlayer)entity).openContainer);
-		if(containerType == 0)
-		{
-			ContainerCraftingFrame c = (ContainerCraftingFrame)((EntityPlayer)entity).openContainer;
-			c.saveToNBT(itemStack);
-		}
+		ContainerCraftingFrame c = (ContainerCraftingFrame)((EntityPlayer)entity).openContainer;
+		c.saveToNBT(itemStack);
 	}
 
-	public ItemCraftingFrame()
-	{
+	public ItemCraftingFrame() {
 		this.setMaxStackSize(1);
+	}
+
+	@Override
+	public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
+		return !oldStack.getItem().equals(newStack.getItem());
 	}
 
 	@Override

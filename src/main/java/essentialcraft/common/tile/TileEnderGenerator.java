@@ -13,31 +13,30 @@ import net.minecraftforge.fml.common.Loader;
 
 public class TileEnderGenerator extends TileMRUGeneric {
 
-	public static float cfgMaxMRU = ApiCore.GENERATOR_MAX_MRU_GENERIC;
+	public static int cfgMaxMRU = ApiCore.GENERATOR_MAX_MRU_GENERIC;
 	public static float cfgBalance = -1F;
-	public static float mruGenerated = 500;
+	public static int mruGenerated = 500;
 	public static int endermenCatchRadius = 8;
+
+	private boolean firstTick = true;
 
 	public TileEnderGenerator() {
 		super();
-		maxMRU = (int)cfgMaxMRU;
-		balance = cfgBalance;
+		mruStorage.setMaxMRU(cfgMaxMRU);
 		slot0IsBoundGem = false;
-	}
-
-	public boolean canGenerateMRU() {
-		return false;
 	}
 
 	@Override
 	public void update() {
+		if(!getWorld().isRemote && cfgBalance == -1F && firstTick) {
+			mruStorage.setBalance(getWorld().rand.nextFloat()*2);
+		}
 		super.update();
-		if(balance == -1)
-			balance = getWorld().rand.nextFloat()*2;
+		firstTick = false;
 		if(getWorld().isBlockIndirectlyGettingPowered(pos) == 0) {
 			AxisAlignedBB endermenTPRadius = new AxisAlignedBB(pos.getX()-endermenCatchRadius, pos.getY()-endermenCatchRadius, pos.getZ()-endermenCatchRadius, pos.getX()+endermenCatchRadius+1, pos.getY()+endermenCatchRadius+1, pos.getZ()+endermenCatchRadius+1);
 			List<EntityEnderman> l = getWorld().getEntitiesWithinAABB(EntityEnderman.class, endermenTPRadius);
-			if(Loader.isModLoaded("HardcoreEnderExpansion")) {
+			if(Loader.isModLoaded("hardcoreenderexpansion")) {
 				try {
 					l.addAll(getWorld().getEntitiesWithinAABB((Class<? extends EntityEnderman>)Class.forName("chylex.hee.entity.mob.EntityMobAngryEnderman"), endermenTPRadius));
 					l.addAll(getWorld().getEntitiesWithinAABB((Class<? extends EntityEnderman>)Class.forName("chylex.hee.entity.mob.EntityMobBabyEnderman"), endermenTPRadius));
@@ -56,7 +55,7 @@ public class TileEnderGenerator extends TileMRUGeneric {
 			}
 			AxisAlignedBB endermanAttackRad = new AxisAlignedBB(pos.getX()-2, pos.getY()-2, pos.getZ()-2, pos.getX()+2, pos.getY()+2, pos.getZ()+2);
 			List<EntityEnderman> l1 = getWorld().getEntitiesWithinAABB(EntityEnderman.class, endermanAttackRad);
-			if(Loader.isModLoaded("HardcoreEnderExpansion")) {
+			if(Loader.isModLoaded("hardcoreenderexpansion")) {
 				try {
 					l1.addAll(getWorld().getEntitiesWithinAABB((Class<? extends EntityEnderman>)Class.forName("chylex.hee.entity.mob.EntityMobAngryEnderman"), endermanAttackRad));
 					l1.addAll(getWorld().getEntitiesWithinAABB((Class<? extends EntityEnderman>)Class.forName("chylex.hee.entity.mob.EntityMobBabyEnderman"), endermanAttackRad));
@@ -69,13 +68,9 @@ public class TileEnderGenerator extends TileMRUGeneric {
 				}
 			}
 			if(!l1.isEmpty()) {
-				if(!getWorld().isRemote) {
-					for(int i = 0; i < l1.size(); ++i) {
-						if(l1.get(i).attackEntityFrom(DamageSource.MAGIC, 1)) {
-							setMRU((int)(getMRU() + mruGenerated));
-							if(getMRU() > getMaxMRU())
-								setMRU(getMaxMRU());
-						}
+				for(int i = 0; i < l1.size(); ++i) {
+					if(l1.get(i).attackEntityFrom(DamageSource.MAGIC, 1)) {
+						mruStorage.addMRU(mruGenerated, true);
 					}
 				}
 			}
@@ -98,9 +93,9 @@ public class TileEnderGenerator extends TileMRUGeneric {
 
 			DummyData[] data = DataStorage.parseData(dataString);
 
-			cfgMaxMRU = Float.parseFloat(data[0].fieldValue);
+			cfgMaxMRU = Integer.parseInt(data[0].fieldValue);
 			cfgBalance = Float.parseFloat(data[1].fieldValue);
-			mruGenerated = Float.parseFloat(data[2].fieldValue);
+			mruGenerated = Integer.parseInt(data[2].fieldValue);
 			endermenCatchRadius = Integer.parseInt(data[3].fieldValue);
 
 			cfg.save();

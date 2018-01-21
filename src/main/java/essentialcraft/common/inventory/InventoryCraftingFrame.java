@@ -40,17 +40,7 @@ public class InventoryCraftingFrame implements IInventory {
 
 	@Override
 	public ItemStack decrStackSize(int slot, int amount) {
-		if(inventory[slot].isEmpty())
-			return ItemStack.EMPTY;
-		ItemStack returnStack;
-		if(inventory[slot].getCount() > amount)
-			returnStack = inventory[slot].splitStack(amount);
-		else {
-			returnStack = inventory[slot];
-			inventory[slot] = ItemStack.EMPTY;
-		}
-		markDirty();
-		return returnStack;
+		return ItemStack.EMPTY;
 	}
 
 	@Override

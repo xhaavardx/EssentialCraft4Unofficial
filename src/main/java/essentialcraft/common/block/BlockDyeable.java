@@ -3,6 +3,7 @@ package essentialcraft.common.block;
 import DummyCore.Client.IBlockColor;
 import DummyCore.Client.IModelRegisterer;
 import net.minecraft.block.Block;
+import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
@@ -25,7 +26,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 
-public class BlockColored extends Block implements IBlockColor, IModelRegisterer {
+public class BlockDyeable extends Block implements IBlockColor, IModelRegisterer {
 
 	public static final String[] field_150921_b = {"white", "red", "green", "brown", "blue", "purple", "cyan", "lightgray", "gray", "pink", "lime", "yellow", "lightblue", "magenta", "orange", "black"};
 	public static final int[] field_150922_c = {15790320, 11743532, 3887386, 5320730, 2437522, 8073150, 2651799, 11250603, 4408131, 14188952, 4312372, 14602026, 6719955, 12801229, 15435844,1973019};
@@ -44,9 +45,13 @@ public class BlockColored extends Block implements IBlockColor, IModelRegisterer
 		return field_150922_c[metadata];
 	}
 
-	protected BlockColored(Material p_i45394_1_) {
-		super(p_i45394_1_);
+	public BlockDyeable(Material material, MapColor mapColor) {
+		super(material, mapColor);
 		setDefaultState(this.blockState.getBaseState().withProperty(COLOR, EnumDyeColor.WHITE));
+	}
+
+	public BlockDyeable(Material material) {
+		this(material, material.getMaterialMapColor());
 	}
 
 	@Override

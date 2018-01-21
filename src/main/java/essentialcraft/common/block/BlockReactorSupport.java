@@ -4,6 +4,7 @@ import DummyCore.Client.IModelRegisterer;
 import DummyCore.Utils.EnumLayer;
 import essentialcraft.common.tile.TileMRUReactor;
 import net.minecraft.block.Block;
+import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyEnum;
@@ -30,7 +31,7 @@ public class BlockReactorSupport extends Block implements IModelRegisterer {
 	public static final PropertyBool WEST = PropertyBool.create("west");
 
 	public BlockReactorSupport() {
-		super(Material.ROCK);
+		super(Material.ROCK, MapColor.PURPLE);
 		setDefaultState(blockState.getBaseState().withProperty(SOUTH, false).withProperty(EAST, false).withProperty(NORTH, false).withProperty(WEST, false).withProperty(LAYER, EnumLayer.BOTTOM));
 	}
 

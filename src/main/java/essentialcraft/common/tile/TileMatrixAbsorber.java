@@ -17,16 +17,16 @@ import net.minecraftforge.common.config.Configuration;
 public class TileMatrixAbsorber extends TileMRUGeneric {
 
 	public int sndTime;
-	public static float cfgMaxMRU =  ApiCore.GENERATOR_MAX_MRU_GENERIC/10;
+	public static int cfgMaxMRU =  ApiCore.GENERATOR_MAX_MRU_GENERIC/10;
 	public static float cfgBalance = 1F;
-	public static float mruGenerated = 1;
-	public static float mruUsage = 10;
+	public static int mruGenerated = 1;
+	public static int mruUsage = 10;
 	public static boolean requestImmidiateSync;
 
 	public TileMatrixAbsorber() {
 		super();
-		balance = cfgBalance;
-		maxMRU = (int)cfgMaxMRU;
+		mruStorage.setBalance(cfgBalance);
+		mruStorage.setMaxMRU(cfgMaxMRU);
 		slot0IsBoundGem = false;
 		setSlotsNum(1);
 	}
@@ -37,32 +37,29 @@ public class TileMatrixAbsorber extends TileMRUGeneric {
 
 	@Override
 	public void update() {
-		balance = cfgBalance;
 		super.update();
 		boolean t = false;
 		if(getWorld().isBlockIndirectlyGettingPowered(pos) == 0) {
-			if(!getWorld().isRemote) {
-				ItemStack stk = getStackInSlot(0);
-				if(stk.getItem() instanceof ItemSoulStone) {
-					if(stk.getTagCompound() != null) {
-						String username = stk.getTagCompound().getString("playerName");
-						if(getWorld().getMinecraftServer() != null && getWorld().getMinecraftServer().getPlayerList() != null) {
-							EntityPlayer p = MiscUtils.getPlayerFromUUID(username);
-							if(p != null) {
-								if(getMRU() + mruGenerated <= getMaxMRU()) {
-									int current = ECUtils.getData(p).getPlayerUBMRU();
-									if(current - mruUsage >= 0) {
-										ECUtils.getData(p).modifyUBMRU((int)(current - mruUsage));
-										if(requestImmidiateSync) {
-											ECUtils.requestSync(p);
-											syncTick = 0;
-										}
-										setMRU((int)(getMRU() + mruGenerated));
-										for(int o = 0; o < 10; ++o) {
-											getWorld().spawnParticle(EnumParticleTypes.REDSTONE, pos.getX()+0.25D+getWorld().rand.nextDouble()/2.2D, pos.getY()+0.25D+(float)o/20, pos.getZ()+0.25D+getWorld().rand.nextDouble()/2.2D, 1.0D, 0.0D, 1.0D);
-										}
-										t = true;
+			ItemStack stk = getStackInSlot(0);
+			if(stk.getItem() instanceof ItemSoulStone) {
+				if(stk.getTagCompound() != null) {
+					String username = stk.getTagCompound().getString("playerName");
+					if(getWorld().getMinecraftServer() != null && getWorld().getMinecraftServer().getPlayerList() != null) {
+						EntityPlayer p = MiscUtils.getPlayerFromUUID(username);
+						if(p != null) {
+							if(mruStorage.getMRU() < mruStorage.getMaxMRU()) {
+								int current = ECUtils.getData(p).getPlayerUBMRU();
+								if(current - mruUsage >= 0) {
+									ECUtils.getData(p).modifyUBMRU(current - mruUsage);
+									if(requestImmidiateSync) {
+										ECUtils.requestSync(p);
+										syncTick = 0;
 									}
+									mruStorage.addMRU(mruGenerated, true);
+									for(int o = 0; o < 10; ++o) {
+										getWorld().spawnParticle(EnumParticleTypes.REDSTONE, pos.getX()+0.25D+getWorld().rand.nextDouble()/2.2D, pos.getY()+0.25D+(float)o/20, pos.getZ()+0.25D+getWorld().rand.nextDouble()/2.2D, 1.0D, 0.0D, 1.0D);
+									}
+									t = true;
 								}
 							}
 						}
@@ -106,10 +103,10 @@ public class TileMatrixAbsorber extends TileMRUGeneric {
 
 			DummyData[] data = DataStorage.parseData(dataString);
 
-			cfgMaxMRU = Float.parseFloat(data[0].fieldValue);
+			cfgMaxMRU = Integer.parseInt(data[0].fieldValue);
 			cfgBalance = Float.parseFloat(data[1].fieldValue);
-			mruGenerated = Float.parseFloat(data[2].fieldValue);
-			mruUsage = Float.parseFloat(data[3].fieldValue);
+			mruGenerated = Integer.parseInt(data[2].fieldValue);
+			mruUsage = Integer.parseInt(data[3].fieldValue);
 			requestImmidiateSync = Boolean.parseBoolean(data[4].fieldValue);
 
 			cfg.save();

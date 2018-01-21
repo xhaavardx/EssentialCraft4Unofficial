@@ -3,6 +3,7 @@ package essentialcraft.common.block;
 import DummyCore.Client.IModelRegisterer;
 import essentialcraft.common.tile.TileMRUCUECController;
 import net.minecraft.block.BlockContainer;
+import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -18,8 +19,8 @@ import net.minecraftforge.client.model.ModelLoader;
 
 public class BlockMRUCUECController extends BlockContainer implements IModelRegisterer {
 
-	public BlockMRUCUECController(Material p_i45386_1_) {
-		super(p_i45386_1_);
+	public BlockMRUCUECController() {
+		super(Material.ROCK, MapColor.PURPLE);
 	}
 
 	@Override

@@ -1,37 +1,13 @@
 package essentialcraft.common.tile;
 
 import essentialcraft.api.EnumStructureType;
-import essentialcraft.api.IMRUHandlerRequires;
+import essentialcraft.api.IMRUDisplay;
+import essentialcraft.api.IMRUHandler;
 import essentialcraft.api.IStructurePiece;
 import net.minecraft.tileentity.TileEntity;
 
-public class TileMRUCUECStateChecker extends TileEntity implements IStructurePiece, IMRUHandlerRequires {
+public class TileMRUCUECStateChecker extends TileEntity implements IStructurePiece, IMRUDisplay {
 	public TileMRUCUECController controller;
-
-	@Override
-	public int getMRU() {
-		return controller != null ? controller.getMRU() : 0;
-	}
-
-	@Override
-	public int getMaxMRU() {
-		return controller != null ? controller.getMaxMRU() : 0;
-	}
-
-	@Override
-	public boolean setMRU(int i) {
-		return false;
-	}
-
-	@Override
-	public float getBalance() {
-		return controller != null ? controller.getBalance() : 1;
-	}
-
-	@Override
-	public boolean setBalance(float f) {
-		return false;
-	}
 
 	@Override
 	public EnumStructureType getStructure() {
@@ -50,7 +26,7 @@ public class TileMRUCUECStateChecker extends TileEntity implements IStructurePie
 	}
 
 	@Override
-	public boolean setMaxMRU(float f) {
-		return false;
+	public IMRUHandler getMRUHandler() {
+		return controller.getMRUHandler();
 	}
 }

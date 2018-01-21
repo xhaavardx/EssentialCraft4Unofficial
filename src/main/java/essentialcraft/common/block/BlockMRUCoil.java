@@ -9,6 +9,7 @@ import essentialcraft.common.mod.EssentialCraftCore;
 import essentialcraft.common.tile.TileMRUCoil;
 import essentialcraft.utils.cfg.Config;
 import net.minecraft.block.BlockContainer;
+import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -19,7 +20,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -32,12 +32,8 @@ import net.minecraftforge.client.model.ModelLoader;
 
 public class BlockMRUCoil extends BlockContainer implements IModelRegisterer {
 
-	protected BlockMRUCoil(Material p_i45386_1_) {
-		super(p_i45386_1_);
-	}
-
 	public BlockMRUCoil() {
-		super(Material.ROCK);
+		super(Material.ROCK, MapColor.PURPLE);
 	}
 
 	@Override
@@ -60,12 +56,6 @@ public class BlockMRUCoil extends BlockContainer implements IModelRegisterer {
 	}
 
 	@Override
-	public BlockRenderLayer getBlockLayer()
-	{
-		return BlockRenderLayer.SOLID;
-	}
-
-	@Override
 	public EnumBlockRenderType getRenderType(IBlockState s)
 	{
 		return EnumBlockRenderType.MODEL;
@@ -78,52 +68,37 @@ public class BlockMRUCoil extends BlockContainer implements IModelRegisterer {
 
 	@Override
 	public boolean onBlockActivated(World par1World, BlockPos par2, IBlockState par3, EntityPlayer par4EntityPlayer, EnumHand par5, EnumFacing par7, float par8, float par9, float par10) {
-		if(par1World.isRemote)
-		{
-			return true;
-		}else
-		{
-			if(!par4EntityPlayer.isSneaking())
-			{
-				if(par4EntityPlayer.capabilities.isCreativeMode)
-				{
-					par4EntityPlayer.openGui(EssentialCraftCore.core, Config.guiID[0], par1World, par2.getX(), par2.getY(), par2.getZ());
-					return true;
-				}
-				TileMRUCoil tile = (TileMRUCoil)par1World.getTileEntity(par2);
-				ItemStack is = tile.getStackInSlot(1);
-				if(is.getItem() instanceof ItemPlayerList)
-				{
-					NBTTagCompound itemTag = MiscUtils.getStackTag(is);
-					if(!itemTag.hasKey("usernames"))
-						itemTag.setString("usernames", "||username:null");
-					String str = itemTag.getString("usernames");
-					DummyData[] dt = DataStorage.parseData(str);
-					for(int i = 0; i < dt.length; ++i)
-					{
-						String username = dt[i].fieldValue;
-						String playerName = MiscUtils.getUUIDFromPlayer(par4EntityPlayer).toString();
-						if(username.equals(playerName))
-						{
-							par4EntityPlayer.openGui(EssentialCraftCore.core, Config.guiID[0], par1World, par2.getX(), par2.getY(), par2.getZ());
-							return true;
-						}
+		if(par4EntityPlayer.isSneaking()) {
+			return false;
+		}
+		boolean flag = par4EntityPlayer.capabilities.isCreativeMode;
+		if(!flag) {
+			TileMRUCoil tile = (TileMRUCoil)par1World.getTileEntity(par2);
+			ItemStack is = tile.getStackInSlot(1);
+			if(is.getItem() instanceof ItemPlayerList) {
+				NBTTagCompound itemTag = MiscUtils.getStackTag(is);
+				if(!itemTag.hasKey("usernames"))
+					itemTag.setString("usernames", "||username:null");
+				String str = itemTag.getString("usernames");
+				DummyData[] dt = DataStorage.parseData(str);
+				for(int i = 0; i < dt.length; ++i) {
+					String username = dt[i].fieldValue;
+					String playerName = MiscUtils.getUUIDFromPlayer(par4EntityPlayer).toString();
+					if(username.equals(playerName)) {
+						flag = true;
 					}
-					par4EntityPlayer.sendMessage(new TextComponentString(TextFormatting.RED+I18n.translateToLocal("essentialcraft.txt.noPermission")));
-
-				}else
-				{
-					par4EntityPlayer.openGui(EssentialCraftCore.core, Config.guiID[0], par1World, par2.getX(), par2.getY(), par2.getZ());
-					return true;
 				}
-
+				par4EntityPlayer.sendMessage(new TextComponentString(TextFormatting.RED+I18n.translateToLocal("essentialcraft.txt.noPermission")));
 			}
-			else
-			{
-				return false;
+			else {
+				flag = true;
 			}
 		}
-		return false;
+		if(flag && !par1World.isRemote) {
+			par4EntityPlayer.openGui(EssentialCraftCore.core, Config.guiID[0], par1World, par2.getX(), par2.getY(), par2.getZ());
+			return true;
+		}
+		return flag;
 	}
 
 	@Override

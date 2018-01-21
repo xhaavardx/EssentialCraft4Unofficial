@@ -14,7 +14,7 @@ import net.minecraft.world.World;
 public class TileAdvancedBlockBreaker extends TileMRUGeneric {
 
 	public TileAdvancedBlockBreaker() {
-		setMaxMRU(0);
+		mruStorage.setMaxMRU(0);
 		setSlotsNum(1);
 	}
 

@@ -3,8 +3,7 @@ package essentialcraft.utils.commands;
 import java.util.Collections;
 import java.util.List;
 
-import DummyCore.Utils.Coord3D;
-import essentialcraft.common.entity.EntityMRUPresence;
+import essentialcraft.api.IMRUHandler;
 import essentialcraft.utils.common.ECUtils;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -39,11 +38,8 @@ public class CommandSetMRUInMRUCU extends CommandBase
 	public void execute(MinecraftServer s, ICommandSender par1ICommandSender, String[] par2ArrayOfStr) throws CommandException {
 		int var3 = parseInt(par2ArrayOfStr[3], 0);
 		BlockPos p = parseBlockPos(par1ICommandSender, par2ArrayOfStr, 0, true);
-		int x = p.getX();
-		int y = p.getY();
-		int z = p.getZ();
 		try {
-			EntityMRUPresence mru = (EntityMRUPresence)ECUtils.getClosestMRUCU(par1ICommandSender.getEntityWorld(), new Coord3D(x,y,z), 16);
+			IMRUHandler mru = ECUtils.getClosestMRUCU(par1ICommandSender.getEntityWorld(), p, 16);
 			mru.setMRU(var3);
 		}
 		catch(Exception e) {

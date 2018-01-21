@@ -4,59 +4,48 @@ import DummyCore.Utils.DataStorage;
 import DummyCore.Utils.DummyData;
 import essentialcraft.api.ApiCore;
 import essentialcraft.api.IMRUHandlerItem;
-import essentialcraft.utils.common.ECUtils;
+import essentialcraft.common.capabilities.mru.CapabilityMRUHandler;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.config.Configuration;
 
 public class TileChargingChamber extends TileMRUGeneric {
 
-	public static float cfgMaxMRU = (int)ApiCore.DEVICE_MAX_MRU_GENERIC;
+	public static Capability<IMRUHandlerItem> MRU_HANDLER_ITEM_CAPABILITY = CapabilityMRUHandler.MRU_HANDLER_ITEM_CAPABILITY;
+	public static int cfgMaxMRU = ApiCore.DEVICE_MAX_MRU_GENERIC;
 	public static float reqMRUModifier = 1.0F;
 
 	public TileChargingChamber() {
 		super();
-		maxMRU = (int) cfgMaxMRU;
+		mruStorage.setMaxMRU(cfgMaxMRU);
 		setSlotsNum(2);
 	}
 
 	@Override
 	public void update() {
 		super.update();
-		ECUtils.manage(this, 0);
-
+		mruStorage.update(getPos(), getWorld(), getStackInSlot(0));
 		if(getWorld().isBlockIndirectlyGettingPowered(pos) == 0)
 			tryChargeTools();
 	}
 
 	public void tryChargeTools(){
-		ItemStack _gen_var_0 = getStackInSlot(1);
-		if(!_gen_var_0.isEmpty() && !getWorld().isRemote) {
-			if(_gen_var_0.getItem() instanceof IMRUHandlerItem) {
-				IMRUHandlerItem item = (IMRUHandlerItem) _gen_var_0.getItem();
-				int mru = item.getMRU(_gen_var_0);
-				int maxMRU = item.getMaxMRU(_gen_var_0);
-				int p = (int)((float)maxMRU/100 * 5);
+		ItemStack stack = getStackInSlot(1);
+		if(!stack.isEmpty()) {
+			if(stack.hasCapability(MRU_HANDLER_ITEM_CAPABILITY, null)) {
+				IMRUHandlerItem mruHandler = stack.getCapability(MRU_HANDLER_ITEM_CAPABILITY, null);
+				int mru = mruHandler.getMRU();
+				int maxMRU = mruHandler.getMaxMRU();
+				int p = (int)((double)maxMRU/20);
 				if(mru < maxMRU) {
 					if(mru+p < maxMRU) {
-						if(getMRU() > p*reqMRUModifier) {
-							if(item.increaseMRU(_gen_var_0,p))
-								setMRU((int) (getMRU() - p*reqMRUModifier));
-						}
-						else if(getMRU() > 0) {
-							if(item.increaseMRU(_gen_var_0,getMRU()))
-								setMRU(0);
-						}
+						int amount = mruStorage.extractMRU((int)(p*reqMRUModifier), true);
+						mruHandler.addMRU(amount, true);
 					}
 					else {
 						int k = maxMRU - mru;
-						if(getMRU() > k*reqMRUModifier) {
-							if(item.increaseMRU(_gen_var_0, k))
-								setMRU((int)(getMRU() - k*reqMRUModifier));
-						}
-						else if(getMRU() > 0) {
-							if(item.increaseMRU(_gen_var_0, getMRU()))
-								setMRU(0);
-						}
+						int amount = mruStorage.extractMRU((int)(k*reqMRUModifier), true);
+						mruHandler.addMRU(amount, true);
 					}
 				}
 			}

@@ -8,6 +8,7 @@ import essentialcraft.common.entity.EntitiesCore;
 import essentialcraft.common.item.ItemsCore;
 import essentialcraft.common.registry.BiomeRegistry;
 import essentialcraft.common.registry.CERegistry;
+import essentialcraft.common.registry.CapabilityRegistry;
 import essentialcraft.common.registry.CoreRegistry;
 import essentialcraft.common.registry.DimensionRegistry;
 import essentialcraft.common.registry.EnchantRegistry;
@@ -62,7 +63,7 @@ public class EssentialCraftCore {
 	@SidedProxy(clientSide = "essentialcraft.proxy.ClientProxy", serverSide = "essentialcraft.proxy.CommonProxy", modId = EssentialCraftCore.MODID)
 	public static CommonProxy proxy;
 	public static Config cfg = new Config();
-	public static final String VERSION = "4.8.112.4";
+	public static final String VERSION = "4.9.112.0";
 	public static final String MODID = "essentialcraft";
 	public static ModMetadata metadata;
 	public static SimpleNetworkWrapper network;
@@ -92,6 +93,7 @@ public class EssentialCraftCore {
 		}
 		proxy.firstMovement(event);
 
+		CapabilityRegistry.register();
 		WailaInitializer.sendIMC();
 
 		CoreRegistry.register();

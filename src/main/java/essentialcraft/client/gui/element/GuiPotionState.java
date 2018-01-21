@@ -9,7 +9,6 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.init.Items;
 import net.minecraft.potion.Potion;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ResourceLocation;
 
 public class GuiPotionState extends GuiTextElement{
 	public TilePotionSpreader tile;
@@ -18,11 +17,6 @@ public class GuiPotionState extends GuiTextElement{
 	{
 		super(i,j);
 		tile = (TilePotionSpreader) t;
-	}
-
-	@Override
-	public ResourceLocation getElementTexture() {
-		return super.getElementTexture();
 	}
 
 	@Override
@@ -39,10 +33,10 @@ public class GuiPotionState extends GuiTextElement{
 		GlStateManager.pushMatrix();
 		TextureAtlasSprite icon = TextureUtils.fromItem(Items.POTIONITEM);
 		DrawUtils.drawTexture_Items(posX+9, posY+9, icon, 18, 18, 10);
-		if(tile.potionID != -1)
+		if(tile.potionID != null)
 		{
 			icon = TextureUtils.fromItem(Items.POTIONITEM);
-			int j = Potion.REGISTRY.getObjectById(tile.potionID).getLiquidColor();
+			int j = Potion.REGISTRY.getObject(tile.potionID).getLiquidColor();
 			float f = 0F;
 			float f1 = 0F;
 			float f2 = 0F;
@@ -60,20 +54,5 @@ public class GuiPotionState extends GuiTextElement{
 	}
 
 	@Override
-	public int getX() {
-		// TODO Auto-generated method stub
-		return super.getX();
-	}
-
-	@Override
-	public int getY() {
-		// TODO Auto-generated method stub
-		return super.getY();
-	}
-
-	@Override
-	public void drawText(int posX, int posY) {
-
-	}
-
+	public void drawText(int posX, int posY) {}
 }

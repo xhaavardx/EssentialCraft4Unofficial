@@ -3,13 +3,13 @@ package essentialcraft.common.block;
 import DummyCore.Client.IModelRegisterer;
 import essentialcraft.common.tile.TileWindRune;
 import net.minecraft.block.BlockContainer;
+import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -24,7 +24,7 @@ public class BlockWindRune extends BlockContainer implements IModelRegisterer {
 	public static final AxisAlignedBB BLOCK_AABB = new AxisAlignedBB(0, 0, 0, 1, 0.0625F, 1);
 
 	public BlockWindRune() {
-		super(Material.ROCK);
+		super(Material.ROCK, MapColor.AIR);
 	}
 
 	@Override
@@ -42,12 +42,6 @@ public class BlockWindRune extends BlockContainer implements IModelRegisterer {
 	public boolean isFullCube(IBlockState s)
 	{
 		return false;
-	}
-
-	@Override
-	public BlockRenderLayer getBlockLayer()
-	{
-		return BlockRenderLayer.SOLID;
 	}
 
 	@Override

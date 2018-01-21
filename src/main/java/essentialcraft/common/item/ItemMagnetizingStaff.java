@@ -17,11 +17,10 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 
-public class ItemMagnetizingStaff extends ItemStoresMRUInNBT implements IModelRegisterer {
+public class ItemMagnetizingStaff extends ItemMRUGeneric implements IModelRegisterer {
 
 	public ItemMagnetizingStaff() {
 		super();
-		this.setMaxMRU(5000);
 		this.maxStackSize = 1;
 		this.bFull3D = true;
 	}
@@ -35,7 +34,7 @@ public class ItemMagnetizingStaff extends ItemStoresMRUInNBT implements IModelRe
 	@Override
 	public void onUsingTick(ItemStack stack, EntityLivingBase player, int count)
 	{
-		if(count % 8 == 0 && player instanceof EntityPlayer && (ECUtils.tryToDecreaseMRUInStorage((EntityPlayer)player, -50) || this.increaseMRU(stack, -50)))
+		if(count % 8 == 0 && player instanceof EntityPlayer && ECUtils.playerUseMRU((EntityPlayer)player, stack, 50))
 		{
 			player.swingArm(EnumHand.MAIN_HAND);
 			List<EntityItem> items = player.getEntityWorld().getEntitiesWithinAABB(EntityItem.class, new AxisAlignedBB(player.posX-0.5D, player.posY, player.posZ-0.5D, player.posX+0.5D, player.posY+1, player.posZ+0.5D).expand(12D, 6D, 12D));

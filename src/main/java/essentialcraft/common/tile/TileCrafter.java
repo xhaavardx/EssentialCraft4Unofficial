@@ -13,7 +13,7 @@ public class TileCrafter extends TileMRUGeneric {
 
 	public TileCrafter() {
 		super();
-		setMaxMRU(0);
+		mruStorage.setMaxMRU(0);
 		setSlotsNum(11);
 		slot0IsBoundGem = false;
 	}
@@ -34,9 +34,8 @@ public class TileCrafter extends TileMRUGeneric {
 			if(!hasFrame()) {
 				makeRecipe();
 			}
-			else {
-				if(hasSufficientForCraftWithFrame())
-					makeRecipe();
+			else if(hasSufficientForCraftWithFrame()) {
+				makeRecipe();
 			}
 		}
 	}

@@ -13,26 +13,26 @@ public class TileRadiatingChamber extends TileMRUGeneric {
 
 	public int progressLevel;
 	public RadiatingChamberRecipe currentRecipe;
-	public static float cfgMaxMRU = ApiCore.DEVICE_MAX_MRU_GENERIC;
+	public static int cfgMaxMRU = ApiCore.DEVICE_MAX_MRU_GENERIC;
 	public static boolean generatesCorruption = true;
 	public static int genCorruption = 1;
 	public static float mruUsage = 1F;
 
 	public TileRadiatingChamber() {
 		super();
-		maxMRU = (int)cfgMaxMRU;
+		mruStorage.setMaxMRU(cfgMaxMRU);
 		setSlotsNum(4);
 	}
 
 	@Override
 	public void update() {
 		super.update();
-		ECUtils.manage(this, 0);
+		mruStorage.update(getPos(), getWorld(), getStackInSlot(0));
 		if(getWorld().isBlockIndirectlyGettingPowered(pos) == 0) {
 			ItemStack[] craftMatrix = new ItemStack[2];
 			craftMatrix[0] = getStackInSlot(1);
 			craftMatrix[1] = getStackInSlot(2);
-			RadiatingChamberRecipe rec = RadiatingChamberRecipes.getRecipeByCPAndBalance(craftMatrix, getBalance());
+			RadiatingChamberRecipe rec = RadiatingChamberRecipes.getRecipeByCPAndBalance(craftMatrix, mruStorage.getBalance());
 			if(currentRecipe == null && rec != null && progressLevel != 0) {
 				if(canFunction(rec))
 					currentRecipe = rec;
@@ -53,11 +53,11 @@ public class TileRadiatingChamber extends TileMRUGeneric {
 					return;
 				}
 				int mruReq = (int)(mruUsage * currentRecipe.costModifier);
-				if(getMRU() >= mruReq && progressLevel < currentRecipe.mruRequired) {
+				if(mruStorage.getMRU() >= mruReq && progressLevel < currentRecipe.mruRequired) {
 					progressLevel += 1;
 					if(generatesCorruption)
-						ECUtils.increaseCorruptionAt(getWorld(), pos.getX(), pos.getY(), pos.getZ(), getWorld().rand.nextInt(genCorruption));
-					setMRU(getMRU() - mruReq);
+						ECUtils.increaseCorruptionAt(getWorld(), pos, getWorld().rand.nextInt(genCorruption));
+					mruStorage.extractMRU(mruReq, true);
 					if(progressLevel >= currentRecipe.mruRequired) {
 						progressLevel = 0;
 						craft();
@@ -113,7 +113,7 @@ public class TileRadiatingChamber extends TileMRUGeneric {
 			DummyData[] data = DataStorage.parseData(dataString);
 
 			mruUsage = Float.parseFloat(data[1].fieldValue);
-			cfgMaxMRU = Float.parseFloat(data[0].fieldValue);
+			cfgMaxMRU = Integer.parseInt(data[0].fieldValue);
 			generatesCorruption = Boolean.parseBoolean(data[2].fieldValue);
 			genCorruption = Integer.parseInt(data[3].fieldValue);
 

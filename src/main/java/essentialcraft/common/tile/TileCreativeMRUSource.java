@@ -4,7 +4,7 @@ public class TileCreativeMRUSource extends TileMRUGeneric {
 
 	public TileCreativeMRUSource() {
 		setSlotsNum(0);
-		setMaxMRU(100000);
+		mruStorage.setMaxMRU(100000);
 	}
 
 	@Override
@@ -14,7 +14,7 @@ public class TileCreativeMRUSource extends TileMRUGeneric {
 
 	@Override
 	public void update()  {
-		setMRU(getMaxMRU());
+		mruStorage.setMRU(mruStorage.getMaxMRU());
 		super.update();
 	}
 }

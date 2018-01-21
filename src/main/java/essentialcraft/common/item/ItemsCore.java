@@ -39,7 +39,7 @@ public class ItemsCore {
 		registerItemSimple(elemental_sword, "elemental_sword");
 		bound_gem = new ItemBoundGem().setUnlocalizedName("essentialcraft.bound_gem");
 		registerItemSimple(bound_gem, "bound_gem");
-		magicMonocle = registerItemSimple(magicMonocle,ItemMonocle.class,"magicMonocle",16,true,1);
+		magicMonocle = registerItemSimple(new ItemMonocle(),"magicMonocle",16,true,1);
 
 		record_everlastingSummer = new ItemRecordEC("letsbefriends", SoundRegistry.recordLetsBeFriends).setUnlocalizedName("essentialcraft.record");
 		registerItemSimple(record_everlastingSummer, "record");
@@ -50,37 +50,37 @@ public class ItemsCore {
 		record_secret = new ItemRecordEC("ecsecret", SoundRegistry.recordSecret).setUnlocalizedName("essentialcraft.record_secret");
 		registerItemSimple(record_secret, "record_secret");
 
-		soulStone = registerItemSimple(soulStone,ItemSoulStone.class,"soulStone",0,false,1);
-		matrixProj = registerItemSimple(matrixProj,ItemMRUMatrixProjection.class,"mruMatrixProjection",0,false,1);
-		titanite = registerItemSimple(titanite,ItemEC.class,"titanite",0,false,64);
-		twinkling_titanite = registerItemSimple(twinkling_titanite,ItemEC.class,"twinkling_titanite",0,false,64);
-		secret = registerItemSimple(secret,ItemSecret.class,"secret",0,false,1);
-		magicalSlag = registerItemSimple(magicalSlag,ItemEC.class,"magicalSlag",0,false,64);
-		genericItem = registerItemSimple(genericItem,ItemGenericEC.class,"genItem",0,false,64);
-		magicalAlloy = registerItemSimple(magicalAlloy,ItemMagicalAlloy.class,"magicalAlloy",0,false,64);
-		essence = registerItemSimple(essence,ItemEssence.class,"essence",0,false,16);
+		soulStone = registerItemSimple(new ItemSoulStone(),"soulStone",0,false,1);
+		matrixProj = registerItemSimple(new ItemMRUMatrixProjection(),"mruMatrixProjection",0,false,1);
+		titanite = registerItemSimple(new ItemEC(),"titanite",0,false,64);
+		twinkling_titanite = registerItemSimple(new ItemEC(),"twinkling_titanite",0,false,64);
+		secret = registerItemSimple(new ItemSecret(),"secret",0,false,1);
+		magicalSlag = registerItemSimple(new ItemEC(),"magicalSlag",0,false,64);
+		genericItem = registerItemSimple(new ItemGenericEC(),"genItem",0,false,64);
+		magicalAlloy = registerItemSimple(new ItemMagicalAlloy(),"magicalAlloy",0,false,64);
+		essence = registerItemSimple(new ItemEssence(),"essence",0,false,16);
 
-		storage = new ItemMRUStorageNBTTag(new int[]{500,5000,30000,120000,1000000}).setUnlocalizedName("essentialcraft.storage");
+		storage = new ItemMRUStorageEC(new int[]{500,5000,30000,120000,1000000}).setUnlocalizedName("essentialcraft.storage");
 		registerItemSimple(storage, "storage");
 
-		magicalDigger = registerItemSimple(magicalDigger,ItemMagicalDigger.class,"magicalDigger",0,true,1);
-		spawnerCollector = registerItemSimple(spawnerCollector,ItemSpawnerCollector.class,"spawnerCollector",0,true,1);
-		staffOfLife = registerItemSimple(staffOfLife,ItemLifeStaff.class,"staffOfLife",0,true,1);
-		biomeWand = registerItemSimple(biomeWand,ItemBiomeWand.class,"biomeWand",0,true,1);
+		magicalDigger = registerItemSimple(new ItemMagicalDigger(),"magicalDigger",0,true,1);
+		spawnerCollector = registerItemSimple(new ItemSpawnerCollector(),"spawnerCollector",0,true,1);
+		staffOfLife = registerItemSimple(new ItemLifeStaff(),"staffOfLife",0,true,1);
+		biomeWand = registerItemSimple(new ItemBiomeWand(),"biomeWand",0,true,1);
 
-		emeraldHeart = registerItemSimple(emeraldHeart,ItemEmeraldHeart.class,"emeraldHeart",0,true,1);
-		magicalShield = registerItemSimple(magicalShield,ItemMagicalShield.class,"magicalShield",0,true,1);
-		spikyShield = registerItemSimple(spikyShield,ItemSpikyShield.class,"spikyShield",0,true,1);
-		magicWaterBottle = registerItemSimple(magicWaterBottle,ItemMagicalWater.class,"magicWaterBottle",0,false,1);
-		magicalPorkchop = registerItemSimple(magicalPorkchop,ItemMagicalPorkchop.class,"magicalPorkchop",0,false,1);
-		charm = registerItemSimple(charm,ItemCharm.class,"charm",0,false,1);
-		magicalWings = registerItemSimple(magicalWings,ItemMagicalWings.class,"magicalWings",0,false,1);
+		emeraldHeart = registerItemSimple(new ItemEmeraldHeart(),"emeraldHeart",0,true,1);
+		magicalShield = registerItemSimple(new ItemMagicalShield(),"magicalShield",0,true,1);
+		spikyShield = registerItemSimple(new ItemSpikyShield(),"spikyShield",0,true,1);
+		magicWaterBottle = registerItemSimple(new ItemMagicalWater(),"magicWaterBottle",0,false,1);
+		magicalPorkchop = registerItemSimple(new ItemMagicalPorkchop(),"magicalPorkchop",0,false,1);
+		charm = registerItemSimple(new ItemCharm(),"charm",0,false,1);
+		magicalWings = registerItemSimple(new ItemMagicalWings(),"magicalWings",0,false,1);
 
-		chaosFork = registerItemSimple(chaosFork,ItemChaosFork.class,"chaosFork",0,true,1);
-		frozenMace = registerItemSimple(frozenMace,ItemFrostMace.class,"frozenMace",0,true,1);
-		holyMace = registerItemSimple(holyMace,ItemHolyMace.class,"holyMace",0,true,1);
+		chaosFork = registerItemSimple(new ItemChaosFork(),"chaosFork",0,true,1);
+		frozenMace = registerItemSimple(new ItemFrostMace(),"frozenMace",0,true,1);
+		holyMace = registerItemSimple(new ItemHolyMace(),"holyMace",0,true,1);
 
-		elementalFuel = registerItemSimple(elementalFuel,ItemEssentialFuel.class,"elementalFuel",0,false,16);
+		elementalFuel = registerItemSimple(new ItemEssentialFuel(),"elementalFuel",0,false,16);
 
 		fFocus = new ItemElementalFocus().setUnlocalizedName("essentialcraft.fFocus");
 		registerItemSimple(fFocus, "fFocus");
@@ -103,10 +103,10 @@ public class ItemsCore {
 		windKeeper = new ItemWindKeeper(100).setUnlocalizedName("essentialcraft.windKeeper");
 		registerItemSimple(windKeeper, "windKeeper");
 
-		windTablet = registerItemSimple(windTablet,ItemWindTablet.class,"windTablet",0,false,1);
+		windTablet = registerItemSimple(new ItemWindTablet(),"windTablet",0,false,1);
 
-		elementalSword = registerItemSimple(elementalSword,ItemElementalSword.class,"elementalSword",0,true,1);
-		ember = registerItemSimple(ember,ItemEmber.class,"ember",0,false,16);
+		elementalSword = registerItemSimple(new ItemElementalSword(),"elementalSword",0,true,1);
+		ember = registerItemSimple(new ItemEmber(),"ember",0,false,16);
 
 
 
@@ -182,28 +182,28 @@ public class ItemsCore {
 
 
 
-		bauble = registerItemSimple(bauble,ItemBaublesResistance.class,"bauble",0,false,1);
+		bauble = registerItemSimple(new ItemBaublesResistance(),"bauble",0,false,1);
 
-		magmaticStaff = registerItemSimple(magmaticStaff,ItemMagmaticWand.class,"magmaticStaff",0,true,1);
-		magicalLantern = registerItemSimple(magicalLantern,ItemMagicLantern.class,"magicalLantern",0,true,1);
-		magnetizingStaff = registerItemSimple(magnetizingStaff,ItemMagnetizingStaff.class,"magnetizingStaff",0,true,1);
+		magmaticStaff = registerItemSimple(new ItemMagmaticWand(),"magmaticStaff",0,true,1);
+		magicalLantern = registerItemSimple(new ItemMagicLantern(),"magicalLantern",0,true,1);
+		magnetizingStaff = registerItemSimple(new ItemMagnetizingStaff(),"magnetizingStaff",0,true,1);
 
-		research_book = registerItemSimple(research_book,ItemKnowledgeBook.class,"research_book",0,false,1);
+		research_book = registerItemSimple(new ItemKnowledgeBook(),"research_book",0,false,1);
 
-		air_potion = registerItemSimple(air_potion,ItemLiquidAir.class,"air_potion",0,false,64);
+		air_potion = registerItemSimple(new ItemLiquidAir(),"air_potion",0,false,64);
 		mruMover_t2 = new ItemMRUMover().setUnlocalizedName("essentialcraft.mruMover_t2").setMaxDamage(256*6).setMaxStackSize(1).setFull3D();
 		registerItemSimple(mruMover_t2, "mruMover_t2");
-		playerList = registerItemSimple(playerList,ItemPlayerList.class,"playerList",0,false,1);
-		magicalChisel = registerItemSimple(magicalChisel,ItemMagicalChisel.class,"magicalChisel",256,true,1);
-		filter = registerItemSimple(filter,ItemFilter.class,"itemFilter",0,false,1);
-		controlRod = registerItemSimple(controlRod,ItemControlRod.class,"controlRod",0,true,1);
-		baublesCore = registerItemSimple(baublesCore,ItemBaublesSpecial.class,"baublesCore",0,false,1);
+		playerList = registerItemSimple(new ItemPlayerList(),"playerList",0,false,1);
+		magicalChisel = registerItemSimple(new ItemMagicalChisel(),"magicalChisel",256,true,1);
+		filter = registerItemSimple(new ItemFilter(),"itemFilter",0,false,1);
+		controlRod = registerItemSimple(new ItemControlRod(),"controlRod",0,true,1);
+		baublesCore = registerItemSimple(new ItemBaublesSpecial(),"baublesCore",0,false,1);
 		ApiCore.MRU_VISIBLE_LIST.add(mruMover_t2);
 
-		shadeSword = registerItemSimple(shadeSword,ItemShadeSword.class,"shadeSword",0,true,1);
-		shadeSlasher = registerItemSimple(shadeSlasher,ItemShadeSlasher.class,"shadeSlasher",0,true,1);
-		shadeKnife = registerItemSimple(shadeKnife,ItemShadowKnife.class,"shadeKnife",0,true,32);
-		entityEgg = registerItemSimple(entityEgg,ItemSpawnEggEC.class,"entityEgg",0,false,64);
+		shadeSword = registerItemSimple(new ItemShadeSword(),"shadeSword",0,true,1);
+		shadeSlasher = registerItemSimple(new ItemShadeSlasher(),"shadeSlasher",0,true,1);
+		shadeKnife = registerItemSimple(new ItemShadowKnife(),"shadeKnife",0,true,32);
+		entityEgg = registerItemSimple(new ItemSpawnEggEC(),"entityEgg",0,false,64);
 
 		pistol = new ItemGun("pistol").setUnlocalizedName("essentialcraft.gun.pistol");
 		registerItemSimple(pistol, "gun.pistol");
@@ -253,10 +253,10 @@ public class ItemsCore {
 		registerItemSimple(wind_boots,"wind_boots");
 		ApiCore.setItemResistances(wind_boots, 0.5F, 0.75F, 0.5F);
 
-		soul = registerItemSimple(soul,ItemCapturedSoul.class,"soul",0,false,64);
-		soulScriber = registerItemSimple(soulScriber,ItemSoulScriber.class,"soulScriber",32,true,1);
+		soul = registerItemSimple(new ItemCapturedSoul(),"soul",0,false,64);
+		soulScriber = registerItemSimple(new ItemSoulScriber(),"soulScriber",32,true,1);
 
-		magicalBuilder = registerItemSimple(magicalBuilder,ItemMagicalBuilder.class,"magicalBuilder",0,true,1);
+		magicalBuilder = registerItemSimple(new ItemMagicalBuilder(),"magicalBuilder",0,true,1);
 
 		computer_helmet = new ItemComputerArmor(computerArmorMaterial, 0, 0).setTextureName("essentialcraft:armor/computer_helmet").setUnlocalizedName("essentialcraft.computer_helmet").setMaxDamage(16384);
 		registerItemSimple(computer_helmet,"computer_helmet");
@@ -275,19 +275,21 @@ public class ItemsCore {
 		registerItemSimple(computer_boots,"computer_boots");
 		ApiCore.setItemResistances(computer_boots, 1F, 1F, 1F);
 
-		computerBoard = registerItemSimple(computerBoard,ItemComputerBoard.class,"computerBoard",0,true,1);
+		computerBoard = registerItemSimple(new ItemComputerBoard(),"computerBoard",0,true,1);
 
-		orbitalRemote = registerItemSimple(orbitalRemote,ItemOrbitalRemote.class,"orbitalRemote",0,true,1);
+		orbitalRemote = registerItemSimple(new ItemOrbitalRemote(),"orbitalRemote",0,true,1);
 
 		record_robocalypse = new ItemRecordEC("hologram", SoundRegistry.recordRopocalypse).setUnlocalizedName("essentialcraft.hologramRec");
 
-		dividingGun = registerItemSimple(dividingGun,ItemDividerGun.class,"dividerGun",0,true,1);
+		dividingGun = registerItemSimple(new ItemDividerGun(),"dividerGun",0,true,1);
 
 		registerItemSimple(record_robocalypse, "robocalypse");
 
-		inventoryGem = registerItemSimple(inventoryGem,ItemInventoryGem.class,"inventoryGem",0,false,64);
-		craftingFrame = registerItemSimple(craftingFrame,ItemCraftingFrame.class,"craftingFrame",0,false,1);
-		collectedSpawner = registerItemSimple(collectedSpawner,ItemCollectedMonsterSpawner.class,"collectedSpawner",0,false,64);
+		inventoryGem = registerItemSimple(new ItemInventoryGem(),"inventoryGem",0,false,64);
+		craftingFrame = registerItemSimple(new ItemCraftingFrame(),"craftingFrame",0,false,1);
+		collectedSpawner = registerItemSimple(new ItemCollectedMonsterSpawner(),"collectedSpawner",0,false,64);
+
+		balance_setter = registerItemSimple(new ItemBalanceSetter(),"balance_setter",0,true,1);
 
 		MagicianTableUpgrades.addUpgrade(new ItemStack(genericItem,1,1), 1.2F, loc("elementalcore"));
 		MagicianTableUpgrades.addUpgrade(new ItemStack(genericItem,1,0), 5F, loc("combinedmagicalalloys"));
@@ -305,21 +307,14 @@ public class ItemsCore {
 		return new ResourceLocation("essentialcraft","textures/models/"+name+".png");
 	}
 
-	public static Item registerItemSimple(Item i, Class<?extends Item> itemClass, String name, int damage, boolean full3D, int stackSize)
+	public static <T extends Item> T registerItemSimple(T item, String name, int damage, boolean full3D, int stackSize)
 	{
-		try
-		{
-			i = itemClass.newInstance().setUnlocalizedName("essentialcraft."+name).setMaxDamage(damage).setMaxStackSize(stackSize);
-			if(full3D)
-				i.setFull3D();
-			ItemRegistry.registerItem(i, name, EssentialCraftCore.class);
-			EssentialCraftCore.proxy.handleItemRegister(i);
-			return i;
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
+		item.setUnlocalizedName("essentialcraft."+name).setMaxDamage(damage).setMaxStackSize(stackSize);
+		if(full3D)
+			item.setFull3D();
+		ItemRegistry.registerItem(item, name, EssentialCraftCore.class);
+		EssentialCraftCore.proxy.handleItemRegister(item);
+		return item;
 	}
 
 	public static Item registerItemSimple(Item i, String name) {
@@ -457,6 +452,8 @@ public class ItemsCore {
 	public static Item inventoryGem;
 	public static Item craftingFrame;
 	public static Item collectedSpawner;
+
+	public static Item balance_setter;
 
 	public static ArmorMaterial magicArmorMaterial = EnumHelper.addArmorMaterial("MRUFortified", "armorEC3Magic", 33, new int[]{3, 8, 6, 3}, 25, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 0);
 	public static ArmorMaterial voidArmorMaterial = EnumHelper.addArmorMaterial("VoidFortified", "armorEC3Void", 52, new int[]{3, 8, 6, 3}, 40, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 0);

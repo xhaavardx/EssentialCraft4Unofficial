@@ -177,9 +177,9 @@ public class OreDictionaryRegistry {
 		OreDictionary.registerOre("coreLapis", new ItemStack(ItemsCore.genericItem,1,45));
 		OreDictionary.registerOre("dustFading", new ItemStack(ItemsCore.genericItem,1,46));
 		OreDictionary.registerOre("gemFading", new ItemStack(ItemsCore.genericItem,1,47));
-		OreDictionary.registerOre("gemMithriline", new ItemStack(ItemsCore.genericItem,1,48));
-		OreDictionary.registerOre("plateMithriline", new ItemStack(ItemsCore.genericItem,1,49));
-		OreDictionary.registerOre("ingotMithriline", new ItemStack(ItemsCore.genericItem,1,50));
+		OreDictionary.registerOre("gemMithrilineCrystal", new ItemStack(ItemsCore.genericItem,1,48));
+		OreDictionary.registerOre("plateMithrilineMetal", new ItemStack(ItemsCore.genericItem,1,49));
+		OreDictionary.registerOre("ingotMithrilineMetal", new ItemStack(ItemsCore.genericItem,1,50));
 		OreDictionary.registerOre("dustMithriline", new ItemStack(ItemsCore.genericItem,1,51));
 		OreDictionary.registerOre("gemWind", new ItemStack(ItemsCore.genericItem,1,55));
 

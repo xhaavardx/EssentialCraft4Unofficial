@@ -4,7 +4,6 @@ import DummyCore.Utils.DataStorage;
 import DummyCore.Utils.DummyData;
 import essentialcraft.api.ApiCore;
 import essentialcraft.common.item.ItemEssence;
-import essentialcraft.utils.common.ECUtils;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumParticleTypes;
@@ -12,33 +11,34 @@ import net.minecraftforge.common.config.Configuration;
 
 public class TileCrystalController extends TileMRUGeneric {
 
-	public static float cfgMaxMRU = ApiCore.DEVICE_MAX_MRU_GENERIC;
+	public static int cfgMaxMRU = ApiCore.DEVICE_MAX_MRU_GENERIC;
 	public static int mruUsage = 100;
 	public static int chanceToUseMRU = 20;
 	public static float mutateModifier = 0.001F;
 
 	public TileCrystalController() {
 		super();
-		maxMRU = (int)cfgMaxMRU;
+		mruStorage.setMaxMRU(cfgMaxMRU);
 		setSlotsNum(2);
 	}
 
 	@Override
 	public void update() {
 		super.update();
-		ECUtils.manage(this, 0);
+		mruStorage.update(getPos(), getWorld(), getStackInSlot(0));
 
-		if(getWorld().isBlockIndirectlyGettingPowered(pos) == 0)
-			if(!getWorld().isRemote && getWorld().rand.nextInt(chanceToUseMRU) == 0 && getMRU() >= mruUsage) {
-				setMRU(getMRU() - mruUsage);
+		if(getWorld().isBlockIndirectlyGettingPowered(pos) == 0) {
+			if(!getWorld().isRemote && getWorld().rand.nextInt(chanceToUseMRU) == 0 && mruStorage.getMRU() >= mruUsage) {
+				mruStorage.extractMRU(mruUsage, true);
 			}
+		}
 		spawnParticles();
-		if(getWorld().isBlockIndirectlyGettingPowered(pos) == 0)
+		if(!getWorld().isRemote && getWorld().isBlockIndirectlyGettingPowered(pos) == 0)
 			mutateToElement();
 	}
 
 	public void spawnParticles() {
-		if(getMRU() > 0 && getCrystal() != null) {
+		if(world.isRemote && mruStorage.getMRU() > 0 && getCrystal() != null) {
 			for(int o = 0; o < 2; ++o) {
 				getWorld().spawnParticle(EnumParticleTypes.REDSTONE, pos.getX()+0.3D + getWorld().rand.nextDouble()/2, pos.getY()+0.3F + (float)o/2, pos.getZ()+0.3D + getWorld().rand.nextDouble()/2D, -1.0D, 1.0D, 0.0D);
 			}
@@ -46,16 +46,16 @@ public class TileCrystalController extends TileMRUGeneric {
 	}
 
 	public void mutateToElement() {
-		if(!getStackInSlot(1).isEmpty() && getStackInSlot(1).getItem() instanceof ItemEssence && getMRU() > 500 && !getWorld().isRemote && getCrystal() != null && getCrystal().size < 100) {
+		if(!getStackInSlot(1).isEmpty() && getStackInSlot(1).getItem() instanceof ItemEssence && mruStorage.getMRU() > mruUsage*10 && getCrystal() != null && getCrystal().size < 100) {
 			ItemStack e = getStackInSlot(1);
 			TileElementalCrystal c = getCrystal();
 			int rarity = (int)((float)e.getItemDamage() / 4);
 			float chance = mutateModifier * (rarity + 1);
 			if(getWorld().rand.nextFloat() <= chance) {
+				mruStorage.extractMRU(mruUsage*10, true);
 				int type = e.getItemDamage()%4;
 				c.mutate(type, getWorld().rand.nextInt((rarity + 1) * 2));
 				decrStackSize(1, 1);
-				setMRU(getMRU() - mruUsage*10);
 			}
 		}
 	}
@@ -112,7 +112,7 @@ public class TileCrystalController extends TileMRUGeneric {
 			mutateModifier = Float.parseFloat(data[3].fieldValue);
 			mruUsage = Integer.parseInt(data[1].fieldValue);
 			chanceToUseMRU = Integer.parseInt(data[2].fieldValue);
-			cfgMaxMRU = Float.parseFloat(data[0].fieldValue);
+			cfgMaxMRU = Integer.parseInt(data[0].fieldValue);
 
 			cfg.save();
 		}

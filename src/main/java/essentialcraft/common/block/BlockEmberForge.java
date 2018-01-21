@@ -14,22 +14,19 @@ import net.minecraftforge.client.model.ModelLoader;
 
 public class BlockEmberForge extends BlockContainer implements IModelRegisterer {
 
-	public BlockEmberForge(Material p_i45394_1_) {
-		super(p_i45394_1_);
-	}
-
 	public BlockEmberForge() {
 		super(Material.ROCK);
 	}
 
 	@Override
-	public TileEntity createNewTileEntity(World p_149915_1_, int p_149915_2_) {
-		return new TileEmberForge();
+	public EnumBlockRenderType getRenderType(IBlockState s)
+	{
+		return EnumBlockRenderType.MODEL;
 	}
 
 	@Override
-	public EnumBlockRenderType getRenderType(IBlockState s) {
-		return EnumBlockRenderType.MODEL;
+	public TileEntity createNewTileEntity(World p_149915_1_, int p_149915_2_) {
+		return new TileEmberForge();
 	}
 
 	@Override

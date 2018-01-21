@@ -20,12 +20,11 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.client.model.ModelLoader;
 
-public class ItemCharm extends ItemStoresMRUInNBT implements IBauble, IModelRegisterer {
+public class ItemCharm extends ItemMRUGeneric implements IBauble, IModelRegisterer {
 
 	public String[] name = {"Fire", "Water", "Earth", "Air", "Steam", "Magma", "Lightning", "Life", "Rain", "Dust", "None"};
 	public ItemCharm() {
 		super();
-		setMaxMRU(5000);
 		setMaxDamage(0);
 		maxStackSize = 1;
 		bFull3D = false;
@@ -74,46 +73,46 @@ public class ItemCharm extends ItemStoresMRUInNBT implements IBauble, IModelRegi
 
 	@Override
 	public void getSubItems(CreativeTabs par2CreativeTabs, NonNullList<ItemStack> par3List) {
-		if(this.isInCreativeTab(par2CreativeTabs))
+		if(this.isInCreativeTab(par2CreativeTabs)) {
 			for(int var4 = 0; var4 < 10; ++var4) {
 				ItemStack min = new ItemStack(this, 1, var4);
-				ECUtils.initMRUTag(min, maxMRU);
 				ItemStack max = new ItemStack(this, 1, var4);
-				ECUtils.initMRUTag(max, maxMRU);
-				ECUtils.getStackTag(max).setInteger("mru", ECUtils.getStackTag(max).getInteger("maxMRU"));
+				min.getCapability(MRU_HANDLER_ITEM_CAPABILITY, null).setMRU(0);
+				max.getCapability(MRU_HANDLER_ITEM_CAPABILITY, null).setMRU(maxMRU);
 				par3List.add(min);
 				par3List.add(max);
 			}
+		}
 	}
 
 	public void updateFire(EntityPlayer e, ItemStack s) {
-		if(e.isBurning() && !e.isPotionActive(MobEffects.FIRE_RESISTANCE) && (ECUtils.tryToDecreaseMRUInStorage(e, -50) || increaseMRU(s, -50))) {
+		if(e.isBurning() && !e.isPotionActive(MobEffects.FIRE_RESISTANCE) && ECUtils.playerUseMRU(e, s, 50)) {
 			e.extinguish();
 			e.getEntityWorld().playSound(e, e.posX, e.posY, e.posZ, SoundEvents.ENTITY_GENERIC_EXTINGUISH_FIRE, SoundCategory.PLAYERS, 1, 1);
 		}
 	}
 
 	public void updateWater(EntityPlayer e, ItemStack s) {
-		if(e.getAir() < 10 && e.isInWater() && (ECUtils.tryToDecreaseMRUInStorage(e, -100) || increaseMRU(s, -100))) {
+		if(e.getAir() < 10 && e.isInWater() && ECUtils.playerUseMRU(e, s, 100)) {
 			e.setAir(100);
 			e.getEntityWorld().playSound(e, e.posX, e.posY, e.posZ, SoundEvents.ENTITY_PLAYER_BREATH, SoundCategory.PLAYERS, 1, 1);
 		}
 	}
 
 	public void updateEarth(EntityPlayer e, ItemStack s) {
-		if(e.hurtTime > 0 && !e.isPotionActive(MobEffects.RESISTANCE) && (ECUtils.tryToDecreaseMRUInStorage(e, -200) || increaseMRU(s, -200)))
+		if(e.hurtTime > 0 && !e.isPotionActive(MobEffects.RESISTANCE) && ECUtils.playerUseMRU(e, s, 200))
 			e.addPotionEffect(new PotionEffect(MobEffects.RESISTANCE, 100, 0));
 	}
 
 	public void updateAir(EntityPlayer e, ItemStack s) {
-		if(e.isSprinting() && !e.isPotionActive(MobEffects.SPEED) && (ECUtils.tryToDecreaseMRUInStorage(e, -10) || increaseMRU(s, -10))) {
+		if(e.isSprinting() && !e.isPotionActive(MobEffects.SPEED) && ECUtils.playerUseMRU(e, s, 10)) {
 			e.addPotionEffect(new PotionEffect(MobEffects.SPEED, 20, 1));
 			e.getEntityWorld().playSound(e, e.posX, e.posY, e.posZ, SoundEvents.ENTITY_PLAYER_BREATH, SoundCategory.PLAYERS, 1, .01F);
 		}
 	}
 
 	public void updateSteam(EntityPlayer e, ItemStack s) {
-		if(e.getHealth() < 5 && !e.isPotionActive(MobEffects.SPEED) && (ECUtils.tryToDecreaseMRUInStorage(e, -200) || increaseMRU(s, -200))) {
+		if(e.getHealth() < 5 && !e.isPotionActive(MobEffects.SPEED) && ECUtils.playerUseMRU(e, s, 200)) {
 			e.addPotionEffect(new PotionEffect(MobEffects.SPEED, 100, 5));
 			e.getEntityWorld().playSound(e, e.posX, e.posY, e.posZ, SoundEvents.ENTITY_PLAYER_BREATH, SoundCategory.PLAYERS, 1, .01F);
 			e.getEntityWorld().playSound(e, e.posX, e.posY, e.posZ, SoundEvents.ENTITY_GENERIC_EXTINGUISH_FIRE, SoundCategory.PLAYERS, 1, .01F);
@@ -123,14 +122,14 @@ public class ItemCharm extends ItemStoresMRUInNBT implements IBauble, IModelRegi
 	public void updateMagma(EntityPlayer e, ItemStack s) {
 		Material m = e.getEntityWorld().getBlockState(new BlockPos((int)e.posX-1, (int)e.posY-1, (int)e.posZ)).getMaterial();
 		Material m1 = e.getEntityWorld().getBlockState(new BlockPos((int)e.posX-1, (int)e.posY, (int)e.posZ)).getMaterial();
-		if((m == Material.LAVA || m1 == Material.LAVA) && !e.isPotionActive(MobEffects.FIRE_RESISTANCE) && (ECUtils.tryToDecreaseMRUInStorage(e, -100) || increaseMRU(s, -100))) {
+		if((m == Material.LAVA || m1 == Material.LAVA) && !e.isPotionActive(MobEffects.FIRE_RESISTANCE) && ECUtils.playerUseMRU(e, s, 100)) {
 			e.addPotionEffect(new PotionEffect(MobEffects.FIRE_RESISTANCE, 100, 0));
 			e.getEntityWorld().playSound(e, e.posX, e.posY, e.posZ, SoundEvents.BLOCK_LAVA_AMBIENT, SoundCategory.PLAYERS, 1, 10F);
 		}
 	}
 
 	public void updateLightning(EntityPlayer e, ItemStack s) {
-		if(e.getEntityWorld().isThundering()&& !e.isPotionActive(MobEffects.STRENGTH) && (ECUtils.tryToDecreaseMRUInStorage(e, -100) || increaseMRU(s, -100))) {
+		if(e.getEntityWorld().isThundering()&& !e.isPotionActive(MobEffects.STRENGTH) && ECUtils.playerUseMRU(e, s, 100)) {
 			e.addPotionEffect(new PotionEffect(MobEffects.FIRE_RESISTANCE, 100, 0));
 			e.addPotionEffect(new PotionEffect(MobEffects.NIGHT_VISION, 600, 0));
 			e.addPotionEffect(new PotionEffect(MobEffects.STRENGTH, 100, 0));
@@ -139,18 +138,18 @@ public class ItemCharm extends ItemStoresMRUInNBT implements IBauble, IModelRegi
 	}
 
 	public void updateLife(EntityPlayer e, ItemStack s) {
-		if(e.getHealth() < 5 && !e.isPotionActive(MobEffects.REGENERATION) && (ECUtils.tryToDecreaseMRUInStorage(e, -200) || increaseMRU(s, -200))) {
+		if(e.getHealth() < 5 && !e.isPotionActive(MobEffects.REGENERATION) && ECUtils.playerUseMRU(e, s, 200)) {
 			e.addPotionEffect(new PotionEffect(MobEffects.REGENERATION, 50, 1));
 			e.getEntityWorld().playSound(e, e.posX, e.posY, e.posZ, SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 1,  10F);
 		}
-		if(e.getHealth() < 20 && !e.isPotionActive(MobEffects.REGENERATION) && (ECUtils.tryToDecreaseMRUInStorage(e, -50) || increaseMRU(s, -50))) {
+		if(e.getHealth() < 20 && !e.isPotionActive(MobEffects.REGENERATION) && ECUtils.playerUseMRU(e, s, 50)) {
 			e.addPotionEffect(new PotionEffect(MobEffects.REGENERATION, 50, 0));
 			e.getEntityWorld().playSound(e, e.posX, e.posY, e.posZ, SoundEvents.ENTITY_EXPERIENCE_ORB_PICKUP, SoundCategory.PLAYERS, 1, 10F);
 		}
 	}
 
 	public void updateRain(EntityPlayer e, ItemStack s) {
-		if(e.getEntityWorld().isRaining() && !e.isPotionActive(MobEffects.HASTE) && (ECUtils.tryToDecreaseMRUInStorage(e, -50) || increaseMRU(s, -50))) {
+		if(e.getEntityWorld().isRaining() && !e.isPotionActive(MobEffects.HASTE) && ECUtils.playerUseMRU(e, s, 50)) {
 			e.addPotionEffect(new PotionEffect(MobEffects.HASTE, 100, 0));
 			e.addPotionEffect(new PotionEffect(MobEffects.JUMP_BOOST, 100, 2));
 			e.addPotionEffect(new PotionEffect(MobEffects.SPEED, 100, 0));
@@ -160,13 +159,14 @@ public class ItemCharm extends ItemStoresMRUInNBT implements IBauble, IModelRegi
 
 	public void updateDust(EntityPlayer e, ItemStack s) {
 		Material m = e.getEntityWorld().getBlockState(new BlockPos((int)e.posX-1, (int)e.posY-1, (int)e.posZ)).getMaterial();
-		if(m == Material.SAND && !e.isPotionActive(MobEffects.RESISTANCE) && (ECUtils.tryToDecreaseMRUInStorage(e, -100) || increaseMRU(s, -100))) {
+		if(m == Material.SAND && !e.isPotionActive(MobEffects.RESISTANCE) && ECUtils.playerUseMRU(e, s, 100)) {
 			e.addPotionEffect(new PotionEffect(MobEffects.RESISTANCE, 100, 0));
 			e.addPotionEffect(new PotionEffect(MobEffects.REGENERATION, 100, 0));
 		}
 	}
 
-	public String getItemDisplayName(ItemStack par1ItemStack) {
+	@Override
+	public String getItemStackDisplayName(ItemStack par1ItemStack) {
 		return "Charm Of "+name[Math.min(par1ItemStack.getItemDamage(), name.length-1)];
 	}
 

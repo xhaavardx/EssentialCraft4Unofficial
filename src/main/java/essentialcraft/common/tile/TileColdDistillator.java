@@ -19,12 +19,12 @@ import net.minecraftforge.common.config.Configuration;
 public class TileColdDistillator extends TileMRUGeneric {
 
 	public static float balanceProduced = 0F;
-	public static float cfgMaxMRU = ApiCore.GENERATOR_MAX_MRU_GENERIC*10;
+	public static int cfgMaxMRU = ApiCore.GENERATOR_MAX_MRU_GENERIC*10;
 	public static boolean harmEntities = true;
 
 	public TileColdDistillator() {
 		super();
-		maxMRU = (int)cfgMaxMRU;
+		mruStorage.setMaxMRU(cfgMaxMRU);
 		slot0IsBoundGem = false;
 	}
 
@@ -35,15 +35,12 @@ public class TileColdDistillator extends TileMRUGeneric {
 	@Override
 	public void update() {
 		super.update();
-		balance = balanceProduced;
-		if(!getWorld().isRemote) {
-			if(getWorld().isBlockIndirectlyGettingPowered(pos) == 0) {
-				int mruGenerated = CgetMru();
-				setMRU(getMRU()+mruGenerated);
-				if(getMRU() > getMaxMRU())
-					setMRU(getMaxMRU());
-				if(harmEntities)
-					CdamageAround();
+		mruStorage.setBalance(balanceProduced);
+		if(getWorld().isBlockIndirectlyGettingPowered(pos) == 0) {
+			int mruGenerated = CgetMru();
+			mruStorage.addMRU(mruGenerated, true);
+			if(mruGenerated > 0 && !getWorld().isRemote && harmEntities) {
+				CdamageAround();
 			}
 		}
 	}
@@ -56,7 +53,7 @@ public class TileColdDistillator extends TileMRUGeneric {
 				e.addPotionEffect(new PotionEffect(MobEffects.MINING_FATIGUE, 3000, 2));
 				e.addPotionEffect(new PotionEffect(MobEffects.WEAKNESS, 3000, 2));
 				e.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 3000, 2));
-				if(e.world.rand.nextFloat() < 0.2F && !e.world.isRemote) {
+				if(getWorld().rand.nextFloat() < 0.2F) {
 					e.attackEntityFrom(DamageSource.STARVE, 1);
 				}
 			}
@@ -64,7 +61,7 @@ public class TileColdDistillator extends TileMRUGeneric {
 				e.addPotionEffect(new PotionEffect(MobEffects.MINING_FATIGUE, 3000, 2));
 				e.addPotionEffect(new PotionEffect(MobEffects.WEAKNESS, 3000, 2));
 				e.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 3000, 2));
-				if(e.world.rand.nextFloat() < 0.2F && !e.world.isRemote) {
+				if(getWorld().rand.nextFloat() < 0.2F) {
 					e.attackEntityFrom(DamageSource.STARVE, 1);
 				}
 			}
@@ -114,7 +111,7 @@ public class TileColdDistillator extends TileMRUGeneric {
 
 			DummyData[] data = DataStorage.parseData(dataString);
 			balanceProduced = Float.parseFloat(data[0].fieldValue);
-			cfgMaxMRU = (int)Float.parseFloat(data[1].fieldValue);
+			cfgMaxMRU = Integer.parseInt(data[1].fieldValue);
 			harmEntities = Boolean.parseBoolean(data[2].fieldValue);
 
 			cfg.save();

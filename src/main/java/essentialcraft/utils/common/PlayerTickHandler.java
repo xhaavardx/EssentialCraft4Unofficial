@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.UUID;
 
 import org.apache.logging.log4j.Level;
 import org.lwjgl.input.Keyboard;
@@ -326,13 +327,14 @@ public class PlayerTickHandler {
 	public void save(PlayerEvent.SaveToFile event)
 	{
 		EntityPlayer e = event.getEntityPlayer();
+		UUID uuid = MiscUtils.getUUIDFromPlayer(e);
 		if(!e.getEntityWorld().isRemote)
 		{
 			File f = event.getPlayerDirectory();
 			if(f != null)
 			{
 				String fPath = f.getAbsolutePath();
-				File saveFile = new File(fPath+"//"+MiscUtils.getUUIDFromPlayer(e)+".ecdat");
+				File saveFile = new File(fPath+"//"+uuid+".ecdat");
 				if(saveFile.isDirectory())
 				{
 					//???
@@ -350,12 +352,12 @@ public class PlayerTickHandler {
 					try
 					{
 						NBTTagCompound tag = new NBTTagCompound();
-						ECUtils.getData(e).writeToNBTTagCompound(tag);
+						ECUtils.getData(uuid).writeToNBTTagCompound(tag);
 						CompressedStreamTools.writeCompressed(tag, oStream);
 					}
 					catch(Exception Ex)
 					{
-						FMLCommonHandler.instance().raiseException(Ex, "EssentialCraft3 Encountered an exception whlist saving playerdata NBT of player "+e.getName()+"!Report the error to the forum - http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/2286105", false);
+						FMLCommonHandler.instance().raiseException(Ex, "EssentialCraft4 Encountered an exception whlist saving playerdata NBT of player "+e.getName()+"!Report the error to the forum - http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/2286105", false);
 					}
 					finally
 					{
@@ -364,7 +366,7 @@ public class PlayerTickHandler {
 				}
 				catch(Exception Exx)
 				{
-					FMLCommonHandler.instance().raiseException(Exx, "EssentialCraft3 Encountered an exception whlist wrighting playerdata file of player "+e.getName()+"! Make sure, that the file is not being accessed by other applications and is not threated as a virus by your anti-virus software! Also make sure, that you have some harddrive space. If everything above is correct - report the error to the forum - http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/2286105", true);
+					FMLCommonHandler.instance().raiseException(Exx, "EssentialCraft4 Encountered an exception whlist wrighting playerdata file of player "+e.getName()+"! Make sure, that the file is not being accessed by other applications and is not threated as a virus by your anti-virus software! Also make sure, that you have some harddrive space. If everything above is correct - report the error to the forum - http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/2286105", true);
 				}
 			}
 		}
@@ -374,59 +376,48 @@ public class PlayerTickHandler {
 	public void load(PlayerEvent.LoadFromFile event)
 	{
 		EntityPlayer e = event.getEntityPlayer();
-
-		if(!e.getEntityWorld().isRemote)
-		{
+		UUID uuid = MiscUtils.getUUIDFromPlayer(e);
+		if(!e.getEntityWorld().isRemote) {
 			File f = event.getPlayerDirectory();
-			if(f != null)
-			{
+			if(f != null) {
 				String fPath = f.getAbsolutePath();
-				File saveFile = new File(fPath+"//"+MiscUtils.getUUIDFromPlayer(e)+".ecdat");
-				if(saveFile.isDirectory())
-				{
+				File saveFile = new File(fPath+"//"+uuid+".ecdat");
+				if(saveFile.isDirectory()) {
 					//???
 					saveFile.delete();
 					try{saveFile.createNewFile();}catch(IOException Ex){Ex.printStackTrace();}
 				}
-				if(!saveFile.exists())
-				{
+				if(!saveFile.exists()) {
 					try{saveFile.createNewFile();}catch(IOException Ex){Ex.printStackTrace();}
 				}
 
-				try
-				{
+				try {
 					FileInputStream iStream = new FileInputStream(saveFile);
-					try
-					{
+					try {
 						NBTTagCompound tag = null;
-						try
-						{
+						try {
 							tag = CompressedStreamTools.readCompressed(iStream);
 						}
-						catch(java.io.EOFException EOFE)
-						{
+						catch(java.io.EOFException EOFE) {
 							//NBT could not be read, probably a first login.
-							FMLLog.log(Level.WARN, "[EC3]Player data for player "+e.getName()+" could not be read. If it is the first time of the player to log in - it is fine. Otherwise, report the error to the author!");
+							FMLLog.log(Level.WARN, "[EC4]Player data for player "+e.getName()+" could not be read. If it is the first time of the player to log in - it is fine. Otherwise, report the error to the author!");
 						}
 
 						if(tag != null)
-							ECUtils.readOrCreatePlayerData(e, tag);
+							ECUtils.readOrCreatePlayerData(uuid, tag);
 						else
-							ECUtils.createPlayerData(e);
+							ECUtils.createPlayerData(uuid);
 					}
-					catch(Exception Ex)
-					{
-						FMLCommonHandler.instance().raiseException(Ex, "EssentialCraft3 Encountered an exception whlist reading playerdata NBT of player "+e.getName()+"! It is totally fine if this is your first time opening the save. If it is not - report the error to the forum - http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/2286105", false);
-						ECUtils.readOrCreatePlayerData(e, new NBTTagCompound());
+					catch(Exception Ex) {
+						FMLCommonHandler.instance().raiseException(Ex, "EssentialCraft4 Encountered an exception whlist reading playerdata NBT of player "+e.getName()+"! It is totally fine if this is your first time opening the save. If it is not - report the error to the forum - http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/2286105", false);
+						ECUtils.readOrCreatePlayerData(uuid, new NBTTagCompound());
 					}
-					finally
-					{
+					finally {
 						iStream.close();
 					}
 				}
-				catch(Exception Exx)
-				{
-					FMLCommonHandler.instance().raiseException(Exx, "EssentialCraft3 Encountered an exception whlist opening playerdata file of player "+e.getName()+"! Make sure, that the file is not being accessed by other applications and is not threated as a virus by your anti-virus software! Also make sure, that you have some harddrive space. If everything above is correct - report the error to the forum - http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/2286105", true);
+				catch(Exception Exx) {
+					FMLCommonHandler.instance().raiseException(Exx, "EssentialCraft4 Encountered an exception whlist opening playerdata file of player "+e.getName()+"! Make sure, that the file is not being accessed by other applications and is not threated as a virus by your anti-virus software! Also make sure, that you have some harddrive space. If everything above is correct - report the error to the forum - http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/2286105", true);
 				}
 			}
 		}
@@ -501,8 +492,8 @@ public class PlayerTickHandler {
 							if(!e.capabilities.allowFlying && !e.capabilities.isCreativeMode)
 							{
 								e.capabilities.allowFlying = true;
-								e.capabilities.setFlySpeed(0.2F);
 							}
+							e.capabilities.setFlySpeed(0.2F);
 
 						}else
 						{
@@ -525,8 +516,8 @@ public class PlayerTickHandler {
 									e.capabilities.allowFlying = false;
 									if(e.capabilities.isFlying)
 										e.capabilities.isFlying = false;
-									e.capabilities.setFlySpeed(0.05F);
 								}
+								e.capabilities.setFlySpeed(0.05F);
 
 							}
 						}else
@@ -642,7 +633,7 @@ public class PlayerTickHandler {
 
 	public void doGroundItemChecks(EntityItem item) {
 		if(item.getItem().getItem() == Items.BLAZE_POWDER) {
-			Block b = item.getEntityWorld().getBlockState(item.getPosition().add(0, -1, 0)).getBlock();
+			Block b = item.getEntityWorld().getBlockState(item.getPosition().down()).getBlock();
 			if(b == Blocks.NETHERRACK) {
 				IBlockState b_check_b1 = item.getEntityWorld().getBlockState(item.getPosition().add(1, -1, 0));
 				IBlockState b_check_b2 = item.getEntityWorld().getBlockState(item.getPosition().add(-1, -1, 0));
@@ -667,7 +658,7 @@ public class PlayerTickHandler {
 			}
 		}
 		else if(item.getItem().getItem() == Items.CLAY_BALL) {
-			Block b = item.getEntityWorld().getBlockState(item.getPosition().add(0, -1, 0)).getBlock();
+			Block b = item.getEntityWorld().getBlockState(item.getPosition().down()).getBlock();
 			if(b == Blocks.ICE) {
 				IBlockState b_check_b1 = item.getEntityWorld().getBlockState(item.getPosition().add(1, -1, 0));
 				IBlockState b_check_b2 = item.getEntityWorld().getBlockState(item.getPosition().add(-1, -1, 0));
@@ -691,7 +682,7 @@ public class PlayerTickHandler {
 			}
 		}
 		else if(item.getItem().getItem() == Items.SLIME_BALL) {
-			Block b = item.getEntityWorld().getBlockState(item.getPosition().add(0, -1, 0)).getBlock();
+			Block b = item.getEntityWorld().getBlockState(item.getPosition().down()).getBlock();
 			if(b == Blocks.SLIME_BLOCK) {
 				IBlockState b_check_b1 = item.getEntityWorld().getBlockState(item.getPosition().add(1, -1, 0));
 				IBlockState b_check_b2 = item.getEntityWorld().getBlockState(item.getPosition().add(-1, -1, 0));
@@ -715,7 +706,7 @@ public class PlayerTickHandler {
 			}
 		}
 		else if(item.getItem().getItem() == Items.GUNPOWDER) {
-			Block b = item.getEntityWorld().getBlockState(item.getPosition().add(0, -1, 0)).getBlock();
+			Block b = item.getEntityWorld().getBlockState(item.getPosition().down()).getBlock();
 			if(b == Blocks.QUARTZ_BLOCK) {
 				IBlockState b_check_b1 = item.getEntityWorld().getBlockState(item.getPosition().add(1, -1, 0));
 				IBlockState b_check_b2 = item.getEntityWorld().getBlockState(item.getPosition().add(-1, -1, 0));
@@ -739,7 +730,7 @@ public class PlayerTickHandler {
 			}
 		}
 		else if(item.getItem().getItem() == Items.DIAMOND) {
-			Block b = item.getEntityWorld().getBlockState(item.getPosition().add(0, -1, 0)).getBlock();
+			Block b = item.getEntityWorld().getBlockState(item.getPosition().down()).getBlock();
 			if(b == Blocks.EMERALD_BLOCK) {
 				IBlockState b_check_b1 = item.getEntityWorld().getBlockState(item.getPosition().add(1, -1, 0));
 				IBlockState b_check_b2 = item.getEntityWorld().getBlockState(item.getPosition().add(-1, -1, 0));
@@ -757,13 +748,13 @@ public class PlayerTickHandler {
 					}
 					MiscUtils.spawnParticlesOnServer("explosion_normal", (float)item.posX, (float)item.posY, (float)item.posZ, 0D, 0D, 0D);
 					if(item.getEntityWorld().rand.nextFloat() <= 0.6F) {
-						ECUtils.increaseCorruptionAt(item.getEntityWorld(), (float)item.posX, (float)item.posY, (float)item.posZ, 5000);
+						ECUtils.increaseCorruptionAt(item.getEntityWorld(), item.getPosition(), 5000);
 					}
 				}
 			}
 		}
 		else if(item.getItem().getItem() == Items.EMERALD) {
-			Block b = item.getEntityWorld().getBlockState(item.getPosition().add(0, -1, 0)).getBlock();
+			Block b = item.getEntityWorld().getBlockState(item.getPosition().down()).getBlock();
 			if(b == Blocks.EMERALD_BLOCK) {
 				IBlockState b_check_b1 = item.getEntityWorld().getBlockState(item.getPosition().add(1, -1, 0));
 				IBlockState b_check_b2 = item.getEntityWorld().getBlockState(item.getPosition().add(-1, -1, 0));

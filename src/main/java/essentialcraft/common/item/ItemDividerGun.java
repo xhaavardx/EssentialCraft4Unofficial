@@ -16,7 +16,11 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 
-public class ItemDividerGun extends ItemStoresMRUInNBT implements IModelRegisterer {
+public class ItemDividerGun extends ItemMRUGeneric implements IModelRegisterer {
+
+	public ItemDividerGun() {
+		this.setMaxMRU(20000);
+	}
 
 	@Override
 	public void onUpdate(ItemStack itemStack, World world, Entity entity, int indexInInventory, boolean isCurrentItem)
@@ -49,7 +53,7 @@ public class ItemDividerGun extends ItemStoresMRUInNBT implements IModelRegister
 
 	@Override
 	public ItemStack onItemUseFinish(ItemStack stk, World w, EntityLivingBase p) {
-		if(p instanceof EntityPlayer && (ECUtils.tryToDecreaseMRUInStorage((EntityPlayer)p, -5000) || this.increaseMRU(stk, -5000))) {
+		if(p instanceof EntityPlayer && ECUtils.playerUseMRU((EntityPlayer)p, stk, 5000)) {
 			w.playSound(p.posX, p.posY, p.posZ, SoundRegistry.gunBeam, SoundCategory.PLAYERS, 1, 2, false);
 			EntityDividerProjectile proj = new EntityDividerProjectile(w,p);
 			proj.setHeadingFromThrower(p, p.rotationPitch, p.rotationYaw, 0.0F, 1.5F, 1.0F);

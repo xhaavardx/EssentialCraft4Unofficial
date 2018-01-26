@@ -21,7 +21,7 @@ import net.minecraftforge.items.wrapper.InvWrapper;
 
 public class TileRayTower extends TileEntity implements IInventory, ITickable {
 	public int syncTick;
-	protected MRUTileStorage mruStorage;
+	protected MRUTileStorage mruStorage = new MRUTileStorage(5000);
 	public int innerRotation;
 	public ItemStack[] items = {ItemStack.EMPTY};
 

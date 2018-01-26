@@ -90,7 +90,7 @@ public class TileUltraFlowerBurner extends TileMRUGeneric {
 						for(int y = 32; y >= 0; --y) {
 							IBlockState state = getWorld().getBlockState(pos.add(offsetX, y, offsetZ));
 							Block b = state.getBlock();
-							int[] ids = b != Blocks.AIR && Item.getItemFromBlock(b) != null ? OreDictionary.getOreIDs(new ItemStack(b.getItemDropped(state, getWorld().rand, 0), 1, b.damageDropped(state))) : null;
+							int[] ids = b != Blocks.AIR && Item.getItemFromBlock(b) != null ? OreDictionary.getOreIDs(new ItemStack(b, 1, b.damageDropped(state))) : null;
 							String name = "";
 							if(ids != null && ids.length > 0) {
 								for(int i = 0; i < ids.length; ++i) {

@@ -55,7 +55,7 @@ public class TileFlowerBurner extends TileMRUGeneric {
 					IBlockState state = getWorld().getBlockState(pos.add(offsetX, 0, offsetZ));
 					Block b = state.getBlock();
 					if(b != Blocks.AIR && Item.getItemFromBlock(b) != null) {
-						int[] ids = OreDictionary.getOreIDs(new ItemStack(b.getItemDropped(state, getWorld().rand, 0), 1, b.damageDropped(state)));
+						int[] ids = OreDictionary.getOreIDs(new ItemStack(b, 1, b.damageDropped(state)));
 						String name = "";
 						if(ids != null && ids.length > 0) {
 							for(int i = 0; i < ids.length; ++i) {
@@ -85,10 +85,16 @@ public class TileFlowerBurner extends TileMRUGeneric {
 					--burnTime;
 					mruStorage.addMRU(mruGenerated, true);
 					if(burnTime <= 0) {
-						if(createDeadBush)
-							getWorld().setBlockState(burnedFlower, Blocks.DEADBUSH.getStateFromMeta(0), 3);
-						else
+						if(createDeadBush) {
+							Block blk = getWorld().getBlockState(burnedFlower.down()).getBlock();
+							if(blk == Blocks.GRASS) {
+								getWorld().setBlockState(burnedFlower.down(), Blocks.DIRT.getDefaultState(), 3);
+							}
+							getWorld().setBlockState(burnedFlower, Blocks.DEADBUSH.getDefaultState(), 3);
+						}
+						else {
 							getWorld().setBlockState(burnedFlower, Blocks.AIR.getDefaultState(), 3);
+						}
 						burnedFlower = null;
 					}
 				}
@@ -112,6 +118,9 @@ public class TileFlowerBurner extends TileMRUGeneric {
 		if(i.hasKey("coord")) {
 			DummyData[] coordData = DataStorage.parseData(i.getString("coord"));
 			burnedFlower = new BlockPos(Integer.parseInt(coordData[0].fieldValue), Integer.parseInt(coordData[1].fieldValue), Integer.parseInt(coordData[2].fieldValue));
+		}
+		else {
+			burnedFlower = null;
 		}
 		burnTime = i.getInteger("burn");
 		super.readFromNBT(i);

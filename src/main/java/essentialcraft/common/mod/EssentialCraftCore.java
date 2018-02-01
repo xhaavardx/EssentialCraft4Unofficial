@@ -23,7 +23,6 @@ import essentialcraft.common.registry.TileRegistry;
 import essentialcraft.common.registry.VillagersRegistry;
 import essentialcraft.common.world.gen.WorldGenManager;
 import essentialcraft.integration.bloodmagic.BloodMagicRegistry;
-import essentialcraft.integration.crafttweaker.CraftTweakerRegistry;
 import essentialcraft.integration.tconstruct.TConstructRegistry;
 import essentialcraft.integration.waila.WailaInitializer;
 import essentialcraft.proxy.CommonProxy;
@@ -63,7 +62,7 @@ public class EssentialCraftCore {
 	@SidedProxy(clientSide = "essentialcraft.proxy.ClientProxy", serverSide = "essentialcraft.proxy.CommonProxy", modId = EssentialCraftCore.MODID)
 	public static CommonProxy proxy;
 	public static Config cfg = new Config();
-	public static final String VERSION = "4.9.112.1";
+	public static final String VERSION = "4.9.112.2";
 	public static final String MODID = "essentialcraft";
 	public static ModMetadata metadata;
 	public static SimpleNetworkWrapper network;
@@ -127,7 +126,6 @@ public class EssentialCraftCore {
 		proxy.registerTileEntitySpecialRenderer();
 
 		CERegistry.register();
-		CraftTweakerRegistry.register();
 		ECEventHandler.shouldLoadLoot = true;
 	}
 

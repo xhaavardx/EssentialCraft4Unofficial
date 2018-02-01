@@ -27,7 +27,7 @@ repositories {
     }
 }
 
-version = "4.9.112.1"
+version = "4.9.112.2"
 group= "essentialcraft"
 archivesBaseName = "EssentialCraftUnofficial"
 

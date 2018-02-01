@@ -5,6 +5,7 @@ import java.util.List;
 
 import crafttweaker.CraftTweakerAPI;
 import crafttweaker.IAction;
+import crafttweaker.annotations.ZenRegister;
 import crafttweaker.api.item.IItemStack;
 import crafttweaker.api.minecraft.CraftTweakerMC;
 import essentialcraft.api.WindImbueRecipe;
@@ -13,6 +14,7 @@ import stanhebben.zenscript.annotations.Optional;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 
+@ZenRegister
 @ZenClass("mods.essentialcraft.WindImbue")
 public class WindImbue {
 

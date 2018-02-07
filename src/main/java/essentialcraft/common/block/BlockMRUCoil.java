@@ -24,9 +24,9 @@ import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 
@@ -88,7 +88,7 @@ public class BlockMRUCoil extends BlockContainer implements IModelRegisterer {
 						flag = true;
 					}
 				}
-				par4EntityPlayer.sendMessage(new TextComponentString(TextFormatting.RED+I18n.translateToLocal("essentialcraft.txt.noPermission")));
+				par4EntityPlayer.sendMessage(new TextComponentTranslation("essentialcraft.txt.noPermission").setStyle(new Style().setColor(TextFormatting.RED)));
 			}
 			else {
 				flag = true;

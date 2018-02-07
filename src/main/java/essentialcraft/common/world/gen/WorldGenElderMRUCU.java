@@ -22,10 +22,8 @@ import net.minecraftforge.common.DungeonHooks;
 public class WorldGenElderMRUCU extends WorldGenerator {
 	public int type;
 
-	public static void handleGeneration(Random random, int chunkX, int chunkZ, World world,IChunkGenerator chunkGenerator, IChunkProvider chunkProvider)
-	{
-		for(int i = 0; i < Config.eMRUCUGenAttempts; ++i)
-		{
+	public static void handleGeneration(Random random, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) {
+		for(int i = 0; i < Config.eMRUCUGenAttempts; ++i) {
 			int rndX = chunkX*16 + random.nextInt(16) + 8;
 			int rndY = random.nextInt(128);
 			int rndZ = chunkZ*16 + random.nextInt(16) + 8;
@@ -33,131 +31,101 @@ public class WorldGenElderMRUCU extends WorldGenerator {
 		}
 	}
 
-	public WorldGenElderMRUCU(int type)
-	{
+	public WorldGenElderMRUCU(int type) {
 		this.type = type;
 	}
 
 	@Override
-	public boolean generate(World var1, Random var2, BlockPos var3) {
-		if(type == 0 && canGenerateAt(var3.getX()-2,var3.getZ()-2,var3.getX()+2,var3.getZ()+2,var3.getY(),true,var1))
-		{
-			for(int x = -2; x<= 2; ++x)
-			{
-				for(int z = -2; z<= 2; ++z)
-				{
-					var1.setBlockState(var3.add(x, 0, z), Block.getBlockFromName("minecraft:stonebrick").getStateFromMeta(0), 2);
-					if(x == -2 || x == 2||z == -2 || z == 2)
-					{
-						var1.setBlockState(var3.add(x, 1, z), Block.getBlockFromName("minecraft:cobblestone_wall").getStateFromMeta(0), 2);
+	public boolean generate(World world, Random rand, BlockPos pos) {
+		if(type == 0 && canGenerateAt(pos.getX()-2,pos.getZ()-2,pos.getX()+2,pos.getZ()+2,pos.getY(),true,world)) {
+			for(int x = -2; x<= 2; ++x) {
+				for(int z = -2; z<= 2; ++z) {
+					world.setBlockState(pos.add(x, 0, z), Blocks.STONEBRICK.getDefaultState(), 2);
+					if(x == -2 || x == 2||z == -2 || z == 2) {
+						world.setBlockState(pos.add(x, 1, z), Blocks.COBBLESTONE_WALL.getDefaultState(), 2);
 					}
-					if(x == 0 && z == 0)
-					{
-						var1.setBlockState(var3.add(x, 1, z), Block.getBlockFromName("minecraft:stonebrick").getStateFromMeta(3), 2);
-						ECUtils.createMRUCUAt(var1, new Coord3D(var3.getX()+x+0.5F,var3.getY()+1.5F,var3.getZ()+z+0.5F), 5000+var2.nextInt(5000), MathUtils.randomFloat(var2)+1.0F, false, false);
+					if(x == 0 && z == 0) {
+						world.setBlockState(pos.add(x, 1, z), Blocks.STONEBRICK.getStateFromMeta(3), 2);
+						ECUtils.createMRUCUAt(world, new Coord3D(pos.getX()+x+0.5F,pos.getY()+1.5F,pos.getZ()+z+0.5F), 5000+rand.nextInt(5000), MathUtils.randomFloat(rand)+1.0F, false, false);
 					}
 				}
 			}
 		}
-		if(type == 1 && canGenerateAt(var3.getX()-4,var3.getZ()-4,var3.getX()+4,var3.getZ()+4,var3.getY(),true,var1))
-		{
-			for(int x = -4; x<= 4; ++x)
-			{
-				for(int z = -4; z<= 4; ++z)
-				{
-					var1.setBlockState(var3.add(x, 0, z), Block.getBlockFromName("minecraft:stonebrick").getStateFromMeta(var2.nextInt(3)), 2);
-					if(x == -4 || x == 4||z == -4 || z == 4)
-					{
-						var1.setBlockState(var3.add(x, 1, z), Block.getBlockFromName("minecraft:cobblestone_wall").getStateFromMeta(0), 2);
+		if(type == 1 && canGenerateAt(pos.getX()-4,pos.getZ()-4,pos.getX()+4,pos.getZ()+4,pos.getY(),true,world)) {
+			for(int x = -4; x<= 4; ++x) {
+				for(int z = -4; z<= 4; ++z) {
+					world.setBlockState(pos.add(x, 0, z), Blocks.STONEBRICK.getStateFromMeta(rand.nextInt(3)), 2);
+					if(x == -4 || x == 4||z == -4 || z == 4) {
+						world.setBlockState(pos.add(x, 1, z), Blocks.COBBLESTONE_WALL.getDefaultState(), 2);
 					}
-					if(x == 0 && z == 0)
-					{
-						var1.setBlockState(var3.add(x, 1, z), Block.getBlockFromName("minecraft:stonebrick").getStateFromMeta(3), 2);
-						ECUtils.createMRUCUAt(var1, new Coord3D(var3.getX()+x+0.5F,var3.getY()+1.5F,var3.getZ()+z+0.5F), 5000+var2.nextInt(5000), MathUtils.randomFloat(var2)+1.0F, false, false);
+					if(x == 0 && z == 0) {
+						world.setBlockState(pos.add(x, 1, z), Blocks.STONEBRICK.getStateFromMeta(3), 2);
+						ECUtils.createMRUCUAt(world, new Coord3D(pos.getX()+x+0.5F,pos.getY()+1.5F,pos.getZ()+z+0.5F), 5000+rand.nextInt(5000), MathUtils.randomFloat(rand)+1.0F, false, false);
 					}
-					if(x == -3 && z == -3 || x == 3 && z == -3 || x == 3 && z == 3 || x == -3 && z == 3)
-					{
-						var1.setBlockState(var3.add(x, 1, z), Block.getBlockFromName("minecraft:chest").getStateFromMeta(4), 2);
-						TileEntityChest tileentitychest = (TileEntityChest)var1.getTileEntity(var3.add(x, 1, z));
+					if(x == -3 && z == -3 || x == 3 && z == -3 || x == 3 && z == 3 || x == -3 && z == 3) {
+						world.setBlockState(pos.add(x, 1, z), Blocks.CHEST.getStateFromMeta(4), 2);
+						TileEntityChest tileentitychest = (TileEntityChest)world.getTileEntity(pos.add(x, 1, z));
 
-						if (tileentitychest != null)
-						{
-							tileentitychest.setLootTable(LootTableList.CHESTS_SIMPLE_DUNGEON, var2.nextLong());
+						if(tileentitychest != null) {
+							tileentitychest.setLootTable(LootTableList.CHESTS_SIMPLE_DUNGEON, rand.nextLong());
 						}
 					}
 				}
 			}
 		}
-		if(type == 2 && canGenerateAt(var3.getX()-4,var3.getZ()-4,var3.getX()+4,var3.getZ()+4,var3.getY(),true,var1))
-		{
-			for(int x = -4; x<= 4; ++x)
-			{
-				for(int z = -4; z<= 4; ++z)
-				{
-					var1.setBlockState(var3.add(x, 0, z), Block.getBlockFromName("minecraft:stonebrick").getStateFromMeta(var2.nextInt(3)), 2);
-					var1.setBlockState(var3.add(x, 1, z), Block.getBlockFromName("minecraft:stonebrick").getStateFromMeta(var2.nextInt(3)), 2);
-					if(x == -4 || x == 4||z == -4 || z == 4)
-					{
-						var1.setBlockState(var3.add(x, 2, z), Block.getBlockFromName("minecraft:cobblestone_wall").getStateFromMeta(0), 2);
+		if(type == 2 && canGenerateAt(pos.getX()-4,pos.getZ()-4,pos.getX()+4,pos.getZ()+4,pos.getY(),true,world)) {
+			for(int x = -4; x<= 4; ++x) {
+				for(int z = -4; z<= 4; ++z) {
+					world.setBlockState(pos.add(x, 0, z), Blocks.STONEBRICK.getStateFromMeta(rand.nextInt(3)), 2);
+					world.setBlockState(pos.add(x, 1, z), Blocks.STONEBRICK.getStateFromMeta(rand.nextInt(3)), 2);
+					if(x == -4 || x == 4||z == -4 || z == 4) {
+						world.setBlockState(pos.add(x, 2, z), Blocks.COBBLESTONE_WALL.getDefaultState(), 2);
 					}
-					if(x == 0 && z == 0)
-					{
-						var1.setBlockState(var3.add(x, 2, z), Block.getBlockFromName("minecraft:stonebrick").getStateFromMeta(3), 2);
-						ECUtils.createMRUCUAt(var1, new Coord3D(var3.getX()+x+0.5F,var3.getY()+1.5F,var3.getZ()+z+0.5F), 5000+var2.nextInt(5000), MathUtils.randomFloat(var2)+1.0F, false, false);
+					if(x == 0 && z == 0) {
+						world.setBlockState(pos.add(x, 2, z), Blocks.STONEBRICK.getStateFromMeta(3), 2);
+						ECUtils.createMRUCUAt(world, new Coord3D(pos.getX()+x+0.5F,pos.getY()+1.5F,pos.getZ()+z+0.5F), 5000+rand.nextInt(5000), MathUtils.randomFloat(rand)+1.0F, false, false);
 					}
-					if(x != 3 && x != -3 && z != 3 && z != -3 && (x == -2 || x == 2||z == -2 || z == 2))
-					{
-						var1.setBlockState(var3.add(x, 2, z), Block.getBlockFromName("minecraft:cobblestone_wall").getStateFromMeta(0), 2);
+					if(x != 3 && x != -3 && z != 3 && z != -3 && (x == -2 || x == 2 || z == -2 || z == 2)) {
+						world.setBlockState(pos.add(x, 2, z), Blocks.COBBLESTONE_WALL.getDefaultState(), 2);
 					}
-					if(x != 4 && x != -4 && z != 4 && z != -4 && (x == -3 || x == 3||z == -3 || z == 3))
-					{
-						var1.setBlockState(var3.add(x, 1, z), Block.getBlockFromName("minecraft:lava").getStateFromMeta(0), 2);
+					if(x != 4 && x != -4 && z != 4 && z != -4 && (x == -3 || x == 3 || z == -3 || z == 3)) {
+						world.setBlockState(pos.add(x, 1, z), Blocks.LAVA.getDefaultState(), 2);
 					}
 				}
 			}
 		}
-		if(type == 3 && canGenerateAt(var3.getX()-4,var3.getZ()-4,var3.getX()+4,var3.getZ()+4,var3.getY(),false,var1))
-		{
-			for(int x = -4; x<= 4; ++x)
-			{
-				for(int z = -4; z<= 4; ++z)
-				{
-					var1.setBlockState(var3.add(x, 0, z), Block.getBlockFromName("minecraft:stonebrick").getStateFromMeta(var2.nextInt(3)), 2);
-					var1.setBlockState(var3.add(x, 4, z), Block.getBlockFromName("minecraft:stonebrick").getStateFromMeta(var2.nextInt(3)), 2);
-					if(x == -4 || x == 4||z == -4 || z == 4)
-					{
-						var1.setBlockState(var3.add(x, 1, z), Block.getBlockFromName("minecraft:iron_bars").getStateFromMeta(0), 2);
-						var1.setBlockState(var3.add(x, 2, z), Block.getBlockFromName("minecraft:stonebrick").getStateFromMeta(var2.nextInt(3)), 2);
-						var1.setBlockState(var3.add(x, 3, z), Block.getBlockFromName("minecraft:iron_bars").getStateFromMeta(0), 2);
+		if(type == 3 && canGenerateAt(pos.getX()-4,pos.getZ()-4,pos.getX()+4,pos.getZ()+4,pos.getY(),false,world)) {
+			for(int x = -4; x<= 4; ++x) {
+				for(int z = -4; z<= 4; ++z) {
+					world.setBlockState(pos.add(x, 0, z), Blocks.STONEBRICK.getStateFromMeta(rand.nextInt(3)), 2);
+					world.setBlockState(pos.add(x, 4, z), Blocks.STONEBRICK.getStateFromMeta(rand.nextInt(3)), 2);
+					if(x == -4 || x == 4||z == -4 || z == 4) {
+						world.setBlockState(pos.add(x, 1, z), Blocks.IRON_BARS.getDefaultState(), 2);
+						world.setBlockState(pos.add(x, 2, z), Blocks.STONEBRICK.getStateFromMeta(rand.nextInt(3)), 2);
+						world.setBlockState(pos.add(x, 3, z), Blocks.IRON_BARS.getDefaultState(), 2);
 					}
-					if(x == -4 && z == -4 || x == 4 && z == -4 || x == 4 && z == 4 || x == -4 && z == 4)
-					{
-						var1.setBlockState(var3.add(x, 1, z), Block.getBlockFromName("minecraft:stonebrick").getStateFromMeta(var2.nextInt(3)), 2);
-						var1.setBlockState(var3.add(x, 3, z), Block.getBlockFromName("minecraft:stonebrick").getStateFromMeta(var2.nextInt(3)), 2);
+					if(x == -4 && z == -4 || x == 4 && z == -4 || x == 4 && z == 4 || x == -4 && z == 4) {
+						world.setBlockState(pos.add(x, 1, z), Blocks.STONEBRICK.getStateFromMeta(rand.nextInt(3)), 2);
+						world.setBlockState(pos.add(x, 3, z), Blocks.STONEBRICK.getStateFromMeta(rand.nextInt(3)), 2);
 					}
-					if(x == 0 && z == 0)
-					{
-						var1.setBlockState(var3.add(x, 1, z), Block.getBlockFromName("minecraft:stonebrick").getStateFromMeta(3), 2);
-						ECUtils.createMRUCUAt(var1, new Coord3D(var3.getX()+x+0.5F,var3.getY()+1.5F,var3.getZ()+z+0.5F), 5000+var2.nextInt(5000), MathUtils.randomFloat(var2)+1.0F, false, false);
+					if(x == 0 && z == 0) {
+						world.setBlockState(pos.add(x, 1, z), Blocks.STONEBRICK.getStateFromMeta(3), 2);
+						ECUtils.createMRUCUAt(world, new Coord3D(pos.getX()+x+0.5F,pos.getY()+1.5F,pos.getZ()+z+0.5F), 5000+rand.nextInt(5000), MathUtils.randomFloat(rand)+1.0F, false, false);
 					}
-					if(x == -3 && z == -3 || x == 3 && z == -3 || x == 3 && z == 3 || x == -3 && z == 3)
-					{
-						var1.setBlockState(var3.add(x, 1, z), Block.getBlockFromName("minecraft:chest").getStateFromMeta(var2.nextInt(4)), 2);
-						TileEntityChest tileentitychest = (TileEntityChest)var1.getTileEntity(new BlockPos(var3.getX()+x, var3.getY()+1, var3.getZ()+z));
+					if(x == -3 && z == -3 || x == 3 && z == -3 || x == 3 && z == 3 || x == -3 && z == 3) {
+						world.setBlockState(pos.add(x, 1, z), Blocks.CHEST.getStateFromMeta(rand.nextInt(4)), 2);
+						TileEntityChest tileentitychest = (TileEntityChest)world.getTileEntity(pos.add(x, 1, z));
 
-						if (tileentitychest != null)
-						{
-							tileentitychest.setLootTable(LootTableList.CHESTS_SIMPLE_DUNGEON, var2.nextLong());
+						if(tileentitychest != null) {
+							tileentitychest.setLootTable(LootTableList.CHESTS_SIMPLE_DUNGEON, rand.nextLong());
 						}
 					}
-					if(x == -1 && z == 0 || x == 1 && z == 0 || x == 0 && z == 1 || x == 0 && z == -1)
-					{
-						var1.setBlockState(var3.add(x, 1, z), Block.getBlockFromName("minecraft:mob_spawner").getStateFromMeta(0), 2);
-						TileEntityMobSpawner tileentitymobspawner = (TileEntityMobSpawner)var1.getTileEntity(new BlockPos(var3.getX()+x, var3.getY()+1, var3.getZ()+z));
+					if(x == -1 && z == 0 || x == 1 && z == 0 || x == 0 && z == 1 || x == 0 && z == -1) {
+						world.setBlockState(pos.add(x, 1, z), Blocks.MOB_SPAWNER.getDefaultState(), 2);
+						TileEntityMobSpawner tileentitymobspawner = (TileEntityMobSpawner)world.getTileEntity(pos.add(x, 1, z));
 
-						if (tileentitymobspawner != null)
-						{
-							tileentitymobspawner.getSpawnerBaseLogic().setEntityId(DungeonHooks.getRandomDungeonMob(var2));
+						if(tileentitymobspawner != null) {
+							tileentitymobspawner.getSpawnerBaseLogic().setEntityId(DungeonHooks.getRandomDungeonMob(rand));
 						}
 					}
 				}
@@ -167,30 +135,26 @@ public class WorldGenElderMRUCU extends WorldGenerator {
 		return false;
 	}
 
-	public boolean canGenerateAt(int minX, int minZ, int maxX, int maxZ, int y, boolean requiresSolidBlocks, World w)
-	{
-		for(int dx = minX; dx <= maxX; ++dx)
-		{
-			for(int dz = minZ; dz <= maxZ; ++dz)
-			{
+	public boolean canGenerateAt(int minX, int minZ, int maxX, int maxZ, int y, boolean requiresSolidBlocks, World w) {
+		for(int dx = minX; dx <= maxX; ++dx) {
+			for(int dz = minZ; dz <= maxZ; ++dz) {
 				BlockPos dp = new BlockPos(dx,y,dz);
 				Block b = w.getBlockState(dp).getBlock();
-				if(!b.isAir(w.getBlockState(dp), w, dp) && b.isBlockNormalCube(w.getBlockState(dp)))
-				{
-					if(requiresSolidBlocks)
-					{
-						if(!w.getBlockState(dp.add(0, 1, 0)).getBlock().isBlockNormalCube(w.getBlockState(dp)) || w.getBlockState(dp.up()).getBlock().isAir(w.getBlockState(dp), w, dp.up())) {}
-						else
+				if(!b.isAir(w.getBlockState(dp), w, dp) && w.getBlockState(dp).isBlockNormalCube()) {
+					if(requiresSolidBlocks) {
+						if(w.getBlockState(dp.up()).isBlockNormalCube() && !w.getBlockState(dp.up()).getBlock().isAir(w.getBlockState(dp), w, dp.up())) {
 							return false;
+						}
 					}
 					else {
-						if(w.getBlockState(dp).getBlock().isReplaceableOreGen(w.getBlockState(dp), w, dp, BlockMatcher.forBlock(Blocks.STONE))){}
-						else
+						if(!w.getBlockState(dp).getBlock().isReplaceableOreGen(w.getBlockState(dp), w, dp, BlockMatcher.forBlock(Blocks.STONE))) {
 							return false;
+						}
 					}
-
-				}else
+				}
+				else {
 					return false;
+				}
 			}
 		}
 		return true;

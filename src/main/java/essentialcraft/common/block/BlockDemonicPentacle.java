@@ -18,6 +18,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.IBlockAccess;
@@ -26,33 +27,29 @@ import net.minecraftforge.client.model.ModelLoader;
 
 public class BlockDemonicPentacle extends BlockContainer implements IModelRegisterer {
 
-	public static final AxisAlignedBB BLOCK_AABB = new AxisAlignedBB(0,0,0,1,0.625F,1);
+	public static final AxisAlignedBB BLOCK_AABB = new AxisAlignedBB(0,0,0,1,0.0625D,1);
 
 	public BlockDemonicPentacle() {
 		super(Material.ROCK, MapColor.AIR);
 	}
 
 	@Override
-	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos)
-	{
+	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
 		return BLOCK_AABB;
 	}
 
 	@Override
-	public AxisAlignedBB getSelectedBoundingBox(IBlockState state, World worldIn, BlockPos pos)
-	{
-		return BLOCK_AABB.offset(pos);
+	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
+		return NULL_AABB;
 	}
 
 	@Override
-	public boolean isOpaqueCube(IBlockState s)
-	{
+	public boolean isOpaqueCube(IBlockState s) {
 		return false;
 	}
 
 	@Override
-	public boolean isFullCube(IBlockState s)
-	{
+	public boolean isFullCube(IBlockState s) {
 		return false;
 	}
 
@@ -62,23 +59,25 @@ public class BlockDemonicPentacle extends BlockContainer implements IModelRegist
 	}
 
 	@Override
-	public TileEntity createNewTileEntity(World var1, int var2) {
+	public TileEntity createNewTileEntity(World world, int meta) {
 		return new TileDemonicPentacle();
 	}
 
 	@Override
-	public boolean onBlockActivated(World par1World, BlockPos par2, IBlockState par3, EntityPlayer par4EntityPlayer, EnumHand par5, EnumFacing par7, float par8, float par9, float par10) {
-		TileDemonicPentacle pentacle = (TileDemonicPentacle)par1World.getTileEntity(par2);
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState blockstate, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+		TileDemonicPentacle pentacle = (TileDemonicPentacle)world.getTileEntity(pos);
 		if(pentacle.consumeEnderstarEnergy(666)) {
-			EntityDemon demon = new EntityDemon(par1World);
-			demon.setPositionAndRotation(par2.getX()+0.5D, par2.getY()+0.1D, par2.getZ()+0.5D, 0, 0);
+			EntityDemon demon = new EntityDemon(world);
+			demon.setPositionAndRotation(pos.getX()+0.5D, pos.getY()+0.1D, pos.getZ()+0.5D, 0, 0);
 			demon.playLivingSound();
-			if(!par1World.isRemote)
-				par1World.spawnEntity(demon);
+			if(!world.isRemote) {
+				world.spawnEntity(demon);
+			}
 		}
 		else {
-			if(par1World.isRemote)
-				par4EntityPlayer.sendMessage(new TextComponentString(I18n.translateToLocal("essentialcraft.txt.noEnergy")).setStyle(new Style().setColor(TextFormatting.RED)));
+			if(world.isRemote) {
+				player.sendMessage(new TextComponentTranslation("essentialcraft.txt.noEnergy").setStyle(new Style().setColor(TextFormatting.RED)));
+			}
 		}
 		return true;
 	}

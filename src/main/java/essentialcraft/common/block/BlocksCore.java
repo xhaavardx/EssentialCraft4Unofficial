@@ -298,7 +298,7 @@ public class BlocksCore {
 	public static Block voidGlass;
 
 	public static Block concrete;
-	public static Block cacti;
+	public static BlockDreadCactus cacti;
 	public static Block dreadDirt;
 	public static Block flowerGreen;
 	public static Block fruit;

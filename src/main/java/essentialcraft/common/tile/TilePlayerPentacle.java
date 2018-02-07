@@ -28,24 +28,33 @@ public class TilePlayerPentacle extends TileEntity implements ITickable {
 
 	public int getEnderstarEnergy() {
 		int tierCheck = 0;
-		if(tier == 0)
+		if(tier == 0) {
 			tierCheck = 8;
-		if(tier == 1)
+		}
+		if(tier == 1) {
 			tierCheck = 12;
-		if(tier == 2)
+		}
+		if(tier == 2) {
 			tierCheck = 16;
-		if(tier >= 3)
+		}
+		if(tier >= 3) {
 			tierCheck = 20;
+		}
 		double energy = 0;
 		double consumeModifier = 0.36D;
 		for(int i = 0; i < tierCheck; ++i) {
 			TileEntity tile = getWorld().getTileEntity(pos.add(coords[i]));
+			if(tile == null) {
+				continue;
+			}
 			if(tile.hasCapability(CapabilityESPEHandler.ESPE_HANDLER_CAPABILITY, null)) {
 				IESPEHandler handler = tile.getCapability(CapabilityESPEHandler.ESPE_HANDLER_CAPABILITY, null);
-				if(tier < 3)
+				if(tier < 3) {
 					energy += handler.getESPE();
-				else
+				}
+				else {
 					energy += handler.getESPE()*2;
+				}
 			}
 		}
 
@@ -67,20 +76,28 @@ public class TilePlayerPentacle extends TileEntity implements ITickable {
 		consumed /= consumeModifier;
 		for(int i = 0; i < tierCheck; ++i) {
 			TileEntity tile = getWorld().getTileEntity(pos.add(coords[i]));
+			if(tile == null) {
+				continue;
+			}
 			if(tile.hasCapability(CapabilityESPEHandler.ESPE_HANDLER_CAPABILITY, null)) {
 				IESPEHandler handler = tile.getCapability(CapabilityESPEHandler.ESPE_HANDLER_CAPABILITY, null);
 				double req = (consumed - aconsumed) / (tier < 3 ? 1 : 2);
 				aconsumed += handler.extractESPE(req, false) * (tier < 3 ? 1 : 2);
-				if(aconsumed >= consumed)
+				if(aconsumed >= consumed) {
 					break;
+				}
 			}
 		}
-		if(aconsumed < consumed)
+		if(aconsumed < consumed) {
 			return false;
+		}
 
 		aconsumed = 0;
 		for(int i = 0; i < tierCheck; ++i) {
 			TileEntity tile = getWorld().getTileEntity(pos.add(coords[i]));
+			if(tile == null) {
+				continue;
+			}
 			if(tile.hasCapability(CapabilityESPEHandler.ESPE_HANDLER_CAPABILITY, null)) {
 				IESPEHandler handler = tile.getCapability(CapabilityESPEHandler.ESPE_HANDLER_CAPABILITY, null);
 				double req = (consumed - aconsumed) / (tier < 3 ? 1 : 2);
@@ -97,14 +114,17 @@ public class TilePlayerPentacle extends TileEntity implements ITickable {
 	public void update() {
 		if(sCheckTick == 0) {
 			checkStructureAndTier();
-			sCheckTick = 200;
-		}else
+			sCheckTick = 40;
+		}
+		else {
 			--sCheckTick;
+		}
 
 		if(getWorld().isRemote) {
 			int movement = (int)(getWorld().getWorldTime() % 60);
-			if(movement > 30)
+			if(movement > 30) {
 				movement = 60 - movement;
+			}
 			if(tier >= 0) {
 				for(int i = 0; i < 8; ++i) {
 					if(getWorld().getTileEntity(pos.add(coords[i])) instanceof TileMithrilineCrystal) {

@@ -14,63 +14,52 @@ import net.minecraft.util.ResourceLocation;
 
 public class PotionMRUCorruption extends Potion {
 
-	public PotionMRUCorruption(int p_i1573_1_, boolean p_i1573_2_,int p_i1573_3_)
-	{
-		super(p_i1573_2_, p_i1573_3_);
+	public PotionMRUCorruption(boolean isBad, int color) {
+		super(isBad, color);
 		this.setIconIndex(3, 1);
 		this.setEffectiveness(0.25D);
 		this.setPotionName("potion.mruCorruption");
-		this.setRegistryName("essentialcraft", "potion.mruCorruption");
-	}
-
-	public boolean isUsable()
-	{
-		return true;
+		this.setRegistryName("essentialcraft", "potion.mrucorruption");
 	}
 
 	@Override
-	public void performEffect(EntityLivingBase p_76394_1_, int p_76394_2_)
-	{
-		if(!p_76394_1_.getEntityWorld().isRemote && p_76394_1_.getEntityWorld().rand.nextInt(16) < p_76394_2_)
-		{
+	public void performEffect(EntityLivingBase entity, int amplifier) {
+		if(!entity.getEntityWorld().isRemote && entity.getEntityWorld().rand.nextInt(16) < amplifier) {
 			float damIndex = 5;
-			if(p_76394_1_ instanceof EntityPlayer)
-			{
-				damIndex *= ECUtils.getGenResistance(0, (EntityPlayer) p_76394_1_);
+			if(entity instanceof EntityPlayer) {
+				damIndex *= ECUtils.getGenResistance(0, (EntityPlayer)entity);
 				boolean heal = false;
-				IBaublesItemHandler b = BaublesApi.getBaublesHandler((EntityPlayer) p_76394_1_);
-				if(b != null)
-				{
-					for(int i = 0; i < b.getSlots(); ++i)
-					{
+				IBaublesItemHandler b = BaublesApi.getBaublesHandler((EntityPlayer)entity);
+				if(b != null) {
+					for(int i = 0; i < b.getSlots(); ++i) {
 						ItemStack is = b.getStackInSlot(i);
-						if(is.getItem() instanceof ItemBaublesSpecial && is.getItemDamage() == 10)
+						if(is.getItem() instanceof ItemBaublesSpecial && is.getItemDamage() == 10) {
 							heal = true;
+						}
 					}
 				}
-				if(!heal)
-					p_76394_1_.attackEntityFrom(DamageSource.MAGIC, damIndex);
-				else
-					p_76394_1_.heal(damIndex);
+				if(!heal) {
+					entity.attackEntityFrom(DamageSource.MAGIC, damIndex);
+				}
+				else {
+					entity.heal(damIndex);
+				}
 			}
 		}
 	}
 
 	@Override
-	public boolean isReady(int p_76397_1_, int p_76397_2_)
-	{
-		return p_76397_1_ % 20 == 0;
+	public boolean isReady(int duration, int amplifier) {
+		return duration % 20 == 0;
 	}
 
 	@Override
-	public boolean hasStatusIcon()
-	{
+	public boolean hasStatusIcon() {
 		return true;
 	}
 
 	@Override
-	public int getStatusIconIndex()
-	{
+	public int getStatusIconIndex() {
 		Minecraft.getMinecraft().renderEngine.bindTexture(rl);
 		return super.getStatusIconIndex();
 	}

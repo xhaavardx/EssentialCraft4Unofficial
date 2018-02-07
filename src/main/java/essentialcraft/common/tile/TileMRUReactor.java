@@ -183,8 +183,10 @@ public class TileMRUReactor extends TileMRUGeneric {
 				}
 				for(int i = 0; i < lightnings.size(); ++i) {
 					Lightning lt = lightnings.get(i);
-					if(lt.renderTicksExisted >= 21)
+					if(lt.renderTicksExisted >= 21) {
 						lightnings.remove(i);
+						--i;
+					}
 				}
 			}
 		}

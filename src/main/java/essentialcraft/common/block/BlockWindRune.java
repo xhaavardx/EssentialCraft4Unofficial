@@ -21,7 +21,7 @@ import net.minecraftforge.client.model.ModelLoader;
 
 public class BlockWindRune extends BlockContainer implements IModelRegisterer {
 
-	public static final AxisAlignedBB BLOCK_AABB = new AxisAlignedBB(0, 0, 0, 1, 0.0625F, 1);
+	public static final AxisAlignedBB BLOCK_AABB = new AxisAlignedBB(0, 0, 0, 1, 0.0625D, 1);
 
 	public BlockWindRune() {
 		super(Material.ROCK, MapColor.AIR);
@@ -33,14 +33,17 @@ public class BlockWindRune extends BlockContainer implements IModelRegisterer {
 	}
 
 	@Override
-	public boolean isOpaqueCube(IBlockState s)
-	{
+	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
+		return NULL_AABB;
+	}
+
+	@Override
+	public boolean isOpaqueCube(IBlockState s) {
 		return false;
 	}
 
 	@Override
-	public boolean isFullCube(IBlockState s)
-	{
+	public boolean isFullCube(IBlockState s) {
 		return false;
 	}
 

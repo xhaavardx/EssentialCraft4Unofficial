@@ -149,25 +149,19 @@ public class ECEventHandler {
 	}
 
 	@SubscribeEvent
-	public void anvilEvent(AnvilUpdateEvent event)
-	{
-		if(event.getLeft().getItem() instanceof ItemGun && !event.getRight().isEmpty())
-		{
+	public void anvilEvent(AnvilUpdateEvent event) {
+		if(event.getLeft().getItem() instanceof ItemGun && !event.getRight().isEmpty()) {
 			NBTTagCompound tag = MiscUtils.getStackTag(event.getLeft());
-			if(tag.hasKey("base"))
-			{
+			if(tag.hasKey("base")) {
 				GunMaterial material = null;
-				for(int i = 0; i < GunRegistry.GUN_MATERIALS.size(); ++i)
-				{
+				for(int i = 0; i < GunRegistry.GUN_MATERIALS.size(); ++i) {
 					GunMaterial gm = GunRegistry.GUN_MATERIALS.get(i);
-					if(gm.recipe.isItemEqual(event.getRight()))
-					{
+					if(gm.recipe.isItemEqual(event.getRight())) {
 						material = gm;
 						break;
 					}
 				}
-				if(material != null)
-				{
+				if(material != null) {
 					ItemStack result = event.getLeft().copy();
 					MiscUtils.getStackTag(result).setFloat("gunDamage", 0);
 					event.setCost(4);
@@ -178,8 +172,7 @@ public class ECEventHandler {
 		}
 	}
 
-	public ItemStack findShearItem(Entity e)
-	{
+	public ItemStack findShearItem(Entity e) {
 		int rN = 1+e.getEntityWorld().rand.nextInt(3);
 		if(e instanceof EntityCow)
 			return new ItemStack(Items.LEATHER,rN,0);
@@ -205,38 +198,33 @@ public class ECEventHandler {
 	}
 
 	@SubscribeEvent
-	public void attackTargetEvent(LivingSetAttackTargetEvent event)
-	{
-		if(event.getTarget() != null)
-		{
-			if(event.getTarget() instanceof EntityPlayer)
-			{
+	public void attackTargetEvent(LivingSetAttackTargetEvent event) {
+		if(event.getTarget() != null) {
+			if(event.getTarget() instanceof EntityPlayer) {
 				EntityPlayer player = (EntityPlayer)event.getTarget();
 				boolean changeTarget = false;
 				IBaublesItemHandler b = BaublesApi.getBaublesHandler(player);
-				if(b != null)
-				{
-					for(int i = 0; i < b.getSlots(); ++i)
-					{
+				if(b != null) {
+					for(int i = 0; i < b.getSlots(); ++i) {
 						ItemStack is = b.getStackInSlot(i);
-						if(is.getItem() instanceof ItemBaublesSpecial && is.getItemDamage() == 30)
+						if(is.getItem() instanceof ItemBaublesSpecial && is.getItemDamage() == 30) {
 							changeTarget = true;
+							break;
+						}
 					}
 				}
-				if(changeTarget)
-				{
+				if(changeTarget) {
 					List<EntityLivingBase> entities = event.getEntityLiving().getEntityWorld().getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(event.getEntityLiving().posX-0.5D, event.getEntityLiving().posY-0.5D, event.getEntityLiving().posZ-0.5D, event.getEntityLiving().posX+0.5D, event.getEntityLiving().posY+0.5D, event.getEntityLiving().posZ+0.5D).expand(6, 3, 6));
-					for(int i = 0; i < entities.size(); ++i)
-					{
+					for(int i = 0; i < entities.size(); ++i) {
 						EntityLivingBase base = entities.get(i);
-						if(base == event.getEntityLiving() || base == event.getTarget())
+						if(base == event.getEntityLiving() || base == event.getTarget()) {
 							entities.remove(i);
+							--i;
+						}
 					}
-					if(!entities.isEmpty())
-					{
+					if(!entities.isEmpty()) {
 						EntityLivingBase ba = entities.get(event.getEntityLiving().getEntityWorld().rand.nextInt(entities.size()));
-						if(ba != event.getEntityLiving() && !(ba instanceof EntityPlayer))
-						{
+						if(ba != event.getEntityLiving() && !(ba instanceof EntityPlayer)) {
 							event.getEntityLiving().setRevengeTarget(ba);
 							event.getEntityLiving().setLastAttackedEntity(ba);
 						}
@@ -247,54 +235,45 @@ public class ECEventHandler {
 	}
 
 	@SubscribeEvent
-	public void xpEvent(PlayerPickupXpEvent event)
-	{
+	public void xpEvent(PlayerPickupXpEvent event) {
 		EntityPlayer player = event.getEntityPlayer();
 		boolean edouble = false;
 		IBaublesItemHandler b = BaublesApi.getBaublesHandler(player);
-		if(b != null)
-		{
-			for(int i = 0; i < b.getSlots(); ++i)
-			{
+		if(b != null) {
+			for(int i = 0; i < b.getSlots(); ++i) {
 				ItemStack is = b.getStackInSlot(i);
-				if(is.getItem() instanceof ItemBaublesSpecial && is.getItemDamage() == 29)
+				if(is.getItem() instanceof ItemBaublesSpecial && is.getItemDamage() == 29) {
 					edouble = true;
+				}
 			}
 		}
-		if(edouble)
+		if(edouble) {
 			event.getOrb().xpValue*=2;
+		}
 	}
 
 	@SubscribeEvent
-	public void shearEvent(EntityInteract event)
-	{
+	public void shearEvent(EntityInteract event) {
 		EntityPlayer player = event.getEntityPlayer();
-		if(player != null)
-		{
+		if(player != null) {
 			boolean shear = false;
-			boolean shear1 = false;
 			IBaublesItemHandler b = BaublesApi.getBaublesHandler(player);
-			if(b != null)
-			{
-				for(int i = 0; i < b.getSlots(); ++i)
-				{
+			if(b != null) {
+				for(int i = 0; i < b.getSlots(); ++i) {
 					ItemStack is = b.getStackInSlot(i);
 					if(is.getItem() instanceof ItemBaublesSpecial && is.getItemDamage() == 28) {
 						shear = true;
-						shear1 = true;
 					}
 				}
 			}
 			ItemStack stk = event.getItemStack();
 			int cost = 1000;
 			shear = shear && stk.getItem() instanceof ItemShears && ApiCore.getPlayerData(player).getPlayerUBMRU() >= cost && !player.isSwingInProgress;
-			if(shear)
-			{
+			if(shear) {
 				Entity base = event.getTarget();
 				stk.damageItem(32, player);
 				ItemStack is = this.findShearItem(base);
-				if(!is.isEmpty())
-				{
+				if(!is.isEmpty()) {
 					EntityItem ent = new EntityItem(base.getEntityWorld(),base.posX,base.posY,base.posZ,is);
 					Random rand = base.getEntityWorld().rand;
 					ent.motionY += rand.nextFloat() * 0.05F;
@@ -311,29 +290,22 @@ public class ECEventHandler {
 	}
 
 	@SubscribeEvent
-	public void enderTeleport(EnderTeleportEvent event)
-	{
-		if(event.getEntityLiving() != null)
-		{
-			if(event.getEntityLiving() instanceof EntityEnderman)
-			{
+	public void enderTeleport(EnderTeleportEvent event) {
+		if(event.getEntityLiving() != null) {
+			if(event.getEntityLiving() instanceof EntityEnderman) {
 				EntityEnderman ender = (EntityEnderman) event.getEntityLiving();
 				EntityPlayer player = ender.getEntityWorld().getClosestPlayerToEntity(ender, 16D);
-				if(player != null)
-				{
+				if(player != null) {
 					boolean stopTeleportation = false;
 					IBaublesItemHandler b = BaublesApi.getBaublesHandler(player);
-					if(b != null)
-					{
-						for(int i = 0; i < b.getSlots(); ++i)
-						{
+					if(b != null) {
+						for(int i = 0; i < b.getSlots(); ++i) {
 							ItemStack is = b.getStackInSlot(i);
 							if(is.getItem() instanceof ItemBaublesSpecial && is.getItemDamage() == 27)
 								stopTeleportation = true;
 						}
 					}
-					if(stopTeleportation)
-					{
+					if(stopTeleportation) {
 						event.setCanceled(true);
 					}
 				}
@@ -342,35 +314,26 @@ public class ECEventHandler {
 	}
 
 	@SubscribeEvent
-	public void livingDeath(LivingDropsEvent event)
-	{
-		if(event.getSource() != null)
-		{
-			if(event.getSource().getTrueSource() != null && event.getSource().getTrueSource() instanceof EntityPlayer)
-			{
+	public void livingDeath(LivingDropsEvent event) {
+		if(event.getSource() != null) {
+			if(event.getSource().getTrueSource() != null && event.getSource().getTrueSource() instanceof EntityPlayer) {
 				EntityPlayer player = (EntityPlayer) event.getSource().getTrueSource();
 				boolean increaseDrops = false;
 				IBaublesItemHandler b = BaublesApi.getBaublesHandler(player);
-				if(b != null)
-				{
-					for(int i = 0; i < b.getSlots(); ++i)
-					{
+				if(b != null) {
+					for(int i = 0; i < b.getSlots(); ++i) {
 						ItemStack is = b.getStackInSlot(i);
 						if(is.getItem() instanceof ItemBaublesSpecial && is.getItemDamage() == 26)
 							increaseDrops = true;
 					}
 				}
-				if(increaseDrops && ApiCore.getPlayerData(player).getPlayerUBMRU() >= 1000)
-				{
+				if(increaseDrops && ApiCore.getPlayerData(player).getPlayerUBMRU() >= 1000) {
 					ApiCore.getPlayerData(player).modifyUBMRU(ApiCore.getPlayerData(player).getPlayerUBMRU()-1000);
-					for(int i = 0; i < event.getDrops().size(); ++i)
-					{
+					for(int i = 0; i < event.getDrops().size(); ++i) {
 						EntityItem ei = event.getDrops().get(i);
-						if(ei != null)
-						{
+						if(ei != null) {
 							ItemStack is = ei.getItem();
-							if(!is.isEmpty())
-							{
+							if(!is.isEmpty()) {
 								is.grow(player.getEntityWorld().rand.nextInt(3));
 							}
 						}
@@ -382,17 +345,13 @@ public class ECEventHandler {
 
 
 	@SubscribeEvent
-	public void breakBlock(BlockEvent.BreakEvent event)
-	{
+	public void breakBlock(BlockEvent.BreakEvent event) {
 		boolean gainXP = false;
 		boolean xpToU = false;
-		if(event.getPlayer() != null)
-		{
+		if(event.getPlayer() != null) {
 			IBaublesItemHandler b = BaublesApi.getBaublesHandler(event.getPlayer());
-			if(b != null)
-			{
-				for(int i = 0; i < b.getSlots(); ++i)
-				{
+			if(b != null) {
+				for(int i = 0; i < b.getSlots(); ++i) {
 					ItemStack is = b.getStackInSlot(i);
 					if(is.getItem() instanceof ItemBaublesSpecial && is.getItemDamage() == 23)
 						gainXP = true;
@@ -400,16 +359,13 @@ public class ECEventHandler {
 						xpToU = true;
 				}
 			}
-			if(gainXP)
-			{
+			if(gainXP) {
 				event.setExpToDrop(event.getExpToDrop()*3);
-				if(event.getExpToDrop() <= 0 && event.getWorld().rand.nextFloat() < 0.05F)
-				{
+				if(event.getExpToDrop() <= 0 && event.getWorld().rand.nextFloat() < 0.05F) {
 					event.setExpToDrop(1);
 				}
 			}
-			if(xpToU)
-			{
+			if(xpToU) {
 				int xp = event.getExpToDrop();
 				ApiCore.getPlayerData(event.getPlayer()).modifyUBMRU(ApiCore.getPlayerData(event.getPlayer()).getPlayerUBMRU() + xp*1000);
 				event.setExpToDrop(0);
@@ -419,30 +375,23 @@ public class ECEventHandler {
 
 
 	@SubscribeEvent
-	public void harvestDrops(HarvestDropsEvent event)
-	{
-		if(event.getHarvester() != null)
-		{
+	public void harvestDrops(HarvestDropsEvent event) {
+		if(event.getHarvester() != null) {
 			boolean increaseFortune = false;
 
 			IBaublesItemHandler b = BaublesApi.getBaublesHandler(event.getHarvester());
-			if(b != null)
-			{
-				for(int i = 0; i < b.getSlots(); ++i)
-				{
+			if(b != null) {
+				for(int i = 0; i < b.getSlots(); ++i) {
 					ItemStack is = b.getStackInSlot(i);
 					if(is.getItem() instanceof ItemBaublesSpecial && is.getItemDamage() == 22)
 						increaseFortune = true;
 				}
 			}
-			if(increaseFortune && ApiCore.getPlayerData(event.getHarvester()).getPlayerUBMRU() >= 500)
-			{
+			if(increaseFortune && ApiCore.getPlayerData(event.getHarvester()).getPlayerUBMRU() >= 500) {
 				ECUtils.getData(event.getHarvester()).modifyUBMRU(ECUtils.getData(event.getHarvester()).getPlayerUBMRU() - 500);
-				for(int i = 0; i < event.getDrops().size(); ++i)
-				{
+				for(int i = 0; i < event.getDrops().size(); ++i) {
 					ItemStack is = event.getDrops().get(i);
-					if(!is.isEmpty() && is.getItem() != null && !(is.getItem() instanceof ItemBlock))
-					{
+					if(!is.isEmpty() && is.getItem() != null && !(is.getItem() instanceof ItemBlock)) {
 						is.grow(1);
 					}
 				}
@@ -603,29 +552,24 @@ public class ECEventHandler {
 	}
 
 	@SubscribeEvent
-	public void guiButtonPressed(DummyCore.Events.DummyEvent_OnClientGUIButtonPress event)
-	{
-		if(event.client_ParentClassPath.equalsIgnoreCase("essentialcraft.client.gui.GuiFilter"))
-		{
+	public void guiButtonPressed(DummyCore.Events.DummyEvent_OnClientGUIButtonPress event) {
+		if(event.client_ParentClassPath.equalsIgnoreCase("essentialcraft.client.gui.GuiFilter")) {
 			EntityPlayer p = event.presser;
 			ItemStack is = p.getHeldItemMainhand();
 			NBTTagCompound itemTag = MiscUtils.getStackTag(is);
-			if(event.buttonID == 0)
-			{
+			if(event.buttonID == 0) {
 				if(itemTag.getBoolean("ignoreMeta"))
 					itemTag.setBoolean("ignoreMeta", false);
 				else
 					itemTag.setBoolean("ignoreMeta", true);
 			}
-			if(event.buttonID == 1)
-			{
+			if(event.buttonID == 1) {
 				if(itemTag.getBoolean("ignoreNBT"))
 					itemTag.setBoolean("ignoreNBT", false);
 				else
 					itemTag.setBoolean("ignoreNBT", true);
 			}
-			if(event.buttonID == 2)
-			{
+			if(event.buttonID == 2) {
 				if(itemTag.getBoolean("ignoreOreDict"))
 					itemTag.setBoolean("ignoreOreDict", false);
 				else
@@ -633,13 +577,11 @@ public class ECEventHandler {
 			}
 			is.setTagCompound(itemTag);
 		}
-		if(event.client_ParentClassPath.equalsIgnoreCase("essentialcraft.client.gui.GuiCraftingFrame"))
-		{
+		if(event.client_ParentClassPath.equalsIgnoreCase("essentialcraft.client.gui.GuiCraftingFrame")) {
 			EntityPlayer p = event.presser;
 			ItemStack is = p.getHeldItemMainhand();
 			NBTTagCompound itemTag = MiscUtils.getStackTag(is);
-			if(event.buttonID == 0)
-			{
+			if(event.buttonID == 0) {
 				if(itemTag.getBoolean("ignoreOreDict"))
 					itemTag.setBoolean("ignoreOreDict", false);
 				else
@@ -647,18 +589,15 @@ public class ECEventHandler {
 			}
 			is.setTagCompound(itemTag);
 		}
-		if(event.client_ParentClassPath.equalsIgnoreCase("essentialcraft.client.gui.GuiWeaponBench") && event.buttonID == 0)
-		{
+		if(event.client_ParentClassPath.equalsIgnoreCase("essentialcraft.client.gui.GuiWeaponBench") && event.buttonID == 0) {
 			TileWeaponMaker maker = (TileWeaponMaker)event.presser.getEntityWorld().getTileEntity(new BlockPos(event.x, event.y, event.z));
 			maker.makeWeapon();
 		}
-		if(event.client_ParentClassPath.equalsIgnoreCase("essentialcraft.client.gui.GuiPlayerPentacle"))
-		{
+		if(event.client_ParentClassPath.equalsIgnoreCase("essentialcraft.client.gui.GuiPlayerPentacle")) {
 			TilePlayerPentacle pentacle = (TilePlayerPentacle) event.presser.getEntityWorld().getTileEntity(new BlockPos(event.x, event.y, event.z));
 
 			int reqToConsume = ECUtils.getData(event.presser).getEffects().get(event.buttonID).getStickiness();
-			if(event.additionalData[0].fieldName.equalsIgnoreCase("isCreative") && event.additionalData[0].fieldValue.equalsIgnoreCase("true") || pentacle.consumeEnderstarEnergy(reqToConsume))
-			{
+			if(event.additionalData[0].fieldName.equalsIgnoreCase("isCreative") && event.additionalData[0].fieldValue.equalsIgnoreCase("true") || pentacle.consumeEnderstarEnergy(reqToConsume)) {
 				ECUtils.getData(event.presser).getEffects().remove(event.buttonID);
 				ECUtils.requestSync(event.presser);
 			}

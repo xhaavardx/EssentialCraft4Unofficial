@@ -294,8 +294,9 @@ public class TileMIMInventoryStorage extends TileMRUGeneric {
 
 	@Override
 	public void closeInventory(EntityPlayer p)  {
-		if(!getWorld().isRemote)
-			plrs.remove(plrs.indexOf(p));
+		if(!getWorld().isRemote) {
+			plrs.remove(p);
+		}
 	}
 
 	@Override

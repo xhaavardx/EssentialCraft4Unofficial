@@ -65,8 +65,8 @@ public class BiomeProviderHoanna extends BiomeProvider {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public float getTemperatureAtHeight(float par1, int par2) {
-		return par1;
+	public float getTemperatureAtHeight(float temp, int y) {
+		return temp;
 	}
 
 	@Override
@@ -164,28 +164,28 @@ public class BiomeProviderHoanna extends BiomeProvider {
 	@Override
 	public BlockPos findBiomePosition(int x, int z, int range, List<Biome> biomes, Random random) {
 		IntCache.resetIntCache();
-		int i = x - range >> 2;
-				int j = z - range >> 2;
-				int k = x + range >> 2;
-				int l = z + range >> 2;
-				int i1 = k - i + 1;
-				int j1 = l - j + 1;
-				int[] aint = this.biomeToUse.getInts(i, j, i1, j1);
-				BlockPos blockpos = null;
-				int k1 = 0;
+		int i = x - range >> 2;;
+		int j = z - range >> 2;
+		int k = x + range >> 2;
+		int l = z + range >> 2;
+		int i1 = k - i + 1;
+		int j1 = l - j + 1;
+		int[] aint = this.biomeToUse.getInts(i, j, i1, j1);
+		BlockPos blockpos = null;
+		int k1 = 0;
 
-				for(int l1 = 0; l1 < i1 * j1; ++l1) {
-					int i2 = i + l1 % i1 << 2;
-					int j2 = j + l1 / i1 << 2;
-					Biome biome = Biome.getBiome(aint[l1]);
+		for(int l1 = 0; l1 < i1 * j1; ++l1) {
+			int i2 = i + l1 % i1 << 2;
+			int j2 = j + l1 / i1 << 2;
+			Biome biome = Biome.getBiome(aint[l1]);
 
-					if(biomes.contains(biome) && (blockpos == null || random.nextInt(k1 + 1) == 0)) {
-						blockpos = new BlockPos(i2, 0, j2);
-						++k1;
-					}
-				}
+			if(biomes.contains(biome) && (blockpos == null || random.nextInt(k1 + 1) == 0)) {
+				blockpos = new BlockPos(i2, 0, j2);
+				++k1;
+			}
+		}
 
-				return blockpos;
+		return blockpos;
 	}
 
 	@Override

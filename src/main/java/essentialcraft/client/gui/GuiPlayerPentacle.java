@@ -1,6 +1,7 @@
 package essentialcraft.client.gui;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import DummyCore.Utils.MathUtils;
 import DummyCore.Utils.MiscUtils;
@@ -138,20 +139,22 @@ public class GuiPlayerPentacle extends GuiScreen {
 
 	@Override
 	protected void actionPerformed(GuiButton button) {
-		EffectButton eb = (EffectButton) button;
+		EffectButton eb = (EffectButton)button;
 		if(eb.enabled) {
-			ArrayList<ICorruptionEffect> effects = (ArrayList<ICorruptionEffect>) ECUtils.getData(Minecraft.getMinecraft().player).getEffects();
+			List<ICorruptionEffect> effects = ECUtils.getData(Minecraft.getMinecraft().player).getEffects();
 			if(effects.size() > button.id) {
 				ICorruptionEffect effect = effects.get(eb.listIndex);
 				if(effect.getType().ordinal() <= this.pentacle.tier || GuiScreen.isShiftKeyDown() && Minecraft.getMinecraft().player.capabilities.isCreativeMode) {
-					if(GuiScreen.isShiftKeyDown() && Minecraft.getMinecraft().player.capabilities.isCreativeMode)
+					if(GuiScreen.isShiftKeyDown() && Minecraft.getMinecraft().player.capabilities.isCreativeMode) {
 						MiscUtils.handleButtonPress(eb.listIndex, getClass(), eb.getClass(), Minecraft.getMinecraft().player, this.pentacle.getPos().getX(), this.pentacle.getPos().getY(), this.pentacle.getPos().getZ(),"||isCreative:true");
-					else
+					}
+					else {
+						this.pentacle.consumeEnderstarEnergy(effects.get(button.id).getStickiness());
 						MiscUtils.handleButtonPress(eb.listIndex, getClass(), eb.getClass(), Minecraft.getMinecraft().player, this.pentacle.getPos().getX(), this.pentacle.getPos().getY(), this.pentacle.getPos().getZ());
+					}
 				}
 			}
 		}
-
 	}
 
 	@Override

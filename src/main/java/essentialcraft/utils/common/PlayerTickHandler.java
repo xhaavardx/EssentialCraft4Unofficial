@@ -44,6 +44,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
@@ -55,9 +56,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -83,107 +83,89 @@ public class PlayerTickHandler {
 
 	public boolean isRKeyPressed = false;
 
-	public void manageWorldSync(EntityPlayer e)
-	{
-		if(!wticks.containsKey(e))
-		{
+	public void manageWorldSync(EntityPlayer e) {
+		if(!wticks.containsKey(e)) {
 			wticks.put(e, 10);
 			ECUtils.requestCurrentEventSyncForPlayer((EntityPlayerMP) e);
-		}else
-		{
+		}
+		else {
 			int i = wticks.get(e).intValue();
 
-			if(i <= 0)
-			{
+			if(i <= 0) {
 				i = 10;
 				ECUtils.requestCurrentEventSyncForPlayer((EntityPlayerMP) e);
-			}else
+			}
+			else {
 				--i;
+			}
 			wticks.put(e, i);
 		}
 	}
 
 	@SubscribeEvent
-	public void tickEvent(WorldTickEvent event)
-	{
+	public void tickEvent(WorldTickEvent event) {
 		++tickAmount;
 	}
 
-	public void manageSync(EntityPlayer e)
-	{
-		if(!ticks.containsKey(e))
-		{
+	public void manageSync(EntityPlayer e) {
+		if(!ticks.containsKey(e)) {
 			ticks.put(e, 10);
 			ECUtils.requestSync(e);
-		}else
-		{
+		}
+		else {
 			int i = ticks.get(e).intValue();
 
-			if(i <= 0)
-			{
+			if(i <= 0) {
 				i = 10;
 				ECUtils.requestSync(e);
-			}else
+			}
+			else {
 				--i;
+			}
 			ticks.put(e, i);
 		}
 	}
 
 	@SideOnly(Side.CLIENT)
-	public void client_manageBook(EntityPlayer e)
-	{
-		if(Keyboard.isKeyDown(Keyboard.KEY_R) && !isRKeyPressed)
-		{
+	public void client_manageBook(EntityPlayer e) {
+		if(Keyboard.isKeyDown(Keyboard.KEY_R) && !isRKeyPressed) {
 			isRKeyPressed = true;
 			ItemStack currentPlayerItem = e.getHeldItemMainhand();
-			if(currentPlayerItem.getItem() == ItemsCore.research_book)
-			{
+			if(currentPlayerItem.getItem() == ItemsCore.research_book) {
 				boolean foundItem = false;
 				Vec3d playerLookVec = e.getLookVec();
 				Vec3d itemSearchVec = new Vec3d(playerLookVec.x, playerLookVec.y, playerLookVec.z);
 				//Searching for EntityItem
-				s:for(int o = 0; o < 4; ++o)
-				{
+				s:for(int o = 0; o < 4; ++o) {
 					itemSearchVec = new Vec3d(itemSearchVec.x*(o+1),itemSearchVec.y*(o+1),itemSearchVec.z*(o+1));
 					List<EntityItem> lst = e.getEntityWorld().getEntitiesWithinAABB(EntityItem.class, new AxisAlignedBB(e.posX+itemSearchVec.x-0.5D, e.posY+itemSearchVec.y-0.5D, e.posZ+itemSearchVec.z-0.5D, e.posX+itemSearchVec.x+0.5D, e.posY+itemSearchVec.y+0.5D, e.posZ+itemSearchVec.z+0.5D));
-					if(!lst.isEmpty())
-					{
-						for(EntityItem itm : lst)
-						{
-							if(itm != null && !itm.isDead)
-							{
+					if(!lst.isEmpty()) {
+						for(EntityItem itm : lst) {
+							if(itm != null && !itm.isDead) {
 								ItemStack heldIS = itm.getItem().copy();
-								if(ApiCore.findDiscoveryByIS(heldIS) != null)
-								{
+								if(ApiCore.findDiscoveryByIS(heldIS) != null) {
 									DiscoveryEntry switchTo = ApiCore.findDiscoveryByIS(heldIS);
 									GuiResearchBook.currentPage = 0;
-									if(GuiResearchBook.currentCategory == null)
+									if(GuiResearchBook.currentCategory == null) {
 										GuiResearchBook.currentCategory = ResearchRegistry.basic;
+									}
 									GuiResearchBook.currentPage_discovery = 0;
 									GuiResearchBook.currentDiscovery = switchTo;
-									if(switchTo != null)
-									{
-										f:for(int i = 0; i < switchTo.pages.size(); ++i)
-										{
+									if(switchTo != null) {
+										f:for(int i = 0; i < switchTo.pages.size(); ++i) {
 											PageEntry entry = switchTo.pages.get(i);
-											if(entry != null)
-											{
-												if(entry.displayedItems != null && entry.displayedItems.length > 0)
-												{
-													for(ItemStack is : entry.displayedItems)
-													{
-														if(heldIS.isItemEqual(is))
-														{
+											if(entry != null) {
+												if(entry.displayedItems != null && entry.displayedItems.length > 0) {
+													for(ItemStack is : entry.displayedItems) {
+														if(heldIS.isItemEqual(is)) {
 															GuiResearchBook.currentPage = i - i%2;
 															break f;
 														}
 													}
 												}
-												if(entry.pageRecipe != null)
-												{
+												if(entry.pageRecipe != null) {
 													ItemStack result = entry.pageRecipe.getRecipeOutput();
-													if(result.isItemEqual(heldIS))
-													{
+													if(result.isItemEqual(heldIS)) {
 														GuiResearchBook.currentPage = i - i%2;
 														break f;
 													}
@@ -201,48 +183,39 @@ public class PlayerTickHandler {
 						}
 					}
 				}
-				if(!foundItem)
-				{
+				if(!foundItem) {
 					Vec3d blockSearchVec = new Vec3d(playerLookVec.x, playerLookVec.y, playerLookVec.z);
 					//Searching for Block
 					s:for(int o = 0; o < 4; ++o) {
 						blockSearchVec = new Vec3d(blockSearchVec.x*(o+1),blockSearchVec.y*(o+1),blockSearchVec.z*(o+1));
 						BlockPos pos = new BlockPos(MathHelper.floor(blockSearchVec.x+e.posX), MathHelper.floor(blockSearchVec.y+e.posY), MathHelper.floor(blockSearchVec.z+e.posZ));
-						Block blk = e.getEntityWorld().getBlockState(pos).getBlock();
-						if(blk != null && blk != Blocks.AIR)
-						{
-							ItemStack heldIS = new ItemStack(blk,1,blk.getMetaFromState(e.getEntityWorld().getBlockState(pos)));
-							if(ApiCore.findDiscoveryByIS(heldIS) != null)
-							{
+						IBlockState state = e.getEntityWorld().getBlockState(pos);
+						Block blk = state.getBlock();
+						if(blk != null && blk != Blocks.AIR && Item.getItemFromBlock(blk) != null) {
+							ItemStack heldIS = new ItemStack(blk, 1, blk.getMetaFromState(state));
+							if(ApiCore.findDiscoveryByIS(heldIS) != null) {
 								DiscoveryEntry switchTo = ApiCore.findDiscoveryByIS(heldIS);
 								GuiResearchBook.currentPage = 0;
-								if(GuiResearchBook.currentCategory == null)
+								if(GuiResearchBook.currentCategory == null) {
 									GuiResearchBook.currentCategory = ResearchRegistry.basic;
+								}
 								GuiResearchBook.currentPage_discovery = 0;
 								GuiResearchBook.currentDiscovery = switchTo;
-								if(switchTo != null)
-								{
-									f:for(int i = 0; i < switchTo.pages.size(); ++i)
-									{
+								if(switchTo != null) {
+									f:for(int i = 0; i < switchTo.pages.size(); ++i) {
 										PageEntry entry = switchTo.pages.get(i);
-										if(entry != null)
-										{
-											if(entry.displayedItems != null && entry.displayedItems.length > 0)
-											{
-												for(ItemStack is : entry.displayedItems)
-												{
-													if(heldIS.isItemEqual(is))
-													{
+										if(entry != null) {
+											if(entry.displayedItems != null && entry.displayedItems.length > 0) {
+												for(ItemStack is : entry.displayedItems) {
+													if(heldIS.isItemEqual(is)) {
 														GuiResearchBook.currentPage = i - i%2;
 														break f;
 													}
 												}
 											}
-											if(entry.pageRecipe != null)
-											{
+											if(entry.pageRecipe != null) {
 												ItemStack result = entry.pageRecipe.getRecipeOutput();
-												if(result.isItemEqual(heldIS))
-												{
+												if(result.isItemEqual(heldIS)) {
 													GuiResearchBook.currentPage = i - i%2;
 													break f;
 												}
@@ -260,26 +233,21 @@ public class PlayerTickHandler {
 				}
 			}
 		}
-		if(!Keyboard.isKeyDown(Keyboard.KEY_R) && isRKeyPressed)
-		{
+		if(!Keyboard.isKeyDown(Keyboard.KEY_R) && isRKeyPressed) {
 			isRKeyPressed = false;
 		}
 	}
 
 	@SideOnly(Side.CLIENT)
-	public void client_manageWorldEvents(EntityPlayer e)
-	{
-		if(e.dimension == Config.dimensionID)
-		{
-			if(e.getEntityWorld().provider.getDimension() == Config.dimensionID)
-			{
+	public void client_manageWorldEvents(EntityPlayer e) {
+		if(e.dimension == Config.dimensionID) {
+			if(e.getEntityWorld().provider.getDimension() == Config.dimensionID) {
 				((WorldProviderHoanna)e.getEntityWorld().provider).generateLightBrightnessTable();
-				if(ECUtils.isEventActive("essentialcraft.event.darkness"))
-				{
-					if(e.getEntityWorld().rand.nextFloat() < 0.01F)
+				if(ECUtils.isEventActive("essentialcraft.event.darkness")) {
+					if(e.getEntityWorld().rand.nextFloat() < 0.01F) {
 						e.getEntityWorld().playSound(e.posX,e.posY,e.posZ, SoundEvents.AMBIENT_CAVE,SoundCategory.AMBIENT, 1, e.getEntityWorld().rand.nextFloat()*2, true);
-					if(e.getEntityWorld().rand.nextFloat() < 0.001F)
-					{
+					}
+					if(e.getEntityWorld().rand.nextFloat() < 0.001F) {
 						SoundEvent[] sound = {SoundEvents.ENTITY_ZOMBIE_DEATH,SoundEvents.ENTITY_ZOMBIE_AMBIENT,SoundEvents.ENTITY_BLAZE_DEATH,SoundEvents.ENTITY_SKELETON_STEP,SoundEvents.ENTITY_ENDERMEN_STARE,SoundEvents.ENTITY_SPIDER_STEP,SoundEvents.ENTITY_SPIDER_DEATH,SoundEvents.ENTITY_SPIDER_AMBIENT,SoundEvents.ENTITY_CREEPER_DEATH};
 
 						e.getEntityWorld().playSound(e.posX+MathUtils.randomDouble(e.getEntityWorld().rand)*16,e.posY,e.posZ+MathUtils.randomDouble(e.getEntityWorld().rand)*16, sound[e.getEntityWorld().rand.nextInt(sound.length)], SoundCategory.HOSTILE, 1, 0.01F, true);
@@ -288,27 +256,23 @@ public class PlayerTickHandler {
 				}
 				boolean ignoreEarthquake = false;
 				IBaublesItemHandler b = BaublesApi.getBaublesHandler(e);
-				if(b != null)
-				{
-					for(int i = 0; i < b.getSlots(); ++i)
-					{
+				if(b != null) {
+					for(int i = 0; i < b.getSlots(); ++i) {
 						ItemStack is = b.getStackInSlot(i);
-						if(is.getItem() instanceof ItemBaublesSpecial && is.getItemDamage() == 19)
+						if(is.getItem() instanceof ItemBaublesSpecial && is.getItemDamage() == 19) {
 							ignoreEarthquake = true;
+						}
 					}
 				}
-				if(ECUtils.isEventActive("essentialcraft.event.earthquake"))
-				{
+				if(ECUtils.isEventActive("essentialcraft.event.earthquake")) {
 					if(!e.capabilities.isCreativeMode) {
 						e.cameraPitch += MathUtils.randomFloat(e.getEntityWorld().rand);
 						e.rotationYaw += MathUtils.randomFloat(e.getEntityWorld().rand);
 						e.motionX += MathUtils.randomFloat(e.getEntityWorld().rand)/30;
 						e.motionY += MathUtils.randomFloat(e.getEntityWorld().rand)/30;
 						e.motionZ += MathUtils.randomFloat(e.getEntityWorld().rand)/30;
-						if(e.getEntityWorld().rand.nextFloat() < 0.01F)
-						{
-							if(!ignoreEarthquake)
-							{
+						if(e.getEntityWorld().rand.nextFloat() < 0.01F) {
+							if(!ignoreEarthquake) {
 								e.cameraPitch += MathUtils.randomFloat(e.getEntityWorld().rand)*90;
 								e.rotationYaw += MathUtils.randomFloat(e.getEntityWorld().rand)*90;
 								e.motionX += MathUtils.randomFloat(e.getEntityWorld().rand)*3;
@@ -324,57 +288,7 @@ public class PlayerTickHandler {
 	}
 
 	@SubscribeEvent
-	public void save(PlayerEvent.SaveToFile event)
-	{
-		EntityPlayer e = event.getEntityPlayer();
-		UUID uuid = MiscUtils.getUUIDFromPlayer(e);
-		if(!e.getEntityWorld().isRemote)
-		{
-			File f = event.getPlayerDirectory();
-			if(f != null)
-			{
-				String fPath = f.getAbsolutePath();
-				File saveFile = new File(fPath+"//"+uuid+".ecdat");
-				if(saveFile.isDirectory())
-				{
-					//???
-					saveFile.delete();
-					try{saveFile.createNewFile();}catch(IOException Ex){Ex.printStackTrace();}
-				}
-				if(!saveFile.exists())
-				{
-					try{saveFile.createNewFile();}catch(IOException Ex){Ex.printStackTrace();}
-				}
-
-				try
-				{
-					FileOutputStream oStream = new FileOutputStream(saveFile);
-					try
-					{
-						NBTTagCompound tag = new NBTTagCompound();
-						ECUtils.getData(uuid).writeToNBTTagCompound(tag);
-						CompressedStreamTools.writeCompressed(tag, oStream);
-					}
-					catch(Exception Ex)
-					{
-						FMLCommonHandler.instance().raiseException(Ex, "EssentialCraft4 Encountered an exception whlist saving playerdata NBT of player "+e.getName()+"!Report the error to the forum - http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/2286105", false);
-					}
-					finally
-					{
-						oStream.close();
-					}
-				}
-				catch(Exception Exx)
-				{
-					FMLCommonHandler.instance().raiseException(Exx, "EssentialCraft4 Encountered an exception whlist wrighting playerdata file of player "+e.getName()+"! Make sure, that the file is not being accessed by other applications and is not threated as a virus by your anti-virus software! Also make sure, that you have some harddrive space. If everything above is correct - report the error to the forum - http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/2286105", true);
-				}
-			}
-		}
-	}
-
-	@SubscribeEvent
-	public void load(PlayerEvent.LoadFromFile event)
-	{
+	public void save(PlayerEvent.SaveToFile event) {
 		EntityPlayer e = event.getEntityPlayer();
 		UUID uuid = MiscUtils.getUUIDFromPlayer(e);
 		if(!e.getEntityWorld().isRemote) {
@@ -385,10 +299,69 @@ public class PlayerTickHandler {
 				if(saveFile.isDirectory()) {
 					//???
 					saveFile.delete();
-					try{saveFile.createNewFile();}catch(IOException Ex){Ex.printStackTrace();}
+					try {
+						saveFile.createNewFile();
+					}
+					catch(IOException Ex) {
+						Ex.printStackTrace();
+					}
 				}
 				if(!saveFile.exists()) {
-					try{saveFile.createNewFile();}catch(IOException Ex){Ex.printStackTrace();}
+					try {
+						saveFile.createNewFile();
+					}
+					catch(IOException Ex) {
+						Ex.printStackTrace();
+					}
+				}
+
+				try {
+					FileOutputStream oStream = new FileOutputStream(saveFile);
+					try {
+						NBTTagCompound tag = new NBTTagCompound();
+						ECUtils.getData(uuid).writeToNBTTagCompound(tag);
+						CompressedStreamTools.writeCompressed(tag, oStream);
+					}
+					catch(Exception Ex) {
+						FMLCommonHandler.instance().raiseException(Ex, "EssentialCraft4 Encountered an exception whlist saving playerdata NBT of player "+e.getName()+"!Report the error to the forum - http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/2286105", false);
+					}
+					finally {
+						oStream.close();
+					}
+				}
+				catch(Exception Exx) {
+					FMLCommonHandler.instance().raiseException(Exx, "EssentialCraft4 Encountered an exception whlist wrighting playerdata file of player "+e.getName()+"! Make sure, that the file is not being accessed by other applications and is not threated as a virus by your anti-virus software! Also make sure, that you have some harddrive space. If everything above is correct - report the error to the forum - http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/2286105", true);
+				}
+			}
+		}
+	}
+
+	@SubscribeEvent
+	public void load(PlayerEvent.LoadFromFile event) {
+		EntityPlayer e = event.getEntityPlayer();
+		UUID uuid = MiscUtils.getUUIDFromPlayer(e);
+		if(!e.getEntityWorld().isRemote) {
+			File f = event.getPlayerDirectory();
+			if(f != null) {
+				String fPath = f.getAbsolutePath();
+				File saveFile = new File(fPath+"//"+uuid+".ecdat");
+				if(saveFile.isDirectory()) {
+					//???
+					saveFile.delete();
+					try {
+						saveFile.createNewFile();
+					}
+					catch(IOException Ex) {
+						Ex.printStackTrace();
+					}
+				}
+				if(!saveFile.exists()) {
+					try {
+						saveFile.createNewFile();
+					}
+					catch(IOException Ex) {
+						Ex.printStackTrace();
+					}
 				}
 
 				try {
@@ -424,161 +397,146 @@ public class PlayerTickHandler {
 	}
 
 	@SubscribeEvent
-	public void tickEvent(PlayerTickEvent event)
-	{
-		if(event.phase == Phase.END)
-		{
+	public void tickEvent(PlayerTickEvent event) {
+		if(event.phase == Phase.END) {
 			EntityPlayer e = event.player;
 
-			if(e == null)
+			if(e == null) {
 				return;
+			}
 
 			//TODO lagFix
 
 			//Client overview
-			if(e.getEntityWorld().isRemote)
-			{
+			if(e.getEntityWorld().isRemote) {
 				client_manageBook(e);
 				client_manageWorldEvents(e);
 			}
 
-			if(!isFlightAllowed.containsKey(e))
+			if(!isFlightAllowed.containsKey(e)) {
 				isFlightAllowed.put(e, false);
+			}
 
 			//Step assistant, should 100% work with TC's system, not sure about Vazkii's one... If she calls it once per tick, it is fine. If it is only onEquiped(), then his baubles need to be re-equipped in order to work.
-			if(!isWearingBoots.containsKey(e))
+			if(!isWearingBoots.containsKey(e)) {
 				isWearingBoots.put(e, false);
+			}
 
-			if(!e.inventory.armorInventory.get(0).isEmpty() && e.inventory.armorInventory.get(0).getItem() instanceof ItemComputerArmor)
-			{
+			if(!e.inventory.armorInventory.get(0).isEmpty() && e.inventory.armorInventory.get(0).getItem() instanceof ItemComputerArmor) {
 				e.fallDistance = 0;
 			}
 
-			if(!e.inventory.armorInventory.get(3).isEmpty() && e.inventory.armorInventory.get(3).getItem() instanceof ItemComputerArmor)
-			{
+			if(!e.inventory.armorInventory.get(3).isEmpty() && e.inventory.armorInventory.get(3).getItem() instanceof ItemComputerArmor) {
 				e.setAir(300);
 				e.getFoodStats().addStats(1, 1);
 			}
 
-			if(!e.inventory.armorInventory.get(1).isEmpty() && e.inventory.armorInventory.get(1).getItem() instanceof ItemComputerArmor)
-			{
-				if(e.isBurning() && !e.getEntityWorld().isRemote && e.ticksExisted%20 == 0)
+			if(!e.inventory.armorInventory.get(1).isEmpty() && e.inventory.armorInventory.get(1).getItem() instanceof ItemComputerArmor) {
+				if(e.isBurning() && !e.getEntityWorld().isRemote && e.ticksExisted%20 == 0) {
 					e.addPotionEffect(new PotionEffect(MobEffects.FIRE_RESISTANCE,100,0,true,true));
+				}
 			}
 
-			if(!e.inventory.armorInventory.get(0).isEmpty() && (e.inventory.armorInventory.get(0).getItem() instanceof ItemGenericArmor || e.inventory.armorInventory.get(0).getItem() instanceof ItemComputerArmor || e.inventory.armorInventory.get(0).getItem() == ItemsCore.magicArmorItems[7]) && (!isWearingBoots.get(e) || e.stepHeight < 1.1F))
-			{
+			if(!e.inventory.armorInventory.get(0).isEmpty() && (e.inventory.armorInventory.get(0).getItem() instanceof ItemGenericArmor || e.inventory.armorInventory.get(0).getItem() instanceof ItemComputerArmor || e.inventory.armorInventory.get(0).getItem() == ItemsCore.magicArmorItems[7]) && (!isWearingBoots.get(e) || e.stepHeight < 1.2F)) {
 				isWearingBoots.put(e, true);
-				e.stepHeight = 1.1F;
+				e.stepHeight = 1.2F;
 			}
 
-			if((e.inventory.armorInventory.get(0).isEmpty() || !(e.inventory.armorInventory.get(0).getItem() instanceof ItemGenericArmor || e.inventory.armorInventory.get(0).getItem() instanceof ItemComputerArmor || e.inventory.armorInventory.get(0).getItem() == ItemsCore.magicArmorItems[7])) && isWearingBoots.get(e))
-			{
+			if((e.inventory.armorInventory.get(0).isEmpty() || !(e.inventory.armorInventory.get(0).getItem() instanceof ItemGenericArmor || e.inventory.armorInventory.get(0).getItem() instanceof ItemComputerArmor || e.inventory.armorInventory.get(0).getItem() == ItemsCore.magicArmorItems[7])) && isWearingBoots.get(e)) {
 				isWearingBoots.put(e, false);
 				e.stepHeight = 0.6F;
 			}
 
-			if(BaublesApi.getBaublesHandler(e) != null)
-			{
+			if(BaublesApi.getBaublesHandler(e) != null) {
 				ItemStack belt = BaublesApi.getBaublesHandler(e).getStackInSlot(3);
-				if(!belt.isEmpty())
-				{
-					if(belt.getItem() instanceof ItemComputerBoard)
-					{
+				if(!belt.isEmpty()) {
+					if(belt.getItem() instanceof ItemComputerBoard) {
 						Side s = FMLCommonHandler.instance().getEffectiveSide();
-						if(s == Side.CLIENT)
-						{
+						if(s.isClient()) {
 							this.client_flightAllowed = true;
-							if(!e.capabilities.allowFlying && !e.capabilities.isCreativeMode)
-							{
+							if(!e.capabilities.allowFlying && !e.capabilities.isCreativeMode) {
 								e.capabilities.allowFlying = true;
 							}
 							e.capabilities.setFlySpeed(0.2F);
 
-						}else
-						{
+						}
+						else {
 							isFlightAllowed.put(e, true);
-							if(!e.capabilities.allowFlying && !e.capabilities.isCreativeMode)
-							{
+							if(!e.capabilities.allowFlying && !e.capabilities.isCreativeMode) {
 								e.capabilities.allowFlying = true;
 							}
 						}
-					}else
-					{
+					}
+					else {
 						Side s = FMLCommonHandler.instance().getEffectiveSide();
-						if(s == Side.CLIENT)
-						{
-							if(client_flightAllowed)
-							{
+						if(s.isClient()) {
+							if(client_flightAllowed) {
 								client_flightAllowed = false;
-								if(e.capabilities.allowFlying && !e.capabilities.isCreativeMode)
-								{
+								if(e.capabilities.allowFlying && !e.capabilities.isCreativeMode) {
 									e.capabilities.allowFlying = false;
-									if(e.capabilities.isFlying)
+									if(e.capabilities.isFlying) {
 										e.capabilities.isFlying = false;
+									}
 								}
 								e.capabilities.setFlySpeed(0.05F);
 
 							}
-						}else
-						{
-							if(isFlightAllowed.get(e))
-							{
+						}
+						else {
+							if(isFlightAllowed.get(e)) {
 								isFlightAllowed.put(e, false);
-								if(e.capabilities.allowFlying && !e.capabilities.isCreativeMode)
-								{
+								if(e.capabilities.allowFlying && !e.capabilities.isCreativeMode) {
 									e.capabilities.allowFlying = false;
-									if(e.capabilities.isFlying)
+									if(e.capabilities.isFlying) {
 										e.capabilities.isFlying = false;
+									}
 								}
 							}
 						}
 					}
-				}else
-				{
+				}
+				else {
 					Side s = FMLCommonHandler.instance().getEffectiveSide();
-					if(s == Side.CLIENT)
-					{
-						if(client_flightAllowed)
-						{
+					if(s == Side.CLIENT) {
+						if(client_flightAllowed) {
 							client_flightAllowed = false;
-							if(e.capabilities.allowFlying && !e.capabilities.isCreativeMode)
-							{
+							if(e.capabilities.allowFlying && !e.capabilities.isCreativeMode) {
 								e.capabilities.allowFlying = false;
-								if(e.capabilities.isFlying)
+								if(e.capabilities.isFlying) {
 									e.capabilities.isFlying = false;
+								}
 								e.capabilities.setFlySpeed(0.05F);
 							}
 
 						}
-					}else
-					{
-						if(isFlightAllowed.get(e))
-						{
+					}
+					else {
+						if(isFlightAllowed.get(e)) {
 							isFlightAllowed.put(e, false);
-							if(e.capabilities.allowFlying && !e.capabilities.isCreativeMode)
-							{
+							if(e.capabilities.allowFlying && !e.capabilities.isCreativeMode) {
 								e.capabilities.allowFlying = false;
-								if(e.capabilities.isFlying)
+								if(e.capabilities.isFlying) {
 									e.capabilities.isFlying = false;
+								}
 							}
 						}
 					}
 				}
 			}
 
-			if(e.ticksExisted % 20 != 0)
-				return;
-
 			//Server overview
 			if(!e.getEntityWorld().isRemote) {
+				RadiationManager.playerTick(e);
+				if(e.ticksExisted % 20 != 0) {
+					return;
+				}
 				manageSync(e);
 				manageWorldSync(e);
 				WindRelations.playerTick(e);
-				RadiationManager.playerTick(e);
 				//System.out.println(ECUtils.getData(e).damage);
-				if(e.ticksExisted % 200 == 0)
+				if(e.ticksExisted % 200 == 0) {
 					ECUtils.requestSync(e);
+				}
 				if(e.ticksExisted % 1200 == 0) {
 					PlayerGenericData data = ECUtils.getData(e);
 					if(e.getEntityWorld().rand.nextInt(36000) <= data.getOverhaulDamage()) {
@@ -609,7 +567,7 @@ public class PlayerTickHandler {
 							ICorruptionEffect added = possibleEffects.get(e.getEntityWorld().rand.nextInt(possibleEffects.size())).copy();
 							data.modifyOverhaulDamage(data.getOverhaulDamage() - added.getStickiness());
 							data.getEffects().add(added);
-							e.sendMessage(new TextComponentString(I18n.translateToLocal("essentialcraft.txt.corruption")).setStyle(new Style().setColor(TextFormatting.RED)));
+							e.sendMessage(new TextComponentTranslation("essentialcraft.txt.corruption").setStyle(new Style().setColor(TextFormatting.RED)));
 							ECUtils.requestSync(e);
 						}
 					}

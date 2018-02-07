@@ -7,10 +7,11 @@ import java.util.List;
 
 import essentialcraft.api.EnumStructureType;
 import essentialcraft.common.block.BlocksCore;
-import essentialcraft.common.world.structure.MapGenTown;
-import essentialcraft.common.world.structure.StructureModernShaftPieces;
-import essentialcraft.common.world.structure.StructureModernShaftStart;
-import essentialcraft.common.world.structure.StructureTownPieces;
+import essentialcraft.common.world.gen.structure.MapGenTown;
+import essentialcraft.common.world.gen.structure.StructureModernShaftPieces;
+import essentialcraft.common.world.gen.structure.StructureModernShaftStart;
+import essentialcraft.common.world.gen.structure.StructureOldCatacombs;
+import essentialcraft.common.world.gen.structure.StructureTownPieces;
 import essentialcraft.utils.common.ECUtils;
 import net.minecraft.block.Block;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
@@ -20,8 +21,10 @@ public class StructureRegistry {
 	public static void register() {
 		MapGenStructureIO.registerStructure(MapGenTown.Start.class, "essentialcraft.Town");
 		MapGenStructureIO.registerStructure(StructureModernShaftStart.class, "essentialcraft.ModernShafts");
-		StructureTownPieces.registerVillagePieces();
-		StructureModernShaftPieces.registerStructurePieces();
+		MapGenStructureIO.registerStructure(StructureOldCatacombs.Start.class, "essentialcraft.OldCatacombs");
+		StructureTownPieces.registerTownComponents();
+		StructureModernShaftPieces.registerShaftComponents();
+		StructureOldCatacombs.registerCatacombComponents();
 		List<Block> structureBlocks_mrucucc = new ArrayList<Block>();
 		structureBlocks_mrucucc.add(BlocksCore.fortifiedGlass);
 		structureBlocks_mrucucc.add(BlocksCore.magicPlating);

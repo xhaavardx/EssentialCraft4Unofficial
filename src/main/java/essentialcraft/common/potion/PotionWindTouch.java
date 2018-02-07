@@ -6,50 +6,39 @@ import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ResourceLocation;
 
-public class PotionWindTouch extends Potion{
+public class PotionWindTouch extends Potion {
 
-	public PotionWindTouch(int p_i1573_1_, boolean p_i1573_2_,int p_i1573_3_)
-	{
-		super(p_i1573_2_, p_i1573_3_);
+	public PotionWindTouch(boolean isBad, int color) {
+		super(isBad, color);
 		this.setIconIndex(6, 1);
 		this.setEffectiveness(0.25D);
 		this.setPotionName("potion.windTouch");
-		this.setRegistryName("essentialcraft", "potion.windTouch");
+		this.setRegistryName("essentialcraft", "potion.windtouch");
 	}
 
-	public boolean isUsable()
-	{
+	@Override
+	public void performEffect(EntityLivingBase entity, int amplifier) {
+
+	}
+
+	@Override
+	public boolean isReady(int duration, int amplifier) {
+		return duration % 20 == 0;
+	}
+
+	@Override
+	public boolean hasStatusIcon() {
 		return true;
 	}
 
 	@Override
-	public void performEffect(EntityLivingBase p_76394_1_, int p_76394_2_)
-	{
-
-	}
-
-	@Override
-	public boolean isReady(int p_76397_1_, int p_76397_2_)
-	{
-		return p_76397_1_ % 20 == 0;
-	}
-
-	@Override
-	public boolean hasStatusIcon()
-	{
-		return true;
-	}
-
-	@Override
-	public int getStatusIconIndex()
-	{
+	public int getStatusIconIndex() {
 		Minecraft.getMinecraft().renderEngine.bindTexture(rl);
 		return super.getStatusIconIndex();
 	}
 
 	@Override
-	public void renderInventoryEffect(int x, int y, PotionEffect effect, net.minecraft.client.Minecraft mc)
-	{
+	public void renderInventoryEffect(int x, int y, PotionEffect effect, Minecraft mc) {
 		mc.fontRenderer.drawStringWithShadow(effect.getAmplifier()+1+"", x+19, y+19, 0xffffff);
 	}
 

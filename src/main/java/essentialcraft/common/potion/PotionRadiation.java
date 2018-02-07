@@ -12,69 +12,56 @@ import net.minecraft.util.ResourceLocation;
 
 public class PotionRadiation extends Potion {
 
-	public PotionRadiation(int p_i1573_1_, boolean p_i1573_2_,int p_i1573_3_)
-	{
-		super(p_i1573_2_, p_i1573_3_);
+	public PotionRadiation(boolean isBad, int color) {
+		super(isBad, color);
 		this.setIconIndex(4, 2);
 		this.setEffectiveness(0.25D);
 		this.setPotionName("potion.radiation");
 		this.setRegistryName("essentialcraft", "potion.radiation");
 	}
 
-	public boolean isUsable()
-	{
-		return true;
-	}
-
 	@Override
-	public void performEffect(EntityLivingBase p_76394_1_, int p_76394_2_)
-	{
-		if(!p_76394_1_.getEntityWorld().isRemote && p_76394_1_.getEntityWorld().rand.nextInt(16) < p_76394_2_)
-		{
+	public void performEffect(EntityLivingBase entity, int amplifier) {
+		if(!entity.getEntityWorld().isRemote && entity.getEntityWorld().rand.nextInt(16) < amplifier) {
 			boolean divide = false;
-			if(p_76394_1_ instanceof EntityPlayer) {
-				IBaublesItemHandler b = BaublesApi.getBaublesHandler((EntityPlayer) p_76394_1_);
-				if(b != null)
-				{
-					for(int i = 0; i < b.getSlots(); ++i)
-					{
+			if(entity instanceof EntityPlayer) {
+				IBaublesItemHandler b = BaublesApi.getBaublesHandler((EntityPlayer)entity);
+				if(b != null) {
+					for(int i = 0; i < b.getSlots(); ++i) {
 						ItemStack is = b.getStackInSlot(i);
-						if(is.getItem() instanceof ItemBaublesSpecial && is.getItemDamage() == 11)
+						if(is.getItem() instanceof ItemBaublesSpecial && is.getItemDamage() == 11) {
 							divide = true;
+						}
 					}
 				}
 			}
 
-			int amplifier = p_76394_2_;
-			if(divide)
+			if(divide) {
 				amplifier/=2;
-			int maxHealth = (int) p_76394_1_.getMaxHealth()-(amplifier+1);
-			float currentHealth = p_76394_1_.getHealth();
-			if(maxHealth < 1)
-				maxHealth = 1;
-			if(currentHealth > maxHealth)
-			{
-				p_76394_1_.setHealth(maxHealth);
 			}
-
+			int maxHealth = (int)entity.getMaxHealth()-(amplifier+1);
+			float currentHealth = entity.getHealth();
+			if(maxHealth < 1) {
+				maxHealth = 1;
+			}
+			if(currentHealth > maxHealth) {
+				entity.setHealth(maxHealth);
+			}
 		}
 	}
 
 	@Override
-	public boolean isReady(int p_76397_1_, int p_76397_2_)
-	{
+	public boolean isReady(int duration, int amplifier) {
 		return true;
 	}
 
 	@Override
-	public boolean hasStatusIcon()
-	{
+	public boolean hasStatusIcon() {
 		return true;
 	}
 
 	@Override
-	public int getStatusIconIndex()
-	{
+	public int getStatusIconIndex() {
 		Minecraft.getMinecraft().renderEngine.bindTexture(rl);
 		return super.getStatusIconIndex();
 	}

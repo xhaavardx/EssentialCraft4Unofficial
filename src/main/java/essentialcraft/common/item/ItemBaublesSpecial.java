@@ -36,6 +36,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.translation.I18n;
@@ -271,7 +272,7 @@ public class ItemBaublesSpecial extends Item implements IBauble, IUBMRUGainModif
 				ItemStack windKeeper = new ItemStack(ItemsCore.windKeeper);
 				if(!p.inventory.addItemStackToInventory(windKeeper))
 					p.dropItem(windKeeper, true);
-				p.sendMessage(new TextComponentString(TextFormatting.DARK_RED+""+TextFormatting.ITALIC+"The wind catcher catches some wind..."));
+				p.sendMessage(new TextComponentString("The wind catcher catches some wind...").setStyle(new Style().setColor(TextFormatting.DARK_RED).setItalic(true)));
 			}
 			return -0.1F;
 		}
@@ -300,13 +301,14 @@ public class ItemBaublesSpecial extends Item implements IBauble, IUBMRUGainModif
 					ret.add(addedString);
 					addedString = "";
 					s = s.substring(index);
-
 				}
 			}
-			else if(charType.equals("r"))
+			else if(charType.equals("r")) {
 				s = s.substring(0,index)+TextFormatting.RESET+s.substring(index);
-			else
+			}
+			else {
 				s = s.substring(0,index)+findByChar(charType.charAt(0))+s.substring(index);
+			}
 		}
 		addedString += s;
 		ret.add(addedString);
@@ -317,8 +319,9 @@ public class ItemBaublesSpecial extends Item implements IBauble, IUBMRUGainModif
 		for(int i = 0; i < TextFormatting.values().length; ++i) {
 			TextFormatting ecf = TextFormatting.values()[i];
 			char w = ecf.toString().charAt(1);
-			if(w == c)
+			if(w == c) {
 				return ecf;
+			}
 		}
 		return TextFormatting.RESET;
 	}
@@ -333,7 +336,8 @@ public class ItemBaublesSpecial extends Item implements IBauble, IUBMRUGainModif
 
 	@Override
 	public void registerModels() {
-		for(int i = 0; i < names.length-1; i++)
+		for(int i = 0; i < names.length-1; i++) {
 			ModelLoader.setCustomModelResourceLocation(this, i, new ModelResourceLocation("essentialcraft:item/baublescore", "type=" + names[i].toLowerCase(Locale.ENGLISH)));
+		}
 	}
 }

@@ -17,6 +17,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingJumpEvent;
@@ -84,7 +85,7 @@ public class PlayerTracker {
 
 				if(addBuff)
 					event.getEntityLiving().addPotionEffect(new PotionEffect(MobEffects.JUMP_BOOST,100,12));
-				player.sendMessage(new TextComponentString(TextFormatting.DARK_AQUA+""+TextFormatting.ITALIC+"The wind pushes you upwards..."));
+				player.sendMessage(new TextComponentString("The wind pushes you upwards...").setStyle(new Style().setColor(TextFormatting.DARK_AQUA).setItalic(true)));
 
 				WindRelations.increasePlayerWindRelations(player, 1000);
 			}

@@ -775,7 +775,7 @@ public class RenderHandlerEC {
 
 				if(ClientProxy.kbArmorBoost.isKeyDown() && !isSprintKeyDown) {
 					isSprintKeyDown = true;
-					if(((ItemComputerArmor)ItemsCore.computer_helmet).hasFullset(player) && renderPartialTicksCheck <= 0) {
+					if(ItemComputerArmor.hasFullset(player) && renderPartialTicksCheck <= 0) {
 						Vec3d lookVec = player.getLookVec();
 						player.motionX += lookVec.x*3;
 						player.motionY += lookVec.y*3;
@@ -786,7 +786,7 @@ public class RenderHandlerEC {
 					}
 				}
 
-				if(!player.capabilities.isFlying && player.isInWater() && ((ItemComputerArmor)ItemsCore.computer_helmet).hasFullset(player) && Minecraft.getMinecraft().gameSettings.keyBindForward.isKeyDown()) {
+				if(!player.capabilities.isFlying && player.isInWater() && ItemComputerArmor.hasFullset(player) && Minecraft.getMinecraft().gameSettings.keyBindForward.isKeyDown()) {
 					player.motionX *= 1.2D;
 					if(player.motionY > 0)
 						player.motionY *= 1.2D;
@@ -965,21 +965,23 @@ public class RenderHandlerEC {
 								WindImbueRecipe rec = WindImbueRecipe.findRecipeByComponent(p.getHeldItemMainhand());
 								if(rec != null) {
 									int energyReq = rec.enderEnergy;
-									int energy = rune.energy;
+									int energy = rune.getEnderstarEnergy();
 
-									int color = 0xffffff;
+									int color;
 									boolean creative = p.capabilities.isCreativeMode;
 
 									if(energy < energyReq && !creative)
-										color = 0xff0000;
+										color = 0xFF0000;
 									else
-										color = 0x00ff66;
+										color = 0x00FF66;
 
 									ScaledResolution res = new ScaledResolution(mc);
 									String displayed = energyReq+" ESPE";
 									if(creative)
 										displayed += " [Creative]";
-									Minecraft.getMinecraft().fontRenderer.drawString(displayed, res.getScaledWidth()/2-displayed.length()*3, res.getScaledHeight()/2+5, color);
+									String energyDisplay = energy+" ESPE";
+									Minecraft.getMinecraft().fontRenderer.drawString(displayed, res.getScaledWidth()/2-displayed.length()*3, res.getScaledHeight()/2, color);
+									Minecraft.getMinecraft().fontRenderer.drawString(energyDisplay, res.getScaledWidth()/2-energyDisplay.length()*3, res.getScaledHeight()/2+10, 0xFFFFFF);
 								}
 							}
 						}

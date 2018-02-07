@@ -14,15 +14,14 @@ import net.minecraftforge.registries.IForgeRegistry;
 
 public class PotionRegistry {
 
-	public static void registerPotions(IForgeRegistry<Potion> registry)
-	{
-		mruCorruption = new PotionMRUCorruption(0, true, 0xff00ff);
-		chaosInfluence = new PotionChaosInfluence(0, true, 0xff0000);
-		frozenMind = new PotionFrozenMind(0, true, 0x0000ff);
-		windTouch = new PotionWindTouch(0, true, 0xccffcc);
-		paranormalLightness = new PotionUnnormalLightness(0, true, 0xffffcc);
-		radiation = new PotionRadiation(0, true, 0x660066);
-		paradox = new PotionMindfoldParadox(0, true, 0xffffff);
+	public static void registerPotions(IForgeRegistry<Potion> registry) {
+		mruCorruption = new PotionMRUCorruption(true, 0xFF00FF);
+		chaosInfluence = new PotionChaosInfluence(true, 0xFF0000);
+		frozenMind = new PotionFrozenMind(true, 0x0000FF);
+		windTouch = new PotionWindTouch(true, 0xCCFFCC);
+		paranormalLightness = new PotionUnnormalLightness(true, 0xFFFFCC);
+		radiation = new PotionRadiation(true, 0x660066);
+		paradox = new PotionMindfoldParadox(true, 0xFFFFFF);
 
 		registry.register(mruCorruption);
 		registry.register(chaosInfluence);

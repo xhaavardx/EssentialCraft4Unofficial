@@ -19,8 +19,8 @@ public class WorldProviderHoanna extends WorldProvider {
 	}
 
 	@Override
-	protected void init()
-	{
+	protected void init() {
+		super.setAllowedSpawnTypes(true, false);
 		this.biomeProvider = new BiomeProviderHoanna(this.world.getWorldInfo());
 		this.doesWaterVaporize = false;
 		this.nether = false;
@@ -28,44 +28,45 @@ public class WorldProviderHoanna extends WorldProvider {
 	}
 
 	@Override
-	public void generateLightBrightnessTable()
-	{
+	public void generateLightBrightnessTable() {
 		float f = 0.0F;
 
-		for (int i = 0; i <= 15; ++i)
-		{
+		for(int i = 0; i <= 15; ++i) {
 			float f1;
-			if(!ECUtils.isEventActive("essentialcraft.event.darkness"))
+			if(!ECUtils.isEventActive("essentialcraft.event.darkness")) {
 				f1 = 1.0F - i / 15.0F;
-			else
+			}
+			else {
 				f1 = 1.9F - i / 15.0F;
+			}
 			this.lightBrightnessTable[i] = (1.0F - f1) / (f1 * 3.0F + 1.0F) * (1.0F - f) + f;
 		}
 	}
 
 	@Override
+	public void setAllowedSpawnTypes(boolean allowHostile, boolean allowPeaceful) {
+		super.setAllowedSpawnTypes(allowHostile, false);
+	}
+
+	@Override
+	public IChunkGenerator createChunkGenerator() {
+		return new ChunkGeneratorHoanna(this.world, this.world.getSeed(), true, this.world.getWorldInfo().getGeneratorOptions());
+	}
+
+	@Override
+	public boolean isSurfaceWorld() {
+		return true;
+	}
+
+	@Override
 	@SideOnly(Side.CLIENT)
-	public IRenderHandler getSkyRenderer()
-	{
+	public IRenderHandler getSkyRenderer() {
 		return (IRenderHandler)EssentialCraftCore.proxy.getRenderer(0);
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public IRenderHandler getCloudRenderer()
-	{
+	public IRenderHandler getCloudRenderer() {
 		return (IRenderHandler)EssentialCraftCore.proxy.getRenderer(1);
-	}
-
-	@Override
-	public boolean isSurfaceWorld()
-	{
-		return true;
-	}
-
-	@Override
-	public IChunkGenerator createChunkGenerator()
-	{
-		return new ChunkGeneratorHoanna(this.world, this.world.getSeed(), true, this.world.getWorldInfo().getGeneratorOptions());
 	}
 }

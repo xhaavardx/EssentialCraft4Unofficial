@@ -5,9 +5,9 @@ import java.util.Random;
 
 import com.google.common.collect.Lists;
 
-import essentialcraft.common.world.gen.WorldGenOldCatacombs;
-import essentialcraft.common.world.structure.MapGenModernShafts;
-import essentialcraft.common.world.structure.MapGenTown;
+import essentialcraft.common.world.gen.structure.MapGenModernShafts;
+import essentialcraft.common.world.gen.structure.MapGenOldCatacombs;
+import essentialcraft.common.world.gen.structure.MapGenTown;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
@@ -23,41 +23,23 @@ public class ChunkGeneratorHoanna extends ChunkGeneratorOverworld {
 	public World world;
 	public MapGenTown town = new MapGenTown();
 	public MapGenModernShafts shafts = new MapGenModernShafts();
+	public MapGenOldCatacombs catacombs = new MapGenOldCatacombs();
 	public static ChunkGeneratorHoanna instance;
-
-	public static MapGenTown getGen() {
-		return instance.town;
-	}
 
 	public ChunkGeneratorHoanna(World world, long seed, boolean mapFeaturesEnabledIn, String generatorOptions) {
 		super(world, seed, false, generatorOptions);
 		instance = this;
-		try {
-			rand = new Random(seed);
-		}
-		catch(Exception e) {
-			e.printStackTrace();
-			return;
-		}
+		this.rand = new Random(seed);
 		this.world = world;
 	}
 
 	@Override
-	public void populate(int x, int z) {
+	public void populate(int chunkX, int chunkZ) {
 		instance = this;
-		super.populate(x, z);
-		int k = x * 16;
-		int l = z * 16;
-
-		town.generateStructure(world, rand, new ChunkPos(x, z));
-		shafts.generateStructure(world, rand, new ChunkPos(x, z));
-
-		int y = rand.nextInt(256);
-		if(y > 6 && y < 32 && rand.nextFloat() < 0.1F) {
-			int l1 = k + rand.nextInt(16) + 8;
-			int j2 = l + rand.nextInt(16) + 8;
-			new WorldGenOldCatacombs().generate(world, rand, new BlockPos(l1, y, j2));
-		}
+		this.town.generateStructure(this.world, this.rand, new ChunkPos(chunkX, chunkZ));
+		this.shafts.generateStructure(this.world, this.rand, new ChunkPos(chunkX, chunkZ));
+		this.catacombs.generateStructure(this.world, this.rand, new ChunkPos(chunkX, chunkZ));
+		super.populate(chunkX, chunkZ);
 	}
 
 	@Override
@@ -69,32 +51,34 @@ public class ChunkGeneratorHoanna extends ChunkGeneratorOverworld {
 			return this.shafts.isInsideStructure(pos);
 		}
 		if(structureName.equals("OldCatacombs")) {
-
+			return this.catacombs.isInsideStructure(pos);
 		}
 		return super.isInsideStructure(worldIn, structureName, pos);
 	}
 
 	@Override
-	public Chunk generateChunk(int x, int z) {
+	public Chunk generateChunk(int chunkX, int chunkZ) {
 		instance = this;
 		ChunkPrimer chunkprimer = new ChunkPrimer();
-		town.generate(world, x, z, chunkprimer);
-		shafts.generate(world, x, z, chunkprimer);
-		return super.generateChunk(x, z);
+		this.town.generate(this.world, chunkX, chunkZ, chunkprimer);
+		this.shafts.generate(this.world, chunkX, chunkZ, chunkprimer);
+		this.catacombs.generate(this.world, chunkX, chunkZ, chunkprimer);
+		return super.generateChunk(chunkX, chunkZ);
 	}
 
 	@Override
-	public void recreateStructures(Chunk chunk, int x, int z) {
+	public void recreateStructures(Chunk chunk, int chunkX, int chunkZ) {
 		ChunkPrimer chunkprimer = new ChunkPrimer();
-		town.generate(world, x, z, chunkprimer);
-		shafts.generate(world, x, z, chunkprimer);
-		super.recreateStructures(chunk, x, z);
+		this.town.generate(this.world, chunkX, chunkZ, chunkprimer);
+		this.shafts.generate(this.world, chunkX, chunkZ, chunkprimer);
+		this.catacombs.generate(this.world, chunkX, chunkZ, chunkprimer);
+		super.recreateStructures(chunk, chunkX, chunkZ);
 	}
 
 	@Override
 	public List<SpawnListEntry> getPossibleCreatures(EnumCreatureType creatureType, BlockPos pos) {
 		if(creatureType.getPeacefulCreature()) {
-			return Lists.newArrayList();
+			return Lists.<SpawnListEntry>newArrayList();
 		}
 		return super.getPossibleCreatures(creatureType, pos);
 	}

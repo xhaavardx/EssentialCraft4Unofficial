@@ -83,37 +83,32 @@ public class ECUtils {
 	private static final List<ScheduledServerAction> ACTION_LIST = new ArrayList<ScheduledServerAction>();
 	public static NBTTagCompound ec3WorldTag = new NBTTagCompound();
 
-	public static void requestSync(EntityPlayer e)
-	{
+	public static void requestSync(EntityPlayer e) {
 		NBTTagCompound tag = new NBTTagCompound();
 		getData(e).writeToNBTTagCompound(tag);
 		PacketNBT pkt = new PacketNBT(tag).setID(0);
 		EssentialCraftCore.network.sendTo(pkt, (EntityPlayerMP)e);
 	}
 
-	public static PlayerGenericData getData(EntityPlayer e)
-	{
+	public static PlayerGenericData getData(EntityPlayer e) {
 		return getData(MiscUtils.getUUIDFromPlayer(e));
 	}
 
 	/**
 	 * Should only be used for CLIENT, but may be used for the SERVER
 	 */
-	public static PlayerGenericData getData(UUID uuid)
-	{
+	public static PlayerGenericData getData(UUID uuid) {
 		return playerDataExists(uuid) ? PLAYER_DATA_MAP.get(uuid) : createPlayerData(uuid);
 	}
 
 	/**
 	 * Should only be used for CLIENT, but may be used for the SERVER
 	 */
-	public static boolean playerDataExists(UUID uuid)
-	{
+	public static boolean playerDataExists(UUID uuid) {
 		return PLAYER_DATA_MAP.containsKey(uuid);
 	}
 
-	public static boolean playerDataExists(EntityPlayer e)
-	{
+	public static boolean playerDataExists(EntityPlayer e) {
 		return PLAYER_DATA_MAP.containsKey(MiscUtils.getUUIDFromPlayer(e));
 	}
 
@@ -496,33 +491,25 @@ public class ECUtils {
 		EssentialCraftCore.network.sendToAll(syncPacket);
 	}
 
-	public static int getActiveEventDuration()
-	{
+	public static int getActiveEventDuration() {
 		return ec3WorldTag.getInteger("currentEventDuration");
 	}
 
-	public static String getActiveEvent()
-	{
+	public static String getActiveEvent() {
 		return ec3WorldTag.getString("currentEvent");
 	}
 
-	public static boolean hasActiveEvent()
-	{
+	public static boolean hasActiveEvent() {
 		return !ec3WorldTag.hasNoTags() && ec3WorldTag.getString("currentEvent") != null && !ec3WorldTag.getString("currentEvent").isEmpty();
 	}
 
-	public static boolean isEventActive(String id)
-	{
+	public static boolean isEventActive(String id) {
 		return ec3WorldTag.getString("currentEvent").equalsIgnoreCase(id);
 	}
 
-	public static void sendChatMessageToAllPlayersInDim(int dimID,String msg)
-	{
-		for(int i = 0; i < FMLCommonHandler.instance().getMinecraftServerInstance().getCurrentPlayerCount(); ++i)
-		{
-			EntityPlayer player = FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayerByUsername(FMLCommonHandler.instance().getMinecraftServerInstance().getOnlinePlayerNames()[i]);
-			if(player.dimension == dimID)
-			{
+	public static void sendChatMessageToAllPlayersInDim(int dimID,String msg) {
+		for(EntityPlayer player : FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayers()) {
+			if(player.dimension == dimID) {
 				player.sendMessage(new TextComponentString(msg));
 			}
 		}
@@ -758,15 +745,17 @@ public class ECUtils {
 	}
 
 	protected static void actionsTick() {
-		if(!ACTION_LIST.isEmpty())
+		if(!ACTION_LIST.isEmpty()) {
 			for(int i = 0; i < ACTION_LIST.size(); ++i) {
 				ScheduledServerAction ssa = ACTION_LIST.get(i);
 				--ssa.actionTime;
 				if(ssa.actionTime <= 0) {
 					ssa.execute();
 					ACTION_LIST.remove(i);
+					--i;
 				}
 			}
+		}
 	}
 
 	public static void addScheduledAction(ScheduledServerAction ssa) {

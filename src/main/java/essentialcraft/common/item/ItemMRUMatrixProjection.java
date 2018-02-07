@@ -20,6 +20,7 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
@@ -38,38 +39,33 @@ public class ItemMRUMatrixProjection extends Item implements IModelRegisterer {
 	}
 
 	@Override
-	public String getUnlocalizedName(ItemStack p_77667_1_)
-	{
-		return super.getUnlocalizedName(p_77667_1_)+"_"+names[Math.min(p_77667_1_.getItemDamage(),names.length-1)];
+	public String getUnlocalizedName(ItemStack stack) {
+		return super.getUnlocalizedName(stack)+"_"+names[Math.min(stack.getItemDamage(),names.length-1)];
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World par2World, EntityPlayer par3EntityPlayer, EnumHand hand)
-	{
-		ItemStack par1ItemStack = par3EntityPlayer.getHeldItem(hand);
-		if(par1ItemStack.getTagCompound() != null)
-		{
-			String username = par1ItemStack.getTagCompound().getString("playerName");
-			if(username.equals(MiscUtils.getUUIDFromPlayer(par3EntityPlayer).toString()))
-				par3EntityPlayer.setActiveHand(hand);
+	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+		ItemStack stack = player.getHeldItem(hand);
+		if(stack.getTagCompound() != null) {
+			String username = stack.getTagCompound().getString("playerName");
+			if(username.equals(MiscUtils.getUUIDFromPlayer(player).toString())) {
+				player.setActiveHand(hand);
+			}
 		}
-		if(par1ItemStack.getTagCompound() == null && !par2World.isRemote && !par3EntityPlayer.isSneaking())
-		{
+		if(stack.getTagCompound() == null && !world.isRemote && !player.isSneaking()) {
 			NBTTagCompound playerTag = new NBTTagCompound();
-			playerTag.setString("playerName", MiscUtils.getUUIDFromPlayer(par3EntityPlayer).toString());
-			par1ItemStack.setTagCompound(playerTag);
+			playerTag.setString("playerName", MiscUtils.getUUIDFromPlayer(player).toString());
+			stack.setTagCompound(playerTag);
 		}
-		return super.onItemRightClick(par2World, par3EntityPlayer, hand);
+		return super.onItemRightClick(world, player, hand);
 	}
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void addInformation(ItemStack par1ItemStack, World par2EntityPlayer, List<String> par3List, ITooltipFlag par4)
-	{
-		if(par1ItemStack.getTagCompound() != null)
-		{
-			String username = MiscUtils.getUsernameFromUUID(par1ItemStack.getTagCompound().getString("playerName"));
-			par3List.add(TextFormatting.DARK_GRAY+"Thus is a projection of "+TextFormatting.GOLD+username+TextFormatting.DARK_GRAY+"'s MRU Matrix");
+	public void addInformation(ItemStack stack, World world, List<String> list, ITooltipFlag flag) {
+		if(stack.getTagCompound() != null) {
+			String username = MiscUtils.getUsernameFromUUID(stack.getTagCompound().getString("playerName"));
+			list.add(TextFormatting.DARK_GRAY+"Thus is a projection of "+TextFormatting.GOLD+username+TextFormatting.DARK_GRAY+"'s MRU Matrix");
 		}
 	}
 
@@ -84,52 +80,45 @@ public class ItemMRUMatrixProjection extends Item implements IModelRegisterer {
 	}
 
 	@Override
-	public EnumAction getItemUseAction(ItemStack p_77661_1_)
-	{
+	public EnumAction getItemUseAction(ItemStack stack) {
 		return EnumAction.BLOCK;
 	}
 
 	@Override
-	public int getMaxItemUseDuration(ItemStack p_77626_1_)
-	{
+	public int getMaxItemUseDuration(ItemStack stack) {
 		return 200;
 	}
 
 	@Override
-	public void onUsingTick(ItemStack stack, EntityLivingBase player, int count)
-	{
-		if(count % 40 == 0)
-		{
+	public void onUsingTick(ItemStack stack, EntityLivingBase player, int count) {
+		if(count % 40 == 0) {
 			player.playSound(SoundEvents.BLOCK_PORTAL_TRAVEL, 0.3F, 2);
 			player.playSound(SoundEvents.BLOCK_PORTAL_TRIGGER, 0.3F, 2);
 		}
-		if(count == 100)
+		if(count == 100) {
 			player.addPotionEffect(new PotionEffect(MobEffects.NAUSEA,200,0,true,true));
-		if(count <= 50)
-		{
+		}
+		if(count <= 50) {
 			player.addPotionEffect(new PotionEffect(MobEffects.BLINDNESS,2000,0,true,true));
 		}
-
 	}
 
 	@Override
-	public ItemStack onItemUseFinish(ItemStack p_77654_1_, World p_77654_2_, EntityLivingBase p_77654_3_)
-	{
-		if(p_77654_3_ instanceof EntityPlayer) {
-			p_77654_3_.playSound(SoundEvents.BLOCK_PORTAL_TRIGGER, 0.3F, 0.01F);
-			p_77654_3_.addPotionEffect(new PotionEffect(MobEffects.WITHER,40*19,0,true,true));
-			p_77654_3_.addPotionEffect(new PotionEffect(MobEffects.WEAKNESS,40*19,4,true,true));
-			p_77654_3_.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS,40*19,4,true,true));
-			p_77654_3_.addPotionEffect(new PotionEffect(MobEffects.MINING_FATIGUE,40*19,4,true,true));
-			p_77654_3_.addPotionEffect(new PotionEffect(MobEffects.HUNGER,40*19,0,true,true));
-			if(!p_77654_3_.getEntityWorld().isRemote)
-			{
-				p_77654_3_.sendMessage(new TextComponentString(TextFormatting.AQUA+"Your MRU Matrix twists with new colors!"));
-				ECUtils.getData((EntityPlayer)p_77654_3_).modifyMatrixType(p_77654_1_.getItemDamage());
+	public ItemStack onItemUseFinish(ItemStack stack, World world, EntityLivingBase entity) {
+		if(entity instanceof EntityPlayer) {
+			entity.playSound(SoundEvents.BLOCK_PORTAL_TRIGGER, 0.3F, 0.01F);
+			entity.addPotionEffect(new PotionEffect(MobEffects.WITHER, 760, 0, true, true));
+			entity.addPotionEffect(new PotionEffect(MobEffects.WEAKNESS, 760, 4, true, true));
+			entity.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 760, 4, true, true));
+			entity.addPotionEffect(new PotionEffect(MobEffects.MINING_FATIGUE, 760, 4, true, true));
+			entity.addPotionEffect(new PotionEffect(MobEffects.HUNGER, 760, 0, true, true));
+			if(!entity.getEntityWorld().isRemote) {
+				entity.sendMessage(new TextComponentString("Your MRU Matrix twists with new colors!").setStyle(new Style().setColor(TextFormatting.AQUA)));
+				ECUtils.getData((EntityPlayer)entity).modifyMatrixType(stack.getItemDamage());
 			}
-			((EntityPlayer)p_77654_3_).inventory.decrStackSize(((EntityPlayer)p_77654_3_).inventory.currentItem, 1);
+			stack.shrink(1);
 		}
-		return p_77654_1_;
+		return stack;
 	}
 
 	@Override

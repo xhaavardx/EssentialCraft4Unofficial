@@ -13,7 +13,7 @@ import essentialcraft.common.item.ItemBaublesResistance;
 import essentialcraft.common.item.ItemsCore;
 import essentialcraft.common.mod.EssentialCraftCore;
 import essentialcraft.common.registry.SoundRegistry;
-import essentialcraft.common.world.gen.WorldGenOldCatacombs;
+import essentialcraft.common.world.gen.structure.StructureOldCatacombs;
 import essentialcraft.utils.common.ECUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
@@ -110,7 +110,7 @@ public class EntityHologram extends EntityLiving {
 		w.setBlockState(getPosition(), Blocks.CHEST.getDefaultState());
 		TileEntityChest chest = (TileEntityChest)w.getTileEntity(getPosition());
 		if(chest != null) {
-			WeightedRandomChestContent.generateChestContents(w.rand, WorldGenOldCatacombs.generatedItems, chest, w.rand.nextInt(26)+18);
+			WeightedRandomChestContent.generateChestContents(w.rand, StructureOldCatacombs.generatedItems, chest, w.rand.nextInt(26)+18);
 			IInventory inv = chest;
 			for(int i = 0; i < inv.getSizeInventory(); ++i) {
 				ItemStack stk = inv.getStackInSlot(i);
@@ -316,8 +316,10 @@ public class EntityHologram extends EntityLiving {
 			PlayerList manager = server.getPlayerList();
 			for(int i = 0; i < players.size(); ++i) {
 				EntityPlayer p = MiscUtils.getPlayerFromUUID(players.get(i));
-				if(p == null || p.isDead)
+				if(p == null || p.isDead) {
 					players.remove(i);
+					--i;
+				}
 			}
 			for(int i = 0; i < manager.getCurrentPlayerCount(); ++i) {
 				EntityPlayerMP player = manager.getPlayers().get(i);
@@ -327,7 +329,7 @@ public class EntityHologram extends EntityLiving {
 
 				if(this.players.contains(MiscUtils.getUUIDFromPlayer(player).toString())) {
 					if(player.isDead) {
-						players.remove(i);
+						players.remove(MiscUtils.getUUIDFromPlayer(player).toString());
 						continue;
 					}
 

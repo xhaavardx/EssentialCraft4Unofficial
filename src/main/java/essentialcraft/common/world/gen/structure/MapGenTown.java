@@ -1,4 +1,4 @@
-package essentialcraft.common.world.structure;
+package essentialcraft.common.world.gen.structure;
 
 import java.util.Arrays;
 import java.util.Iterator;
@@ -19,72 +19,59 @@ import net.minecraft.world.gen.structure.MapGenStructure;
 import net.minecraft.world.gen.structure.StructureComponent;
 import net.minecraft.world.gen.structure.StructureStart;
 
-public class MapGenTown extends MapGenStructure
-{
+public class MapGenTown extends MapGenStructure {
 	/** A list of all the biomes villages can spawn in. */
-	public static List<Biome> villageSpawnBiomes = Arrays.asList(new Biome[] {Biomes.PLAINS, BiomeRegistry.chaosCorruption, BiomeRegistry.frozenCorruption});
+	public static List<Biome> townSpawnBiomes = Arrays.<Biome>asList(
+			Biomes.PLAINS, Biomes.DESERT, Biomes.SAVANNA, Biomes.TAIGA, BiomeRegistry.dreadlands, BiomeRegistry.desert, BiomeRegistry.chaosCorruption, BiomeRegistry.frozenCorruption, BiomeRegistry.magicCorruption
+			);
 	private int size;
 	private int distance;
 	private int minTownSeparation;
 
-	public MapGenTown()
-	{
+	public MapGenTown() {
 		this.distance = 32;
 		this.minTownSeparation = 8;
 	}
 
-	public MapGenTown(Map<String, String> map)
-	{
+	public MapGenTown(Map<String, String> map) {
 		this();
-		for (Entry<String, String> entry : map.entrySet())
-		{
-			if (entry.getKey().equals("size"))
-			{
+		for(Entry<String, String> entry : map.entrySet()) {
+			if(entry.getKey().equals("size")) {
 				this.size = MathHelper.getInt(entry.getValue(), this.size, 0);
 			}
-			else if (entry.getKey().equals("distance"))
-			{
+			else if(entry.getKey().equals("distance")) {
 				this.distance = MathHelper.getInt(entry.getValue(), this.distance, 9);
 			}
 		}
 	}
 
 	@Override
-	public String getStructureName()
-	{
+	public String getStructureName() {
 		return "Town";
 	}
 
 	@Override
-	protected boolean canSpawnStructureAtCoords(int p_75047_1_, int p_75047_2_)
-	{
-		int k = p_75047_1_;
-		int l = p_75047_2_;
+	protected boolean canSpawnStructureAtCoords(int chunkX, int chunkZ) {
+		int k = chunkX;
+		int l = chunkZ;
 
-		if (p_75047_1_ < 0)
-		{
-			p_75047_1_ -= this.distance - 1;
+		if(chunkX < 0) {
+			chunkX -= this.distance - 1;
 		}
 
-		if (p_75047_2_ < 0)
-		{
-			p_75047_2_ -= this.distance - 1;
+		if(chunkZ < 0) {
+			chunkZ -= this.distance - 1;
 		}
 
-		int i1 = p_75047_1_ / this.distance;
-		int j1 = p_75047_2_ / this.distance;
+		int i1 = chunkX / this.distance;
+		int j1 = chunkZ / this.distance;
 		Random random = this.world.setRandomSeed(i1, j1, 10387312);
 		i1 *= this.distance;
 		j1 *= this.distance;
 		i1 += random.nextInt(this.distance - 8);
 		j1 += random.nextInt(this.distance - 8);
-		if (k == i1 && l == j1)
-		{
-			boolean flag = this.world.provider.getDimension() == Config.dimensionID;
-			if (flag)
-			{
-				return true;
-			}
+		if(k == i1 && l == j1) {
+			return true;
 		}
 
 		return false;
@@ -97,22 +84,18 @@ public class MapGenTown extends MapGenStructure
 	}
 
 	@Override
-	protected StructureStart getStructureStart(int p_75049_1_, int p_75049_2_)
-	{
+	protected StructureStart getStructureStart(int p_75049_1_, int p_75049_2_) {
 		return new MapGenTown.Start(this.world, this.rand, p_75049_1_, p_75049_2_, this.size);
 	}
 
-	public static class Start extends StructureStart
-	{
-		/** well ... thats what it does */
+	public static class Start extends StructureStart {
 		private boolean hasMoreThanTwoComponents;
 
 		public Start() {}
 
-		public Start(World world, Random rand, int chunkX, int chunkZ, int size)
-		{
+		public Start(World world, Random rand, int chunkX, int chunkZ, int size) {
 			super(chunkX, chunkZ);
-			List<StructureTownPieces.PieceWeight> list = StructureTownPieces.getStructureVillageWeightedPieceList(rand, size);
+			List<StructureTownPieces.PieceWeight> list = StructureTownPieces.getStructureTownWeightedPieceList();
 			StructureTownPieces.Start start = new StructureTownPieces.Start(world.getBiomeProvider(), 0, rand, (chunkX << 4) + 2, (chunkZ << 4) + 2, list, size);
 			this.components.add(start);
 			start.buildComponent(start, this.components, rand);
@@ -120,20 +103,17 @@ public class MapGenTown extends MapGenStructure
 			List<StructureComponent> list2 = start.pendingHouses;
 			int l;
 
-			while (!list1.isEmpty() || !list2.isEmpty())
-			{
+			while(!list1.isEmpty() || !list2.isEmpty()) {
 				StructureComponent structurecomponent;
 
-				if (list1.isEmpty())
-				{
+				if(list1.isEmpty()) {
 					l = rand.nextInt(list2.size());
 					structurecomponent = list2.remove(l);
 					structurecomponent.buildComponent(start, this.components, rand);
 				}
-				else
-				{
+				else {
 					l = rand.nextInt(list1.size());
-					structurecomponent =list1.remove(l);
+					structurecomponent = list1.remove(l);
 					structurecomponent.buildComponent(start, this.components, rand);
 				}
 			}
@@ -142,12 +122,10 @@ public class MapGenTown extends MapGenStructure
 			l = 0;
 			Iterator<StructureComponent> iterator = this.components.iterator();
 
-			while (iterator.hasNext())
-			{
+			while(iterator.hasNext()) {
 				StructureComponent structurecomponent1 = iterator.next();
 
-				if (!(structurecomponent1 instanceof StructureTownPieces.Road))
-				{
+				if(!(structurecomponent1 instanceof StructureTownPieces.Road)) {
 					++l;
 				}
 			}
@@ -155,25 +133,19 @@ public class MapGenTown extends MapGenStructure
 			this.hasMoreThanTwoComponents = l > 2;
 		}
 
-		/**
-		 * currently only defined for Villages, returns true if Village has more than 2 non-road components
-		 */
 		@Override
-		public boolean isSizeableStructure()
-		{
+		public boolean isSizeableStructure() {
 			return this.hasMoreThanTwoComponents;
 		}
 
 		@Override
-		public void writeToNBT(NBTTagCompound nbt)
-		{
+		public void writeToNBT(NBTTagCompound nbt) {
 			super.writeToNBT(nbt);
 			nbt.setBoolean("Valid", this.hasMoreThanTwoComponents);
 		}
 
 		@Override
-		public void readFromNBT(NBTTagCompound nbt)
-		{
+		public void readFromNBT(NBTTagCompound nbt) {
 			super.readFromNBT(nbt);
 			this.hasMoreThanTwoComponents = nbt.getBoolean("Valid");
 		}

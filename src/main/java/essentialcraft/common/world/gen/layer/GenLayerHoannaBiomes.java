@@ -2,9 +2,12 @@ package essentialcraft.common.world.gen.layer;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 
 import essentialcraft.common.registry.BiomeRegistry;
 import net.minecraft.init.Biomes;
@@ -14,6 +17,8 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.ChunkGeneratorSettings;
 import net.minecraft.world.gen.layer.GenLayer;
 import net.minecraft.world.gen.layer.IntCache;
+import net.minecraftforge.common.BiomeDictionary;
+import net.minecraftforge.common.BiomeDictionary.Type;
 import net.minecraftforge.common.BiomeManager;
 import net.minecraftforge.common.BiomeManager.BiomeEntry;
 import net.minecraftforge.common.BiomeManager.BiomeType;
@@ -29,9 +34,9 @@ public class GenLayerHoannaBiomes extends GenLayer {
 	private List<BiomeEntry>[] biomes = new ArrayList[BiomeType.values().length];
 	private final ChunkGeneratorSettings settings;
 
-	public GenLayerHoannaBiomes(long p_i45560_1_, GenLayer p_i45560_3_, WorldType p_i45560_4_, ChunkGeneratorSettings p_i45560_5_) {
-		super(p_i45560_1_);
-		this.parent = p_i45560_3_;
+	public GenLayerHoannaBiomes(long seed, GenLayer prevLayer, WorldType worldType, ChunkGeneratorSettings settings) {
+		super(seed);
+		this.parent = prevLayer;
 
 		for(BiomeType type : BiomeType.values()) {
 			ImmutableList<BiomeEntry> biomesToAdd = BiomeManager.getBiomes(type);
@@ -40,7 +45,7 @@ public class GenLayerHoannaBiomes extends GenLayer {
 			if(biomes[idx] == null)
 				biomes[idx] = new ArrayList<BiomeEntry>();
 			if(biomesToAdd != null) {
-				biomes[idx].addAll(biomesToAdd);
+				biomes[idx].addAll(biomesToAdd.stream().filter(entry->biomehasAnyType(entry.biome, Type.FOREST, Type.DENSE)).collect(Collectors.toList()));
 				biomes[idx].addAll(HOANNA_BIOMES);
 			}
 		}
@@ -48,21 +53,18 @@ public class GenLayerHoannaBiomes extends GenLayer {
 		int desertIdx = BiomeType.DESERT.ordinal();
 
 		biomes[desertIdx].add(new BiomeEntry(BiomeRegistry.desert, 30));
-		biomes[desertIdx].add(new BiomeEntry(Biomes.SAVANNA, 20));
 		biomes[desertIdx].add(new BiomeEntry(Biomes.PLAINS, 10));
 
-		if(p_i45560_4_ == WorldType.DEFAULT_1_1) {
+		if(worldType == WorldType.DEFAULT_1_1) {
 			biomes[desertIdx].clear();
 			biomes[desertIdx].add(new BiomeEntry(BiomeRegistry.desert, 10));
-			biomes[desertIdx].add(new BiomeEntry(Biomes.FOREST, 10));
 			biomes[desertIdx].add(new BiomeEntry(Biomes.EXTREME_HILLS, 10));
 			biomes[desertIdx].add(new BiomeEntry(Biomes.SWAMPLAND, 10));
 			biomes[desertIdx].add(new BiomeEntry(Biomes.PLAINS, 10));
-			biomes[desertIdx].add(new BiomeEntry(Biomes.TAIGA, 10));
 			this.settings = null;
 		}
 		else {
-			this.settings = p_i45560_5_;
+			this.settings = settings;
 		}
 	}
 
@@ -102,7 +104,7 @@ public class GenLayerHoannaBiomes extends GenLayer {
 			}
 			else if (k == 2) {
 				if (l > 0) {
-					aint1[j + i * areaWidth] = Biome.getIdForBiome(Biomes.JUNGLE);
+					aint1[j + i * areaWidth] = Biome.getIdForBiome(Biomes.SWAMPLAND);
 				}
 				else {
 					aint1[j + i * areaWidth] = Biome.getIdForBiome(getWeightedBiomeEntry(BiomeType.WARM).biome);
@@ -110,7 +112,7 @@ public class GenLayerHoannaBiomes extends GenLayer {
 			}
 			else if (k == 3) {
 				if (l > 0) {
-					aint1[j + i * areaWidth] = Biome.getIdForBiome(Biomes.REDWOOD_TAIGA);
+					aint1[j + i * areaWidth] = Biome.getIdForBiome(Biomes.EXTREME_HILLS);
 				}
 				else {
 					aint1[j + i * areaWidth] = Biome.getIdForBiome(getWeightedBiomeEntry(BiomeType.COOL).biome);
@@ -133,5 +135,9 @@ public class GenLayerHoannaBiomes extends GenLayer {
 		int totalWeight = WeightedRandom.getTotalWeight(biomeList);
 		int weight = BiomeManager.isTypeListModded(type)?nextInt(totalWeight):nextInt(totalWeight / 10) * 10;
 		return WeightedRandom.getRandomItem(biomeList, weight);
+	}
+	
+	protected static boolean biomehasAnyType(Biome biome, Type... types) {
+		return !Sets.intersection(BiomeDictionary.getTypes(biome), ImmutableSet.copyOf(types)).isEmpty();
 	}
 }

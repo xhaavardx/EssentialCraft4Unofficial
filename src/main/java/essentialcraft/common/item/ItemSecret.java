@@ -18,6 +18,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.translation.I18n;
@@ -38,8 +39,8 @@ public class ItemSecret extends Item implements IModelRegisterer {
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void addInformation(ItemStack par1ItemStack, World par2World, List<String> par3List, ITooltipFlag par4) {
-		super.addInformation(par1ItemStack, par2World, par3List, par4);
+	public void addInformation(ItemStack par1ItemStack, World world, List<String> par3List, ITooltipFlag par4) {
+		super.addInformation(par1ItemStack, world, par3List, par4);
 		int metadata = par1ItemStack.getItemDamage();
 		switch(metadata) {
 		case 0: {
@@ -91,51 +92,52 @@ public class ItemSecret extends Item implements IModelRegisterer {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(World par2World, EntityPlayer par3EntityPlayer, EnumHand hand) {
-		ItemStack par1ItemStack = par3EntityPlayer.getHeldItem(hand);
+	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+		ItemStack par1ItemStack = player.getHeldItem(hand);
 		int metadata = par1ItemStack.getItemDamage();
 		switch(metadata) {
 		case 0: {
-			EntityPlayer player = par3EntityPlayer;
-			World wrld = par3EntityPlayer.getEntityWorld();
+			World wrld = player.getEntityWorld();
 			List<EntityPlayer> playerLst = wrld.getEntitiesWithinAABB(EntityPlayer.class, new AxisAlignedBB(player.posX-10, player.posY-10, player.posZ-10, player.posX+10, player.posY+10, player.posZ+10));
 			Biome biome = wrld.getBiome(new BlockPos(MathHelper.floor(player.posX), MathHelper.floor(player.posY), MathHelper.floor(player.posZ)));
 			boolean canWork = wrld.getWorldTime() % 24000 >= 14000 && wrld.getWorldTime() % 24000 <= 16000 && player.rotationPitch <= -42 && player.rotationPitch >= -65 && playerLst.size() == 1 && !wrld.isRaining() && (biome.getTempCategory() == TempCategory.WARM || biome.getTempCategory() == TempCategory.MEDIUM);
 			if(canWork) {
 				player.inventory.setInventorySlotContents(player.inventory.currentItem, new ItemStack(ItemsCore.record_everlastingSummer,1,0));
 				if(wrld.isRemote) {
-					player.sendMessage(new TextComponentString(TextFormatting.WHITE+"You gase into the stars holding the ticket."));
-					player.sendMessage(new TextComponentString(TextFormatting.WHITE+"Suddenly a gust of wind swoops upon you."));
-					player.sendMessage(new TextComponentString(TextFormatting.WHITE+"You are immediately beeing attacked by lots of feels."));
-					player.sendMessage(new TextComponentString(TextFormatting.WHITE+"Strange, warm feels fall upon you."));
-					player.sendMessage(new TextComponentString(TextFormatting.WHITE+"You feel calm and relaxed."));
-					player.sendMessage(new TextComponentString(TextFormatting.WHITE+"A feeling falls upon you. You feel like you've just lived a whole another life."));
-					player.sendMessage(new TextComponentString(TextFormatting.WHITE+"You try to remember what happened, but memory lets you down."));
-					player.sendMessage(new TextComponentString(TextFormatting.WHITE+"You suddenly realise, that you no longer keep the ticket in your hand."));
-					player.sendMessage(new TextComponentString(TextFormatting.WHITE+"Instead a music disk is in your hand."));
-					player.sendMessage(new TextComponentString(TextFormatting.WHITE+"When you gaze to the disk, you begin to hear the song, written on it."));
-					player.sendMessage(new TextComponentString(TextFormatting.WHITE+"You start feeling really sad, like you've missed something very important to you."));
-					player.sendMessage(new TextComponentString(TextFormatting.WHITE+"You feel lonely, like missing another half of you."));
-					player.sendMessage(new TextComponentString(TextFormatting.WHITE+"After some time you calm down."));
+					Style style = new Style().setColor(TextFormatting.WHITE);
+					player.sendMessage(new TextComponentString("You gase into the stars holding the ticket.").setStyle(style));
+					player.sendMessage(new TextComponentString("Suddenly a gust of wind swoops upon you.").setStyle(style));
+					player.sendMessage(new TextComponentString("You are immediately beeing attacked by lots of feels.").setStyle(style));
+					player.sendMessage(new TextComponentString("Strange, warm feels fall upon you.").setStyle(style));
+					player.sendMessage(new TextComponentString("You feel calm and relaxed.").setStyle(style));
+					player.sendMessage(new TextComponentString("A feeling falls upon you. You feel like you've just lived a whole another life.").setStyle(style));
+					player.sendMessage(new TextComponentString("You try to remember what happened, but memory lets you down.").setStyle(style));
+					player.sendMessage(new TextComponentString("You suddenly realise, that you no longer keep the ticket in your hand.").setStyle(style));
+					player.sendMessage(new TextComponentString("Instead a music disk is in your hand.").setStyle(style));
+					player.sendMessage(new TextComponentString("When you gaze to the disk, you begin to hear the song, written on it.").setStyle(style));
+					player.sendMessage(new TextComponentString("You start feeling really sad, like you've missed something very important to you.").setStyle(style));
+					player.sendMessage(new TextComponentString("You feel lonely, like missing another half of you.").setStyle(style));
+					player.sendMessage(new TextComponentString("After some time you calm down.").setStyle(style));
 				}
 				return ActionResult.<ItemStack>newResult(EnumActionResult.SUCCESS, par1ItemStack);
 			}
 		}
 		}
-		return super.onItemRightClick(par2World, par3EntityPlayer, hand);
+		return super.onItemRightClick(world, player, hand);
 	}
 
 	@Override
-	public String getUnlocalizedName(ItemStack p_77667_1_) {
-		return getUnlocalizedName()+dropNames[Math.min(p_77667_1_.getItemDamage(), dropNames.length-1)];
+	public String getUnlocalizedName(ItemStack stack) {
+		return getUnlocalizedName()+dropNames[Math.min(stack.getItemDamage(), dropNames.length-1)];
 	}
 
 	@Override
-	public void getSubItems(CreativeTabs p_150895_2_, NonNullList<ItemStack> p_150895_3_) {
-		if(this.isInCreativeTab(p_150895_2_))
+	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> list) {
+		if(this.isInCreativeTab(tab)) {
 			for(int i = 0; i < 7; ++i) {
-				p_150895_3_.add(new ItemStack(this,1,i));
+				list.add(new ItemStack(this,1,i));
 			}
+		}
 	}
 
 	@Override

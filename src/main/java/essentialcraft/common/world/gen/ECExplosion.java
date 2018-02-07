@@ -4,43 +4,41 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
+import com.google.common.collect.Maps;
+
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityTNTPrimed;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 
-public class ECExplosion extends Explosion
-{
-	private int field_77289_h = 16;
+public class ECExplosion extends Explosion {
+
 	private World world;
 	private float explosionSize;
 	private double explosionX;
 	private double explosionY;
 	private double explosionZ;
 	private Entity exploder;
-	private Map<Object, Object> field_77288_k = new HashMap<Object, Object>();
-	public ECExplosion(World p_i1948_1_, Entity p_i1948_2_, double p_i1948_3_, double p_i1948_5_, double p_i1948_7_, float p_i1948_9_)
-	{
-		super(p_i1948_1_, p_i1948_2_, p_i1948_3_, p_i1948_5_, p_i1948_7_, p_i1948_9_, false, true);
-		this.world = p_i1948_1_;
-		this.exploder = p_i1948_2_;
-		this.explosionX = p_i1948_3_;
-		this.explosionY = p_i1948_5_;
-		this.explosionZ = p_i1948_7_;
-		this.explosionSize = p_i1948_9_;
+
+	public ECExplosion(World world, Entity exploder, double x, double y, double z, float size) {
+		super(world, exploder, x, y, z, size, false, true);
+		this.world = world;
+		this.exploder = exploder;
+		this.explosionX = x;
+		this.explosionY = y;
+		this.explosionZ = z;
+		this.explosionSize = size;
 	}
 
-	/**
-	 * Does the first part of the explosion (destroy blocks)
-	 */
 	@Override
-	public void doExplosionA()
-	{
+	public void doExplosionA() {
 		float f = this.explosionSize;
 		HashSet<BlockPos> hashset = new HashSet<BlockPos>();
 		int i;
@@ -50,17 +48,13 @@ public class ECExplosion extends Explosion
 		double d6;
 		double d7;
 
-		for (i = 0; i < this.field_77289_h; ++i)
-		{
-			for (j = 0; j < this.field_77289_h; ++j)
-			{
-				for (k = 0; k < this.field_77289_h; ++k)
-				{
-					if (i == 0 || i == this.field_77289_h - 1 || j == 0 || j == this.field_77289_h - 1 || k == 0 || k == this.field_77289_h - 1)
-					{
-						double d0 = i / (this.field_77289_h - 1.0F) * 2.0F - 1.0F;
-						double d1 = j / (this.field_77289_h - 1.0F) * 2.0F - 1.0F;
-						double d2 = k / (this.field_77289_h - 1.0F) * 2.0F - 1.0F;
+		for(i = 0; i < 16; ++i) {
+			for(j = 0; j < 16; ++j) {
+				for(k = 0; k < 16; ++k) {
+					if(i == 0 || i == 15 || j == 0 || j == 15 || k == 0 || k == 15) {
+						double d0 = i / (15F) * 2.0F - 1.0F;
+						double d1 = j / (15F) * 2.0F - 1.0F;
+						double d2 = k / (15F) * 2.0F - 1.0F;
 						double d3 = Math.sqrt(d0 * d0 + d1 * d1 + d2 * d2);
 						d0 /= d3;
 						d1 /= d3;
@@ -70,22 +64,19 @@ public class ECExplosion extends Explosion
 						d6 = this.explosionY;
 						d7 = this.explosionZ;
 
-						for (float f2 = 0.3F; f1 > 0.0F; f1 -= f2 * 0.75F)
-						{
+						for(float f2 = 0.3F; f1 > 0.0F; f1 -= f2 * 0.75F) {
 							int j1 = MathHelper.floor(d5);
 							int k1 = MathHelper.floor(d6);
 							int l1 = MathHelper.floor(d7);
 							BlockPos pos = new BlockPos(j1,k1,l1);
 							IBlockState block = this.world.getBlockState(pos);
 
-							if (block.getMaterial() != Material.AIR)
-							{
+							if(block.getMaterial() != Material.AIR) {
 								float f3 = this.exploder != null ? this.exploder.getExplosionResistance(this, this.world, pos, block) : block.getBlock().getExplosionResistance(world, pos, this.exploder, this);
 								f1 -= (f3 + 0.3F) * f2;
 							}
 
-							if (f1 > 0.0F && (this.exploder == null || this.exploder.canExplosionDestroyBlock(this, this.world, pos, block, f1)))
-							{
+							if(f1 > 0.0F && (this.exploder == null || this.exploder.canExplosionDestroyBlock(this, this.world, pos, block, f1))) {
 								hashset.add(new BlockPos(j1, k1, l1));
 							}
 
@@ -106,50 +97,22 @@ public class ECExplosion extends Explosion
 		this.explosionSize = f;
 	}
 
-	/**
-	 * Does the second part of the explosion (sound, particles, drop spawn)
-	 */
 	@Override
-	public void doExplosionB(boolean p_77279_1_)
-	{
+	public void doExplosionB(boolean p_77279_1_) {
 		int i;
 		int j;
 		int k;
 		IBlockState block;
 
-		if(true)
-		{
-			for(BlockPos chunkposition : this.getAffectedBlockPositions())
-			{
-				i = chunkposition.getX();
-				j = chunkposition.getY();
-				k = chunkposition.getZ();
-				block = this.world.getBlockState(chunkposition);
+		for(BlockPos chunkposition : this.getAffectedBlockPositions()) {
+			i = chunkposition.getX();
+			j = chunkposition.getY();
+			k = chunkposition.getZ();
+			block = this.world.getBlockState(chunkposition);
 
-				if (block.getMaterial() != Material.AIR)
-				{
-					if (block.getBlock().canDropFromExplosion(this))
-					{
-						//block.dropBlockAsItemWithChance(this.world, i, j, k, this.world.getBlockMetadata(i, j, k), 1.0F / this.explosionSize, 0);
-					}
-
-					block.getBlock().onBlockExploded(this.world, chunkposition, this);
-				}
+			if(block.getMaterial() != Material.AIR) {
+				block.getBlock().onBlockExploded(this.world, chunkposition, this);
 			}
 		}
-	}
-
-	public Map<Object, Object> func_77277_b()
-	{
-		return this.field_77288_k;
-	}
-
-	/**
-	 * Returns either the entity that placed the explosive block, the entity that caused the explosion or null.
-	 */
-	@Override
-	public EntityLivingBase getExplosivePlacedBy()
-	{
-		return this.exploder == null ? null : this.exploder instanceof EntityTNTPrimed ? ((EntityTNTPrimed)this.exploder).getTntPlacedBy() : this.exploder instanceof EntityLivingBase ? (EntityLivingBase)this.exploder : null;
 	}
 }

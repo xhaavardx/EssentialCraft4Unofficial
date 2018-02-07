@@ -12,55 +12,45 @@ import net.minecraft.util.ResourceLocation;
 
 public class PotionChaosInfluence extends Potion {
 
-	public PotionChaosInfluence(int p_i1573_1_, boolean p_i1573_2_,int p_i1573_3_)
-	{
-		super(p_i1573_2_, p_i1573_3_);
+	public PotionChaosInfluence(boolean isBad, int color) {
+		super(isBad, color);
 		this.setIconIndex(4, 1);
 		this.setEffectiveness(0.25D);
 		this.setPotionName("potion.chaosInfluence");
-		this.setRegistryName("essentialcraft", "potion.chaosInfluence");
-	}
-
-	public boolean isUsable()
-	{
-		return true;
+		this.setRegistryName("essentialcraft", "potion.chaosinfluence");
 	}
 
 	@Override
-	public void performEffect(EntityLivingBase p_76394_1_, int p_76394_2_)
-	{
-		if(!(p_76394_1_ instanceof EntityPlayer))
+	public void performEffect(EntityLivingBase entity, int amplifier) {
+		if(!(entity instanceof EntityPlayer)) {
 			return;
+		}
 		boolean remove = false;
-		IBaublesItemHandler b = BaublesApi.getBaublesHandler((EntityPlayer) p_76394_1_);
-		if(b != null)
-		{
-			for(int i = 0; i < b.getSlots(); ++i)
-			{
+		IBaublesItemHandler b = BaublesApi.getBaublesHandler((EntityPlayer) entity);
+		if(b != null) {
+			for(int i = 0; i < b.getSlots(); ++i) {
 				ItemStack is = b.getStackInSlot(i);
 				if(is.getItem() instanceof ItemBaublesSpecial && is.getItemDamage() == 31)
 					remove = true;
 			}
 		}
-		if(remove)
-			p_76394_1_.removePotionEffect(this);
+		if(remove) {
+			entity.removePotionEffect(this);
+		}
 	}
 
 	@Override
-	public boolean isReady(int p_76397_1_, int p_76397_2_)
-	{
-		return p_76397_1_ % 20 == 0;
+	public boolean isReady(int duration, int amplifier) {
+		return duration % 20 == 0;
 	}
 
 	@Override
-	public boolean hasStatusIcon()
-	{
+	public boolean hasStatusIcon() {
 		return true;
 	}
 
 	@Override
-	public int getStatusIconIndex()
-	{
+	public int getStatusIconIndex() {
 		Minecraft.getMinecraft().renderEngine.bindTexture(rl);
 		return super.getStatusIconIndex();
 	}

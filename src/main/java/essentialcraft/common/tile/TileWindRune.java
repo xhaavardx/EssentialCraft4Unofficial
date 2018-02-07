@@ -20,16 +20,14 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 public class TileWindRune extends TileEntity implements ITickable {
 	public int tier = -1;
 	public int sCheckTick = 0;
-	public int energy;
 	public int energyCheck = 0;
 	protected static Vec3i[] coords = {
 			new Vec3i(2, 0, 2), new Vec3i(2, 0, -2), new Vec3i(-2, 0, 2), new Vec3i(-2, 0, -2),
@@ -37,13 +35,17 @@ public class TileWindRune extends TileEntity implements ITickable {
 	};
 
 	public int getEnderstarEnergy() {
-		if(tier == -1)
+		if(tier == -1) {
 			return 0;
+		}
 
 		double energy = 0;
 
-		for(int i = 0; i < 8; ++i) {
+		for(int i = 0; i < coords.length; ++i) {
 			TileEntity tile = getWorld().getTileEntity(pos.add(coords[i]));
+			if(tile == null) {
+				continue;
+			}
 			if(tile.hasCapability(CapabilityESPEHandler.ESPE_HANDLER_CAPABILITY, null)) {
 				IESPEHandler handler = tile.getCapability(CapabilityESPEHandler.ESPE_HANDLER_CAPABILITY, null);
 				energy += handler.getESPE();
@@ -58,7 +60,7 @@ public class TileWindRune extends TileEntity implements ITickable {
 			ItemStack item = player.getHeldItemMainhand();
 			WindImbueRecipe rec = WindImbueRecipe.findRecipeByComponent(item);
 			if(rec != null) {
-				int energy = this.energy;
+				int energy = getEnderstarEnergy();
 				boolean hasEnergy = energy >= rec.enderEnergy;
 				boolean creative = player.capabilities.isCreativeMode;
 				if(hasEnergy || creative) {
@@ -66,6 +68,9 @@ public class TileWindRune extends TileEntity implements ITickable {
 
 					for(int i = 0; i < 8; ++i) {
 						TileEntity tile = getWorld().getTileEntity(pos.add(coords[i]));
+						if(tile == null) {
+							continue;
+						}
 						if(tile.hasCapability(CapabilityESPEHandler.ESPE_HANDLER_CAPABILITY, null)) {
 							IESPEHandler handler = tile.getCapability(CapabilityESPEHandler.ESPE_HANDLER_CAPABILITY, null);
 							double req = rec.enderEnergy - cenergy;
@@ -76,7 +81,7 @@ public class TileWindRune extends TileEntity implements ITickable {
 								if(rec.transforming.getItem() instanceof ItemSoulStone && !ECUtils.getData(player).isWindbound()) {
 									ECUtils.getData(player).modifyWindbound(true);
 									if(!player.world.isRemote) {
-										player.sendMessage(new TextComponentString(I18n.translateToLocal("essentialcraft.txt.windImbue")).setStyle(new Style().setColor(TextFormatting.AQUA)));
+										player.sendMessage(new TextComponentTranslation("essentialcraft.txt.windImbue").setStyle(new Style().setColor(TextFormatting.AQUA)));
 										ECUtils.requestSync(player);
 									}
 									if(player.world.isRemote)
@@ -108,19 +113,13 @@ public class TileWindRune extends TileEntity implements ITickable {
 
 	@Override
 	public void update() {
-		if(energyCheck == 0) {
-			energyCheck = 100;
-			energy = getEnderstarEnergy();
-		}
-		else
-			--energyCheck;
-
 		if(sCheckTick == 0) {
 			checkStructureAndTier();
-			sCheckTick = 200;
+			sCheckTick = 40;
 		}
-		else
+		else {
 			--sCheckTick;
+		}
 
 		if(getWorld().isRemote && tier >= 0) {
 			int movement = (int)(getWorld().getWorldTime() % 60);

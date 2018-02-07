@@ -2,7 +2,6 @@ package essentialcraft.utils.common;
 
 import java.util.Random;
 
-import DummyCore.Utils.MathUtils;
 import essentialcraft.common.registry.BiomeRegistry;
 import essentialcraft.common.registry.PotionRegistry;
 import essentialcraft.utils.cfg.Config;
@@ -34,35 +33,40 @@ public class RadiationManager {
 		if(player instanceof FakePlayer)
 			return;
 		int dimID = player.dimension;
-		if(dimID == Config.dimensionID && !player.capabilities.isCreativeMode) {
+		if(player.ticksExisted % 20 == 0 && dimID == Config.dimensionID && !player.capabilities.isCreativeMode) {
 			int chunkX = player.chunkCoordX;
 			int chunkZ = player.chunkCoordZ;
-			Random rnd = new Random(Long.parseLong((int)MathUtils.module(chunkX)*128+""+(int)MathUtils.module(chunkZ)*128));
+			Random rnd = new Random(Long.parseLong(Math.abs(chunkX)*128+""+Math.abs(chunkZ)*128));
 			Biome biome = player.getEntityWorld().getBiome(player.getPosition());
 			int rndRad = rnd.nextInt(6);
-			if(biome == BiomeRegistry.desert)
+			if(biome == BiomeRegistry.desert) {
 				rndRad += 2;
-			if(biome == BiomeRegistry.dreadlands)
+			}
+			if(biome == BiomeRegistry.dreadlands) {
 				rndRad += 6;
-			rndRad = (int) (rndRad * ECUtils.getGenResistance(2, player));
-			increasePlayerRadiation(player,rndRad);
+			}
+			rndRad = (int)(rndRad * ECUtils.getGenResistance(2, player));
+			increasePlayerRadiation(player, rndRad);
 		}
 		int amount = getPlayerRadiation(player);
-		if(amount > 0)
-			if(player.dimension == Config.dimensionID)
-				increasePlayerRadiation(player,-1);
-			else
-				increasePlayerRadiation(player,-5);
-		if(amount > 0) {
-			boolean hasEffect = player.getActivePotionEffect(PotionRegistry.radiation) != null;
-			if(hasEffect) {
-				int currentDuration = amount;
-				int newModifier = currentDuration/10000;
-				player.removePotionEffect(PotionRegistry.radiation);
-				player.addPotionEffect(new PotionEffect(PotionRegistry.radiation,currentDuration,newModifier,true,true));
+		if(player.ticksExisted % 20 == 0 && amount > 0) {
+			if(player.dimension == Config.dimensionID) {
+				increasePlayerRadiation(player, -1);
 			}
 			else {
-				player.addPotionEffect(new PotionEffect(PotionRegistry.radiation,200,0,true,true));
+				increasePlayerRadiation(player, -5);
+			}
+		}
+		if(amount > 0) {
+			boolean hasEffect = player.getActivePotionEffect(PotionRegistry.radiation) != null;
+			int currentDuration = amount;
+			int newModifier = currentDuration/10000;
+			if(hasEffect) {
+				player.removeActivePotionEffect(PotionRegistry.radiation);
+				player.addPotionEffect(new PotionEffect(PotionRegistry.radiation, currentDuration, newModifier, true, false));
+			}
+			else {
+				player.addPotionEffect(new PotionEffect(PotionRegistry.radiation, currentDuration, newModifier, true, false));
 			}
 		}
 	}

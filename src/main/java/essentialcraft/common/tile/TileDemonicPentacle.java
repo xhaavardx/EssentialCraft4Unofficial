@@ -23,8 +23,6 @@ import net.minecraft.world.World;
 public class TileDemonicPentacle extends TileEntity implements ITickable {
 	public int tier = -1;
 	public int sCheckTick = 0;
-	public int energy;
-	public int energyCheck = 0;
 	protected static Vec3i[] coords = {
 			new Vec3i(2, 1, 2), new Vec3i(2, 1, -2), new Vec3i(-2, 1, 2), new Vec3i(-2, 1, -2),
 			new Vec3i(3, 0, 2), new Vec3i(3, 0, -2), new Vec3i(-3, 0, 2), new Vec3i(-3, 0, -2),
@@ -36,6 +34,9 @@ public class TileDemonicPentacle extends TileEntity implements ITickable {
 		double aconsumed = 0;
 		for(int i = 0; i < coords.length; ++i) {
 			TileEntity tile = getWorld().getTileEntity(pos.add(coords[i]));
+			if(tile == null) {
+				continue;
+			}
 			if(tile.hasCapability(CapabilityESPEHandler.ESPE_HANDLER_CAPABILITY, null)) {
 				IESPEHandler handler = tile.getCapability(CapabilityESPEHandler.ESPE_HANDLER_CAPABILITY, null);
 				double req = consumed - aconsumed;
@@ -52,6 +53,9 @@ public class TileDemonicPentacle extends TileEntity implements ITickable {
 		aconsumed = 0;
 		for(int i = 0; i < coords.length; ++i) {
 			TileEntity tile = getWorld().getTileEntity(pos.add(coords[i]));
+			if(tile == null) {
+				continue;
+			}
 			if(tile.hasCapability(CapabilityESPEHandler.ESPE_HANDLER_CAPABILITY, null)) {
 				IESPEHandler handler = tile.getCapability(CapabilityESPEHandler.ESPE_HANDLER_CAPABILITY, null);
 				double req = consumed - aconsumed;
@@ -65,13 +69,17 @@ public class TileDemonicPentacle extends TileEntity implements ITickable {
 	}
 
 	public int getEnderstarEnergy() {
-		if(tier == -1)
+		if(tier == -1) {
 			return 0;
+		}
 
 		double energy = 0;
 
 		for(int i = 0; i < coords.length; ++i) {
 			TileEntity tile = getWorld().getTileEntity(pos.add(coords[i]));
+			if(tile == null) {
+				continue;
+			}
 			if(tile.hasCapability(CapabilityESPEHandler.ESPE_HANDLER_CAPABILITY, null)) {
 				IESPEHandler handler = tile.getCapability(CapabilityESPEHandler.ESPE_HANDLER_CAPABILITY, null);
 				energy += handler.getESPE();
@@ -95,19 +103,14 @@ public class TileDemonicPentacle extends TileEntity implements ITickable {
 				EssentialCraftCore.proxy.SmokeFX(x, y, z, 0, 0.1D, 0, 1, 1, 0, 0);
 			}
 		}
-		if(energyCheck == 0) {
-			energyCheck = 100;
-			energy = getEnderstarEnergy();
-		}
-		else
-			--energyCheck;
 
 		if(sCheckTick == 0) {
 			checkStructureAndTier();
-			sCheckTick = 200;
+			sCheckTick = 40;
 		}
-		else
+		else {
 			--sCheckTick;
+		}
 
 		if(getWorld().isRemote && tier >= 0) {
 			int movement = (int)(getWorld().getWorldTime() % 60);
